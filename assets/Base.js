@@ -1,7 +1,8 @@
 /*global module, require*/
 var path = require('path'),
     _ = require('underscore'),
-    error = require('../error');
+    error = require('../error'),
+    makeBufferedAccessor = require('../makeBufferedAccessor');
 
 var Base = module.exports = function (config) {
     _.extend(this, config);
@@ -11,7 +12,7 @@ var Base = module.exports = function (config) {
 Base.prototype = {
     encoding: 'utf8', // Change to 'binary' in subclass for images etc.
 
-    getSrc: function (cb) {
+    getSrc: makeBufferedAccessor('_src', function (cb) {
         var This = this;
         if ('src' in this) {
             process.nextTick(function () {
@@ -25,7 +26,7 @@ Base.prototype = {
         } else {
             cb(new Error("Don't know how to get asset src!"));
         }
-    },
+    }),
 
     getRelationTypes: function (cb) {
         this.getRelations(error.passToFunction(cb, function (relations) {
