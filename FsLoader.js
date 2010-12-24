@@ -170,7 +170,7 @@ FsLoader.prototype = {
                 }, this);
             }),
             error.throwException(function (loadedAssets) {
-                asset.relations[relationType] = allResolvedRelationsInOrder;
+                // asset.relations[relationType] = allResolvedRelationsInOrder; // Add to graph instead!
                 cb(null, loadedAssets);
             })
         );
