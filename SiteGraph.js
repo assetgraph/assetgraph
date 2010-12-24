@@ -20,5 +20,7 @@ console.log("addAsset " + asset.url);
         if ('url' in asset) {
             this.assetsByUrl[asset.url] = asset;
         }
-    }
+    },
+
+    addRelation: function () {}
 };

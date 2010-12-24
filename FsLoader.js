@@ -143,32 +143,28 @@ FsLoader.prototype = {
     },
 
     populateRelationType: function (asset, relationType, cb) {
-//console.log("populateRelationType " + relationType + " " + ppAsset(asset));
         var This = this,
-            relationsOfType = asset.relations[relationType] || [],
             allResolvedRelationsInOrder = [];
-        if (!relationsOfType.length) {
-//console.log("No " + relationType + " relations in " + ppAsset(asset) + ", exiting");
-//console.log("These are the ones in there: " + _.keys(asset.relations).map(function (key) {return key + ": " + _.keys(asset.relations[key]).length; }).join(", "));
-            process.nextTick(function () {
-                cb(null, []);
-            });
-        }
         step(
             function () {
-                relationsOfType.forEach(function (relation) {
-//console.log("Resolving relation " + ppRelation(relation));
-                    This.resolveRelation(relation, this.parallel());
-                }, this);
+                asset.getRelationsOfType(relationType, this);
             },
+            error.throwException(function (relationsOfType) {
+                if (relationsOfType.length) {
+                    relationsOfType.forEach(function (relation) {
+                        This.resolveRelation(relation, this.parallel());
+                    }, this);
+                } else {
+                    process.nextTick(function () {
+                        cb(null, []);
+                    });
+                }
+            }),
             error.throwException(function () { // [[resolved relations for relation 1], ...]
-//console.log("arguments = " + require('sys').inspect(arguments));
                 var group = this.group();
                 _.toArray(arguments).forEach(function (resolvedRelations, i) {
-//console.log("resolvedRelations = " + require('sys').inspect(resolvedRelations));
                     [].push.apply(allResolvedRelationsInOrder, resolvedRelations);
                     resolvedRelations.forEach(function (resolvedRelation) {
-//console.log("Saw resolved relation = " + ppRelation(resolvedRelation));
                         This.loadAsset(resolvedRelation, group());
                     });
                 }, this);
