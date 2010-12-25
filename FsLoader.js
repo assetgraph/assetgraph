@@ -94,54 +94,59 @@ FsLoader.prototype = {
         if ('url' in relation) {
             var alreadyLoaded = this.siteGraph.assetsByUrl[relation.url];
             if (alreadyLoaded) {
-                process.nextTick(function () {
-                    cb(null, alreadyLoaded);
-                });
-                return;
-            } else if (relation.url in this.assetLoadingQueues) {
-                this.assetLoadingQueues[relation.url].push(cb);
-                return;
+                return alreadyLoaded;
             }
         }
-        var type = determineAssetType(relation),
+        var This = this,
+            type = determineAssetType(relation),
             Constructor = assets.byType[type],
             id = this.nextId += 1,
-            createAssetFromSrc = function (src) {
-                var config = {
-                    id: id,
-                    baseUrl: relation.baseUrl,
-                    src: src
-                };
-                if ('url' in relation) {
-                    config.url = relation.url;
-                }
-                var asset = new Constructor(config);
-                this.siteGraph.addAsset(asset);
-
-                if ('url' in relation && relation.url in this.assetLoadingQueues) {
-                    this.assetLoadingQueues[relation.url].forEach(function (waitingCallback) {
-                        console.log("Running callback waiting for " + relation.url);
-                        process.nextTick(function () {
-                            waitingCallback(null, asset);
-                        });
-                    });
-                    delete this.waitingForAsset[relation.url];
-                }
-
-                process.nextTick(function () {
-                    cb(null, asset);
-                });
-            }.bind(this);
+            config = {
+                id: id,
+                baseUrl: relation.baseUrl
+            };
 
         if ('inlineData' in relation) {
-            createAssetFromSrc(relation.inlineData);
+            config.srcProxy = function (cb) {
+                if (cb) {
+                    process.nextTick(function () {
+                        cb(null, relation.inlineData);
+                    });
+                } else {
+                    // TODO: Return a stream that emits the inlineData blob in one go
+                }
+            };
         } else if ('url' in relation) {
-            this.siteGraph.assetsByUrl[relation.url] = relation.id; // Placeholder until it's loaded
-            var encoding = Constructor.prototype.encoding;
-            fs.readFile(path.join(this.root, relation.url), encoding, error.throwException(createAssetFromSrc));
+            config.url = relation.url;
+            config.srcProxy = function (cb) {
+                var fileName = path.join(This.root, relation.url),
+                    encoding = Constructor.prototype.encoding;
+                if (cb) {
+                    fs.readFile(fileName, encoding, cb);
+                } else {
+                    return fs.createReadStream(fileName, {encoding: encoding});
+                }
+            };
         } else {
-            throw new Error("loadAsset cannot make sense of " + util.inspect(relation));
+            cb(new Error("loadAsset cannot make sense of " + util.inspect(relation)));
         }
+        var asset = new Constructor(config);
+        this.siteGraph.addAsset(asset);
+        return asset;
+/*
+        if ('url' in relation && relation.url in this.assetLoadingQueues) {
+            this.assetLoadingQueues[relation.url].forEach(function (waitingCallback) {
+                console.log("Running callback waiting for " + relation.url);
+                process.nextTick(function () {
+                    waitingCallback(null, asset);
+                });
+            });
+            delete this.waitingForAsset[relation.url];
+        }
+        process.nextTick(function () {
+            cb(null, asset);
+        });
+*/
     },
 
     populateRelationType: function (asset, relationType, cb) {
@@ -163,17 +168,16 @@ FsLoader.prototype = {
                 }
             }),
             error.throwException(function () { // [[resolved relations for relation 1], ...]
+                var assets = [];
                 var group = this.group();
                 _.toArray(arguments).forEach(function (resolvedRelations, i) {
                     [].push.apply(allResolvedRelationsInOrder, resolvedRelations);
                     resolvedRelations.forEach(function (resolvedRelation) {
-                        This.loadAsset(resolvedRelation, group());
+                        assets.push(This.loadAsset(resolvedRelation));
                     });
                 }, this);
-            }),
-            error.throwException(function (loadedAssets) {
                 // asset.relations[relationType] = allResolvedRelationsInOrder; // Add to graph instead!
-                cb(null, loadedAssets);
+                cb(null, assets);
             })
         );
     },

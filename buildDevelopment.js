@@ -65,10 +65,8 @@ step(
     function () {
         var group = this.group();
         (options._ || []).forEach(function (templateUrl) {
-            var callback = group();
-            loader.loadAsset({type: 'HTML', url: templateUrl}, error.throwException(function (asset) {
-                loader.populate(asset, ['html-script-tag', 'js-static-include'], callback);
-            }));
+            var asset = loader.loadAsset({type: 'HTML', url: templateUrl});
+            loader.populate(asset, ['html-script-tag', 'js-static-include'], group());
         });
     }
 );
