@@ -36,6 +36,8 @@ function determineAssetType(relation) {
     case 'html-style-tag':
     case 'css': // FIXME
         return 'CSS';
+    case 'css-background-image':
+        return 'Image';
     default:
         throw new Error("Cannot determine asset from relation: " + require('sys').inspect(relation));
     }
