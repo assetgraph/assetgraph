@@ -77,6 +77,7 @@ SenchaJSBuilder.prototype = {
                         error.passToFunction(cb, function (fileBodies) {
                             relations.push({
                                 type: 'js',
+                                assetRelations: {}, // Huhm...
                                 inlineData: fileBodies.join("\n"),
                                 originalUrl: path.join(This.baseUrl, pkg.target)
                             });
@@ -85,30 +86,26 @@ SenchaJSBuilder.prototype = {
                     );
                } else {
                     var cssUrls = [];
-//console.log("The file names = " + fileNames.join(" "));
                     urls.forEach(function (url) {
                         if (/\.css$/.test(url)) {
                             cssUrls.push(url);
                         } else {
                             relations.push({
                                 // originalUrl: ...
+                                assetRelations: {}, // Huhm...
                                 url: url
                             });
                         }
                     });
                     if (!cssUrls.length) {
-//console.log("no css files, returning the rest of the relations");
                         process.nextTick(function () {
                             cb(null, relations);
                         });
                     } else {
-//console.log("there are css files!");
                         step(
                             function () {
                                 var innerGroup = this.group();
                                 cssUrls.forEach(function (cssUrl) {
-//console.log("\n THE thing = " + [This.root, This.baseUrl, cssFileName].join("|"));
-//                                    fs.readFile(path.join(This.root, This.baseUrl, cssFileName), 'utf8', innerGroup());
                                     fs.readFile(path.join(This.root, cssUrl), 'utf8', innerGroup());
                                 });
                             },
@@ -118,14 +115,12 @@ SenchaJSBuilder.prototype = {
                                 // Issue reported here: http://www.extjs.com/forum/showthread.php?p=330222
                                 // Work around it by around by substituting the url()s:
                                 cssFileBodies.forEach(function (cssFileBody, i) {
-//console.log("    Fixing " + cssFileNames[i]);
                                     var relation = {
                                         type: 'css',
                                         originalUrl: path.join(This.baseUrl, cssUrls[i])
                                     };
                                     relation.url = relation.originalUrl;
                                     relation.inlineData = cssFileBody.replace(/\*.*?\*\//g, '').replace(/url\s*\(\s*/g, function () {
-//                                        console.log("    subst!");
                                         delete relation.url; // ... Ehh.. Maybe relation.isDirty=true or relation.originalUrl?
                                         return "url(..";
                                     });

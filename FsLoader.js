@@ -130,6 +130,9 @@ FsLoader.prototype = {
         } else {
             cb(new Error("loadAsset cannot make sense of " + util.inspect(relation)));
         }
+        if ('assetRelations' in relation) {
+            config.relations = relation.assetRelations;
+        }
         var asset = new Constructor(config);
         this.siteGraph.addAsset(asset);
         return asset;
