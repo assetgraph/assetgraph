@@ -12,7 +12,7 @@ var CSS = module.exports = function (config) {
 util.inherits(CSS, Base);
 
 _.extend(CSS.prototype, {
-    getParseTree: makeBufferedAccessor('_parseTree', function (cb) {
+    getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var This = this;
         this.getSrc(error.passToFunction(cb, function (src) {
             This.parseTree = cssom.parse(src);
@@ -20,7 +20,7 @@ _.extend(CSS.prototype, {
         }));
     }),
 
-    getRelations: makeBufferedAccessor('_relations', function (cb) {
+    getRelations: makeBufferedAccessor('relations', function (cb) {
         var This = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var relations = {};

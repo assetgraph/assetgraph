@@ -12,7 +12,7 @@ var HTML = module.exports = function (config) {
 util.inherits(HTML, Base);
 
 _.extend(HTML.prototype, {
-    getParseTree: makeBufferedAccessor('_parseTree', function (cb) {
+    getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var This = this;
         this.getSrc(error.passToFunction(cb, function (src) {
             This.parseTree = jsdom(src);
@@ -20,7 +20,7 @@ _.extend(HTML.prototype, {
         }));
     }),
 
-    getRelations: makeBufferedAccessor('_relations', function (cb) {
+    getRelations: makeBufferedAccessor('relations', function (cb) {
         var This = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var relations = {};

@@ -13,7 +13,7 @@ var JavaScript = module.exports = function (config) {
 util.inherits(JavaScript, Base);
 
 _.extend(JavaScript.prototype, {
-    getParseTree: makeBufferedAccessor('_parseTree', function (cb) {
+    getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var This = this;
         this.getSrc(error.passToFunction(cb, function (src) {
             This.parseTree = uglify.parser.parse(src);
@@ -21,7 +21,7 @@ _.extend(JavaScript.prototype, {
         }));
     }),
 
-    getRelations: makeBufferedAccessor('_relations', function (cb) {
+    getRelations: makeBufferedAccessor('relations', function (cb) {
         var This = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var relations = {};
