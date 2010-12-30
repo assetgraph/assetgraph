@@ -1,6 +1,6 @@
 var util = require('util'),
     _ = require('underscore'),
-    jsdom = require('jsdom').jsdom,
+    jsdom = require('jsdom'),
     error = require('../error'),
     makeBufferedAccessor = require('../makeBufferedAccessor'),
     Base = require('./Base');
@@ -15,7 +15,7 @@ _.extend(HTML.prototype, {
     getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var This = this;
         this.getSrc(error.passToFunction(cb, function (src) {
-            This.parseTree = jsdom(src);
+            This.parseTree = jsdom.jsdom(src, undefined, {features: {ProcessExternalResources: []}});
             cb(null, This.parseTree);
         }));
     }),
