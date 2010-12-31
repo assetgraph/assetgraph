@@ -77,7 +77,7 @@ SenchaJSBuilder.prototype = {
                         error.passToFunction(cb, function (fileBodies) {
                             relations.push({
                                 type: 'js',
-                                assetRelations: {}, // Huhm...
+                                assetPointers: {}, // Huhm...
                                 inlineData: fileBodies.join("\n"),
                                 originalUrl: path.join(This.baseUrl, pkg.target)
                             });
@@ -92,7 +92,7 @@ SenchaJSBuilder.prototype = {
                         } else {
                             relations.push({
                                 // originalUrl: ...
-                                assetRelations: {}, // Huhm...
+                                assetPointers: {}, // Huhm...
                                 url: url
                             });
                         }

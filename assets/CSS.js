@@ -20,12 +20,12 @@ _.extend(CSS.prototype, {
         }));
     }),
 
-    getRelations: makeBufferedAccessor('relations', function (cb) {
+    getPointers: makeBufferedAccessor('pointers', function (cb) {
         var This = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
-            var relations = {};
-            function addRelation(config) {
-                (relations[config.type] = relations[config.type] || []).push(config);
+            var pointers = {};
+            function addPointer(config) {
+                (pointers[config.type] = pointers[config.type] || []).push(config);
             }
             _.toArray(parseTree.cssRules).forEach(function (cssRule) {
                 ['background-image', 'background'].forEach(function (propertyName) {
@@ -38,7 +38,7 @@ _.extend(CSS.prototype, {
                                     cssRule: cssRule,
                                     propertyName: propertyName,
                                     type: 'css-background-image',
-                                    baseUrl: this.baseUrlForRelations
+                                    baseUrl: this.baseUrlForPointers
                                 };
                             if (dataUrlMatch) {
                                 config.assetType = dataUrlMatch[1];
@@ -50,12 +50,12 @@ _.extend(CSS.prototype, {
                             } else {
                                 config.url = urlMatch[2];
                             }
-                            addRelation(config);
+                            addPointer(config);
                         }
                     }
                 });
             });
-            cb(null, relations);
+            cb(null, pointers);
         }));
     })
 });

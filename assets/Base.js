@@ -6,7 +6,7 @@ var path = require('path'),
 
 var Base = module.exports = function (config) {
     _.extend(this, config);
-    this.baseUrlForRelations = ('url' in this) ? path.dirname(this.url) : this.baseUrl; // Get that outta here and into sitegraph!
+    this.baseUrlForPointers = ('url' in this) ? path.dirname(this.url) : this.baseUrl; // Get that outta here and into sitegraph!
 };
 
 Base.prototype = {
@@ -28,15 +28,15 @@ Base.prototype = {
         }
     }),
 
-    getRelationTypes: function (cb) {
-        this.getRelations(error.passToFunction(cb, function (relations) {
-            cb(null, _.keys(relations));
+    getPointerTypes: function (cb) {
+        this.getPointers(error.passToFunction(cb, function (pointers) {
+            cb(null, _.keys(pointers));
         }));
     },
 
-    getRelationsOfType: function (type, cb) {
-        this.getRelations(error.passToFunction(cb, function (relations) {
-            cb(null, relations[type] || []);
+    getPointersOfType: function (type, cb) {
+        this.getPointers(error.passToFunction(cb, function (pointers) {
+            cb(null, pointers[type] || []);
         }));
     }
 };

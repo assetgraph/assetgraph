@@ -21,13 +21,13 @@ _.extend(JavaScript.prototype, {
         }));
     }),
 
-    getRelations: makeBufferedAccessor('relations', function (cb) {
+    getPointers: makeBufferedAccessor('pointers', function (cb) {
         var This = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
-            var relations = {};
-            function addRelation(relation) {
-                relation.includingAsset = This;
-                (relations[relation.type] = relations[relation.type] || []).push(relation);
+            var pointers = {};
+            function addPointer(pointer) {
+                pointer.includingAsset = This;
+                (pointers[pointer.type] = pointers[pointer.type] || []).push(pointer);
             }
 
             function walk (node) {
@@ -36,9 +36,9 @@ _.extend(JavaScript.prototype, {
                     if (/^(?:lazyInlude|include)$/.test(node[1][2])) {
                         if (Array.isArray(node[2]) && node[2].length === 1 &&
                             Array.isArray(node[2][0]) && node[2][0][0] === 'string') {
-                            addRelation({
+                            addPointer({
                                 type: node[1][2] === 'include' ? 'js-static-include' : 'js-lazy-include',
-                                baseUrl: This.baseUrlForRelations,
+                                baseUrl: This.baseUrlForPointers,
                                 url: node[2][0][1],
                                 node: node
                             });
@@ -49,9 +49,9 @@ _.extend(JavaScript.prototype, {
                         if (Array.isArray(node[2]) && node[2].length === 1 &&
                             Array.isArray(node[2][0]) && node[2][0][0] === 'string') {
 
-                            addRelation({
+                            addPointer({
                                 type: 'js-static-url',
-                                baseUrl: This.baseUrlForRelations,
+                                baseUrl: This.baseUrlForPointers,
                                 url: node[2][1],
                                 node: node
                             });
@@ -68,7 +68,7 @@ _.extend(JavaScript.prototype, {
                 }
             }
             walk(parseTree);
-            cb(null, relations);
+            cb(null, pointers);
         }));
     })
 });

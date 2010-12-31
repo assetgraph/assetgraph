@@ -20,36 +20,36 @@ _.extend(HTML.prototype, {
         }));
     }),
 
-    getRelations: makeBufferedAccessor('relations', function (cb) {
+    getPointers: makeBufferedAccessor('pointers', function (cb) {
         var This = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
-            var relations = {};
-            function addRelation(config) {
-                (relations[config.type] = relations[config.type] || []).push(config);
+            var pointers = {};
+            function addPointer(config) {
+                (pointers[config.type] = pointers[config.type] || []).push(config);
             }
 
             _.toArray(parseTree.getElementsByTagName('*')).forEach(function (tag) {
                 var tagName = tag.nodeName.toLowerCase();
                 if (tagName === 'script') {
                     if (tag.src) {
-                        addRelation({
+                        addPointer({
                             type: 'html-script-tag',
-                            baseUrl: This.baseUrlForRelations,
+                            baseUrl: This.baseUrlForPointers,
                             url: script.src,
                             tag: tag
                         });
                     } else {
-                        addRelation({
+                        addPointer({
                             type: 'html-script-tag',
-                            baseUrl: This.baseUrlForRelations,
+                            baseUrl: This.baseUrlForPointers,
                             inlineData: tag.firstChild.nodeValue,
                             tag: tag
                         });
                     }
                 } else if (tagName === 'style') {
-                    addRelation({
+                    addPointer({
                         type: 'html-style-tag',
-                        baseUrl: This.baseUrlForRelations,
+                        baseUrl: This.baseUrlForPointers,
                         inlineData: tag.firstChild.nodeValue,
                         tag: tag
                     });
@@ -57,38 +57,38 @@ _.extend(HTML.prototype, {
                     if ('rel' in tag) {
                         var rel = tag.rel.toLowerCase();
                         if (rel === 'stylesheet') {
-                            addRelation({
+                            addPointer({
                                 type: 'html-style-tag',
-                                baseUrl: This.baseUrlForRelations,
+                                baseUrl: This.baseUrlForPointers,
                                 url: tag.href,
                                 tag: tag
                             });
                         } else if (/^(?:shortcut |apple-touch-)?icon$/.test(rel)) {
-                            addRelation({
+                            addPointer({
                                 type: 'html-shortcut-icon',
-                                baseUrl: This.baseUrlForRelations,
+                                baseUrl: This.baseUrlForPointers,
                                 url: tag.href,
                                 tag: tag
                             });
                         }
                     }
                 } else if (tagName === 'img') {
-                    addRelation({
+                    addPointer({
                         type: 'html-image-tag',
-                        baseUrl: This.baseUrlForRelations,
+                        baseUrl: This.baseUrlForPointers,
                         url: tag.src,
                         tag: tag
                     });
                 } else if (tagName === 'iframe') {
-                    addRelation({
+                    addPointer({
                         type: 'html-iframe-tag',
-                        baseUrl: This.baseUrlForRelations,
+                        baseUrl: This.baseUrlForPointers,
                         url: tag.src,
                         tag: tag
                     });
                 }
             }, this);
-            cb(null, relations);
+            cb(null, pointers);
         }));
     })
 });
