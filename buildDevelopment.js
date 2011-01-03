@@ -54,7 +54,7 @@ step(
                     if (!exists) {
                         throw new Error("Label " + labelName + ": Dir not found: " + labelValue);
                     }
-                    loader.addLabelResolver(labelName, resolvers.Directory, {baseUrl: labelValue});
+                    loader.addLabelResolver(labelName, resolvers.Directory, {url: labelValue});
                     callback();
                 });
             }
@@ -64,7 +64,7 @@ step(
     function () {
         var group = this.group();
         (options._ || []).forEach(function (templateUrl) {
-            var asset = loader.loadAsset({type: 'HTML', url: templateUrl});
+            var asset = loader.createAsset({type: 'HTML', url: templateUrl});
             loader.populate(asset, ['html-script-tag', 'js-static-include'], group());
         });
     }

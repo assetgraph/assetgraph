@@ -25,6 +25,7 @@ _.extend(CSS.prototype, {
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var pointers = {};
             function addPointer(config) {
+                config.asset = This;
                 (pointers[config.type] = pointers[config.type] || []).push(config);
             }
             _.toArray(parseTree.cssRules).forEach(function (cssRule) {
@@ -37,8 +38,7 @@ _.extend(CSS.prototype, {
                                 config = {
                                     cssRule: cssRule,
                                     propertyName: propertyName,
-                                    type: 'css-background-image',
-                                    baseUrl: this.baseUrlForPointers
+                                    type: 'css-background-image'
                                 };
                             if (dataUrlMatch) {
                                 config.assetType = dataUrlMatch[1];

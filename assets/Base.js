@@ -6,7 +6,6 @@ var path = require('path'),
 
 var Base = module.exports = function (config) {
     _.extend(this, config);
-    this.baseUrlForPointers = ('url' in this) ? path.dirname(this.url) : this.baseUrl; // Get that outta here and into sitegraph!
 };
 
 Base.prototype = {

@@ -2,16 +2,18 @@ var path = require('path'),
     _ = require('underscore');
 
 var Directory = module.exports = function (config) {
-    // Expects: config.baseUrl, config.root
+    // Expects: config.url, config.root
     _.extend(this, config);
 };
 
 Directory.prototype = {
-    resolve: function (relation, cb) {
-        relation.url = path.join(this.baseUrl, relation.url);
-        delete relation.label; // Hmm, maybe keep it around?
+    resolve: function (pointer, cb) {
+        var This = this;
         process.nextTick(function () {
-            cb(null, [relation]);
+            cb(null, [{
+                pointer: pointer,
+                url: path.join(This.url, pointer.url)
+            }]);
         });
     }
 };

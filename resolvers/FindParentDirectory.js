@@ -27,14 +27,17 @@ FindParentDirectory.prototype = {
         }
     },
 
-    resolve: function (relation, cb) {
+    resolve: function (pointer, cb) {
         var This = this,
+            relation = {
+                pointer: pointer
+            },
             candidateUrls = [];
         step(
             function () {
-                var baseUrlFragments = relation.baseUrl.split("/");
+                var baseUrlFragments = pointer.asset.baseUrl.split("/");
                 baseUrlFragments.forEach(function (baseUrlFragment, i) {
-                    var candidateUrl = baseUrlFragments.slice(0, i).concat(relation.label).join("/");
+                    var candidateUrl = baseUrlFragments.slice(0, i).concat(pointer.label).join("/");
                     candidateUrls.push(candidateUrl);
                     This.dirExists(path.join(This.root, candidateUrl), this.parallel());
                 }, this);
@@ -42,11 +45,10 @@ FindParentDirectory.prototype = {
             error.passToFunction(cb, function () { // ...
                 var bestCandidateIndex = _.toArray(arguments).lastIndexOf(true);
                 if (bestCandidateIndex !== -1) {
-                    relation.url = path.join(candidateUrls[bestCandidateIndex], relation.url);
-                    delete relation.label; // Maybe not?
+                    relation.url = path.join(candidateUrls[bestCandidateIndex], pointer.url);
                     cb(null, [relation]);
                 } else {
-                    cb(new Error("Couldn't resolve label " + relation.label + " from " + relation.baseUrl));
+                    cb(new Error("Couldn't resolve label " + pointer.label + " from " + pointer.baseUrl));
                 }
             })
         );

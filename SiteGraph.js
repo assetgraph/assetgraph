@@ -15,11 +15,13 @@ var SiteGraph = module.exports = function (config) {
 
 SiteGraph.prototype = {
     addAsset: function (asset) {
-console.log("addAsset " + asset.url);
+console.log("addAsset " + (asset.url || '(inline)'));
         if ('url' in asset) {
             this.assetsByUrl[asset.url] = asset;
         }
     },
 
-    addRelation: function () {}
+    addRelation: function (relation, srcAsset, targetAsset) {
+console.log("addRelation " + (relation.srcAsset.url || '(inline)') + " => " + (relation.targetAsset.url || '(inline)'));
+    }
 };

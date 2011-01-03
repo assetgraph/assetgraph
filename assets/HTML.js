@@ -25,6 +25,7 @@ _.extend(HTML.prototype, {
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var pointers = {};
             function addPointer(config) {
+                config.asset = This;
                 (pointers[config.type] = pointers[config.type] || []).push(config);
             }
 
@@ -34,14 +35,12 @@ _.extend(HTML.prototype, {
                     if (tag.src) {
                         addPointer({
                             type: 'html-script-tag',
-                            baseUrl: This.baseUrlForPointers,
                             url: script.src,
                             tag: tag
                         });
                     } else {
                         addPointer({
                             type: 'html-script-tag',
-                            baseUrl: This.baseUrlForPointers,
                             inlineData: tag.firstChild.nodeValue,
                             tag: tag
                         });
@@ -49,7 +48,6 @@ _.extend(HTML.prototype, {
                 } else if (tagName === 'style') {
                     addPointer({
                         type: 'html-style-tag',
-                        baseUrl: This.baseUrlForPointers,
                         inlineData: tag.firstChild.nodeValue,
                         tag: tag
                     });
@@ -59,14 +57,12 @@ _.extend(HTML.prototype, {
                         if (rel === 'stylesheet') {
                             addPointer({
                                 type: 'html-style-tag',
-                                baseUrl: This.baseUrlForPointers,
                                 url: tag.href,
                                 tag: tag
                             });
                         } else if (/^(?:shortcut |apple-touch-)?icon$/.test(rel)) {
                             addPointer({
                                 type: 'html-shortcut-icon',
-                                baseUrl: This.baseUrlForPointers,
                                 url: tag.href,
                                 tag: tag
                             });
@@ -75,14 +71,12 @@ _.extend(HTML.prototype, {
                 } else if (tagName === 'img') {
                     addPointer({
                         type: 'html-image-tag',
-                        baseUrl: This.baseUrlForPointers,
                         url: tag.src,
                         tag: tag
                     });
                 } else if (tagName === 'iframe') {
                     addPointer({
                         type: 'html-iframe-tag',
-                        baseUrl: This.baseUrlForPointers,
                         url: tag.src,
                         tag: tag
                     });

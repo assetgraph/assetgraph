@@ -26,7 +26,7 @@ _.extend(JavaScript.prototype, {
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var pointers = {};
             function addPointer(pointer) {
-                pointer.includingAsset = This;
+                pointer.asset = This;
                 (pointers[pointer.type] = pointers[pointer.type] || []).push(pointer);
             }
 
@@ -38,7 +38,6 @@ _.extend(JavaScript.prototype, {
                             Array.isArray(node[2][0]) && node[2][0][0] === 'string') {
                             addPointer({
                                 type: node[1][2] === 'include' ? 'js-static-include' : 'js-lazy-include',
-                                baseUrl: This.baseUrlForPointers,
                                 url: node[2][0][1],
                                 node: node
                             });
@@ -51,7 +50,6 @@ _.extend(JavaScript.prototype, {
 
                             addPointer({
                                 type: 'js-static-url',
-                                baseUrl: This.baseUrlForPointers,
                                 url: node[2][1],
                                 node: node
                             });
