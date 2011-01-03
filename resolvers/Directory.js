@@ -12,7 +12,9 @@ Directory.prototype = {
         process.nextTick(function () {
             cb(null, [{
                 pointer: pointer,
-                url: path.join(This.url, pointer.url)
+                assetConfig: {
+                    url: path.join(This.url, pointer.url)
+                }
             }]);
         });
     }

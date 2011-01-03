@@ -38,8 +38,10 @@ _.extend(JavaScript.prototype, {
                             Array.isArray(node[2][0]) && node[2][0][0] === 'string') {
                             addPointer({
                                 type: node[1][2] === 'include' ? 'js-static-include' : 'js-lazy-include',
-                                url: node[2][0][1],
-                                node: node
+                                node: node,
+                                assetConfig: {
+                                    url: node[2][0][1]
+                                }
                             });
                         } else {
                             throw new Error("Invalid one.include syntax");
@@ -50,8 +52,10 @@ _.extend(JavaScript.prototype, {
 
                             addPointer({
                                 type: 'js-static-url',
-                                url: node[2][1],
-                                node: node
+                                node: node,
+                                assetConfig: {
+                                    url: node[2][1]
+                                }
                             });
                         } else {
                             throw new Error("Invalid one.getStaticUrl syntax");

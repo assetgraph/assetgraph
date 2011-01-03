@@ -35,21 +35,29 @@ _.extend(HTML.prototype, {
                     if (tag.src) {
                         addPointer({
                             type: 'html-script-tag',
-                            url: script.src,
-                            tag: tag
+                            tag: tag,
+                            assetConfig: {
+                                src: script.src
+                            }
                         });
                     } else {
                         addPointer({
                             type: 'html-script-tag',
-                            inlineData: tag.firstChild.nodeValue,
-                            tag: tag
+                            tag: tag,
+                            assetConfig: {
+                                type: 'JavaScript',
+                                src: tag.firstChild.nodeValue
+                            }
                         });
                     }
                 } else if (tagName === 'style') {
                     addPointer({
                         type: 'html-style-tag',
-                        inlineData: tag.firstChild.nodeValue,
-                        tag: tag
+                        tag: tag,
+                        assetConfig: {
+                            type: 'CSS',
+                            src: tag.firstChild.nodeValue
+                        }
                     });
                 } else if (tagName === 'link') {
                     if ('rel' in tag) {
@@ -57,28 +65,36 @@ _.extend(HTML.prototype, {
                         if (rel === 'stylesheet') {
                             addPointer({
                                 type: 'html-style-tag',
-                                url: tag.href,
-                                tag: tag
-                            });
+                                tag: tag,
+                                assetConfig: {
+                                    url: tag.href
+                                }
+                           });
                         } else if (/^(?:shortcut |apple-touch-)?icon$/.test(rel)) {
                             addPointer({
                                 type: 'html-shortcut-icon',
-                                url: tag.href,
-                                tag: tag
+                                tag: tag,
+                                assetConfig: {
+                                    url: tag.href
+                                }
                             });
                         }
                     }
                 } else if (tagName === 'img') {
                     addPointer({
                         type: 'html-image-tag',
-                        url: tag.src,
-                        tag: tag
+                        tag: tag,
+                        assetConfig: {
+                            url: tag.src
+                        }
                     });
                 } else if (tagName === 'iframe') {
                     addPointer({
                         type: 'html-iframe-tag',
-                        url: tag.src,
-                        tag: tag
+                        tag: tag,
+                        assetConfig: {
+                            url: tag.src
+                        }
                     });
                 }
             }, this);

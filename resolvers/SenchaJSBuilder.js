@@ -76,9 +76,11 @@ SenchaJSBuilder.prototype = {
                         },
                         error.passToFunction(cb, function (fileBodies) {
                             relations.push({
-                                type: 'JavaScript',
-                                assetPointers: {}, // Huhm...
-                                inlineData: fileBodies.join("\n"),
+                                assetConfig: {
+                                    type: 'JavaScript',
+                                    src: fileBodies.join("\n"),
+                                    pointers: {}
+                                },
                                 originalUrl: path.join(This.baseUrl, pkg.target)
                             });
                             cb(null, relations);
@@ -92,13 +94,15 @@ SenchaJSBuilder.prototype = {
                         } else {
                             relations.push({
                                 // originalUrl: ...
-                                assetPointers: {}, // Huhm...
-                                url: url
+                                assetConfig: {
+                                    url: url,
+                                    pointers: {}
+                                }
                             });
                         }
                     });
                     if (cssUrls.length && /^Ext JS Library [23].\d.\d/.test(This.body.licenceText)) {
-                        // Stupid ExtJS 3 has CSS url()s relative to the target paths of their target
+                        // Stupid ExtJS 3 has CSS url()s relative to the target paths of their
                         // bundles, NOT the source files!
                         // Issue reported here: http://www.extjs.com/forum/showthread.php?p=330222
                         // Work around it by around by substituting the url()s:
@@ -112,11 +116,13 @@ SenchaJSBuilder.prototype = {
                             error.passToFunction(cb, function (cssFileBodies) {
                                 cssFileBodies.forEach(function (cssFileBody, i) {
                                     relations.push({
-                                        type: 'CSS',
                                         originalUrl: path.join(This.baseUrl, cssUrls[i]),
-                                        inlineData: cssFileBody.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/url\s*\(\s*/g, function () {
-                                            return "url(..";
-                                        })
+                                        assetConfig: {
+                                            type: 'CSS',
+                                            src: cssFileBody.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/url\s*\(\s*/g, function () {
+                                                return "url(..";
+                                            })
+                                        }
                                     });
                                 });
                                 cb(null, relations);
@@ -125,8 +131,10 @@ SenchaJSBuilder.prototype = {
                     } else {
                         cssUrls.forEach(function (cssUrl) {
                             relations.push({
-                                type: 'CSS',
-                                url: cssUrl
+                                assetConfig: {
+                                    url: cssUrl,
+                                    type: 'CSS'
+                                }
                             });
                         });
                         cb(null, relations);
@@ -150,7 +158,9 @@ SenchaJSBuilder.prototype = {
             process.nextTick(function () {
                 cb(null, [{
                     pointer: pointer,
-                    url: path.join(This.baseUrl, pointer.url)
+                    assetConfig: {
+                        url: path.join(This.baseUrl, pointer.url)
+                    }
                 }]);
             });
         }

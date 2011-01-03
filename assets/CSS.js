@@ -35,22 +35,25 @@ _.extend(CSS.prototype, {
                         var urlMatch = propertyValue.match(/\burl\((\'|\"|)([^\'\"]+)\1\)/);
                         if (urlMatch) {
                             var dataUrlMatch = urlMatch[2].match(/^data:image\/(png|gif|jpeg)(;base64)?,(.*)$/),
-                                config = {
-                                    cssRule: cssRule,
-                                    propertyName: propertyName,
-                                    type: 'css-background-image'
+                                assetConfig = {
+                                    type: 'Image'
                                 };
                             if (dataUrlMatch) {
-                                config.assetType = dataUrlMatch[1];
+                                assetConfig.contentType = "image/" + dataUrlMatch[1];
                                 if (dataUrlMatch[2]) {
-                                    config.inlineData = new Buffer(dataUrlMatch[3], 'base64').toString();
+                                    assetConfig.src = new Buffer(dataUrlMatch[3], 'base64').toString();
                                 } else {
-                                    config.inlineData = dataUrlMatch[3];
+                                    assetConfig.src = dataUrlMatch[3];
                                 }
                             } else {
-                                config.url = urlMatch[2];
+                                assetConfig.url = urlMatch[2];
                             }
-                            addPointer(config);
+                            addPointer({
+                                cssRule: cssRule,
+                                propertyName: propertyName,
+                                type: 'css-background-image',
+                                assetConfig: assetConfig
+                            });
                         }
                     }
                 });

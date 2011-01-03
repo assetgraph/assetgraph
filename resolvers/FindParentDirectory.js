@@ -30,7 +30,8 @@ FindParentDirectory.prototype = {
     resolve: function (pointer, cb) {
         var This = this,
             relation = {
-                pointer: pointer
+                pointer: pointer,
+                assetConfig: {}
             },
             candidateUrls = [];
         step(
@@ -45,10 +46,10 @@ FindParentDirectory.prototype = {
             error.passToFunction(cb, function () { // ...
                 var bestCandidateIndex = _.toArray(arguments).lastIndexOf(true);
                 if (bestCandidateIndex !== -1) {
-                    relation.url = path.join(candidateUrls[bestCandidateIndex], pointer.url);
+                    relation.assetConfig.url = path.join(candidateUrls[bestCandidateIndex], pointer.url);
                     cb(null, [relation]);
                 } else {
-                    cb(new Error("Couldn't resolve label " + pointer.label + " from " + pointer.baseUrl));
+                    cb(new Error("Couldn't resolve label " + pointer.label + " from " + pointer.asset.baseUrl));
                 }
             })
         );

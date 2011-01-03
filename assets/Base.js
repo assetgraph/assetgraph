@@ -11,14 +11,10 @@ var Base = module.exports = function (config) {
 Base.prototype = {
     encoding: 'utf8', // Change to 'binary' in subclass for images etc.
 
-    getSrc: makeBufferedAccessor('_src', function (cb) {
+    getSrc: makeBufferedAccessor('src', function (cb) {
         var This = this;
-        if ('src' in this) {
-            process.nextTick(function () {
-                cb(null, This.src);
-            });
-        } else if (this.srcProxy) {
-            this.srcProxy(error.throwException(function (src) {
+        if (this.srcProxy) {
+            this.srcProxy(error.passToFunction(cb, function (src) {
                 This.src = src;
                 cb(null, src);
             }));
