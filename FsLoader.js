@@ -7,7 +7,6 @@ var util = require('util'),
     _ = require('underscore'),
     resolvers = require('./resolvers'),
     assets = require('./assets'),
-    relations = require('./relations'),
     error = require('./error');
 
 // Expects: config.root

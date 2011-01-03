@@ -6,7 +6,6 @@ var util = require('util'),
     step = require('step'),
     _ = require('underscore'),
     assets = require('./assets'),
-    relations = require('./relations'),
     error = require('./error');
 
 var SiteGraph = module.exports = function (config) {
