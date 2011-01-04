@@ -15,7 +15,7 @@ _.extend(HTML.prototype, {
     getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var This = this;
         this.getSrc(error.passToFunction(cb, function (src) {
-            This.parseTree = jsdom.jsdom(src, undefined, {features: {ProcessExternalResources: []}});
+            This.parseTree = jsdom.jsdom(src, undefined, {features: {ProcessExternalResources: [], FetchExternalResources: []}});
             cb(null, This.parseTree);
         }));
     }),
