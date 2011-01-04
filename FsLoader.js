@@ -9,10 +9,6 @@ var util = require('util'),
     assets = require('./assets'),
     error = require('./error');
 
-process.on('uncaughtException', function (e) {
-    console.log("Uncaught exception: " + sys.inspect(e.msg) + "\n" + e.stack);
-});
-
 // Expects: config.root
 var FsLoader = module.exports = function (config) {
     _.extend(this, config);
@@ -50,7 +46,7 @@ FsLoader.prototype = {
     // cb(err, relationsArray)
     resolvePointer: function (pointer, cb) {
         var assetConfig = pointer.assetConfig;
-console.log("Resolving pointer with assetConfig " + require('sys').inspect(assetConfig));
+//console.log("Resolving pointer with assetConfig " + require('sys').inspect(assetConfig));
         if (pointer.assetConfig.src) {
             process.nextTick(function () {
                 return cb(null, [
@@ -159,7 +155,7 @@ console.log("Resolving pointer with assetConfig " + require('sys').inspect(asset
             function () {
                 srcAsset.getPointersOfType(pointerType, this);
             },
-            error.throwException(function (pointersOfType) {
+            error.passToFunction(cb, function (pointersOfType) {
                 if (pointersOfType.length) {
                     pointersOfType.forEach(function (pointer) {
                         This.resolvePointer(pointer, this.parallel());
@@ -170,14 +166,14 @@ console.log("Resolving pointer with assetConfig " + require('sys').inspect(asset
                     });
                 }
             }),
-            error.throwException(function () { // [[resolved pointers for pointer 1], ...]
+            error.passToFunction(cb, function () { // [[resolved pointers for pointer 1], ...]
                 var assets = [],
                     group = this.group();
                 _.toArray(arguments).forEach(function (relations, i) {
                     [].push.apply(allRelations, relations);
                     relations.forEach(function (relation) {
                         relation.srcAsset = srcAsset;
-console.log("creating asset from relation with assetConfig = " + sys.inspect(relation.assetConfig));
+//console.log("creating asset from relation with assetConfig = " + sys.inspect(relation.assetConfig));
                         relation.targetAsset = This.createAssetFromRelation(relation);
                         assets.push(relation.targetAsset);
                         This.siteGraph.addAsset(relation.targetAsset);
@@ -204,7 +200,7 @@ console.log("creating asset from relation with assetConfig = " + sys.inspect(rel
                     This.populatePointerType(asset, pointerType, this.parallel());
                 }, this);
             },
-            error.throwException(function () { // [[loaded assets for pointerTypes[0]], ...]
+            error.passToFunction(cb, function () { // [[loaded assets for pointerTypes[0]], ...]
                 var loadedAssets = _.flatten(_.toArray(arguments));
                 if (loadedAssets.length) {
                     var group = this.group();

@@ -9,7 +9,7 @@ var SenchaJSBuilder = module.exports = function (config) {
     _.extend(this, config);
 
     if (this.version !== 2 && this.version !== 3) {
-        throw "SenchaJSBuilder: Unsupported version: " + this.version;
+        throw new Error("SenchaJSBuilder: Unsupported version: " + this.version);
     }
 
     this.pkgIndex = {};

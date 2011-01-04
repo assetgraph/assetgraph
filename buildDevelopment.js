@@ -12,6 +12,10 @@ var util = require('util'),
     error = require('./error'),
     options = {};
 
+process.on('uncaughtException', function (e) {
+    console.log("Uncaught exception: " + sys.inspect(e.msg) + "\n" + e.stack);
+});
+
 _.each(require('optimist').usage('FIXME')/*.demand(['assets-root'])*/.argv,
     function (value, optionName) {
         options[optionName.replace(/-([a-z])/g, function ($0, $1) {
@@ -67,5 +71,8 @@ step(
             var asset = loader.createAsset({type: 'HTML', url: templateUrl});
             loader.populate(asset, ['html-script-tag', 'js-static-include'], group());
         });
+    },
+    function (err) {
+        console.log("error: " + err + "\n" + err.stack);
     }
 );

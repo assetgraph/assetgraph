@@ -18,7 +18,7 @@ error.throwException = function (successCallback) {
                 err = new Error(err);
             }
             Error.captureStackTrace(err);
-            throw new Error(err);
+            throw err;
         } else if (successCallback) {
             successCallback.apply(this, [].slice.call(arguments, 1));
         }
