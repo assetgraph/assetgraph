@@ -27,9 +27,8 @@ FindParentDirectory.prototype = {
         }
     },
 
-    resolve: function (pointer, cb) {
+    resolve: function (assetConfig, pointer, cb) {
         var This = this,
-            assetConfig = pointer.assetConfig,
             candidateUrls = [];
 
         step(
@@ -44,17 +43,13 @@ FindParentDirectory.prototype = {
             error.passToFunction(cb, function () { // ...
                 var bestCandidateIndex = _.toArray(arguments).lastIndexOf(true);
                 if (bestCandidateIndex === -1) {
-                    return cb(new Error("Couldn't resolve label " + pointer.label + " from " + pointer.asset.baseUrl));
+                    return cb(new Error("Couldn't resolve assetConfig " + require('sys').inspect(assetConfig)));
                 }
-                // If bestCandidateIndex === 0, assetConfig.url is already correct
                 if (bestCandidateIndex >= 0) {
                     assetConfig.url = path.join(candidateUrls[bestCandidateIndex], assetConfig.url);
                 }
                 delete assetConfig.label; // Egh
-                cb(null, [{
-                    pointer: pointer,
-                    assetConfig: assetConfig
-                }]);
+                cb(null, [assetConfig]);
             })
         );
     }

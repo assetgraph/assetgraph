@@ -17,25 +17,6 @@ var FsLoader = module.exports = function (config) {
     this.defaultLabelResolver = new resolvers.FindParentDirectory({root: this.root});
 };
 
-function determineRelationTargetType(relation) {
-    if ('type' in relation) {
-        return relation.type;
-    }
-    // Inline assets:
-    if (relation.pointer) {
-        switch (relation.pointer.type) {
-        case 'html-script-tag':
-            return 'JavaScript';
-        case 'html-style-tag':
-            return 'CSS';
-        case 'css-background-image':
-            return 'Image';
-        }
-    }
-    // FIXME: Extract mime type from data: urls
-    throw new Error("Cannot determine asset from relation: " + require('sys').inspect(relation));
-}
-
 FsLoader.prototype = {
     addLabelResolver: function (labelName, Constructor, config) {
         config = config || {};
@@ -44,17 +25,11 @@ FsLoader.prototype = {
     },
 
     // cb(err, relationsArray)
-    resolvePointer: function (pointer, cb) {
-        var assetConfig = pointer.assetConfig;
-//console.log("Resolving pointer with assetConfig " + require('sys').inspect(assetConfig));
-        if (pointer.assetConfig.src) {
+    resolveAssetConfig: function (assetConfig, pointer, cb) {
+console.log("resolving assetConfig " + require('sys').inspect(assetConfig));
+        if (assetConfig.src) {
             process.nextTick(function () {
-                return cb(null, [
-                    {
-                        pointer: pointer,
-                        assetConfig: assetConfig
-                    }
-                ]);
+                return cb(null, [assetConfig]);
             });
         } else if (assetConfig.url) {
             var This = this,
@@ -67,32 +42,28 @@ FsLoader.prototype = {
                 assetConfig.url = matchLabel[2];
                 var resolver = This.labelResolvers[assetConfig.label] || This.defaultLabelResolver;
 
-                resolver.resolve(pointer, error.passToFunction(cb, function (relations) {
+                resolver.resolve(assetConfig, pointer, error.passToFunction(cb, function (resolvedAssetConfigs) {
                     step(
                         function () {
                             var group = this.group();
-                            relations.forEach(function (relation) {
-                                if ('label' in relation) {
+                            resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
+                                if ('label' in resolvedAssetConfig) {
                                     // Reresolve, probably ext: remapped to ext-base:
-                                    This.resolvePointer(resolvedPointer, group());
+                                    This.resolveAssetConfig(resolvedAssetConfig, pointer, group());
                                 } else {
-                                    group()(null, [relation]);
+                                    group()(null, [resolvedAssetConfig]);
                                 }
                             });
                         },
-                        error.passToFunction(cb, function (relations) {
-                            cb(null, _.flatten(relations));
+                        error.passToFunction(cb, function (resolvedAssetConfigArrays) {
+                            cb(null, _.flatten(resolvedAssetConfigArrays));
                         })
                     );
                 }));
             } else {
                 // No label, assume relative path
-                cb(null, [{
-                    pointer: pointer,
-                    assetConfig: _.extend(assetConfig, {
-                        url: path.join(pointer.asset.baseUrl, assetConfig.url)
-                    })
-                }]);
+                assetConfig.url = path.join(pointer.asset.baseUrl, assetConfig.url);
+                cb(null, [assetConfig]);
             }
         } else {
             // No url and no inlineData, give up.
@@ -118,6 +89,7 @@ FsLoader.prototype = {
             if (extension && extension in assets.typeByExtension) {
                 assetConfig.type = assets.typeByExtension[extension];
             } else {
+                // FIXME: Extract mime type from data: urls
                 throw new Error("No type in assetConfig and couldn't work it out from the url: " + sys.inspect(assetConfig));
             }
         }
@@ -130,35 +102,21 @@ FsLoader.prototype = {
         return new Constructor(assetConfig);
     },
 
-    createAssetFromRelation: function (relation) {
-        var assetConfig = relation.assetConfig;
-        if (!assetConfig) {
-            throw new Error("No assetConfig in relation! " + sys.inspect(relation));
-        }
-        if (!('baseUrl' in assetConfig) && !('url' in assetConfig)) {
-            // Inline asset
-            if (relation.srcAsset && relation.srcAsset.url) {
-                assetConfig.baseUrl = path.dirname(relation.srcAsset.url);
-            } else if (relation.srcAsset && relation.srcAsset.baseUrl) {
-                assetConfig.baseUrl = relation.srcAsset.baseUrl;
-            } else {
-                throw new Error("createAssetFromRelation: Cannot determine baseUrl for inline asset");
-            }
-        }
-        return this.createAsset(assetConfig);
-    },
-
     populatePointerType: function (srcAsset, pointerType, cb) {
         var This = this,
-            allRelations = [];
+            allRelations = [],
+            pointers;
         step(
             function () {
                 srcAsset.getPointersOfType(pointerType, this);
             },
             error.passToFunction(cb, function (pointersOfType) {
-                if (pointersOfType.length) {
-                    pointersOfType.forEach(function (pointer) {
-                        This.resolvePointer(pointer, this.parallel());
+                pointers = pointersOfType; // Make available in the next step
+                if (pointers.length) {
+                    pointers.forEach(function (pointer) {
+                        var assetConfig = pointer.assetConfig;
+                        This.resolveAssetConfig(pointer.assetConfig, pointer, this.parallel());
+                        delete pointer.assetConfig;
                     }, this);
                 } else {
                     process.nextTick(function () {
@@ -166,19 +124,24 @@ FsLoader.prototype = {
                     });
                 }
             }),
-            error.passToFunction(cb, function () { // [[resolved pointers for pointer 1], ...]
+            error.passToFunction(cb, function () { // [resolvedAssetConfigArrayForPointer1, ...]
                 var assets = [],
                     group = this.group();
-                _.toArray(arguments).forEach(function (relations, i) {
-                    [].push.apply(allRelations, relations);
-                    relations.forEach(function (relation) {
-                        relation.srcAsset = srcAsset;
-//console.log("creating asset from relation with assetConfig = " + sys.inspect(relation.assetConfig));
-                        relation.targetAsset = This.createAssetFromRelation(relation);
-                        assets.push(relation.targetAsset);
-                        This.siteGraph.addAsset(relation.targetAsset);
+                _.toArray(arguments).forEach(function (resolvedAssetConfigs, i) {
+                    resolvedAssetConfigs.forEach(function (assetConfig) {
+                        if (!('url' in assetConfig)) {
+                            // Inline asset, copy baseUrl from srcAsset
+                            assetConfig.baseUrl = srcAsset.baseUrl;
+                        }
+                        var relation = {
+                            srcAsset: srcAsset,
+                            targetAsset: This.createAsset(assetConfig),
+                            pointer: pointers[i]
+                        };
                         This.siteGraph.addRelation(relation);
+                        assets.push(relation.targetAsset);
                     });
+
                 }, this);
                 cb(null, assets);
             })

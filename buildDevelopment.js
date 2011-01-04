@@ -43,11 +43,11 @@ step(
                 callback = group(),
                 matchSenchaJSBuilder = labelValue.match(/\.jsb(\d)$/);
             if (matchSenchaJSBuilder) {
-                var baseUrl = path.dirname(labelValue),
+                var url = path.dirname(labelValue) || '',
                     version = parseInt(matchSenchaJSBuilder[1], 10);
                 fs.readFile(path.join(loader.root, labelValue), 'utf8', error.throwException(function (fileBody) {
                     loader.addLabelResolver(labelName, resolvers.SenchaJSBuilder, {
-                        baseUrl: baseUrl || '',
+                        url: url,
                         version: version,
                         body: JSON.parse(fileBody)
                     });

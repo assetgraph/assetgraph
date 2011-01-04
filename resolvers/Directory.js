@@ -7,15 +7,11 @@ var Directory = module.exports = function (config) {
 };
 
 Directory.prototype = {
-    resolve: function (pointer, cb) {
-        var This = this,
-            assetConfig = pointer.assetConfig;
-        assetConfig.url = path.join(This.url, pointer.assetConfig.url);
+    resolve: function (assetConfig, pointer, cb) {
+        assetConfig.url = path.join(this.url, assetConfig.url);
+        delete assetConfig.label; // Egh
         process.nextTick(function () {
-            cb(null, [{
-                pointer: pointer,
-                assetConfig: assetConfig
-            }]);
+            cb(null, [assetConfig]);
         });
     }
 };
