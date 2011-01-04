@@ -72,7 +72,7 @@ FsLoader.prototype = {
         }
     },
 
-    createAsset: function (assetConfig) {
+    loadAsset: function (assetConfig) {
         var This = this;
         if ('url' in assetConfig && assetConfig.url in this.siteGraph.assetsByUrl) {
             // Already loaded
@@ -86,7 +86,7 @@ FsLoader.prototype = {
             }
         }
         if (!('type' in assetConfig)) {
-            var extension = 'url' in assetConfig && path.extname(assetConfig.url);
+            var extension = ('url' in assetConfig) && path.extname(assetConfig.url).replace(/^\./, "");
             if (extension && extension in assets.typeByExtension) {
                 assetConfig.type = assets.typeByExtension[extension];
             } else {
@@ -142,7 +142,7 @@ FsLoader.prototype = {
                         }
                         var relation = {
                             srcAsset: srcAsset,
-                            targetAsset: This.createAsset(assetConfig),
+                            targetAsset: This.loadAsset(assetConfig),
                             pointer: pointers[i]
                         };
                         This.siteGraph.addRelation(relation);

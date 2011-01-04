@@ -28,7 +28,7 @@ _.extend(HttpLoader.prototype, {
             request({
                 uri: This.root + assetConfig.url
             }, function (err, response, body) {
-                console.log("GET "+ This.root + assetConfig.url + " => " + response.statusCode + "\n" + body);
+                console.log("GET "+ This.root + assetConfig.url + " => " + response.statusCode);
 
                 if (response.statusCode >= 400) {
                     err = new Error("Got " + response.statusCode + " from remote server!");

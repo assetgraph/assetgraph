@@ -10,9 +10,9 @@ var siteGraph = new SiteGraph(),
         root: 'http://localhost:3000/'
     });
 
-var asset = loader.createAsset({
+var asset = loader.loadAsset({
     type: 'HTML',
     url: 'index.html'
 });
 
-loader.populate(asset, ['html-script-tag', 'js-static-include'], error.throwException());
+loader.populate(asset, ['html-script-tag'], error.throwException());

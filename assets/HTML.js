@@ -37,7 +37,7 @@ _.extend(HTML.prototype, {
                             type: 'html-script-tag',
                             tag: tag,
                             assetConfig: {
-                                src: tag.src
+                                url: tag.src
                             }
                         });
                     } else {
