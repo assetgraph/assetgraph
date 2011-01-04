@@ -41,7 +41,9 @@ Base.prototype = {
         if (!('src' in assetConfig)) {
             assetConfig.srcProxy = this.getSrcProxy(assetConfig, Constructor.prototype.encoding);
         }
-        return new Constructor(assetConfig);
+        var asset = new Constructor(assetConfig);
+        this.siteGraph.addAsset(asset);
+        return asset;
     },
 
     populatePointerType: function (srcAsset, pointerType, cb) {

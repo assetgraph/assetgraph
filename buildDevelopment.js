@@ -72,6 +72,9 @@ step(
             loader.populate(asset, ['htmlScript', 'jsStaticInclude'], group());
         });
     },
+    error.throwException(function () {
+        siteGraph.toGraphViz();
+    }),
     function (err) {
         console.log("error: " + err + "\n" + err.stack);
     }
