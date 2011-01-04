@@ -34,7 +34,7 @@ _.extend(HTML.prototype, {
                 if (tagName === 'script') {
                     if (tag.src) {
                         addPointer({
-                            type: 'html-script-tag',
+                            type: 'htmlScriptTag',
                             tag: tag,
                             assetConfig: {
                                 url: tag.src
@@ -42,7 +42,7 @@ _.extend(HTML.prototype, {
                         });
                     } else {
                         addPointer({
-                            type: 'html-script-tag',
+                            type: 'htmlScriptTag',
                             tag: tag,
                             assetConfig: {
                                 type: 'JavaScript',
@@ -52,7 +52,7 @@ _.extend(HTML.prototype, {
                     }
                 } else if (tagName === 'style') {
                     addPointer({
-                        type: 'html-style-tag',
+                        type: 'htmlStyleTag',
                         tag: tag,
                         assetConfig: {
                             type: 'CSS',
@@ -64,7 +64,7 @@ _.extend(HTML.prototype, {
                         var rel = tag.rel.toLowerCase();
                         if (rel === 'stylesheet') {
                             addPointer({
-                                type: 'html-style-tag',
+                                type: 'htmlStyleTag',
                                 tag: tag,
                                 assetConfig: {
                                     url: tag.href
@@ -72,7 +72,7 @@ _.extend(HTML.prototype, {
                            });
                         } else if (/^(?:shortcut |apple-touch-)?icon$/.test(rel)) {
                             addPointer({
-                                type: 'html-shortcut-icon',
+                                type: 'htmlShortcutIcon',
                                 tag: tag,
                                 assetConfig: {
                                     url: tag.href
@@ -82,7 +82,7 @@ _.extend(HTML.prototype, {
                     }
                 } else if (tagName === 'img') {
                     addPointer({
-                        type: 'html-image-tag',
+                        type: 'htmlImageTag',
                         tag: tag,
                         assetConfig: {
                             url: tag.src
@@ -90,7 +90,7 @@ _.extend(HTML.prototype, {
                     });
                 } else if (tagName === 'iframe') {
                     addPointer({
-                        type: 'html-iframe-tag',
+                        type: 'htmlIframeTag',
                         tag: tag,
                         assetConfig: {
                             url: tag.src

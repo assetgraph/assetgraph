@@ -37,7 +37,7 @@ _.extend(JavaScript.prototype, {
                         if (Array.isArray(node[2]) && node[2].length === 1 &&
                             Array.isArray(node[2][0]) && node[2][0][0] === 'string') {
                             addPointer({
-                                type: node[1][2] === 'include' ? 'js-static-include' : 'js-lazy-include',
+                                type: node[1][2] === 'include' ? 'jsStaticInclude' : 'jsLazyInclude',
                                 node: node,
                                 assetConfig: {
                                     url: node[2][0][1]
@@ -51,7 +51,7 @@ _.extend(JavaScript.prototype, {
                             Array.isArray(node[2][0]) && node[2][0][0] === 'string') {
 
                             addPointer({
-                                type: 'js-static-url',
+                                type: 'jsStaticUrl',
                                 node: node,
                                 assetConfig: {
                                     url: node[2][1]

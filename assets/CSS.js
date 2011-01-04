@@ -51,7 +51,7 @@ _.extend(CSS.prototype, {
                             addPointer({
                                 cssRule: cssRule,
                                 propertyName: propertyName,
-                                type: 'css-background-image',
+                                type: 'cssBackgroundImage',
                                 assetConfig: assetConfig
                             });
                         }
