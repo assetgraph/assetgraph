@@ -136,7 +136,7 @@ SenchaJSBuilder.prototype = {
         );
     },
 
-    resolve: function (assetConfig, label, pointer, cb) {
+    resolve: function (assetConfig, label, baseUrl, cb) {
         if (assetConfig.url in this.pkgIndex) {
             this.resolvePkg(this.pkgIndex[assetConfig.url], cb);
         } else {

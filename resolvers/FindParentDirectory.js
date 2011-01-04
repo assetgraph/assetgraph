@@ -27,13 +27,13 @@ FindParentDirectory.prototype = {
         }
     },
 
-    resolve: function (assetConfig, label, pointer, cb) {
+    resolve: function (assetConfig, label, baseUrl, cb) {
         var This = this,
             candidateUrls = [];
 
         step(
             function () {
-                var baseUrlFragments = pointer.asset.baseUrl.split("/");
+                var baseUrlFragments = baseUrl.split("/");
                 baseUrlFragments.forEach(function (baseUrlFragment, i) {
                     var candidateUrl = baseUrlFragments.slice(0, i).concat(label).join("/");
                     candidateUrls.push(candidateUrl);

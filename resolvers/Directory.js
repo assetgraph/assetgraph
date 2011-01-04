@@ -7,7 +7,7 @@ var Directory = module.exports = function (config) {
 };
 
 Directory.prototype = {
-    resolve: function (assetConfig, pointer, label, cb) {
+    resolve: function (assetConfig, label, baseUrl, cb) {
         assetConfig.url = path.join(this.url, assetConfig.url);
         process.nextTick(function () {
             cb(null, [assetConfig]);

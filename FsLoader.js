@@ -24,14 +24,15 @@ FsLoader.prototype = {
         this.labelResolvers[labelName] = new Constructor(config);
     },
 
-    // cb(err, relationsArray)
-    resolveAssetConfig: function (assetConfig, pointer, cb) {
-console.log("resolving assetConfig " + require('sys').inspect(assetConfig));
-        if (assetConfig.src) {
+    // cb(err, resolvedAssetConfigs)
+    resolveAssetConfig: function (assetConfig, baseUrl, cb) {
+//console.log("resolving assetConfig " + require('sys').inspect(assetConfig));
+        if ('src' in assetConfig) {
+            // Inline asset, no need to resolve any further
             process.nextTick(function () {
                 return cb(null, [assetConfig]);
             });
-        } else if (assetConfig.url) {
+        } else if ('url' in assetConfig) {
             var This = this,
                 matchLabel = assetConfig.url.match(/^([\w\-]+):(.*)$/);
             if (matchLabel) {
@@ -42,14 +43,14 @@ console.log("resolving assetConfig " + require('sys').inspect(assetConfig));
                 assetConfig.url = matchLabel[2];
                 var resolver = This.labelResolvers[label] || This.defaultLabelResolver;
 
-                resolver.resolve(assetConfig, label, pointer, error.passToFunction(cb, function (resolvedAssetConfigs) {
+                resolver.resolve(assetConfig, label, baseUrl, error.passToFunction(cb, function (resolvedAssetConfigs) {
                     step(
                         function () {
                             var group = this.group();
                             resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
                                 if ('url' in resolvedAssetConfig && /[\w\-]+:/.test(resolvedAssetConfig.url)) {
                                     // Reresolve, probably ext: remapped to ext-base:
-                                    This.resolveAssetConfig(resolvedAssetConfig, pointer, group());
+                                    This.resolveAssetConfig(resolvedAssetConfig, baseUrl, group());
                                 } else {
                                     group()(null, [resolvedAssetConfig]);
                                 }
@@ -62,7 +63,7 @@ console.log("resolving assetConfig " + require('sys').inspect(assetConfig));
                 }));
             } else {
                 // No label, assume relative path
-                assetConfig.url = path.join(pointer.asset.baseUrl, assetConfig.url);
+                assetConfig.url = path.join(baseUrl, assetConfig.url);
                 cb(null, [assetConfig]);
             }
         } else {
@@ -115,7 +116,7 @@ console.log("resolving assetConfig " + require('sys').inspect(assetConfig));
                 if (pointers.length) {
                     pointers.forEach(function (pointer) {
                         var assetConfig = pointer.assetConfig;
-                        This.resolveAssetConfig(pointer.assetConfig, pointer, this.parallel());
+                        This.resolveAssetConfig(pointer.assetConfig, pointer.asset.baseUrl, this.parallel());
                         delete pointer.assetConfig;
                     }, this);
                 } else {
