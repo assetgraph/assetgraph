@@ -116,8 +116,8 @@ SenchaJSBuilder.prototype = {
                             error.passToFunction(cb, function (cssFileBodies) {
                                 cssFileBodies.forEach(function (cssFileBody, i) {
                                     relations.push({
-                                        originalUrl: path.join(This.baseUrl, cssUrls[i]),
                                         assetConfig: {
+                                            originalUrl: path.join(This.baseUrl, cssUrls[i]),
                                             type: 'CSS',
                                             src: cssFileBody.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/url\s*\(\s*/g, function () {
                                                 return "url(..";
@@ -146,7 +146,8 @@ SenchaJSBuilder.prototype = {
 
     resolve: function (pointer, cb) {
         var This = this,
-            pkg = this.pkgIndex[pointer.url];
+            assetConfig = pointer.assetConfig,
+            pkg = this.pkgIndex[assetConfig.url];
         if (pkg) {
             this.resolvePkg(pkg, error.passToFunction(cb, function (relations) {
                 relations.forEach(function (relation) {
@@ -155,12 +156,11 @@ SenchaJSBuilder.prototype = {
                 cb(null, relations);
             }));
         } else {
+            assetConfig.url = path.join(This.baseUrl, assetConfig.url);
             process.nextTick(function () {
                 cb(null, [{
                     pointer: pointer,
-                    assetConfig: {
-                        url: path.join(This.baseUrl, pointer.url)
-                    }
+                    assetConfig: assetConfig
                 }]);
             });
         }

@@ -8,13 +8,13 @@ var Directory = module.exports = function (config) {
 
 Directory.prototype = {
     resolve: function (pointer, cb) {
-        var This = this;
+        var This = this,
+            assetConfig = pointer.assetConfig;
+        assetConfig.url = path.join(This.url, pointer.assetConfig.url);
         process.nextTick(function () {
             cb(null, [{
                 pointer: pointer,
-                assetConfig: {
-                    url: path.join(This.url, pointer.url)
-                }
+                assetConfig: assetConfig
             }]);
         });
     }

@@ -25,12 +25,6 @@ function determineRelationTargetType(relation) {
     if ('type' in relation) {
         return relation.type;
     }
-    if ('url' in relation) {
-        var assetType = assets.typeByExtension[path.extname(relation.url)];
-        if (assetType) {
-            return assetType;
-        }
-    }
     // Inline assets:
     if (relation.pointer) {
         switch (relation.pointer.type) {
@@ -56,6 +50,7 @@ FsLoader.prototype = {
     // cb(err, relationsArray)
     resolvePointer: function (pointer, cb) {
         var assetConfig = pointer.assetConfig;
+console.log("Resolving pointer with assetConfig " + require('sys').inspect(assetConfig));
         if (pointer.assetConfig.src) {
             process.nextTick(function () {
                 return cb(null, [
@@ -67,7 +62,7 @@ FsLoader.prototype = {
             });
         } else if (assetConfig.url) {
             var This = this,
-                matchLabel = url.match(/^([\w\-]+):(.*)$/);
+                matchLabel = assetConfig.url.match(/^([\w\-]+):(.*)$/);
             if (matchLabel) {
                 assetConfig.label = matchLabel[1];
                 if (!('originalUrl' in assetConfig)) {
@@ -119,11 +114,16 @@ FsLoader.prototype = {
             if ('url' in assetConfig) {
                 assetConfig.baseUrl = path.dirname(assetConfig.url);
             } else {
-                throw "Couldn't work out baseUrl";
+                throw new Error("Couldn't work out baseUrl for asset: " + sys.inspect(assetConfig));
             }
         }
         if (!('type' in assetConfig)) {
-            throw "No type in assetConfig";
+            var extension = 'url' in assetConfig && path.extname(assetConfig.url);
+            if (extension && extension in assets.typeByExtension) {
+                assetConfig.type = assets.typeByExtension[extension];
+            } else {
+                throw new Error("No type in assetConfig and couldn't work it out from the url: " + sys.inspect(assetConfig));
+            }
         }
         var Constructor = assets.byType[assetConfig.type];
         if (!('src' in assetConfig)) {
@@ -177,6 +177,7 @@ FsLoader.prototype = {
                     [].push.apply(allRelations, relations);
                     relations.forEach(function (relation) {
                         relation.srcAsset = srcAsset;
+console.log("creating asset from relation with assetConfig = " + sys.inspect(relation.assetConfig));
                         relation.targetAsset = This.createAssetFromRelation(relation);
                         assets.push(relation.targetAsset);
                         This.siteGraph.addAsset(relation.targetAsset);
