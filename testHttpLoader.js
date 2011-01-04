@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var error = require('./error'),
-    HttpLoader = require('./HttpLoader'),
+    HttpLoader = require('./loaders/Http'),
     SiteGraph = require('./SiteGraph');
 
 var siteGraph = new SiteGraph(),

@@ -1,21 +1,21 @@
-var FsLoader = require('./FsLoader'),
-    util = require('util'),
+var util = require('util'),
     sys = require('sys'),
     fs = require('fs'),
     path = require('path'),
     step = require('step'),
     _ = require('underscore'),
-    assets = require('./assets'),
-    error = require('./error'),
-    request = require('request');
+    request = require('request'),
+    assets = require('../assets'),
+    error = require('../error'),
+    Base = require('./Base');
 
-var HttpLoader = module.exports = function (config) {
-    FsLoader.apply(this, arguments);
+var Http = module.exports = function (config) {
+    Base.apply(this, arguments);
 };
 
-util.inherits(HttpLoader, FsLoader);
+util.inherits(Http, Base);
 
-_.extend(HttpLoader.prototype, {
+_.extend(Http.prototype, {
     resolveAssetConfig: function (assetConfig, baseUrl, cb) {
         process.nextTick(function () {
             cb(null, [assetConfig]);

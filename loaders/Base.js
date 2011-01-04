@@ -5,73 +5,16 @@ var util = require('util'),
     path = require('path'),
     step = require('step'),
     _ = require('underscore'),
-    resolvers = require('./resolvers'),
-    assets = require('./assets'),
-    error = require('./error');
+    assets = require('../assets'),
+    error = require('../error');
 
 // Expects: config.root
-var FsLoader = module.exports = function (config) {
+var Base = module.exports = function (config) {
     _.extend(this, config);
-    this.labelResolvers = {};
     this.seenAssetUrls = {};
-    this.defaultLabelResolver = new resolvers.FindParentDirectory({root: this.root});
 };
 
-FsLoader.prototype = {
-    addLabelResolver: function (labelName, Constructor, config) {
-        config = config || {};
-        config.root = this.root;
-        this.labelResolvers[labelName] = new Constructor(config);
-    },
-
-    // cb(err, resolvedAssetConfigs)
-    resolveAssetConfig: function (assetConfig, baseUrl, cb) {
-//console.log("resolving assetConfig " + require('sys').inspect(assetConfig));
-        if ('src' in assetConfig) {
-            // Inline asset, no need to resolve any further
-            process.nextTick(function () {
-                return cb(null, [assetConfig]);
-            });
-        } else if ('url' in assetConfig) {
-            var This = this,
-                matchLabel = assetConfig.url.match(/^([\w\-]+):(.*)$/);
-            if (matchLabel) {
-                var label = matchLabel[1];
-                if (!('originalUrl' in assetConfig)) {
-                    assetConfig.originalUrl = assetConfig.url;
-                }
-                assetConfig.url = matchLabel[2];
-                var resolver = This.labelResolvers[label] || This.defaultLabelResolver;
-
-                resolver.resolve(assetConfig, label, baseUrl, error.passToFunction(cb, function (resolvedAssetConfigs) {
-                    step(
-                        function () {
-                            var group = this.group();
-                            resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
-                                if ('url' in resolvedAssetConfig && /[\w\-]+:/.test(resolvedAssetConfig.url)) {
-                                    // Reresolve, probably ext: remapped to ext-base:
-                                    This.resolveAssetConfig(resolvedAssetConfig, baseUrl, group());
-                                } else {
-                                    group()(null, [resolvedAssetConfig]);
-                                }
-                            });
-                        },
-                        error.passToFunction(cb, function (resolvedAssetConfigArrays) {
-                            cb(null, _.flatten(resolvedAssetConfigArrays));
-                        })
-                    );
-                }));
-            } else {
-                // No label, assume relative path
-                assetConfig.url = path.join(baseUrl, assetConfig.url);
-                cb(null, [assetConfig]);
-            }
-        } else {
-            // No url and no inlineData, give up.
-            cb(new Error("Cannot resolve pointer"));
-        }
-    },
-
+Base.prototype = {
     loadAsset: function (assetConfig) {
         var This = this;
         if ('url' in assetConfig && assetConfig.url in this.siteGraph.assetsByUrl) {
@@ -101,18 +44,11 @@ FsLoader.prototype = {
         return new Constructor(assetConfig);
     },
 
-    getSrcProxy: function (assetConfig) {
-        var This = this;
-        return function (cb) {
-            // Will be invoked in the asset's scope, so this.encoding works out.
-            fs.readFile(path.join(This.root, assetConfig.url), this.encoding, cb);
-        };
-    },
-
     populatePointerType: function (srcAsset, pointerType, cb) {
         var This = this,
             allRelations = [],
             pointers;
+
         step(
             function () {
                 srcAsset.getPointersOfType(pointerType, this);

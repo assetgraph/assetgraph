@@ -2,7 +2,7 @@ var path = require('path'),
     fs = require('fs'),
     step = require('step'),
     _ = require('underscore'),
-    error = require('../error');
+    error = require('../../../error');
 
 var SenchaJSBuilder = module.exports = function (config) {
     // Expects: config.url, config.body, config.root

@@ -1,7 +1,7 @@
 var path = require('path'),
     step = require('step'),
     _ = require('underscore'),
-    error = require('../error');
+    error = require('../../../error');
 
 var FindParentDirectory = module.exports = function (config) {
     // Expects: config.root

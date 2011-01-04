@@ -6,9 +6,9 @@ var util = require('util'),
     step = require('step'),
     _ = require('underscore'),
     assets = require('./assets'),
-    resolvers = require('./resolvers'),
+    resolvers = require('./loaders/Fs/resolvers'),
     SiteGraph = require('./SiteGraph'),
-    FsLoader = require('./FsLoader'),
+    FsLoader = require('./loaders/Fs'),
     error = require('./error'),
     options = {};
 
