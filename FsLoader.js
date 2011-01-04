@@ -96,11 +96,17 @@ FsLoader.prototype = {
         }
         var Constructor = assets.byType[assetConfig.type];
         if (!('src' in assetConfig)) {
-            assetConfig.srcProxy = function (cb) {
-                fs.readFile(path.join(This.root, assetConfig.url), Constructor.prototype.encoding, cb);
-            };
+            assetConfig.srcProxy = this.getSrcProxy(assetConfig, Constructor.prototype.encoding);
         }
         return new Constructor(assetConfig);
+    },
+
+    getSrcProxy: function (assetConfig) {
+        var This = this;
+        return function (cb) {
+            // Will be invoked in the asset's scope, so this.encoding works out.
+            fs.readFile(path.join(This.root, assetConfig.url), this.encoding, cb);
+        };
     },
 
     populatePointerType: function (srcAsset, pointerType, cb) {
