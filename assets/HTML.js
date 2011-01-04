@@ -34,7 +34,7 @@ _.extend(HTML.prototype, {
                 if (tagName === 'script') {
                     if (tag.src) {
                         addPointer({
-                            type: 'htmlScriptTag',
+                            type: 'htmlScript',
                             tag: tag,
                             assetConfig: {
                                 url: tag.src
@@ -42,7 +42,7 @@ _.extend(HTML.prototype, {
                         });
                     } else {
                         addPointer({
-                            type: 'htmlScriptTag',
+                            type: 'htmlScript',
                             tag: tag,
                             assetConfig: {
                                 type: 'JavaScript',
@@ -52,7 +52,7 @@ _.extend(HTML.prototype, {
                     }
                 } else if (tagName === 'style') {
                     addPointer({
-                        type: 'htmlStyleTag',
+                        type: 'htmlStyle',
                         tag: tag,
                         assetConfig: {
                             type: 'CSS',
@@ -64,7 +64,7 @@ _.extend(HTML.prototype, {
                         var rel = tag.rel.toLowerCase();
                         if (rel === 'stylesheet') {
                             addPointer({
-                                type: 'htmlStyleTag',
+                                type: 'htmlStyle',
                                 tag: tag,
                                 assetConfig: {
                                     url: tag.href
@@ -82,7 +82,7 @@ _.extend(HTML.prototype, {
                     }
                 } else if (tagName === 'img') {
                     addPointer({
-                        type: 'htmlImageTag',
+                        type: 'htmlImage',
                         tag: tag,
                         assetConfig: {
                             url: tag.src
@@ -90,7 +90,7 @@ _.extend(HTML.prototype, {
                     });
                 } else if (tagName === 'iframe') {
                     addPointer({
-                        type: 'htmlIframeTag',
+                        type: 'htmlIframe',
                         tag: tag,
                         assetConfig: {
                             url: tag.src

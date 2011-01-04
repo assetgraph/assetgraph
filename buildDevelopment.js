@@ -69,7 +69,7 @@ step(
         var group = this.group();
         (options._ || []).forEach(function (templateUrl) {
             var asset = loader.loadAsset({type: 'HTML', url: templateUrl});
-            loader.populate(asset, ['htmlScriptTag', 'jsStaticInclude'], group());
+            loader.populate(asset, ['htmlScript', 'jsStaticInclude'], group());
         });
     },
     function (err) {

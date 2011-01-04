@@ -15,4 +15,4 @@ var asset = loader.loadAsset({
     url: 'index.html'
 });
 
-loader.populate(asset, ['htmlScriptTag'], error.throwException());
+loader.populate(asset, ['htmlScript', 'htmlStyle', 'htmlImage', 'htmlIframe', 'cssBackgroundImage'], error.throwException());
