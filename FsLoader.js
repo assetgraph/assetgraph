@@ -135,14 +135,14 @@ FsLoader.prototype = {
         if (!assetConfig) {
             throw new Error("No assetConfig in relation! " + sys.inspect(relation));
         }
-        if (!('baseUrl' in assetConfig)) {
+        if (!('baseUrl' in assetConfig) && !('url' in assetConfig)) {
+            // Inline asset
             if (relation.srcAsset && relation.srcAsset.url) {
                 assetConfig.baseUrl = path.dirname(relation.srcAsset.url);
             } else if (relation.srcAsset && relation.srcAsset.baseUrl) {
-                // Inline asset?
                 assetConfig.baseUrl = relation.srcAsset.baseUrl;
             } else {
-                throw new Error("Cannot determine baseUrl");
+                throw new Error("createAssetFromRelation: Cannot determine baseUrl for inline asset");
             }
         }
         return this.createAsset(assetConfig);

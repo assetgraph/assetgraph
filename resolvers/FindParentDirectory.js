@@ -32,7 +32,6 @@ FindParentDirectory.prototype = {
             assetConfig = pointer.assetConfig,
             candidateUrls = [];
 
-var msg="Resolving " + assetConfig.label + ":" + assetConfig.url + " to ";
         step(
             function () {
                 var baseUrlFragments = pointer.asset.baseUrl.split("/");
@@ -48,13 +47,10 @@ var msg="Resolving " + assetConfig.label + ":" + assetConfig.url + " to ";
                     return cb(new Error("Couldn't resolve label " + pointer.label + " from " + pointer.asset.baseUrl));
                 }
                 // If bestCandidateIndex === 0, assetConfig.url is already correct
-console.log("candidateUrls = " + candidateUrls.join(" "));
-console.log("bestCandidateIndex = " + bestCandidateIndex);
                 if (bestCandidateIndex >= 0) {
                     assetConfig.url = path.join(candidateUrls[bestCandidateIndex], assetConfig.url);
                 }
                 delete assetConfig.label; // Egh
-console.log(msg + assetConfig.url);
                 cb(null, [{
                     pointer: pointer,
                     assetConfig: assetConfig
