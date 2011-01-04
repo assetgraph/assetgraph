@@ -16,7 +16,7 @@ process.on('uncaughtException', function (e) {
     console.log("Uncaught exception: " + sys.inspect(e.msg) + "\n" + e.stack);
 });
 
-_.each(require('optimist').usage('FIXME')/*.demand(['assets-root'])*/.argv,
+_.each(require('optimist').usage('FIXME').demand(['assets-root']).argv,
     function (value, optionName) {
         options[optionName.replace(/-([a-z])/g, function ($0, $1) {
             return $1.toUpperCase();
