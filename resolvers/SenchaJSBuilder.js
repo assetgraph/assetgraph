@@ -136,12 +136,11 @@ SenchaJSBuilder.prototype = {
         );
     },
 
-    resolve: function (assetConfig, pointer, cb) {
+    resolve: function (assetConfig, label, pointer, cb) {
         if (assetConfig.url in this.pkgIndex) {
             this.resolvePkg(this.pkgIndex[assetConfig.url], cb);
         } else {
             assetConfig.url = path.join(this.url, assetConfig.url);
-            delete assetConfig.label; // Egh
             process.nextTick(function () {
                 cb(null, [assetConfig]);
             });

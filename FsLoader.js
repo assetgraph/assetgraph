@@ -35,19 +35,19 @@ console.log("resolving assetConfig " + require('sys').inspect(assetConfig));
             var This = this,
                 matchLabel = assetConfig.url.match(/^([\w\-]+):(.*)$/);
             if (matchLabel) {
-                assetConfig.label = matchLabel[1];
+                var label = matchLabel[1];
                 if (!('originalUrl' in assetConfig)) {
                     assetConfig.originalUrl = assetConfig.url;
                 }
                 assetConfig.url = matchLabel[2];
-                var resolver = This.labelResolvers[assetConfig.label] || This.defaultLabelResolver;
+                var resolver = This.labelResolvers[label] || This.defaultLabelResolver;
 
-                resolver.resolve(assetConfig, pointer, error.passToFunction(cb, function (resolvedAssetConfigs) {
+                resolver.resolve(assetConfig, label, pointer, error.passToFunction(cb, function (resolvedAssetConfigs) {
                     step(
                         function () {
                             var group = this.group();
                             resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
-                                if ('label' in resolvedAssetConfig) {
+                                if ('url' in resolvedAssetConfig && /[\w\-]+:/.test(resolvedAssetConfig.url)) {
                                     // Reresolve, probably ext: remapped to ext-base:
                                     This.resolveAssetConfig(resolvedAssetConfig, pointer, group());
                                 } else {

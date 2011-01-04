@@ -7,9 +7,8 @@ var Directory = module.exports = function (config) {
 };
 
 Directory.prototype = {
-    resolve: function (assetConfig, pointer, cb) {
+    resolve: function (assetConfig, pointer, label, cb) {
         assetConfig.url = path.join(this.url, assetConfig.url);
-        delete assetConfig.label; // Egh
         process.nextTick(function () {
             cb(null, [assetConfig]);
         });

@@ -27,7 +27,7 @@ FindParentDirectory.prototype = {
         }
     },
 
-    resolve: function (assetConfig, pointer, cb) {
+    resolve: function (assetConfig, label, pointer, cb) {
         var This = this,
             candidateUrls = [];
 
@@ -35,7 +35,7 @@ FindParentDirectory.prototype = {
             function () {
                 var baseUrlFragments = pointer.asset.baseUrl.split("/");
                 baseUrlFragments.forEach(function (baseUrlFragment, i) {
-                    var candidateUrl = baseUrlFragments.slice(0, i).concat(assetConfig.label).join("/");
+                    var candidateUrl = baseUrlFragments.slice(0, i).concat(label).join("/");
                     candidateUrls.push(candidateUrl);
                     This.dirExists(path.join(This.root, candidateUrl), this.parallel());
                 }, this);
@@ -48,7 +48,6 @@ FindParentDirectory.prototype = {
                 if (bestCandidateIndex >= 0) {
                     assetConfig.url = path.join(candidateUrls[bestCandidateIndex], assetConfig.url);
                 }
-                delete assetConfig.label; // Egh
                 cb(null, [assetConfig]);
             })
         );
