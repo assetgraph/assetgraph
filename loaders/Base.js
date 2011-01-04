@@ -76,15 +76,16 @@ Base.prototype = {
                             // Inline asset, copy baseUrl from srcAsset
                             assetConfig.baseUrl = srcAsset.baseUrl;
                         }
-                        var relation = {
-                            srcAsset: srcAsset,
-                            targetAsset: This.loadAsset(assetConfig),
-                            pointer: pointers[i]
-                        };
+                        var pointer = pointers[i],
+                            relation = {
+                                type: pointer.type,
+                                srcAsset: srcAsset,
+                                targetAsset: This.loadAsset(assetConfig),
+                                pointer: pointer
+                            };
                         This.siteGraph.addRelation(relation);
                         assets.push(relation.targetAsset);
                     });
-
                 }, this);
                 cb(null, assets);
             })
