@@ -27,7 +27,6 @@ _.extend(Fs.prototype, {
 
     // cb(err, resolvedAssetConfigs)
     resolveAssetConfig: function (assetConfig, baseUrl, cb) {
-//console.log("resolving assetConfig " + require('sys').inspect(assetConfig));
         if ('src' in assetConfig) {
             // Inline asset, no need to resolve any further
             process.nextTick(function () {

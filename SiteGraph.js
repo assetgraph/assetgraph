@@ -37,6 +37,17 @@ SiteGraph.prototype = {
             this.relationsByType[relation.type] = [];
         }
         this.relationsByType[relation.type].push(relation);
+        var srcAsset = relation.srcAsset;
+
+//        (relation.srcAsset.relations[relation.type] = relation.srcAsset.relations[relation.type] || []).push(relation);
+    },
+
+    getRelationsByType: function (type) {
+        return this.relationsByType[type] || [];
+    },
+
+    getAssetsByType: function (type) {
+        return this.assetsByType[type] || [];
     },
 
     getRelationTypes: function () {
@@ -47,9 +58,26 @@ SiteGraph.prototype = {
         return _.keys(this.assetsByType);
     },
 
+    // This cries out for a rich query facility/DSL!
+    getRelationsDeep: function (startAsset, relationType) { // preorder
+        var result = [],
+            assetQueue = [startAsset],
+            seenAssets = {};
+        while (assetQueue.length) {
+            var asset = assetQueue.shift();
+            if (!seenAssets[asset.id]) {
+                seenAssets[asset.id] = true;
+                asset.relations[relationType].forEach(function (relation) {
+                    result.push(relation);
+                    assetQueue.push(relation.targetAsset);
+                });
+            }
+        }
+        return result;
+    },
+
     toGraphViz: function () {
         var g = graphviz.digraph("G");
-g.set('splines', 'compound');
         this.getAssetTypes().forEach(function (assetType) {
             this.assetsByType[assetType].forEach(function (asset) {
                 g.addNode(asset.id.toString(), {label: 'url' in asset ? path.basename(asset.url) : 'inline'});

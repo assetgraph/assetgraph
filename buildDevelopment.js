@@ -5,7 +5,9 @@ var util = require('util'),
     fs = require('fs'),
     step = require('step'),
     _ = require('underscore'),
+    fileUtils = require('./fileUtils'),
     assets = require('./assets'),
+//    translations = require('./translations'),
     resolvers = require('./loaders/Fs/resolvers'),
     SiteGraph = require('./SiteGraph'),
     FsLoader = require('./loaders/Fs'),
@@ -29,6 +31,8 @@ var siteGraph = new SiteGraph(),
         siteGraph: siteGraph,
         root: options.assetsRoot
     });
+
+var templates = [];
 
 step(
     function () {
@@ -68,12 +72,67 @@ step(
     function () {
         var group = this.group();
         (options._ || []).forEach(function (templateUrl) {
-            var asset = loader.loadAsset({type: 'HTML', url: templateUrl});
-            loader.populate(asset, ['htmlScript', 'jsStaticInclude'], group());
+            var template = loader.loadAsset({type: 'HTML', url: templateUrl});
+            templates.push(template);
+            loader.populate(template, ['htmlScript', 'jsStaticInclude'], group());
         });
     },
+    function () {
+try{
+        templates.forEach(function (template) {
+            var document = template.parseTree; // Egh, gotta do it async?
+            function makeTemplateRelativeUrl(url) {
+                return fileUtils.buildRelativeUrl(template.url, url);
+            }
+console.log("relations by type htmlScript = " + require('sys').inspect(template.getRelationsByType('htmlScript').length));
+            template.getRelationsByType('htmlScript').forEach(function (htmlScriptRelation) {
+                var script = relation.targetAsset,
+                    linkTags = [],
+                    scriptTags = [];
+                siteGraph.getRelationsDeep(script, 'jsStaticInclude').forEach(function (relation) {
+                    var url;
+                    if ('url' in targetAsset) {
+                        url = makeTemplateRelativeUrl(targetAsset.url);
+                    } else {
+                        // Inline or "dirty", has to be written to disc
+                        url = makeTemplateRelativeUrl("build/" + makeHumanReadableFileName(targetAsset));
+                    }
+                    if (targetAsset.type === 'CSS') {
+                        var linkTag = document.createElement('link');
+                        linkTag.rel = 'stylesheet';
+                        linkTag.href = url;
+                        linkTags.push(linkTag);
+                    } else {
+                        var scriptTag = document.createElement('script');
+                        scriptTag.src = url;
+                        scriptTags.push(scriptTag);
+                    }
+                });
+
+                var htmlScriptTag = htmlScriptRelation.pointer.tag;
+                scriptTags.forEach(function (scriptTag) {
+                    htmlScriptTag.parentNode.insertBefore(scriptTag, htmlScriptTag);
+                });
+                var existingScriptTags = document.getElementsByTagName('script'),
+                    firstExistingScriptTag = existingScriptTags.length > 0 && existingScriptTags[0],
+                    head = document.head;
+                if (firstExistingScriptTag && firstExistingScriptTag.parentNode === head) {
+                    linkTags.reverse().forEach(function (linkTag) {
+                        head.insertBefore(linkTag, firstExistingScriptTag);
+                    });
+                } else {
+                    linkTags.forEach(function (linkTag) {
+                        head.appendChild(linkTag);
+                    });
+                }
+            });
+            console.log("The document = " + document.outerHTML);
+        });
+}catch(e){console.log("error: " + e);}
+        process.nextTick(this);
+    },
     error.throwException(function () {
-        siteGraph.toGraphViz();
+//        siteGraph.toGraphViz();
     }),
     function (err) {
         console.log("error: " + err + "\n" + err.stack);

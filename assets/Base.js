@@ -6,6 +6,7 @@ var path = require('path'),
 
 var Base = module.exports = function (config) {
     _.extend(this, config);
+    this.relations = {};
 };
 
 Base.prototype = {
@@ -29,9 +30,17 @@ Base.prototype = {
         }));
     },
 
-    getPointersOfType: function (type, cb) {
+    getPointersOfType: function (type, cb) { // Of => By please
         this.getPointers(error.passToFunction(cb, function (pointers) {
             cb(null, pointers[type] || []);
         }));
+    },
+
+    getRelationTypes: function () {
+        return _.keys(this.relations);
+    },
+
+    getRelationsByType: function (type) {
+        return this.relations[type] || [];
     }
 };
