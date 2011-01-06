@@ -1,4 +1,7 @@
-/*global exports*/
+/*global require, exports*/
+var fs = require('fs'),
+    error = require('./error');
+
 exports.buildRelativeUrl = function(fromUrl, toUrl) {
     var fromFragments = fromUrl.split("/"),
         toFragments = toUrl.split("/"),
@@ -14,4 +17,25 @@ exports.buildRelativeUrl = function(fromUrl, toUrl) {
     }
     [].push.apply(relativeUrlFragments, toFragments);
     return relativeUrlFragments.join("/");
+};
+
+var defaultPermissions = parseInt('0666', 8);
+
+exports.mkpath = function (dir, permissions, cb) {
+    if (typeof permissions === 'function') {
+        cb = permissions;
+        permissions = parseInt('0666', 8);
+    }
+    fs.mkdir(dir, permissions, function (err) {
+        if (err && err === process.ENOENT) {
+            var parentDir = path.normalize(dir + "/..");
+            if (parentDir !== '/' && parentDir !== '') {
+                exports.mkpath(parentDir, permissions, error.passToFunction(cb, function () {
+                    fs.mkdir(dir, permissions, cb);
+                }));
+                return;
+            }
+        }
+        cb(err);
+    });
 };

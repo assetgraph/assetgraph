@@ -18,7 +18,7 @@ process.on('uncaughtException', function (e) {
     console.log("Uncaught exception: " + sys.inspect(e.msg) + "\n" + e.stack);
 });
 
-_.each(require('optimist').usage('FIXME').demand(['assets-root']).argv,
+_.each(require('optimist').usage('FIXME').demand(['root', 'fixup-url']).argv,
     function (value, optionName) {
         options[optionName.replace(/-([a-z])/g, function ($0, $1) {
             return $1.toUpperCase();
@@ -29,7 +29,7 @@ _.each(require('optimist').usage('FIXME').demand(['assets-root']).argv,
 var siteGraph = new SiteGraph(),
     loader = new FsLoader({
         siteGraph: siteGraph,
-        root: options.assetsRoot
+        root: options.root
     });
 
 var templates = [];
@@ -68,6 +68,9 @@ step(
             }
         });
         process.nextTick(group());
+        if ('fixupUrl' in options) {
+            fileUtils.mkpath(path.join(loader.root, options.fixupUrl), this.parallel());
+        }
     },
     function () {
         var group = this.group();
@@ -78,37 +81,48 @@ step(
         });
     },
     function () {
-try{
+        function makeHumanReadableFileName (asset) {
+            console.log("make human read " + (asset.originalUrl || asset.url));
+            return (asset.originalUrl || asset.url).replace(/[^a-z0-9_\-]/g, '_');
+        }
+
         templates.forEach(function (template) {
-            var document = template.parseTree; // Egh, gotta do it async?
+            var document = template.parseTree, // Egh, gotta do it async?
+                seenAssets = {};
             function makeTemplateRelativeUrl(url) {
-                return fileUtils.buildRelativeUrl(template.url, url);
+                return fileUtils.buildRelativeUrl(path.dirname(template.url), url);
             }
-console.log("relations by type htmlScript = " + require('sys').inspect(template.getRelationsByType('htmlScript').length));
             template.getRelationsByType('htmlScript').forEach(function (htmlScriptRelation) {
-                var script = relation.targetAsset,
+                var script = htmlScriptRelation.targetAsset,
                     linkTags = [],
                     scriptTags = [];
                 siteGraph.getRelationsDeep(script, 'jsStaticInclude').forEach(function (relation) {
-                    var url;
-                    if ('url' in targetAsset) {
-                        url = makeTemplateRelativeUrl(targetAsset.url);
-                    } else {
-                        // Inline or "dirty", has to be written to disc
-                        url = makeTemplateRelativeUrl("build/" + makeHumanReadableFileName(targetAsset));
-                    }
-                    if (targetAsset.type === 'CSS') {
-                        var linkTag = document.createElement('link');
-                        linkTag.rel = 'stylesheet';
-                        linkTag.href = url;
-                        linkTags.push(linkTag);
-                    } else {
-                        var scriptTag = document.createElement('script');
-                        scriptTag.src = url;
-                        scriptTags.push(scriptTag);
+                    var targetAsset = relation.targetAsset;
+                    if (!(targetAsset.id in seenAssets)) {
+                        seenAssets[targetAsset.id] = true;
+                        var url;
+                        if ('url' in targetAsset) {
+                            url = makeTemplateRelativeUrl(targetAsset.url);
+                        } else {
+                            // "Dirty", has to be written to disc
+                            var rewrittenUrl = path.join(options.fixupUrl, makeHumanReadableFileName(targetAsset));
+                            fs.writeFile(path.join(loader.root, rewrittenUrl), targetAsset.src, targetAsset.encoding, function (err) {
+                                console.log("Wrote " + rewrittenUrl + " " + err);
+                            });
+                            url = makeTemplateRelativeUrl(rewrittenUrl);
+                        }
+                        if (targetAsset.type === 'CSS') {
+                            var linkTag = document.createElement('link');
+                            linkTag.rel = 'stylesheet';
+                            linkTag.href = url;
+                            linkTags.push(linkTag);
+                        } else {
+                            var scriptTag = document.createElement('script');
+                            scriptTag.src = url;
+                            scriptTags.push(scriptTag);
+                        }
                     }
                 });
-
                 var htmlScriptTag = htmlScriptRelation.pointer.tag;
                 scriptTags.forEach(function (scriptTag) {
                     htmlScriptTag.parentNode.insertBefore(scriptTag, htmlScriptTag);
@@ -126,9 +140,8 @@ console.log("relations by type htmlScript = " + require('sys').inspect(template.
                     });
                 }
             });
-            console.log("The document = " + document.outerHTML);
+//            console.log("The document = " + document.outerHTML);
         });
-}catch(e){console.log("error: " + e);}
         process.nextTick(this);
     },
     error.throwException(function () {

@@ -38,8 +38,7 @@ SiteGraph.prototype = {
         }
         this.relationsByType[relation.type].push(relation);
         var srcAsset = relation.srcAsset;
-
-//        (relation.srcAsset.relations[relation.type] = relation.srcAsset.relations[relation.type] || []).push(relation);
+        (relation.srcAsset.relations[relation.type] = relation.srcAsset.relations[relation.type] || []).push(relation);
     },
 
     getRelationsByType: function (type) {
@@ -67,7 +66,7 @@ SiteGraph.prototype = {
             var asset = assetQueue.shift();
             if (!seenAssets[asset.id]) {
                 seenAssets[asset.id] = true;
-                asset.relations[relationType].forEach(function (relation) {
+                (asset.relations[relationType] || []).forEach(function (relation) {
                     result.push(relation);
                     assetQueue.push(relation.targetAsset);
                 });

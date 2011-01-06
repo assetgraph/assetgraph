@@ -79,7 +79,7 @@ SenchaJSBuilder.prototype = {
                                 type: 'JavaScript',
                                 src: fileBodies.join("\n"),
                                 pointers: {},
-                                originalUrl: path.join(This.baseUrl, pkg.target)
+                                originalUrl: path.join(This.url, pkg.target)
                             });
                             cb(null, assetConfigs);
                         })
@@ -112,7 +112,7 @@ SenchaJSBuilder.prototype = {
                             error.passToFunction(cb, function (cssFileBodies) {
                                 cssFileBodies.forEach(function (cssFileBody, i) {
                                     assetConfigs.push({
-                                        originalUrl: path.join(This.baseUrl, cssUrls[i]),
+                                        originalUrl: path.join(This.url, cssUrls[i]),
                                         type: 'CSS',
                                         src: cssFileBody.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/url\s*\(\s*/g, function () {
                                             return "url(..";

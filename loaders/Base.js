@@ -16,7 +16,6 @@ var Base = module.exports = function (config) {
 
 Base.prototype = {
     loadAsset: function (assetConfig) {
-        var This = this;
         if ('url' in assetConfig && assetConfig.url in this.siteGraph.assetsByUrl) {
             // Already loaded
             return this.siteGraph.assetsByUrl[assetConfig.url];
