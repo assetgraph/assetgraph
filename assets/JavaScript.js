@@ -33,9 +33,11 @@ _.extend(JavaScript.prototype, {
             function walk (node) {
                 if (node[0] === 'call' && Array.isArray(node[1]) && node[1][0] === 'dot' &&
                     Array.isArray(node[1][1]) && node[1][1][0] === 'name' && node[1][1][1] === 'one') {
+
                     if (/^(?:lazyInlude|include)$/.test(node[1][2])) {
                         if (Array.isArray(node[2]) && node[2].length === 1 &&
                             Array.isArray(node[2][0]) && node[2][0][0] === 'string') {
+
                             addPointer({
                                 type: node[1][2] === 'include' ? 'jsStaticInclude' : 'jsLazyInclude',
                                 node: node,
@@ -46,7 +48,9 @@ _.extend(JavaScript.prototype, {
                         } else {
                             throw new Error("Invalid one.include syntax");
                         }
-                    } else if (node[1][2] === 'getStaticUrl') {
+                    }
+/*
+                    else if (node[1][2] === 'getStaticUrl') {
                         if (Array.isArray(node[2]) && node[2].length === 1 &&
                             Array.isArray(node[2][0]) && node[2][0][0] === 'string') {
 
@@ -58,18 +62,21 @@ _.extend(JavaScript.prototype, {
                                 }
                             });
                         } else {
-                            throw new Error("Invalid one.getStaticUrl syntax");
+                            cb(new Error("Invalid one.getStaticUrl syntax"));
                         }
                     }
+*/
                 }
 
-                for (var i=1 ; i<node.length ; i++) {
+                for (var i=0 ; i<node.length ; i++) {
                     if (Array.isArray(node[i])) {
                         walk(node[i]);
                     }
                 }
             }
+try{
             walk(parseTree);
+}catch(e) {console.log("ouch! " + e)}
             cb(null, pointers);
         }));
     })

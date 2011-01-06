@@ -7,7 +7,6 @@ var util = require('util'),
     _ = require('underscore'),
     fileUtils = require('./fileUtils'),
     assets = require('./assets'),
-//    translations = require('./translations'),
     resolvers = require('./loaders/Fs/resolvers'),
     SiteGraph = require('./SiteGraph'),
     FsLoader = require('./loaders/Fs'),
@@ -79,7 +78,7 @@ step(
             loader.populate(template, ['htmlScript', 'jsStaticInclude'], group());
         });
     },
-    function () {
+    error.logAndExit(function () {
         function makeHumanReadableFileName (asset) {
             return (asset.originalUrl || asset.url).replace(/[^a-z0-9_\-\.]/g, '_');
         }
@@ -137,7 +136,7 @@ step(
             });
         });
         process.nextTick(this);
-    },
+    }),
     error.logAndExit(function () {
         templates.forEach(function (template) {
             fs.writeFile(path.join(loader.root, template.url.replace(/\.template$/, '')), template.parseTree.outerHTML, 'utf8', error.logAndExit());
