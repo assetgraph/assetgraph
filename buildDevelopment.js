@@ -82,8 +82,7 @@ step(
     },
     function () {
         function makeHumanReadableFileName (asset) {
-            console.log("make human read " + (asset.originalUrl || asset.url));
-            return (asset.originalUrl || asset.url).replace(/[^a-z0-9_\-]/g, '_');
+            return (asset.originalUrl || asset.url).replace(/[^a-z0-9_\-\.]/g, '_');
         }
 
         templates.forEach(function (template) {
@@ -107,7 +106,7 @@ step(
                             // "Dirty", has to be written to disc
                             var rewrittenUrl = path.join(options.fixupUrl, makeHumanReadableFileName(targetAsset));
                             fs.writeFile(path.join(loader.root, rewrittenUrl), targetAsset.src, targetAsset.encoding, function (err) {
-                                console.log("Wrote " + rewrittenUrl + " " + err);
+                                console.log("Wrote " + path.join(loader.root, rewrittenUrl) + " " + err);
                             });
                             url = makeTemplateRelativeUrl(rewrittenUrl);
                         }

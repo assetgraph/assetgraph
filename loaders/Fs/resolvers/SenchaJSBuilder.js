@@ -97,7 +97,7 @@ SenchaJSBuilder.prototype = {
                             });
                         }
                     });
-                    if (cssUrls.length && /^Ext JS Library [23].\d.\d/.test(This.body.licenceText)) {
+                    if (cssUrls.length && /^Ext JS Library [23].\d.\d/.test(This.body.licenseText)) {
                         // Stupid ExtJS 3 has CSS url()s relative to the target paths of their
                         // bundles, NOT the source files!
                         // Issue reported here: http://www.extjs.com/forum/showthread.php?p=330222

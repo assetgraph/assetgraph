@@ -19,12 +19,10 @@ exports.buildRelativeUrl = function(fromUrl, toUrl) {
     return relativeUrlFragments.join("/");
 };
 
-var defaultPermissions = parseInt('0666', 8);
-
 exports.mkpath = function (dir, permissions, cb) {
     if (typeof permissions === 'function') {
         cb = permissions;
-        permissions = parseInt('0666', 8);
+        permissions = parseInt('0777', 8);
     }
     fs.mkdir(dir, permissions, function (err) {
         if (err && err === process.ENOENT) {
