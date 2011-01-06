@@ -30,9 +30,8 @@ var siteGraph = new SiteGraph(),
     loader = new FsLoader({
         siteGraph: siteGraph,
         root: options.root
-    });
-
-var templates = [];
+    }),
+    templates = [];
 
 step(
     function () {
@@ -49,7 +48,7 @@ step(
             if (matchSenchaJSBuilder) {
                 var url = path.dirname(labelValue) || '',
                     version = parseInt(matchSenchaJSBuilder[1], 10);
-                fs.readFile(path.join(loader.root, labelValue), 'utf8', error.throwException(function (fileBody) {
+                fs.readFile(path.join(loader.root, labelValue), 'utf8', error.logAndExit(function (fileBody) {
                     loader.addLabelResolver(labelName, resolvers.SenchaJSBuilder, {
                         url: url,
                         version: version,
@@ -74,7 +73,7 @@ step(
     },
     function () {
         var group = this.group();
-        (options._ || []).forEach(function (templateUrl) {
+        options._.forEach(function (templateUrl) {
             var template = loader.loadAsset({type: 'HTML', url: templateUrl});
             templates.push(template);
             loader.populate(template, ['htmlScript', 'jsStaticInclude'], group());
@@ -84,7 +83,6 @@ step(
         function makeHumanReadableFileName (asset) {
             return (asset.originalUrl || asset.url).replace(/[^a-z0-9_\-\.]/g, '_');
         }
-
         templates.forEach(function (template) {
             var document = template.parseTree, // Egh, gotta do it async?
                 seenAssets = {};
@@ -105,9 +103,7 @@ step(
                         } else {
                             // "Dirty", has to be written to disc
                             var rewrittenUrl = path.join(options.fixupUrl, makeHumanReadableFileName(targetAsset));
-                            fs.writeFile(path.join(loader.root, rewrittenUrl), targetAsset.src, targetAsset.encoding, function (err) {
-                                console.log("Wrote " + path.join(loader.root, rewrittenUrl) + " " + err);
-                            });
+                            fs.writeFile(path.join(loader.root, rewrittenUrl), targetAsset.src, targetAsset.encoding, error.logAndExit());
                             url = makeTemplateRelativeUrl(rewrittenUrl);
                         }
                         if (targetAsset.type === 'CSS') {
@@ -139,14 +135,15 @@ step(
                     });
                 }
             });
-//            console.log("The document = " + document.outerHTML);
         });
         process.nextTick(this);
     },
-    error.throwException(function () {
-//        siteGraph.toGraphViz();
+    error.logAndExit(function () {
+        templates.forEach(function (template) {
+            fs.writeFile(path.join(loader.root, template.url.replace(/\.template$/, '')), template.parseTree.outerHTML, 'utf8', error.logAndExit());
+        });
     }),
-    function (err) {
-        console.log("error: " + err + "\n" + err.stack);
-    }
+    error.logAndExit(function () {
+        siteGraph.toGraphViz();
+    })
 );
