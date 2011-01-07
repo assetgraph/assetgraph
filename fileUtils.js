@@ -25,7 +25,11 @@ exports.mkpath = function (dir, permissions, cb) {
         permissions = parseInt('0777', 8);
     }
     fs.mkdir(dir, permissions, function (err) {
-        if (err && err === process.ENOENT) {
+        if (err && err.errno === process.EEXIST) {
+            // Success!
+            return cb();
+        }
+        if (err && err.errno === process.ENOENT) {
             var parentDir = path.normalize(dir + "/..");
             if (parentDir !== '/' && parentDir !== '') {
                 exports.mkpath(parentDir, permissions, error.passToFunction(cb, function () {
