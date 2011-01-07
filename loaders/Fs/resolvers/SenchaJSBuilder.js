@@ -84,7 +84,7 @@ SenchaJSBuilder.prototype = {
                             cb(null, assetConfigs);
                         })
                     );
-               } else {
+                } else {
                     var cssUrls = [];
                     urls.forEach(function (url) {
                         if (/\.css$/.test(url)) {

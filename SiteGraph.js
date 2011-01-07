@@ -60,18 +60,23 @@ SiteGraph.prototype = {
     // This cries out for a rich query facility/DSL!
     getRelationsDeep: function (startAsset, relationType) { // preorder
         var result = [],
-            assetQueue = [startAsset],
-            seenAssets = {};
-        while (assetQueue.length) {
-            var asset = assetQueue.shift();
-            if (!seenAssets[asset.id]) {
+            seenAssets = {},
+            seenRelations = {};
+        function traverse (asset) {
+            if (asset.id in seenAssets) {
+                return;
+            } else {
                 seenAssets[asset.id] = true;
                 (asset.relations[relationType] || []).forEach(function (relation) {
-                    result.push(relation);
-                    assetQueue.push(relation.targetAsset);
+                    traverse(relation.targetAsset);
+                    if (!(relation.id in seenRelations)) {
+                        result.push(relation);
+                        seenRelations[relation.id] = true;
+                    }
                 });
             }
         }
+        traverse(startAsset);
         return result;
     },
 
