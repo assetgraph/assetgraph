@@ -58,10 +58,11 @@ step(
             } else {
                 path.exists(path.join(loader.root, labelValue), function (exists) {
                     if (!exists) {
-                        throw new Error("Label " + labelName + ": Dir not found: " + labelValue);
+                        callback(new Error("Label " + labelName + ": Dir not found: " + labelValue));
+                    } else {
+                        loader.addLabelResolver(labelName, resolvers.Directory, {url: labelValue});
+                        callback();
                     }
-                    loader.addLabelResolver(labelName, resolvers.Directory, {url: labelValue});
-                    callback();
                 });
             }
         });
@@ -70,14 +71,14 @@ step(
             fileUtils.mkpath(path.join(loader.root, options.fixupUrl), this.parallel());
         }
     },
-    function () {
+    error.logAndExit(function () {
         var group = this.group();
         options._.forEach(function (templateUrl) {
             var template = loader.loadAsset({type: 'HTML', url: templateUrl});
             templates.push(template);
             loader.populate(template, ['htmlScript', 'jsStaticInclude'], group());
         });
-    },
+    }),
     error.logAndExit(function () {
         function makeHumanReadableFileName (asset) {
             return (asset.originalUrl || asset.url).replace(/[^a-z0-9_\-\.]/g, '_');
