@@ -3,7 +3,7 @@
 var util = require('util'),
     path = require('path'),
     fs = require('fs'),
-    step = require('./3rdparty/step'),
+    step = require('step'),
     _ = require('underscore'),
     fileUtils = require('./fileUtils'),
     assets = require('./assets'),
