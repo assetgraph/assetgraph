@@ -99,6 +99,13 @@ step(
                         } else {
                             // "Dirty", has to be written to disc
                             var rewrittenUrl = path.join(options.fixupUrl, makeHumanReadableFileName(targetAsset));
+                            if (targetAsset.type === 'CSS') {
+                                // FIXME: This should be done by manipulating the relations properly
+                                targetAsset.src = targetAsset.src.replace(/url\(/g, function () {
+                                    var relativeUrl = fileUtils.buildRelativeUrl(options.fixupUrl, path.dirname(targetAsset.originalUrl));
+                                    return "url(" + relativeUrl + "/";
+                                });
+                            }
                             fs.writeFile(path.join(loader.root, rewrittenUrl), targetAsset.src, targetAsset.encoding, error.logAndExit());
                             url = makeTemplateRelativeUrl(rewrittenUrl);
                         }

@@ -46,14 +46,14 @@ var SenchaJSBuilder = module.exports = function (config) {
 
 SenchaJSBuilder.prototype = {
     resolvePkg: function (pkg, cb) {
-        var This = this,
+        var that = this,
             assetConfigs = [];
         step(
             function () {
                 if (pkg.pkgDeps && pkg.pkgDeps.length > 0) {
                     pkg.pkgDeps.forEach(function (pkgTargetFileName) {
                         var callback = this.parallel();
-                        This.resolvePkg(This.pkgIndex[pkgTargetFileName], error.passToFunction(cb, function (pkgAssetConfigs) {
+                        that.resolvePkg(that.pkgIndex[pkgTargetFileName], error.passToFunction(cb, function (pkgAssetConfigs) {
                             [].push.apply(assetConfigs, pkgAssetConfigs);
                             callback();
                         }));
@@ -64,14 +64,14 @@ SenchaJSBuilder.prototype = {
             },
             function () {
                 var urls = (pkg.files || []).map(function (fileDef) {
-                    return path.join(This.url, fileDef.path, fileDef.name);
+                    return path.join(that.url, fileDef.path, fileDef.name);
                 });
                 if (pkg.name === 'Ext Base') {
                     step(
                         function () {
                             var innerGroup = this.group();
                             urls.forEach(function (url) {
-                                fs.readFile(path.join(This.root, url), 'utf8', innerGroup());
+                                fs.readFile(path.join(that.root, url), 'utf8', innerGroup());
                             });
                         },
                         error.passToFunction(cb, function (fileBodies) {
@@ -79,7 +79,7 @@ SenchaJSBuilder.prototype = {
                                 type: 'JavaScript',
                                 src: fileBodies.join("\n"),
                                 pointers: {},
-                                originalUrl: path.join(This.url, pkg.target)
+                                originalUrl: path.join(that.url, pkg.target)
                             });
                             cb(null, assetConfigs);
                         })
@@ -97,7 +97,7 @@ SenchaJSBuilder.prototype = {
                             });
                         }
                     });
-                    if (cssUrls.length && /^Ext JS Library [23].\d.\d/.test(This.body.licenseText)) {
+                    if (cssUrls.length && /^Ext JS Library [23].\d.\d/.test(that.body.licenseText)) {
                         // Stupid ExtJS 3 has CSS url()s relative to the target paths of their
                         // bundles, NOT the source files!
                         // Issue reported here: http://www.extjs.com/forum/showthread.php?p=330222
@@ -106,16 +106,16 @@ SenchaJSBuilder.prototype = {
                             function () {
                                 var innerGroup = this.group();
                                 cssUrls.forEach(function (cssUrl) {
-                                    fs.readFile(path.join(This.root, cssUrl), 'utf8', innerGroup());
+                                    fs.readFile(path.join(that.root, cssUrl), 'utf8', innerGroup());
                                 });
                             },
                             error.passToFunction(cb, function (cssFileBodies) {
                                 cssFileBodies.forEach(function (cssFileBody, i) {
                                     assetConfigs.push({
-                                        originalUrl: path.join(This.url, cssUrls[i]),
+                                        originalUrl: cssUrls[i],
                                         type: 'CSS',
                                         src: cssFileBody.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/url\s*\(\s*/g, function () {
-                                            return "url(..";
+                                            return "url(../";
                                         })
                                     });
                                 });
