@@ -30,7 +30,16 @@ _.extend(JavaScript.prototype, {
                 (pointers[pointer.type] = pointers[pointer.type] || []).push(pointer);
             }
 
-            function walk (node) {
+            var callbackCalled = false;
+            // Avoid calling the callback more than once
+            function finished(err, pointers) {
+                if (!callbackCalled) {
+                    cb(err, pointers);
+                    callbackCalled = true;
+                }
+            }
+
+            function walk(node) {
                 if (node[0] === 'call' && Array.isArray(node[1]) && node[1][0] === 'dot' &&
                     Array.isArray(node[1][1]) && node[1][1][0] === 'name' && node[1][1][1] === 'one') {
 
@@ -46,7 +55,7 @@ _.extend(JavaScript.prototype, {
                                 }
                             });
                         } else {
-                            throw new Error("Invalid one.include syntax");
+                            finished(new Error("Invalid one.include syntax"));
                         }
                     }
 /*
@@ -62,7 +71,7 @@ _.extend(JavaScript.prototype, {
                                 }
                             });
                         } else {
-                            cb(new Error("Invalid one.getStaticUrl syntax"));
+                            finished(new Error("Invalid one.getStaticUrl syntax"));
                         }
                     }
 */
@@ -74,10 +83,8 @@ _.extend(JavaScript.prototype, {
                     }
                 }
             }
-try{
             walk(parseTree);
-}catch(e) {console.log("ouch! " + e)}
-            cb(null, pointers);
+            finished(null, pointers);
         }));
     })
 });

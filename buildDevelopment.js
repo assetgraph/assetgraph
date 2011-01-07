@@ -13,10 +13,6 @@ var util = require('util'),
     error = require('./error'),
     options = {};
 
-process.on('uncaughtException', function (e) {
-    console.log("Uncaught exception: " + sys.inspect(e.msg) + "\n" + e.stack);
-});
-
 _.each(require('optimist').usage('FIXME').demand(['root', 'fixup-url']).argv,
     function (value, optionName) {
         options[optionName.replace(/-([a-z])/g, function ($0, $1) {

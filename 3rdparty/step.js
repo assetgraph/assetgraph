@@ -44,13 +44,13 @@ function Step() {
     results = [];
 
     // Run the step in a try..catch block so exceptions don't get out of hand.
-//    try {
+    try {
       lock = true;
       var result = fn.apply(next, arguments);
-//    } catch (e) {
+    } catch (e) {
       // Pass any exceptions on through the next callback
       next(e);
-//    }
+    }
 
 
     // If a syncronous return is used, pass it to the callback
