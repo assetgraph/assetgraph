@@ -33,7 +33,7 @@ _.extend(Fs.prototype, {
                 return cb(null, [assetConfig]);
             });
         } else if ('url' in assetConfig) {
-            var This = this,
+            var that = this,
                 matchLabel = assetConfig.url.match(/^([\w\-]+):(.*)$/);
             if (matchLabel) {
                 var label = matchLabel[1];
@@ -41,7 +41,7 @@ _.extend(Fs.prototype, {
                     assetConfig.originalUrl = assetConfig.url;
                 }
                 assetConfig.url = matchLabel[2];
-                var resolver = This.labelResolvers[label] || This.defaultLabelResolver;
+                var resolver = that.labelResolvers[label] || that.defaultLabelResolver;
 
                 resolver.resolve(assetConfig, label, baseUrl, error.passToFunction(cb, function (resolvedAssetConfigs) {
                     step(
@@ -51,7 +51,7 @@ _.extend(Fs.prototype, {
                                 resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
                                     if ('url' in resolvedAssetConfig && /[\w\-]+:/.test(resolvedAssetConfig.url)) {
                                         // Reresolve, probably ext: remapped to ext-base:
-                                        This.resolveAssetConfig(resolvedAssetConfig, baseUrl, group());
+                                        that.resolveAssetConfig(resolvedAssetConfig, baseUrl, group());
                                     } else {
                                         group()(null, [resolvedAssetConfig]);
                                     }
@@ -77,10 +77,10 @@ _.extend(Fs.prototype, {
     },
 
     getSrcProxy: function (assetConfig) {
-        var This = this;
+        var that = this;
         return function (cb) {
             // Will be invoked in the asset's scope, so this.encoding works out.
-            fs.readFile(path.join(This.root, assetConfig.url), this.encoding, cb);
+            fs.readFile(path.join(that.root, assetConfig.url), this.encoding, cb);
         };
     }
 });

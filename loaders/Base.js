@@ -46,7 +46,7 @@ Base.prototype = {
     },
 
     populatePointerType: function (srcAsset, pointerType, cb) {
-        var This = this,
+        var that = this,
             allRelations = [],
             pointers;
 
@@ -59,7 +59,7 @@ Base.prototype = {
                 if (pointers.length) {
                     pointers.forEach(function (pointer) {
                         var assetConfig = pointer.assetConfig;
-                        This.resolveAssetConfig(pointer.assetConfig, pointer.asset.baseUrl, this.parallel());
+                        that.resolveAssetConfig(pointer.assetConfig, pointer.asset.baseUrl, this.parallel());
                         delete pointer.assetConfig;
                     }, this);
                 } else {
@@ -81,10 +81,10 @@ Base.prototype = {
                             relation = {
                                 type: pointer.type,
                                 srcAsset: srcAsset,
-                                targetAsset: This.loadAsset(assetConfig),
+                                targetAsset: that.loadAsset(assetConfig),
                                 pointer: pointer
                             };
-                        This.siteGraph.addRelation(relation);
+                        that.siteGraph.addRelation(relation);
                         assets.push(relation.targetAsset);
                     });
                 }, this);
@@ -94,7 +94,7 @@ Base.prototype = {
     },
 
     populate: function (asset, pointerTypes, cb) {
-        var This = this;
+        var that = this;
         if (asset.url) {
             if (this.seenAssetUrls[asset.url]) {
                 return cb();
@@ -105,7 +105,7 @@ Base.prototype = {
         step(
             function () {
                 pointerTypes.forEach(function (pointerType) {
-                    This.populatePointerType(asset, pointerType, this.parallel());
+                    that.populatePointerType(asset, pointerType, this.parallel());
                 }, this);
             },
             error.passToFunction(cb, function () { // [[loaded assets for pointerTypes[0]], ...]
@@ -113,7 +113,7 @@ Base.prototype = {
                 if (loadedAssets.length) {
                     var group = this.group();
                     loadedAssets.forEach(function (loadedAsset) {
-                        This.populate(loadedAsset, pointerTypes, group());
+                        that.populate(loadedAsset, pointerTypes, group());
                     });
                 } else {
                     return cb(null, []);

@@ -13,19 +13,19 @@ util.inherits(HTML, Base);
 
 _.extend(HTML.prototype, {
     getParseTree: makeBufferedAccessor('parseTree', function (cb) {
-        var This = this;
+        var that = this;
         this.getSrc(error.passToFunction(cb, function (src) {
-            This.parseTree = jsdom.jsdom(src, undefined, {features: {ProcessExternalResources: [], FetchExternalResources: []}});
-            cb(null, This.parseTree);
+            that.parseTree = jsdom.jsdom(src, undefined, {features: {ProcessExternalResources: [], FetchExternalResources: []}});
+            cb(null, that.parseTree);
         }));
     }),
 
     getPointers: makeBufferedAccessor('pointers', function (cb) {
-        var This = this;
+        var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var pointers = {};
             function addPointer(config) {
-                config.asset = This;
+                config.asset = that;
                 (pointers[config.type] = pointers[config.type] || []).push(config);
             }
 

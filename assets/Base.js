@@ -13,10 +13,10 @@ Base.prototype = {
     encoding: 'utf8', // Change to 'binary' in subclass for images etc.
 
     getSrc: makeBufferedAccessor('src', function (cb) {
-        var This = this;
+        var that = this;
         if (this.srcProxy) {
             this.srcProxy(error.passToFunction(cb, function (src) {
-                This.src = src;
+                that.src = src;
                 cb(null, src);
             }));
         } else {

@@ -23,12 +23,12 @@ _.extend(Http.prototype, {
     },
 
     getSrcProxy: function (assetConfig) {
-        var This = this;
+        var that = this;
         return function (cb) {
             request({
-                uri: This.root + assetConfig.url
+                uri: that.root + assetConfig.url
             }, function (err, response, body) {
-                console.log("GET "+ This.root + assetConfig.url + " => " + response.statusCode);
+                console.log("GET "+ that.root + assetConfig.url + " => " + response.statusCode);
 
                 if (response.statusCode >= 400) {
                     err = new Error("Got " + response.statusCode + " from remote server!");

@@ -14,19 +14,19 @@ util.inherits(JavaScript, Base);
 
 _.extend(JavaScript.prototype, {
     getParseTree: makeBufferedAccessor('parseTree', function (cb) {
-        var This = this;
+        var that = this;
         this.getSrc(error.passToFunction(cb, function (src) {
-            This.parseTree = uglify.parser.parse(src);
-            cb(null, This.parseTree);
+            that.parseTree = uglify.parser.parse(src);
+            cb(null, that.parseTree);
         }));
     }),
 
     getPointers: makeBufferedAccessor('pointers', function (cb) {
-        var This = this;
+        var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var pointers = {};
             function addPointer(pointer) {
-                pointer.asset = This;
+                pointer.asset = that;
                 (pointers[pointer.type] = pointers[pointer.type] || []).push(pointer);
             }
 

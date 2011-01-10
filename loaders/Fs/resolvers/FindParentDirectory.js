@@ -28,7 +28,7 @@ FindParentDirectory.prototype = {
     },
 
     resolve: function (assetConfig, label, baseUrl, cb) {
-        var This = this,
+        var that = this,
             candidateUrls = [];
 
         step(
@@ -37,7 +37,7 @@ FindParentDirectory.prototype = {
                 baseUrlFragments.forEach(function (baseUrlFragment, i) {
                     var candidateUrl = baseUrlFragments.slice(0, i).concat(label).join("/");
                     candidateUrls.push(candidateUrl);
-                    This.dirExists(path.join(This.root, candidateUrl), this.parallel());
+                    that.dirExists(path.join(that.root, candidateUrl), this.parallel());
                 }, this);
             },
             error.passToFunction(cb, function () { // ...
