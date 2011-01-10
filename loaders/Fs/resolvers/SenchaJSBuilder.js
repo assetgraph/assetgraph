@@ -25,6 +25,7 @@ var SenchaJSBuilder = module.exports = function (config) {
             this.body[sectionName].forEach(function (pkg) {
                 if (this.version === 2) {
                     pkg.packages = pkg.pkgDeps;
+                    delete pkg.pkgDeps;
                     pkg.target = pkg.file;
                     delete pkg.file;
                     pkg.files = pkg.fileIncludes.map(function (fileInclude) {
@@ -50,8 +51,8 @@ SenchaJSBuilder.prototype = {
             assetConfigs = [];
         step(
             function () {
-                if (pkg.pkgDeps && pkg.pkgDeps.length > 0) {
-                    pkg.pkgDeps.forEach(function (pkgTargetFileName) {
+                if (pkg.packages && pkg.packages.length > 0) {
+                    pkg.packages.forEach(function (pkgTargetFileName) {
                         var callback = this.parallel();
                         that.resolvePkg(that.pkgIndex[pkgTargetFileName], error.passToFunction(cb, function (pkgAssetConfigs) {
                             [].push.apply(assetConfigs, pkgAssetConfigs);
@@ -66,6 +67,9 @@ SenchaJSBuilder.prototype = {
                 var urls = (pkg.files || []).map(function (fileDef) {
                     return path.join(that.url, fileDef.path, fileDef.name);
                 });
+                if (!urls.length) {
+                    return cb(null, assetConfigs);
+                }
                 if (pkg.name === 'Ext Base') {
                     step(
                         function () {
