@@ -46,15 +46,19 @@ _.extend(Fs.prototype, {
                 resolver.resolve(assetConfig, label, baseUrl, error.passToFunction(cb, function (resolvedAssetConfigs) {
                     step(
                         function () {
-                            var group = this.group();
-                            resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
-                                if ('url' in resolvedAssetConfig && /[\w\-]+:/.test(resolvedAssetConfig.url)) {
-                                    // Reresolve, probably ext: remapped to ext-base:
-                                    This.resolveAssetConfig(resolvedAssetConfig, baseUrl, group());
-                                } else {
-                                    group()(null, [resolvedAssetConfig]);
-                                }
-                            });
+                            if (resolvedAssetConfigs.length) {
+                                var group = this.group();
+                                resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
+                                    if ('url' in resolvedAssetConfig && /[\w\-]+:/.test(resolvedAssetConfig.url)) {
+                                        // Reresolve, probably ext: remapped to ext-base:
+                                        This.resolveAssetConfig(resolvedAssetConfig, baseUrl, group());
+                                    } else {
+                                        group()(null, [resolvedAssetConfig]);
+                                    }
+                                });
+                            } else {
+                                cb(new Error("assetConfig resolved to nothing: " + sys.inspect(assetConfig)));
+                            }
                         },
                         error.passToFunction(cb, function (resolvedAssetConfigArrays) {
                             cb(null, _.flatten(resolvedAssetConfigArrays));
