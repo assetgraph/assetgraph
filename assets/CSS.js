@@ -3,9 +3,10 @@ var util = require('util'),
     cssom = require('../3rdparty/cssom/lib'),
     error = require('../error'),
     makeBufferedAccessor = require('../makeBufferedAccessor'),
+    relations = require('../relations'),
     Base = require('./Base');
 
-var CSS = module.exports = function (config) {
+function CSS(config) {
     Base.call(this, config);
 };
 
@@ -20,14 +21,10 @@ _.extend(CSS.prototype, {
         }));
     }),
 
-    getPointers: makeBufferedAccessor('pointers', function (cb) {
+    getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
         var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
-            var pointers = {};
-            function addPointer(config) {
-                config.asset = that;
-                (pointers[config.type] = pointers[config.type] || []).push(config);
-            }
+            var originalRelations = [];
             _.toArray(parseTree.cssRules).forEach(function (cssRule) {
                 ['background-image', 'background'].forEach(function (propertyName) {
                     var propertyValue = cssRule.style[propertyName];
@@ -48,17 +45,19 @@ _.extend(CSS.prototype, {
                             } else {
                                 assetConfig.url = urlMatch[2];
                             }
-                            addPointer({
+                            originalRelations.push(new relations.CSSBackgroundImage({
+                                from: that,
                                 cssRule: cssRule,
                                 propertyName: propertyName,
-                                type: 'cssBackgroundImage',
                                 assetConfig: assetConfig
-                            });
+                            }));
                         }
                     }
                 });
             });
-            cb(null, pointers);
+            cb(null, originalRelations);
         }));
     })
 });
+
+exports.CSS = CSS;

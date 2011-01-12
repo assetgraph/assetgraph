@@ -4,7 +4,7 @@ exports.typeByExtension = {};
 
 function register(config) {
     var type = config.type,
-        Constructor = require('./' + type);
+        Constructor = require('./' + type)[type];
     Constructor.prototype.type = type;
     exports.byType[config.type] = Constructor;
     if (config.extensions) {

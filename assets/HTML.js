@@ -3,9 +3,10 @@ var util = require('util'),
     jsdom = require('jsdom'),
     error = require('../error'),
     makeBufferedAccessor = require('../makeBufferedAccessor'),
+    relations = require('../relations'),
     Base = require('./Base');
 
-var HTML = module.exports = function (config) {
+function HTML(config) {
     Base.call(this, config);
 };
 
@@ -20,85 +21,82 @@ _.extend(HTML.prototype, {
         }));
     }),
 
-    getPointers: makeBufferedAccessor('pointers', function (cb) {
+    getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
         var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
-            var pointers = {};
-            function addPointer(config) {
-                config.asset = that;
-                (pointers[config.type] = pointers[config.type] || []).push(config);
-            }
-
+            var originalRelations = [];
             _.toArray(parseTree.getElementsByTagName('*')).forEach(function (tag) {
                 var tagName = tag.nodeName.toLowerCase();
                 if (tagName === 'script') {
                     if (tag.src) {
-                        addPointer({
-                            type: 'htmlScript',
+                        originalRelations.push(new relations.HTMLScript({
+                            from: that,
                             tag: tag,
                             assetConfig: {
                                 url: tag.src
                             }
-                        });
+                        }));
                     } else {
-                        addPointer({
-                            type: 'htmlScript',
+                        originalRelations.push(new relations.HTMLScript({
+                            from: that,
                             tag: tag,
                             assetConfig: {
                                 type: 'JavaScript',
                                 src: tag.firstChild.nodeValue
                             }
-                        });
+                        }));
                     }
                 } else if (tagName === 'style') {
-                    addPointer({
-                        type: 'htmlStyle',
+                    originalRelations.push(new relations.HTMLStyle({
+                        from: that,
                         tag: tag,
                         assetConfig: {
                             type: 'CSS',
                             src: tag.firstChild.nodeValue
                         }
-                    });
+                    }));
                 } else if (tagName === 'link') {
                     if ('rel' in tag) {
                         var rel = tag.rel.toLowerCase();
                         if (rel === 'stylesheet') {
-                            addPointer({
-                                type: 'htmlStyle',
+                            originalRelations.push(new relations.HTMLStyle({
+                                from: that,
                                 tag: tag,
                                 assetConfig: {
                                     url: tag.href
                                 }
-                           });
+                           }));
                         } else if (/^(?:shortcut |apple-touch-)?icon$/.test(rel)) {
-                            addPointer({
-                                type: 'htmlShortcutIcon',
+                            originalRelations.push(new relations.HTMLShortcutIcon({
+                                from: that,
                                 tag: tag,
                                 assetConfig: {
                                     url: tag.href
                                 }
-                            });
+                            }));
                         }
                     }
                 } else if (tagName === 'img') {
-                    addPointer({
-                        type: 'htmlImage',
+                    originalRelations.push(new relations.HTMLImage({
+                        from: that,
                         tag: tag,
                         assetConfig: {
                             url: tag.src
                         }
-                    });
+                    }));
                 } else if (tagName === 'iframe') {
-                    addPointer({
-                        type: 'htmlIframe',
+                    originalRelations.push(new relations.HTMLIFrame({
+                        from: that,
                         tag: tag,
                         assetConfig: {
                             url: tag.src
                         }
-                    });
+                    }));
                 }
             }, this);
-            cb(null, pointers);
+            cb(null, originalRelations);
         }));
     })
 });
+
+exports.HTML = HTML;

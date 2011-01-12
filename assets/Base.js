@@ -6,41 +6,21 @@ var path = require('path'),
 
 var Base = module.exports = function (config) {
     _.extend(this, config);
-    this.relations = {};
+    this.relations = [];
 };
 
 Base.prototype = {
     encoding: 'utf8', // Change to 'binary' in subclass for images etc.
 
     getSrc: makeBufferedAccessor('src', function (cb) {
-        var that = this;
         if (this.srcProxy) {
-            this.srcProxy(error.passToFunction(cb, function (src) {
-                that.src = src;
-                cb(null, src);
-            }));
+            this.srcProxy(cb);
         } else {
             cb(new Error("Don't know how to get asset src!"));
         }
     }),
 
-    getPointerTypes: function (cb) {
-        this.getPointers(error.passToFunction(cb, function (pointers) {
-            cb(null, _.keys(pointers));
-        }));
-    },
-
-    getPointersOfType: function (type, cb) { // Of => By please
-        this.getPointers(error.passToFunction(cb, function (pointers) {
-            cb(null, pointers[type] || []);
-        }));
-    },
-
-    getRelationTypes: function () {
-        return _.keys(this.relations);
-    },
-
-    getRelationsByType: function (type) {
-        return this.relations[type] || [];
+    toString: function () {
+        return "[" + this.type + ('id' in this ? "/" + this.id : "") + "]";
     }
 };

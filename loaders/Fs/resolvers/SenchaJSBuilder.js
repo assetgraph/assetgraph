@@ -82,7 +82,7 @@ SenchaJSBuilder.prototype = {
                             assetConfigs.push({
                                 type: 'JavaScript',
                                 src: fileBodies.join("\n"),
-                                pointers: {},
+                                originalRelations: [],
                                 originalUrl: path.join(that.url, pkg.target)
                             });
                             cb(null, assetConfigs);
@@ -97,7 +97,7 @@ SenchaJSBuilder.prototype = {
                             assetConfigs.push({
                                 // originalUrl: ...
                                 url: url,
-                                pointers: {}
+                                originalRelations: []
                             });
                         }
                     });

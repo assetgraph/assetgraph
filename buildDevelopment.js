@@ -72,7 +72,9 @@ step(
         options._.forEach(function (templateUrl) {
             var template = loader.loadAsset({type: 'HTML', url: templateUrl});
             templates.push(template);
-            loader.populate(template, ['htmlScript', 'jsStaticInclude'], group());
+            loader.populate(template, function (relation) {
+                return relation.type === 'HTMLScript' || relation.type === 'JavaScriptStaticInclude';
+            }, group());
         });
     }),
     error.logAndExit(function () {
@@ -85,12 +87,17 @@ step(
             function makeTemplateRelativeUrl(url) {
                 return fileUtils.buildRelativeUrl(path.dirname(template.url), url);
             }
-            template.getRelationsByType('htmlScript').forEach(function (htmlScriptRelation) {
-                var script = htmlScriptRelation.targetAsset,
+            template.relations.filter(function (relation) {
+                return relation.type === 'HTMLScript';
+            }).forEach(function (htmlScriptRelation) {
+                var script = htmlScriptRelation.to,
                     linkTags = [],
                     scriptTags = [];
-                siteGraph.getRelationsDeep(script, 'jsStaticInclude').forEach(function (relation) {
-                    var targetAsset = relation.targetAsset;
+console.log(require('uglify').uglify.gen_code(htmlScriptRelation.to.parseTree));
+                siteGraph.getRelationsDeep(script, function (relation) {
+                    return relation.type === 'JavaScriptStaticInclude';
+                }).forEach(function (relation) {
+                    var targetAsset = relation.to;
                     if (!(targetAsset.id in seenAssets)) {
                         seenAssets[targetAsset.id] = true;
                         var url;
@@ -121,7 +128,7 @@ step(
                         }
                     }
                 });
-                var htmlScriptTag = htmlScriptRelation.pointer.tag;
+                var htmlScriptTag = htmlScriptRelation.tag;
                 scriptTags.forEach(function (scriptTag) {
                     htmlScriptTag.parentNode.insertBefore(scriptTag, htmlScriptTag);
                 });

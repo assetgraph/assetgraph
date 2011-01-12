@@ -21,8 +21,8 @@ Base.prototype = {
             return this.siteGraph.assetsByUrl[assetConfig.url];
         }
         if (!('baseUrl' in assetConfig)) {
-            if ('url' in assetConfig) {
-                assetConfig.baseUrl = path.dirname(assetConfig.url);
+            if ('url' in assetConfig || 'originalUrl' in assetConfig) {
+                assetConfig.baseUrl = path.dirname(assetConfig.url || assetConfig.originalUrl);
             } else {
                 throw new Error("Couldn't work out baseUrl for asset: " + sys.inspect(assetConfig));
             }
@@ -41,82 +41,71 @@ Base.prototype = {
             assetConfig.srcProxy = this.getSrcProxy(assetConfig, Constructor.prototype.encoding);
         }
         var asset = new Constructor(assetConfig);
-        this.siteGraph.addAsset(asset);
+        this.siteGraph.registerAsset(asset);
         return asset;
     },
 
-    populatePointerType: function (srcAsset, pointerType, cb) {
+    populate: function (srcAsset, includeRelationLambda, cb) {
         var that = this,
-            allRelations = [],
-            pointers;
-
-        step(
-            function () {
-                srcAsset.getPointersOfType(pointerType, this);
-            },
-            error.passToFunction(cb, function (pointersOfType) {
-                pointers = pointersOfType; // Make available in the next step
-                if (pointers.length) {
-                    pointers.forEach(function (pointer) {
-                        var assetConfig = pointer.assetConfig;
-                        that.resolveAssetConfig(pointer.assetConfig, pointer.asset.baseUrl, this.parallel());
-                        delete pointer.assetConfig;
-                    }, this);
-                } else {
-                    process.nextTick(function () {
-                        cb(null, []);
-                    });
-                }
-            }),
-            error.passToFunction(cb, function () { // [resolvedAssetConfigArrayForPointer1, ...]
-                var assets = [],
-                    group = this.group();
-                _.toArray(arguments).forEach(function (resolvedAssetConfigs, i) {
-                    resolvedAssetConfigs.forEach(function (assetConfig) {
-                        if (!('url' in assetConfig)) {
-                            // Inline asset, copy baseUrl from srcAsset
-                            assetConfig.baseUrl = srcAsset.baseUrl;
-                        }
-                        var pointer = pointers[i],
-                            relation = {
-                                type: pointer.type,
-                                srcAsset: srcAsset,
-                                targetAsset: that.loadAsset(assetConfig),
-                                pointer: pointer
-                            };
-                        that.siteGraph.addRelation(relation);
-                        assets.push(relation.targetAsset);
-                    });
-                }, this);
-                cb(null, assets);
-            })
-        );
-    },
-
-    populate: function (asset, pointerTypes, cb) {
-        var that = this;
-        if (asset.url) {
-            if (this.seenAssetUrls[asset.url]) {
+            filteredOriginalRelations;
+        if ('url' in srcAsset) {
+            if (this.seenAssetUrls[srcAsset.url]) {
                 return cb();
             } else {
-                this.seenAssetUrls[asset.url] = true;
+                this.seenAssetUrls[srcAsset.url] = true;
             }
         }
         step(
             function () {
-                pointerTypes.forEach(function (pointerType) {
-                    that.populatePointerType(asset, pointerType, this.parallel());
-                }, this);
+                srcAsset.getOriginalRelations(this);
             },
-            error.passToFunction(cb, function () { // [[loaded assets for pointerTypes[0]], ...]
-                var loadedAssets = _.flatten(_.toArray(arguments));
-                if (loadedAssets.length) {
+            error.passToFunction(cb, function (originalRelations) {
+                filteredOriginalRelations = originalRelations.filter(includeRelationLambda);
+                if (filteredOriginalRelations.length) {
+                    filteredOriginalRelations.forEach(function (relation) {
+                        that.resolveAssetConfig(relation.assetConfig, relation.from.baseUrl, this.parallel());
+                    }, this);
+                } else {
+                    return cb();
+                }
+            }),
+            error.passToFunction(cb, function () { // [resolvedAssetConfigArrayForFirstRelation, ...]
+                var assets = [];
+                _.toArray(arguments).forEach(function (resolvedAssetConfigs, i) {
+                    var originalRelation = filteredOriginalRelations[i];
+                    if (resolvedAssetConfigs.length === 0) {
+                        originalRelation.remove();
+                    } else if (resolvedAssetConfigs.length === 1) {
+                        if (!('url' in resolvedAssetConfigs[0])) {
+                            // Inline asset, copy baseUrl from srcAsset
+                            resolvedAssetConfigs[0].baseUrl = originalRelation.from.baseUrl;
+                        }
+                        originalRelation.assetConfig = resolvedAssetConfigs[0];
+                        originalRelation.to = that.loadAsset(originalRelation.assetConfig);
+                        srcAsset.relations.push(originalRelation); // Hmm, maybe SiteGraph should do this?
+                        that.siteGraph.registerRelation(originalRelation);
+                        assets.push(originalRelation.to);
+                    } else if (originalRelation.addRelationAfter) {
+                        var previous = originalRelation;
+                        resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
+                            var relation = previous.addRelationAfter(resolvedAssetConfig);
+                            relation.to = that.loadAsset(relation.assetConfig);
+                            that.siteGraph.registerRelation(relation);
+                            srcAsset.relations.push(relation); // Hmm, maybe SiteGraph should do this?
+                            assets.push(relation.to);
+                        });
+                        originalRelation.remove();
+                    } else {
+                        cb(new Error("assetConfig resolved to multiple, and originalRelation doesn't support addRelationAfter"));
+                    }
+                }, this);
+                if (assets.length) {
                     var group = this.group();
-                    loadedAssets.forEach(function (loadedAsset) {
-                        that.populate(loadedAsset, pointerTypes, group());
+                    assets.forEach(function (asset) {
+                        that.populate(asset, includeRelationLambda, group());
                     });
                 } else {
-                    return cb(null, []);
+                    process.nextTick(this);
                 }
             }),
             cb

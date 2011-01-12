@@ -4,6 +4,7 @@ var util = require('util'),
     fs = require('fs'),
     path = require('path'),
     step = require('step'),
+    relations = require('./relations'),
     _ = require('underscore'),
     graphviz = require('graphviz'),
     error = require('./error');
@@ -12,15 +13,18 @@ var SiteGraph = module.exports = function (config) {
     _.extend(this, config || {});
     this.nextAssetId = 1;
     this.nextRelationId = 1;
+    this.assets = [];
+    this.relations = [];
     this.assetsByUrl = {};
     this.assetsByType = {};
     this.relationsByType = {};
 };
 
 SiteGraph.prototype = {
-    addAsset: function (asset) {
+    registerAsset: function (asset) {
         asset.id = this.nextAssetId;
         this.nextAssetId += 1;
+        this.assets.push(asset);
         if ('url' in asset) {
             this.assetsByUrl[asset.url] = asset;
         }
@@ -30,15 +34,14 @@ SiteGraph.prototype = {
         this.assetsByType[asset.type].push(asset);
     },
 
-    addRelation: function (relation) {
+    registerRelation: function (relation) {
         relation.id = this.nextRelationId;
         this.nextRelationId += 1;
+        this.relations.push(relation);
         if (!(relation.type in this.relationsByType)) {
             this.relationsByType[relation.type] = [];
         }
         this.relationsByType[relation.type].push(relation);
-        var srcAsset = relation.srcAsset;
-        (relation.srcAsset.relations[relation.type] = relation.srcAsset.relations[relation.type] || []).push(relation);
     },
 
     getRelationsByType: function (type) {
@@ -58,7 +61,7 @@ SiteGraph.prototype = {
     },
 
     // This cries out for a rich query facility/DSL!
-    getRelationsDeep: function (startAsset, relationType) { // preorder
+    getRelationsDeep: function (startAsset, lambda) { // preorder
         var result = [],
             seenAssets = {},
             seenRelations = {};
@@ -67,11 +70,13 @@ SiteGraph.prototype = {
                 return;
             } else {
                 seenAssets[asset.id] = true;
-                (asset.relations[relationType] || []).forEach(function (relation) {
-                    traverse(relation.targetAsset);
-                    if (!(relation.id in seenRelations)) {
-                        result.push(relation);
-                        seenRelations[relation.id] = true;
+                asset.relations.forEach(function (relation) {
+                    if (lambda(relation)) {
+                        traverse(relation.to);
+                        if (!(relation.id in seenRelations)) {
+                            result.push(relation);
+                            seenRelations[relation.id] = true;
+                        }
                     }
                 });
             }
@@ -89,7 +94,7 @@ SiteGraph.prototype = {
         }, this);
         this.getRelationTypes().forEach(function (relationType) {
             this.relationsByType[relationType].forEach(function (relation) {
-                var edge = g.addEdge(relation.srcAsset.id.toString(), relation.targetAsset.id.toString());
+                var edge = g.addEdge(relation.from.id.toString(), relation.to.id.toString());
             }, this);
         }, this);
         console.log(g.to_dot());

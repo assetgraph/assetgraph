@@ -4,9 +4,10 @@ var util = require('util'),
     uglify = require('uglify'),
     error = require('../error'),
     makeBufferedAccessor = require('../makeBufferedAccessor'),
+    relations = require('../relations'),
     Base = require('./Base');
 
-var JavaScript = module.exports = function (config) {
+function JavaScript(config) {
     Base.call(this, config);
 };
 
@@ -21,39 +22,37 @@ _.extend(JavaScript.prototype, {
         }));
     }),
 
-    getPointers: makeBufferedAccessor('pointers', function (cb) {
+    getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
         var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
-            var pointers = {};
-            function addPointer(pointer) {
-                pointer.asset = that;
-                (pointers[pointer.type] = pointers[pointer.type] || []).push(pointer);
-            }
-
             var callbackCalled = false;
             // Avoid calling the callback more than once
-            function finished(err, pointers) {
+            function finished(err, relations) {
                 if (!callbackCalled) {
-                    cb(err, pointers);
+                    cb(err, relations);
                     callbackCalled = true;
                 }
             }
+            var stack = [],
+                originalRelations = [];
 
             function walk(node) {
-                if (node[0] === 'call' && Array.isArray(node[1]) && node[1][0] === 'dot' &&
-                    Array.isArray(node[1][1]) && node[1][1][0] === 'name' && node[1][1][1] === 'one') {
+                if (node[0] === 'stat' && Array.isArray(node[1]) &&
+                    node[1][0] === 'call' && Array.isArray(node[1][1]) && node[1][1][0] === 'dot' &&
+                    Array.isArray(node[1][1][1]) && node[1][1][1][0] === 'name' && node[1][1][1][1] === 'one') {
 
-                    if (/^(?:lazyInlude|include)$/.test(node[1][2])) {
-                        if (Array.isArray(node[2]) && node[2].length === 1 &&
-                            Array.isArray(node[2][0]) && node[2][0][0] === 'string') {
+                    if (/^(?:lazyInlude|include)$/.test(node[1][1][2])) {
+                        if (Array.isArray(node[1][2]) && node[1][2].length === 1 &&
+                            Array.isArray(node[1][2][0]) && node[1][2][0][0] === 'string') {
 
-                            addPointer({
-                                type: node[1][2] === 'include' ? 'jsStaticInclude' : 'jsLazyInclude',
+                            originalRelations.push(new relations['JavaScript' + (node[1][1][2] === 'include' ? 'Static' : 'Lazy') + 'Include']({
+                                from: that,
+                                stack: [].concat(stack),
                                 node: node,
                                 assetConfig: {
-                                    url: node[2][0][1]
+                                    url: node[1][2][0][1]
                                 }
-                            });
+                            }));
                         } else {
                             finished(new Error("Invalid one.include syntax"));
                         }
@@ -63,13 +62,14 @@ _.extend(JavaScript.prototype, {
                         if (Array.isArray(node[2]) && node[2].length === 1 &&
                             Array.isArray(node[2][0]) && node[2][0][0] === 'string') {
 
-                            addPointer({
-                                type: 'jsStaticUrl',
+                            originalRelations.push(new relations.JavaScriptStaticUrl({
+                                from: that,
+                                stack: [].concat(stack),
                                 node: node,
                                 assetConfig: {
                                     url: node[2][1]
                                 }
-                            });
+                            }));
                         } else {
                             finished(new Error("Invalid one.getStaticUrl syntax"));
                         }
@@ -79,12 +79,16 @@ _.extend(JavaScript.prototype, {
 
                 for (var i=0 ; i<node.length ; i++) {
                     if (Array.isArray(node[i])) {
+                        stack.push(node);
                         walk(node[i]);
+                        stack.pop();
                     }
                 }
             }
             walk(parseTree);
-            finished(null, pointers);
+            finished(null, originalRelations);
         }));
     })
 });
+
+exports.JavaScript = JavaScript;

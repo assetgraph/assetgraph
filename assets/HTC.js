@@ -1,10 +1,12 @@
 /*global require, module*/
 var util = require('util'),
     _ = require('underscore'),
-    HTML = require('./HTML');
+    HTML = require('./HTML').HTML;
 
-var HTC = module.exports = function (config) {
+function HTC (config) {
     HTML.call(config);
 };
 
 util.inherits(HTC, HTML);
+
+exports.HTC = HTC;
