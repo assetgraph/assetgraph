@@ -20,7 +20,7 @@ _.extend(JavaScriptStaticInclude.prototype, {
         this.node[1][2][0][1] = url;
     },
 
-    addRelationAfter: function (assetConfig) {
+    insertRelationAfter: function (assetConfig) {
         var parentNode = this.stack[this.stack.length-1],
             newRelation = new this.constructor({
                 assetConfig: assetConfig,

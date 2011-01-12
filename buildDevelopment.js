@@ -93,8 +93,8 @@ step(
                 var script = htmlScriptRelation.to,
                     linkTags = [],
                     scriptTags = [];
-console.log(require('uglify').uglify.gen_code(htmlScriptRelation.to.parseTree));
-                siteGraph.getRelationsDeep(script, function (relation) {
+//console.log(require('uglify').uglify.gen_code(htmlScriptRelation.to.parseTree));
+                siteGraph.queryRelationsDeep(script, function (relation) {
                     return relation.type === 'JavaScriptStaticInclude';
                 }).forEach(function (relation) {
                     var targetAsset = relation.to;

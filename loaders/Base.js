@@ -82,21 +82,19 @@ Base.prototype = {
                         }
                         originalRelation.assetConfig = resolvedAssetConfigs[0];
                         originalRelation.to = that.loadAsset(originalRelation.assetConfig);
-                        srcAsset.relations.push(originalRelation); // Hmm, maybe SiteGraph should do this?
                         that.siteGraph.registerRelation(originalRelation);
                         assets.push(originalRelation.to);
-                    } else if (originalRelation.addRelationAfter) {
+                    } else if (originalRelation.insertRelationAfter) {
                         var previous = originalRelation;
                         resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
-                            var relation = previous.addRelationAfter(resolvedAssetConfig);
+                            var relation = previous.insertRelationAfter(resolvedAssetConfig);
                             relation.to = that.loadAsset(relation.assetConfig);
                             that.siteGraph.registerRelation(relation);
-                            srcAsset.relations.push(relation); // Hmm, maybe SiteGraph should do this?
                             assets.push(relation.to);
                         });
                         originalRelation.remove();
                     } else {
-                        cb(new Error("assetConfig resolved to multiple, and originalRelation doesn't support addRelationAfter"));
+                        cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support insertRelationAfter"));
                     }
                 }, this);
                 if (assets.length) {

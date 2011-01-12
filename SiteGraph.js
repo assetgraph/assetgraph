@@ -34,6 +34,7 @@ SiteGraph.prototype = {
         this.assetsByType[asset.type].push(asset);
     },
 
+    // Relations must be registered in order
     registerRelation: function (relation) {
         relation.id = this.nextRelationId;
         this.nextRelationId += 1;
@@ -42,26 +43,11 @@ SiteGraph.prototype = {
             this.relationsByType[relation.type] = [];
         }
         this.relationsByType[relation.type].push(relation);
-    },
-
-    getRelationsByType: function (type) {
-        return this.relationsByType[type] || [];
-    },
-
-    getAssetsByType: function (type) {
-        return this.assetsByType[type] || [];
-    },
-
-    getRelationTypes: function () {
-        return _.keys(this.relationsByType);
-    },
-
-    getAssetTypes: function () {
-        return _.keys(this.assetsByType);
+        relation.from.relations.push(relation);
     },
 
     // This cries out for a rich query facility/DSL!
-    getRelationsDeep: function (startAsset, lambda) { // preorder
+    queryRelationsDeep: function (startAsset, lambda) { // preorder
         var result = [],
             seenAssets = {},
             seenRelations = {};
