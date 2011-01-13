@@ -87,13 +87,12 @@ step(
             function makeTemplateRelativeUrl(url) {
                 return fileUtils.buildRelativeUrl(path.dirname(template.url), url);
             }
-            template.relations.filter(function (relation) {
-                return relation.type === 'HTMLScript';
+            siteGraph.relations.filter(function (relation) {
+                return relation.from === template && relation.type === 'HTMLScript';
             }).forEach(function (htmlScriptRelation) {
                 var script = htmlScriptRelation.to,
                     linkTags = [],
                     scriptTags = [];
-//console.log(require('uglify').uglify.gen_code(htmlScriptRelation.to.parseTree));
                 siteGraph.queryRelationsDeep(script, function (relation) {
                     return relation.type === 'JavaScriptStaticInclude';
                 }).forEach(function (relation) {

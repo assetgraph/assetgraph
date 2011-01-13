@@ -43,12 +43,12 @@ SiteGraph.prototype = {
             this.relationsByType[relation.type] = [];
         }
         this.relationsByType[relation.type].push(relation);
-        relation.from.relations.push(relation);
     },
 
     // This cries out for a rich query facility/DSL!
     queryRelationsDeep: function (startAsset, lambda) { // preorder
-        var result = [],
+        var that = this,
+            result = [],
             seenAssets = {},
             seenRelations = {};
         function traverse (asset) {
@@ -56,7 +56,9 @@ SiteGraph.prototype = {
                 return;
             } else {
                 seenAssets[asset.id] = true;
-                asset.relations.forEach(function (relation) {
+                that.relations.filter(function (relation) {
+                    return relation.from === asset;
+                }).forEach(function (relation) {
                     if (lambda(relation)) {
                         traverse(relation.to);
                         if (!(relation.id in seenRelations)) {

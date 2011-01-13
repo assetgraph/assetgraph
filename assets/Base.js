@@ -6,7 +6,6 @@ var path = require('path'),
 
 var Base = module.exports = function (config) {
     _.extend(this, config);
-    this.relations = [];
 };
 
 Base.prototype = {
