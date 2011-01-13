@@ -35,11 +35,11 @@ _.extend(HTMLScript.prototype, {
             this.node.parentNode.replaceChild(style, this.node);
             this.node = style;
         }
+    },
+
+    createNode: function (document) {
+        return document.createElement('script');
     }
 });
-
-HTMLScript.createNodeForAsset = function (document, asset) {
-    return document.createElement('script');
-};
 
 exports.HTMLScript = HTMLScript;

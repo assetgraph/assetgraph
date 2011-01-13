@@ -90,33 +90,20 @@ _.extend(JavaScript.prototype, {
         }));
     }),
 
-    attachRelationAfter: function (existingRelation, newRelation) {
+    attachRelation: function (newRelation, existingRelation, position) {
+        position = position || 'after';
         _.extend(newRelation, {
             from: this,
             stack: [].concat(existingRelation.stack),
-            node: [
-                'stat',
-                [
-                    'call',
-                    [
-                        'dot',
-                        [
-                            'name',
-                            'one'
-                        ],
-                        'include'
-                    ],
-                    [
-                        [
-                            'string',
-                            '<urlGoesHere>'
-                        ]
-                    ]
-                ]
-            ]
+            node: newRelation.createNode(this.parseTree)
         });
-        var parentNode = existingRelation.stack[existingRelation.stack.length-1];
-        parentNode.splice(parentNode.indexOf(this.node), 0, newRelation.node);
+        var parentNode = existingRelation.stack[existingRelation.stack.length-1],
+            existingIndex = parentNode.indexOf(this.node);
+        if (position == 'after') {
+            parentNode.splice(existingIndex + 1, 0, newRelation.node);
+        } else {
+            parentNode.splice(existingIndex, 0, newRelation.node);
+        }
     }
 });
 

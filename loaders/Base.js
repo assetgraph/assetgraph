@@ -92,19 +92,19 @@ Base.prototype = {
                         } else if (resolvedAssetConfigs.length === 1) {
                             originalRelation.assetConfig = resolvedAssetConfigs[0];
                             initializeRelation(originalRelation);
-                        } else if (asset.attachRelationAfter) {
+                        } else if (asset.attachRelation) {
                             var previous = originalRelation;
                             resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
                                 var relation = new originalRelation.constructor({
                                     assetConfig: resolvedAssetConfig
                                 });
-                                asset.attachRelationAfter(previous, relation);
+                                asset.attachRelation(relation, previous, 'after');
                                 initializeRelation(relation);
                                 previous = relation;
                             });
                             originalRelation.remove();
                         } else {
-                            cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support attachRelationAfter"));
+                            cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support attachRelation"));
                         }
                     }, this);
                     if (!numAssets) {

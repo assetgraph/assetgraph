@@ -12,11 +12,11 @@ util.inherits(HTMLImage, Base);
 _.extend(HTMLImage.prototype, {
     setUrl: function (url) {
         this.node.setAttribute('src', url);
+    },
+
+    createNode: function (document) {
+        return document.createElement('img');
     }
 });
-
-HTMLImage.createNodeForAsset = function (document, asset) {
-    return document.createElement('img');
-};
 
 exports.HTMLImage = HTMLImage;

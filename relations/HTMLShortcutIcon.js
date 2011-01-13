@@ -12,13 +12,13 @@ util.inherits(HTMLShortcutIcon, Base);
 _.extend(HTMLShortcutIcon.prototype, {
     setUrl: function (url) {
         this.node.setAttribute('href', url);
+    },
+
+    createNode: function (document) {
+        var node = document.createElement('link');
+        node.rel = 'shortcut icon'; // Hmm, how to handle apple-touch-icon?
+        return node;
     }
 });
-
-HTMLShortcutIcon.createNodeForAsset = function (document, asset) {
-    var node = document.createElement('link');
-    node.rel = 'shortcut icon'; // Hmm, how to handle apple-touch-icon?
-    return node;
-};
 
 exports.HTMLShortcutIcon = HTMLShortcutIcon;

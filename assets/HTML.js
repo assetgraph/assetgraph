@@ -98,15 +98,19 @@ _.extend(HTML.prototype, {
         }));
     }),
 
-    attachRelationAfter: function (existingRelation, newRelation) {
+    attachRelation: function (newRelation, existingRelation, position) {
+        position = position || 'after';
         _.extend(newRelation, {
-            node: this.parseTree.get,
             from: existingRelation.node,
-            stack: [].concat(existingRelation.stack)
+            node: newRelation.constructor.createNodeForRelation(newRelation)
         });
 
-        var parentNode = existingRelation.stack[existingRelation.stack.length-1];
-        parentNode.splice(parentNode.indexOf(this.node), 0, newRelation.node);
+        var parentNode = existingRelation.node.parentNode;
+        if (position === 'before') {
+            parentNode.insertBefore(node, existingRelation.node);
+        } else {
+            parentNode.insertBefore(node, existingRelation.node.nextSibling);
+        }
     }
 });
 

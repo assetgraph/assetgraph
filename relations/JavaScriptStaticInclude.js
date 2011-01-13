@@ -18,6 +18,29 @@ _.extend(JavaScriptStaticInclude.prototype, {
 
     setUrl: function (url) {
         this.node[1][2][0][1] = url;
+    },
+
+    createNode: function (asset) {
+        return [
+            'stat',
+            [
+                'call',
+                [
+                    'dot',
+                    [
+                        'name',
+                        'one'
+                    ],
+                    'include'
+                ],
+                [
+                    [
+                        'string',
+                        '<urlGoesHere>'
+                    ]
+                ]
+            ]
+        ];
     }
 });
 

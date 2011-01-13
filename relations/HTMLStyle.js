@@ -37,13 +37,13 @@ _.extend(HTMLStyle.prototype, {
             this.node.parentNode.replaceChild(style, this.node);
             this.node = style;
         }
+    },
+
+    createNode: function (document) {
+        var node = document.createElement('link');
+        node.rel = 'stylesheet';
+        return node;
     }
 });
-
-HTMLStyle.createNodeForAsset = function (document, asset) {
-    var node = document.createElement('link');
-    node.rel = 'stylesheet';
-    return node;
-};
 
 exports.HTMLStyle = HTMLStyle;

@@ -12,11 +12,11 @@ util.inherits(HTMLIFrame, Base);
 _.extend(HTMLIFrame.prototype, {
     setUrl: function (url) {
         this.node.setAttribute('src', url);
+    },
+
+    createNode: function (document) {
+        return document.createElement('iframe');
     }
 });
-
-HTMLIFrame.createNodeForAsset = function (document, asset) {
-    return document.createElement('iframe');
-};
 
 exports.HTMLIFrame = HTMLIFrame;
