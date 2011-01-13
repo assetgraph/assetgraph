@@ -87,15 +87,16 @@ step(
             function makeTemplateRelativeUrl(url) {
                 return fileUtils.buildRelativeUrl(path.dirname(template.url), url);
             }
-            siteGraph.lookupIndex('relation', 'from', template).filter(function (relation) {
+            siteGraph.findRelations('from', template).filter(function (relation) {
                 return relation.from === template;
             }).forEach(function (htmlScriptRelation) {
                 var script = htmlScriptRelation.to,
                     linkTags = [],
                     scriptTags = [];
-                siteGraph.queryRelationsDeep(script, function (relation) {
+
+                siteGraph.lookupSubgraph(script, function (relation) {
                     return relation.type === 'JavaScriptStaticInclude';
-                }).forEach(function (relation) {
+                }).relations.forEach(function (relation) {
                     var targetAsset = relation.to;
                     if (!(targetAsset.id in seenAssets)) {
                         seenAssets[targetAsset.id] = true;

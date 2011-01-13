@@ -4,11 +4,11 @@ var util = require('util'),
     error = require('../error'),
     makeBufferedAccessor = require('../makeBufferedAccessor'),
     relations = require('../relations'),
-    Base = require('./Base');
+    Base = require('./Base').Base;
 
 function CSS(config) {
     Base.call(this, config);
-};
+}
 
 util.inherits(CSS, Base);
 

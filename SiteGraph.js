@@ -9,19 +9,17 @@ var util = require('util'),
     graphviz = require('graphviz'),
     error = require('./error');
 
+var allIndices = {
+    relation: ['id', 'type', 'from', 'to'],
+    asset: ['id', 'url', 'type']
+};
+
 var SiteGraph = module.exports = function (config) {
     _.extend(this, config || {});
-    this.nextAssetId = 1;
-    this.nextRelationId = 1;
     this.assets = [];
     this.relations = [];
-
-    this.indexNames = {
-        relation: ['url', 'type', 'from', 'to'],
-        asset: ['url', 'type']
-    };
     this.indices = {};
-    _.each(this.indexNames, function (indexNames, indexType) {
+    _.each(allIndices, function (indexNames, indexType) {
        this.indices[indexType] = {};
        indexNames.forEach(function (indexName) {
            this.indices[indexType][indexName] = {};
@@ -31,18 +29,23 @@ var SiteGraph = module.exports = function (config) {
 
 SiteGraph.prototype = {
     addToIndex: function (indexType, obj) {
-        this.indexNames[indexType].forEach(function (indexName) {
+        allIndices[indexType].forEach(function (indexName) {
             if (indexName in obj) {
                 var type = typeof obj[indexName],
                     key;
                 if (type === 'string' || type === 'number' || type === 'boolean') {
                     key = obj[indexName];
                 } else if (type === 'object' && 'id' in obj[indexName]) {
-                    key = obj.id;
+                    key = obj[indexName].id;
                 }
                 if (typeof key !== 'undefined') {
                     var index = this.indices[indexType][indexName];
-                    (index[key] = index[key] || []).push(obj);
+                    if (!(key in index)) {
+                        index[key] = [obj];
+                    } else {
+                        index[key].push(obj);
+                    }
+                    (this.indices[indexType][indexName][key] = this.indices[indexType][indexName][key] || []).push(obj);
                 }
             }
         }, this);
@@ -52,56 +55,55 @@ SiteGraph.prototype = {
         return this.indices[indexType][indexName][typeof value === 'object' ? value.id : value] || [];
     },
 
+    existsInIndex: function (indexType, indexName, value) {
+        return this.lookupIndex(indexType, indexName, value).length > 0;
+    },
+
+    findRelations: function (indexName, value) {
+        return this.lookupIndex('relation', indexName, value);
+    },
+
+    findAssets: function (indexName, value) {
+        return this.lookupIndex('asset', indexName, value);
+    },
+
     registerAsset: function (asset) {
-        asset.id = this.nextAssetId;
-        this.nextAssetId += 1;
         this.assets.push(asset);
         this.addToIndex('asset', asset);
     },
 
     // Relations must be registered in order
     registerRelation: function (relation) {
-        relation.id = this.nextRelationId;
-        this.nextRelationId += 1;
         this.relations.push(relation);
         this.addToIndex('relation', relation);
     },
 
     // This cries out for a rich query facility/DSL!
-    queryRelationsDeep: function (startAsset, relationLambda) { // preorder
+    lookupSubgraph: function (startAsset, relationLambda) { // preorder
         var that = this,
-            result = [],
-            seenAssets = {},
-            seenRelations = {};
+            subgraph = new SiteGraph();
         function traverse (asset) {
-            if (asset.id in seenAssets) {
-                return;
-            } else {
-                seenAssets[asset.id] = true;
+            if (!subgraph.existsInIndex('asset', 'id', asset)) {
+                subgraph.registerAsset(asset);
                 that.lookupIndex('relation', 'from', asset).forEach(function (relation) {
                     traverse(relation.to);
-                    if (!(relation.id in seenRelations)) {
-                        result.push(relation);
-                        seenRelations[relation.id] = true;
+                    if (!subgraph.existsInIndex('relation', 'id', relation)) {
+                        subgraph.registerRelation(relation);
                     }
                 });
             }
         }
         traverse(startAsset);
-        return result;
+        return subgraph;
     },
 
     toGraphViz: function () {
         var g = graphviz.digraph("G");
-        this.getAssetTypes().forEach(function (assetType) {
-            this.assetsByType[assetType].forEach(function (asset) {
-                g.addNode(asset.id.toString(), {label: 'url' in asset ? path.basename(asset.url) : 'inline'});
-            }, this);
+        this.assets.forEach(function (asset) {
+            g.addNode(asset.id.toString(), {label: 'url' in asset ? path.basename(asset.url) : 'inline'});
         }, this);
-        this.getRelationTypes().forEach(function (relationType) {
-            this.relationsByType[relationType].forEach(function (relation) {
-                var edge = g.addEdge(relation.from.id.toString(), relation.to.id.toString());
-            }, this);
+        this.relations.forEach(function (relation) {
+            var edge = g.addEdge(relation.from.id.toString(), relation.to.id.toString());
         }, this);
         console.log(g.to_dot());
         g.output('png', 'graph.png');

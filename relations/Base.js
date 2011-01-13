@@ -1,13 +1,16 @@
 /*global exports, require*/
-var _ = require('underscore');
+var _ = require('underscore'),
+    nextId = 1;
 
 function Base(config) {
     _.extend(this, config);
+    this.id = nextId;
+    nextId += 1;
 }
 
 _.extend(Base.prototype, {
     toString: function () {
-        return "[" + this.type + ('id' in this ? "/" + this.id : "") + "]";
+        return "[" + this.type + "/" + this.id + "]";
     }
 });
 

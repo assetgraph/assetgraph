@@ -2,11 +2,14 @@
 var path = require('path'),
     _ = require('underscore'),
     error = require('../error'),
-    makeBufferedAccessor = require('../makeBufferedAccessor');
+    makeBufferedAccessor = require('../makeBufferedAccessor'),
+    nextId = 1;
 
-var Base = module.exports = function (config) {
+function Base(config) {
     _.extend(this, config);
-};
+    this.id = nextId;
+    nextId += 1;
+}
 
 Base.prototype = {
     encoding: 'utf8', // Change to 'binary' in subclass for images etc.
@@ -20,6 +23,8 @@ Base.prototype = {
     }),
 
     toString: function () {
-        return "[" + this.type + ('id' in this ? "/" + this.id : "") + "]";
+        return "[" + this.type + "/" + this.id + "]";
     }
 };
+
+exports.Base = Base;
