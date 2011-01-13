@@ -15,4 +15,6 @@ var asset = loader.loadAsset({
     url: 'index.html'
 });
 
-loader.populate(asset, ['htmlScript', 'htmlStyle', 'htmlImage', 'htmlIframe', 'cssBackgroundImage'], error.throwException());
+loader.populate(asset, function (relation) {
+    return ['HTMLScript', 'HTMLStyle', 'HTMLImage', 'HTMLIFrame', 'HTMLShortcutIcon', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
+}, error.throwException());
