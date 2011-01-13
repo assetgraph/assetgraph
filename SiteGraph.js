@@ -49,7 +49,7 @@ SiteGraph.prototype = {
     },
 
     lookupIndex: function (indexType, indexName, value) {
-        return this.indices[indexType][indexName][value] || [];
+        return this.indices[indexType][indexName][typeof value === 'object' ? value.id : value] || [];
     },
 
     registerAsset: function (asset) {
@@ -78,9 +78,7 @@ SiteGraph.prototype = {
                 return;
             } else {
                 seenAssets[asset.id] = true;
-                that.relations.filter(function (relation) {
-                    return relation.from === asset;
-                }).filter(relationLambda).forEach(function (relation) {
+                that.lookupIndex('relation', 'from', asset).forEach(function (relation) {
                     traverse(relation.to);
                     if (!(relation.id in seenRelations)) {
                         result.push(relation);
