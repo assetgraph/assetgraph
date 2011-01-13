@@ -49,14 +49,13 @@ Base.prototype = {
             seenAssetUrls = {};
 
         function traverse(asset, cb) {
-            var filteredOriginalRelations;
             if ('url' in asset) {
                 if (seenAssetUrls[asset.url]) {
                     return cb();
-                } else {
-                   seenAssetUrls[asset.url] = true;
                 }
+                seenAssetUrls[asset.url] = true;
             }
+            var filteredOriginalRelations;
             step(
                 function () {
                     asset.getOriginalRelations(this);
@@ -64,16 +63,17 @@ Base.prototype = {
                 error.passToFunction(cb, function (originalRelations) {
                     filteredOriginalRelations = originalRelations.filter(includeRelationLambda);
                     if (filteredOriginalRelations.length) {
+                        var group = this.group();
                         filteredOriginalRelations.forEach(function (relation) {
-                            that.resolveAssetConfig(relation.assetConfig, relation.from.baseUrl, this.parallel());
+                            that.resolveAssetConfig(relation.assetConfig, relation.from.baseUrl, group());
                         }, this);
                     } else {
                         return cb();
                     }
                 }),
-                error.passToFunction(cb, function () { // [resolvedAssetConfigArrayForFirstRelation, ...]
+                error.passToFunction(cb, function (resolvedAssetConfigArrays) {
                     var assets = [];
-                    _.toArray(arguments).forEach(function (resolvedAssetConfigs, i) {
+                    resolvedAssetConfigArrays.forEach(function (resolvedAssetConfigs, i) {
                         var originalRelation = filteredOriginalRelations[i];
                         if (resolvedAssetConfigs.length === 0) {
                             originalRelation.remove();
