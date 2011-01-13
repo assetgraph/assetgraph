@@ -88,7 +88,37 @@ _.extend(JavaScript.prototype, {
             walk(parseTree);
             finished(null, originalRelations);
         }));
-    })
+    }),
+
+    attachRelationAfter: function (existingRelation, newRelation) {
+        _.extend(newRelation, {
+            from: this,
+            stack: [].concat(this.stack),
+            node: [
+                'stat',
+                [
+                    'call',
+                    [
+                        'dot',
+                        [
+                            'name',
+                            'one'
+                        ],
+                        'include'
+                    ],
+                    [
+                        [
+                            'string',
+                            '<urlGoesHere>'
+                        ]
+                    ]
+                ]
+            ]
+        });
+
+        var parentNode = existingRelation.stack[existingRelation.stack.length-1];
+        parentNode.splice(parentNode.indexOf(this.node), 0, newRelation.node);
+    }
 });
 
 exports.JavaScript = JavaScript;

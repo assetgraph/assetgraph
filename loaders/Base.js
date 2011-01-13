@@ -11,7 +11,6 @@ var util = require('util'),
 // Expects: config.root
 var Base = module.exports = function (config) {
     _.extend(this, config);
-    this.seenAssetUrls = {};
 };
 
 Base.prototype = {
@@ -45,68 +44,76 @@ Base.prototype = {
         return asset;
     },
 
-    populate: function (srcAsset, includeRelationLambda, cb) {
+    populate: function (originAsset, includeRelationLambda, cb) {
         var that = this,
-            filteredOriginalRelations;
-        if ('url' in srcAsset) {
-            if (this.seenAssetUrls[srcAsset.url]) {
-                return cb();
-            } else {
-                this.seenAssetUrls[srcAsset.url] = true;
-            }
-        }
-        step(
-            function () {
-                srcAsset.getOriginalRelations(this);
-            },
-            error.passToFunction(cb, function (originalRelations) {
-                filteredOriginalRelations = originalRelations.filter(includeRelationLambda);
-                if (filteredOriginalRelations.length) {
-                    filteredOriginalRelations.forEach(function (relation) {
-                        that.resolveAssetConfig(relation.assetConfig, relation.from.baseUrl, this.parallel());
-                    }, this);
-                } else {
+            seenAssetUrls = {};
+
+        function traverse(asset, cb) {
+            var filteredOriginalRelations;
+            if ('url' in asset) {
+                if (seenAssetUrls[asset.url]) {
                     return cb();
-                }
-            }),
-            error.passToFunction(cb, function () { // [resolvedAssetConfigArrayForFirstRelation, ...]
-                var assets = [];
-                _.toArray(arguments).forEach(function (resolvedAssetConfigs, i) {
-                    var originalRelation = filteredOriginalRelations[i];
-                    if (resolvedAssetConfigs.length === 0) {
-                        originalRelation.remove();
-                    } else if (resolvedAssetConfigs.length === 1) {
-                        if (!('url' in resolvedAssetConfigs[0])) {
-                            // Inline asset, copy baseUrl from srcAsset
-                            resolvedAssetConfigs[0].baseUrl = originalRelation.from.baseUrl;
-                        }
-                        originalRelation.assetConfig = resolvedAssetConfigs[0];
-                        originalRelation.to = that.loadAsset(originalRelation.assetConfig);
-                        that.siteGraph.registerRelation(originalRelation);
-                        assets.push(originalRelation.to);
-                    } else if (originalRelation.insertRelationAfter) {
-                        var previous = originalRelation;
-                        resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
-                            var relation = previous.insertRelationAfter(resolvedAssetConfig);
-                            relation.to = that.loadAsset(relation.assetConfig);
-                            that.siteGraph.registerRelation(relation);
-                            assets.push(relation.to);
-                        });
-                        originalRelation.remove();
-                    } else {
-                        cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support insertRelationAfter"));
-                    }
-                }, this);
-                if (assets.length) {
-                    var group = this.group();
-                    assets.forEach(function (asset) {
-                        that.populate(asset, includeRelationLambda, group());
-                    });
                 } else {
-                    process.nextTick(this);
+                   seenAssetUrls[asset.url] = true;
                 }
-            }),
-            cb
-        );
+            }
+            step(
+                function () {
+                    asset.getOriginalRelations(this);
+                },
+                error.passToFunction(cb, function (originalRelations) {
+                    filteredOriginalRelations = originalRelations.filter(includeRelationLambda);
+                    if (filteredOriginalRelations.length) {
+                        filteredOriginalRelations.forEach(function (relation) {
+                            that.resolveAssetConfig(relation.assetConfig, relation.from.baseUrl, this.parallel());
+                        }, this);
+                    } else {
+                        return cb();
+                    }
+                }),
+                error.passToFunction(cb, function () { // [resolvedAssetConfigArrayForFirstRelation, ...]
+                    var assets = [];
+                    _.toArray(arguments).forEach(function (resolvedAssetConfigs, i) {
+                        var originalRelation = filteredOriginalRelations[i];
+                        if (resolvedAssetConfigs.length === 0) {
+                            originalRelation.remove();
+                        } else if (resolvedAssetConfigs.length === 1) {
+                            if (!('url' in resolvedAssetConfigs[0])) {
+                                // Inline asset, copy baseUrl from asset
+                                resolvedAssetConfigs[0].baseUrl = originalRelation.from.baseUrl;
+                            }
+                            originalRelation.assetConfig = resolvedAssetConfigs[0];
+                            originalRelation.to = that.loadAsset(originalRelation.assetConfig);
+                            that.siteGraph.registerRelation(originalRelation);
+                            assets.push(originalRelation.to);
+                        } else if (asset.attachRelationAfter) {
+                            var previous = originalRelation;
+                            resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
+                                var relation = new originalRelation.constructor({
+                                    assetConfig: resolvedAssetConfig
+                                });
+                                asset.attachRelationAfter(previous, relation);
+                                relation.to = that.loadAsset(relation.assetConfig);
+                                that.siteGraph.registerRelation(relation);
+                                assets.push(relation.to);
+                            });
+                            originalRelation.remove();
+                        } else {
+                            cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support attachRelationAfter"));
+                        }
+                    }, this);
+                    if (assets.length) {
+                        var group = this.group();
+                        assets.forEach(function (asset) {
+                            traverse(asset, group());
+                        });
+                    } else {
+                        process.nextTick(this);
+                    }
+                }),
+                cb
+            );
+        }
+        traverse(originAsset, cb);
     }
 };

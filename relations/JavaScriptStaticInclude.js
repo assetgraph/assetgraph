@@ -18,38 +18,6 @@ _.extend(JavaScriptStaticInclude.prototype, {
 
     setUrl: function (url) {
         this.node[1][2][0][1] = url;
-    },
-
-    insertRelationAfter: function (assetConfig) {
-        var parentNode = this.stack[this.stack.length-1],
-            newRelation = new this.constructor({
-                assetConfig: assetConfig,
-                from: this.from,
-                node: [
-                    'stat',
-                    [
-                        'call',
-                        [
-                            'dot',
-                            [
-                                'name',
-                                'one'
-                            ],
-                            'include'
-                        ],
-                        [
-                            [
-                                'string',
-                                assetConfig.url || '[inline]' // Ehh..
-                            ]
-                        ]
-                    ]
-                ],
-                stack: [].concat(this.stack)
-            });
-        parentNode.splice(parentNode.indexOf(this.node), 0, newRelation.node);
-        this.from.relations.splice(this.from.relations.indexOf(this), 0, newRelation);
-        return newRelation;
     }
 });
 
