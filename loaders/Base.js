@@ -72,20 +72,25 @@ Base.prototype = {
                     }
                 }),
                 error.passToFunction(cb, function (resolvedAssetConfigArrays) {
-                    var assets = [];
+                    var numAssets = 0,
+                        makeParallel = this.parallel;
+                    function initializeRelation(relation) {
+                        if (!('url' in relation.assetConfig)) {
+                            // Inline asset, copy baseUrl from asset
+                            relation.assetConfig.baseUrl = asset.baseUrl;
+                        }
+                        relation.to = that.loadAsset(relation.assetConfig);
+                        that.siteGraph.registerRelation(relation);
+                        numAssets++;
+                        traverse(relation.to, makeParallel());
+                    }
                     resolvedAssetConfigArrays.forEach(function (resolvedAssetConfigs, i) {
                         var originalRelation = filteredOriginalRelations[i];
                         if (resolvedAssetConfigs.length === 0) {
                             originalRelation.remove();
                         } else if (resolvedAssetConfigs.length === 1) {
-                            if (!('url' in resolvedAssetConfigs[0])) {
-                                // Inline asset, copy baseUrl from asset
-                                resolvedAssetConfigs[0].baseUrl = originalRelation.from.baseUrl;
-                            }
                             originalRelation.assetConfig = resolvedAssetConfigs[0];
-                            originalRelation.to = that.loadAsset(originalRelation.assetConfig);
-                            that.siteGraph.registerRelation(originalRelation);
-                            assets.push(originalRelation.to);
+                            initializeRelation(originalRelation);
                         } else if (asset.attachRelationAfter) {
                             var previous = originalRelation;
                             resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
@@ -93,21 +98,15 @@ Base.prototype = {
                                     assetConfig: resolvedAssetConfig
                                 });
                                 asset.attachRelationAfter(previous, relation);
-                                relation.to = that.loadAsset(relation.assetConfig);
-                                that.siteGraph.registerRelation(relation);
-                                assets.push(relation.to);
+                                initializeRelation(relation);
+                                previous = relation;
                             });
                             originalRelation.remove();
                         } else {
                             cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support attachRelationAfter"));
                         }
                     }, this);
-                    if (assets.length) {
-                        var group = this.group();
-                        assets.forEach(function (asset) {
-                            traverse(asset, group());
-                        });
-                    } else {
+                    if (!numAssets) {
                         process.nextTick(this);
                     }
                 }),

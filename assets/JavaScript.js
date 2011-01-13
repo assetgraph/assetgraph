@@ -93,7 +93,7 @@ _.extend(JavaScript.prototype, {
     attachRelationAfter: function (existingRelation, newRelation) {
         _.extend(newRelation, {
             from: this,
-            stack: [].concat(this.stack),
+            stack: [].concat(existingRelation.stack),
             node: [
                 'stat',
                 [
