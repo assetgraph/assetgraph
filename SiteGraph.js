@@ -15,23 +15,48 @@ var SiteGraph = module.exports = function (config) {
     this.nextRelationId = 1;
     this.assets = [];
     this.relations = [];
-    this.assetsByUrl = {};
-    this.assetsByType = {};
-    this.relationsByType = {};
+
+    this.indexNames = {
+        relation: ['url', 'type', 'from', 'to'],
+        asset: ['url', 'type']
+    };
+    this.indices = {};
+    _.each(this.indexNames, function (indexNames, indexType) {
+       this.indices[indexType] = {};
+       indexNames.forEach(function (indexName) {
+           this.indices[indexType][indexName] = {};
+       }, this);
+    }, this);
 };
 
 SiteGraph.prototype = {
+    addToIndex: function (indexType, obj) {
+        this.indexNames[indexType].forEach(function (indexName) {
+            if (indexName in obj) {
+                var type = typeof obj[indexName],
+                    key;
+                if (type === 'string' || type === 'number' || type === 'boolean') {
+                    key = obj[indexName];
+                } else if (type === 'object' && 'id' in obj[indexName]) {
+                    key = obj.id;
+                }
+                if (typeof key !== 'undefined') {
+                    var index = this.indices[indexType][indexName];
+                    (index[key] = index[key] || []).push(obj);
+                }
+            }
+        }, this);
+    },
+
+    lookupIndex: function (indexType, indexName, value) {
+        return this.indices[indexType][indexName][value] || [];
+    },
+
     registerAsset: function (asset) {
         asset.id = this.nextAssetId;
         this.nextAssetId += 1;
         this.assets.push(asset);
-        if ('url' in asset) {
-            this.assetsByUrl[asset.url] = asset;
-        }
-        if (!(asset.type in this.assetsByType)) {
-            this.assetsByType[asset.type] = [];
-        }
-        this.assetsByType[asset.type].push(asset);
+        this.addToIndex('asset', asset);
     },
 
     // Relations must be registered in order
@@ -39,14 +64,11 @@ SiteGraph.prototype = {
         relation.id = this.nextRelationId;
         this.nextRelationId += 1;
         this.relations.push(relation);
-        if (!(relation.type in this.relationsByType)) {
-            this.relationsByType[relation.type] = [];
-        }
-        this.relationsByType[relation.type].push(relation);
+        this.addToIndex('relation', relation);
     },
 
     // This cries out for a rich query facility/DSL!
-    queryRelationsDeep: function (startAsset, lambda) { // preorder
+    queryRelationsDeep: function (startAsset, relationLambda) { // preorder
         var that = this,
             result = [],
             seenAssets = {},
@@ -58,13 +80,11 @@ SiteGraph.prototype = {
                 seenAssets[asset.id] = true;
                 that.relations.filter(function (relation) {
                     return relation.from === asset;
-                }).forEach(function (relation) {
-                    if (lambda(relation)) {
-                        traverse(relation.to);
-                        if (!(relation.id in seenRelations)) {
-                            result.push(relation);
-                            seenRelations[relation.id] = true;
-                        }
+                }).filter(relationLambda).forEach(function (relation) {
+                    traverse(relation.to);
+                    if (!(relation.id in seenRelations)) {
+                        result.push(relation);
+                        seenRelations[relation.id] = true;
                     }
                 });
             }

@@ -15,9 +15,11 @@ var Base = module.exports = function (config) {
 
 Base.prototype = {
     loadAsset: function (assetConfig) {
-        if ('url' in assetConfig && assetConfig.url in this.siteGraph.assetsByUrl) {
-            // Already loaded
-            return this.siteGraph.assetsByUrl[assetConfig.url];
+        if ('url' in assetConfig) {
+            var lookupUrl = this.siteGraph.lookupIndex('asset', 'url', assetConfig.url);
+            if (lookupUrl.length) {
+                return lookupUrl[0];
+            }
         }
         if (!('baseUrl' in assetConfig)) {
             if ('url' in assetConfig || 'originalUrl' in assetConfig) {
@@ -79,9 +81,9 @@ Base.prototype = {
                             relation.assetConfig.baseUrl = asset.baseUrl;
                         }
                         relation.to = that.loadAsset(relation.assetConfig);
-                        that.siteGraph.registerRelation(relation);
                         numAssets++;
                         traverse(relation.to, makeParallel());
+                        that.siteGraph.registerRelation(relation);
                     }
                     resolvedAssetConfigArrays.forEach(function (resolvedAssetConfigs, i) {
                         var originalRelation = filteredOriginalRelations[i];
