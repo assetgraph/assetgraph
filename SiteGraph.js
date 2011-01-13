@@ -7,12 +7,11 @@ var util = require('util'),
     relations = require('./relations'),
     _ = require('underscore'),
     graphviz = require('graphviz'),
-    error = require('./error');
-
-var allIndices = {
-    relation: ['id', 'type', 'from', 'to'],
-    asset: ['id', 'url', 'type']
-};
+    error = require('./error'),
+    allIndices = {
+        relation: ['id', 'type', 'from', 'to'],
+        asset: ['id', 'url', 'type']
+    };
 
 var SiteGraph = module.exports = function (config) {
     _.extend(this, config || {});
@@ -28,7 +27,7 @@ var SiteGraph = module.exports = function (config) {
 };
 
 SiteGraph.prototype = {
-    addToIndex: function (indexType, obj) {
+    addToIndices: function (indexType, obj) {
         allIndices[indexType].forEach(function (indexName) {
             if (indexName in obj) {
                 var type = typeof obj[indexName],
@@ -45,10 +44,31 @@ SiteGraph.prototype = {
                     } else {
                         index[key].push(obj);
                     }
-                    (this.indices[indexType][indexName][key] = this.indices[indexType][indexName][key] || []).push(obj);
                 }
             }
         }, this);
+    },
+
+    removeFromIndices: function (indexType, obj) {
+        allIndices[indexType].forEach(function (indexName) {
+            if (indexName in obj) {
+                var type = typeof obj[indexName],
+                    key;
+                if (type === 'string' || type === 'number' || type === 'boolean') {
+                    key = obj[indexName];
+                } else if (type === 'object' && 'id' in obj[indexName]) {
+                    key = obj[indexName].id;
+                }
+                if (typeof key !== 'undefined') {
+                    var i = index[key].indexOf(obj);
+                    if (i === -1) {
+                        index[key].splice(i, 1);
+                    } else {
+                        throw "removeFromIndices: object not found in index!";
+                    }
+                }
+            }
+        });
     },
 
     lookupIndex: function (indexType, indexName, value) {
@@ -69,13 +89,13 @@ SiteGraph.prototype = {
 
     registerAsset: function (asset) {
         this.assets.push(asset);
-        this.addToIndex('asset', asset);
+        this.addToIndices('asset', asset);
     },
 
     // Relations must be registered in order
     registerRelation: function (relation) {
         this.relations.push(relation);
-        this.addToIndex('relation', relation);
+        this.addToIndices('relation', relation);
     },
 
     // This cries out for a rich query facility/DSL!

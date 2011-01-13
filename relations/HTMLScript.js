@@ -38,7 +38,7 @@ _.extend(HTMLScript.prototype, {
     }
 });
 
-HTMLIFrame.createNodeForAsset = function (document, asset) {
+HTMLScript.createNodeForAsset = function (document, asset) {
     return document.createElement('script');
 };
 

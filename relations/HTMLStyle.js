@@ -40,7 +40,7 @@ _.extend(HTMLStyle.prototype, {
     }
 });
 
-HTMLIFrame.createNodeForAsset = function (document, asset) {
+HTMLStyle.createNodeForAsset = function (document, asset) {
     var node = document.createElement('link');
     node.rel = 'stylesheet';
     return node;

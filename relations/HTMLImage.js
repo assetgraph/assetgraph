@@ -15,7 +15,7 @@ _.extend(HTMLImage.prototype, {
     }
 });
 
-HTMLIFrame.createNodeForAsset = function (document, asset) {
+HTMLImage.createNodeForAsset = function (document, asset) {
     return document.createElement('img');
 };
 
