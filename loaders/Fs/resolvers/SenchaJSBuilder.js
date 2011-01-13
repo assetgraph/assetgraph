@@ -81,9 +81,10 @@ SenchaJSBuilder.prototype = {
                         error.passToFunction(cb, function (fileBodies) {
                             assetConfigs.push({
                                 type: 'JavaScript',
+                                dirty: true,
                                 src: fileBodies.join("\n"),
                                 originalRelations: [],
-                                originalUrl: path.join(that.url, pkg.target)
+                                url: path.join(that.url, pkg.target)
                             });
                             cb(null, assetConfigs);
                         })
@@ -95,7 +96,6 @@ SenchaJSBuilder.prototype = {
                             cssUrls.push(url);
                         } else {
                             assetConfigs.push({
-                                // originalUrl: ...
                                 url: url,
                                 originalRelations: []
                             });
@@ -115,13 +115,15 @@ SenchaJSBuilder.prototype = {
                             },
                             error.passToFunction(cb, function (cssFileBodies) {
                                 cssFileBodies.forEach(function (cssFileBody, i) {
-                                    assetConfigs.push({
-                                        originalUrl: cssUrls[i],
-                                        type: 'CSS',
-                                        src: cssFileBody.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/url\s*\(\s*/g, function () {
-                                            return "url(../";
-                                        })
+                                    var assetConfig = {
+                                        url: cssUrls[i],
+                                        type: 'CSS'
+                                    };
+                                    assetConfig.src = cssFileBody.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/url\s*\(\s*/g, function () {
+                                        assetConfig.dirty = true;
+                                        return "url(../";
                                     });
+                                    assetConfigs.push(assetConfig);
                                 });
                                 cb(null, assetConfigs);
                             })
