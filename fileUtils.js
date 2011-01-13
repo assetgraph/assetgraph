@@ -1,9 +1,11 @@
 /*global require, exports*/
 var fs = require('fs'),
     path = require('path'),
-    error = require('./error');
+    error = require('./error'),
+    _ = require('underscore'),
+    fileUtils = {};
 
-exports.splitUrl = function(url) {
+fileUtils.splitUrl = function(url) {
     if (url === '.' || url === '') {
         return [];
     } else {
@@ -11,9 +13,9 @@ exports.splitUrl = function(url) {
     }
 };
 
-exports.buildRelativeUrl = function(fromUrl, toUrl) {
-    var fromFragments = exports.splitUrl(fromUrl),
-        toFragments = exports.splitUrl(toUrl),
+fileUtils.buildRelativeUrl = function(fromUrl, toUrl) {
+    var fromFragments = fileUtils.splitUrl(fromUrl),
+        toFragments = fileUtils.splitUrl(toUrl),
         relativeUrlFragments = [];
     // The last part of the criterion looks broken, shouldn't it be fromFragments[0] === toFragments[0] ?
     // -- but it's a direct port of what the perl code has done all along.
@@ -28,12 +30,12 @@ exports.buildRelativeUrl = function(fromUrl, toUrl) {
     return relativeUrlFragments.join("/");
 };
 
-exports.dirnameNoDot = function (url) {
+fileUtils.dirnameNoDot = function (url) {
     var dirname = path.dirname(url);
     return (dirname === '.' ? "" : dirname);
 };
 
-exports.mkpath = function (dir, permissions, cb) {
+fileUtils.mkpath = function (dir, permissions, cb) {
     if (typeof permissions === 'function') {
         cb = permissions;
         permissions = parseInt('0777', 8); // Stupid JSLint
@@ -46,7 +48,7 @@ exports.mkpath = function (dir, permissions, cb) {
         if (err && err.errno === process.ENOENT) {
             var parentDir = path.normalize(dir + "/..");
             if (parentDir !== '/' && parentDir !== '') {
-                exports.mkpath(parentDir, permissions, error.passToFunction(cb, function () {
+                fileUtils.mkpath(parentDir, permissions, error.passToFunction(cb, function () {
                     fs.mkdir(dir, permissions, cb);
                 }));
                 return;
@@ -55,3 +57,5 @@ exports.mkpath = function (dir, permissions, cb) {
         cb(err);
     });
 };
+
+_.extend(exports, fileUtils);
