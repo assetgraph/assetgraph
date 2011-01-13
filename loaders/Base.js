@@ -47,8 +47,7 @@ Base.prototype = {
     populate: function (originAsset, includeRelationLambda, cb) {
         var that = this,
             seenAssetUrls = {};
-
-        function traverse(asset, cb) {
+        (function traverse(asset, cb) {
             if ('url' in asset) {
                 if (seenAssetUrls[asset.url]) {
                     return cb();
@@ -112,7 +111,6 @@ Base.prototype = {
                 }),
                 cb
             );
-        }
-        traverse(originAsset, cb);
+        })(originAsset, cb);
     }
 };
