@@ -41,7 +41,7 @@ step(
                 callback = group(),
                 matchSenchaJSBuilder = labelValue.match(/\.jsb(\d)$/);
             if (matchSenchaJSBuilder) {
-                var url = path.dirname(labelValue) || '',
+                var url = fileUtils.dirnameNoDot(labelValue) || '',
                     version = parseInt(matchSenchaJSBuilder[1], 10);
                 fs.readFile(path.join(loader.root, labelValue), 'utf8', error.logAndExit(function (fileBody) {
                     loader.addLabelResolver(labelName, resolvers.SenchaJSBuilder, {
@@ -85,7 +85,7 @@ step(
             var document = template.parseTree, // Egh, gotta do it async?
                 seenAssets = {};
             function makeTemplateRelativeUrl(url) {
-                return fileUtils.buildRelativeUrl(path.dirname(template.url), url);
+                return fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(template.url), url);
             }
             siteGraph.findRelations('from', template).filter(function (relation) {
                 return relation.from === template;
@@ -109,7 +109,7 @@ step(
                             if (targetAsset.type === 'CSS') {
                                 // FIXME: This should be done by manipulating the relations properly
                                 targetAsset.src = targetAsset.src.replace(/url\(/g, function () {
-                                    var relativeUrl = fileUtils.buildRelativeUrl(options.fixupUrl, path.dirname(targetAsset.url));
+                                    var relativeUrl = fileUtils.buildRelativeUrl(options.fixupUrl, fileUtils.dirnameNoDot(targetAsset.url));
                                     return "url(" + relativeUrl + "/";
                                 });
                             }

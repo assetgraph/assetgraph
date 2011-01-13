@@ -1,10 +1,19 @@
 /*global require, exports*/
 var fs = require('fs'),
+    path = require('path'),
     error = require('./error');
 
+exports.splitUrl = function(url) {
+    if (url === '.' || url === '') {
+        return [];
+    } else {
+        return url.split("/");
+    }
+};
+
 exports.buildRelativeUrl = function(fromUrl, toUrl) {
-    var fromFragments = fromUrl.split("/"),
-        toFragments = toUrl.split("/"),
+    var fromFragments = exports.splitUrl(fromUrl),
+        toFragments = exports.splitUrl(toUrl),
         relativeUrlFragments = [];
     // The last part of the criterion looks broken, shouldn't it be fromFragments[0] === toFragments[0] ?
     // -- but it's a direct port of what the perl code has done all along.
@@ -19,10 +28,15 @@ exports.buildRelativeUrl = function(fromUrl, toUrl) {
     return relativeUrlFragments.join("/");
 };
 
+exports.dirnameNoDot = function (url) {
+    var dirname = path.dirname(url);
+    return (dirname === '.' ? "" : dirname);
+};
+
 exports.mkpath = function (dir, permissions, cb) {
     if (typeof permissions === 'function') {
         cb = permissions;
-        permissions = parseInt('0777', 8);
+        permissions = parseInt('0777', 8); // Stupid JSLint
     }
     fs.mkdir(dir, permissions, function (err) {
         if (err && err.errno === process.EEXIST) {
