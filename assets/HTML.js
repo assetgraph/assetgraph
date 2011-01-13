@@ -25,78 +25,89 @@ _.extend(HTML.prototype, {
         var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var originalRelations = [];
-            _.toArray(parseTree.getElementsByTagName('*')).forEach(function (tag) {
-                var tagName = tag.nodeName.toLowerCase();
-                if (tagName === 'script') {
-                    if (tag.src) {
+            _.toArray(parseTree.getElementsByTagName('*')).forEach(function (node) {
+                var nodeName = node.nodeName.toLowerCase();
+                if (nodeName === 'script') {
+                    if (node.src) {
                         originalRelations.push(new relations.HTMLScript({
                             from: that,
-                            tag: tag,
+                            node: node,
                             assetConfig: {
-                                url: tag.src
+                                url: node.src
                             }
                         }));
                     } else {
                         originalRelations.push(new relations.HTMLScript({
                             from: that,
-                            tag: tag,
+                            node: node,
                             assetConfig: {
                                 type: 'JavaScript',
-                                src: tag.firstChild.nodeValue
+                                src: node.firstChild.nodeValue
                             }
                         }));
                     }
-                } else if (tagName === 'style') {
+                } else if (nodeName === 'style') {
                     originalRelations.push(new relations.HTMLStyle({
                         from: that,
-                        tag: tag,
+                        node: node,
                         assetConfig: {
                             type: 'CSS',
-                            src: tag.firstChild.nodeValue
+                            src: node.firstChild.nodeValue
                         }
                     }));
-                } else if (tagName === 'link') {
-                    if ('rel' in tag) {
-                        var rel = tag.rel.toLowerCase();
+                } else if (nodeName === 'link') {
+                    if ('rel' in node) {
+                        var rel = node.rel.toLowerCase();
                         if (rel === 'stylesheet') {
                             originalRelations.push(new relations.HTMLStyle({
                                 from: that,
-                                tag: tag,
+                                node: node,
                                 assetConfig: {
-                                    url: tag.href
+                                    url: node.href
                                 }
                            }));
                         } else if (/^(?:shortcut |apple-touch-)?icon$/.test(rel)) {
                             originalRelations.push(new relations.HTMLShortcutIcon({
                                 from: that,
-                                tag: tag,
+                                node: node,
                                 assetConfig: {
-                                    url: tag.href
+                                    url: node.href
                                 }
                             }));
                         }
                     }
-                } else if (tagName === 'img') {
+                } else if (nodeName === 'img') {
                     originalRelations.push(new relations.HTMLImage({
                         from: that,
-                        tag: tag,
+                        node: node,
                         assetConfig: {
-                            url: tag.src
+                            url: node.src
                         }
                     }));
-                } else if (tagName === 'iframe') {
+                } else if (nodeName === 'iframe') {
                     originalRelations.push(new relations.HTMLIFrame({
                         from: that,
-                        tag: tag,
+                        node: node,
                         assetConfig: {
-                            url: tag.src
+                            url: node.src
                         }
                     }));
                 }
             }, this);
             cb(null, originalRelations);
         }));
-    })
+    }),
+
+    attachRelationAfter: function (existingRelation, newRelation) {
+        _.extend(newRelation, {
+            node: this.parseTree.get,
+            from: existingRelation.node,
+            stack: [].concat(existingRelation.stack)
+        });
+
+        var parentNode = existingRelation.stack[existingRelation.stack.length-1];
+        parentNode.splice(parentNode.indexOf(this.node), 0, newRelation.node);
+    }
 });
 
 exports.HTML = HTML;

@@ -128,9 +128,9 @@ step(
                         }
                     }
                 });
-                var htmlScriptTag = htmlScriptRelation.tag;
+                var htmlScriptNode = htmlScriptRelation.node;
                 scriptTags.forEach(function (scriptTag) {
-                    htmlScriptTag.parentNode.insertBefore(scriptTag, htmlScriptTag);
+                    htmlScriptNode.parentNode.insertBefore(scriptTag, htmlScriptNode);
                 });
                 var existingScriptTags = document.getElementsByTagName('script'),
                     firstExistingScriptTag = existingScriptTags.length > 0 && existingScriptTags[0],

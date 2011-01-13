@@ -11,33 +11,39 @@ util.inherits(HTMLStyle, Base);
 
 _.extend(HTMLStyle.prototype, {
     setUrl: function (url) {
-        if (this.tag.nodeName === 'link') {
-            this.tag.href = url;
+        if (this.node.nodeName === 'link') {
+            this.node.href = url;
         } else {
-            var document = this.tag.ownerDocument,
+            var document = this.node.ownerDocument,
                 link = document.createElement('link');
             link.rel = 'stylesheet';
             link.href = url;
-            this.tag.parentNode.replaceChild(link, this.tag);
-            this.tag = link;
+            this.node.parentNode.replaceChild(link, this.node);
+            this.node = link;
         }
     },
 
     inline: function (src) {
-        if (this.tag.nodeName === 'style') {
-            while (this.tag.firstChild) {
-                this.tag.removeChild(this.tag.firstChild);
+        if (this.node.nodeName === 'style') {
+            while (this.node.firstChild) {
+                this.node.removeChild(this.node.firstChild);
             }
-            this.tag.appendChild(document.createTextNode(src));
+            this.node.appendChild(document.createTextNode(src));
         } else {
-            var document = this.tag.ownerDocument,
+            var document = this.node.ownerDocument,
                 style = document.createElement('style');
             style.type = 'text/css';
             style.appendChild(document.createTextNode(src));
-            this.tag.parentNode.replaceChild(style, this.tag);
-            this.tag = style;
+            this.node.parentNode.replaceChild(style, this.node);
+            this.node = style;
         }
     }
 });
+
+HTMLIFrame.createNodeForAsset = function (document, asset) {
+    var node = document.createElement('link');
+    node.rel = 'stylesheet';
+    return node;
+};
 
 exports.HTMLStyle = HTMLStyle;

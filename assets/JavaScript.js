@@ -115,7 +115,6 @@ _.extend(JavaScript.prototype, {
                 ]
             ]
         });
-
         var parentNode = existingRelation.stack[existingRelation.stack.length-1];
         parentNode.splice(parentNode.indexOf(this.node), 0, newRelation.node);
     }
