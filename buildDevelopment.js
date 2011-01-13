@@ -7,6 +7,7 @@ var util = require('util'),
     _ = require('underscore'),
     fileUtils = require('./fileUtils'),
     assets = require('./assets'),
+    relations = require('./relations'),
     resolvers = require('./loaders/Fs/resolvers'),
     SiteGraph = require('./SiteGraph'),
     FsLoader = require('./loaders/Fs'),
@@ -91,8 +92,8 @@ step(
                 return relation.from === template;
             }).forEach(function (htmlScriptRelation) {
                 var script = htmlScriptRelation.to,
-                    linkTags = [],
-                    scriptTags = [];
+                    newHTMLScriptRelations = [],
+                    newHTMLStyleRelations = [];
 
                 siteGraph.lookupSubgraph(script, function (relation) {
                     return relation.type === 'JavaScriptStaticInclude';
@@ -117,31 +118,33 @@ step(
                             url = makeTemplateRelativeUrl(rewrittenUrl);
                         }
                         if (targetAsset.type === 'CSS') {
-                            var linkTag = document.createElement('link');
-                            linkTag.rel = 'stylesheet';
-                            linkTag.href = url;
-                            linkTags.push(linkTag);
+                            newHTMLStyleRelations.push(new relations.HTMLStyle({to: targetAsset}));
                         } else {
-                            var scriptTag = document.createElement('script');
-                            scriptTag.src = url;
-                            scriptTags.push(scriptTag);
+                            newHTMLScriptRelations.push(new relations.HTMLScript({to: targetAsset}));
                         }
+                        //relation.remove();
                     }
                 });
+/*
                 var htmlScriptNode = htmlScriptRelation.node;
                 scriptTags.forEach(function (scriptTag) {
                     htmlScriptNode.parentNode.insertBefore(scriptTag, htmlScriptNode);
                 });
+*/
+                newHTMLScriptRelations.forEach(function (newHTMLScriptRelation) {
+                    template.attachRelation(newHTMLScriptRelation, htmlScriptRelation, 'before');
+                });
+
                 var existingScriptTags = document.getElementsByTagName('script'),
                     firstExistingScriptTag = existingScriptTags.length > 0 && existingScriptTags[0],
                     head = document.head;
                 if (firstExistingScriptTag && firstExistingScriptTag.parentNode === head) {
-                    linkTags.reverse().forEach(function (linkTag) {
-                        head.insertBefore(linkTag, firstExistingScriptTag);
+                    newHTMLStyleRelations.reverse().forEach(function (newHTMLStyleRelation) {
+                        template.attachRelation(newHTMLStyleRelation, firstExisingScriptTag, 'before');
                     });
                 } else {
-                    linkTags.forEach(function (linkTag) {
-                        head.appendChild(linkTag);
+                    newHTMLStyleRelations.forEach(function (newHTMLStyleRelation) {
+                        template.attachRelation(newHTMLStyleRelation, head.lastChild, 'after'); // HMM, does this work?
                     });
                 }
             });

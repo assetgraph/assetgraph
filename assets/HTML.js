@@ -98,18 +98,19 @@ _.extend(HTML.prototype, {
         }));
     }),
 
-    attachRelation: function (newRelation, existingRelation, position) {
+    attachRelation: function (newRelation, existingRelationOrNode, position) {
         position = position || 'after';
+        var existingNode = existingRelationOrNode.node || existingRelationOrNode;
         _.extend(newRelation, {
-            from: existingRelation.node,
-            node: newRelation.constructor.createNodeForRelation(newRelation)
+            from: this,
+            node: newRelation.createNode(this.parseTree)
         });
 
-        var parentNode = existingRelation.node.parentNode;
+        var parentNode = existingNode.parentNode;
         if (position === 'before') {
-            parentNode.insertBefore(node, existingRelation.node);
+            parentNode.insertBefore(newRelation.node, existingNode);
         } else {
-            parentNode.insertBefore(node, existingRelation.node.nextSibling);
+            parentNode.insertBefore(newRelation.node, existingNode.nextSibling);
         }
     }
 });
