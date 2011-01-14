@@ -102,8 +102,8 @@ SiteGraph.prototype = {
     },
 
     unregisterAsset: function (asset) {
-        this.relations.splice(this.assets.indexOf(asset), 1);
-        this.removeFromIndices('relation', asset);
+        this.assets.splice(this.assets.indexOf(asset), 1);
+        this.removeFromIndices('asset', asset);
     },
 
     // Relations must be registered in order
