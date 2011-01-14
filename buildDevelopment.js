@@ -92,8 +92,13 @@ step(
                 return relation.from === template;
             }).forEach(function (htmlScriptRelation) {
                 var script = htmlScriptRelation.to,
-                    newHTMLScriptRelations = [],
-                    newHTMLStyleRelations = [];
+                    firstScriptTag = document.getElementsByTagName('script')[0],
+                    styleInsertionPoint;
+                if (firstScriptTag && firstScriptTag.parentNode === document.head) {
+                    styleInsertionPoint = firstScriptTag.previousSibling;
+                } else {
+                    styleInsertionPoint = document.head.lastChild;
+                }
 
                 siteGraph.lookupSubgraph(script, function (relation) {
                     return relation.type === 'JavaScriptStaticInclude';
@@ -118,35 +123,17 @@ step(
                             url = makeTemplateRelativeUrl(rewrittenUrl);
                         }
                         if (targetAsset.type === 'CSS') {
-                            newHTMLStyleRelations.push(new relations.HTMLStyle({to: targetAsset}));
+                            var newHTMLStyleRelation = new relations.HTMLStyle({to: targetAsset});
+                            siteGraph.registerRelation(newHTMLStyleRelation);
+                            template.attachRelation(newHTMLStyleRelation, styleInsertionPoint, 'after');
                         } else {
-                            newHTMLScriptRelations.push(new relations.HTMLScript({to: targetAsset}));
+                            var newHTMLScriptRelation = new relations.HTMLScript({to: targetAsset});
+                            siteGraph.registerRelation(newHTMLScriptRelation);
+                            template.attachRelation(newHTMLScriptRelation, htmlScriptRelation, 'before');
                         }
                         //relation.remove();
                     }
                 });
-/*
-                var htmlScriptNode = htmlScriptRelation.node;
-                scriptTags.forEach(function (scriptTag) {
-                    htmlScriptNode.parentNode.insertBefore(scriptTag, htmlScriptNode);
-                });
-*/
-                newHTMLScriptRelations.forEach(function (newHTMLScriptRelation) {
-                    template.attachRelation(newHTMLScriptRelation, htmlScriptRelation, 'before');
-                });
-
-                var existingScriptTags = document.getElementsByTagName('script'),
-                    firstExistingScriptTag = existingScriptTags.length > 0 && existingScriptTags[0],
-                    head = document.head;
-                if (firstExistingScriptTag && firstExistingScriptTag.parentNode === head) {
-                    newHTMLStyleRelations.reverse().forEach(function (newHTMLStyleRelation) {
-                        template.attachRelation(newHTMLStyleRelation, firstExisingScriptTag, 'before');
-                    });
-                } else {
-                    newHTMLStyleRelations.forEach(function (newHTMLStyleRelation) {
-                        template.attachRelation(newHTMLStyleRelation, head.lastChild, 'after'); // HMM, does this work?
-                    });
-                }
             });
         });
         process.nextTick(this);
