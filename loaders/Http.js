@@ -22,7 +22,7 @@ _.extend(Http.prototype, {
         });
     },
 
-    getSrcProxy: function (assetConfig) {
+    getOriginalSrcProxy: function (assetConfig) {
         var that = this;
         return function (cb) {
             request({

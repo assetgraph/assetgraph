@@ -82,7 +82,7 @@ SenchaJSBuilder.prototype = {
                             assetConfigs.push({
                                 type: 'JavaScript',
                                 dirty: true,
-                                src: fileBodies.join("\n"),
+                                originalSrc: fileBodies.join("\n"),
                                 originalRelations: [],
                                 url: path.join(that.url, pkg.target)
                             });
@@ -119,7 +119,7 @@ SenchaJSBuilder.prototype = {
                                         url: cssUrls[i],
                                         type: 'CSS'
                                     };
-                                    assetConfig.src = cssFileBody.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/url\s*\(\s*/g, function () {
+                                    assetConfig.originalSrc = cssFileBody.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/url\s*\(\s*/g, function () {
                                         assetConfig.dirty = true;
                                         return "url(../";
                                     });

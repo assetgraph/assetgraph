@@ -15,7 +15,7 @@ util.inherits(CSS, Base);
 _.extend(CSS.prototype, {
     getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var that = this;
-        this.getSrc(error.passToFunction(cb, function (src) {
+        this.getOriginalSrc(error.passToFunction(cb, function (src) {
             that.parseTree = cssom.parse(src);
             cb(null, that.parseTree);
         }));
@@ -38,9 +38,9 @@ _.extend(CSS.prototype, {
                             if (dataUrlMatch) {
                                 assetConfig.contentType = "image/" + dataUrlMatch[1];
                                 if (dataUrlMatch[2]) {
-                                    assetConfig.src = new Buffer(dataUrlMatch[3], 'base64').toString();
+                                    assetConfig.originalSrc = new Buffer(dataUrlMatch[3], 'base64').toString();
                                 } else {
-                                    assetConfig.src = dataUrlMatch[3];
+                                    assetConfig.originalSrc = dataUrlMatch[3];
                                 }
                             } else {
                                 assetConfig.url = urlMatch[2];

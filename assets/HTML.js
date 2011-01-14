@@ -15,7 +15,7 @@ util.inherits(HTML, Base);
 _.extend(HTML.prototype, {
     getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var that = this;
-        this.getSrc(error.passToFunction(cb, function (src) {
+        this.getOriginalSrc(error.passToFunction(cb, function (src) {
             that.parseTree = jsdom.jsdom(src, undefined, {features: {ProcessExternalResources: [], FetchExternalResources: []}});
             cb(null, that.parseTree);
         }));
@@ -42,7 +42,7 @@ _.extend(HTML.prototype, {
                             node: node,
                             assetConfig: {
                                 type: 'JavaScript',
-                                src: node.firstChild.nodeValue
+                                originalSrc: node.firstChild.nodeValue
                             }
                         }));
                     }
@@ -52,7 +52,7 @@ _.extend(HTML.prototype, {
                         node: node,
                         assetConfig: {
                             type: 'CSS',
-                            src: node.firstChild.nodeValue
+                            originalSrc: node.firstChild.nodeValue
                         }
                     }));
                 } else if (nodeName === 'link') {

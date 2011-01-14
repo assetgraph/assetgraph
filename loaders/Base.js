@@ -38,8 +38,8 @@ Base.prototype = {
             }
         }
         var Constructor = assets.byType[assetConfig.type];
-        if (!('src' in assetConfig)) {
-            assetConfig.srcProxy = this.getSrcProxy(assetConfig, Constructor.prototype.encoding);
+        if (!('originalSrc' in assetConfig)) {
+            assetConfig.originalSrcProxy = this.getOriginalSrcProxy(assetConfig, Constructor.prototype.encoding);
         }
         var asset = new Constructor(assetConfig);
         this.siteGraph.registerAsset(asset);

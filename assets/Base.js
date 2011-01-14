@@ -14,11 +14,11 @@ function Base(config) {
 Base.prototype = {
     encoding: 'utf8', // Change to 'binary' in subclass for images etc.
 
-    getSrc: makeBufferedAccessor('src', function (cb) {
-        if (this.srcProxy) {
-            this.srcProxy(cb);
+    getOriginalSrc: makeBufferedAccessor('originalSrc', function (cb) {
+        if (this.originalSrcProxy) {
+            this.originalSrcProxy(cb);
         } else {
-            cb(new Error("Don't know how to get asset src!"));
+            cb(new Error("Don't know how to get the original asset src!"));
         }
     }),
 

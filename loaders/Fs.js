@@ -27,7 +27,7 @@ _.extend(Fs.prototype, {
 
     // cb(err, resolvedAssetConfigs)
     resolveAssetConfig: function (assetConfig, baseUrl, cb) {
-        if ('src' in assetConfig) {
+        if ('originalSrc' in assetConfig) {
             // Inline asset, no need to resolve any further
             process.nextTick(function () {
                 return cb(null, [assetConfig]);
@@ -72,11 +72,11 @@ _.extend(Fs.prototype, {
             }
         } else {
             // No url and no inlineData, give up.
-            cb(new Error("Cannot resolve pointer"));
+            cb(new Error("Cannot resolve assetConfig"));
         }
     },
 
-    getSrcProxy: function (assetConfig) {
+    getOriginalSrcProxy: function (assetConfig) {
         var that = this;
         return function (cb) {
             // Will be invoked in the asset's scope, so this.encoding works out.

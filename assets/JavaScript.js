@@ -16,7 +16,7 @@ util.inherits(JavaScript, Base);
 _.extend(JavaScript.prototype, {
     getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var that = this;
-        this.getSrc(error.passToFunction(cb, function (src) {
+        this.getOriginalSrc(error.passToFunction(cb, function (src) {
             that.parseTree = uglify.parser.parse(src);
             cb(null, that.parseTree);
         }));
