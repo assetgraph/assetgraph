@@ -131,10 +131,23 @@ step(
                             siteGraph.registerRelation(newHTMLScriptRelation);
                             template.attachRelation(newHTMLScriptRelation, htmlScriptRelation, 'before');
                         }
-                        //relation.remove();
+                        relation.remove();
+                        siteGraph.unregisterRelation(relation);
                     }
                 });
             });
+        });
+        process.nextTick(this);
+    }),
+    error.logAndExit(function () {
+        siteGraph.assets.forEach(function (asset) {
+        });
+        siteGraph.relations.forEach(function (relation) {
+            if (relation.to.url) {
+                relation.setUrl(relation.to.url);
+            } else {
+                relation.inline();
+            }
         });
         process.nextTick(this);
     }),

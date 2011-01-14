@@ -1,6 +1,7 @@
 /*global require, exports*/
 var util = require('util'),
     _ = require('underscore'),
+    uglify = require('uglify').uglify,
     Base = require('./Base').Base;
 
 function HTMLScript(config) {
@@ -22,19 +23,10 @@ _.extend(HTMLScript.prototype, {
         if (this.node.hasAttribute('src')) {
             this.node.removeAttribute('src');
         }
-        if (this.node.nodeName === 'style') {
-            while (this.node.firstChild) {
-                this.node.removeChild(this.node.firstChild);
-            }
-            this.node.appendChild(document.createTextNode(src));
-        } else {
-            var document = this.node.ownerDocument,
-                style = document.createElement('style');
-            style.type = 'text/css';
-            style.appendChild(document.createTextNode(src));
-            this.node.parentNode.replaceChild(style, this.node);
-            this.node = style;
+        while (this.node.firstChild) {
+            this.node.removeChild(this.node.firstChild);
         }
+        this.node.appendChild(this.from.parseTree.createTextNode(uglify.gen_code(this.to.parseTree)));
     },
 
     createNode: function (document) {

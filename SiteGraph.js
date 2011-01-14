@@ -60,15 +60,16 @@ SiteGraph.prototype = {
                     key = obj[indexName].id;
                 }
                 if (typeof key !== 'undefined') {
-                    var i = index[key].indexOf(obj);
-                    if (i === -1) {
+                    var index = this.indices[indexType][indexName],
+                        i = index[key].indexOf(obj);
+                    if (i !== -1) {
                         index[key].splice(i, 1);
                     } else {
                         throw "removeFromIndices: object not found in index!";
                     }
                 }
             }
-        });
+        }, this);
     },
 
     lookupIndex: function (indexType, indexName, value) {
@@ -92,10 +93,20 @@ SiteGraph.prototype = {
         this.addToIndices('asset', asset);
     },
 
+    unregisterAsset: function (asset) {
+        this.relations.splice(this.assets.indexOf(asset), 1);
+        this.removeFromIndices('relation', asset);
+    },
+
     // Relations must be registered in order
     registerRelation: function (relation) {
         this.relations.push(relation);
         this.addToIndices('relation', relation);
+    },
+
+    unregisterRelation: function (relation) {
+        this.relations.splice(this.relations.indexOf(relation), 1);
+        this.removeFromIndices('relation', relation);
     },
 
     // This cries out for a rich query facility/DSL!

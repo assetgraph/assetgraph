@@ -47,8 +47,8 @@ _.extend(JavaScript.prototype, {
 
                             originalRelations.push(new relations['JavaScript' + (node[1][1][2] === 'include' ? 'Static' : 'Lazy') + 'Include']({
                                 from: that,
-                                stack: [].concat(stack),
                                 node: node,
+                                parentNode: stack[stack.length - 1],
                                 assetConfig: {
                                     url: node[1][2][0][1]
                                 }
@@ -64,7 +64,7 @@ _.extend(JavaScript.prototype, {
 
                             originalRelations.push(new relations.JavaScriptStaticUrl({
                                 from: that,
-                                stack: [].concat(stack),
+                                parentNode: stack[stack.length - 1],
                                 node: node,
                                 assetConfig: {
                                     url: node[2][1]
@@ -92,13 +92,13 @@ _.extend(JavaScript.prototype, {
 
     attachRelation: function (newRelation, existingRelation, position) {
         position = position || 'after';
+        var parentNode = existingRelation.parentNode,
+            existingIndex = parentNode.indexOf(existingRelation.node);
         _.extend(newRelation, {
             from: this,
-            stack: [].concat(existingRelation.stack),
+            parentNode: parentNode,
             node: newRelation.createNode(this.parseTree)
         });
-        var parentNode = existingRelation.stack[existingRelation.stack.length-1],
-            existingIndex = parentNode.indexOf(this.node);
         if (position == 'after') {
             parentNode.splice(existingIndex + 1, 0, newRelation.node);
         } else {

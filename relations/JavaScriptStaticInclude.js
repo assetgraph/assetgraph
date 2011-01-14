@@ -11,9 +11,9 @@ util.inherits(JavaScriptStaticInclude, Base);
 
 _.extend(JavaScriptStaticInclude.prototype, {
     remove: function () {
-        this.stack.splice(this.stack.indexOf(this.node), 1);
+        this.parentNode.splice(this.parentNode.indexOf(this.node), 1);
         delete this.node;
-        delete this.stack;
+        delete this.parentNode;
     },
 
     setUrl: function (url) {
