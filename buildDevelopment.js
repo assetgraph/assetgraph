@@ -91,7 +91,8 @@ step(
             siteGraph.findRelations('from', template).filter(function (relation) {
                 return relation.from === template;
             }).forEach(function (htmlScriptRelation) {
-                var script = htmlScriptRelation.to,
+                var script = htmlScriptRelation.to;
+/*,
                     firstScriptTag = document.getElementsByTagName('script')[0],
                     styleInsertionPoint;
                 if (firstScriptTag && firstScriptTag.parentNode === document.head) {
@@ -99,7 +100,7 @@ step(
                 } else {
                     styleInsertionPoint = document.head.lastChild;
                 }
-
+*/
                 siteGraph.lookupSubgraph(script, function (relation) {
                     return relation.type === 'JavaScriptStaticInclude';
                 }).relations.forEach(function (relation) {
@@ -123,13 +124,9 @@ step(
                             url = makeTemplateRelativeUrl(rewrittenUrl);
                         }
                         if (targetAsset.type === 'CSS') {
-                            var newHTMLStyleRelation = new relations.HTMLStyle({to: targetAsset});
-                            siteGraph.registerRelation(newHTMLStyleRelation);
-                            template.attachRelation(newHTMLStyleRelation, styleInsertionPoint, 'after');
+                            siteGraph.registerRelation(new relations.HTMLStyle({from: template, to: targetAsset}), htmlScriptRelation, 'before'); // FIXME
                         } else {
-                            var newHTMLScriptRelation = new relations.HTMLScript({to: targetAsset});
-                            siteGraph.registerRelation(newHTMLScriptRelation);
-                            template.attachRelation(newHTMLScriptRelation, htmlScriptRelation, 'before');
+                            siteGraph.registerRelation(new relations.HTMLScript({from: template, to: targetAsset}), htmlScriptRelation, 'before');
                         }
                         relation.remove();
                         siteGraph.unregisterRelation(relation);

@@ -92,18 +92,14 @@ _.extend(JavaScript.prototype, {
 
     attachRelation: function (newRelation, existingRelation, position) {
         position = position || 'after';
-        var parentNode = existingRelation.parentNode,
-            existingIndex = parentNode.indexOf(existingRelation.node);
+        var parentNode = existingRelation.parentNode;
         _.extend(newRelation, {
             from: this,
             parentNode: parentNode,
             node: newRelation.createNode(this.parseTree)
         });
-        if (position == 'after') {
-            parentNode.splice(existingIndex + 1, 0, newRelation.node);
-        } else {
-            parentNode.splice(existingIndex, 0, newRelation.node);
-        }
+        var i = parentNode.indexOf(existingRelation.node) + (position === 'after' ? 1 : 0);
+        parentNode.splice(i, 0, newRelation.node);
     }
 });
 
