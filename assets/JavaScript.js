@@ -22,6 +22,15 @@ _.extend(JavaScript.prototype, {
         }));
     }),
 
+    serialize: function (cb, minify) {
+        this.getParseTree(error.passToFunction(cb, function (parseTree) {
+            if (minify) {
+                parseTree = uglify.uglify.ast_squeeze(uglify.uglify.ast_mangle(parseTree));
+            }
+            cb(null, uglify.uglify.gen_code(parseTree, !minify));
+        }));
+    },
+
     getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
         var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {

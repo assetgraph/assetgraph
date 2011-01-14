@@ -1,7 +1,7 @@
 /*global require, exports*/
 var util = require('util'),
     _ = require('underscore'),
-    uglify = require('uglify').uglify,
+    error = require('../error'),
     Base = require('./Base').Base;
 
 function HTMLScript(config) {
@@ -19,14 +19,18 @@ _.extend(HTMLScript.prototype, {
         }
     },
 
-    inline: function (src) {
-        if (this.node.hasAttribute('src')) {
-            this.node.removeAttribute('src');
-        }
-        while (this.node.firstChild) {
-            this.node.removeChild(this.node.firstChild);
-        }
-        this.node.appendChild(this.from.parseTree.createTextNode(uglify.gen_code(this.to.parseTree, true)));
+    inline: function (cb) {
+        var that = this;
+        this.to.serialize(error.passToFunction(cb, function (src) {
+            if (that.node.hasAttribute('src')) {
+                that.node.removeAttribute('src');
+            }
+            while (that.node.firstChild) {
+                that.node.removeChild(that.node.firstChild);
+            }
+            that.node.appendChild(that.from.parseTree.createTextNode(src));
+            cb();
+        }));
     },
 
     createNode: function (document) {

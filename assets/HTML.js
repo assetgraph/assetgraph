@@ -21,6 +21,12 @@ _.extend(HTML.prototype, {
         }));
     }),
 
+    serialize: function (cb) {
+        this.getParseTree(error.passToFunction(cb, function (parseTree) {
+            cb(null, parseTree.outerHTML);
+        }));
+    },
+
     getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
         var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {

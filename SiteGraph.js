@@ -107,14 +107,14 @@ SiteGraph.prototype = {
         this.removeFromIndices('asset', asset);
     },
 
-    inlineRelation: function (relation) {
+    inlineRelation: function (relation, cb) {
         relation.to.baseUrl = relation.from.baseUrl;
         this.findRelations('from', relation.to).forEach(function (relrel) {
             if (relrel.to.url) { // better: !isInline
                 relrel.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(template.url), url));
             }
         }, this);
-        relation.inline();
+        relation.inline(cb);
     },
 
     setAssetUrl: function (asset, url) {

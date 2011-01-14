@@ -1,7 +1,7 @@
 /*global require, exports*/
 var util = require('util'),
     _ = require('underscore'),
-    cssom = require('../3rdparty/cssom/lib'),
+    error = require('../error'),
     Base = require('./Base').Base;
 
 function HTMLStyle(config) {
@@ -24,20 +24,24 @@ _.extend(HTMLStyle.prototype, {
         }
     },
 
-    inline: function () { // FIXME: Make async due to parseTree?
-        if (this.node.nodeName === 'style') {
-            while (this.node.firstChild) {
-                this.node.removeChild(this.node.firstChild);
+    inline: function (cb) {
+        var that = this;
+        this.to.serialize(error.passToFunction(cb, function (src) {
+            if (that.node.nodeName === 'style') {
+                while (that.node.firstChild) {
+                    that.node.removeChild(that.node.firstChild);
+                }
+                this.node.appendChild(document.createTextNode(src));
+            } else {
+                var document = that.node.ownerDocument,
+                    style = document.createElement('style');
+                style.type = 'text/css';
+                style.appendChild(document.createTextNode(src));
+                that.node.parentNode.replaceChild(style, that.node);
+                that.node = style;
             }
-            this.node.appendChild(document.createTextNode(this.to.parseTree.toString()));
-        } else {
-            var document = this.node.ownerDocument,
-                style = document.createElement('style');
-            style.type = 'text/css';
-            style.appendChild(document.createTextNode(this.to.parseTree.toString()));
-            this.node.parentNode.replaceChild(style, this.node);
-            this.node = style;
-        }
+            cb();
+        }));
     },
 
     createNode: function (document) {

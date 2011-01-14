@@ -76,23 +76,17 @@ step(
         });
     }),
     error.logAndExit(function () {
-        function makeHumanReadableFileName (asset) {
-            return (asset.originalUrl || asset.url).replace(/[^a-z0-9_\-\.]/g, '_');
-        }
         templates.forEach(function (template) {
-            var document = template.parseTree, // Egh, gotta do it async?
-                seenAssets = {};
+            var seenAssets = {};
             siteGraph.findRelations('from', template).forEach(function (htmlScriptRelation) {
-                var script = htmlScriptRelation.to,
-                    htmlStyleInsertionPoint;
-                siteGraph.lookupSubgraph(script, function (relation) {
+                var htmlStyleInsertionPoint;
+                siteGraph.lookupSubgraph(htmlScriptRelation.to, function (relation) {
                     return relation.type === 'JavaScriptStaticInclude';
                 }).relations.forEach(function (relation) {
-                    var targetAsset = relation.to;
-                    if (!(targetAsset.id in seenAssets)) {
-                        seenAssets[targetAsset.id] = true;
-                        if (targetAsset.type === 'CSS') {
-                            var htmlStyle = new relations.HTMLStyle({from: template, to: targetAsset});
+                    if (!(relation.to.id in seenAssets)) {
+                        seenAssets[relation.to.id] = true;
+                        if (relation.to.type === 'CSS') {
+                            var htmlStyle = new relations.HTMLStyle({from: template, to: relation.to});
                             if (htmlStyleInsertionPoint) {
                                 siteGraph.registerRelation(htmlStyle, 'after', htmlStyleInsertionPoint);
                             } else {
@@ -100,7 +94,7 @@ step(
                             }
                             htmlStyleInsertionPoint = htmlStyle;
                         } else {
-                            siteGraph.registerRelation(new relations.HTMLScript({from: template, to: targetAsset}), 'before', htmlScriptRelation);
+                            siteGraph.registerRelation(new relations.HTMLScript({from: template, to: relation.to}), 'before', htmlScriptRelation);
                         }
                     }
                     siteGraph.unregisterRelation(relation);
@@ -113,7 +107,6 @@ step(
         var relationsToInline = [];
         siteGraph.relations.forEach(function (relation) {
             if (relation.to.dirty) {
-                //siteGraph.inlineRelation(relation);
                 relationsToInline.push(relation);
             } else if (relation.to.url) {
                 relation.setUrl(relation.to.url);
@@ -122,11 +115,7 @@ step(
         if (relationsToInline.length) {
             var group = this.group();
             relationsToInline.forEach(function (relation) {
-                var callback = group();
-                relation.to.getParseTree(function () {
-                    siteGraph.inlineRelation(relation);
-                    callback();
-                });
+                siteGraph.inlineRelation(relation, group());
             });
         } else {
             process.nextTick(this);
@@ -134,10 +123,13 @@ step(
     }),
     error.logAndExit(function () {
         templates.forEach(function (template) {
-            fs.writeFile(path.join(loader.root, template.url.replace(/\.template$/, '')), template.parseTree.outerHTML, 'utf8', error.logAndExit());
-        });
+            var callback = this.parallel();
+            template.serialize(error.throwException(function (src) {
+                fs.writeFile(path.join(loader.root, template.url.replace(/\.template$/, '')), src, 'utf8', callback);
+            }));
+        }, this);
     }),
     error.logAndExit(function () {
-        siteGraph.toGraphViz();
+//        siteGraph.toGraphViz();
     })
 );
