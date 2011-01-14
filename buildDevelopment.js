@@ -128,7 +128,6 @@ step(
                         } else {
                             siteGraph.registerRelation(new relations.HTMLScript({from: template, to: targetAsset}), htmlScriptRelation, 'before');
                         }
-                        relation.remove();
                         siteGraph.unregisterRelation(relation);
                     }
                 });

@@ -100,6 +100,12 @@ _.extend(JavaScript.prototype, {
         });
         var i = parentNode.indexOf(existingRelation.node) + (position === 'after' ? 1 : 0);
         parentNode.splice(i, 0, newRelation.node);
+    },
+
+    detachRelation: function (relation) {
+        relation.parentNode.splice(relation.parentNode.indexOf(relation.node), 1);
+        delete relation.node;
+        delete relation.parentNode;
     }
 });
 

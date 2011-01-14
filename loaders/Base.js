@@ -102,7 +102,7 @@ Base.prototype = {
                                 initializeRelation(relation);
                                 previous = relation;
                             });
-                            originalRelation.remove();
+                            asset.detachRelation(originalRelation);
                         } else {
                             cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support attachRelation"));
                         }
