@@ -90,16 +90,16 @@ _.extend(JavaScript.prototype, {
         }));
     }),
 
-    attachRelation: function (newRelation, existingRelation, position) {
+    attachRelation: function (relation, position, adjacentRelation) {
         position = position || 'after';
-        var parentNode = existingRelation.parentNode;
-        _.extend(newRelation, {
+        var parentNode = adjacentRelation.parentNode;
+        _.extend(relation, {
             from: this,
             parentNode: parentNode,
-            node: newRelation.createNode(this.parseTree)
+            node: relation.createNode(this.parseTree)
         });
-        var i = parentNode.indexOf(existingRelation.node) + (position === 'after' ? 1 : 0);
-        parentNode.splice(i, 0, newRelation.node);
+        var i = parentNode.indexOf(adjacentRelation.node) + (position === 'after' ? 1 : 0);
+        parentNode.splice(i, 0, relation.node);
     },
 
     detachRelation: function (relation) {

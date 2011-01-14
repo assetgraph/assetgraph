@@ -98,18 +98,18 @@ _.extend(HTML.prototype, {
         }));
     }),
 
-    attachRelation: function (relation, existingRelation, position) {
+    attachRelation: function (relation, position, adjacentRelation) {
         position = position || 'after';
         _.extend(relation, {
             from: this,
             node: relation.createNode(this.parseTree)
         });
 
-        var parentNode = existingRelation.node.parentNode;
+        var parentNode = adjacentRelation.node.parentNode;
         if (position === 'after') {
-            parentNode.insertBefore(relation.node, existingRelation.node.nextSibling);
+            parentNode.insertBefore(relation.node, adjacentRelation.node.nextSibling);
         } else {
-            parentNode.insertBefore(relation.node, existingRelation.node);
+            parentNode.insertBefore(relation.node, adjacentRelation.node);
         }
     },
 

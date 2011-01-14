@@ -122,9 +122,9 @@ step(
                             url = makeTemplateRelativeUrl(rewrittenUrl);
                         }
                         if (targetAsset.type === 'CSS') {
-                            siteGraph.registerRelation(new relations.HTMLStyle({from: template, to: targetAsset}), htmlScriptRelation, 'before'); // FIXME
+                            siteGraph.registerRelation(new relations.HTMLStyle({from: template, to: targetAsset}), 'before', htmlScriptRelation); // FIXME
                         } else {
-                            siteGraph.registerRelation(new relations.HTMLScript({from: template, to: targetAsset}), htmlScriptRelation, 'before');
+                            siteGraph.registerRelation(new relations.HTMLScript({from: template, to: targetAsset}), 'before', htmlScriptRelation);
                         }
                         siteGraph.unregisterRelation(relation);
                     }

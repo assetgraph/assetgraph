@@ -99,13 +99,13 @@ SiteGraph.prototype = {
     },
 
     // Relations must be registered in order
-    registerRelation: function (relation, adjacentRelation, position) { // adjacentRelation and position are optional
+    registerRelation: function (relation, position, adjacentRelation) { // position and adjacentRelation are optional
         if (adjacentRelation) {
             position = position || 'after';
             if (adjacentRelation.from !== relation.from) {
                 throw "registerRelation: adjacentRelation.from !== relation.from!";
             }
-            relation.from.attachRelation(relation, adjacentRelation, position);
+            relation.from.attachRelation(relation, position, adjacentRelation);
             var i = this.relations.indexOf(adjacentRelation) + (position === 'after' ? 1 : 0);
             this.relations.splice(i, 0, relation);
         } else {

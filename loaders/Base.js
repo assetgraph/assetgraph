@@ -88,7 +88,7 @@ Base.prototype = {
                     resolvedAssetConfigArrays.forEach(function (resolvedAssetConfigs, i) {
                         var originalRelation = filteredOriginalRelations[i];
                         if (resolvedAssetConfigs.length === 0) {
-                            originalRelation.remove();
+                            asset.detachRelation(originalRelation);
                         } else if (resolvedAssetConfigs.length === 1) {
                             originalRelation.assetConfig = resolvedAssetConfigs[0];
                             initializeRelation(originalRelation);
@@ -98,7 +98,7 @@ Base.prototype = {
                                 var relation = new originalRelation.constructor({
                                     assetConfig: resolvedAssetConfig
                                 });
-                                asset.attachRelation(relation, previous, 'after');
+                                asset.attachRelation(relation, 'after', previous);
                                 initializeRelation(relation);
                                 previous = relation;
                             });
