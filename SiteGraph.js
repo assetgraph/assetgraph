@@ -99,18 +99,22 @@ SiteGraph.prototype = {
     },
 
     // Relations must be registered in order
-    registerRelation: function (relation, position, adjacentRelation) { // position and adjacentRelation are optional
-        if (adjacentRelation) {
-            position = position || 'after';
+    registerRelation: function (relation, position, adjacentRelation) { // position and adjacentRelation are optional,
+        position = position || 'last';
+
+        if (!relation.node) { // Assume there's a node if it's already attached
             if (adjacentRelation.from !== relation.from) {
                 throw "registerRelation: adjacentRelation.from !== relation.from!";
             }
             relation.from.attachRelation(relation, position, adjacentRelation);
+        }
+        if (position === 'last') {
+            this.relations.push(relation);
+        } else if (position === 'first') {
+            this.relations.unshift(relation);
+        } else { // Assume 'before' or 'after'
             var i = this.relations.indexOf(adjacentRelation) + (position === 'after' ? 1 : 0);
             this.relations.splice(i, 0, relation);
-        } else {
-            // Assume already attached relation
-            this.relations.push(relation);
         }
         this.addToIndices('relation', relation); //, adjacentRelation, position... have to be there to preserve order
     },

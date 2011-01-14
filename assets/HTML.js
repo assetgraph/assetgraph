@@ -99,17 +99,25 @@ _.extend(HTML.prototype, {
     }),
 
     attachRelation: function (relation, position, adjacentRelation) {
-        position = position || 'after';
+        position = position || 'first';
         _.extend(relation, {
             from: this,
             node: relation.createNode(this.parseTree)
         });
 
-        var parentNode = adjacentRelation.node.parentNode;
-        if (position === 'after') {
-            parentNode.insertBefore(relation.node, adjacentRelation.node.nextSibling);
-        } else {
-            parentNode.insertBefore(relation.node, adjacentRelation.node);
+        if (position === 'first') {
+            if (relation.type === 'CSS') {
+                this.parseTree.head.appendChild(relation.node);
+            } else {
+                throw "HTML.attachRelation: position=first only supported for CSS assets";
+            }
+        } else { // 'before' or 'after'
+            var parentNode = adjacentRelation.node.parentNode;
+            if (position === 'after') {
+                parentNode.insertBefore(relation.node, adjacentRelation.node.nextSibling);
+            } else {
+                parentNode.insertBefore(relation.node, adjacentRelation.node);
+            }
         }
     },
 
