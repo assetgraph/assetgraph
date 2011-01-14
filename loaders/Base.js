@@ -75,15 +75,15 @@ Base.prototype = {
                 error.passToFunction(cb, function (resolvedAssetConfigArrays) {
                     var numAssets = 0,
                         makeParallel = this.parallel;
-                    function initializeRelation(relation) {
+                    function initializeRelation(relation, position, adjacentRelation) {
                         if (!('url' in relation.assetConfig)) {
                             // Inline asset, copy baseUrl from asset
                             relation.assetConfig.baseUrl = asset.baseUrl;
                         }
                         relation.to = that.loadAsset(relation.assetConfig);
-                        numAssets++;
+                        that.siteGraph.registerRelation(relation, position, adjacentRelation);
+                        numAssets += 1;
                         traverse(relation.to, makeParallel());
-                        that.siteGraph.registerRelation(relation);
                     }
                     resolvedAssetConfigArrays.forEach(function (resolvedAssetConfigs, i) {
                         var originalRelation = filteredOriginalRelations[i];
@@ -91,15 +91,15 @@ Base.prototype = {
                             asset.detachRelation(originalRelation);
                         } else if (resolvedAssetConfigs.length === 1) {
                             originalRelation.assetConfig = resolvedAssetConfigs[0];
-                            initializeRelation(originalRelation);
+                            initializeRelation(originalRelation, 'last');
                         } else if (asset.attachRelation) {
                             var previous = originalRelation;
                             resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
                                 var relation = new originalRelation.constructor({
+                                    from: asset,
                                     assetConfig: resolvedAssetConfig
                                 });
-                                asset.attachRelation(relation, 'after', previous);
-                                initializeRelation(relation);
+                                initializeRelation(relation, 'after', previous);
                                 previous = relation;
                             });
                             asset.detachRelation(originalRelation);

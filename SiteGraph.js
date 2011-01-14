@@ -127,6 +127,7 @@ SiteGraph.prototype = {
     },
 
     unregisterRelation: function (relation) {
+        relation.from.detachRelation(relation);
         this.relations.splice(this.relations.indexOf(relation), 1);
         this.removeFromIndices('relation', relation);
     },
