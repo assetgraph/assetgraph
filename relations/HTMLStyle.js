@@ -1,6 +1,7 @@
 /*global require, exports*/
 var util = require('util'),
     _ = require('underscore'),
+    cssom = require('../3rdparty/cssom/lib'),
     Base = require('./Base').Base;
 
 function HTMLStyle(config) {
@@ -23,17 +24,17 @@ _.extend(HTMLStyle.prototype, {
         }
     },
 
-    inline: function (src) {
+    inline: function () { // FIXME: Make async due to parseTree?
         if (this.node.nodeName === 'style') {
             while (this.node.firstChild) {
                 this.node.removeChild(this.node.firstChild);
             }
-            this.node.appendChild(document.createTextNode(src));
+            this.node.appendChild(document.createTextNode(this.to.parseTree.toString()));
         } else {
             var document = this.node.ownerDocument,
                 style = document.createElement('style');
             style.type = 'text/css';
-            style.appendChild(document.createTextNode(src));
+            style.appendChild(document.createTextNode(this.to.parseTree.toString()));
             this.node.parentNode.replaceChild(style, this.node);
             this.node = style;
         }

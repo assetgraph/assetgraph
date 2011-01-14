@@ -4,8 +4,9 @@ var util = require('util'),
     fs = require('fs'),
     path = require('path'),
     step = require('step'),
-    relations = require('./relations'),
     _ = require('underscore'),
+    fileUtils = require('./fileUtils'),
+    relations = require('./relations'),
     graphviz = require('graphviz'),
     error = require('./error'),
     allIndices = {
@@ -104,6 +105,23 @@ SiteGraph.prototype = {
     unregisterAsset: function (asset) {
         this.assets.splice(this.assets.indexOf(asset), 1);
         this.removeFromIndices('asset', asset);
+    },
+
+    inlineRelation: function (relation) {
+        relation.to.baseUrl = relation.from.baseUrl;
+        this.findRelations('from', relation.to).forEach(function (relrel) {
+            if (relrel.to.url) { // better: !isInline
+                relrel.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(template.url), url));
+            }
+        }, this);
+        relation.inline();
+    },
+
+    setAssetUrl: function (asset, url) {
+        asset.url = url;
+        this.findRelations('to', asset).forEach(function (incomingRelation) {
+            incomingRelation.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(incomingRelation.from), url));
+        }, this);
     },
 
     // Relations must be registered in order

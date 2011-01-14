@@ -14,7 +14,7 @@ var util = require('util'),
     error = require('./error'),
     options = {};
 
-_.each(require('optimist').usage('FIXME').demand(['root', 'fixup-url']).argv,
+_.each(require('optimist').usage('FIXME').demand(['root']).argv,
     function (value, optionName) {
         options[optionName.replace(/-([a-z])/g, function ($0, $1) {
             return $1.toUpperCase();
@@ -64,9 +64,6 @@ step(
             }
         });
         process.nextTick(group());
-        if ('fixupUrl' in options) {
-            fileUtils.mkpath(path.join(loader.root, options.fixupUrl), this.parallel());
-        }
     },
     error.logAndExit(function () {
         var group = this.group();
@@ -85,9 +82,6 @@ step(
         templates.forEach(function (template) {
             var document = template.parseTree, // Egh, gotta do it async?
                 seenAssets = {};
-            function makeTemplateRelativeUrl(url) {
-                return fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(template.url), url);
-            }
             siteGraph.findRelations('from', template).forEach(function (htmlScriptRelation) {
                 var script = htmlScriptRelation.to,
                     htmlStyleInsertionPoint;
@@ -97,22 +91,6 @@ step(
                     var targetAsset = relation.to;
                     if (!(targetAsset.id in seenAssets)) {
                         seenAssets[targetAsset.id] = true;
-                        var url;
-                        if (!targetAsset.dirty && 'url' in targetAsset) {
-                            url = makeTemplateRelativeUrl(targetAsset.url);
-                        } else {
-                            // "Dirty" or inline, has to be written to disc
-                            var rewrittenUrl = path.join(options.fixupUrl, makeHumanReadableFileName(targetAsset));
-                            if (targetAsset.type === 'CSS') {
-                                // FIXME: This should be done by manipulating the relations properly
-                                targetAsset.src = targetAsset.src.replace(/url\(/g, function () {
-                                    var relativeUrl = fileUtils.buildRelativeUrl(options.fixupUrl, fileUtils.dirnameNoDot(targetAsset.url));
-                                    return "url(" + relativeUrl + "/";
-                                });
-                            }
-                            fs.writeFile(path.join(loader.root, rewrittenUrl), targetAsset.src, targetAsset.encoding, error.logAndExit());
-                            url = makeTemplateRelativeUrl(rewrittenUrl);
-                        }
                         if (targetAsset.type === 'CSS') {
                             var htmlStyle = new relations.HTMLStyle({from: template, to: targetAsset});
                             if (htmlStyleInsertionPoint) {
@@ -132,16 +110,27 @@ step(
         process.nextTick(this);
     }),
     error.logAndExit(function () {
-        siteGraph.assets.forEach(function (asset) {
-        });
+        var relationsToInline = [];
         siteGraph.relations.forEach(function (relation) {
-            if (relation.to.url) {
+            if (relation.to.dirty) {
+                //siteGraph.inlineRelation(relation);
+                relationsToInline.push(relation);
+            } else if (relation.to.url) {
                 relation.setUrl(relation.to.url);
-            } else {
-                relation.inline();
             }
         });
-        process.nextTick(this);
+        if (relationsToInline.length) {
+            var group = this.group();
+            relationsToInline.forEach(function (relation) {
+                var callback = group();
+                relation.to.getParseTree(function () {
+                    siteGraph.inlineRelation(relation);
+                    callback();
+                });
+            });
+        } else {
+            process.nextTick(this);
+        }
     }),
     error.logAndExit(function () {
         templates.forEach(function (template) {
