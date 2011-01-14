@@ -106,7 +106,7 @@ _.extend(HTML.prototype, {
         });
 
         if (position === 'first') {
-            if (relation.type === 'CSS') {
+            if (relation.type === 'HTMLStyle') {
                 this.parseTree.head.appendChild(relation.node);
             } else {
                 throw "HTML.attachRelation: position=first only supported for CSS assets";

@@ -89,16 +89,8 @@ step(
                 return fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(template.url), url);
             }
             siteGraph.findRelations('from', template).forEach(function (htmlScriptRelation) {
-                var script = htmlScriptRelation.to;
-/*,
-                    firstScriptTag = document.getElementsByTagName('script')[0],
-                    styleInsertionPoint;
-                if (firstScriptTag && firstScriptTag.parentNode === document.head) {
-                    styleInsertionPoint = firstScriptTag.previousSibling;
-                } else {
-                    styleInsertionPoint = document.head.lastChild;
-                }
-*/
+                var script = htmlScriptRelation.to,
+                    htmlStyleInsertionPoint;
                 siteGraph.lookupSubgraph(script, function (relation) {
                     return relation.type === 'JavaScriptStaticInclude';
                 }).relations.forEach(function (relation) {
@@ -122,7 +114,13 @@ step(
                             url = makeTemplateRelativeUrl(rewrittenUrl);
                         }
                         if (targetAsset.type === 'CSS') {
-                            siteGraph.registerRelation(new relations.HTMLStyle({from: template, to: targetAsset}), 'before', htmlScriptRelation); // FIXME
+                            var htmlStyle = new relations.HTMLStyle({from: template, to: targetAsset});
+                            if (htmlStyleInsertionPoint) {
+                                siteGraph.registerRelation(htmlStyle, 'after', htmlStyleInsertionPoint);
+                            } else {
+                                siteGraph.registerRelation(htmlStyle, 'first');
+                            }
+                            htmlStyleInsertionPoint = htmlStyle;
                         } else {
                             siteGraph.registerRelation(new relations.HTMLScript({from: template, to: targetAsset}), 'before', htmlScriptRelation);
                         }

@@ -110,7 +110,7 @@ SiteGraph.prototype = {
     registerRelation: function (relation, position, adjacentRelation) { // position and adjacentRelation are optional,
         position = position || 'last';
         if (!relation.node) { // Assume there's a node if it's already attached
-            if (adjacentRelation.from !== relation.from) {
+            if (adjacentRelation && adjacentRelation.from !== relation.from) {
                 throw "registerRelation: adjacentRelation.from !== relation.from!";
             }
             relation.from.attachRelation(relation, position, adjacentRelation);
