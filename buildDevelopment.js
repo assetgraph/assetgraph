@@ -88,9 +88,7 @@ step(
             function makeTemplateRelativeUrl(url) {
                 return fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(template.url), url);
             }
-            siteGraph.findRelations('from', template).filter(function (relation) {
-                return relation.from === template;
-            }).forEach(function (htmlScriptRelation) {
+            siteGraph.findRelations('from', template).forEach(function (htmlScriptRelation) {
                 var script = htmlScriptRelation.to;
 /*,
                     firstScriptTag = document.getElementsByTagName('script')[0],
