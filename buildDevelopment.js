@@ -76,6 +76,12 @@ step(
         });
     }),
     error.logAndExit(function () {
+        var parallel = this.parallel,
+            numCallbacks = 0;
+        function makeCallback () {
+            numCallbacks += 1;
+            return parallel();
+        }
         templates.forEach(function (template) {
             var seenAssets = {};
             siteGraph.findRelations('from', template).forEach(function (htmlScriptRelation) {
@@ -99,9 +105,12 @@ step(
                     }
                     siteGraph.unregisterRelation(relation);
                 });
+                siteGraph.inlineRelation(htmlScriptRelation, makeCallback());
             });
         });
-        process.nextTick(this);
+        if (!numCallbacks) {
+            process.nextTick(this);
+        }
     }),
     error.logAndExit(function () {
         var relationsToInline = [];
