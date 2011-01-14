@@ -26,7 +26,7 @@ _.extend(HTMLScript.prototype, {
         while (this.node.firstChild) {
             this.node.removeChild(this.node.firstChild);
         }
-        this.node.appendChild(this.from.parseTree.createTextNode(uglify.gen_code(this.to.parseTree)));
+        this.node.appendChild(this.from.parseTree.createTextNode(uglify.gen_code(this.to.parseTree, true)));
     },
 
     createNode: function (document) {
