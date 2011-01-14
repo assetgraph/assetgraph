@@ -75,7 +75,7 @@ Base.prototype = {
                 error.passToFunction(cb, function (resolvedAssetConfigArrays) {
                     var numAssets = 0,
                         makeParallel = this.parallel;
-                    function initializeRelation(relation, position, adjacentRelation) {
+                    function initializeAndRegisterRelation(relation, position, adjacentRelation) {
                         if (!('url' in relation.assetConfig)) {
                             // Inline asset, copy baseUrl from asset
                             relation.assetConfig.baseUrl = asset.baseUrl;
@@ -91,7 +91,7 @@ Base.prototype = {
                             asset.detachRelation(originalRelation);
                         } else if (resolvedAssetConfigs.length === 1) {
                             originalRelation.assetConfig = resolvedAssetConfigs[0];
-                            initializeRelation(originalRelation, 'last');
+                            initializeAndRegisterRelation(originalRelation, 'last');
                         } else if (asset.attachRelation) {
                             var previous = originalRelation;
                             resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
@@ -99,7 +99,7 @@ Base.prototype = {
                                     from: asset,
                                     assetConfig: resolvedAssetConfig
                                 });
-                                initializeRelation(relation, 'after', previous);
+                                initializeAndRegisterRelation(relation, 'after', previous);
                                 previous = relation;
                             });
                             asset.detachRelation(originalRelation);

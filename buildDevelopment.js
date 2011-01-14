@@ -124,8 +124,8 @@ step(
                         } else {
                             siteGraph.registerRelation(new relations.HTMLScript({from: template, to: targetAsset}), 'before', htmlScriptRelation);
                         }
-                        siteGraph.unregisterRelation(relation);
                     }
+                    siteGraph.unregisterRelation(relation);
                 });
             });
         });
