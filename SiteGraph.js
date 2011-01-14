@@ -27,8 +27,9 @@ var SiteGraph = module.exports = function (config) {
 };
 
 SiteGraph.prototype = {
-    addToIndices: function (indexType, obj) {
+    addToIndices: function (indexType, obj, position, adjacentObj) { // position and adjacentRelation are optional
         allIndices[indexType].forEach(function (indexName) {
+            position = position || 'last';
             if (indexName in obj) {
                 var type = typeof obj[indexName],
                     key;
@@ -42,7 +43,14 @@ SiteGraph.prototype = {
                     if (!(key in index)) {
                         index[key] = [obj];
                     } else {
-                        index[key].push(obj);
+                        if (position === 'last') {
+                            index[key].push(obj);
+                        } else if (position === 'first') {
+                            index[key].unshift(obj);
+                        } else { // 'before' or 'after'
+                            var i = index[key].indexOf(adjacentObj) + (position === 'after' ? 1 : 0);
+                            index[key].splice(i, 0, obj);
+                        }
                     }
                 }
             }
@@ -101,7 +109,6 @@ SiteGraph.prototype = {
     // Relations must be registered in order
     registerRelation: function (relation, position, adjacentRelation) { // position and adjacentRelation are optional,
         position = position || 'last';
-
         if (!relation.node) { // Assume there's a node if it's already attached
             if (adjacentRelation.from !== relation.from) {
                 throw "registerRelation: adjacentRelation.from !== relation.from!";
@@ -116,7 +123,7 @@ SiteGraph.prototype = {
             var i = this.relations.indexOf(adjacentRelation) + (position === 'after' ? 1 : 0);
             this.relations.splice(i, 0, relation);
         }
-        this.addToIndices('relation', relation); //, adjacentRelation, position... have to be there to preserve order
+        this.addToIndices('relation', relation, position, adjacentRelation);
     },
 
     unregisterRelation: function (relation) {
