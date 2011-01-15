@@ -14,6 +14,8 @@ function JavaScript(config) {
 util.inherits(JavaScript, Base);
 
 _.extend(JavaScript.prototype, {
+    contentType: 'application/javascript', // TODO: Double check that this is everyone's recommended value
+
     getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var that = this;
         this.getOriginalSrc(error.passToFunction(cb, function (src) {

@@ -13,6 +13,8 @@ function HTML(config) {
 util.inherits(HTML, Base);
 
 _.extend(HTML.prototype, {
+    contentType: 'text/html',
+
     getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var that = this;
         this.getOriginalSrc(error.passToFunction(cb, function (src) {

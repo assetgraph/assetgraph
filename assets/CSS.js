@@ -13,6 +13,8 @@ function CSS(config) {
 util.inherits(CSS, Base);
 
 _.extend(CSS.prototype, {
+    contentType: 'text/css',
+
     getParseTree: makeBufferedAccessor('parseTree', function (cb) {
         var that = this;
         this.getOriginalSrc(error.passToFunction(cb, function (src) {
@@ -38,9 +40,7 @@ _.extend(CSS.prototype, {
                         var urlMatch = propertyValue.match(/\burl\((\'|\"|)([^\'\"]+)\1\)/);
                         if (urlMatch) {
                             var dataUrlMatch = urlMatch[2].match(/^data:image\/(png|gif|jpeg)(;base64)?,(.*)$/),
-                                assetConfig = {
-                                    type: 'Image'
-                                };
+                                assetConfig = {};
                             if (dataUrlMatch) {
                                 assetConfig.contentType = "image/" + dataUrlMatch[1];
                                 if (dataUrlMatch[2]) {

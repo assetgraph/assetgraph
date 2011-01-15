@@ -1,0 +1,16 @@
+var util = require('util'),
+    _ = require('underscore'),
+    error = require('../error'),
+    Image = require('./Image').Image;
+
+function ICO(config) {
+    Image.call(this, config);
+}
+
+util.inherits(ICO, Image);
+
+_.extend(ICO.prototype, {
+    contentType: 'image/x-icon' // Non-standard, but supported by IE
+});
+
+exports.ICO = ICO;

@@ -9,4 +9,8 @@ function HTC (config) {
 
 util.inherits(HTC, HTML);
 
+_.extend(HTC.prototype, {
+    contentType: 'text/x-component'
+});
+
 exports.HTC = HTC;
