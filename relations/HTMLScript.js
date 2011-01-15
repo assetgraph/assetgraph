@@ -29,6 +29,7 @@ _.extend(HTMLScript.prototype, {
                 that.node.removeChild(that.node.firstChild);
             }
             that.node.appendChild(that.from.parseTree.createTextNode(src));
+            that.isInline = true;
             cb();
         }));
     },

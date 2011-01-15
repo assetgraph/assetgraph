@@ -40,6 +40,7 @@ _.extend(HTMLStyle.prototype, {
                 that.node.parentNode.replaceChild(style, that.node);
                 that.node = style;
             }
+            that.isInline = true;
             cb();
         }));
     },
