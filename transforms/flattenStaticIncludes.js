@@ -12,13 +12,13 @@ exports.flattenStaticIncludes = function flattenStaticIncludes(siteGraph, templa
                 if (relation.to.type === 'CSS') {
                     var htmlStyle = new relations.HTMLStyle({from: template, to: relation.to});
                     if (htmlStyleInsertionPoint) {
-                        siteGraph.registerRelation(htmlStyle, 'after', htmlStyleInsertionPoint);
+                        siteGraph.attachAndRegisterRelation(htmlStyle, 'after', htmlStyleInsertionPoint);
                     } else {
-                        siteGraph.registerRelation(htmlStyle, 'first');
+                        siteGraph.attachAndRegisterRelation(htmlStyle, 'first');
                     }
                     htmlStyleInsertionPoint = htmlStyle;
                 } else {
-                    siteGraph.registerRelation(new relations.HTMLScript({from: template, to: relation.to}), 'before', htmlScriptRelation);
+                    siteGraph.attachAndRegisterRelation(new relations.HTMLScript({from: template, to: relation.to}), 'before', htmlScriptRelation);
                 }
             }
             siteGraph.unregisterRelation(relation);
