@@ -41,6 +41,7 @@ _.extend(HTMLStyle.prototype, {
                 that.node = style;
             }
             that.isInline = true;
+            delete that.url;
             cb();
         }));
     },

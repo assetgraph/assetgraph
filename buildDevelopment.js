@@ -54,7 +54,7 @@ step(
             if (relation.to.dirty) {
                 numCallbacks += 1;
                 siteGraph.inlineRelation(relation, this.parallel());
-            } else if (relation.to.url) {
+            } else if (!relation.isInline && relation.to.url) {
                 relation.setUrl(relation.to.url);
             }
         }, this);
