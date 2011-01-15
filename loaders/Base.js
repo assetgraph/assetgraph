@@ -81,7 +81,7 @@ Base.prototype = {
                         }
                         relation.to = that.loadAsset(relation.assetConfig);
                         if (initializedRelations.length) {
-                            that.siteGraph.registerRelation(relation, 'after', initializedRelations[initializedRelations.length - 1);
+                            that.siteGraph.registerRelation(relation, 'after', initializedRelations[initializedRelations.length - 1]);
                         } else {
                             that.siteGraph.registerRelation(relation, 'first');
                         }
@@ -95,15 +95,13 @@ Base.prototype = {
                             originalRelation.assetConfig = resolvedAssetConfigs[0];
                             initializeAndRegisterRelation(originalRelation);
                         } else if (asset.attachRelation) {
-                            var previous = originalRelation;
                             resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
                                 var relation = new originalRelation.constructor({
                                     from: asset,
                                     assetConfig: resolvedAssetConfig
                                 });
-                                relation.from.attachRelation(relation, 'after', previous);
+                                relation.from.attachRelation(relation, 'before', originalRelation);
                                 initializeAndRegisterRelation(relation);
-                                previous = relation;
                             });
                             asset.detachRelation(originalRelation);
                         } else {
