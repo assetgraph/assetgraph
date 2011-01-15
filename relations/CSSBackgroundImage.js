@@ -34,7 +34,7 @@ _.extend(CSSBackgroundImage.prototype, {
     inline: function (cb) {
         var that = this;
         this.to.serialize(error.passToFunction(cb, function (src) {
-            that.setUrl("data:" + that.to.getContentType() + ";base64," + new Buffer(src).toString('base64'));
+            that.setUrl("data:" + that.to.getContentType() + ";base64," + new Buffer(src, 'binary').toString('base64'));
             that.isInline = true;
             delete that.url;
             cb();
