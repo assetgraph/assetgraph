@@ -1,6 +1,6 @@
 var util = require('util'),
     _ = require('underscore'),
-    jsdom = require('jsdom'),
+    jsdom = require('../3rdparty/papandreou-jsdom/lib/jsdom'),
     error = require('../error'),
     makeBufferedAccessor = require('../makeBufferedAccessor'),
     relations = require('../relations'),
