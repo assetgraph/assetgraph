@@ -8,7 +8,6 @@ var util = require('util'),
     fileUtils = require('./fileUtils'),
     assets = require('./assets'),
     relations = require('./relations'),
-    resolvers = require('./loaders/Fs/resolvers'),
     transforms = require('./transforms'),
     SiteGraph = require('./SiteGraph'),
     FsLoader = require('./loaders/Fs'),
@@ -32,39 +31,7 @@ var siteGraph = new SiteGraph(),
 
 step(
     function () {
-        var group = this.group();
-        (options.label || []).forEach(function (labelDefinition) {
-            var keyValue = labelDefinition.split('=');
-            if (keyValue.length != 2) {
-                throw "Invalid label syntax: " + labelDefinition;
-            }
-            var labelName = keyValue[0],
-                labelValue = keyValue[1],
-                callback = group(),
-                matchSenchaJSBuilder = labelValue.match(/\.jsb(\d)$/);
-            if (matchSenchaJSBuilder) {
-                var url = fileUtils.dirnameNoDot(labelValue) || '',
-                    version = parseInt(matchSenchaJSBuilder[1], 10);
-                fs.readFile(path.join(loader.root, labelValue), 'utf8', error.logAndExit(function (fileBody) {
-                    loader.addLabelResolver(labelName, resolvers.SenchaJSBuilder, {
-                        url: url,
-                        version: version,
-                        body: JSON.parse(fileBody)
-                    });
-                    callback();
-                }));
-            } else {
-                path.exists(path.join(loader.root, labelValue), function (exists) {
-                    if (!exists) {
-                        callback(new Error("Label " + labelName + ": Dir not found: " + labelValue));
-                    } else {
-                        loader.addLabelResolver(labelName, resolvers.Directory, {url: labelValue});
-                        callback();
-                    }
-                });
-            }
-        });
-        process.nextTick(group());
+        transforms.addLabelResolversToFsLoader(loader, options.label || [], this);
     },
     error.logAndExit(function () {
         var group = this.group();
