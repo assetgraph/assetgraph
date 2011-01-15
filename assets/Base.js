@@ -22,6 +22,13 @@ Base.prototype = {
         }
     }),
 
+    // Override in subclass if it supports relations
+    getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
+        process.nextTick(function () {
+            cb(null, []);
+        });
+    }),
+
     toString: function () {
         return "[" + this.type + "/" + this.id + "]";
     }
