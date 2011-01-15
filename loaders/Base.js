@@ -48,14 +48,12 @@ Base.prototype = {
 
     populate: function (originAsset, includeRelationLambda, cb) {
         var that = this,
-            seenAssetUrls = {};
+            populatedAssets = {};
         (function traverse(asset, cb) {
-            if ('url' in asset) {
-                if (seenAssetUrls[asset.url]) {
-                    return cb();
-                }
-                seenAssetUrls[asset.url] = true;
+            if (asset.id in populatedAssets) {
+                return cb();
             }
+            populatedAssets[asset.id] = true;
             var filteredOriginalRelations;
             step(
                 function () {
