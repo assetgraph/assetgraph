@@ -103,6 +103,14 @@ _.extend(HTML.prototype, {
                             url: node.src
                         }
                     }));
+                } else if (nodeName === 'html' && node.manifest) {
+                    originalRelations.push(new relations.HTMLCacheManifest({
+                        from: that,
+                        node: node,
+                        assetConfig: {
+                            url: node.manifest
+                        }
+                    }));
                 }
             }, this);
             cb(null, originalRelations);
@@ -119,8 +127,10 @@ _.extend(HTML.prototype, {
         if (position === 'first') {
             if (relation.type === 'HTMLStyle') {
                 this.parseTree.head.appendChild(relation.node);
+            } else if (relation.type === 'HTMLCacheManifest') {
+                // Already attached to <html> as a result of relation.createNode above
             } else {
-                throw "HTML.attachRelation: position=first only supported for HTMLStyle relations";
+                throw "HTML.attachRelation: position=first only supported for HTMLStyle and HTMLCacheManifest relations";
             }
         } else { // 'before' or 'after'
             var parentNode = adjacentRelation.node.parentNode;

@@ -22,7 +22,12 @@ Base.prototype = {
         }
     }),
 
-    // Override in subclass if it supports relations
+    // Overwrite in subclass if an intermediate representation/parse tree is used for manipulation:
+    serialize: function (cb) {
+        this.getOriginalSrc(cb);
+    },
+
+    // Override in subclass if it supports relations:
     getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
         process.nextTick(function () {
             cb(null, []);

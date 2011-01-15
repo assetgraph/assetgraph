@@ -1,6 +1,7 @@
 ['addLabelResolversToFsLoader',
  'flattenStaticIncludes',
  'dumpGraph',
- 'addCDNPrefix'].forEach(function (transformName) {
+ 'addCDNPrefix',
+ 'addCacheManifest'].forEach(function (transformName) {
     exports[transformName] = require('./' + transformName)[transformName];
 });

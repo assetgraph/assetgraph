@@ -6,7 +6,8 @@ var util = require('util'),
     step = require('step'),
     _ = require('underscore'),
     assets = require('../assets'),
-    error = require('../error');
+    error = require('../error'),
+    fileUtils = require('../fileUtils');
 
 // Expects: config.root
 var Base = module.exports = function (config) {
@@ -23,7 +24,7 @@ Base.prototype = {
         }
         if (!('baseUrl' in assetConfig)) {
             if ('url' in assetConfig || 'originalUrl' in assetConfig) {
-                assetConfig.baseUrl = path.dirname(assetConfig.url || assetConfig.originalUrl);
+                assetConfig.baseUrl = fileUtils.dirnameNoDot(assetConfig.url || assetConfig.originalUrl);
             } else {
                 throw new Error("Couldn't work out baseUrl for asset: " + sys.inspect(assetConfig));
             }
@@ -37,7 +38,7 @@ Base.prototype = {
                 throw new Error("No type in assetConfig and couldn't work it out from the url: " + sys.inspect(assetConfig));
             }
         }
-        var Constructor = assets.byType[assetConfig.type];
+        var Constructor = assets[assetConfig.type];
         if (!('originalSrc' in assetConfig)) {
             assetConfig.originalSrcProxy = this.getOriginalSrcProxy(assetConfig, Constructor.prototype.encoding);
         }

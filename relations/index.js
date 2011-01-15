@@ -1,5 +1,5 @@
 /*global exports*/
-['HTMLStyle', 'HTMLScript', 'HTMLShortcutIcon', 'HTMLImage', 'HTMLIFrame',
+['HTMLStyle', 'HTMLScript', 'HTMLShortcutIcon', 'HTMLImage', 'HTMLIFrame', 'HTMLCacheManifest',
  'JavaScriptStaticInclude', 'JavaScriptLazyInclude', 'JavaScriptStaticUrl',
  'CSSBackgroundImage'].forEach(function (relationType) {
     exports[relationType] = require('./' + relationType)[relationType];
