@@ -73,17 +73,19 @@ Base.prototype = {
                     }
                 }),
                 error.passToFunction(cb, function (resolvedAssetConfigArrays) {
-                    var numAssets = 0,
-                        makeParallel = this.parallel;
-                    function initializeAndRegisterRelation(relation, position, adjacentRelation) {
+                    var initializedRelations = [];
+                    function initializeAndRegisterRelation(relation) {
                         if (!('url' in relation.assetConfig)) {
                             // Inline asset, copy baseUrl from asset
                             relation.assetConfig.baseUrl = asset.baseUrl;
                         }
                         relation.to = that.loadAsset(relation.assetConfig);
-                        that.siteGraph.registerRelation(relation, position, adjacentRelation);
-                        numAssets += 1;
-                        traverse(relation.to, makeParallel());
+                        if (initializedRelations.length) {
+                            that.siteGraph.registerRelation(relation, 'after', initializedRelations[initializedRelations.length - 1);
+                        } else {
+                            that.siteGraph.registerRelation(relation, 'first');
+                        }
+                        initializedRelations.push(relation);
                     }
                     resolvedAssetConfigArrays.forEach(function (resolvedAssetConfigs, i) {
                         var originalRelation = filteredOriginalRelations[i];
@@ -91,7 +93,7 @@ Base.prototype = {
                             asset.detachRelation(originalRelation);
                         } else if (resolvedAssetConfigs.length === 1) {
                             originalRelation.assetConfig = resolvedAssetConfigs[0];
-                            initializeAndRegisterRelation(originalRelation, 'last');
+                            initializeAndRegisterRelation(originalRelation);
                         } else if (asset.attachRelation) {
                             var previous = originalRelation;
                             resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
@@ -99,7 +101,8 @@ Base.prototype = {
                                     from: asset,
                                     assetConfig: resolvedAssetConfig
                                 });
-                                initializeAndRegisterRelation(relation, 'after', previous);
+                                relation.from.attachRelation(relation, 'after', previous);
+                                initializeAndRegisterRelation(relation);
                                 previous = relation;
                             });
                             asset.detachRelation(originalRelation);
@@ -107,7 +110,11 @@ Base.prototype = {
                             cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support attachRelation"));
                         }
                     }, this);
-                    if (!numAssets) {
+                    if (initializedRelations.length) {
+                        initializedRelations.forEach(function (relation) {
+                            traverse(relation.to, this.parallel());
+                        }, this);
+                    } else {
                         process.nextTick(this);
                     }
                 }),
