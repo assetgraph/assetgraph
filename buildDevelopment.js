@@ -72,7 +72,7 @@ step(
             var template = loader.loadAsset({type: 'HTML', url: templateUrl});
             templates.push(template);
             loader.populate(template, function (relation) {
-                return relation.type === 'HTMLScript' || relation.type === 'JavaScriptStaticInclude';
+                return ['HTMLScript', 'JavaScriptStaticInclude', 'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
             }, group());
         });
     }),

@@ -7,6 +7,9 @@ exports.flattenStaticIncludes = function flattenStaticIncludes(siteGraph, templa
         siteGraph.lookupSubgraph(htmlScriptRelation.to, function (relation) {
             return relation.type === 'JavaScriptStaticInclude';
         }).relations.forEach(function (relation) {
+            if (relation.from.type === 'CSS') { // FIXME: Narrow down the subgraph instead
+                return;
+            }
             if (!(relation.to.id in seenAssets)) {
                 seenAssets[relation.to.id] = true;
                 if (relation.to.type === 'CSS') {

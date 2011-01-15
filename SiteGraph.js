@@ -110,7 +110,7 @@ SiteGraph.prototype = {
         relation.to.baseUrl = relation.from.baseUrl;
         this.findRelations('from', relation.to).forEach(function (relrel) {
             if (relrel.to.url) { // better: !isInline
-                relrel.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(template.url), url));
+                relrel.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(relrel.from.baseUrl), relrel.to.url));
             }
         }, this);
         relation.inline(cb);

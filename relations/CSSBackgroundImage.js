@@ -15,7 +15,10 @@ _.extend(CSSBackgroundImage.prototype, {
     },
 
     setUrl: function (url) {
-        // FIXME
+        var style = this.cssRule.style;
+        style[this.propertyName] = style[this.propertyName].replace(/\burl\((\'|\"|)([^\'\"]+)\1\)/, function () {
+            return "url(" + url + ")";
+        });
     },
 
     inline: function (src) {
