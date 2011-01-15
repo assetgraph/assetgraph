@@ -81,21 +81,17 @@ step(
             transforms.flattenStaticIncludes(siteGraph, template, this.parallel());
         }, this);
     }),
-    error.logAndExit(function () {
-        var relationsToInline = [];
+    error.logAndExit(function inlineDirtyAssets() {
+        var numCallbacks = 0;
         siteGraph.relations.forEach(function (relation) {
             if (relation.to.dirty) {
-                relationsToInline.push(relation);
+                numCallbacks += 1;
+                siteGraph.inlineRelation(relation, this.parallel());
             } else if (relation.to.url) {
                 relation.setUrl(relation.to.url);
             }
-        });
-        if (relationsToInline.length) {
-            var group = this.group();
-            relationsToInline.forEach(function (relation) {
-                siteGraph.inlineRelation(relation, group());
-            });
-        } else {
+        }, this);
+        if (!numCallbacks) {
             process.nextTick(this);
         }
     }),
