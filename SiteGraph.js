@@ -167,17 +167,5 @@ SiteGraph.prototype = {
         }
         traverse(startAsset);
         return subgraph;
-    },
-
-    toGraphViz: function () {
-        var g = graphviz.digraph("G");
-        this.assets.forEach(function (asset) {
-            g.addNode(asset.id.toString(), {label: 'url' in asset ? path.basename(asset.url) : 'inline'});
-        }, this);
-        this.relations.forEach(function (relation) {
-            var edge = g.addEdge(relation.from.id.toString(), relation.to.id.toString());
-        }, this);
-        console.log(g.to_dot());
-        g.output('png', 'graph.png');
     }
 };

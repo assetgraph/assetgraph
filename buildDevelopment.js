@@ -9,6 +9,7 @@ var util = require('util'),
     assets = require('./assets'),
     relations = require('./relations'),
     resolvers = require('./loaders/Fs/resolvers'),
+    transforms = require('./transforms'),
     SiteGraph = require('./SiteGraph'),
     FsLoader = require('./loaders/Fs'),
     error = require('./error'),
@@ -76,41 +77,9 @@ step(
         });
     }),
     error.logAndExit(function () {
-        var parallel = this.parallel,
-            numCallbacks = 0;
-        function makeCallback () {
-            numCallbacks += 1;
-            return parallel();
-        }
         templates.forEach(function (template) {
-            var seenAssets = {};
-            siteGraph.findRelations('from', template).forEach(function (htmlScriptRelation) {
-                var htmlStyleInsertionPoint;
-                siteGraph.lookupSubgraph(htmlScriptRelation.to, function (relation) {
-                    return relation.type === 'JavaScriptStaticInclude';
-                }).relations.forEach(function (relation) {
-                    if (!(relation.to.id in seenAssets)) {
-                        seenAssets[relation.to.id] = true;
-                        if (relation.to.type === 'CSS') {
-                            var htmlStyle = new relations.HTMLStyle({from: template, to: relation.to});
-                            if (htmlStyleInsertionPoint) {
-                                siteGraph.registerRelation(htmlStyle, 'after', htmlStyleInsertionPoint);
-                            } else {
-                                siteGraph.registerRelation(htmlStyle, 'first');
-                            }
-                            htmlStyleInsertionPoint = htmlStyle;
-                        } else {
-                            siteGraph.registerRelation(new relations.HTMLScript({from: template, to: relation.to}), 'before', htmlScriptRelation);
-                        }
-                    }
-                    siteGraph.unregisterRelation(relation);
-                });
-                siteGraph.inlineRelation(htmlScriptRelation, makeCallback());
-            });
-        });
-        if (!numCallbacks) {
-            process.nextTick(this);
-        }
+            transforms.flattenStaticIncludes(siteGraph, template, this.parallel());
+        }, this);
     }),
     error.logAndExit(function () {
         var relationsToInline = [];
@@ -137,8 +106,5 @@ step(
                 fs.writeFile(path.join(loader.root, template.url.replace(/\.template$/, '')), src, 'utf8', callback);
             }));
         }, this);
-    }),
-    error.logAndExit(function () {
-//        siteGraph.toGraphViz();
     })
 );
