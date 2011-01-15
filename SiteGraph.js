@@ -7,7 +7,6 @@ var util = require('util'),
     _ = require('underscore'),
     fileUtils = require('./fileUtils'),
     relations = require('./relations'),
-    graphviz = require('graphviz'),
     error = require('./error'),
     allIndices = {
         relation: ['id', 'type', 'from', 'to'],
