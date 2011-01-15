@@ -15,7 +15,7 @@ _.extend(HTMLScript.prototype, {
         this.node.setAttribute('src', url);
         // Clear any inline script
         while (this.node.firstChild) {
-            this.node.removeChild(firstChild);
+            this.node.removeChild(this.node.firstChild);
         }
     },
 
