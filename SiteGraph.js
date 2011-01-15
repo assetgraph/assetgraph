@@ -142,11 +142,14 @@ SiteGraph.prototype = {
         this.registerRelation(relation, position, adjacentRelation);
     },
 
-
     unregisterRelation: function (relation) {
-        relation.from.detachRelation(relation);
         this.relations.splice(this.relations.indexOf(relation), 1);
         this.removeFromIndices('relation', relation);
+    },
+
+    detachAndUnregisterRelation: function (relation) {
+        relation.from.detachRelation(relation);
+        this.unregisterRelation(relation);
     },
 
     // This cries out for a rich query facility/DSL!

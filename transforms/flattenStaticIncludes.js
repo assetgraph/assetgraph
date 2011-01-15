@@ -21,7 +21,7 @@ exports.flattenStaticIncludes = function flattenStaticIncludes(siteGraph, templa
                     siteGraph.attachAndRegisterRelation(new relations.HTMLScript({from: template, to: relation.to}), 'before', htmlScriptRelation);
                 }
             }
-            siteGraph.unregisterRelation(relation);
+            siteGraph.detachAndUnregisterRelation(relation);
             htmlScriptRelation.to.dirty = true;
         });
     });
