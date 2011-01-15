@@ -12,11 +12,12 @@ function register(type, extensions) {
             exports.typeByExtension[extension] = type;
             exports.typeByExtension['.' + extension] = type; // Support path.extname
         });
+        Constructor.prototype.defaultExtension = extensions[0];
     }
 }
 
 register('JavaScript', ['js']);
-register('HTML', ['template', 'html', 'xhtml', 'php']);
+register('HTML', ['html', 'template', 'xhtml', 'php']);
 register('CSS', ['css']);
 register('HTC', ['htc']);
 register('PNG', ['png']);

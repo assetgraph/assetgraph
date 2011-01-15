@@ -101,7 +101,15 @@ SiteGraph.prototype = {
         this.addToIndices('asset', asset);
     },
 
-    unregisterAsset: function (asset) {
+    unregisterAsset: function (asset, cascade) {
+        if (cascade) {
+            this.findRelations('to', asset).forEach(function (incomingRelation) {
+                this.unregisterRelation(incomingRelation);
+            }, this);
+            this.findRelations('from', asset).forEach(function (outgoingRelation) {
+                this.unregisterRelation(outgoingRelation);
+            }, this);
+        }
         this.assets.splice(this.assets.indexOf(asset), 1);
         this.removeFromIndices('asset', asset);
     },
@@ -113,7 +121,7 @@ SiteGraph.prototype = {
                 relrel.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(relrel.from.baseUrl), relrel.to.url));
             }
         }, this);
-        relation.inline(cb);
+        relation._inline(cb);
     },
 
     setAssetUrl: function (asset, url) {
@@ -150,6 +158,17 @@ SiteGraph.prototype = {
     detachAndUnregisterRelation: function (relation) {
         relation.from.detachRelation(relation);
         this.unregisterRelation(relation);
+    },
+
+    clone: function () {
+        var clone = new SiteGraph();
+        this.assets.forEach(function (asset) {
+            clone.registerAsset(asset);
+        });
+        this.relations.forEach(function (relation) {
+            clone.registerRelation(relation);
+        });
+        return clone;
     },
 
     // This cries out for a rich query facility/DSL!

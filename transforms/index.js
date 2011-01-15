@@ -2,6 +2,8 @@
  'flattenStaticIncludes',
  'dumpGraph',
  'addCDNPrefix',
- 'addCacheManifest'].forEach(function (transformName) {
+ 'addCacheManifest',
+ 'findAssetSerializationOrder',
+ 'checkRelationConsistency'].forEach(function (transformName) {
     exports[transformName] = require('./' + transformName)[transformName];
 });

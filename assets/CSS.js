@@ -63,7 +63,11 @@ _.extend(CSS.prototype, {
             });
             cb(null, originalRelations);
         }));
-    })
+    }),
+
+    detachRelation: function (relation) {
+        relation.remove();
+    }
 });
 
 exports.CSS = CSS;

@@ -19,7 +19,7 @@ _.extend(HTMLScript.prototype, {
         }
     },
 
-    inline: function (cb) {
+    _inline: function (cb) {
         var that = this;
         this.to.serialize(error.passToFunction(cb, function (src) {
             if (that.node.hasAttribute('src')) {
