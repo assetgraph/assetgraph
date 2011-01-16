@@ -2,7 +2,7 @@
 var path = require('path'),
     _ = require('underscore'),
     error = require('../error'),
-    makeBufferedAccessor = require('../makeBufferedAccessor'),
+    memoizeAsyncAccessor = require('../memoizeAsyncAccessor'),
     nextId = 1;
 
 function Base(config) {
@@ -14,7 +14,7 @@ function Base(config) {
 Base.prototype = {
     encoding: 'utf8', // Change to 'binary' in subclass for images etc.
 
-    getOriginalSrc: makeBufferedAccessor('originalSrc', function (cb) {
+    getOriginalSrc: memoizeAsyncAccessor('originalSrc', function (cb) {
         if (this.originalSrcProxy) {
             this.originalSrcProxy(cb);
         } else {
@@ -28,7 +28,7 @@ Base.prototype = {
     },
 
     // Override in subclass if it supports relations:
-    getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
+    getOriginalRelations: memoizeAsyncAccessor('originalRelations', function (cb) {
         process.nextTick(function () {
             cb(null, []);
         });

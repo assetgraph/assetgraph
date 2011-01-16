@@ -4,7 +4,7 @@ var util = require('util'),
     step = require('step'),
     uglify = require('uglify'),
     error = require('../error'),
-    makeBufferedAccessor = require('../makeBufferedAccessor'),
+    memoizeAsyncAccessor = require('../memoizeAsyncAccessor'),
     relations = require('../relations'),
     Base = require('./Base').Base;
 
@@ -38,7 +38,7 @@ JavaScript.makeBundle = function (javaScripts, cb) {
 _.extend(JavaScript.prototype, {
     contentType: 'application/javascript', // TODO: Double check that this is everyone's recommended value
 
-    getParseTree: makeBufferedAccessor('parseTree', function (cb) {
+    getParseTree: memoizeAsyncAccessor('parseTree', function (cb) {
         var that = this;
         this.getOriginalSrc(error.passToFunction(cb, function (src) {
             that.parseTree = uglify.parser.parse(src);
@@ -55,7 +55,7 @@ _.extend(JavaScript.prototype, {
         }));
     },
 
-    getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
+    getOriginalRelations: memoizeAsyncAccessor('originalRelations', function (cb) {
         var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var callbackCalled = false;

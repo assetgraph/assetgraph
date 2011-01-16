@@ -2,7 +2,7 @@ var util = require('util'),
     _ = require('underscore'),
     jsdom = require('../3rdparty/papandreou-jsdom/lib/jsdom'),
     error = require('../error'),
-    makeBufferedAccessor = require('../makeBufferedAccessor'),
+    memoizeAsyncAccessor = require('../memoizeAsyncAccessor'),
     relations = require('../relations'),
     Base = require('./Base').Base;
 
@@ -15,7 +15,7 @@ util.inherits(HTML, Base);
 _.extend(HTML.prototype, {
     contentType: 'text/html',
 
-    getParseTree: makeBufferedAccessor('parseTree', function (cb) {
+    getParseTree: memoizeAsyncAccessor('parseTree', function (cb) {
         var that = this;
         this.getOriginalSrc(error.passToFunction(cb, function (src) {
             that.parseTree = jsdom.jsdom(src, undefined, {features: {ProcessExternalResources: [], FetchExternalResources: []}});
@@ -29,7 +29,7 @@ _.extend(HTML.prototype, {
         }));
     },
 
-    getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
+    getOriginalRelations: memoizeAsyncAccessor('originalRelations', function (cb) {
         var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var originalRelations = [];

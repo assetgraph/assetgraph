@@ -3,7 +3,7 @@ var util = require('util'),
     step = require('step'),
     cssom = require('../3rdparty/cssom/lib'),
     error = require('../error'),
-    makeBufferedAccessor = require('../makeBufferedAccessor'),
+    memoizeAsyncAccessor = require('../memoizeAsyncAccessor'),
     relations = require('../relations'),
     Base = require('./Base').Base;
 
@@ -36,7 +36,7 @@ CSS.makeBundle = function (cssAssets, cb) {
 _.extend(CSS.prototype, {
     contentType: 'text/css',
 
-    getParseTree: makeBufferedAccessor('parseTree', function (cb) {
+    getParseTree: memoizeAsyncAccessor('parseTree', function (cb) {
         var that = this;
         this.getOriginalSrc(error.passToFunction(cb, function (src) {
             that.parseTree = cssom.parse(src);
@@ -50,7 +50,7 @@ _.extend(CSS.prototype, {
         }));
     },
 
-    getOriginalRelations: makeBufferedAccessor('originalRelations', function (cb) {
+    getOriginalRelations: memoizeAsyncAccessor('originalRelations', function (cb) {
         var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var originalRelations = [];

@@ -1,5 +1,5 @@
 /*global require, module, process*/
-module.exports = function makeBufferedAccessor(name, computer) {
+module.exports = function memoizeAsyncAccessor(name, computer) {
     return function (cb) {
         var that = this;
         if (name in that) {
