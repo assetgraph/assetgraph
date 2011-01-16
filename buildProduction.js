@@ -44,7 +44,10 @@ step(
     error.logAndExit(function () {
         transforms.bundleRelations(siteGraph, siteGraph.relations.filter(function (relation) {
             return relation.from === htmlAssets[0] && relation.type === 'HTMLScript';
-        }), this);
+        }), this.parallel());
+        transforms.bundleRelations(siteGraph, siteGraph.relations.filter(function (relation) {
+            return relation.from === htmlAssets[0] && relation.type === 'HTMLStyle';
+        }), this.parallel());
     }),
     error.logAndExit(function () {
         // FIXME

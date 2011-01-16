@@ -1,5 +1,6 @@
 var util = require('util'),
     _ = require('underscore'),
+    step = require('step'),
     cssom = require('../3rdparty/cssom/lib'),
     error = require('../error'),
     makeBufferedAccessor = require('../makeBufferedAccessor'),
@@ -11,6 +12,26 @@ function CSS(config) {
 }
 
 util.inherits(CSS, Base);
+
+CSS.makeBundle = function (cssAssets, cb) {
+    step(
+        function () {
+            var group = this.group();
+            cssAssets.forEach(function (cssAsset) {
+                cssAsset.getParseTree(group());
+            });
+        },
+        error.passToFunction(cb, function (parseTrees) {
+            var bundledParseTree = new cssom.CSSStyleSheet();
+            parseTrees.forEach(function (parseTree) {
+                [].push.apply(bundledParseTree.cssRules, parseTree.cssRules);
+            });
+            cb(null, new CSS({
+                parseTree: bundledParseTree
+            }));
+        })
+    );
+};
 
 _.extend(CSS.prototype, {
     contentType: 'text/css',
