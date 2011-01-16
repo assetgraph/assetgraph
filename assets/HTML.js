@@ -75,7 +75,7 @@ _.extend(HTML.prototype, {
                                 assetConfig: {
                                     url: node.href
                                 }
-                           }));
+                            }));
                         } else if (/^(?:shortcut |apple-touch-)?icon$/.test(rel)) {
                             originalRelations.push(new relations.HTMLShortcutIcon({
                                 from: that,

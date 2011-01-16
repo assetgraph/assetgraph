@@ -60,10 +60,10 @@ _.extend(CSS.prototype, {
                     if (propertyValue) {
                         var urlMatch = propertyValue.match(/\burl\((\'|\"|)([^\'\"]+)\1\)/);
                         if (urlMatch) {
-                            var dataUrlMatch = urlMatch[2].match(/^data:image\/(png|gif|jpeg)(;base64)?,(.*)$/),
+                            var dataUrlMatch = urlMatch[2].match(/^data:(image\/png|gif|jpeg)(;base64)?,(.*)$/),
                                 assetConfig = {};
                             if (dataUrlMatch) {
-                                assetConfig.contentType = "image/" + dataUrlMatch[1];
+                                assetConfig.contentType = dataUrlMatch[1];
                                 if (dataUrlMatch[2]) {
                                     assetConfig.originalSrc = new Buffer(dataUrlMatch[3], 'base64').toString();
                                 } else {

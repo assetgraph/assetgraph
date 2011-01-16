@@ -3,7 +3,7 @@ var util = require('util'),
     error = require('../error'),
     Image = require('./Image').Image;
 
-function JPEG (config) {
+function JPEG(config) {
     Image.call(this, config);
 }
 
