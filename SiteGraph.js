@@ -129,7 +129,7 @@ SiteGraph.prototype = {
         asset.baseUrl = fileUtils.dirnameNoDot(url);
         this.findRelations('to', asset).forEach(function (incomingRelation) {
             if (!incomingRelation.isInline) {
-                incomingRelation.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(incomingRelation.from.baseUrl), url));
+                incomingRelation.setUrl(fileUtils.buildRelativeUrl(incomingRelation.from.baseUrl, url));
             }
         }, this);
     },

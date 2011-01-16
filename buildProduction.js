@@ -42,6 +42,15 @@ step(
         fileUtils.mkpath(path.join(options.outRoot, options.staticUrl), this.parallel());
     },
     error.logAndExit(function () {
+        // FIXME
+        siteGraph.assets.forEach(function (asset) {
+            if (htmlAssets.indexOf(asset) === -1) {
+                siteGraph.setAssetUrl(asset, path.join(options.staticUrl, "foo"));
+            }
+        });
+        process.nextTick(this);
+    }),
+    error.logAndExit(function () {
         transforms.findAssetSerializationOrder(siteGraph, this);
     }),
     error.logAndExit(function (assetSerializationOrderGroups) {
@@ -50,14 +59,17 @@ step(
                 function () {
                     var group = this.group();
                     assets.forEach(function (asset) {
-                        var callback = group();
-                        asset.serialize(error.passToFunction(callback, function (src) {
-                            if (htmlAssets.indexOf(asset) === -1) {
-                                var md5Prefix = require('crypto').createHash('md5').update(src).digest('hex').substr(0, 10);
-                                siteGraph.setAssetUrl(asset, path.join(options.staticUrl, md5Prefix + '.' + asset.defaultExtension));
-                            }
-                            fs.writeFile(path.join(options.outRoot, asset.url), src, asset.encoding, callback);
-                        }));
+                        // Move + write only if asset has non-inline incoming relations
+                        if (htmlAssets.indexOf(asset) !== -1 || siteGraph.findRelations('to', asset).some(function (relation) {return !relation.isInline;})) {
+                            var callback = group();
+                            asset.serialize(error.passToFunction(callback, function (src) {
+                                if (htmlAssets.indexOf(asset) === -1) {
+                                    var md5Prefix = require('crypto').createHash('md5').update(src).digest('hex').substr(0, 10);
+                                    siteGraph.setAssetUrl(asset, path.join(options.staticUrl, md5Prefix + '.' + asset.defaultExtension));
+                                }
+                                fs.writeFile(path.join(options.outRoot, asset.url), src, asset.encoding, callback);
+                            }));
+                        }
                     }, this);
                     process.nextTick(group());
                 },
