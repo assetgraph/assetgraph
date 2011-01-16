@@ -18,7 +18,7 @@ Base.prototype = {
         if (this.originalSrcProxy) {
             this.originalSrcProxy(cb);
         } else {
-            cb(new Error("Don't know how to get the original asset src!"));
+            cb(new Error("Don't know how to get the original asset src: " + this.toString()));
         }
     }),
 

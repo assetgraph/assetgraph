@@ -9,10 +9,14 @@ var urlMatch = dataUrl.match(/\burl\((\'|\"|)([^\'\"]+)\1\)/);
 console.log(urlMatch);
 process.exit();
 */
-var css = new assets.byType.CSS({
-    src: "div.bar { background-image: url(/foo.png); } table {font-weight: bold; background: red;} span {background-image: " + dataUrl + ";}"
+var css = new assets.CSS({
+    originalSrc: "div.bar { background-image: url(/foo.png); } table {font-weight: bold; background: red;} span {background-image: " + dataUrl + ";}"
 });
 
-css.getRelations(function (err, result) {
+css.getParseTree(function (err, parseTree) {
+    console.log("Got the parseTree = " + require('sys').inspect(parseTree, false, 10));
+});
+
+css.getOriginalRelations(function (err, result) {
     console.log("Got the rels!");
 });

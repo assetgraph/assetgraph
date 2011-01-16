@@ -5,6 +5,7 @@
  'addCacheManifest',
  'findAssetSerializationOrder',
  'checkRelationConsistency',
- 'bundleRelations'].forEach(function (transformName) {
+ 'bundleRelations',
+ 'spriteBackgroundImages'].forEach(function (transformName) {
     exports[transformName] = require('./' + transformName)[transformName];
 });

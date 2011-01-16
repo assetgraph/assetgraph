@@ -50,6 +50,9 @@ step(
         }), this.parallel());
     }),
     error.logAndExit(function () {
+        transforms.spriteBackgroundImages(siteGraph, this);
+    }),
+    error.logAndExit(function () {
         // FIXME
         siteGraph.assets.forEach(function (asset) {
             if (htmlAssets.indexOf(asset) === -1) {
