@@ -42,6 +42,11 @@ step(
         fileUtils.mkpath(path.join(options.outRoot, options.staticUrl), this.parallel());
     },
     error.logAndExit(function () {
+        transforms.bundleRelations(siteGraph, siteGraph.relations.filter(function (relation) {
+            return relation.from === htmlAssets[0] && relation.type === 'HTMLScript';
+        }), this);
+    }),
+    error.logAndExit(function () {
         // FIXME
         siteGraph.assets.forEach(function (asset) {
             if (htmlAssets.indexOf(asset) === -1) {

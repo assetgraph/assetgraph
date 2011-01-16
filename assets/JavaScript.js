@@ -1,6 +1,7 @@
 /*global module, require*/
 var util = require('util'),
     _ = require('underscore'),
+    step = require('step'),
     uglify = require('uglify'),
     error = require('../error'),
     makeBufferedAccessor = require('../makeBufferedAccessor'),
@@ -12,6 +13,27 @@ function JavaScript(config) {
 }
 
 util.inherits(JavaScript, Base);
+
+JavaScript.makeBundle = function (javaScripts, cb) {
+    step(
+        function () {
+            var group = this.group();
+            javaScripts.forEach(function (javaScript) {
+                javaScript.getParseTree(group());
+            });
+        },
+        error.passToFunction(cb, function (parseTrees) {
+            cb(null, new JavaScript({
+                parseTree: [
+                    'toplevel',
+                    [].concat.apply([], parseTrees.map(function (parseTree) {
+                        return parseTree[1];
+                    }))
+                ]
+            }));
+        })
+    );
+};
 
 _.extend(JavaScript.prototype, {
     contentType: 'application/javascript', // TODO: Double check that this is everyone's recommended value
