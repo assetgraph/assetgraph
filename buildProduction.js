@@ -36,7 +36,7 @@ step(
             var htmlAsset = loader.loadAsset({type: 'HTML', url: htmlUrl});
             htmlAssets.push(htmlAsset);
             loader.populate(htmlAsset, function (relation) {
-                return relation.type !== 'JavaScriptStaticInclude';
+                return relation.type !== 'JavaScriptStaticInclude' && relation.type !== 'HTMLScript';
             }, group());
         });
         fileUtils.mkpath(path.join(options.outRoot, options.staticUrl), this.parallel());
@@ -54,9 +54,9 @@ step(
             asset.serialize(error.passToFunction(callback, function (src) {
                 if (htmlAssets.indexOf(asset) === -1) {
                     var md5Prefix = require('crypto').createHash('md5').update(src).digest('hex').substr(0, 10);
-                    siteGraph.setAssetUrl(path.join(options.staticUrl, md5Prefix + '.' + asset.defaultExtension));
+                    siteGraph.setAssetUrl(asset, path.join(options.staticUrl, md5Prefix + '.' + asset.defaultExtension));
                 }
-                fs.writeFile(path.join(options.outRoot, url), src, asset.url, callback);
+                fs.writeFile(path.join(options.outRoot, asset.url), src, asset.encoding, callback);
             }));
         }, this);
         process.nextTick(group());

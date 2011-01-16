@@ -103,10 +103,10 @@ SiteGraph.prototype = {
 
     unregisterAsset: function (asset, cascade) {
         if (cascade) {
-            this.findRelations('to', asset).forEach(function (incomingRelation) {
+            [].concat(this.findRelations('to', asset)).forEach(function (incomingRelation) {
                 this.unregisterRelation(incomingRelation);
             }, this);
-            this.findRelations('from', asset).forEach(function (outgoingRelation) {
+            [].concat(this.findRelations('from', asset)).forEach(function (outgoingRelation) {
                 this.unregisterRelation(outgoingRelation);
             }, this);
         }
@@ -127,7 +127,9 @@ SiteGraph.prototype = {
     setAssetUrl: function (asset, url) {
         asset.url = url;
         this.findRelations('to', asset).forEach(function (incomingRelation) {
-            incomingRelation.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(incomingRelation.from), url));
+            if (!incomingRelation.isInline) {
+                incomingRelation.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(incomingRelation.from.url), url));
+            }
         }, this);
     },
 
@@ -151,8 +153,8 @@ SiteGraph.prototype = {
     },
 
     unregisterRelation: function (relation) {
-        this.relations.splice(this.relations.indexOf(relation), 1);
         this.removeFromIndices('relation', relation);
+        this.relations.splice(this.relations.indexOf(relation), 1);
     },
 
     detachAndUnregisterRelation: function (relation) {

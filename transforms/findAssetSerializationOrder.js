@@ -5,7 +5,7 @@ exports.findAssetSerializationOrder = function findAssetSerializationOrder(siteG
 
     while (clone.assets.length) {
         numAssetsRemovedThisIteration = 0;
-        clone.assets.forEach(function (asset) {
+        [].concat(clone.assets).forEach(function (asset) {
             if (!clone.findRelations('from', asset).length) {
                 assetSerializationOrder.push(asset);
                 clone.unregisterAsset(asset, true); // cascade
