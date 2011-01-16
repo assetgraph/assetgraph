@@ -1,21 +1,21 @@
 exports.findAssetSerializationOrder = function findAssetSerializationOrder(siteGraph, cb) {
-    var assetSerializationOrder = [],
+    var assetSerializationOrderGroups = [],
         clone = siteGraph.clone(),
-        numAssetsRemovedThisIteration;
+        currentGroup;
 
     while (clone.assets.length) {
-        numAssetsRemovedThisIteration = 0;
+        currentGroup = [];
         [].concat(clone.assets).forEach(function (asset) {
             if (!clone.findRelations('from', asset).length) {
-                assetSerializationOrder.push(asset);
+                currentGroup.push(asset);
                 clone.unregisterAsset(asset, true); // cascade
-                numAssetsRemovedThisIteration += 1;
             }
         });
 
-        if (numAssetsRemovedThisIteration === 0) {
+        if (currentGroup.length === 0) {
             return cb(new Error("Couldn't find a suitable serialization order, SiteGraph has cycles!"));
         }
+        assetSerializationOrderGroups.push(currentGroup);
     }
-    cb(null, assetSerializationOrder);
+    cb(null, assetSerializationOrderGroups);
 };

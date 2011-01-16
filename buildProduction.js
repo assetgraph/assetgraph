@@ -36,29 +36,42 @@ step(
             var htmlAsset = loader.loadAsset({type: 'HTML', url: htmlUrl});
             htmlAssets.push(htmlAsset);
             loader.populate(htmlAsset, function (relation) {
-                return relation.type !== 'JavaScriptStaticInclude' && relation.type !== 'HTMLScript';
+                return relation.type !== 'JavaScriptStaticInclude';
             }, group());
         });
         fileUtils.mkpath(path.join(options.outRoot, options.staticUrl), this.parallel());
     },
     error.logAndExit(function () {
-        transforms.checkRelationConsistency(siteGraph, this);
-    }),
-    error.logAndExit(function () {
         transforms.findAssetSerializationOrder(siteGraph, this);
     }),
-    error.logAndExit(function (assetSerializationOrder) {
-        var group = this.group();
-        assetSerializationOrder.forEach(function (asset) {
-            var callback = group();
-            asset.serialize(error.passToFunction(callback, function (src) {
-                if (htmlAssets.indexOf(asset) === -1) {
-                    var md5Prefix = require('crypto').createHash('md5').update(src).digest('hex').substr(0, 10);
-                    siteGraph.setAssetUrl(asset, path.join(options.staticUrl, md5Prefix + '.' + asset.defaultExtension));
-                }
-                fs.writeFile(path.join(options.outRoot, asset.url), src, asset.encoding, callback);
-            }));
-        }, this);
-        process.nextTick(group());
-    })
+    error.logAndExit(function (assetSerializationOrderGroups) {
+        function serializeAssets(assets, cb) {
+            step(
+                function () {
+                    var group = this.group();
+                    assets.forEach(function (asset) {
+                        var callback = group();
+                        asset.serialize(error.passToFunction(callback, function (src) {
+                            if (htmlAssets.indexOf(asset) === -1) {
+                                var md5Prefix = require('crypto').createHash('md5').update(src).digest('hex').substr(0, 10);
+                                siteGraph.setAssetUrl(asset, path.join(options.staticUrl, md5Prefix + '.' + asset.defaultExtension));
+                            }
+                            fs.writeFile(path.join(options.outRoot, asset.url), src, asset.encoding, callback);
+                        }));
+                    }, this);
+                    process.nextTick(group());
+                },
+                cb
+            );
+        }
+        var callback = this;
+        function proceed() {
+            if (assetSerializationOrderGroups.length) {
+                serializeAssets(assetSerializationOrderGroups.shift(), proceed);
+            } else {
+                callback();
+            }
+        }
+        proceed();
+   })
 );

@@ -126,9 +126,10 @@ SiteGraph.prototype = {
 
     setAssetUrl: function (asset, url) {
         asset.url = url;
+        asset.baseUrl = fileUtils.dirnameNoDot(url);
         this.findRelations('to', asset).forEach(function (incomingRelation) {
             if (!incomingRelation.isInline) {
-                incomingRelation.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(incomingRelation.from.url), url));
+                incomingRelation.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(incomingRelation.from.baseUrl), url));
             }
         }, this);
     },
