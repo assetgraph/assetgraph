@@ -1,15 +1,16 @@
 var _ = require('underscore'),
     step = require('step'),
     Canvas = require('canvas'),
-    error = require('../error');
+    error = require('../error'),
+    assets = require('../assets'),
+    relations = require('../relations'),
+    vendorPrefix = '-one';
 
-var vendorPrefix = '-one';
-
-function extractHashFromCSSRule(cssRule, propertyNamePrefix) {
+function extractInfoFromCSSRule(cssRule, propertyNamePrefix) {
     var result = {};
     for (var i = 0 ; i < cssRule.style.length ; i += 1) {
         var propertyName = cssRule.style[i];
-        if (propertyName.indexOf(propertyNamePrefix) === 0) {
+        if (!propertyNamePrefix || propertyName.indexOf(propertyNamePrefix) === 0) {
             var keyName = propertyName.substr(propertyNamePrefix.length).replace(/-([a-z])/, function ($0, $1) {
                 return $1.toUpperCase();
             });
@@ -19,47 +20,109 @@ function extractHashFromCSSRule(cssRule, propertyNamePrefix) {
     return result;
 }
 
+function calculateSpritePadding(paddingStr) {
+    if (paddingStr) {
+        // Strip units ('px' assumed)
+        var tokens = [];
+        paddingStr.split(/\s+/).forEach(function (token) {
+            var num = parseInt(token.replace(/[a-z]+$/, ''), 10);
+            if (!isNaN(num)) {
+                tokens.push(num);
+            }
+        });
+        if (tokens.length === 4) {
+            return tokens;
+        } else if (tokens.length === 3) {
+            return [tokens[0], tokens[1], tokens[2], tokens[1]]; // T, L+R, B
+        } else if (tokens.length === 2) {
+            return [tokens[0], tokens[1], tokens[0], tokens[1]]; // T+B, L+R
+        } else if (tokens.length === 1) {
+            return [tokens[0], tokens[0], tokens[0], tokens[0]];
+        }
+    }
+    return [0, 0, 0, 0];
+}
+
+function makeSprite(packingData, cb) {
+    var canvas = new Canvas(packingData.width, packingData.height),
+        ctx = canvas.getContext('2d');
+    packingData.imageInfos.forEach(function (imageInfo) {
+        ctx.drawImage(imageInfo.canvasImage, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height);
+    });
+    canvas.toBuffer(cb);
+}
+
 exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb) {
     var spriteGroups = {};
     siteGraph.relations.forEach(function (relation) {
         if (relation.type === 'CSSBackgroundImage') {
-            var spriteGroup = relation.cssRule.style[vendorPrefix + '-sprite-group'];
-            if (spriteGroup) {
-                if (!(spriteGroup in spriteGroups)) {
-                    spriteGroups[spriteGroup] = [];
+            var spriteInfo = extractInfoFromCSSRule(relation.cssRule, vendorPrefix + '-sprite-'),
+                asset = relation.to;
+            if (spriteInfo.group) {
+                var spriteGroup = spriteGroups[spriteInfo.group];
+                if (!spriteGroup) {
+                    spriteGroup = spriteGroups[spriteInfo.group] = {};
                 }
-                spriteGroups[spriteGroup].push(relation);
+                var imageInfo = spriteGroup[asset.id],
+                    padding = calculateSpritePadding(spriteInfo.padding);
+                if (!imageInfo) {
+                    imageInfo = spriteGroup[asset.id] = {
+                        padding: padding,
+                        asset: asset,
+                        relations: [relation]
+                    };
+                } else {
+                    imageInfo.relations.push(relation);
+                    for (var i = 0 ; i < 4 ; i += 1) {
+                        imageInfo.padding[i] = Math.max(padding[i], imageInfo.padding[i]);
+                    }
+                }
             }
         }
     });
 
-//    console.log("These are the sprite groups: " + require('sys').inspect(spriteGroups, false, 2));
-
-    _.each(spriteGroups, function (cssBackgroundImages, spriteGroupName) {
-//        console.log("Spriting " + spriteGroupName + " (" + cssBackgroundImages.length + " images)");
-
-        var imageOccurrences = {};
-        cssBackgroundImages.forEach(function (cssBackgroundImage) {
-            var assetId = cssBackgroundImage.to.id;
-            (imageOccurrences[assetId] = imageOccurrences[assetId] || []).push(cssBackgroundImage);
-        });
-
-        _.each(imageOccurrences, function (cssBackgroundImages, assetId) {
-            // find max padding
-        });
-
-
+    _.each(spriteGroups, function (spriteGroup, spriteGroupName) {
+        var imageInfos = _.values(spriteGroup);
         step(
             function () {
                 var group = this.group();
-                cssBackgroundImages.forEach(function (cssBackgroundImage) {
-                    cssBackgroundImage.to.getCanvasImage(group());
+                imageInfos.forEach(function (imageInfo) {
+                    imageInfo.asset.getCanvasImage(group());
                 });
             },
-            function (err, canvasImages) {
-                console.log("Got the images " + canvasImages.length + " and the err=" + err);
-            },
-            cb
+            error.passToFunction(cb, function (canvasImages) {
+                canvasImages.forEach(function (canvasImage, i) {
+                    _.extend(imageInfos[i], {
+                        canvasImage: canvasImage,
+                        width: canvasImage.width,
+                        height: canvasImage.height
+                    });
+                });
+                makeSprite(require('./spriteBackgroundImages/packers/horizontal').pack(imageInfos), this);
+            }),
+            error.passToFunction(cb, function (spriteBuffer) {
+                imageInfos.forEach(function (imageInfo) {
+                    imageInfo.relations.forEach(function (relation) {
+                        var newRelation = new relations.CSSBackgroundImage({
+                            cssRule: relation.cssRule,
+                            propertyName: relation.propertyName,
+                            from: relation.from,
+                            to: new assets.PNG({
+                                originalSrc: spriteBuffer
+                            })
+                        });
+                        newRelation.cssRule['background-position'] =
+                            (imageInfo.x ? (-imageInfo.x) + "px " : "0 ") + (imageInfo.y ? -imageInfo.y + "px" : "0");
+
+                        siteGraph.registerRelation(newRelation, 'before', relation);
+                        siteGraph.unregisterRelation(relation);
+                        if (siteGraph.assetIsOrphan(relation.to)) {
+                            siteGraph.unregisterAsset(relation.to);
+                        }
+                    });
+                });
+                cb();
+            })
         );
     });
 };

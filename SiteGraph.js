@@ -70,10 +70,10 @@ SiteGraph.prototype = {
                 if (typeof key !== 'undefined') {
                     var index = this.indices[indexType][indexName],
                         i = index[key].indexOf(obj);
-                    if (i !== -1) {
-                        index[key].splice(i, 1);
-                    } else {
+                    if (i === -1) {
                         throw "removeFromIndices: object not found in index!";
+                    } else {
+                        index[key].splice(i, 1);
                     }
                 }
             }
@@ -112,6 +112,10 @@ SiteGraph.prototype = {
         }
         this.assets.splice(this.assets.indexOf(asset), 1);
         this.removeFromIndices('asset', asset);
+    },
+
+    assetIsOrphan: function (asset) {
+        return !this.findRelations('to', asset).length;
     },
 
     inlineRelation: function (relation, cb) {

@@ -50,7 +50,20 @@ step(
         }), this.parallel());
     }),
     error.logAndExit(function () {
+        transforms.dumpGraph(siteGraph.lookupSubgraph(htmlAssets[0], function (relation) {
+            return relation.type === 'HTMLStyle' || relation.type === 'CSSBackgroundImage';
+        }), "png", "beforesprite.png", this);
+    }),
+    error.logAndExit(function () {
         transforms.spriteBackgroundImages(siteGraph, this);
+    }),
+    error.logAndExit(function () {
+        transforms.checkRelationConsistency(siteGraph, this);
+    }),
+    error.logAndExit(function () {
+        transforms.dumpGraph(siteGraph.lookupSubgraph(htmlAssets[0], function (relation) {
+            return relation.type === 'HTMLStyle' || relation.type === 'CSSBackgroundImage';
+        }), "png", "aftersprite.png", this);
     }),
     error.logAndExit(function () {
         // FIXME
