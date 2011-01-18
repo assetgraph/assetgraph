@@ -2,11 +2,11 @@ exports.checkRelationConsistency = function checkRelationConsistency (siteGraph,
     var numErrors = 0;
     siteGraph.relations.forEach(function (relation) {
         if (siteGraph.assets.indexOf(relation.from) === -1) {
-            console.log("checkRelationConsistency fail, relation.from not in graph" + relation);
+            console.log("checkRelationConsistency fail, source asset for " + relation + " not found");
             numErrors += 1;
         }
         if (siteGraph.assets.indexOf(relation.to) === -1) {
-            console.log("checkRelationConsistency fail, relation.to not in graph" + relation);
+            console.log("checkRelationConsistency fail, asset pointed to by " + relation + " not in graph");
             numErrors += 1;
         }
     });
