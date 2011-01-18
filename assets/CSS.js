@@ -13,26 +13,6 @@ function CSS(config) {
 
 util.inherits(CSS, Base);
 
-CSS.makeBundle = function (cssAssets, cb) {
-    step(
-        function () {
-            var group = this.group();
-            cssAssets.forEach(function (cssAsset) {
-                cssAsset.getParseTree(group());
-            });
-        },
-        error.passToFunction(cb, function (parseTrees) {
-            var bundledParseTree = new cssom.CSSStyleSheet();
-            parseTrees.forEach(function (parseTree) {
-                [].push.apply(bundledParseTree.cssRules, parseTree.cssRules);
-            });
-            cb(null, new CSS({
-                parseTree: bundledParseTree
-            }));
-        })
-    );
-};
-
 _.extend(CSS.prototype, {
     contentType: 'text/css',
 
@@ -55,8 +35,9 @@ _.extend(CSS.prototype, {
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var originalRelations = [];
             _.toArray(parseTree.cssRules).forEach(function (cssRule) {
+                var style = cssRule.style;
                 ['background-image', 'background'].forEach(function (propertyName) {
-                    var propertyValue = cssRule.style[propertyName];
+                    var propertyValue = style[propertyName];
                     if (propertyValue) {
                         var urlMatch = propertyValue.match(/\burl\((\'|\"|)([^\'\"]+)\1\)/);
                         if (urlMatch) {
@@ -81,6 +62,42 @@ _.extend(CSS.prototype, {
                         }
                     }
                 });
+                if ('behavior' in style) {
+                    var urlMatch = style.behavior.match(/\burl\((\'|\"|)([^\'\"]+)\1\)/);
+                    if (urlMatch) {
+                        originalRelations.push(new relations.CSSBehavior({
+                            from: that,
+                            cssRule: cssRule,
+                            assetConfig: {
+                                url: urlMatch[2]
+                            }
+                        }));
+                    }
+                }
+                if ('filter' in style) {
+                    // FIXME: Tokenize properly (parentheses in urls, etc.)
+                    var alphaImageLoaderMatch = style.filter.match(/AlphaImageLoader\([^\)]*src=([\'\"])(.+?)(\1)[^\)]*\)/i);
+                    if (alphaImageLoaderMatch) {
+                        originalRelations.push(new relations.CSSAlphaImageLoader({
+                            from: that,
+                            cssRule: cssRule,
+                            assetConfig: {
+                                url: alphaImageLoaderMatch[2]
+                            }
+                        }));
+                    }
+                }
+                if ((CSS.vendorPrefix + '-sprite-selector-for-group')) {
+                    originalRelations.push(new relations.CSSSpritePlaceholder({
+                        from: that,
+                        cssRule: cssRule,
+                        isInline: true,
+                        assetConfig: {
+                            type: 'SpriteConfiguration',
+                            originalSrc: CSS.extractInfoFromRule(cssRule, CSS.vendorPrefix + '-sprite')
+                        }
+                    }));
+                }
             });
             cb(null, originalRelations);
         }));
@@ -90,5 +107,41 @@ _.extend(CSS.prototype, {
         relation.remove();
     }
 });
+
+CSS.vendorPrefix = '-one'; // Should be in a more visible place
+
+CSS.makeBundle = function (cssAssets, cb) {
+    step(
+        function () {
+            var group = this.group();
+            cssAssets.forEach(function (cssAsset) {
+                cssAsset.getParseTree(group());
+            });
+        },
+        error.passToFunction(cb, function (parseTrees) {
+            var bundledParseTree = new cssom.CSSStyleSheet();
+            parseTrees.forEach(function (parseTree) {
+                [].push.apply(bundledParseTree.cssRules, parseTree.cssRules);
+            });
+            cb(null, new CSS({
+                parseTree: bundledParseTree
+            }));
+        })
+    );
+};
+
+CSS.extractInfoFromRule = function (cssRule, propertyNamePrefix) {
+    var info = {};
+    for (var i = 0 ; i < cssRule.style.length ; i += 1) {
+        var propertyName = cssRule.style[i];
+        if (!propertyNamePrefix || propertyName.indexOf(propertyNamePrefix) === 0) {
+            var keyName = propertyName.substr(propertyNamePrefix.length).replace(/-([a-z])/, function ($0, $1) {
+                return $1.toUpperCase();
+            });
+            info[keyName] = cssRule.style[propertyName].replace(/^([\'\"])(.*)\1$/, "$2");
+        }
+    }
+    return info;
+};
 
 exports.CSS = CSS;

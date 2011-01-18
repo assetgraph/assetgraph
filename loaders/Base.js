@@ -74,8 +74,7 @@ Base.prototype = {
                 error.passToFunction(cb, function (resolvedAssetConfigArrays) {
                     var initializedRelations = [];
                     function initializeAndRegisterRelation(relation) {
-                        if (!('url' in relation.assetConfig)) {
-                            // Inline asset, copy baseUrl from asset
+                        if (relation.isInline) {
                             relation.assetConfig.baseUrl = asset.baseUrl;
                         }
                         relation.to = that.loadAsset(relation.assetConfig);

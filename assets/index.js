@@ -25,3 +25,4 @@ register('GIF', ['gif']);
 register('JPEG', ['jpg', 'jpeg']);
 register('ICO', ['ico']);
 register('CacheManifest', ['manifest']);
+register('SpriteConfiguration'); // Virtual

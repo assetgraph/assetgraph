@@ -3,22 +3,7 @@ var _ = require('underscore'),
     Canvas = require('canvas'),
     error = require('../error'),
     assets = require('../assets'),
-    relations = require('../relations'),
-    vendorPrefix = '-one';
-
-function extractInfoFromCSSRule(cssRule, propertyNamePrefix) {
-    var result = {};
-    for (var i = 0 ; i < cssRule.style.length ; i += 1) {
-        var propertyName = cssRule.style[i];
-        if (!propertyNamePrefix || propertyName.indexOf(propertyNamePrefix) === 0) {
-            var keyName = propertyName.substr(propertyNamePrefix.length).replace(/-([a-z])/, function ($0, $1) {
-                return $1.toUpperCase();
-            });
-            result[keyName] = cssRule.style[propertyName].replace(/^([\'\"])(.*)\1$/, "$2");
-        }
-    }
-    return result;
-}
+    relations = require('../relations');
 
 function calculateSpritePadding(paddingStr) {
     if (paddingStr) {
@@ -56,7 +41,7 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
     var spriteGroups = {};
     siteGraph.relations.forEach(function (relation) {
         if (relation.type === 'CSSBackgroundImage') {
-            var spriteInfo = extractInfoFromCSSRule(relation.cssRule, vendorPrefix + '-sprite-'),
+            var spriteInfo = assets.CSS.extractInfoFromRule(relation.cssRule, assets.CSS.vendorPrefix + '-sprite-'),
                 asset = relation.to;
             if (spriteInfo.group) {
                 var spriteGroup = spriteGroups[spriteInfo.group];
