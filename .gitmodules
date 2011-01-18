@@ -1,6 +1,3 @@
-[submodule "3rdparty/cssom"]
-	path = 3rdparty/cssom
-	url = git://github.com/NV/CSSOM.git
 [submodule "3rdparty/papandreou-jsdom"]
 	path = 3rdparty/papandreou-jsdom
 	url = git://github.com/papandreou/jsdom.git

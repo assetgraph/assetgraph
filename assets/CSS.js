@@ -1,7 +1,7 @@
 var util = require('util'),
     _ = require('underscore'),
     step = require('step'),
-    cssom = require('../3rdparty/cssom/lib'),
+    cssom = require('cssom'),
     error = require('../error'),
     memoizeAsyncAccessor = require('../memoizeAsyncAccessor'),
     relations = require('../relations'),
