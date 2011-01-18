@@ -110,7 +110,12 @@ SiteGraph.prototype = {
                 this.unregisterRelation(outgoingRelation);
             }, this);
         }
-        this.assets.splice(this.assets.indexOf(asset), 1);
+        var i = this.assets.indexOf(asset);
+        if (i === -1) {
+            throw new Error("unregisterAsset: " + asset + " not in graph");
+        } else {
+            this.assets.splice(i, 1);
+        }
         this.removeFromIndices('asset', asset);
     },
 
@@ -159,7 +164,12 @@ SiteGraph.prototype = {
 
     unregisterRelation: function (relation) {
         this.removeFromIndices('relation', relation);
-        this.relations.splice(this.relations.indexOf(relation), 1);
+        var i = this.relations.indexOf(relation);
+        if (i === -1) {
+            throw new Error("unregisterRelation: " + relation + " not in graph");
+        } else {
+            this.relations.splice(i, 1);
+        }
     },
 
     detachAndUnregisterRelation: function (relation) {
