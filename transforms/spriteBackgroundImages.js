@@ -86,24 +86,24 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
                 makeSprite(require('./spriteBackgroundImages/packers/horizontal').pack(imageInfos), this);
             }),
             error.passToFunction(cb, function (spriteBuffer) {
+                var spriteAsset = new assets.PNG({
+                    originalSrc: spriteBuffer
+                });
+                siteGraph.registerAsset(spriteAsset);
                 imageInfos.forEach(function (imageInfo) {
                     imageInfo.relations.forEach(function (relation) {
                         var newRelation = new relations.CSSBackgroundImage({
                             cssRule: relation.cssRule,
                             propertyName: relation.propertyName,
                             from: relation.from,
-                            to: new assets.PNG({
-                                originalSrc: spriteBuffer
-                            })
+                            to: spriteAsset
                         });
                         newRelation.cssRule['background-position'] =
                             (imageInfo.x ? (-imageInfo.x) + "px " : "0 ") + (imageInfo.y ? -imageInfo.y + "px" : "0");
 
                         siteGraph.registerRelation(newRelation, 'before', relation);
-console.log("sBI unregistering " + relation);
                         siteGraph.unregisterRelation(relation);
                         if (siteGraph.assetIsOrphan(relation.to)) {
-console.log("sBI unregistering orphan " + relation.to);
                             siteGraph.unregisterAsset(relation.to);
                         }
                     });

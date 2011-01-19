@@ -18,10 +18,22 @@ loader.populate(stylesheet, function () {return true;}, function () {
             transforms.dumpGraph(siteGraph, 'svg', 'beforesprite.svg', this);
         },
         error.logAndExit(function () {
+            console.log("ASSETS:\n\n" + siteGraph.assets.join("\n  "));
+            console.log("RELATIONS:\n\n" + siteGraph.relations.join("\n  "));
+            console.log("\n");
+            process.nextTick(this);
+        }),
+        error.logAndExit(function () {
             transforms.spriteBackgroundImages(siteGraph, this);
         }),
         error.logAndExit(function () {
             transforms.dumpGraph(siteGraph, 'svg', 'aftersprite.svg', this);
+        }),
+        error.logAndExit(function () {
+            console.log("ASSETS:\n\n  " + siteGraph.assets.join("\n  "));
+            console.log("RELATIONS:\n\n  " + siteGraph.relations.join("\n  "));
+            console.log("\n");
+            process.nextTick(this);
         }),
         error.logAndExit(function () {
             transforms.checkRelationConsistency(siteGraph, this);
