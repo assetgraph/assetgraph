@@ -27,7 +27,7 @@ error.throwException = function (successCallback) {
 
 error.logAndExit = function (successCallback) {
     return error.passToFunction(function (err) {
-        console.log("Error: " + err.stack);
+        console.log(err.stack);
         process.exit();
     }, successCallback);
 };
