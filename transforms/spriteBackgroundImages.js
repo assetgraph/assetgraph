@@ -100,8 +100,10 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
                             (imageInfo.x ? (-imageInfo.x) + "px " : "0 ") + (imageInfo.y ? -imageInfo.y + "px" : "0");
 
                         siteGraph.registerRelation(newRelation, 'before', relation);
+console.log("sBI unregistering " + relation);
                         siteGraph.unregisterRelation(relation);
                         if (siteGraph.assetIsOrphan(relation.to)) {
+console.log("sBI unregistering orphan " + relation.to);
                             siteGraph.unregisterAsset(relation.to);
                         }
                     });

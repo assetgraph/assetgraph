@@ -52,7 +52,10 @@ step(
     error.logAndExit(function () {
         transforms.dumpGraph(siteGraph.lookupSubgraph(htmlAssets[0], function (relation) {
             return relation.type === 'HTMLStyle' || relation.type === 'CSSBackgroundImage';
-        }), "png", "beforesprite.png", this);
+        }), "svg", "beforesprite.svg", this);
+    }),
+    error.logAndExit(function () {
+        transforms.checkRelationConsistency(siteGraph, this);
     }),
     error.logAndExit(function () {
         transforms.spriteBackgroundImages(siteGraph, this);
@@ -63,7 +66,7 @@ step(
     error.logAndExit(function () {
         transforms.dumpGraph(siteGraph.lookupSubgraph(htmlAssets[0], function (relation) {
             return relation.type === 'HTMLStyle' || relation.type === 'CSSBackgroundImage';
-        }), "png", "aftersprite.png", this);
+        }), "svg", "aftersprite.svg", this);
     }),
     error.logAndExit(function () {
         // FIXME

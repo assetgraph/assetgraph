@@ -1,0 +1,13 @@
+.icon {
+    -one-sprite-selector-for-group: 'icons';
+}
+
+.icon-foo {
+    -one-sprite-group: 'icons';
+    background-image: url(foo.png);
+}
+
+.icon-bar {
+    -one-sprite-group: 'icons';
+    background-image: url(bar.png);
+}
