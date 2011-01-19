@@ -9,34 +9,31 @@ exports.addCacheManifest = function addCacheManifest(siteGraph, htmlAsset, cb) {
     siteGraph.relations.filter(function (relation) {
         return relation.from === htmlAsset && relation.type === 'HTMLCacheManifest';
     }).forEach(function (existingManifest) {
-        siteGraph.detachAndUnregisterRelation(existingManifest);
+        siteGraph.unregisterAsset(existingManifest, true); // cascade
     });
 
-    var src = "CACHE MANIFEST\n" + htmlAsset.url + "\n";
+    var cacheManifest = new assets.CacheManifest({
+        dirty: true,
+        baseUrl: htmlAsset.baseUrl,
+        url: htmlAsset.url.replace(/\.html$/, '.manifest'), // FIXME
+        parseTree: {}
+    });
+
     siteGraph.lookupSubgraph(htmlAsset, function (relation) {return true;}).assets.forEach(function (asset) {
-        if (siteGraph.findRelations('to', asset).some(function (incomingRelation) {
-            return !asset.isInline && 'url' in asset;
-        })) {
-            // At least one non-inline incoming relation, add to manifest:
-            src += fileUtils.buildRelativeUrl(htmlAsset.url, asset.url) + "\n";
+        if (siteGraph.findRelations('to', asset).some(function (incomingRelation) {return !incomingRelation.isInline;})) {
+            siteGraph.attachAndRegisterRelation(new relations.CacheManifestEntry({
+                from: cacheManifest,
+                to: asset
+            }));
         }
     });
-    htmlAsset.getParseTree(error.passToFunction(cb, function (parseTree) {
-        // This is a little cumbersome:
-        var manifestUrl = htmlAsset.url.replace(/\.[^\/]*$/, "") + '.manifest',
-            cacheManifest = new assets.CacheManifest({
-                url: manifestUrl,
-                dirty: true,
-                originalSrc: src
-            });
-        siteGraph.registerAsset(cacheManifest);
-        var relation = new relations.HTMLCacheManifest({
-            from: htmlAsset,
-            to: cacheManifest
-        });
-        htmlAsset.attachRelation(relation, 'first');
-        relation.setUrl(manifestUrl);
-        htmlAsset.dirty = true;
-        cb();
+
+    siteGraph.registerAsset(cacheManifest);
+
+    siteGraph.attachAndRegisterRelation(new relations.HTMLCacheManifest({
+        from: htmlAsset,
+        to: cacheManifest
     }));
+
+    process.nextTick(cb);
 };

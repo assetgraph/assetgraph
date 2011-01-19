@@ -18,8 +18,7 @@ _.extend(HTML.prototype, {
     getParseTree: memoizeAsyncAccessor('parseTree', function (cb) {
         var that = this;
         this.getOriginalSrc(error.passToFunction(cb, function (src) {
-            that.parseTree = jsdom.jsdom(src, undefined, {features: {ProcessExternalResources: [], FetchExternalResources: []}});
-            cb(null, that.parseTree);
+            cb(null, jsdom.jsdom(src, undefined, {features: {ProcessExternalResources: [], FetchExternalResources: []}}));
         }));
     }),
 

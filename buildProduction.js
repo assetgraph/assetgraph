@@ -50,23 +50,10 @@ step(
         }), this.parallel());
     }),
     error.logAndExit(function () {
-        transforms.dumpGraph(siteGraph.lookupSubgraph(htmlAssets[0], function (relation) {
-            return relation.type === 'HTMLStyle' || relation.type === 'CSSBackgroundImage';
-        }), "svg", "beforesprite.svg", this);
-    }),
-    error.logAndExit(function () {
-        transforms.checkRelationConsistency(siteGraph, this);
-    }),
-    error.logAndExit(function () {
         transforms.spriteBackgroundImages(siteGraph, this);
     }),
     error.logAndExit(function () {
         transforms.checkRelationConsistency(siteGraph, this);
-    }),
-    error.logAndExit(function () {
-        transforms.dumpGraph(siteGraph.lookupSubgraph(htmlAssets[0], function (relation) {
-            return relation.type === 'HTMLStyle' || relation.type === 'CSSBackgroundImage';
-        }), "svg", "aftersprite.svg", this);
     }),
     error.logAndExit(function () {
         // FIXME
@@ -76,6 +63,9 @@ step(
             }
         });
         process.nextTick(this);
+    }),
+    error.logAndExit(function () {
+        transforms.addCacheManifest(siteGraph, htmlAssets[0], this);
     }),
     error.logAndExit(function () {
         transforms.findAssetSerializationOrder(siteGraph, this);

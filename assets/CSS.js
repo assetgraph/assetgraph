@@ -19,8 +19,7 @@ _.extend(CSS.prototype, {
     getParseTree: memoizeAsyncAccessor('parseTree', function (cb) {
         var that = this;
         this.getOriginalSrc(error.passToFunction(cb, function (src) {
-            that.parseTree = cssom.parse(src);
-            cb(null, that.parseTree);
+            cb(null, cssom.parse(src));
         }));
     }),
 

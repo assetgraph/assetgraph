@@ -41,8 +41,7 @@ _.extend(JavaScript.prototype, {
     getParseTree: memoizeAsyncAccessor('parseTree', function (cb) {
         var that = this;
         this.getOriginalSrc(error.passToFunction(cb, function (src) {
-            that.parseTree = uglify.parser.parse(src);
-            cb(null, that.parseTree);
+            cb(null, uglify.parser.parse(src));
         }));
     }),
 
