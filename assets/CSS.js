@@ -87,7 +87,7 @@ _.extend(CSS.prototype, {
                         }));
                     }
                 }
-                if ((CSS.vendorPrefix + '-sprite-selector-for-group')) {
+                if ((CSS.vendorPrefix + '-sprite-selector-for-group') in style) {
                     originalRelations.push(new relations.CSSSpritePlaceholder({
                         from: that,
                         cssRule: cssRule,
