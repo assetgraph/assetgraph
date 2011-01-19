@@ -46,18 +46,20 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
             if (spriteInfo.group) {
                 var spriteGroup = spriteGroups[spriteInfo.group];
                 if (!spriteGroup) {
-                    spriteGroup = spriteGroups[spriteInfo.group] = {};
+                    spriteGroup = spriteGroups[spriteInfo.group] = {
+                        imageInfosById: {}
+                    };
                 }
                 var imageInfo = spriteGroup[asset.id],
                     padding = calculateSpritePadding(spriteInfo.padding);
                 if (!imageInfo) {
-                    imageInfo = spriteGroup[asset.id] = {
+                    imageInfo = spriteGroup.imageInfosById[asset.id] = {
                         padding: padding,
                         asset: asset,
-                        relations: [relation]
+                        incomingRelations: [relation]
                     };
                 } else {
-                    imageInfo.relations.push(relation);
+                    imageInfo.incomingRelations.push(relation);
                     for (var i = 0 ; i < 4 ; i += 1) {
                         imageInfo.padding[i] = Math.max(padding[i], imageInfo.padding[i]);
                     }
@@ -66,8 +68,17 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
         }
     });
 
+    // Find the sprite configurations (if any):
+    siteGraph.findAssets('type', 'SpriteConfiguration').forEach(function (spriteConfiguration) {
+        // TODO: Emit a warning if the sprite configuration selector won't be reachable
+        var spriteGroupName = spriteConfiguration.originalSrc.selectorForGroup; // Eeh
+        if (spriteGroupName in spriteGroups) {
+            spriteGroups[spriteGroupName].spriteConfiguration = spriteConfiguration;
+        }
+    });
+
     _.each(spriteGroups, function (spriteGroup, spriteGroupName) {
-        var imageInfos = _.values(spriteGroup);
+        var imageInfos = _.values(spriteGroup.imageInfosById);
         step(
             function () {
                 var group = this.group();
@@ -91,20 +102,20 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
                 });
                 siteGraph.registerAsset(spriteAsset);
                 imageInfos.forEach(function (imageInfo) {
-                    imageInfo.relations.forEach(function (relation) {
-                        var newRelation = new relations.CSSBackgroundImage({
-                            cssRule: relation.cssRule,
-                            propertyName: relation.propertyName,
-                            from: relation.from,
+                    imageInfo.incomingRelations.forEach(function (incomingRelation) {
+                        var spriteRelation = new relations.CSSBackgroundImage({
+                            cssRule: incomingRelation.cssRule,
+                            propertyName: incomingRelation.propertyName,
+                            from: incomingRelation.from,
                             to: spriteAsset
                         });
-                        newRelation.cssRule['background-position'] =
+                        spriteRelation.cssRule['background-position'] =
                             (imageInfo.x ? (-imageInfo.x) + "px " : "0 ") + (imageInfo.y ? -imageInfo.y + "px" : "0");
 
-                        siteGraph.registerRelation(newRelation, 'before', relation);
-                        siteGraph.unregisterRelation(relation);
-                        if (siteGraph.assetIsOrphan(relation.to)) {
-                            siteGraph.unregisterAsset(relation.to);
+                        siteGraph.registerRelation(spriteRelation, 'before', incomingRelation);
+                        siteGraph.unregisterRelation(incomingRelation);
+                        if (siteGraph.assetIsOrphan(incomingRelation.to)) {
+                            siteGraph.unregisterAsset(incomingRelation.to);
                         }
                     });
                 });

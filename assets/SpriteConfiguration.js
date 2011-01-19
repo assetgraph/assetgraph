@@ -11,7 +11,4 @@ function SpriteConfiguration(config) {
 
 util.inherits(SpriteConfiguration, Base);
 
-_.extend(SpriteConfiguration.prototype, {
-});
-
 exports.SpriteConfiguration = SpriteConfiguration;

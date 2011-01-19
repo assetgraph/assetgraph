@@ -93,7 +93,7 @@ _.extend(CSS.prototype, {
                         isInline: true,
                         assetConfig: {
                             type: 'SpriteConfiguration',
-                            originalSrc: CSS.extractInfoFromRule(cssRule, CSS.vendorPrefix + '-sprite')
+                            originalSrc: CSS.extractInfoFromRule(cssRule, CSS.vendorPrefix + '-sprite-')
                         }
                     }));
                 }
@@ -134,7 +134,7 @@ CSS.extractInfoFromRule = function (cssRule, propertyNamePrefix) {
     for (var i = 0 ; i < cssRule.style.length ; i += 1) {
         var propertyName = cssRule.style[i];
         if (!propertyNamePrefix || propertyName.indexOf(propertyNamePrefix) === 0) {
-            var keyName = propertyName.substr(propertyNamePrefix.length).replace(/-([a-z])/, function ($0, $1) {
+            var keyName = propertyName.substr(propertyNamePrefix.length).replace(/-([a-z])/g, function ($0, $1) {
                 return $1.toUpperCase();
             });
             info[keyName] = cssRule.style[propertyName].replace(/^([\'\"])(.*)\1$/, "$2");
