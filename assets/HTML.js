@@ -32,6 +32,15 @@ _.extend(HTML.prototype, {
         var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var originalRelations = [];
+            if (parseTree.documentElement.hasAttribute('manifest')) {
+                originalRelations.push(new relations.HTMLCacheManifest({
+                    from: that,
+                    node: parseTree.documentElement,
+                    assetConfig: {
+                        url: parseTree.documentElement.getAttribute('manifest')
+                    }
+                }));
+            }
             _.toArray(parseTree.getElementsByTagName('*')).forEach(function (node) {
                 var nodeName = node.nodeName.toLowerCase();
                 if (nodeName === 'script') {
@@ -100,14 +109,6 @@ _.extend(HTML.prototype, {
                         node: node,
                         assetConfig: {
                             url: node.src
-                        }
-                    }));
-                } else if (nodeName === 'html' && node.manifest) {
-                    originalRelations.push(new relations.HTMLCacheManifest({
-                        from: that,
-                        node: node,
-                        assetConfig: {
-                            url: node.manifest
                         }
                     }));
                 }

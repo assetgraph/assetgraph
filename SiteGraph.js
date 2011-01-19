@@ -192,7 +192,7 @@ SiteGraph.prototype = {
     lookupSubgraph: function (startAsset, relationLambda) { // preorder
         var that = this,
             subgraph = new SiteGraph();
-        function traverse (asset) {
+        (function traverse(asset) {
             if (!subgraph.existsInIndex('asset', 'id', asset)) {
                 subgraph.registerAsset(asset);
                 that.lookupIndex('relation', 'from', asset).forEach(function (relation) {
@@ -202,8 +202,7 @@ SiteGraph.prototype = {
                     }
                 });
             }
-        }
-        traverse(startAsset);
+        }(startAsset));
         return subgraph;
     }
 };

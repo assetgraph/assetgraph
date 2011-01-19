@@ -11,7 +11,6 @@ util.inherits(CacheManifestEntry, Base);
 
 _.extend(CacheManifestEntry.prototype, {
     setUrl: function (url) {
-console.log("setUrl " + url);
         this.node.url = url;
     }
 });

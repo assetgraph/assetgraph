@@ -2,6 +2,7 @@ var util = require('util'),
     _ = require('underscore'),
     error = require('../error'),
     memoizeAsyncAccessor = require('../memoizeAsyncAccessor'),
+    relations = require('../relations'),
     Base = require('./Base').Base;
 
 function CacheManifest(config) {
@@ -57,7 +58,7 @@ _.extend(CacheManifest.prototype, {
             var originalRelations = [];
             if ('CACHE' in parseTree) {
                 parseTree.CACHE.forEach(function (node) {
-                    originalRelations.push(new CacheManifestEntry({
+                    originalRelations.push(new relations.CacheManifestEntry({
                         from: that,
                         node: node,
                         assetConfig: {
