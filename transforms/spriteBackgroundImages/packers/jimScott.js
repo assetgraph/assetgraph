@@ -87,7 +87,6 @@ exports.pack = function (imageInfos, config) {
         _.extend(imageInfo, coords);
     });
     return {
-        imageInfos: imageInfos,
         width: packingWidth,
         height: packingHeight
     };

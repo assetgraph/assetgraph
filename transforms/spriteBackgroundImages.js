@@ -28,15 +28,6 @@ function calculateSpritePadding(paddingStr) {
     return [0, 0, 0, 0];
 }
 
-function makeSprite(packingData, cb) {
-    var canvas = new Canvas(packingData.width, packingData.height),
-        ctx = canvas.getContext('2d');
-    packingData.imageInfos.forEach(function (imageInfo) {
-        ctx.drawImage(imageInfo.canvasImage, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height);
-    });
-    canvas.toBuffer(cb);
-}
-
 exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb) {
     var spriteGroups = {};
     siteGraph.relations.forEach(function (relation) {
@@ -99,10 +90,15 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
 
                 var packerName = {
                     'jim-scott': 'jimScott',
-                    horizontal: 'horizontal',
-                    vertical: 'vertical'
+                    horizontal: 'horizontal'
                 }[spriteInfo.packer] || 'vertical';
-                makeSprite(require('./spriteBackgroundImages/packers/' + packerName).pack(imageInfos), this);
+                var packingData = require('./spriteBackgroundImages/packers/' + packerName).pack(imageInfos),
+                    canvas = new Canvas(packingData.width, packingData.height),
+                    ctx = canvas.getContext('2d');
+                imageInfos.forEach(function (imageInfo) {
+                    ctx.drawImage(imageInfo.canvasImage, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height);
+                });
+                canvas.toBuffer(this);
             }),
             error.passToFunction(cb, function (spriteBuffer) {
                 var spriteAsset = new assets.PNG({

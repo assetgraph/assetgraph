@@ -11,7 +11,6 @@ exports.pack = function (imageInfos) {
         height = Math.max(height, imageInfo.height);
     });
     return {
-        imageInfos: imageInfos,
         width: x,
         height: height
     };
