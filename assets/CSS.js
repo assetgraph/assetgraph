@@ -35,7 +35,8 @@ _.extend(CSS.prototype, {
             var originalRelations = [];
             _.toArray(parseTree.cssRules).forEach(function (cssRule) {
                 var style = cssRule.style;
-                ['background-image', 'background'].forEach(function (propertyName) {
+                ['background-image', 'background',
+                 '_background-image', '_background'].forEach(function (propertyName) {
                     var propertyValue = style[propertyName];
                     if (propertyValue) {
                         var urlMatch = propertyValue.match(/\burl\((\'|\"|)([^\'\"]+)\1\)/);
