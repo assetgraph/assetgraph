@@ -4,15 +4,10 @@ var step = require('step'),
     assets = require('../assets'),
     transforms = require('../transforms'),
     error = require('../error');
+    siteGraph = new SiteGraph({root: 'parseCacheManifest'}),
+    html = siteGraph.loadAsset({type: 'HTML', url: 'index.html'});
 
-var siteGraph = new SiteGraph(),
-    loader = new FsLoader({
-        siteGraph: siteGraph,
-        root: 'parseCacheManifest'
-    });
-
-var html = loader.loadAsset({type: 'HTML', url: 'index.html'});
-loader.populate(html, function () {return true;}, error.logAndExit(function () {
+siteGraph.populate(html, function () {return true;}, error.logAndExit(function () {
     step(
         function () {
             console.log("ASSETS:\n\n" + siteGraph.assets.join("\n  "));

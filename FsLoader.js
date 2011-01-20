@@ -4,21 +4,18 @@ var util = require('util'),
     path = require('path'),
     step = require('step'),
     _ = require('underscore'),
-    assets = require('../assets'),
-    error = require('../error'),
-    resolvers = require('./Fs/resolvers'),
-    request = require('request'),
-    Base = require('./Base');
+    assets = require('./assets'),
+    error = require('./error'),
+    resolvers = require('./resolvers'),
+    request = require('request');
 
-var Fs = module.exports = function (config) {
-    Base.apply(this, arguments);
+function FsLoader(config) {
+    _.extend(this, config);
     this.labelResolvers = {};
     this.defaultLabelResolver = new resolvers.FindParentDirectory({root: this.root});
 };
 
-util.inherits(Fs, Base);
-
-_.extend(Fs.prototype, {
+FsLoader.prototype = {
     addLabelResolver: function (labelName, Constructor, config) {
         config = config || {};
         config.root = this.root;
@@ -83,4 +80,6 @@ _.extend(Fs.prototype, {
             fs.readFile(path.join(that.root, assetConfig.url), this.encoding, cb);
         };
     }
-});
+};
+
+module.exports = FsLoader;

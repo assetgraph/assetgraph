@@ -2,10 +2,10 @@ var fs = require('fs'),
     path = require('path'),
     step = require('step'),
     error = require('../error'),
-    resolvers = require('../loaders/Fs/resolvers'),
+    resolvers = require('../resolvers'),
     fileUtils = require('../fileUtils');
 
-exports.addLabelResolversToFsLoader = function addLabelResolversToFsLoader(fsLoader, labelDefinitions, cb) {
+exports.addFsLabelResolvers = function addFsLabelResolvers(siteGraph, labelDefinitions, cb) {
     step(
         function () {
             var group = this.group();
@@ -21,8 +21,8 @@ exports.addLabelResolversToFsLoader = function addLabelResolversToFsLoader(fsLoa
                 if (matchSenchaJSBuilder) {
                     var url = fileUtils.dirnameNoDot(labelValue) || '',
                         version = parseInt(matchSenchaJSBuilder[1], 10);
-                    fs.readFile(path.join(fsLoader.root, labelValue), 'utf8', error.passToFunction(cb, function (fileBody) {
-                        fsLoader.addLabelResolver(labelName, resolvers.SenchaJSBuilder, {
+                    fs.readFile(path.join(siteGraph.fsLoader.root, labelValue), 'utf8', error.passToFunction(cb, function (fileBody) {
+                        siteGraph.fsLoader.addLabelResolver(labelName, resolvers.SenchaJSBuilder, {
                             url: url,
                             version: version,
                             body: JSON.parse(fileBody)
@@ -30,11 +30,11 @@ exports.addLabelResolversToFsLoader = function addLabelResolversToFsLoader(fsLoa
                         callback();
                     }));
                 } else {
-                    path.exists(path.join(fsLoader.root, labelValue), function (exists) {
+                    path.exists(path.join(siteGraph.fsLoader.root, labelValue), function (exists) {
                         if (!exists) {
                             callback(new Error("Label " + labelName + ": Dir not found: " + labelValue));
                         } else {
-                            fsLoader.addLabelResolver(labelName, resolvers.Directory, {url: labelValue});
+                            siteGraph.fsLoader.addLabelResolver(labelName, resolvers.Directory, {url: labelValue});
                             callback();
                         }
                     });

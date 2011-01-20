@@ -1,4 +1,4 @@
-['addLabelResolversToFsLoader',
+['addFsLabelResolvers',
  'flattenStaticIncludes',
  'dumpGraph',
  'addCDNPrefix',

@@ -3,16 +3,11 @@ var step = require('step'),
     FsLoader = require('../loaders/Fs'),
     assets = require('../assets'),
     transforms = require('../transforms'),
-    error = require('../error');
+    error = require('../error'),
+    siteGraph = new SiteGraph({root: 'addCacheManifest'}),
+    html = siteGraph.loadAsset({type: 'HTML', url: 'index.html'});
 
-var siteGraph = new SiteGraph(),
-    loader = new FsLoader({
-        siteGraph: siteGraph,
-        root: 'addCacheManifest'
-    });
-
-var html = loader.loadAsset({type: 'HTML', url: 'index.html'});
-loader.populate(html, function () {return true;}, function () {
+siteGraph.populate(html, function () {return true;}, function () {
     step(
         function () {
             transforms.dumpGraph(siteGraph, 'svg', 'beforemanifest.svg', this);

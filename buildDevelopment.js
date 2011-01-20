@@ -6,39 +6,23 @@ var util = require('util'),
     step = require('step'),
     _ = require('underscore'),
     fileUtils = require('./fileUtils'),
-    assets = require('./assets'),
-    relations = require('./relations'),
     transforms = require('./transforms'),
     SiteGraph = require('./SiteGraph'),
-    FsLoader = require('./loaders/Fs'),
     error = require('./error'),
-    options = {};
-
-_.each(require('optimist').usage('FIXME').demand(['root']).argv,
-    function (value, optionName) {
-        options[optionName.replace(/-([a-z])/g, function ($0, $1) {
-            return $1.toUpperCase();
-        })] = value;
-    }
-);
-
-var siteGraph = new SiteGraph(),
-    loader = new FsLoader({
-        siteGraph: siteGraph,
-        root: options.root
-    }),
+    commandLineOptions = require('./camelOptimist')({usage: 'FIXME', demand: ['root']}),
+    siteGraph = new SiteGraph({root: commandLineOptions.root}),
     templates = [];
 
 step(
     function () {
-        transforms.addLabelResolversToFsLoader(loader, options.label || [], this);
+        transforms.addFsLabelResolvers(siteGraph, commandLineOptions.label || [], this);
     },
     error.logAndExit(function () {
         var group = this.group();
-        options._.forEach(function (templateUrl) {
-            var template = loader.loadAsset({type: 'HTML', url: templateUrl});
+        commandLineOptions._.forEach(function (templateUrl) {
+            var template = siteGraph.loadAsset({type: 'HTML', url: templateUrl});
             templates.push(template);
-            loader.populate(template, function (relation) {
+            siteGraph.populate(template, function (relation) {
                 return ['HTMLScript', 'JavaScriptStaticInclude', 'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
             }, group());
         });
@@ -66,7 +50,7 @@ step(
         templates.forEach(function (template) {
             var callback = this.parallel();
             template.serialize(error.throwException(function (src) {
-                fs.writeFile(path.join(loader.root, template.url.replace(/\.template$/, '')), src, 'utf8', callback);
+                fs.writeFile(path.join(siteGraph.fsLoader.root, template.url.replace(/\.template$/, '')), src, 'utf8', callback);
             }));
         }, this);
     })
