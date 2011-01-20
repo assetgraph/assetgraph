@@ -69,16 +69,18 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
     });
 
     // Find the sprite configurations (if any):
-    siteGraph.findAssets('type', 'SpriteConfiguration').forEach(function (spriteConfiguration) {
+    siteGraph.findRelations('type', 'CSSSpritePlaceholder').forEach(function (cssSpritePlaceholder) {
         // TODO: Emit a warning if the sprite configuration selector won't be reachable
-        var spriteGroupName = spriteConfiguration.originalSrc.selectorForGroup; // Eeh
+        var spriteGroupName = cssSpritePlaceholder.to.originalSrc.selectorForGroup; // Eeh
         if (spriteGroupName in spriteGroups) {
-            spriteGroups[spriteGroupName].spriteConfiguration = spriteConfiguration;
+            spriteGroups[spriteGroupName].cssSpritePlaceholder = cssSpritePlaceholder;
         }
     });
 
     _.each(spriteGroups, function (spriteGroup, spriteGroupName) {
-        var imageInfos = _.values(spriteGroup.imageInfosById);
+        var imageInfos = _.values(spriteGroup.imageInfosById),
+            spriteInfo = spriteGroup.cssSpritePlaceholder ? spriteGroup.cssSpritePlaceholder.to.originalSrc : {};
+//console.log("imageInfos = " + require('sys').inspect(imageInfos));
         step(
             function () {
                 var group = this.group();
@@ -94,7 +96,13 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
                         height: canvasImage.height
                     });
                 });
-                makeSprite(require('./spriteBackgroundImages/packers/horizontal').pack(imageInfos), this);
+
+                var packerName = {
+                    'jim-scott': 'jimScott',
+                    horizontal: 'horizontal',
+                    vertical: 'vertical'
+                }[spriteInfo.packer] || 'vertical';
+                makeSprite(require('./spriteBackgroundImages/packers/' + packerName).pack(imageInfos), this);
             }),
             error.passToFunction(cb, function (spriteBuffer) {
                 var spriteAsset = new assets.PNG({

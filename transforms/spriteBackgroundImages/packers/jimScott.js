@@ -13,7 +13,7 @@ function findCoords(node, width, height) {
     // If we are not at a leaf then go deeper
     if (node.lft) {
         // Check first the left branch if not found then go by the right
-        return recursiveFindCoords(node.lft, width, height) || recursiveFindCoords(node.rgt, width, height);
+        return findCoords(node.lft, width, height) || findCoords(node.rgt, width, height);
     } else {
         // If already used or it's too big then return
         if (node.used || width > node.width || height > node.height) {
@@ -29,21 +29,35 @@ function findCoords(node, width, height) {
         };
     }
 
-    // Initialize the left and right leaves by cloning the current one
-    node.lft = _.extend({}, node);
-    node.rgt = _.extend({}, node);
-
-    // Checks if we partition in vertical or horizontal
+    // Partition vertically or horizontally:
     if (node.width - width > node.height - height) {
-        node.lft.width = width;
-        node.rgt.x = node.x + width;
-        node.rgt.width = node.width - width;
+        node.lft = {
+            x: node.x,
+            y: node.y,
+            width: width,
+            height: node.height
+        };
+        node.rgt = {
+            x: node.x + width,
+            y: node.y,
+            width: node.width - width,
+            height: node.height
+        };
     } else {
-        node.lft.height = height;
-        node.rgt.y = node.y + height;
-        node.rgt.height = node.height - height;
+        node.lft = {
+            x: node.x,
+            y: node.y,
+            width: node.width,
+            height: height
+        };
+        node.rgt = {
+            x: node.x,
+            y: node.y + height,
+            width: node.width,
+            height: node.height - height
+        };
     }
-    return recursiveFindCoords(node.lft, width, height);
+    return findCoords(node.lft, width, height);
 }
 
 exports.pack = function (imageInfos, config) {
@@ -58,11 +72,11 @@ exports.pack = function (imageInfos, config) {
         packingHeight = 0;
 
     imageInfos.forEach(function (imageInfo) {
-        if (imageInfo.padding && imageInfo.padding.any(function (v) {return v > 0;})) {
+        if (imageInfo.padding && imageInfo.padding.some(function (v) {return v > 0;})) {
             throw new Error("jimScott.pack: Sprite padding not supported");
         }
         // Perform the search
-        var coords = recursiveFindCoords(root, imageInfo.width, imageInfo.height);
+        var coords = findCoords(root, imageInfo.width, imageInfo.height);
         // If fitted then recalculate the used dimensions
         if (coords) {
             packingWidth = Math.max(packingWidth, coords.x + imageInfo.width);
@@ -73,6 +87,7 @@ exports.pack = function (imageInfos, config) {
         _.extend(imageInfo, coords);
     });
     return {
+        imageInfos: imageInfos,
         width: packingWidth,
         height: packingHeight
     };
