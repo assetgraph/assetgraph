@@ -71,7 +71,6 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
     _.each(spriteGroups, function (spriteGroup, spriteGroupName) {
         var imageInfos = _.values(spriteGroup.imageInfosById),
             spriteInfo = spriteGroup.cssSpritePlaceholder ? spriteGroup.cssSpritePlaceholder.to.originalSrc : {};
-//console.log("imageInfos = " + require('sys').inspect(imageInfos));
         step(
             function () {
                 var group = this.group();
@@ -95,6 +94,10 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
                 var packingData = require('./spriteBackgroundImages/packers/' + packerName).pack(imageInfos),
                     canvas = new Canvas(packingData.width, packingData.height),
                     ctx = canvas.getContext('2d');
+                if ('backgroundColor' in spriteInfo) {
+                    ctx.fillStyle = spriteInfo.imageBackgroundColor;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
                 imageInfos.forEach(function (imageInfo) {
                     ctx.drawImage(imageInfo.canvasImage, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height);
                 });

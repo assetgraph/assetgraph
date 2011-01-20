@@ -1,10 +1,12 @@
 .icon {
-    -one-sprite-packer: jim-scott;
     -one-sprite-selector-for-group: 'icons';
+    -one-sprite-packer: horizontal;
+    -one-sprite-background-color: transparent;
 }
 
 .icon-foo {
     -one-sprite-group: 'icons';
+    -one-sprite-padding: 10 10 10 10;
     background-image: url(foo.png);
 }
 
