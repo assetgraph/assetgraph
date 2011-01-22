@@ -108,19 +108,40 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
                     originalSrc: spriteBuffer
                 });
                 siteGraph.registerAsset(spriteAsset);
+                if (spriteGroup.cssSpritePlaceholder) {
+                    spriteGroup.cssSpritePlaceholder.cssRule.style.setProperty('background-image', 'url(thething.png)'); // Not necessary, is it?
+                    siteGraph.registerRelation(new relations.CSSBackgroundImage({
+                        cssRule: spriteGroup.cssSpritePlaceholder.cssRule,
+                        propertyName: 'background-image',
+                        from: spriteGroup.cssSpritePlaceholder.from,
+                        to: spriteAsset
+                    }), 'before', spriteGroup.cssSpritePlaceholder);
+                    siteGraph.detachAndUnregisterRelation(spriteGroup.cssSpritePlaceholder);
+                    siteGraph.unregisterAsset(spriteGroup.cssSpritePlaceholder.to);
+                }
                 imageInfos.forEach(function (imageInfo) {
                     imageInfo.incomingRelations.forEach(function (incomingRelation) {
-                        var spriteRelation = new relations.CSSBackgroundImage({
-                            cssRule: incomingRelation.cssRule,
-                            propertyName: incomingRelation.propertyName,
-                            from: incomingRelation.from,
-                            to: spriteAsset
-                        });
-                        spriteRelation.cssRule['background-position'] =
-                            (imageInfo.x ? (-imageInfo.x) + "px " : "0 ") + (imageInfo.y ? -imageInfo.y + "px" : "0");
-
-                        siteGraph.registerRelation(spriteRelation, 'before', incomingRelation);
-                        siteGraph.unregisterRelation(incomingRelation);
+                        var relationSpriteInfo = assets.CSS.extractInfoFromRule(incomingRelation.cssRule, assets.CSS.vendorPrefix + '-sprite-');
+                        incomingRelation.cssRule.style.setProperty('background-position',
+                                                                   (imageInfo.x ? (-imageInfo.x) + "px " : "0 ") +
+                                                                   (imageInfo.y ? -imageInfo.y + "px" : "0"));
+                        ['group', 'padding', 'no-group-selector'].forEach(function (propertyName) {
+                            incomingRelation.cssRule.style.removeProperty(assets.CSS.vendorPrefix + '-sprite-' + propertyName);
+                        }, this);
+                        if (relationSpriteInfo.noGroupSelector) {
+                            // The user specified the this selector needs its own background-image / background
+                            // property pointing at the sprite rather than relying on the HTML elements also being
+                            // matched by the sprite group's "main" selector, which would have been preferable.
+                            siteGraph.registerRelation(new relations.CSSBackgroundImage({
+                                cssRule: incomingRelation.cssRule,
+                                propertyName: incomingRelation.propertyName,
+                                from: incomingRelation.from,
+                                to: spriteAsset
+                            }), 'before', incomingRelation);
+                            siteGraph.unregisterRelation(incomingRelation);
+                        } else {
+                            siteGraph.detachAndUnregisterRelation(incomingRelation);
+                        }
                         if (siteGraph.assetIsOrphan(incomingRelation.to)) {
                             siteGraph.unregisterAsset(incomingRelation.to);
                         }

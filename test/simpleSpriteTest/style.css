@@ -14,3 +14,9 @@
     -one-sprite-group: 'icons';
     background-image: url(bar.png);
 }
+
+.icon-quux {
+    -one-sprite-group: 'icons';
+    -one-sprite-no-group-selector: true;
+    background-image: url(quux.png);
+}

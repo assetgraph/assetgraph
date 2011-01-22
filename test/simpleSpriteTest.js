@@ -1,6 +1,5 @@
 var step = require('step'),
     SiteGraph = require('../SiteGraph'),
-    FsLoader = require('../loaders/Fs'),
     assets = require('../assets'),
     transforms = require('../transforms'),
     error = require('../error'),
@@ -32,6 +31,11 @@ siteGraph.populate(stylesheet, function () {return true;}, function () {
         }),
         error.logAndExit(function () {
             transforms.checkRelationConsistency(siteGraph, this);
+        }),
+        error.logAndExit(function () {
+            stylesheet.serialize(function (err, src) {
+                console.log(src);
+            });
         })
     );
 });

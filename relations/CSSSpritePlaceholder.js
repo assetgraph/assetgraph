@@ -14,7 +14,9 @@ util.inherits(CSSSpritePlaceholder, Base);
 
 _.extend(CSSSpritePlaceholder.prototype, {
     remove: function () {
-        this.cssRule[assets.CSS.vendorPrefix + '-sprite-selector-for-group'] = null;
+        ['selector-for-group', 'packer', 'image-format', 'background-color'].forEach(function (propertyName) {
+            this.cssRule.style.removeProperty(assets.CSS.vendorPrefix + '-sprite-' + propertyName);
+        }, this);
         delete this.cssRule;
     }
 });

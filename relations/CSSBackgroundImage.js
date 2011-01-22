@@ -15,25 +15,24 @@ _.extend(CSSBackgroundImage.prototype, {
     remove: function () {
         var style = this.cssRule.style;
         if (this.propertyName === 'background-image' || style[this.propertyName].match(/^url\((\'|\"|)([^\'\"]+)\1\)^/)) {
-            style[this.propertyName] = null;
+            style.removeProperty(this.propertyName);
         } else {
             // We're attached to a 'background' property with other tokens in it. Just remove the url().
-            style[this.propertyName] = style[this.propertyName].replace(/\burl\((\'|\"|)([^\'\"]+)\1\)\s?/, "");
+            style.setProperty(this.propertyName, style[this.propertyName].replace(/\burl\((\'|\"|)([^\'\"]+)\1\)\s?/, ""));
         }
         delete this.propertyName;
         delete this.cssRule;
     },
 
     setUrl: function (url) {
-        var style = this.cssRule.style;
-        style[this.propertyName] = style[this.propertyName].replace(/\burl\((\'|\"|)([^\'\"]+)\1\)/, function () {
+        this.cssRule.style.setProperty(this.propertyName, this.cssRule.style[this.propertyName].replace(/\burl\((\'|\"|)([^\'\"]+)\1\)/, function () {
             // Quote if necessary:
             if (/^[a-z0-9\/\-_.]*$/i.test(url)) {
                 return "url(" + url + ")";
             } else {
                 return "url('" + url.replace(/([\'\"])/g, "\\$1") + "')";
             }
-        });
+        }));
     },
 
     _inline: function (cb) {
