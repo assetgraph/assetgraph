@@ -9,6 +9,6 @@ exports.addCDNPrefix = function addCDNPrefix(siteGraph, prefix, cb) {
 
             relation.setUrl(prefix + relation.to.url);
         }
-        cb();
+        cb(null, siteGraph);
     });
 };

@@ -23,9 +23,7 @@ vows.describe('Cache manifest').addBatch({
         'then spriting the background images': {
             topic: function (siteGraph) {
                 var callback = this.callback;
-                transforms.spriteBackgroundImages(siteGraph, function () {
-                    callback(null, siteGraph);
-                });
+                transforms.spriteBackgroundImages(siteGraph, this.callback);
             },
             'the number of PNG assets should be down to one': function (siteGraph) {
                 assert.equal(siteGraph.findAssets('type', 'PNG').length, 1);

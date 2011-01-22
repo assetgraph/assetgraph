@@ -11,6 +11,6 @@ exports.checkRelationConsistency = function checkRelationConsistency (siteGraph,
         }
     });
     process.nextTick(function () {
-        cb(numErrors === 0 ? null : new Error("SiteGraph is inconsistent"));
+        cb(numErrors === 0 ? null : new Error("SiteGraph is inconsistent"), siteGraph);
     });
 };

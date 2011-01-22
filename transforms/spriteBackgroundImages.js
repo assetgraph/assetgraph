@@ -147,7 +147,7 @@ exports.spriteBackgroundImages = function spriteBackgroundImages (siteGraph, cb)
                         }
                     });
                 });
-                cb();
+                cb(null, siteGraph);
             })
         );
     });

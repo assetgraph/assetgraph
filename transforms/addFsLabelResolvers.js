@@ -42,6 +42,8 @@ exports.addFsLabelResolvers = function addFsLabelResolvers(siteGraph, labelDefin
             });
             process.nextTick(group()); // Make sure it's called at least once
         },
-        cb
+        error.passToFunction(cb, function () {
+            cb(null, siteGraph);
+        })
     );
 };

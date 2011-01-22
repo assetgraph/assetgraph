@@ -12,5 +12,5 @@ exports.dumpGraph = function dumpGraph(siteGraph, targetFormat, targetFileName, 
         g.addEdge(relation.from.id.toString(), relation.to.id.toString());
     });
     g.output(targetFormat, targetFileName);
-    cb();
+    cb(null, siteGraph);
 };

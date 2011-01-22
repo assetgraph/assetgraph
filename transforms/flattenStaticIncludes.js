@@ -28,5 +28,5 @@ exports.flattenStaticIncludes = function flattenStaticIncludes(siteGraph, templa
             htmlScriptRelation.to.dirty = true;
         });
     });
-    cb();
+    cb(null, siteGraph);
 };

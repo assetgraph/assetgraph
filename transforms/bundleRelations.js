@@ -23,6 +23,6 @@ exports.bundleRelations = function bundleRelations(siteGraph, relationsToBundle,
                 siteGraph.registerRelation(relrel);
             });
         });
-        cb();
+        cb(null, siteGraph);
     }));
 };

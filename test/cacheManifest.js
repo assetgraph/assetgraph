@@ -46,9 +46,7 @@ vows.describe('Cache manifest').addBatch({
                 var callback = this.callback,
                     htmlAssets = siteGraph.findAssets('type', 'HTML');
                 assert.equal(htmlAssets.length, 1);
-                transforms.addCacheManifest(siteGraph, htmlAssets[0], function () {
-                    callback(null, siteGraph);
-                });
+                transforms.addCacheManifest(siteGraph, htmlAssets[0], this.callback);
             },
             'the graph should contain the manifest with the right outgoing relations': function (siteGraph) {
                 var manifests = siteGraph.findAssets('type', 'CacheManifest');

@@ -17,5 +17,5 @@ exports.findAssetSerializationOrder = function findAssetSerializationOrder(siteG
         }
         assetSerializationOrderGroups.push(currentGroup);
     }
-    cb(null, assetSerializationOrderGroups);
+    cb(null, siteGraph, assetSerializationOrderGroups);
 };

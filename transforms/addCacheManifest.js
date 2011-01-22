@@ -35,5 +35,7 @@ exports.addCacheManifest = function addCacheManifest(siteGraph, htmlAsset, cb) {
         to: cacheManifest
     }));
 
-    process.nextTick(cb);
+    process.nextTick(function () {
+        cb(null, siteGraph);
+    });
 };

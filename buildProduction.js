@@ -53,7 +53,7 @@ step(
     error.logAndExit(function () {
         transforms.findAssetSerializationOrder(siteGraph, this);
     }),
-    error.logAndExit(function (assetSerializationOrderGroups) {
+    error.logAndExit(function (_, assetSerializationOrderGroups) {
         function serializeAssets(assets, cb) {
             step(
                 function () {
