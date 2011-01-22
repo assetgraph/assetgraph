@@ -103,6 +103,7 @@ SiteGraph.prototype = {
     registerAsset: function (asset) {
         this.assets.push(asset);
         this.addToIndices('asset', asset);
+        return this;
     },
 
     unregisterAsset: function (asset, cascade) {
@@ -121,6 +122,7 @@ SiteGraph.prototype = {
             this.assets.splice(i, 1);
         }
         this.removeFromIndices('asset', asset);
+        return this;
     },
 
     assetIsOrphan: function (asset) {
@@ -135,6 +137,7 @@ SiteGraph.prototype = {
             }
         }, this);
         relation._inline(cb);
+        return this;
     },
 
     setAssetUrl: function (asset, url) {
@@ -145,6 +148,7 @@ SiteGraph.prototype = {
                 incomingRelation.setUrl(fileUtils.buildRelativeUrl(incomingRelation.from.baseUrl, url));
             }
         }, this);
+        return this;
     },
 
     // Relations must be registered in order
@@ -159,6 +163,7 @@ SiteGraph.prototype = {
             this.relations.splice(i, 0, relation);
         }
         this.addToIndices('relation', relation, position, adjacentRelation);
+        return this;
     },
 
     attachAndRegisterRelation: function (relation, position, adjacentRelation) {
@@ -174,11 +179,13 @@ SiteGraph.prototype = {
         } else {
             this.relations.splice(i, 1);
         }
+        return this;
     },
 
     detachAndUnregisterRelation: function (relation) {
         relation.from.detachRelation(relation);
         this.unregisterRelation(relation);
+        return this;
     },
 
     clone: function () {
@@ -256,6 +263,7 @@ SiteGraph.prototype = {
         return asset;
     },
 
+    // Turn into a transform?
     populate: function (originAsset, includeRelationLambda, cb) {
         var that = this,
             populatedAssets = {};
@@ -326,6 +334,8 @@ SiteGraph.prototype = {
                 }),
                 cb
             );
-        })(originAsset, cb);
+        })(originAsset, function (err) {
+            cb(err, that);
+        });
     }
 };

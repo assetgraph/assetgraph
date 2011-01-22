@@ -6,12 +6,9 @@ var vows = require('vows'),
 vows.describe('Cache manifest').addBatch({
     'After loading a test case with an existing cache manifest': {
         topic: function () {
-            var callback = this.callback,
-                siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/existingCacheManifest'}),
+            var siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/existingCacheManifest'}),
                 htmlAsset = siteGraph.loadAsset({type: 'HTML', url: 'index.html'});
-            siteGraph.populate(htmlAsset, function () {return true;}, function () {
-                callback(null, siteGraph);
-            });
+            siteGraph.populate(htmlAsset, function () {return true;}, this.callback);
         },
         'the graph contains the expected number of assets and relations': function (siteGraph) {
             assert.equal(siteGraph.relations.length, 3);
@@ -27,12 +24,9 @@ vows.describe('Cache manifest').addBatch({
     },
     'After loading a test case with no manifest': {
         topic: function () {
-            var callback = this.callback,
-                siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifest'}),
+            var siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifest'}),
                 htmlAsset = siteGraph.loadAsset({type: 'HTML', url: 'index.html'});
-            siteGraph.populate(htmlAsset, function () {return true;}, function () {
-                callback(null, siteGraph);
-            });
+            siteGraph.populate(htmlAsset, function () {return true;}, this.callback);
         },
         'the graph contains the expected assets and relations': function (siteGraph) {
             assert.equal(siteGraph.assets.length, 3);
@@ -43,10 +37,7 @@ vows.describe('Cache manifest').addBatch({
         },
         'then adding a cache manifest to the HTML file': {
             topic: function (siteGraph) {
-                var callback = this.callback,
-                    htmlAssets = siteGraph.findAssets('type', 'HTML');
-                assert.equal(htmlAssets.length, 1);
-                transforms.addCacheManifest(siteGraph, htmlAssets[0], this.callback);
+                transforms.addCacheManifest(siteGraph, siteGraph.findAssets('type', 'HTML')[0], this.callback);
             },
             'the graph should contain the manifest with the right outgoing relations': function (siteGraph) {
                 var manifests = siteGraph.findAssets('type', 'CacheManifest');

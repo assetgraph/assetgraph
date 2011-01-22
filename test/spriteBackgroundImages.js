@@ -6,12 +6,9 @@ var vows = require('vows'),
 vows.describe('Cache manifest').addBatch({
     'After loading a test case with images and spriting instructions': {
         topic: function () {
-            var callback = this.callback,
-                siteGraph = new SiteGraph({root: __dirname + '/spriteBackgroundImages'}),
+            var siteGraph = new SiteGraph({root: __dirname + '/spriteBackgroundImages'}),
                 styleAsset = siteGraph.loadAsset({type: 'CSS', url: 'style.css'});
-            siteGraph.populate(styleAsset, function () {return true;}, function () {
-                callback(null, siteGraph);
-            });
+            siteGraph.populate(styleAsset, function () {return true;}, this.callback);
         },
         'the graph contains the expected assets and relations': function (siteGraph) {
             assert.equal(siteGraph.assets.length, 5);
@@ -22,7 +19,6 @@ vows.describe('Cache manifest').addBatch({
         },
         'then spriting the background images': {
             topic: function (siteGraph) {
-                var callback = this.callback;
                 transforms.spriteBackgroundImages(siteGraph, this.callback);
             },
             'the number of PNG assets should be down to one': function (siteGraph) {
