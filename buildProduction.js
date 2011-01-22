@@ -25,12 +25,19 @@ step(
         fileUtils.mkpath(path.join(commandLineOptions.outRoot, commandLineOptions.staticUrl), this.parallel());
     },
     error.logAndExit(function () {
-        transforms.bundleRelations(siteGraph, siteGraph.relations.filter(function (relation) {
-            return relation.from === htmlAssets[0] && relation.type === 'HTMLScript';
-        }), this.parallel());
-        transforms.bundleRelations(siteGraph, siteGraph.relations.filter(function (relation) {
-            return relation.from === htmlAssets[0] && relation.type === 'HTMLStyle';
-        }), this.parallel());
+        var numJobs = 0;
+        ['HTMLScript', 'HTMLStyle'].forEach(function (relationType) {
+            var relationsOfType = siteGraph.relations.filter(function (relation) {
+                return relation.from === htmlAssets[0] && relation.type === relationType;
+            });
+            if (relationsOfType.length > 1) {
+                transforms.bundleRelations(siteGraph, relationsOfType, this.parallel());
+                numJobs += 1;
+            }
+        }, this);
+        if (numJobs === 0) {
+            process.nextTick(this);
+        }
     }),
     error.logAndExit(function () {
         transforms.spriteBackgroundImages(siteGraph, this);
