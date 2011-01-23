@@ -48,7 +48,7 @@ step(
                 numCallbacks += 1;
                 siteGraph.inlineRelation(relation, this.parallel());
             } else if (!relation.isInline && relation.to.url) {
-                relation.setUrl(fileUtils.buildRelativeUrl(relation.from.url, relation.to.url));
+                relation._setRawUrlString(fileUtils.buildRelativeUrl(relation.from.url, relation.to.url));
             }
         }, this);
         if (!numCallbacks) {

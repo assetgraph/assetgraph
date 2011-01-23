@@ -10,7 +10,7 @@ function CacheManifestEntry(config) {
 util.inherits(CacheManifestEntry, Base);
 
 _.extend(CacheManifestEntry.prototype, {
-    setUrl: function (url) {
+    _setRawUrlString: function (url) {
         this.node.url = url;
     }
 });

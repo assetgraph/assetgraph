@@ -24,7 +24,7 @@ _.extend(CSSBackgroundImage.prototype, {
         delete this.cssRule;
     },
 
-    setUrl: function (url) {
+    _setRawUrlString: function (url) {
         this.cssRule.style.setProperty(this.propertyName, this.cssRule.style[this.propertyName].replace(/\burl\((\'|\"|)([^\'\"]+)\1\)/, function () {
             // Quote if necessary:
             if (/^[a-z0-9\/\-_.]*$/i.test(url)) {
@@ -38,7 +38,7 @@ _.extend(CSSBackgroundImage.prototype, {
     _inline: function (cb) {
         var that = this;
         this.to.serialize(error.passToFunction(cb, function (src) {
-            that.setUrl("data:" + that.to.contentType + ";base64," + new Buffer(src, 'binary').toString('base64'));
+            that._setRawUrlString("data:" + that.to.contentType + ";base64," + new Buffer(src, 'binary').toString('base64'));
             that.isInline = true;
             delete that.url;
             cb();

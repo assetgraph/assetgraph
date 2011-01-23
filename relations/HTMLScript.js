@@ -11,7 +11,7 @@ function HTMLScript(config) {
 util.inherits(HTMLScript, Base);
 
 _.extend(HTMLScript.prototype, {
-    setUrl: function (url) {
+    _setRawUrlString: function (url) {
         this.node.setAttribute('src', url);
         // Clear any inline script
         while (this.node.firstChild) {

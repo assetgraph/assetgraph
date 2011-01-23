@@ -143,7 +143,7 @@ SiteGraph.prototype = {
     inlineRelation: function (relation, cb) {
         this.findRelations('from', relation.to).forEach(function (relrel) {
             if (!relrel.isInline) {
-                relrel.setUrl(fileUtils.buildRelativeUrl(relrel.from.url, relrel.to.url));
+                relrel._setRawUrlString(fileUtils.buildRelativeUrl(relrel.from.url, relrel.to.url));
             }
         }, this);
         relation._inline(cb);
@@ -154,7 +154,7 @@ SiteGraph.prototype = {
         asset.url = url;
         this.findRelations('to', asset).forEach(function (incomingRelation) {
             if (!incomingRelation.isInline) {
-                incomingRelation.setUrl(fileUtils.buildRelativeUrl(incomingRelation.from.url, url));
+                incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(incomingRelation.from.url, url));
             }
         }, this);
         return this;

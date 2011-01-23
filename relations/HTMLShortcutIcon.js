@@ -10,7 +10,7 @@ function HTMLShortcutIcon(config) {
 util.inherits(HTMLShortcutIcon, Base);
 
 _.extend(HTMLShortcutIcon.prototype, {
-    setUrl: function (url) {
+    _setRawUrlString: function (url) {
         this.node.setAttribute('href', url);
     },
 

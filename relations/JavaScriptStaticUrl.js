@@ -10,14 +10,14 @@ function JavaScriptStaticUrl(config) {
 util.inherits(JavaScriptStaticUrl, Base);
 
 _.extend(JavaScriptStaticUrl.prototype, {
+    _setRawUrlString: function (url) {
+        this.node[1][2] = url;
+    },
+
     remove: function () {
         this.stack.splice(relation.stack.indexOf(this.node), 1);
         delete this.node;
         delete this.stack;
-    },
-
-    setUrl: function (url) {
-        this.node[1][2] = url;
     }
 });
 

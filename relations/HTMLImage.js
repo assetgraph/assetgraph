@@ -10,7 +10,7 @@ function HTMLImage(config) {
 util.inherits(HTMLImage, Base);
 
 _.extend(HTMLImage.prototype, {
-    setUrl: function (url) {
+    _setRawUrlString: function (url) {
         this.node.setAttribute('src', url);
     },
 

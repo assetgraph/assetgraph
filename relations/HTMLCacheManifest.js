@@ -11,12 +11,12 @@ function HTMLCacheManifest(config) {
 util.inherits(HTMLCacheManifest, Base);
 
 _.extend(HTMLCacheManifest.prototype, {
-    remove: function () {
-        this.node.removeAttribute('manifest');
+    _setRawUrlString: function (url) {
+            this.node.setAttribute('manifest', url);
     },
 
-    setUrl: function (url) {
-            this.node.setAttribute('manifest', url);
+    remove: function () {
+        this.node.removeAttribute('manifest');
     },
 
     createNode: function (document) {

@@ -11,7 +11,7 @@ function HTMLStyle(config) {
 util.inherits(HTMLStyle, Base);
 
 _.extend(HTMLStyle.prototype, {
-    setUrl: function (url) {
+    _setRawUrlString: function (url) {
         if (this.node.nodeName === 'link') {
             this.node.href = url;
         } else {

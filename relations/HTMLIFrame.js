@@ -10,7 +10,7 @@ function HTMLIFrame(config) {
 util.inherits(HTMLIFrame, Base);
 
 _.extend(HTMLIFrame.prototype, {
-    setUrl: function (url) {
+    _setRawUrlString: function (url) {
         this.node.setAttribute('src', url);
     },
 

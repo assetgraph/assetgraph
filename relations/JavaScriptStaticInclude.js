@@ -10,7 +10,7 @@ function JavaScriptStaticInclude(config) {
 util.inherits(JavaScriptStaticInclude, Base);
 
 _.extend(JavaScriptStaticInclude.prototype, {
-    setUrl: function (url) {
+    _setRawUrlString: function (url) {
         this.node[1][2][0][1] = url;
     },
 
