@@ -43,6 +43,9 @@ step(
         transforms.spriteBackgroundImages(siteGraph, this);
     }),
     error.logAndExit(function () {
+        transforms.addPNG8FallbackForIE6(siteGraph, this);
+    }),
+    error.logAndExit(function () {
         transforms.checkRelationConsistency(siteGraph, this);
     }),
     error.logAndExit(function () {

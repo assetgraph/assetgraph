@@ -6,6 +6,7 @@
  'findAssetSerializationOrder',
  'checkRelationConsistency',
  'bundleRelations',
- 'spriteBackgroundImages'].forEach(function (transformName) {
+ 'spriteBackgroundImages',
+ 'addPNG8FallbackForIE6'].forEach(function (transformName) {
     exports[transformName] = require('./' + transformName)[transformName];
 });

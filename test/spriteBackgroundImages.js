@@ -3,7 +3,7 @@ var vows = require('vows'),
     SiteGraph = require('../SiteGraph'),
     transforms = require('../transforms');
 
-vows.describe('Cache manifest').addBatch({
+vows.describe('Sprite background images').addBatch({
     'After loading a test case with images and spriting instructions': {
         topic: function () {
             var siteGraph = new SiteGraph({root: __dirname + '/spriteBackgroundImages'}),
