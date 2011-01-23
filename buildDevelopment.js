@@ -10,18 +10,23 @@ var util = require('util'),
     SiteGraph = require('./SiteGraph'),
     error = require('./error'),
     commandLineOptions = require('./camelOptimist')({usage: 'FIXME', demand: ['root']}),
-    siteGraph = new SiteGraph({root: commandLineOptions.root}),
+    siteGraph = new SiteGraph({root: commandLineOptions.root + '/'}),
     templates = [];
 
 step(
     function () {
-        transforms.addFsLabelResolvers(siteGraph, commandLineOptions.label || [], this);
+        transforms.registerLabelsAsCustomProtocols(siteGraph, commandLineOptions.label || [], this);
     },
     error.logAndExit(function () {
         var group = this.group();
         commandLineOptions._.forEach(function (templateUrl) {
-            var template = siteGraph.loadAsset({type: 'HTML', url: templateUrl});
-            templates.push(template);
+            siteGraph.loadAsset(templateUrl, group());
+        });
+    }),
+    error.logAndExit(function (loadedTemplates) {
+        templates = loadedTemplates;
+        var group = this.group();
+        templates.forEach(function (template) {
             siteGraph.populate(template, function (relation) {
                 return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment',
                         'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
@@ -43,7 +48,7 @@ step(
                 numCallbacks += 1;
                 siteGraph.inlineRelation(relation, this.parallel());
             } else if (!relation.isInline && relation.to.url) {
-                relation.setUrl(relation.to.url);
+                relation.setUrl(fileUtils.buildRelativeUrl(relation.from.url, relation.to.url));
             }
         }, this);
         if (!numCallbacks) {
@@ -54,7 +59,7 @@ step(
         templates.forEach(function (template) {
             var callback = this.parallel();
             template.serialize(error.throwException(function (src) {
-                fs.writeFile(path.join(siteGraph.fsLoader.root, template.url.replace(/\.template$/, '')), src, 'utf8', callback);
+                fs.writeFile(fileUtils.fileUrlToFsPath(template.url).replace(/\.template$/, ''), src, 'utf8', callback);
             }));
         }, this);
     })

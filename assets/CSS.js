@@ -41,23 +41,11 @@ _.extend(CSS.prototype, {
                     if (propertyValue) {
                         var urlMatch = propertyValue.match(/\burl\((\'|\"|)([^\'\"]+)\1\)/);
                         if (urlMatch) {
-                            var dataUrlMatch = urlMatch[2].match(/^data:(image\/png|gif|jpeg)(;base64)?,(.*)$/),
-                                assetConfig = {};
-                            if (dataUrlMatch) {
-                                assetConfig.contentType = dataUrlMatch[1];
-                                if (dataUrlMatch[2]) {
-                                    assetConfig.originalSrc = new Buffer(dataUrlMatch[3], 'base64').toString();
-                                } else {
-                                    assetConfig.originalSrc = dataUrlMatch[3];
-                                }
-                            } else {
-                                assetConfig.url = urlMatch[2];
-                            }
                             originalRelations.push(new relations.CSSBackgroundImage({
                                 from: that,
                                 cssRule: cssRule,
                                 propertyName: propertyName,
-                                assetConfig: assetConfig
+                                assetConfig: urlMatch[2]
                             }));
                         }
                     }
@@ -68,9 +56,7 @@ _.extend(CSS.prototype, {
                         originalRelations.push(new relations.CSSBehavior({
                             from: that,
                             cssRule: cssRule,
-                            assetConfig: {
-                                url: urlMatch[2]
-                            }
+                            assetConfig: urlMatch[2]
                         }));
                     }
                 }
@@ -81,9 +67,7 @@ _.extend(CSS.prototype, {
                         originalRelations.push(new relations.CSSAlphaImageLoader({
                             from: that,
                             cssRule: cssRule,
-                            assetConfig: {
-                                url: alphaImageLoaderMatch[2]
-                            }
+                            assetConfig: alphaImageLoaderMatch[2]
                         }));
                     }
                 }

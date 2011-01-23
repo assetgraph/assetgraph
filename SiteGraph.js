@@ -2,12 +2,12 @@
 var util = require('util'),
     sys = require('sys'),
     fs = require('fs'),
+    URL = require('url'),
     request = require('request'),
     path = require('path'),
     step = require('step'),
     _ = require('underscore'),
     fileUtils = require('./fileUtils'),
-    FsLoader = require('./FsLoader'),
     assets = require('./assets'),
     relations = require('./relations'),
     error = require('./error'),
@@ -18,10 +18,21 @@ var util = require('util'),
 
 var SiteGraph = module.exports = function (config) {
     _.extend(this, config || {});
-    this.fsLoader = new FsLoader({root: this.root}); // Does it belong in FsLoader exclusively?
+this.loadedAssetUrls = {}; // FIXMEFIXME
+
+    if (typeof this.root === 'string') {
+        if (this.root[0] === '/') {
+            this.root = URL.parse("file://" + this.url);
+        } else {
+            this.root = URL.parse("file://" + path.join(process.cwd(), this.root));
+        }
+    }
     this.assets = [];
     this.relations = [];
     this.indices = {};
+    if (!this.customProtocols) {
+        this.customProtocols = {};
+    }
     _.each(allIndices, function (indexNames, indexType) {
         this.indices[indexType] = {};
         indexNames.forEach(function (indexName) {
@@ -130,10 +141,9 @@ SiteGraph.prototype = {
     },
 
     inlineRelation: function (relation, cb) {
-        relation.to.baseUrl = relation.from.baseUrl;
         this.findRelations('from', relation.to).forEach(function (relrel) {
             if (!relrel.isInline) {
-                relrel.setUrl(fileUtils.buildRelativeUrl(fileUtils.dirnameNoDot(relrel.from.baseUrl), relrel.to.url));
+                relrel.setUrl(fileUtils.buildRelativeUrl(relrel.from.url, relrel.to.url));
             }
         }, this);
         relation._inline(cb);
@@ -142,10 +152,9 @@ SiteGraph.prototype = {
 
     setAssetUrl: function (asset, url) {
         asset.url = url;
-        asset.baseUrl = fileUtils.dirnameNoDot(url);
         this.findRelations('to', asset).forEach(function (incomingRelation) {
             if (!incomingRelation.isInline) {
-                incomingRelation.setUrl(fileUtils.buildRelativeUrl(incomingRelation.from.baseUrl, url));
+                incomingRelation.setUrl(fileUtils.buildRelativeUrl(incomingRelation.from.url, url));
             }
         }, this);
         return this;
@@ -223,34 +232,60 @@ SiteGraph.prototype = {
         return subgraph;
     },
 
-    loadAsset: function (assetConfig) {
-        if ('url' in assetConfig) {
-            var lookupUrl = this.lookupIndex('asset', 'url', assetConfig.url);
-            if (lookupUrl.length) {
-                return lookupUrl[0];
-            }
+    // "root/relative/path.html"
+    // "file:///home/foo/thething.jpg"
+    // "http://example.com/hereiam.css"
+    // {originalSrc: "thesource", type: "CSS"}
+    loadAsset: function (assetConfig, fromUrl, cb) {
+        if (typeof fromUrl === 'function') {
+            cb = fromUrl;
+            fromUrl = this.root;
         }
-        if (!('baseUrl' in assetConfig)) {
-            if ('url' in assetConfig || 'originalUrl' in assetConfig) {
-                assetConfig.baseUrl = fileUtils.dirnameNoDot(assetConfig.url || assetConfig.originalUrl);
-            } else {
-                throw new Error("Couldn't work out baseUrl for asset: " + sys.inspect(assetConfig));
+        var that = this;
+        this.resolveAssetConfig(assetConfig, fromUrl, error.passToFunction(cb, function (resolvedAssetConfig) {
+            cb(null, that.loadResolvedAssetConfig(resolvedAssetConfig));
+        }));
+    },
+
+    loadResolvedAssetConfig: function (assetConfig) {
+        if (assetConfig.url) {
+if (this.loadedAssetUrls[assetConfig.url.href]) {
+return this.loadedAssetUrls[assetConfig.url.href];
+}
+            if (assetConfig.url.protocol === 'data:') {
+                var dataUrlMatch = assetConfig.url.href.match(/^data:([\w\/\-]+)(;base64)?,(.*)$/);
+                if (dataUrlMatch) {
+                    var contentType = dataUrlMatch[1],
+                        data = dataUrlMatch[3];
+                    if (dataUrlMatch[2]) {
+                        data = new Buffer(data, 'base64').toString();
+                    }
+                    assetConfig.originalSrc = data;
+                    if (!assetConfig.type) {
+                        if (contentType in assets.typeByContentType) {
+                            assetConfig.type = assets.typeByContentType[contentType];
+                        } else {
+                            return cb(new Error("Unknown Content-Type " + contentType + " in data url: " + assetConfig.url.href));
+                        }
+                    }
+                } else {
+                    return cb(new Error("Cannot parse data url: " + assetConfig.url.href));
+                }
             }
-        }
-        if (!('type' in assetConfig)) {
-            var extension = ('url' in assetConfig) && path.extname(assetConfig.url).replace(/^\./, "");
-            if (extension && extension in assets.typeByExtension) {
-                assetConfig.type = assets.typeByExtension[extension];
-            } else {
-                // FIXME: Extract mime type from data: urls
-                throw new Error("No type in assetConfig and couldn't work it out from the url: " + sys.inspect(assetConfig));
-            }
-        }
-        var Constructor = assets[assetConfig.type];
-        if (!('originalSrc' in assetConfig)) {
-            // FIXME: http:, data:
-            if (false) {
+            if (assetConfig.url.protocol === 'file:') {
                 assetConfig.originalSrcProxy = function (cb) {
+                    var fsPath = fileUtils.fileUrlToFsPath(assetConfig.url);
+                    // Will be invoked in the asset's scope, so this.encoding works out.
+                    if (typeof cb === 'function') {
+                        fs.readFile(fsPath, this.encoding, cb);
+                    } else {
+                        return fs.createReadStream(fsPath, {encoding: this.encoding});
+                    }
+                };
+            } else if (assetConfig.url.protocol === 'http:' || assetConfig.url.protocol === 'https:') {
+                // FIXME: Duplicated from the 'file:' case above
+                assetConfig.originalSrcProxy = function (cb) {
+                    // FIXME: Find a way to return a stream if cb is undefined
                     request({
                         uri: that.root + assetConfig.url
                     }, function (err, response, body) {
@@ -260,20 +295,86 @@ SiteGraph.prototype = {
                         cb(err, body);
                     });
                 };
-            } else {
-                assetConfig.originalSrcProxy = this.fsLoader.getOriginalSrcProxy(assetConfig, Constructor.prototype.encoding);
             }
         }
-        var asset = new Constructor(assetConfig);
+        if (!assetConfig.type) {
+            var extension = path.extname(assetConfig.url.pathname);
+            if (extension in assets.typeByExtension) {
+                assetConfig.type = assets.typeByExtension[extension];
+            } else {
+                throw cb(new Error("Cannot work out asset type from pathname: " + assetConfig.url.pathname));
+            }
+        }
+        var asset = new assets[assetConfig.type](assetConfig);
+
+if (assetConfig.url) {
+this.loadedAssetUrls[assetConfig.url.href] = asset;
+}
         this.registerAsset(asset);
         return asset;
+    },
+
+    resolveAssetConfig: function (assetConfig, fromUrl, cb) {
+        var that = this;
+        if (typeof assetConfig === 'string') {
+            assetConfig = {
+                url: URL.parse(URL.resolve(fromUrl, assetConfig))
+            };
+        }
+        if ((assetConfig.url && /^(https?|data|file):$/.test(assetConfig.url.protocol)) || 'originalSrc' in assetConfig) {
+            // Already resolved
+            return process.nextTick(function () {
+                cb(null, assetConfig);
+            });
+        } else if (assetConfig.url.protocol in this.customProtocols) {
+            // Set pathname to the entire href sans "protocol:"
+            assetConfig.url.pathname = assetConfig.url.href.substr(assetConfig.url.protocol.length);
+            this.customProtocols[assetConfig.url.protocol].resolve(assetConfig.url, error.passToFunction(cb, function (resolvedAssetConfigs) {
+                if (!_.isArray(resolvedAssetConfigs)) {
+                    resolvedAssetConfigs = [resolvedAssetConfigs];
+                }
+                if (resolvedAssetConfigs.length === 0) {
+                    return cb(null, []); // I have yet to see a use case for this, but...
+                }
+                step(
+                    function () {
+                        resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
+                            that.resolveAssetConfig(resolvedAssetConfig, fromUrl, this.parallel());
+                        }, this);
+                    },
+                    error.passToFunction(cb, function () { // ...
+                        var flattened = [];
+                        _.toArray(arguments).forEach(function (reresolvedAssetConfig) {
+                            if (_.isArray(reresolvedAssetConfig)) {
+                                Array.prototype.push.apply(flattened, reresolvedAssetConfig);
+                            } else {
+                                flattened.push(reresolvedAssetConfig);
+                            }
+                        });
+                        if (flattened.length === 1) {
+                            return cb(null, flattened[0]);
+                        } else {
+                            return cb(null, flattened);
+                        }
+                    })
+                );
+            }));
+        } else if (assetConfig.url.protocol && fromUrl.protocol === 'file:') {
+            fileUtils.findParentDirCached(fromUrl, assetConfig.url.protocol.replace(/:$/, ""), error.passToFunction(cb, function (parentPath) {
+            var labelRelativePath = assetConfig.url.href.substr(assetConfig.url.protocol.length);
+                assetConfig.url = fileUtils.fsPathToFileUrl(parentPath + '/' + labelRelativePath);
+                cb(null, assetConfig);
+            }));
+        } else {
+            cb(new Error("Cannot resolve assetConfig"));
+        }
     },
 
     // Turn into a transform?
     populate: function (originAsset, includeRelationLambda, cb) {
         var that = this,
             populatedAssets = {};
-        (function traverse(asset, cb) {
+        (function traverse(asset, fromUrl, cb) {
             if (asset.id in populatedAssets) {
                 return cb();
             }
@@ -288,8 +389,7 @@ SiteGraph.prototype = {
                     if (filteredOriginalRelations.length) {
                         var group = this.group();
                         filteredOriginalRelations.forEach(function (relation) {
-                            // FIXME: Don't hardcode fs here
-                            that.fsLoader.resolveAssetConfig(relation.assetConfig, relation.from.baseUrl, group());
+                            that.resolveAssetConfig(relation.assetConfig, asset.url || fromUrl, group());
                         }, this);
                     } else {
                         return cb();
@@ -301,7 +401,7 @@ SiteGraph.prototype = {
                         if (relation.isInline) {
                             relation.assetConfig.baseUrl = asset.baseUrl;
                         }
-                        relation.to = that.loadAsset(relation.assetConfig);
+                        relation.to = that.loadResolvedAssetConfig(relation.assetConfig);
                         if (initializedRelations.length) {
                             that.registerRelation(relation, 'after', initializedRelations[initializedRelations.length - 1]);
                         } else {
@@ -310,6 +410,10 @@ SiteGraph.prototype = {
                         initializedRelations.push(relation);
                     }
                     resolvedAssetConfigArrays.forEach(function (resolvedAssetConfigs, i) {
+                        if (!_.isArray(resolvedAssetConfigs)) {
+                            // Simple siteGraph.resolveAssetConfig case
+                            resolvedAssetConfigs = [resolvedAssetConfigs];
+                        }
                         var originalRelation = filteredOriginalRelations[i];
                         if (resolvedAssetConfigs.length === 0) {
                             asset.detachRelation(originalRelation);
@@ -332,7 +436,7 @@ SiteGraph.prototype = {
                     }, this);
                     if (initializedRelations.length) {
                         initializedRelations.forEach(function (relation) {
-                            traverse(relation.to, this.parallel());
+                            traverse(relation.to, relation.from.url || fromUrl, this.parallel());
                         }, this);
                     } else {
                         process.nextTick(this);
@@ -340,7 +444,7 @@ SiteGraph.prototype = {
                 }),
                 cb
             );
-        })(originAsset, function (err) {
+        })(originAsset, originAsset.url, function (err) {
             cb(err, that);
         });
     }

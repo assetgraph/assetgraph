@@ -36,9 +36,7 @@ _.extend(HTML.prototype, {
                 originalRelations.push(new relations.HTMLCacheManifest({
                     from: that,
                     node: parseTree.documentElement,
-                    assetConfig: {
-                        url: parseTree.documentElement.getAttribute('manifest')
-                    }
+                    assetConfig: parseTree.documentElement.getAttribute('manifest')
                 }));
             }
             _.toArray(parseTree.getElementsByTagName('*')).forEach(function (node) {
@@ -48,9 +46,7 @@ _.extend(HTML.prototype, {
                         originalRelations.push(new relations.HTMLScript({
                             from: that,
                             node: node,
-                            assetConfig: {
-                                url: node.src
-                            }
+                            assetConfig: node.src
                         }));
                     } else {
                         originalRelations.push(new relations.HTMLScript({
@@ -80,17 +76,13 @@ _.extend(HTML.prototype, {
                             originalRelations.push(new relations.HTMLStyle({
                                 from: that,
                                 node: node,
-                                assetConfig: {
-                                    url: node.href
-                                }
+                                assetConfig: node.href
                             }));
                         } else if (/^(?:shortcut |apple-touch-)?icon$/.test(rel)) {
                             originalRelations.push(new relations.HTMLShortcutIcon({
                                 from: that,
                                 node: node,
-                                assetConfig: {
-                                    url: node.href
-                                }
+                                assetConfig: node.href
                             }));
                         }
                     }
@@ -107,9 +99,7 @@ _.extend(HTML.prototype, {
                     originalRelations.push(new relations.HTMLIFrame({
                         from: that,
                         node: node,
-                        assetConfig: {
-                            url: node.src
-                        }
+                        assetConfig: node.src
                     }));
                 }
             }, this);

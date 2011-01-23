@@ -1,13 +1,13 @@
-var path = require('path'),
-    fs = require('fs'),
+var fs = require('fs'),
+    URL = require('url'),
+    fileUtils = require('../fileUtils'),
     step = require('step'),
     _ = require('underscore'),
     error = require('../error');
 
 var SenchaJSBuilder = module.exports = function (config) {
-    // Expects: config.url, config.body, config.root
+    // Expects: config.url, config.body
     _.extend(this, config);
-
     if (this.version !== 2 && this.version !== 3) {
         throw new Error("SenchaJSBuilder: Unsupported version: " + this.version);
     }
@@ -65,7 +65,7 @@ SenchaJSBuilder.prototype = {
             },
             function () {
                 var urls = (pkg.files || []).map(function (fileDef) {
-                    return path.join(that.url, fileDef.path, fileDef.name);
+                    return URL.parse(URL.resolve(that.url, fileDef.path + fileDef.name));
                 });
                 if (!urls.length) {
                     return cb(null, assetConfigs);
@@ -75,16 +75,16 @@ SenchaJSBuilder.prototype = {
                         function () {
                             var innerGroup = this.group();
                             urls.forEach(function (url) {
-                                fs.readFile(path.join(that.root, url), 'utf8', innerGroup());
+                                fs.readFile(fileUtils.fileUrlToFsPath(url), 'utf8', innerGroup());
                             });
                         },
-                        error.passToFunction(cb, function (fileBodies) {
+                        error.passToFunction(cb, function (fileBodies, i) {
                             assetConfigs.push({
                                 type: 'JavaScript',
                                 dirty: true,
                                 originalSrc: fileBodies.join("\n"),
                                 originalRelations: [],
-                                url: path.join(that.url, pkg.target)
+                                url: urls[i]
                             });
                             cb(null, assetConfigs);
                         })
@@ -92,7 +92,7 @@ SenchaJSBuilder.prototype = {
                 } else {
                     var cssUrls = [];
                     urls.forEach(function (url) {
-                        if (/\.css$/.test(url)) {
+                        if (/\.css$/.test(url.pathname)) {
                             cssUrls.push(url);
                         } else {
                             assetConfigs.push({
@@ -110,7 +110,7 @@ SenchaJSBuilder.prototype = {
                             function () {
                                 var innerGroup = this.group();
                                 cssUrls.forEach(function (cssUrl) {
-                                    fs.readFile(path.join(that.root, cssUrl), 'utf8', innerGroup());
+                                    fs.readFile(fileUtils.fileUrlToFsPath(cssUrl), 'utf8', innerGroup());
                                 });
                             },
                             error.passToFunction(cb, function (cssFileBodies) {
@@ -142,13 +142,15 @@ SenchaJSBuilder.prototype = {
         );
     },
 
-    resolve: function (assetConfig, label, baseUrl, cb) {
-        if (assetConfig.url in this.pkgIndex) {
-            this.resolvePkg(this.pkgIndex[assetConfig.url], cb);
+    resolve: function (url, cb) {
+        if (url.pathname in this.pkgIndex) {
+            this.resolvePkg(this.pkgIndex[url.pathname], cb);
         } else {
-            assetConfig.url = path.join(this.url, assetConfig.url);
+            var assetConfig = {
+                url: URL.parse(URL.resolve(this.url, url.pathname))
+            };
             process.nextTick(function () {
-                cb(null, [assetConfig]);
+                cb(null, assetConfig);
             });
         }
     }

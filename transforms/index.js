@@ -1,4 +1,4 @@
-['addFsLabelResolvers',
+['registerLabelsAsCustomProtocols',
  'executeJavaScriptIfEnvironment',
  'flattenStaticIncludes',
  'dumpGraph',

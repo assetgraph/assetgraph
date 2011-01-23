@@ -81,9 +81,7 @@ _.extend(JavaScript.prototype, {
                                 from: that,
                                 node: node,
                                 parentNode: stack[stack.length - 1],
-                                assetConfig: {
-                                    url: node[1][2][0][1]
-                                }
+                                assetConfig: node[1][2][0][1]
                             }));
                         } else {
                             finished(new Error("Invalid one.include syntax"));
@@ -98,9 +96,7 @@ _.extend(JavaScript.prototype, {
                                 from: that,
                                 parentNode: stack[stack.length - 1],
                                 node: node,
-                                assetConfig: {
-                                    url: node[2][1]
-                                }
+                                assetConfig: node[2][1]
                             }));
                         } else {
                             finished(new Error("Invalid one.getStaticUrl syntax"));

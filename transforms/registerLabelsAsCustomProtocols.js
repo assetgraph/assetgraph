@@ -1,18 +1,19 @@
 var fs = require('fs'),
     path = require('path'),
+    URL = require('url'),
     step = require('step'),
     error = require('../error'),
     resolvers = require('../resolvers'),
     fileUtils = require('../fileUtils');
 
-exports.addFsLabelResolvers = function addFsLabelResolvers(siteGraph, labelDefinitions, cb) {
+exports.registerLabelsAsCustomProtocols = function registerLabelsAsCustomProtocols(siteGraph, labelDefinitions, cb) {
     step(
         function () {
             var group = this.group();
             labelDefinitions.forEach(function (labelDefinition) {
                 var keyValue = labelDefinition.split('=');
                 if (keyValue.length !== 2) {
-                    throw "Invalid label syntax: " + labelDefinition;
+                    return group()(new Error("Invalid label syntax: " + labelDefinition));
                 }
                 var labelName = keyValue[0],
                     labelValue = keyValue[1],
@@ -21,20 +22,22 @@ exports.addFsLabelResolvers = function addFsLabelResolvers(siteGraph, labelDefin
                 if (matchSenchaJSBuilder) {
                     var url = fileUtils.dirnameNoDot(labelValue) || '',
                         version = parseInt(matchSenchaJSBuilder[1], 10);
-                    fs.readFile(path.join(siteGraph.fsLoader.root, labelValue), 'utf8', error.passToFunction(cb, function (fileBody) {
-                        siteGraph.fsLoader.addLabelResolver(labelName, resolvers.SenchaJSBuilder, {
-                            url: url,
+                    fs.readFile(fileUtils.fileUrlToFsPath(siteGraph.root) + '/' + labelValue, 'utf8', error.passToFunction(cb, function (fileBody) {
+                        siteGraph.customProtocols[labelName + ':'] = new resolvers.SenchaJSBuilder({
+                            url: URL.parse(siteGraph.root.href + labelValue),
                             version: version,
                             body: JSON.parse(fileBody)
                         });
                         callback();
                     }));
                 } else {
-                    path.exists(path.join(siteGraph.fsLoader.root, labelValue), function (exists) {
+                    path.exists(fileUtils.fileUrlToFsPath(siteGraph.root) + '/' + labelValue, function (exists) {
                         if (!exists) {
                             callback(new Error("Label " + labelName + ": Dir not found: " + labelValue));
                         } else {
-                            siteGraph.fsLoader.addLabelResolver(labelName, resolvers.Directory, {url: labelValue});
+                            siteGraph.customProtocols[labelName + ':'] = new resolvers.Directory({
+                                url: URL.parse(siteGraph.root.href + labelValue)
+                            });
                             callback();
                         }
                     });

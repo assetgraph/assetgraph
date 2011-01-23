@@ -1,16 +1,18 @@
-var path = require('path'),
+var URL = require('url'),
     _ = require('underscore');
 
 var Directory = module.exports = function (config) {
-    // Expects: config.url, config.root
+    // Expects: config.url
     _.extend(this, config);
 };
 
 Directory.prototype = {
-    resolve: function (assetConfig, label, baseUrl, cb) {
-        assetConfig.url = path.join(this.url, assetConfig.url);
+    resolve: function (url, cb) {
+        var assetConfig = {
+            url: URL.parse(this.url.href + '/' + url.pathname)
+        };
         process.nextTick(function () {
-            cb(null, [assetConfig]);
+            cb(null, assetConfig);
         });
     }
 };

@@ -1,42 +1,42 @@
 /*global require, exports*/
 var fs = require('fs'),
+    URL = require('url'),
     path = require('path'),
     error = require('./error'),
     step = require('step'),
     _ = require('underscore'),
     fileUtils = {};
 
-fileUtils.splitUrl = function(url) {
-    if (url === '.' || url === '') {
-        return [];
+fileUtils.buildRelativeUrl = function buildRelativeUrl(fromUrl, toUrl) {
+    if (fromUrl.protocol !== toUrl.protocol || fromUrl.hostname !== toUrl.hostname) {
+        return toUrl.href; // No dice
     } else {
-        return url.split("/");
+        var fromFragments = fromUrl.pathname.replace(/^\/+/, "").split(/\//),
+            toFragments = toUrl.pathname.replace(/^\/+/, "").split(/\//);
+
+        if (!/\/$/.test(fromUrl.pathname)) {
+            fromFragments.pop();
+        }
+
+        var i = 0;
+        while (i < fromFragments.length && i < toFragments.length && fromFragments[i] === toFragments[i]) {
+            i += 1;
+        }
+        var relativeUrl = toFragments.slice(i).join("/");
+        while (i < fromFragments.length) {
+            relativeUrl = '../' + relativeUrl;
+            i += 1;
+        }
+        return relativeUrl;
     }
 };
 
-fileUtils.buildRelativeUrl = function(fromUrl, toUrl) {
-    var fromFragments = fileUtils.splitUrl(fromUrl),
-        toFragments = fileUtils.splitUrl(toUrl),
-        relativeUrlFragments = [];
-    // The last part of the criterion looks broken, shouldn't it be fromFragments[0] === toFragments[0] ?
-    // -- but it's a direct port of what the perl code has done all along.
-    while (fromFragments.length && toFragments.length && fromFragments[fromFragments.length-1] === toFragments[0]) {
-        fromFragments.pop();
-        toFragments.shift();
-    }
-    for (var i=0 ; i<fromFragments.length ; i++) {
-        relativeUrlFragments.push('..');
-    }
-    [].push.apply(relativeUrlFragments, toFragments);
-    return relativeUrlFragments.join("/");
-};
-
-fileUtils.dirnameNoDot = function (url) {
+fileUtils.dirnameNoDot = function dirnameNoDot(url) {
     var dirname = path.dirname(url);
     return (dirname === '.' ? "" : dirname);
 };
 
-fileUtils.mkpath = function (dir, permissions, cb) {
+fileUtils.mkpath = function mkpath(dir, permissions, cb) {
     if (typeof permissions === 'function') {
         cb = permissions;
         permissions = parseInt('0777', 8); // Stupid JSLint
@@ -59,16 +59,21 @@ fileUtils.mkpath = function (dir, permissions, cb) {
     });
 };
 
-fileUtils.fileUrlToPathName = function (fileUrl) {
+fileUtils.fileUrlToFsPath = function fileUrlToFsPath(fileUrl) {
     // FIXME: Will be /C:/... on Windows
     return fileUrl.pathname.substr(2);
+};
+
+fileUtils.fsPathToFileUrl = function fsPathToFileUrl(fsPath) {
+    // FIXME: Turn into /C:/... on Windows
+    return URL.parse("file://" + fsPath);
 };
 
 // FIXME: Make flushable
 var dirExistsCache = {},
     dirExistsWaitingQueue = {};
 
-fileUtils.dirExistsCached = function (fsPath, cb) {
+fileUtils.dirExistsCached = function dirExistsCached(fsPath, cb) {
     if (fsPath in dirExistsCache) {
         process.nextTick(function () {
             cb(null, dirExistsCache[fsPath]);
@@ -87,9 +92,9 @@ fileUtils.dirExistsCached = function (fsPath, cb) {
     }
 };
 
-fileUtils.findParentDirCached = function (fromPath, parentDirName, cb) {
+fileUtils.findParentDirCached = function findParentDirCached(fromPath, parentDirName, cb) {
     if (typeof fromPath === 'object') {
-        fromPath = fileUtils.fileUrlToPathName(fromPath);
+        fromPath = fileUtils.fileUrlToFsPath(fromPath);
     }
     var candidatePaths = [],
         fromPathFragments = fromPath.split("/");

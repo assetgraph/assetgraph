@@ -61,9 +61,7 @@ _.extend(CacheManifest.prototype, {
                     originalRelations.push(new relations.CacheManifestEntry({
                         from: that,
                         node: node,
-                        assetConfig: {
-                            url: node.url
-                        }
+                        assetConfig: node.url
                     }));
                 });
             }
