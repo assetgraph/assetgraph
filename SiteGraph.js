@@ -207,9 +207,15 @@ SiteGraph.prototype = {
             if (!subgraph.existsInIndex('asset', 'id', asset)) {
                 subgraph.registerAsset(asset);
                 that.lookupIndex('relation', 'from', asset).forEach(function (relation) {
-                    traverse(relation.to);
-                    if (!subgraph.existsInIndex('relation', 'id', relation)) {
-                        subgraph.registerRelation(relation);
+                    if (relationLambda(relation)) {
+                        if (relation.to) {
+                            traverse(relation.to);
+                        } else {
+                            console.log("siteGraph.lookupSubgraph: No 'to' attribute found on " + relation + " -- not populated yet?");
+                        }
+                        if (!subgraph.existsInIndex('relation', 'id', relation)) {
+                            subgraph.registerRelation(relation);
+                        }
                     }
                 });
             }

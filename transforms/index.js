@@ -1,4 +1,5 @@
 ['addFsLabelResolvers',
+ 'executeJavaScriptIfEnvironment',
  'flattenStaticIncludes',
  'dumpGraph',
  'addCDNPrefix',

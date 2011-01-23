@@ -107,6 +107,21 @@ _.extend(JavaScript.prototype, {
                         }
                     }
 */
+                } else if (node[0] === 'if' && node[1][0] === 'dot' &&
+                           node[1][1][0] === 'name' && node[1][1][1] === 'one' &&
+                           node[1][2] === 'buildDevelopment') {
+                    originalRelations.push(new relations.JavaScriptIfEnvironment({
+                        from: that,
+                        parentNode: stack[stack.length - 1],
+                        node: node,
+                        environment: node[1][2],
+                        isInline: true,
+                        assetConfig: {
+                            type: 'JavaScript',
+                            originalSrc: true, // FIXME
+                            parseTree: node[2]
+                        }
+                    }));
                 }
 
                 for (var i=0 ; i<node.length ; i++) {

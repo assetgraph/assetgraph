@@ -23,7 +23,8 @@ step(
             var template = siteGraph.loadAsset({type: 'HTML', url: templateUrl});
             templates.push(template);
             siteGraph.populate(template, function (relation) {
-                return ['HTMLScript', 'JavaScriptStaticInclude', 'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
+                return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment',
+                        'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
             }, group());
         });
     }),
@@ -31,6 +32,9 @@ step(
         templates.forEach(function (template) {
             transforms.flattenStaticIncludes(siteGraph, template, this.parallel());
         }, this);
+    }),
+    error.logAndExit(function () {
+        transforms.executeJavaScriptIfEnvironment(siteGraph, templates[0], 'buildDevelopment', this);
     }),
     error.logAndExit(function inlineDirtyAssets() {
         var numCallbacks = 0;
