@@ -46,7 +46,7 @@ _.extend(CacheManifest.prototype, {
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             var src = "CACHE MANIFEST\n";
             _.each(parseTree, function (nodes, sectionName) {
-                src += sectionName + ":\n" + _.pluck(nodes, 'url').join("\n") + "\n";
+                src += sectionName + ":\n" + _.pluck(nodes, 'url').join("\n");
             });
             cb(null, src);
         }));

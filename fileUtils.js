@@ -1,4 +1,3 @@
-/*global require, exports*/
 var fs = require('fs'),
     URL = require('url'),
     path = require('path'),
@@ -31,11 +30,6 @@ fileUtils.buildRelativeUrl = function buildRelativeUrl(fromUrl, toUrl) {
     }
 };
 
-fileUtils.dirnameNoDot = function dirnameNoDot(url) {
-    var dirname = path.dirname(url);
-    return (dirname === '.' ? "" : dirname);
-};
-
 fileUtils.mkpath = function mkpath(dir, permissions, cb) {
     if (typeof permissions === 'function') {
         cb = permissions;
@@ -60,13 +54,26 @@ fileUtils.mkpath = function mkpath(dir, permissions, cb) {
 };
 
 fileUtils.fileUrlToFsPath = function fileUrlToFsPath(fileUrl) {
-    // FIXME: Will be /C:/... on Windows
-    return fileUrl.pathname.substr(2);
+    // FIXME: Will be /C:/... on Windows, is that OK?
+    if (typeof fileUrl === 'string') {
+        return fileUrl.substr("file://".length);
+    } else {
+        return fileUrl.pathname.substr(2); // Just strip leading '//'
+    }
 };
 
-fileUtils.fsPathToFileUrl = function fsPathToFileUrl(fsPath) {
+fileUtils.fsPathToFileUrl = function fsPathToFileUrl(fsPath, forceDirectory) {
     // FIXME: Turn into /C:/... on Windows
-    return URL.parse("file://" + fsPath);
+    if (forceDirectory && !/\/$/.test(fsPath)) {
+        // URL.resolve misbehaves if paths don't end with a slash (how would it know to do otherwise?)
+        fsPath += "/";
+    }
+    if (fsPath[0] === '/') {
+        return URL.parse("file://" + fsPath);
+    } else {
+        // Interpret as relative to the current working dir
+        return URL.parse("file://" + path.join(process.cwd(), fsPath));
+    }
 };
 
 // FIXME: Make flushable

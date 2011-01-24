@@ -2,14 +2,17 @@
 
 var path = require('path'),
     fs = require('fs'),
+    URL = require('url'),
     step = require('step'),
     _ = require('underscore'),
     fileUtils = require('./fileUtils'),
     transforms = require('./transforms'),
     SiteGraph = require('./SiteGraph'),
     error = require('./error'),
-    commandLineOptions = require('./camelOptimist')({usage: 'FIXME', demand: ['root', 'out-root', 'static-url']}),
+    commandLineOptions = require('./camelOptimist')({usage: 'FIXME', demand: ['root', 'out-root', 'static-dir']}),
     siteGraph = new SiteGraph({root: commandLineOptions.root}),
+    outRoot = fileUtils.fsPathToFileUrl(commandLineOptions.outRoot, true), // forceDirectory
+    staticDir = commandLineOptions.staticDir || 'static',
     htmlAssets = [];
 
 step(
@@ -22,7 +25,7 @@ step(
                 return relation.type !== 'JavaScriptStaticInclude';
             }, group());
         });
-        fileUtils.mkpath(path.join(commandLineOptions.outRoot, commandLineOptions.staticUrl), this.parallel());
+        fileUtils.mkpath(fileUtils.fileUrlToFsPath(outRoot) + staticDir, this.parallel());
     },
     error.logAndExit(function () {
         var numJobs = 0;
@@ -46,9 +49,6 @@ step(
         transforms.addPNG8FallbackForIE6(siteGraph, this);
     }),
     error.logAndExit(function () {
-        transforms.checkRelationConsistency(siteGraph, this);
-    }),
-    error.logAndExit(function () {
         transforms.addCacheManifest(siteGraph, htmlAssets[0], this);
     }),
     error.logAndExit(function () {
@@ -63,13 +63,17 @@ step(
                         // Move + write only if asset has non-inline incoming relations
                         if (htmlAssets.indexOf(asset) !== -1 || siteGraph.findRelations('to', asset).some(function (relation) {return !relation.isInline;})) {
                             var callback = group();
-                            asset.serialize(error.passToFunction(callback, function (src) {
-                                if (htmlAssets.indexOf(asset) === -1) {
-                                    var md5Prefix = require('crypto').createHash('md5').update(src).digest('hex').substr(0, 10);
-                                    siteGraph.setAssetUrl(asset, path.join(commandLineOptions.staticUrl, md5Prefix + '.' + asset.defaultExtension));
-                                }
-                                fs.writeFile(path.join(commandLineOptions.outRoot, asset.url), src, asset.encoding, callback);
-                            }));
+                            if (asset.url) {
+                                asset.serialize(error.passToFunction(callback, function (src) {
+                                    if (htmlAssets.indexOf(asset) === -1) {
+                                        var md5Prefix = require('crypto').createHash('md5').update(src).digest('hex').substr(0, 10);
+                                        siteGraph.setAssetUrl(asset, URL.parse(outRoot.href + staticDir + '/' + md5Prefix + '.' + asset.defaultExtension));
+                                    }
+                                    fs.writeFile(fileUtils.fileUrlToFsPath(asset.url), src, asset.encoding, callback);
+                                }));
+                            } else {
+                                console.log(asset + " has no url, cannot write to disc");
+                            }
                         }
                     }, this);
                     process.nextTick(group());

@@ -20,8 +20,7 @@ exports.registerLabelsAsCustomProtocols = function registerLabelsAsCustomProtoco
                     callback = group(),
                     matchSenchaJSBuilder = labelValue.match(/\.jsb(\d)$/);
                 if (matchSenchaJSBuilder) {
-                    var url = fileUtils.dirnameNoDot(labelValue) || '',
-                        version = parseInt(matchSenchaJSBuilder[1], 10);
+                    var version = parseInt(matchSenchaJSBuilder[1], 10);
                     fs.readFile(fileUtils.fileUrlToFsPath(siteGraph.root) + '/' + labelValue, 'utf8', error.passToFunction(cb, function (fileBody) {
                         siteGraph.customProtocols[labelName + ':'] = new resolvers.SenchaJSBuilder({
                             url: URL.parse(siteGraph.root.href + labelValue),

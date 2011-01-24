@@ -19,14 +19,11 @@ var util = require('util'),
 function SiteGraph(config) {
     _.extend(this, config || {});
     if (typeof this.root === 'string') {
-        // URL.resolve misbehaves if paths don't end with a slash
-        if (!/\/$/.test(this.root)) {
-            this.root += "/";
-        }
-        if (this.root[0] === '/') {
-            this.root = URL.parse("file://" + this.root);
+        var rootUrl = URL.parse(this.root);
+        if (rootUrl.protocol) {
+            this.root = rootUrl;
         } else {
-            this.root = URL.parse("file://" + path.join(process.cwd(), this.root));
+            this.root = fileUtils.fsPathToFileUrl(this.root, true); // forceDirectory
         }
     }
     this.assets = [];
@@ -149,7 +146,7 @@ SiteGraph.prototype = {
         return asset;
     },
 
-    unregisterAsset: function (asset, cascade) {
+    unregisterAsset: function (asset, cascade) { // Perhaps just cascade by default?
         if (cascade) {
             [].concat(this.findRelations('to', asset)).forEach(function (incomingRelation) {
                 this.unregisterRelation(incomingRelation);
@@ -194,7 +191,11 @@ SiteGraph.prototype = {
         this.assetsByUrl[asset.url.href] = asset;
         this.findRelations('to', asset).forEach(function (incomingRelation) {
             if (!incomingRelation.isInline) {
-                incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(incomingRelation.from.url, url));
+                if (incomingRelation.from.url) {
+                    incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(incomingRelation.from.url, url));
+                } else {
+                    throw new Error("SiteGraph.setAssetUrl: Cannot update url of relation " + incomingRelation);
+                }
             }
         }, this);
         return this;

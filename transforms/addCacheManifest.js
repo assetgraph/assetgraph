@@ -1,4 +1,5 @@
-var path = require('path'),
+var URL = require('url'),
+    path = require('path'),
     error = require('../error'),
     assets = require('../assets'),
     relations = require('../relations'),
@@ -14,9 +15,12 @@ exports.addCacheManifest = function addCacheManifest(siteGraph, htmlAsset, cb) {
 
     var cacheManifest = new assets.CacheManifest({
         isDirty: true,
-        url: URL.parse(URL.resolve(htmlAsset.url, path.basename(assetUrl.pathname, path.extname(assetUrl.pathname)) + '.manifest')),
         parseTree: {} // FIXME
     });
+
+    if (htmlAsset.url) {
+        cacheManifest.url = URL.parse(URL.resolve(htmlAsset.url, path.basename(htmlAsset.url.pathname, path.extname(htmlAsset.url.pathname)) + '.manifest'));
+    }
 
     siteGraph.lookupSubgraph(htmlAsset, function (relation) {return true;}).assets.forEach(function (asset) {
         if (siteGraph.findRelations('to', asset).some(function (incomingRelation) {return !incomingRelation.isInline;})) {
