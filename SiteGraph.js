@@ -143,11 +143,10 @@ SiteGraph.prototype = {
     inlineRelation: function (relation, cb) {
         this.findRelations('from', relation.to).forEach(function (relrel) {
             if (!relrel.isInline) {
-                relrel._setRawUrlString(fileUtils.buildRelativeUrl(relrel.from.url, relrel.to.url));
+                relrel._setRawUrlString(fileUtils.buildRelativeUrl(relation.from.url, relrel.to.url));
             }
         }, this);
         relation._inline(cb);
-        return this;
     },
 
     setAssetUrl: function (asset, url) {
@@ -178,6 +177,13 @@ SiteGraph.prototype = {
     attachAndRegisterRelation: function (relation, position, adjacentRelation) {
         relation.from.attachRelation(relation, position, adjacentRelation);
         this.registerRelation(relation, position, adjacentRelation);
+        if (!relation.isInline) {
+            if (relation.from.url && relation.to.url) {
+                relation._setRawUrlString(fileUtils.buildRelativeUrl(relation.from.url, relation.to.url));
+            } else {
+                console.log("SiteGraph.attachAndRegisterRelation: warning, cannot set url of " + relation);
+            }
+        }
     },
 
     unregisterRelation: function (relation) {

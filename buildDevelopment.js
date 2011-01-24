@@ -43,13 +43,11 @@ step(
     }),
     error.logAndExit(function inlineDirtyAssets() {
         var numCallbacks = 0;
-        siteGraph.relations.forEach(function (relation) {
-            if (relation.to.dirty) {
+        siteGraph.assets.filter(function (asset) {return asset.dirty;}).forEach(function (dirtyAsset) {
+            siteGraph.findRelations('to', dirtyAsset).forEach(function (relation) {
                 numCallbacks += 1;
                 siteGraph.inlineRelation(relation, this.parallel());
-            } else if (!relation.isInline && relation.to.url) {
-                relation._setRawUrlString(fileUtils.buildRelativeUrl(relation.from.url, relation.to.url));
-            }
+            }, this);
         }, this);
         if (!numCallbacks) {
             process.nextTick(this);
