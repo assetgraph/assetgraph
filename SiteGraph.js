@@ -116,16 +116,16 @@ SiteGraph.prototype = {
         }, this);
     },
 
-    lookupIndex: function (indexType, indexName, value) {
+    _lookupIndex: function (indexType, indexName, value) {
         return this.indices[indexType][indexName][typeof value === 'object' ? value.id : value] || [];
     },
 
     findRelations: function (indexName, value) {
-        return this.lookupIndex('relation', indexName, value);
+        return this._lookupIndex('relation', indexName, value);
     },
 
     findAssets: function (indexName, value) {
-        return this.lookupIndex('asset', indexName, value);
+        return this._lookupIndex('asset', indexName, value);
     },
 
     // "root/relative/path.html"
@@ -262,7 +262,7 @@ SiteGraph.prototype = {
         (function traverse(asset) {
             if (!(asset.id in subgraph.assetsById)) {
                 subgraph.registerAsset(asset);
-                that.lookupIndex('relation', 'from', asset).forEach(function (relation) {
+                that.findRelations('from', asset).forEach(function (relation) {
                     if (relationLambda(relation)) {
                         if (relation.to) {
                             traverse(relation.to);
