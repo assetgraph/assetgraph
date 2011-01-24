@@ -270,72 +270,68 @@ SiteGraph.prototype = {
         }
         var that = this;
         this.resolveAssetConfig(assetConfig, fromUrl, error.passToFunction(cb, function (resolvedAssetConfig) {
-            cb(null, that.loadResolvedAssetConfig(resolvedAssetConfig));
-        }));
-    },
-
-    loadResolvedAssetConfig: function (assetConfig) {
-        if (assetConfig.url) {
-            if (this.assetsByUrl[assetConfig.url.href]) {
-                // Already loaded
-                return this.assetsByUrl[assetConfig.url.href];
-            }
-            if (assetConfig.url.protocol === 'data:') {
-                var dataUrlMatch = assetConfig.url.href.match(/^data:([\w\/\-]+)(;base64)?,(.*)$/);
-                if (dataUrlMatch) {
-                    var contentType = dataUrlMatch[1],
-                        data = dataUrlMatch[3];
-                    if (dataUrlMatch[2]) {
-                        data = new Buffer(data, 'base64').toString();
-                    }
-                    assetConfig.originalSrc = data;
-                    if (!assetConfig.type) {
-                        if (contentType in assets.typeByContentType) {
-                            assetConfig.type = assets.typeByContentType[contentType];
-                        } else {
-                            return cb(new Error("Unknown Content-Type " + contentType + " in data url: " + assetConfig.url.href));
+            if (resolvedAssetConfig.url) {
+                if (that.assetsByUrl[resolvedAssetConfig.url.href]) {
+                    // Already loaded
+                    return that.assetsByUrl[resolvedAssetConfig.url.href];
+                }
+                if (resolvedAssetConfig.url.protocol === 'data:') {
+                    var dataUrlMatch = resolvedAssetConfig.url.href.match(/^data:([\w\/\-]+)(;base64)?,(.*)$/);
+                    if (dataUrlMatch) {
+                        var contentType = dataUrlMatch[1],
+                            data = dataUrlMatch[3];
+                        if (dataUrlMatch[2]) {
+                            data = new Buffer(data, 'base64').toString();
                         }
+                        resolvedAssetConfig.originalSrc = data;
+                        if (!resolvedAssetConfig.type) {
+                            if (contentType in assets.typeByContentType) {
+                                resolvedAssetConfig.type = assets.typeByContentType[contentType];
+                            } else {
+                                return cb(new Error("Unknown Content-Type " + contentType + " in data url: " + resolvedAssetConfig.url.href));
+                            }
+                        }
+                    } else {
+                        return cb(new Error("Cannot parse data url: " + resolvedAssetConfig.url.href));
                     }
-                } else {
-                    return cb(new Error("Cannot parse data url: " + assetConfig.url.href));
+                }
+                if (resolvedAssetConfig.url.protocol === 'file:') {
+                    resolvedAssetConfig.originalSrcProxy = function (cb) {
+                        var fsPath = fileUtils.fileUrlToFsPath(resolvedAssetConfig.url);
+                        // Will be invoked in the asset's scope, so this.encoding works out.
+                        if (typeof cb === 'function') {
+                            fs.readFile(fsPath, this.encoding, cb);
+                        } else {
+                            return fs.createReadStream(fsPath, {encoding: this.encoding});
+                        }
+                    };
+                } else if (resolvedAssetConfig.url.protocol === 'http:' || resolvedAssetConfig.url.protocol === 'https:') {
+                    // FIXME: Duplicated from the 'file:' case above
+                    resolvedAssetConfig.originalSrcProxy = function (cb) {
+                        // FIXME: Find a way to return a stream if cb is undefined
+                        request({
+                            uri: that.root + resolvedAssetConfig.url
+                        }, function (err, response, body) {
+                            if (response.statusCode >= 400) {
+                                err = new Error("Got " + response.statusCode + " from remote server!");
+                            }
+                            cb(err, body);
+                        });
+                    };
                 }
             }
-            if (assetConfig.url.protocol === 'file:') {
-                assetConfig.originalSrcProxy = function (cb) {
-                    var fsPath = fileUtils.fileUrlToFsPath(assetConfig.url);
-                    // Will be invoked in the asset's scope, so this.encoding works out.
-                    if (typeof cb === 'function') {
-                        fs.readFile(fsPath, this.encoding, cb);
-                    } else {
-                        return fs.createReadStream(fsPath, {encoding: this.encoding});
-                    }
-                };
-            } else if (assetConfig.url.protocol === 'http:' || assetConfig.url.protocol === 'https:') {
-                // FIXME: Duplicated from the 'file:' case above
-                assetConfig.originalSrcProxy = function (cb) {
-                    // FIXME: Find a way to return a stream if cb is undefined
-                    request({
-                        uri: that.root + assetConfig.url
-                    }, function (err, response, body) {
-                        if (response.statusCode >= 400) {
-                            err = new Error("Got " + response.statusCode + " from remote server!");
-                        }
-                        cb(err, body);
-                    });
-                };
+            if (!resolvedAssetConfig.type) {
+                var extension = path.extname(resolvedAssetConfig.url.pathname);
+                if (extension in assets.typeByExtension) {
+                    resolvedAssetConfig.type = assets.typeByExtension[extension];
+                } else {
+                    throw cb(new Error("Cannot work out asset type from pathname: " + resolvedAssetConfig.url.pathname));
+                }
             }
-        }
-        if (!assetConfig.type) {
-            var extension = path.extname(assetConfig.url.pathname);
-            if (extension in assets.typeByExtension) {
-                assetConfig.type = assets.typeByExtension[extension];
-            } else {
-                throw cb(new Error("Cannot work out asset type from pathname: " + assetConfig.url.pathname));
-            }
-        }
-        var asset = new assets[assetConfig.type](assetConfig);
-        this.registerAsset(asset);
-        return asset;
+            var asset = new assets[resolvedAssetConfig.type](resolvedAssetConfig);
+            that.registerAsset(asset);
+            cb(null, asset);
+        }));
     },
 
     resolveAssetConfig: function (assetConfig, fromUrl, cb) {
