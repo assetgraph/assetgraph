@@ -8,7 +8,7 @@ vows.describe('Sprite background images').addBatch({
         topic: function () {
             var siteGraph = new SiteGraph({root: __dirname + '/spriteBackgroundImages'}),
                 styleAsset = siteGraph.loadAsset({type: 'CSS', url: 'style.css'});
-            siteGraph.populate(styleAsset, function () {return true;}, this.callback);
+            transforms.populate(siteGraph, styleAsset, function () {return true;}, this.callback);
         },
         'the graph contains the expected assets and relations': function (siteGraph) {
             assert.equal(siteGraph.assets.length, 5);

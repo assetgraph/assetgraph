@@ -18,7 +18,7 @@ step(
         commandLineOptions._.forEach(function (htmlUrl) {
             var htmlAsset = siteGraph.loadAsset({type: 'HTML', url: htmlUrl});
             htmlAssets.push(htmlAsset);
-            siteGraph.populate(htmlAsset, function (relation) {
+            transforms.populate(siteGraph, htmlAsset, function (relation) {
                 return relation.type !== 'JavaScriptStaticInclude';
             }, group());
         });

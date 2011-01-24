@@ -27,7 +27,7 @@ step(
         templates = loadedTemplates;
         var group = this.group();
         templates.forEach(function (template) {
-            siteGraph.populate(template, function (relation) {
+            transforms.populate(siteGraph, template, function (relation) {
                 return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment',
                         'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
             }, group());

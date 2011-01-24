@@ -1,4 +1,5 @@
 ['registerLabelsAsCustomProtocols',
+ 'populate',
  'executeJavaScriptIfEnvironment',
  'flattenStaticIncludes',
  'dumpGraph',

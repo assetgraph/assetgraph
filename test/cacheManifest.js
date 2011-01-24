@@ -12,12 +12,7 @@ vows.describe('Cache manifest').addBatch({
                 if (err) {
                     return callback(err);
                 }
-                siteGraph.populate(htmlAsset, function () {return true;}, function (err) {
-                    if (err) {
-                        return callback(err);
-                    }
-                    callback(null, siteGraph);
-                });
+                transforms.populate(siteGraph, htmlAsset, function () {return true;}, callback);
             });
         },
         'the graph contains the expected number of assets and relations': function (siteGraph) {
@@ -40,7 +35,7 @@ vows.describe('Cache manifest').addBatch({
                 if (err) {
                     return callback(err);
                 }
-                siteGraph.populate(htmlAsset, function () {return true;}, callback);
+                transforms.populate(siteGraph, htmlAsset, function () {return true;}, callback);
             });
         },
         'the graph contains the expected assets and relations': function (siteGraph) {
