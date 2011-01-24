@@ -115,6 +115,7 @@ SenchaJSBuilder.prototype = {
                             },
                             error.passToFunction(cb, function (cssFileBodies) {
                                 cssFileBodies.forEach(function (cssFileBody, i) {
+                                    // FIXME: Maybe just adjust the url one level up and avoid the regexp substitution?
                                     var assetConfig = {
                                         url: cssUrls[i],
                                         type: 'CSS'
