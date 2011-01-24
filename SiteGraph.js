@@ -12,14 +12,12 @@ var util = require('util'),
     relations = require('./relations'),
     error = require('./error'),
     allIndices = {
-        relation: ['id', 'type', 'from', 'to'],
-        asset: ['id', 'url', 'type']
+        relation: ['type', 'from', 'to'],
+        asset: ['type']
     };
 
 var SiteGraph = module.exports = function (config) {
     _.extend(this, config || {});
-this.loadedAssetUrls = {}; // FIXMEFIXME
-
     if (typeof this.root === 'string') {
         // URL.resolve misbehaves if paths don't end with a slash
         if (!/\/$/.test(this.root)) {
@@ -34,6 +32,9 @@ this.loadedAssetUrls = {}; // FIXMEFIXME
     this.assets = [];
     this.relations = [];
     this.indices = {};
+    this.assetsById = {};
+    this.relationsById = {};
+    this.assetsByUrl = {};
     if (!this.customProtocols) {
         this.customProtocols = {};
     }
@@ -47,6 +48,14 @@ this.loadedAssetUrls = {}; // FIXMEFIXME
 
 SiteGraph.prototype = {
     addToIndices: function (indexType, obj, position, adjacentObj) { // position and adjacentRelation are optional
+        if (indexType === 'asset') {
+            this.assetsById[obj.id] = obj;
+            if (obj.url) {
+                this.assetsByUrl[obj.url.href] = obj;
+            }
+        } else {
+            this.relationsById[obj.id] = obj;
+        }
         allIndices[indexType].forEach(function (indexName) {
             position = position || 'last';
             if (indexName in obj) {
@@ -77,6 +86,14 @@ SiteGraph.prototype = {
     },
 
     removeFromIndices: function (indexType, obj) {
+        if (indexType === 'asset') {
+            if (obj.url) {
+                delete this.assetsByUrl[obj.url.href];
+            }
+            delete this.assetsById[obj.id];
+        } else {
+            delete this.relationsById[obj.id];
+        }
         allIndices[indexType].forEach(function (indexName) {
             if (indexName in obj) {
                 var type = typeof obj[indexName],
@@ -101,10 +118,6 @@ SiteGraph.prototype = {
 
     lookupIndex: function (indexType, indexName, value) {
         return this.indices[indexType][indexName][typeof value === 'object' ? value.id : value] || [];
-    },
-
-    existsInIndex: function (indexType, indexName, value) {
-        return this.lookupIndex(indexType, indexName, value).length > 0;
     },
 
     findRelations: function (indexName, value) {
@@ -154,7 +167,11 @@ SiteGraph.prototype = {
     },
 
     setAssetUrl: function (asset, url) {
+        if (asset.url) {
+            delete this.assetsByUrl[asset.url];
+        }
         asset.url = url;
+        this.assetsByUrl[asset.url.href] = asset;
         this.findRelations('to', asset).forEach(function (incomingRelation) {
             if (!incomingRelation.isInline) {
                 incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(incomingRelation.from.url, url));
@@ -223,7 +240,7 @@ SiteGraph.prototype = {
         var that = this,
             subgraph = new SiteGraph();
         (function traverse(asset) {
-            if (!subgraph.existsInIndex('asset', 'id', asset)) {
+            if (!(asset.id in subgraph.assetsById)) {
                 subgraph.registerAsset(asset);
                 that.lookupIndex('relation', 'from', asset).forEach(function (relation) {
                     if (relationLambda(relation)) {
@@ -232,7 +249,7 @@ SiteGraph.prototype = {
                         } else {
                             console.log("siteGraph.lookupSubgraph: No 'to' attribute found on " + relation + " -- not populated yet?");
                         }
-                        if (!subgraph.existsInIndex('relation', 'id', relation)) {
+                        if (!(relation.id in subgraph.relationsById)) {
                             subgraph.registerRelation(relation);
                         }
                     }
@@ -259,9 +276,10 @@ SiteGraph.prototype = {
 
     loadResolvedAssetConfig: function (assetConfig) {
         if (assetConfig.url) {
-if (this.loadedAssetUrls[assetConfig.url.href]) {
-return this.loadedAssetUrls[assetConfig.url.href];
-}
+            if (this.assetsByUrl[assetConfig.url.href]) {
+                // Already loaded
+                return this.assetsByUrl[assetConfig.url.href];
+            }
             if (assetConfig.url.protocol === 'data:') {
                 var dataUrlMatch = assetConfig.url.href.match(/^data:([\w\/\-]+)(;base64)?,(.*)$/);
                 if (dataUrlMatch) {
@@ -316,10 +334,6 @@ return this.loadedAssetUrls[assetConfig.url.href];
             }
         }
         var asset = new assets[assetConfig.type](assetConfig);
-
-if (assetConfig.url) {
-this.loadedAssetUrls[assetConfig.url.href] = asset;
-}
         this.registerAsset(asset);
         return asset;
     },
