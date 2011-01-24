@@ -7,7 +7,7 @@ vows.describe('Sprite background images').addBatch({
     'After loading a test case with images and spriting instructions': {
         topic: function () {
             var siteGraph = new SiteGraph({root: __dirname + '/spriteBackgroundImages'}),
-                styleAsset = siteGraph.loadAsset({type: 'CSS', url: 'style.css'});
+                styleAsset = siteGraph.registerAsset('style.css');
             transforms.populate(siteGraph, styleAsset, function () {return true;}, this.callback);
         },
         'the graph contains the expected assets and relations': function (siteGraph) {

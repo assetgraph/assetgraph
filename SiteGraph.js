@@ -16,7 +16,7 @@ var util = require('util'),
         asset: ['type']
     };
 
-var SiteGraph = module.exports = function (config) {
+function SiteGraph(config) {
     _.extend(this, config || {});
     if (typeof this.root === 'string') {
         // URL.resolve misbehaves if paths don't end with a slash
@@ -47,7 +47,7 @@ var SiteGraph = module.exports = function (config) {
 };
 
 SiteGraph.prototype = {
-    addToIndices: function (indexType, obj, position, adjacentObj) { // position and adjacentRelation are optional
+    _addToIndices: function (indexType, obj, position, adjacentObj) { // position and adjacentRelation are optional
         if (indexType === 'asset') {
             this.assetsById[obj.id] = obj;
             if (obj.url) {
@@ -85,7 +85,7 @@ SiteGraph.prototype = {
         }, this);
     },
 
-    removeFromIndices: function (indexType, obj) {
+    _removeFromIndices: function (indexType, obj) {
         if (indexType === 'asset') {
             if (obj.url) {
                 delete this.assetsByUrl[obj.url.href];
@@ -107,7 +107,7 @@ SiteGraph.prototype = {
                     var index = this.indices[indexType][indexName],
                         i = index[key].indexOf(obj);
                     if (i === -1) {
-                        throw "removeFromIndices: object not found in index!";
+                        throw "_removeFromIndices: object not found in index!";
                     } else {
                         index[key].splice(i, 1);
                     }
@@ -128,10 +128,25 @@ SiteGraph.prototype = {
         return this.lookupIndex('asset', indexName, value);
     },
 
-    registerAsset: function (asset) {
+    // "root/relative/path.html"
+    // "file:///home/foo/thething.jpg"
+    // "http://example.com/hereiam.css"
+    // {originalSrc: "thesource", type: "CSS"}
+    registerAsset: function (asset, fromUrl, cb) {
+        if (!asset.isAsset) {
+            var resolvedAssetConfig = this.resolveAssetConfig(asset);
+            if (resolvedAssetConfig.url && this.assetsByUrl[resolvedAssetConfig.url.href]) {
+                // Already loaded
+                return this.assetsByUrl[resolvedAssetConfig.url.href];
+            }
+            if (!resolvedAssetConfig.type) {
+                throw new Error("Cannot work out asset type: " + require('sys').inspect(resolvedAssetConfig));
+            }
+            asset = new assets[resolvedAssetConfig.type](resolvedAssetConfig);
+        }
         this.assets.push(asset);
-        this.addToIndices('asset', asset);
-        return this;
+        this._addToIndices('asset', asset);
+        return asset;
     },
 
     unregisterAsset: function (asset, cascade) {
@@ -149,7 +164,7 @@ SiteGraph.prototype = {
         } else {
             this.assets.splice(i, 1);
         }
-        this.removeFromIndices('asset', asset);
+        this._removeFromIndices('asset', asset);
         return this;
     },
 
@@ -191,7 +206,7 @@ SiteGraph.prototype = {
             var i = this.relations.indexOf(adjacentRelation) + (position === 'after' ? 1 : 0);
             this.relations.splice(i, 0, relation);
         }
-        this.addToIndices('relation', relation, position, adjacentRelation);
+        this._addToIndices('relation', relation, position, adjacentRelation);
         return this;
     },
 
@@ -208,7 +223,7 @@ SiteGraph.prototype = {
     },
 
     unregisterRelation: function (relation) {
-        this.removeFromIndices('relation', relation);
+        this._removeFromIndices('relation', relation);
         var i = this.relations.indexOf(relation);
         if (i === -1) {
             throw new Error("unregisterRelation: " + relation + " not in graph");
@@ -257,24 +272,6 @@ SiteGraph.prototype = {
             }
         }(startAsset));
         return subgraph;
-    },
-
-    // "root/relative/path.html"
-    // "file:///home/foo/thething.jpg"
-    // "http://example.com/hereiam.css"
-    // {originalSrc: "thesource", type: "CSS"}
-    loadAsset: function (assetConfig, fromUrl, cb) {
-        var resolvedAssetConfig = this.resolveAssetConfig(assetConfig);
-        if (resolvedAssetConfig.url && this.assetsByUrl[resolvedAssetConfig.url.href]) {
-            // Already loaded
-            return this.assetsByUrl[resolvedAssetConfig.url.href];
-        }
-        if (!resolvedAssetConfig.type) {
-            throw new Error("Cannot work out asset type: " + require('sys').inspect(resolvedAssetConfig));
-        }
-        var asset = new assets[resolvedAssetConfig.type](resolvedAssetConfig);
-        this.registerAsset(asset);
-        return asset;
     },
 
     resolveAssetConfig: function (assetConfig, fromUrl) {
@@ -340,3 +337,5 @@ SiteGraph.prototype = {
         return assetConfig;
     }
 };
+
+module.exports = SiteGraph;

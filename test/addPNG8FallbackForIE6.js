@@ -7,11 +7,9 @@ var vows = require('vows'),
 vows.describe('Add PNG8 fallback for IE6').addBatch({
     'After loading a the test case': {
         topic: function () {
-            var callback = this.callback,
-                siteGraph = new SiteGraph({root: __dirname + '/addPNG8FallbackForIE6'});
-            siteGraph.loadAsset('style.css', function (err, styleAsset) {
-                transforms.populate(siteGraph, styleAsset, function () {return true;}, callback);
-            });
+            var siteGraph = new SiteGraph({root: __dirname + '/addPNG8FallbackForIE6'}),
+                styleAsset = siteGraph.registerAsset('style.css');
+            transforms.populate(siteGraph, styleAsset, function () {return true;}, this.callback);
         },
         'the graph contains the expected assets and relations': function (siteGraph) {
             assert.equal(siteGraph.assets.length, 3);

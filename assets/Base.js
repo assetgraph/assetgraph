@@ -12,6 +12,8 @@ function Base(config) {
 }
 
 Base.prototype = {
+    isAsset: true, // Avoid instanceof check in SiteGraph.registerAsset
+
     encoding: 'utf8', // Change to 'binary' in subclass for images etc.
 
     getOriginalSrc: memoizeAsyncAccessor('originalSrc', function (cb) {

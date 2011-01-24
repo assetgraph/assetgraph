@@ -20,7 +20,7 @@ step(
     error.logAndExit(function () {
         var group = this.group();
         commandLineOptions._.forEach(function (templateUrl) {
-            var template = siteGraph.loadAsset(templateUrl);
+            var template = siteGraph.registerAsset(templateUrl);
             templates.push(template);
             transforms.populate(siteGraph, template, function (relation) {
                 return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment',

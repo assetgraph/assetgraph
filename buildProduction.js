@@ -16,7 +16,7 @@ step(
     function () {
         var group = this.group();
         commandLineOptions._.forEach(function (htmlUrl) {
-            var htmlAsset = siteGraph.loadAsset({type: 'HTML', url: htmlUrl});
+            var htmlAsset = siteGraph.registerAsset(htmlUrl);
             htmlAssets.push(htmlAsset);
             transforms.populate(siteGraph, htmlAsset, function (relation) {
                 return relation.type !== 'JavaScriptStaticInclude';

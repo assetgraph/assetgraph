@@ -6,14 +6,9 @@ var vows = require('vows'),
 vows.describe('Cache manifest').addBatch({
     'After loading a test case with an existing cache manifest': {
         topic: function () {
-            var callback = this.callback,
-                siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/existingCacheManifest/'});
-            siteGraph.loadAsset('index.html', function (err, htmlAsset) {
-                if (err) {
-                    return callback(err);
-                }
-                transforms.populate(siteGraph, htmlAsset, function () {return true;}, callback);
-            });
+            var siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/existingCacheManifest/'}),
+                htmlAsset = siteGraph.registerAsset('index.html');
+            transforms.populate(siteGraph, htmlAsset, function () {return true;}, this.callback);
         },
         'the graph contains the expected number of assets and relations': function (siteGraph) {
             assert.equal(siteGraph.relations.length, 3);
@@ -29,14 +24,9 @@ vows.describe('Cache manifest').addBatch({
     },
     'After loading a test case with no manifest': {
         topic: function () {
-            var callback = this.callback,
-                siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifest/'});
-            siteGraph.loadAsset('index.html', function (err, htmlAsset) {
-                if (err) {
-                    return callback(err);
-                }
-                transforms.populate(siteGraph, htmlAsset, function () {return true;}, callback);
-            });
+            var siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifest/'}),
+                htmlAsset = siteGraph.registerAsset('index.html');
+            transforms.populate(siteGraph, htmlAsset, function () {return true;}, this.callback);
         },
         'the graph contains the expected assets and relations': function (siteGraph) {
             assert.equal(siteGraph.assets.length, 3);
