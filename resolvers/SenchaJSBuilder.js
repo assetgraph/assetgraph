@@ -83,8 +83,8 @@ SenchaJSBuilder.prototype = {
                                 type: 'JavaScript',
                                 isDirty: true,
                                 originalSrc: fileBodies.join("\n"),
-                                originalRelations: [],
-                                url: urls[i]
+                                originalRelations: [], // Save the trouble of parsing it to find zero relations
+                                url: URL.parse(URL.resolve(that.url, pkg.target))
                             });
                             cb(null, assetConfigs);
                         })
