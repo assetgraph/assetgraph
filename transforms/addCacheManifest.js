@@ -15,8 +15,8 @@ exports.addCacheManifest = function addCacheManifest(siteGraph, htmlAsset, cb) {
     var cacheManifest = new assets.CacheManifest({
         isDirty: true,
         baseUrl: htmlAsset.baseUrl,
-        url: htmlAsset.url.replace(/\.html$/, '.manifest'), // FIXME
-        parseTree: {}
+        url: URL.parse(URL.resolve(htmlAsset.url, path.basename(assetUrl.pathname, path.extname(assetUrl.pathname)) + '.manifest')),
+        parseTree: {} // FIXME
     });
 
     siteGraph.lookupSubgraph(htmlAsset, function (relation) {return true;}).assets.forEach(function (asset) {
