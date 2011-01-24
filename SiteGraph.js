@@ -1,4 +1,3 @@
-/*global module, require*/
 var util = require('util'),
     sys = require('sys'),
     fs = require('fs'),
@@ -183,6 +182,19 @@ SiteGraph.prototype = {
         relation._inline(cb);
     },
 
+    _findBaseAsset: function (fromAsset) {
+        var baseAsset = fromAsset;
+        while (!baseAsset.url) {
+            var parentRelations = this.findRelations('to', baseAsset);
+            if (parentRelations.length === 1 && parentRelations[0].isInline) {
+                baseAsset = parentRelations[0].from;
+            } else {
+                return;
+            }
+        }
+        return baseAsset;
+    },
+
     setAssetUrl: function (asset, url) {
         if (asset.url) {
             delete this.assetsByUrl[asset.url];
@@ -191,16 +203,10 @@ SiteGraph.prototype = {
             if (incomingRelation.isInline) {
                 throw new Error("SiteGraph.setAssetUrl: Cannot set the url of an asset that's inlined");
             } else {
-                var baseUrlAsset = incomingRelation.from;
-                while (!baseUrlAsset.url) {
-                    var parentRelations = this.findRelations('to', baseUrlAsset);
-                    if (parentRelations.length === 1 && parentRelations[0].isInline) {
-                        baseUrlAsset = parentRelations[0];
-                    } else {
-                        throw new Error("SiteGraph.setAssetUrl " + asset + ": Cannot update url of relation " + incomingRelation);
-                    }
+                var baseAsset = this._findBaseAsset(incomingRelation.from);
+                if (baseAsset) {
+                    incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(baseAsset.url, url));
                 }
-                incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(baseUrlAsset.url, url));
             }
         }, this);
         asset.url = url;
@@ -226,11 +232,10 @@ SiteGraph.prototype = {
     attachAndRegisterRelation: function (relation, position, adjacentRelation) {
         relation.from.attachRelation(relation, position, adjacentRelation);
         this.registerRelation(relation, position, adjacentRelation);
-        if (!relation.isInline) {
-            if (relation.from.url && relation.to.url) {
-                relation._setRawUrlString(fileUtils.buildRelativeUrl(relation.from.url, relation.to.url));
-            } else {
-                console.log("SiteGraph.attachAndRegisterRelation: warning, cannot set url of " + relation);
+        if (!relation.isInline && relation.to.url) {
+            var baseAsset = this._findBaseAsset(relation.from);
+            if (baseAsset) {
+                relation._setRawUrlString(fileUtils.buildRelativeUrl(baseAsset.url, relation.to.url));
             }
         }
     },

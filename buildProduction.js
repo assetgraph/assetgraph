@@ -52,6 +52,9 @@ step(
         transforms.addCacheManifest(siteGraph, htmlAssets[0], this);
     }),
     error.logAndExit(function () {
+        transforms.dumpGraph(siteGraph, "svg", "foo.svg", this);
+    }),
+    error.logAndExit(function () {
         transforms.findAssetSerializationOrder(siteGraph, this);
     }),
     error.logAndExit(function (_, assetSerializationOrderGroups) {
