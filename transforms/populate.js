@@ -4,7 +4,7 @@ var _ = require('underscore'),
     error = require('../error');
 
 function resolveAssetConfigWithCustomProtocols(siteGraph, assetConfig, fromUrl, cb) {
-    assetConfig = siteGraph.resolveAssetConfig(assetConfig);
+    assetConfig = siteGraph.resolveAssetConfig(assetConfig, fromUrl);
     if ((assetConfig.url && /^(https?|data|file):$/.test(assetConfig.url.protocol)) || 'originalSrc' in assetConfig) {
         // Already resolved
         return process.nextTick(function () {

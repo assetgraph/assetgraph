@@ -132,7 +132,7 @@ SiteGraph.prototype = {
     // "file:///home/foo/thething.jpg"
     // "http://example.com/hereiam.css"
     // {originalSrc: "thesource", type: "CSS"}
-    registerAsset: function (asset, fromUrl, cb) {
+    registerAsset: function (asset) {
         if (!asset.isAsset) {
             var resolvedAssetConfig = this.resolveAssetConfig(asset);
             if (resolvedAssetConfig.url && this.assetsByUrl[resolvedAssetConfig.url.href]) {
@@ -173,11 +173,16 @@ SiteGraph.prototype = {
     },
 
     inlineRelation: function (relation, cb) {
-        this.findRelations('from', relation.to).forEach(function (relrel) {
-            if (!relrel.isInline) {
-                relrel._setRawUrlString(fileUtils.buildRelativeUrl(relation.from.url, relrel.to.url));
+        // FIXME: Should complain or create a copy if relation.to has other incoming relations
+        this.findRelations('from', relation.to).forEach(function (relationFromInlinedAsset) {
+            if (!relationFromInlinedAsset.isInline) {
+               relationFromInlinedAsset._setRawUrlString(fileUtils.buildRelativeUrl(relation.from.url, relationFromInlinedAsset.to.url));
             }
         }, this);
+        if (relation.to.url) {
+            delete this.assetsByUrl[relation.to.url.href];
+            delete relation.to.url;
+        }
         relation._inline(cb);
     },
 
