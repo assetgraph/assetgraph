@@ -187,17 +187,24 @@ SiteGraph.prototype = {
         if (asset.url) {
             delete this.assetsByUrl[asset.url];
         }
-        asset.url = url;
-        this.assetsByUrl[asset.url.href] = asset;
         this.findRelations('to', asset).forEach(function (incomingRelation) {
-            if (!incomingRelation.isInline) {
-                if (incomingRelation.from.url) {
-                    incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(incomingRelation.from.url, url));
-                } else {
-                    throw new Error("SiteGraph.setAssetUrl: Cannot update url of relation " + incomingRelation);
+            if (incomingRelation.isInline) {
+                throw new Error("SiteGraph.setAssetUrl: Cannot set the url of an asset that's inlined");
+            } else {
+                var baseUrlAsset = incomingRelation.from;
+                while (!baseUrlAsset.url) {
+                    var parentRelations = this.findRelations('to', baseUrlAsset);
+                    if (parentRelations.length === 1 && parentRelations[0].isInline) {
+                        baseUrlAsset = parentRelations[0];
+                    } else {
+                        throw new Error("SiteGraph.setAssetUrl " + asset + ": Cannot update url of relation " + incomingRelation);
+                    }
                 }
+                incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(baseUrlAsset.url, url));
             }
         }, this);
+        asset.url = url;
+        this.assetsByUrl[asset.url.href] = asset;
         return this;
     },
 

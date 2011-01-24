@@ -61,7 +61,7 @@ step(
                     var group = this.group();
                     assets.forEach(function (asset) {
                         // Move + write only if asset has non-inline incoming relations
-                        if (htmlAssets.indexOf(asset) !== -1 || siteGraph.findRelations('to', asset).some(function (relation) {return !relation.isInline;})) {
+                        if (siteGraph.findRelations('to', asset).some(function (relation) {return !relation.isInline;})) {
                             var callback = group();
                             if (asset.url) {
                                 asset.serialize(error.passToFunction(callback, function (src) {
