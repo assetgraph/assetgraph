@@ -28,9 +28,6 @@ exports.populate = function populate(siteGraph, originAsset, includeRelationLamb
             error.passToFunction(cb, function (resolvedAssetConfigArrays) {
                 var initializedRelations = [];
                 function initializeAndRegisterRelation(relation) {
-                    if (relation.isInline) {
-                        relation.assetConfig.baseUrl = asset.baseUrl;
-                    }
                     relation.to = siteGraph.loadResolvedAssetConfig(relation.assetConfig);
                     if (initializedRelations.length) {
                         siteGraph.registerRelation(relation, 'after', initializedRelations[initializedRelations.length - 1]);

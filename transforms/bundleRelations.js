@@ -8,7 +8,6 @@ var _ = require('underscore'),
 
 exports.bundleRelations = function bundleRelations(siteGraph, relationsToBundle, cb) {
     assets[relationsToBundle[0].to.type].makeBundle(_.pluck(relationsToBundle, 'to'), error.passToFunction(cb, function (bundleAsset) {
-        bundleAsset.baseUrl = relationsToBundle[0].from.baseUrl;
         siteGraph.registerAsset(bundleAsset);
         var bundleRelation = new relations[relationsToBundle[0].type]({
             from: relationsToBundle[0].from,
