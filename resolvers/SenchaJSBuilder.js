@@ -81,7 +81,7 @@ SenchaJSBuilder.prototype = {
                         error.passToFunction(cb, function (fileBodies, i) {
                             assetConfigs.push({
                                 type: 'JavaScript',
-                                dirty: true,
+                                isDirty: true,
                                 originalSrc: fileBodies.join("\n"),
                                 originalRelations: [],
                                 url: urls[i]
@@ -120,7 +120,7 @@ SenchaJSBuilder.prototype = {
                                         type: 'CSS'
                                     };
                                     assetConfig.originalSrc = cssFileBody.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/url\s*\(\s*/g, function () {
-                                        assetConfig.dirty = true;
+                                        assetConfig.isDirty = true;
                                         return "url(../";
                                     });
                                     assetConfigs.push(assetConfig);

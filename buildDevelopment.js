@@ -43,11 +43,12 @@ step(
     }),
     error.logAndExit(function inlineDirtyAssets() {
         var numCallbacks = 0;
-        siteGraph.assets.filter(function (asset) {return asset.dirty;}).forEach(function (dirtyAsset) {
+        siteGraph.assets.filter(function (asset) {return asset.isDirty;}).forEach(function (dirtyAsset) {
             siteGraph.findRelations('to', dirtyAsset).forEach(function (relation) {
                 numCallbacks += 1;
                 siteGraph.inlineRelation(relation, this.parallel());
             }, this);
+            dirtyAsset.isDirty = false;
         }, this);
         if (!numCallbacks) {
             process.nextTick(this);

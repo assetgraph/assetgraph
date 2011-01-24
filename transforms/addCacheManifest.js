@@ -13,7 +13,7 @@ exports.addCacheManifest = function addCacheManifest(siteGraph, htmlAsset, cb) {
     });
 
     var cacheManifest = new assets.CacheManifest({
-        dirty: true,
+        isDirty: true,
         baseUrl: htmlAsset.baseUrl,
         url: htmlAsset.url.replace(/\.html$/, '.manifest'), // FIXME
         parseTree: {}

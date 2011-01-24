@@ -25,7 +25,7 @@ exports.flattenStaticIncludes = function flattenStaticIncludes(siteGraph, templa
                 }
             }
             siteGraph.detachAndUnregisterRelation(relation);
-            htmlScriptRelation.to.dirty = true;
+            htmlScriptRelation.to.isDirty = true;
         });
     });
     cb(null, siteGraph);
