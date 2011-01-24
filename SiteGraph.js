@@ -21,8 +21,12 @@ var SiteGraph = module.exports = function (config) {
 this.loadedAssetUrls = {}; // FIXMEFIXME
 
     if (typeof this.root === 'string') {
+        // URL.resolve misbehaves if paths don't end with a slash
+        if (!/\/$/.test(this.root)) {
+            this.root += "/";
+        }
         if (this.root[0] === '/') {
-            this.root = URL.parse("file://" + this.url);
+            this.root = URL.parse("file://" + this.root);
         } else {
             this.root = URL.parse("file://" + path.join(process.cwd(), this.root));
         }

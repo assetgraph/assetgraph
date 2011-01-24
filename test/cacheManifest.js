@@ -6,9 +6,19 @@ var vows = require('vows'),
 vows.describe('Cache manifest').addBatch({
     'After loading a test case with an existing cache manifest': {
         topic: function () {
-            var siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/existingCacheManifest'}),
-                htmlAsset = siteGraph.loadAsset({type: 'HTML', url: 'index.html'});
-            siteGraph.populate(htmlAsset, function () {return true;}, this.callback);
+            var callback = this.callback,
+                siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/existingCacheManifest/'});
+            siteGraph.loadAsset('index.html', function (err, htmlAsset) {
+                if (err) {
+                    return callback(err);
+                }
+                siteGraph.populate(htmlAsset, function () {return true;}, function (err) {
+                    if (err) {
+                        return callback(err);
+                    }
+                    callback(null, siteGraph);
+                });
+            });
         },
         'the graph contains the expected number of assets and relations': function (siteGraph) {
             assert.equal(siteGraph.relations.length, 3);
@@ -24,9 +34,14 @@ vows.describe('Cache manifest').addBatch({
     },
     'After loading a test case with no manifest': {
         topic: function () {
-            var siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifest'}),
-                htmlAsset = siteGraph.loadAsset({type: 'HTML', url: 'index.html'});
-            siteGraph.populate(htmlAsset, function () {return true;}, this.callback);
+            var callback = this.callback,
+                siteGraph = new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifest/'});
+            siteGraph.loadAsset('index.html', function (err, htmlAsset) {
+                if (err) {
+                    return callback(err);
+                }
+                siteGraph.populate(htmlAsset, function () {return true;}, callback);
+            });
         },
         'the graph contains the expected assets and relations': function (siteGraph) {
             assert.equal(siteGraph.assets.length, 3);
