@@ -20,13 +20,8 @@ step(
     error.logAndExit(function () {
         var group = this.group();
         commandLineOptions._.forEach(function (templateUrl) {
-            siteGraph.loadAsset(templateUrl, group());
-        });
-    }),
-    error.logAndExit(function (loadedTemplates) {
-        templates = loadedTemplates;
-        var group = this.group();
-        templates.forEach(function (template) {
+            var template = siteGraph.loadAsset(templateUrl);
+            templates.push(template);
             transforms.populate(siteGraph, template, function (relation) {
                 return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment',
                         'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
