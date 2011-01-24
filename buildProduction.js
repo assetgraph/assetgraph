@@ -49,15 +49,6 @@ step(
         transforms.checkRelationConsistency(siteGraph, this);
     }),
     error.logAndExit(function () {
-        // FIXME
-        siteGraph.assets.forEach(function (asset) {
-            if (htmlAssets.indexOf(asset) === -1) {
-                siteGraph.setAssetUrl(asset, path.join(commandLineOptions.staticUrl, "foo"));
-            }
-        });
-        process.nextTick(this);
-    }),
-    error.logAndExit(function () {
         transforms.addCacheManifest(siteGraph, htmlAssets[0], this);
     }),
     error.logAndExit(function () {
