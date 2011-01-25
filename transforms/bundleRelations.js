@@ -27,7 +27,7 @@ exports.bundleRelations = function bundleRelations(siteGraph, relationsToBundle,
                 siteGraph.registerRelation(outgoingRelation);
             });
             siteGraph.unregisterAsset(relation.to);
-            siteGraph.unregisterRelation(relation);
+            siteGraph.detachAndUnregisterRelation(relation);
         });
         cb(null, siteGraph);
     }));
