@@ -15,15 +15,14 @@ var URL = require('url'),
 
 step(
     function () {
-        var group = this.group();
         commandLineOptions._.forEach(function (htmlUrl) {
             var htmlAsset = siteGraph.registerAsset(htmlUrl);
             htmlAsset.preserveUrl = true;
             htmlAssets.push(htmlAsset);
             transforms.populate(siteGraph, htmlAsset, function (relation) {
                 return relation.type !== 'JavaScriptStaticInclude';
-            }, group());
-        });
+            }, this.parallel());
+        }, this);
         fileUtils.mkpath(fileUtils.fileUrlToFsPath(outRoot) + staticDir, this.parallel());
     },
     error.logAndExit(function () {
