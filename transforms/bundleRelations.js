@@ -1,8 +1,8 @@
 var _ = require('underscore'),
+    step = require('step'),
     error = require('../error'),
     assets = require('../assets'),
-    relations = require('../relations'),
-    step = require('step');
+    relations = require('../relations');
 
 // Will break the existing assets pretty badly, be careful!
 
