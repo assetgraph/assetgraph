@@ -1,7 +1,7 @@
 var path = require('path'),
     graphviz = require('graphviz');
 
-exports.dumpGraph = function dumpGraph(siteGraph, targetFormat, targetFileName, cb) {
+exports.dumpGraph = function dumpGraph(siteGraph, targetFileName, cb) {
     var g = graphviz.digraph("G");
     siteGraph.assets.forEach(function (asset) {
         g.addNode(asset.id.toString(), {
@@ -11,6 +11,6 @@ exports.dumpGraph = function dumpGraph(siteGraph, targetFormat, targetFileName, 
     siteGraph.relations.forEach(function (relation) {
         g.addEdge(relation.from.id.toString(), relation.to.id.toString());
     });
-    g.output(targetFormat, targetFileName);
+    g.output(path.extname(targetFileName).substr(1), targetFileName);
     cb(null, siteGraph);
 };
