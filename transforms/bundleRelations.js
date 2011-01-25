@@ -7,7 +7,8 @@ var _ = require('underscore'),
 // Will break the existing assets pretty badly, be careful!
 
 exports.bundleRelations = function bundleRelations(siteGraph, relationsToBundle, cb) {
-    assets[relationsToBundle[0].to.type].makeBundle(_.pluck(relationsToBundle, 'to'), error.passToFunction(cb, function (bundleAsset) {
+    var assetsToBundle = _.pluck(relationsToBundle, 'to');
+    assets[relationsToBundle[0].to.type].makeBundle(assetsToBundle, error.passToFunction(cb, function (bundleAsset) {
         bundleAsset.url = _.extend(siteGraph.root); // FIXME
         siteGraph.registerAsset(bundleAsset);
         var bundleRelation = new relations[relationsToBundle[0].type]({
@@ -22,6 +23,9 @@ exports.bundleRelations = function bundleRelations(siteGraph, relationsToBundle,
                 relrel.from = bundleAsset;
                 siteGraph.registerRelation(relrel);
             });
+        });
+        assetsToBundle.forEach(function (asset) {
+            siteGraph.unregisterAsset(asset, true); // Cascade
         });
         cb(null, siteGraph);
     }));
