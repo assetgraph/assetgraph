@@ -5,15 +5,21 @@ var _ = require('underscore'),
 
 function resolveAssetConfigWithCustomProtocols(siteGraph, assetConfig, fromUrl, cb) {
     assetConfig = siteGraph.resolveAssetConfig(assetConfig, fromUrl);
-    if ((assetConfig.url && /^(https?|data|file):$/.test(assetConfig.url.protocol)) || 'originalSrc' in assetConfig) {
+    if ((assetConfig.url && /^(file|https?):/.test(assetConfig.url)) || 'originalSrc' in assetConfig) {
         // Already resolved
         return process.nextTick(function () {
             cb(null, assetConfig);
         });
-    } else if (assetConfig.url.protocol in siteGraph.customProtocols) {
-        // Set pathname to the entire href sans "protocol:"
-        assetConfig.url.pathname = assetConfig.url.href.substr(assetConfig.url.protocol.length);
-        siteGraph.customProtocols[assetConfig.url.protocol].resolve(assetConfig.url, error.passToFunction(cb, function (resolvedAssetConfigs) {
+    }
+    var splitIntoLabelAndPath = assetConfig.url.match(/^([^:]+):(.*)$/);
+    if (!splitIntoLabelAndPath) {
+        cb(new Error("Cannot resolve assetConfig"));
+    }
+
+    var labelName = splitIntoLabelAndPath[1],
+        labelRelativePath = splitIntoLabelAndPath[2];
+    if (labelName in siteGraph.customProtocols) {
+        siteGraph.customProtocols[labelName].resolve(labelRelativePath, error.passToFunction(cb, function (resolvedAssetConfigs) {
             if (!_.isArray(resolvedAssetConfigs)) {
                 resolvedAssetConfigs = [resolvedAssetConfigs];
             }
@@ -43,11 +49,10 @@ function resolveAssetConfigWithCustomProtocols(siteGraph, assetConfig, fromUrl, 
                 })
             );
         }));
-    } else if (assetConfig.url.protocol && fromUrl.protocol === 'file:') {
-        fileUtils.findParentDirCached(fromUrl, assetConfig.url.protocol.replace(/:$/, ""), error.passToFunction(cb, function (parentPath) {
-            var labelRelativePath = assetConfig.url.href.substr(assetConfig.url.protocol.length);
+    } else if (/^file:/.test(fromUrl)) {
+        fileUtils.findParentDirCached(fileUtils.fileUrlToFsPath(fromUrl), labelName, error.passToFunction(cb, function (parentPath) {
             assetConfig.url = fileUtils.fsPathToFileUrl(parentPath + '/' + labelRelativePath);
-            cb(null, assetConfig);
+            return cb(null, assetConfig);
         }));
     } else {
         cb(new Error("Cannot resolve assetConfig"));

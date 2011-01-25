@@ -7,9 +7,9 @@ var Directory = module.exports = function (config) {
 };
 
 Directory.prototype = {
-    resolve: function (url, cb) {
+    resolve: function (labelRelativePath, cb) {
         var assetConfig = {
-            url: URL.parse(this.url.href + '/' + url.pathname)
+            url: this.url + '/' + labelRelativePath
         };
         process.nextTick(function () {
             cb(null, assetConfig);

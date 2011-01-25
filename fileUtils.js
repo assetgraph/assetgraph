@@ -7,11 +7,13 @@ var fs = require('fs'),
     fileUtils = {};
 
 fileUtils.buildRelativeUrl = function buildRelativeUrl(fromUrl, toUrl) {
-    if (fromUrl.protocol !== toUrl.protocol || fromUrl.hostname !== toUrl.hostname) {
-        return toUrl.href; // No dice
+    var fromUrlObj = URL.parse(fromUrl),
+        toUrlObj = URL.parse(toUrl);
+    if (fromUrlObj.protocol !== toUrlObj.protocol || fromUrlObj.hostname !== toUrlObj.hostname) {
+        return toUrl; // No dice
     } else {
-        var fromFragments = fromUrl.pathname.replace(/^\/+/, "").replace(/[^\/]+$/, "").split(/\//),
-            toFragments = toUrl.pathname.replace(/^\/+/, "").split(/\//);
+        var fromFragments = fromUrlObj.pathname.replace(/^\/+/, "").replace(/[^\/]+$/, "").split(/\//),
+            toFragments = toUrlObj.pathname.replace(/^\/+/, "").split(/\//);
         fromFragments.pop();
 
         var i = 0;
@@ -52,11 +54,7 @@ fileUtils.mkpath = function mkpath(dir, permissions, cb) {
 
 fileUtils.fileUrlToFsPath = function fileUrlToFsPath(fileUrl) {
     // FIXME: Will be /C:/... on Windows, is that OK?
-    if (typeof fileUrl === 'string') {
-        return fileUrl.substr("file://".length);
-    } else {
-        return fileUrl.pathname.substr(2); // Just strip leading '//'
-    }
+    return fileUrl.substr("file://".length);
 };
 
 fileUtils.fsPathToFileUrl = function fsPathToFileUrl(fsPath, forceDirectory) {
@@ -66,10 +64,10 @@ fileUtils.fsPathToFileUrl = function fsPathToFileUrl(fsPath, forceDirectory) {
         fsPath += "/";
     }
     if (fsPath[0] === '/') {
-        return URL.parse("file://" + fsPath);
+        return "file://" + fsPath;
     } else {
         // Interpret as relative to the current working dir
-        return URL.parse("file://" + path.join(process.cwd(), fsPath));
+        return "file://" + path.join(process.cwd(), fsPath);
     }
 };
 
@@ -97,9 +95,6 @@ fileUtils.dirExistsCached = function dirExistsCached(fsPath, cb) {
 };
 
 fileUtils.findParentDirCached = function findParentDirCached(fromPath, parentDirName, cb) {
-    if (typeof fromPath === 'object') {
-        fromPath = fileUtils.fileUrlToFsPath(fromPath);
-    }
     var candidatePaths = [],
         fromPathFragments = fromPath.split("/");
 

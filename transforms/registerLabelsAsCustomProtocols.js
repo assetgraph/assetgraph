@@ -1,6 +1,5 @@
 var fs = require('fs'),
     path = require('path'),
-    URL = require('url'),
     step = require('step'),
     error = require('../error'),
     resolvers = require('../resolvers'),
@@ -22,8 +21,8 @@ exports.registerLabelsAsCustomProtocols = function registerLabelsAsCustomProtoco
                 if (matchSenchaJSBuilder) {
                     var version = parseInt(matchSenchaJSBuilder[1], 10);
                     fs.readFile(fileUtils.fileUrlToFsPath(siteGraph.root) + '/' + labelValue, 'utf8', error.passToFunction(cb, function (fileBody) {
-                        siteGraph.customProtocols[labelName + ':'] = new resolvers.SenchaJSBuilder({
-                            url: URL.parse(siteGraph.root.href + labelValue),
+                        siteGraph.customProtocols[labelName] = new resolvers.SenchaJSBuilder({
+                            url: siteGraph.root + labelValue,
                             version: version,
                             body: JSON.parse(fileBody)
                         });
@@ -34,8 +33,8 @@ exports.registerLabelsAsCustomProtocols = function registerLabelsAsCustomProtoco
                         if (!exists) {
                             callback(new Error("Label " + labelName + ": Dir not found: " + labelValue));
                         } else {
-                            siteGraph.customProtocols[labelName + ':'] = new resolvers.Directory({
-                                url: URL.parse(siteGraph.root.href + labelValue)
+                            siteGraph.customProtocols[labelName] = new resolvers.Directory({
+                                url: siteGraph.root + labelValue
                             });
                             callback();
                         }

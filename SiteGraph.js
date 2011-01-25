@@ -17,13 +17,8 @@ var util = require('util'),
 
 function SiteGraph(config) {
     _.extend(this, config || {});
-    if (typeof this.root === 'string') {
-        var rootUrl = URL.parse(this.root);
-        if (rootUrl.protocol) {
-            this.root = rootUrl;
-        } else {
-            this.root = fileUtils.fsPathToFileUrl(this.root, true); // forceDirectory
-        }
+    if (!/^[^:]+:/.test(this.root)) { // No protocol?
+        this.root = fileUtils.fsPathToFileUrl(this.root || process.cwd(), true); // forceDirectory
     }
     this.assets = [];
     this.relations = [];
@@ -47,7 +42,7 @@ SiteGraph.prototype = {
         if (indexType === 'asset') {
             this.assetsById[obj.id] = obj;
             if (obj.url) {
-                this.assetsByUrl[obj.url.href] = obj;
+                this.assetsByUrl[obj.url] = obj;
             }
         } else {
             this.relationsById[obj.id] = obj;
@@ -84,7 +79,7 @@ SiteGraph.prototype = {
     _removeFromIndices: function (indexType, obj) {
         if (indexType === 'asset') {
             if (obj.url) {
-                delete this.assetsByUrl[obj.url.href];
+                delete this.assetsByUrl[obj.url];
             }
             delete this.assetsById[obj.id];
         } else {
@@ -131,9 +126,9 @@ SiteGraph.prototype = {
     registerAsset: function (asset) {
         if (!asset.isAsset) {
             var resolvedAssetConfig = this.resolveAssetConfig(asset);
-            if (resolvedAssetConfig.url && this.assetsByUrl[resolvedAssetConfig.url.href]) {
+            if (resolvedAssetConfig.url && this.assetsByUrl[resolvedAssetConfig.url]) {
                 // Already loaded
-                return this.assetsByUrl[resolvedAssetConfig.url.href];
+                return this.assetsByUrl[resolvedAssetConfig.url];
             }
             if (!resolvedAssetConfig.type) {
                 throw new Error("Cannot work out asset type: " + require('sys').inspect(resolvedAssetConfig));
@@ -181,7 +176,7 @@ SiteGraph.prototype = {
             }
         }, this);
         if (relation.to.url) {
-            delete this.assetsByUrl[relation.to.url.href];
+            delete this.assetsByUrl[relation.to.url];
             delete relation.to.url;
         }
         relation._inline(cb);
@@ -212,7 +207,7 @@ SiteGraph.prototype = {
             incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(this._findBaseAsset(incomingRelation.from).url, url));
         }, this);
         asset.url = url;
-        this.assetsByUrl[asset.url.href] = asset;
+        this.assetsByUrl[asset.url] = asset;
         return this;
     },
 
@@ -297,12 +292,13 @@ SiteGraph.prototype = {
         }
         if (typeof assetConfig === 'string') {
             assetConfig = {
-                url: URL.parse(URL.resolve(fromUrl, assetConfig))
+                url: URL.resolve(fromUrl, assetConfig)
             };
         }
         if (assetConfig.url) {
-            if (assetConfig.url.protocol === 'data:') {
-                var dataUrlMatch = assetConfig.url.href.match(/^data:([\w\/\-]+)(;base64)?,(.*)$/);
+            var urlObj = URL.parse(assetConfig.url);
+            if (/^data:/.test(assetConfig.url)) {
+                var dataUrlMatch = assetConfig.url.match(/^data:([\w\/\-]+)(;base64)?,(.*)$/);
                 if (dataUrlMatch) {
                     var contentType = dataUrlMatch[1],
                         data = dataUrlMatch[3];
@@ -314,14 +310,14 @@ SiteGraph.prototype = {
                         if (contentType in assets.typeByContentType) {
                             assetConfig.type = assets.typeByContentType[contentType];
                         } else {
-                            throw new Error("Unknown Content-Type " + contentType + " in data url: " + assetConfig.url.href);
+                            throw new Error("Unknown Content-Type " + contentType + " in data url: " + assetConfig.url);
                         }
                     }
                 } else {
-                    throw new Error("Cannot parse data url: " + assetConfig.url.href);
+                    throw new Error("Cannot parse data url: " + assetConfig.url);
                 }
             }
-            if (assetConfig.url.protocol === 'file:') {
+            if (/^file:/.test(assetConfig.url)) {
                 assetConfig.originalSrcProxy = function (cb) {
                     var fsPath = fileUtils.fileUrlToFsPath(assetConfig.url);
                     // Will be invoked in the asset's scope, so this.encoding works out.
@@ -331,22 +327,22 @@ SiteGraph.prototype = {
                         return fs.createReadStream(fsPath, {encoding: this.encoding});
                     }
                 };
-            } else if (assetConfig.url.protocol === 'http:' || assetConfig.url.protocol === 'https:') {
+            } else if (/^https?:/.test(assetConfig.url)) {
                 assetConfig.originalSrcProxy = function (cb) {
                     // FIXME: Find a way to return a stream if cb is undefined
                     request({
-                        uri: assetConfig.url.href
+                        url: assetConfig.url
                     }, function (err, response, body) {
                         if (response.statusCode >= 400) {
                             err = new Error("Got " + response.statusCode + " from remote server!");
                         }
                         cb(err, body);
-                    });
+                   });
                 };
             }
         }
-        if (!assetConfig.type && assetConfig.url && assetConfig.url.pathname) {
-            var extension = path.extname(assetConfig.url.pathname);
+        if (!assetConfig.type && assetConfig.url) {
+            var extension = path.extname(assetConfig.url);
             if (extension in assets.typeByExtension) {
                 assetConfig.type = assets.typeByExtension[extension];
             }

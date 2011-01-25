@@ -38,7 +38,7 @@ exports.moveAssetsToStaticDir = function moveAssets(siteGraph, staticDir, cb) {
                         var callback = group();
                         asset.serialize(error.passToFunction(error.logAndExit(), function (src) {
                             var md5Prefix = crypto.createHash('md5').update(src).digest('hex').substr(0, 10);
-                            siteGraph.setAssetUrl(asset, URL.parse(URL.resolve(siteGraph.root, staticDir + '/' + md5Prefix + '.' + asset.defaultExtension)));
+                            siteGraph.setAssetUrl(asset, URL.resolve(siteGraph.root, staticDir + '/' + md5Prefix + '.' + asset.defaultExtension));
                             callback();
                         }));
                     }

@@ -19,7 +19,7 @@ exports.addCacheManifestSinglePage = function addCacheManifestSinglePage(siteGra
     });
 
     if (htmlAsset.url) {
-        cacheManifest.url = URL.parse(URL.resolve(htmlAsset.url, path.basename(htmlAsset.url.pathname, path.extname(htmlAsset.url.pathname)) + '.manifest'));
+        cacheManifest.url = URL.resolve(htmlAsset.url, path.basename(htmlAsset.url, path.extname(htmlAsset.url)) + '.manifest');
     }
 
     // Find all assets that can be reached from the HTML file and add relations to them from the manifest:

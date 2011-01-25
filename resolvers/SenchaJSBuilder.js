@@ -65,7 +65,7 @@ SenchaJSBuilder.prototype = {
             },
             function () {
                 var urls = (pkg.files || []).map(function (fileDef) {
-                    return URL.parse(URL.resolve(that.url, fileDef.path + fileDef.name));
+                    return URL.resolve(that.url, fileDef.path + fileDef.name);
                 });
                 if (!urls.length) {
                     return cb(null, assetConfigs);
@@ -84,7 +84,7 @@ SenchaJSBuilder.prototype = {
                                 isDirty: true,
                                 originalSrc: fileBodies.join("\n"),
                                 originalRelations: [], // Save the trouble of parsing it to find zero relations
-                                url: URL.parse(URL.resolve(that.url, pkg.target))
+                                url: URL.resolve(that.url, pkg.target)
                             });
                             cb(null, assetConfigs);
                         })
@@ -92,7 +92,7 @@ SenchaJSBuilder.prototype = {
                 } else {
                     var cssUrls = [];
                     urls.forEach(function (url) {
-                        if (/\.css$/.test(url.pathname)) {
+                        if (/\.css$/.test(url)) {
                             cssUrls.push(url);
                         } else {
                             assetConfigs.push({
@@ -143,12 +143,12 @@ SenchaJSBuilder.prototype = {
         );
     },
 
-    resolve: function (url, cb) {
-        if (url.pathname in this.pkgIndex) {
-            this.resolvePkg(this.pkgIndex[url.pathname], cb);
+    resolve: function (labelRelativePath, cb) {
+        if (labelRelativePath in this.pkgIndex) {
+            this.resolvePkg(this.pkgIndex[labelRelativePath], cb);
         } else {
             var assetConfig = {
-                url: URL.parse(URL.resolve(this.url, url.pathname))
+                url: URL.resolve(this.url, labelRelativePath)
             };
             process.nextTick(function () {
                 cb(null, assetConfig);
