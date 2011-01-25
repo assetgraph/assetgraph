@@ -1,5 +1,6 @@
 ['moveAssetsToStaticDir',
  'registerLabelsAsCustomProtocols',
+ 'minifyAssets',
  'populate',
  'executeJavaScriptIfEnvironment',
  'flattenStaticIncludes',
