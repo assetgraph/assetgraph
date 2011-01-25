@@ -11,7 +11,9 @@ function findMoveOrderAssetBatches(siteGraph, cb) {
     while (clone.assets.length) {
         currentBatch = [];
         [].concat(clone.assets).forEach(function (asset) {
-            if (!clone.findRelations('from', asset).length) {
+            if (asset.preserveUrl) {
+                clone.unregisterAsset(asset, true); // cascade
+            } else if (!clone.findRelations('from', asset).length) {
                 currentBatch.push(asset);
                 clone.unregisterAsset(asset, true); // cascade
             }

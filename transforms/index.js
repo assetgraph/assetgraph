@@ -9,6 +9,7 @@
  'checkRelationConsistency',
  'bundleRelations',
  'spriteBackgroundImages',
- 'addPNG8FallbackForIE6'].forEach(function (transformName) {
+ 'addPNG8FallbackForIE6',
+ 'writeAssetsToDisc'].forEach(function (transformName) {
     exports[transformName] = require('./' + transformName)[transformName];
 });

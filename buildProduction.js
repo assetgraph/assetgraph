@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-var path = require('path'),
-    fs = require('fs'),
-    URL = require('url'),
+var URL = require('url'),
     step = require('step'),
     _ = require('underscore'),
     fileUtils = require('./fileUtils'),
@@ -20,6 +18,7 @@ step(
         var group = this.group();
         commandLineOptions._.forEach(function (htmlUrl) {
             var htmlAsset = siteGraph.registerAsset(htmlUrl);
+            htmlAsset.preserveUrl = true;
             htmlAssets.push(htmlAsset);
             transforms.populate(siteGraph, htmlAsset, function (relation) {
                 return relation.type !== 'JavaScriptStaticInclude';
@@ -48,23 +47,13 @@ step(
     error.logAndExit(function () {
         transforms.addPNG8FallbackForIE6(siteGraph, this);
     }),
-/*
     error.logAndExit(function () {
         transforms.addCacheManifest(siteGraph, htmlAssets[0], this);
     }),
-*/
     error.logAndExit(function () {
         transforms.moveAssetsToStaticDir(siteGraph, staticDir, this);
     }),
     error.logAndExit(function () {
-       siteGraph.assets.forEach(function (asset) {
-            if (asset.url) {
-                asset.serialize(function (err, src) {
-                    fs.writeFile(fileUtils.fileUrlToFsPath(URL.resolve(outRoot, fileUtils.buildRelativeUrl(siteGraph.root, asset.url))), src, asset.encoding, error.logAndExit());
-                });
-            } else {
-                console.log("Inline: " + asset);
-            }
-        });
+        transforms.writeAssetsToDisc(siteGraph, outRoot, this);
     })
 );
