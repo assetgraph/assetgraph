@@ -1,4 +1,5 @@
-['registerLabelsAsCustomProtocols',
+['moveAssetsToStaticDir',
+ 'registerLabelsAsCustomProtocols',
  'populate',
  'executeJavaScriptIfEnvironment',
  'flattenStaticIncludes',

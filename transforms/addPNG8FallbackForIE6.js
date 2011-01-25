@@ -29,7 +29,6 @@ exports.addPNG8FallbackForIE6 = function addPNG8FallbackForIE6 (siteGraph, cb) {
 
     var imageInfos = _.values(imageInfosById);
     if (!imageInfos.length) {
-        console.log("addPNG8FallbackForIE6: No background images to process");
         return cb(null, siteGraph);
     }
     step(

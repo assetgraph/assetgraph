@@ -52,46 +52,17 @@ step(
         transforms.addCacheManifest(siteGraph, htmlAssets[0], this);
     }),
     error.logAndExit(function () {
-        transforms.dumpGraph(siteGraph, "svg", "foo.svg", this);
+        transforms.moveAssetsToStaticDir(siteGraph, staticDir, this);
     }),
     error.logAndExit(function () {
-        transforms.findAssetSerializationOrder(siteGraph, this);
-    }),
-    error.logAndExit(function (_, assetSerializationOrderGroups) {
-        function serializeAssets(assets, cb) {
-            step(
-                function () {
-                    var group = this.group();
-                    assets.forEach(function (asset) {
-                        // Move + write only if asset has non-inline incoming relations
-                        if (siteGraph.findRelations('to', asset).some(function (relation) {return !relation.isInline;})) {
-                            var callback = group();
-                            if (asset.url) {
-                                asset.serialize(error.passToFunction(callback, function (src) {
-                                    if (htmlAssets.indexOf(asset) === -1) {
-                                        var md5Prefix = require('crypto').createHash('md5').update(src).digest('hex').substr(0, 10);
-                                        siteGraph.setAssetUrl(asset, URL.parse(outRoot.href + staticDir + '/' + md5Prefix + '.' + asset.defaultExtension));
-                                    }
-                                    fs.writeFile(fileUtils.fileUrlToFsPath(asset.url), src, asset.encoding, callback);
-                                }));
-                            } else {
-                                console.log(asset + " has no url, cannot write to disc");
-                            }
-                        }
-                    }, this);
-                    process.nextTick(group());
-                },
-                cb
-            );
-        }
-        var callback = this;
-        function proceed() {
-            if (assetSerializationOrderGroups.length) {
-                serializeAssets(assetSerializationOrderGroups.shift(), proceed);
+       siteGraph.assets.forEach(function (asset) {
+            if (asset.url) {
+                asset.serialize(function (err, src) {
+                    fs.writeFile(fileUtils.fileUrlToFsPath(URL.resolve(outRoot, fileUtils.buildRelativeUrl(siteGraph.root, asset.url))), src, asset.encoding, error.logAndExit());
+                });
             } else {
-                callback();
+                console.log("Inline: " + asset);
             }
-        }
-        proceed();
-   })
+        });
+    })
 );
