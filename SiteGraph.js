@@ -117,11 +117,11 @@ SiteGraph.prototype = {
     },
 
     findRelations: function (indexName, value) {
-        return this._lookupIndex('relation', indexName, value);
+        return [].concat(this._lookupIndex('relation', indexName, value));
     },
 
     findAssets: function (indexName, value) {
-        return this._lookupIndex('asset', indexName, value);
+        return [].concat(this._lookupIndex('asset', indexName, value));
     },
 
     // "root/relative/path.html"
@@ -147,10 +147,10 @@ SiteGraph.prototype = {
 
     unregisterAsset: function (asset, cascade) { // Perhaps just cascade by default?
         if (cascade) {
-            [].concat(this.findRelations('to', asset)).forEach(function (incomingRelation) {
+            this.findRelations('to', asset).forEach(function (incomingRelation) {
                 this.unregisterRelation(incomingRelation);
             }, this);
-            [].concat(this.findRelations('from', asset)).forEach(function (outgoingRelation) {
+            this.findRelations('from', asset).forEach(function (outgoingRelation) {
                 this.unregisterRelation(outgoingRelation);
             }, this);
         }
