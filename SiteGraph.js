@@ -169,9 +169,14 @@ SiteGraph.prototype = {
     },
 
     inlineRelation: function (relation, cb) {
-        // FIXME: Should complain or create a copy if relation.to has other incoming relations
+        var incomingRelationsForTarget = this.findRelations('to', relation.to);
+        if (incomingRelationsForTarget.length !== 1 || incomingRelationsForTarget[0] !== relation) {
+            // FIXME: Maybe create a copy instead of complaining?
+            throw new Error("SiteGraph.inlineRelation " + relation + ": Target asset has " + incomingRelationsForTarget.length + " incoming relations, cannot inline");
+        }
+
         this.findRelations('from', relation.to).forEach(function (relationFromInlinedAsset) {
-            if (!relationFromInlinedAsset.isInline) {
+            if (relationFromInlinedAsset.to.url) {
                relationFromInlinedAsset._setRawUrlString(fileUtils.buildRelativeUrl(relation.from.url, relationFromInlinedAsset.to.url));
             }
         }, this);
@@ -186,10 +191,12 @@ SiteGraph.prototype = {
         var baseAsset = fromAsset;
         while (!baseAsset.url) {
             var parentRelations = this.findRelations('to', baseAsset);
-            if (parentRelations.length === 1 && parentRelations[0].isInline) {
+            if (parentRelations.length === 1) {
                 baseAsset = parentRelations[0].from;
+            } else if (parentRelations.length > 1) {
+                throw new Error("SiteGraph._findBaseAsset: Inline asset " + baseAsset + " has multiple incoming relations");
             } else {
-                return;
+                throw new Error("SiteGraph._findBaseAsset: Cannot find non-inline parent of " + fromAsset);
             }
         }
         return baseAsset;
@@ -198,23 +205,18 @@ SiteGraph.prototype = {
     setAssetUrl: function (asset, url) {
         if (asset.url) {
             delete this.assetsByUrl[asset.url];
+        } else {
+            throw new Error("SiteGraph.setAssetUrl: Cannot set url of an inline asset (not implemented yet)");
         }
         this.findRelations('to', asset).forEach(function (incomingRelation) {
-            if (incomingRelation.isInline) {
-                throw new Error("SiteGraph.setAssetUrl: Cannot set the url of an asset that's inlined");
-            } else {
-                var baseAsset = this._findBaseAsset(incomingRelation.from);
-                if (baseAsset) {
-                    incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(baseAsset.url, url));
-                }
-            }
+            incomingRelation._setRawUrlString(fileUtils.buildRelativeUrl(this._findBaseAsset(incomingRelation.from).url, url));
         }, this);
         asset.url = url;
         this.assetsByUrl[asset.url.href] = asset;
         return this;
     },
 
-    // Relations must be registered in order
+    // Register the relations in order, or specify position and adjacentRelation to splice them in later
     registerRelation: function (relation, position, adjacentRelation) { // position and adjacentRelation are optional,
         position = position || 'last';
         if (position === 'last') {
@@ -232,11 +234,8 @@ SiteGraph.prototype = {
     attachAndRegisterRelation: function (relation, position, adjacentRelation) {
         relation.from.attachRelation(relation, position, adjacentRelation);
         this.registerRelation(relation, position, adjacentRelation);
-        if (!relation.isInline && relation.to.url) {
-            var baseAsset = this._findBaseAsset(relation.from);
-            if (baseAsset) {
-                relation._setRawUrlString(fileUtils.buildRelativeUrl(baseAsset.url, relation.to.url));
-            }
+        if (relation.to.url) {
+            relation._setRawUrlString(fileUtils.buildRelativeUrl(this._findBaseAsset(relation.from).url, relation.to.url));
         }
     },
 

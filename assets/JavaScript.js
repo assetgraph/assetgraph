@@ -111,7 +111,6 @@ _.extend(JavaScript.prototype, {
                         parentNode: stack[stack.length - 1],
                         node: node,
                         environment: node[1][2],
-                        isInline: true,
                         assetConfig: {
                             type: 'JavaScript',
                             originalSrc: true, // FIXME

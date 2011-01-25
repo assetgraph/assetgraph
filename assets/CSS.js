@@ -75,7 +75,6 @@ _.extend(CSS.prototype, {
                     originalRelations.push(new relations.CSSSpritePlaceholder({
                         from: that,
                         cssRule: cssRule,
-                        isInline: true,
                         assetConfig: {
                             type: 'SpriteConfiguration',
                             originalSrc: CSS.extractInfoFromRule(cssRule, CSS.vendorPrefix + '-sprite-')

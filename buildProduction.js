@@ -48,9 +48,11 @@ step(
     error.logAndExit(function () {
         transforms.addPNG8FallbackForIE6(siteGraph, this);
     }),
+/*
     error.logAndExit(function () {
         transforms.addCacheManifest(siteGraph, htmlAssets[0], this);
     }),
+*/
     error.logAndExit(function () {
         transforms.moveAssetsToStaticDir(siteGraph, staticDir, this);
     }),

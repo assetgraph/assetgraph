@@ -52,7 +52,6 @@ _.extend(HTML.prototype, {
                         originalRelations.push(new relations.HTMLScript({
                             from: that,
                             node: node,
-                            isInline: true,
                             assetConfig: {
                                 type: 'JavaScript',
                                 originalSrc: node.firstChild.nodeValue
@@ -63,7 +62,6 @@ _.extend(HTML.prototype, {
                     originalRelations.push(new relations.HTMLStyle({
                         from: that,
                         node: node,
-                        isInline: true,
                         assetConfig: {
                             type: 'CSS',
                             originalSrc: node.firstChild.nodeValue
@@ -87,13 +85,10 @@ _.extend(HTML.prototype, {
                         }
                     }
                 } else if (nodeName === 'img') {
-                    // FIXME: Somehow support data: urls (report as isInline)
                     originalRelations.push(new relations.HTMLImage({
                         from: that,
                         node: node,
-                        assetConfig: {
-                            url: node.src
-                        }
+                        assetConfig: node.src
                     }));
                 } else if (nodeName === 'iframe') {
                     originalRelations.push(new relations.HTMLIFrame({

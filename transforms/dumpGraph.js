@@ -5,7 +5,7 @@ exports.dumpGraph = function dumpGraph(siteGraph, targetFormat, targetFileName, 
     var g = graphviz.digraph("G");
     siteGraph.assets.forEach(function (asset) {
         g.addNode(asset.id.toString(), {
-            label: "\"" + asset.toString() + "\""
+            label: "\"" + (asset.url ? '' : 'i:') + asset.toString() + "\""
         });
     });
     siteGraph.relations.forEach(function (relation) {

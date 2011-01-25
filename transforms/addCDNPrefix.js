@@ -1,6 +1,6 @@
 exports.addCDNPrefix = function addCDNPrefix(siteGraph, prefix, cb) {
     siteGraph.relations.forEach(function (relation) {
-        if (!relation.isInline &&
+        if (relation.to.url &&
             relation.type === 'CSSBackgroundImage' ||
             relation.type === 'HTMLShortcutIcon' ||
             relation.type === 'HTMLImage' ||

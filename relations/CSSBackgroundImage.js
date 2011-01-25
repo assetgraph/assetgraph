@@ -39,8 +39,6 @@ _.extend(CSSBackgroundImage.prototype, {
         var that = this;
         this.to.serialize(error.passToFunction(cb, function (src) {
             that._setRawUrlString("data:" + that.to.contentType + ";base64," + new Buffer(src, 'binary').toString('base64'));
-            that.isInline = true;
-            delete that.url;
             cb();
         }));
     }

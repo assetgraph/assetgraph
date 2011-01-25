@@ -23,7 +23,7 @@ exports.addCacheManifest = function addCacheManifest(siteGraph, htmlAsset, cb) {
     }
 
     siteGraph.lookupSubgraph(htmlAsset, function (relation) {return true;}).assets.forEach(function (asset) {
-        if (siteGraph.findRelations('to', asset).some(function (incomingRelation) {return !incomingRelation.isInline;})) {
+        if (asset.url) {
             siteGraph.attachAndRegisterRelation(new relations.CacheManifestEntry({
                 from: cacheManifest,
                 to: asset
