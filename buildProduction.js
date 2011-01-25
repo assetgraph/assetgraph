@@ -50,6 +50,14 @@ step(
         transforms.addCacheManifest(siteGraph, htmlAssets[0], this);
     }),
     error.logAndExit(function () {
+        siteGraph.assets.forEach(function (asset) {
+            if (asset.minify) {
+                asset.minify(this.parallel());
+            }
+        }, this);
+        process.nextTick(this.parallel());
+    }),
+    error.logAndExit(function () {
         transforms.moveAssetsToStaticDir(siteGraph, staticDir, this);
     }),
     error.logAndExit(function () {

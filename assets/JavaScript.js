@@ -45,12 +45,18 @@ _.extend(JavaScript.prototype, {
         }));
     }),
 
-    serialize: function (cb, minify) {
+    minify: function (cb) {
+        this.isMinified = true; // Postpone until serialization
+        process.nextTick(cb);
+    },
+
+    serialize: function (cb) {
+        var that = this;
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
-            if (minify) {
+            if (that.isMinified) {
                 parseTree = uglify.uglify.ast_squeeze(uglify.uglify.ast_mangle(parseTree));
             }
-            cb(null, uglify.uglify.gen_code(parseTree, !minify));
+            cb(null, uglify.uglify.gen_code(parseTree, !that.isMinified));
         }));
     },
 

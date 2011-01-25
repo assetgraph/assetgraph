@@ -22,6 +22,25 @@ _.extend(HTML.prototype, {
         }));
     }),
 
+    minify: function (cb) {
+        this.getParseTree(error.passToFunction(cb, function (parseTree) {
+            var q = [parseTree];
+            while (q.length) {
+                var element = q.shift();
+                if (element.nodeType === 3) {
+                    if (/^[\r\n\s\t]*$/.test(element.nodeValue)) {
+                        element.parentNode.removeChild(element);
+                    }
+                } else {
+                    for (var i = 0 ; i < element.childNodes.length ; i += 1) {
+                        q.push(element.childNodes[i]);
+                    }
+                }
+            }
+            cb();
+        }));
+    },
+
     serialize: function (cb) {
         this.getParseTree(error.passToFunction(cb, function (parseTree) {
             cb(null, parseTree.outerHTML);
