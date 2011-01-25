@@ -6,7 +6,6 @@
  'dumpGraph',
  'addCDNPrefix',
  'addCacheManifest',
- 'findAssetSerializationOrder',
  'checkRelationConsistency',
  'bundleRelations',
  'spriteBackgroundImages',
