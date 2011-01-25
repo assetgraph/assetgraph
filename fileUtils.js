@@ -7,13 +7,18 @@ var fs = require('fs'),
     fileUtils = {};
 
 fileUtils.buildRelativeUrl = function buildRelativeUrl(fromUrl, toUrl) {
-    var fromUrlObj = URL.parse(fromUrl),
-        toUrlObj = URL.parse(toUrl);
-    if (fromUrlObj.protocol !== toUrlObj.protocol || fromUrlObj.hostname !== toUrlObj.hostname) {
-        return toUrl; // No dice
-    } else {
-        var fromFragments = fromUrlObj.pathname.replace(/^\/+/, "").replace(/[^\/]+$/, "").split(/\//),
-            toFragments = toUrlObj.pathname.replace(/^\/+/, "").split(/\//);
+    var minLength = Math.min(fromUrl.length, toUrl.length),
+        commonPrefixLength = 0;
+    while (commonPrefixLength < minLength && fromUrl[commonPrefixLength] === toUrl[commonPrefixLength]) {
+        commonPrefixLength += 1;
+    }
+    var commonPrefix = fromUrl.substr(0, commonPrefixLength),
+        commonPrefixMatch = commonPrefix.match(/^(file:\/\/|[^:]+:\/\/[^\/]+\/)/);
+
+    if (commonPrefixMatch) {
+        var fromFragments = fromUrl.substr(commonPrefixMatch[1].length).replace(/^\/+/, "").replace(/[^\/]+$/, "").split(/\//),
+            toFragments = toUrl.substr(commonPrefixMatch[1].length).replace(/^\/+/, "").split(/\//);
+
         fromFragments.pop();
 
         var i = 0;
@@ -26,6 +31,8 @@ fileUtils.buildRelativeUrl = function buildRelativeUrl(fromUrl, toUrl) {
             i += 1;
         }
         return relativeUrl;
+    } else {
+        return toUrl; // No dice
     }
 };
 

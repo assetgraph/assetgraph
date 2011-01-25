@@ -23,6 +23,12 @@ vows.describe('Utility functions in fileUtils').addBatch({
             assert.equal(relativeUrl, 'http://other.com/index.html');
         }
     },
+    'buildRelativeUrl to file in dir one level up with shared prefix': {
+        topic: fileUtils.buildRelativeUrl('file:///home/andreas/mystuff.txt', 'file:///home/anders/hisstuff.txt'),
+        'should build the proper relative url': function (relativeUrl) {
+            assert.equal(relativeUrl, '../anders/hisstuff.txt');
+        }
+    },
     'buildRelativeUrl to file in dir one level up': {
         topic: fileUtils.buildRelativeUrl('file:///home/andreas/mystuff.txt', 'file:///home/otherguy/hisstuff.txt'),
         'should build the proper relative url': function (relativeUrl) {
