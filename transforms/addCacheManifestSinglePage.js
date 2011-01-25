@@ -5,7 +5,7 @@ var URL = require('url'),
     relations = require('../relations'),
     fileUtils = require('../fileUtils');
 
-exports.addCacheManifest = function addCacheManifest(siteGraph, htmlAsset, cb) {
+exports.addCacheManifestSinglePage = function addCacheManifestSinglePage(siteGraph, htmlAsset, cb) {
     // Remove any existing manifests for htmlAsset:
     siteGraph.relations.filter(function (relation) {
         return relation.from === htmlAsset && relation.type === 'HTMLCacheManifest';
@@ -15,15 +15,17 @@ exports.addCacheManifest = function addCacheManifest(siteGraph, htmlAsset, cb) {
 
     var cacheManifest = new assets.CacheManifest({
         isDirty: true,
-        parseTree: {} // FIXME
+        parseTree: {} // Hmm, FIXME, "new" really means new here :)
     });
 
     if (htmlAsset.url) {
         cacheManifest.url = URL.parse(URL.resolve(htmlAsset.url, path.basename(htmlAsset.url.pathname, path.extname(htmlAsset.url.pathname)) + '.manifest'));
     }
 
+    // Find all assets that can be reached from the HTML file and add relations to them from the manifest:
+
     siteGraph.lookupSubgraph(htmlAsset, function (relation) {return true;}).assets.forEach(function (asset) {
-        if (asset.url) {
+        if (asset.url && asset !== htmlAsset) {
             siteGraph.attachAndRegisterRelation(new relations.CacheManifestEntry({
                 from: cacheManifest,
                 to: asset

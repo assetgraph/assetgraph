@@ -1,5 +1,5 @@
 /*global exports*/
-['HTMLStyle', 'HTMLScript', 'HTMLShortcutIcon', 'HTMLImage', 'HTMLIFrame', 'HTMLCacheManifest',
+['HTMLStyle', 'HTMLScript', 'HTMLShortcutIcon', 'HTMLImage', 'HTMLAnchor', 'HTMLIFrame', 'HTMLCacheManifest',
  'JavaScriptStaticInclude', 'JavaScriptLazyInclude', 'JavaScriptStaticUrl', 'JavaScriptIfEnvironment',
  'CSSBackgroundImage', 'CSSSpritePlaceholder', 'CSSAlphaImageLoader', 'CSSSpritePlaceholder',
  'CacheManifestEntry'].forEach(function (relationType) {

@@ -109,6 +109,12 @@ _.extend(HTML.prototype, {
                         node: node,
                         assetConfig: node.src
                     }));
+                } else if (nodeName === 'a') {
+                    originalRelations.push(new relations.HTMLAnchor({
+                        from: that,
+                        node: node,
+                        assetConfig: node.getAttribute('href')
+                    }));
                 } else if (nodeName === 'iframe') {
                     originalRelations.push(new relations.HTMLIFrame({
                         from: that,
