@@ -23,11 +23,16 @@ vows.describe('Utility functions in fileUtils').addBatch({
             assert.equal(relativeUrl, 'http://other.com/index.html');
         }
     },
-    'buildRelativeUrl from and to file': {
+    'buildRelativeUrl to file in dir one level up': {
         topic: fileUtils.buildRelativeUrl(URL.parse('file:///home/andreas/mystuff.txt'), URL.parse('file:///home/otherguy/hisstuff.txt')),
-        'should build a proper relative url': function (relativeUrl) {
-console.log(relativeUrl);
+        'should build the proper relative url': function (relativeUrl) {
             assert.equal(relativeUrl, '../otherguy/hisstuff.txt');
+        }
+    },
+    'buildRelativeUrl to file one level down': {
+        topic: fileUtils.buildRelativeUrl(URL.parse('file:///home/andreas/work/oneweb/http-pub/'), URL.parse('file:///home/andreas/work/oneweb/http-pub/static/413c60cd8d.css')),
+        'should build the proper relative url': function (relativeUrl) {
+            assert.equal(relativeUrl, 'static/413c60cd8d.css');
         }
     },
     'dirExistsCached(non-existent dir)': {

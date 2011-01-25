@@ -10,12 +10,9 @@ fileUtils.buildRelativeUrl = function buildRelativeUrl(fromUrl, toUrl) {
     if (fromUrl.protocol !== toUrl.protocol || fromUrl.hostname !== toUrl.hostname) {
         return toUrl.href; // No dice
     } else {
-        var fromFragments = fromUrl.pathname.replace(/^\/+/, "").split(/\//),
+        var fromFragments = fromUrl.pathname.replace(/^\/+/, "").replace(/[^\/]+$/, "").split(/\//),
             toFragments = toUrl.pathname.replace(/^\/+/, "").split(/\//);
-
-        if (!/\/$/.test(fromUrl.pathname)) {
-            fromFragments.pop();
-        }
+        fromFragments.pop();
 
         var i = 0;
         while (i < fromFragments.length && i < toFragments.length && fromFragments[i] === toFragments[i]) {
