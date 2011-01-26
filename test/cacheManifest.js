@@ -6,7 +6,7 @@ var vows = require('vows'),
 vows.describe('Cache manifest').addBatch({
     'After loading a single-page test case with an existing cache manifest': {
         topic: function () {
-            new SiteGraph({root: __dirname + '/cacheManifest/existingCacheManifest/'}).applyTransform(
+            new SiteGraph({root: __dirname + '/cacheManifest/existingCacheManifest/'}).transform(
                 transforms.addInitialAssets('index.html'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
@@ -29,7 +29,7 @@ vows.describe('Cache manifest').addBatch({
     },
     'After loading a test case with no manifest': {
         topic: function () {
-            new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifest/'}).applyTransform(
+            new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifest/'}).transform(
                 transforms.addInitialAssets('index.html'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
@@ -52,7 +52,7 @@ vows.describe('Cache manifest').addBatch({
         },
         'then adding a cache manifest to the HTML file using the "single page" method': {
             topic: function (siteGraph) {
-                siteGraph.applyTransform(
+                siteGraph.transform(
                     transforms.addCacheManifestSinglePage(),
                     transforms.escapeToCallback(this.callback)
                 );
@@ -67,7 +67,7 @@ vows.describe('Cache manifest').addBatch({
     },
     'After loading a multi-page test case with no manifest': {
         topic: function () {
-            new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifestMultiPage/'}).applyTransform(
+            new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifestMultiPage/'}).transform(
                 transforms.addInitialAssets('index.html'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
@@ -93,7 +93,7 @@ vows.describe('Cache manifest').addBatch({
         },
         'then adding a cache manifest to the HTML file using the "site map" method': {
             topic: function (siteGraph) {
-                siteGraph.applyTransform(
+                siteGraph.transform(
                     transforms.addCacheManifestSiteMap(),
                     transforms.escapeToCallback(this.callback)
                 );

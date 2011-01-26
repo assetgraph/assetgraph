@@ -6,7 +6,7 @@ var vows = require('vows'),
 vows.describe('Sprite background images').addBatch({
     'After loading a test case with images and spriting instructions': {
         topic: function () {
-            new SiteGraph({root: __dirname + '/spriteBackgroundImages'}).applyTransform(
+            new SiteGraph({root: __dirname + '/spriteBackgroundImages'}).transform(
                 transforms.addInitialAssets('style.css'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
@@ -29,7 +29,7 @@ vows.describe('Sprite background images').addBatch({
         },
         'then spriting the background images': {
             topic: function (siteGraph) {
-                siteGraph.applyTransform(
+                siteGraph.transform(
                     transforms.spriteBackgroundImages(),
                     transforms.escapeToCallback(this.callback)
                 );

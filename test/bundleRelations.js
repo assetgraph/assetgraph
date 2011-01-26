@@ -6,7 +6,7 @@ var vows = require('vows'),
 vows.describe('Bundle stylesheets').addBatch({
     'After loading a test case with 1 HTML, 2 stylesheets, and 3 images': {
         topic: function () {
-            new SiteGraph({root: __dirname + '/bundleRelations'}).applyTransform(
+            new SiteGraph({root: __dirname + '/bundleRelations'}).transform(
                 transforms.addInitialAssets('index.html'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
@@ -32,7 +32,7 @@ vows.describe('Bundle stylesheets').addBatch({
         },
         'then bundling the HTMLStyles': {
             topic: function (siteGraph) {
-                siteGraph.applyTransform(
+                siteGraph.transform(
                     transforms.bundleJavaScriptAndCSS(),
                     transforms.escapeToCallback(this.callback)
                 );

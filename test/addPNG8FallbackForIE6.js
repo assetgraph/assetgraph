@@ -7,7 +7,7 @@ var vows = require('vows'),
 vows.describe('Add PNG8 fallback for IE6').addBatch({
     'After loading a the test case': {
         topic: function () {
-            new SiteGraph({root: __dirname + '/addPNG8FallbackForIE6'}).applyTransform(
+            new SiteGraph({root: __dirname + '/addPNG8FallbackForIE6'}).transform(
                 transforms.addInitialAssets('style.css'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
@@ -21,7 +21,7 @@ vows.describe('Add PNG8 fallback for IE6').addBatch({
         },
         'then running the addPNG8FallbackForIE6 transform': {
             topic: function (siteGraph) {
-                siteGraph.applyTransform(
+                siteGraph.transform(
                     transforms.addPNG8FallbackForIE6(),
                     transforms.escapeToCallback(this.callback)
                 );
