@@ -10,7 +10,7 @@ function Base(config) {
 
 _.extend(Base.prototype, {
     toString: function () {
-        return "[" + this.type + "/" + this.id + ": " + ((this.from && this.to) ? this.from.toString() + " => " + this.to.toString() : " unattached") + "]";
+        return "[" + this.type + "/" + this.id + ": " + ((this.from && this.to) ? this.from.toString() + " => " + this.to.toString() : "unattached") + "]";
     }
 });
 

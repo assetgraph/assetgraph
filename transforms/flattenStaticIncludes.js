@@ -1,8 +1,9 @@
-var relations = require('../relations');
+var step = require('step'),
+    relations = require('../relations');
 
 function flattenStaticIncludesForAsset(siteGraph, asset, cb) {
     var seenAssets = {};
-    siteGraph.findRelations('from', asset).forEach(function (htmlScriptRelation) {
+    siteGraph.findRelations('from', asset).forEach(function (htmlScriptRelation) { // FIXME
         var htmlStyleInsertionPoint;
         siteGraph.lookupSubgraph(htmlScriptRelation.to, function (relation) {
             return relation.type === 'JavaScriptStaticInclude';
@@ -28,18 +29,24 @@ function flattenStaticIncludesForAsset(siteGraph, asset, cb) {
             htmlScriptRelation.to.isDirty = true;
         });
     });
-    cb(null, siteGraph);
+    process.nextTick(function () {
+        cb(null, siteGraph);
+    });
 };
 
-exports.flattenStaticIncludes = function () {
+exports.flattenStaticIncludes = function flattenStaticIncludes() {
     return function (siteGraph, cb) {
         step(
             function () {
-                siteGraph.findRelations('isInitial', true).forEach(function (initialAsset) {
+                siteGraph.findAssets('isInitial', true).forEach(function (initialAsset) {
                     flattenStaticIncludesForAsset(siteGraph, initialAsset, this.parallel());
                 }, this);
             },
-            cb
+            function () {
+                process.nextTick(function () {
+                    cb(null, siteGraph);
+                });
+            }
         );
     };
 };

@@ -269,7 +269,7 @@ SiteGraph.prototype = {
             subgraph = new SiteGraph();
         (function traverse(asset) {
             if (!(asset.id in subgraph.assetsById)) {
-                subgraph.registerAsset(asset);
+                subgraph.registerAsset(asset, asset.isInitial); // Careful
                 that.findRelations('from', asset).forEach(function (relation) {
                     if (relationLambda(relation)) {
                         if (relation.to) {
@@ -351,16 +351,24 @@ SiteGraph.prototype = {
         return assetConfig;
     },
 
-    applyTransforms: function (cb) { // ...
-        var nextStepNo = 0;
-        function executeNextStep () {
-            if (nextStep < arguments.length) {
-                arguments[nextStepNo](this, executeNextStep);
+    // Add your callback as the last transform at the end of the list
+    applyTransforms: function () { // ...
+        var that = this,
+            transforms = _.toArray(arguments),
+            nextStepNo = 0;
+        function executeNextStep (err) {
+            if (err) {
+                throw err;
+            }
+//console.log(nextStepNo + " " + transforms[nextStepNo]);
+console.log(nextStepNo);
+            if (nextStepNo < transforms.length) {
+                var nextTransform = transforms[nextStepNo];
                 nextStepNo += 1;
-            } else {
-                cb(null, this);
+                nextTransform(that, executeNextStep);
             }
         }
+        executeNextStep();
     }
 };
 

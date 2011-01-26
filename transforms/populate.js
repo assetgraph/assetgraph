@@ -136,24 +136,18 @@ function populateFromAsset(siteGraph, originAsset, includeRelationLambda, cb) {
 
 exports.populate = function (options) {
     return function (siteGraph, cb) {
-        if ('initial' in options && !_.isArray(options.initial)) {
-            options.initial = [options.initial];
-        }
-        var initialAssets = options.initial.map(function (asset) {
-            if (asset.isAsset) {
-                return asset;
-            } else {
-                return siteGraph.registerAsset(initialAssetConfig, true);
-            }
-        });
-
         step(
             function () {
-                initialAssets.forEach(function (templateUrl) {
-                    populateFromAsset(siteGraph, template, options.includeRelationsLambda, this.parallel());
+                siteGraph.findAssets('isInitial', true).forEach(function (asset) {
+                    populateFromAsset(siteGraph, asset, options.includeRelationsLambda, this.parallel());
                 }, this);
+                process.nextTick(this.parallel());
             },
-            cb
+            error.passToFunction(cb, function () {
+                process.nextTick(function () {
+                    cb(null, siteGraph);
+                });
+            })
         );
     };
 };
