@@ -7,7 +7,6 @@ var URL = require('url'),
 exports.addCacheManifestSinglePage = function addCacheManifestSinglePage() { // Query?
     return function (siteGraph, cb) {
         siteGraph.findAssets('isInitial', true).forEach(function (htmlAsset) {
-if (htmlAsset.type !== 'HTML') return;
             // Remove any existing manifests for htmlAsset:
             siteGraph.relations.filter(function (relation) {
                 return relation.from === htmlAsset && relation.type === 'HTMLCacheManifest';

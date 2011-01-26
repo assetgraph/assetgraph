@@ -135,7 +135,7 @@ SiteGraph.prototype = {
             }
             asset = new assets[resolvedAssetConfig.type](resolvedAssetConfig);
         }
-        asset.isInitial = true;
+        asset.isInitial = !!isInitial; // Meh
         this.assets.push(asset);
         this._addToIndices('asset', asset);
         return asset;
@@ -269,7 +269,7 @@ SiteGraph.prototype = {
             subgraph = new SiteGraph();
         (function traverse(asset) {
             if (!(asset.id in subgraph.assetsById)) {
-                subgraph.registerAsset(asset, asset.isInitial); // Careful
+                subgraph.registerAsset(asset);
                 that.findRelations('from', asset).forEach(function (relation) {
                     if (relationLambda(relation)) {
                         if (relation.to) {
