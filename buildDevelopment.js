@@ -10,7 +10,6 @@ new SiteGraph({root: commandLineOptions.root + '/'}).applyTransform(
     transforms.populate(function (relation) {
         return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment', 'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
     }),
-    transforms.drawGraph("beforeflatten.svg"),
     transforms.flattenStaticIncludes(),
     transforms.executeJavaScript({environment: 'buildDevelopment'}),
     transforms.inlineDirtyAssets(),
