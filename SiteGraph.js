@@ -300,12 +300,12 @@ SiteGraph.prototype = {
             if (protocol === 'data') {
                 var dataUrlMatch = assetConfig.url.match(/^data:([\w\/\-]+)(;base64)?,(.*)$/);
                 if (dataUrlMatch) {
-                    var contentType = dataUrlMatch[1],
-                        data = dataUrlMatch[3];
+                    var contentType = dataUrlMatch[1];
                     if (dataUrlMatch[2]) {
-                        data = new Buffer(data, 'base64').toString();
+                        assetConfig.originalSrc = new Buffer(dataUrlMatch[3], 'base64').toString();
+                    } else {
+                        assetConfig.originalSrc = dataUrlMatch[3];
                     }
-                    assetConfig.originalSrc = data;
                     if (!assetConfig.type) {
                         if (contentType in assets.typeByContentType) {
                             assetConfig.type = assets.typeByContentType[contentType];
