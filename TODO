@@ -8,14 +8,6 @@ buildDevelopment.js, accept paths instead of urls on the command line
 
 static urls in JavaScript should be treated as a relation
 
-CDN
-
-pngquant
-
-manifest
-
 support @import
 
 "Check all paths" pre-commit hook mode
-
-Draw dependency graph using graphviz or similar
