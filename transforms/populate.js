@@ -59,96 +59,88 @@ function resolveAssetConfigWithCustomProtocols(siteGraph, assetConfig, fromUrl, 
     }
 }
 
-var populatedAssets = {}; // FIXME: One more jab at using SiteGraph's indices?
+exports.populate = function (includeRelationLambda) {
+    var populatedAssets = {}; // FIXME: One more jab at using SiteGraph's indices?
 
-function populateFromAsset(siteGraph, originAsset, includeRelationLambda, cb) {
-    (function traverse(asset, fromUrl, cb) {
-        if (asset.id in populatedAssets) {
-            return cb();
-        }
-        populatedAssets[asset.id] = true;
-        var filteredOriginalRelations;
-        step(
-            function () {
-                asset.getOriginalRelations(this);
-            },
-            error.passToFunction(cb, function (originalRelations) {
-                filteredOriginalRelations = originalRelations.filter(includeRelationLambda);
-                if (filteredOriginalRelations.length) {
-                    var group = this.group();
-                    filteredOriginalRelations.forEach(function (relation) {
-                        resolveAssetConfigWithCustomProtocols(siteGraph, relation.assetConfig, asset.url || fromUrl, group());
-                    }, this);
-                } else {
-                    return cb();
-                }
-            }),
-            error.passToFunction(cb, function (resolvedAssetConfigArrays) {
-                var initializedRelations = [];
-                function initializeAndRegisterRelation(relation) {
-                    relation.to = siteGraph.registerAsset(relation.assetConfig);
-                    if (initializedRelations.length) {
-                        siteGraph.registerRelation(relation, 'after', initializedRelations[initializedRelations.length - 1]);
-                    } else {
-                        siteGraph.registerRelation(relation, 'first');
-                    }
-                    initializedRelations.push(relation);
-                }
-                resolvedAssetConfigArrays.forEach(function (resolvedAssetConfigs, i) {
-                    if (!_.isArray(resolvedAssetConfigs)) {
-                        // Simple siteGraph.resolveAssetConfig case
-                        resolvedAssetConfigs = [resolvedAssetConfigs];
-                    }
-                    var originalRelation = filteredOriginalRelations[i];
-                    if (resolvedAssetConfigs.length === 0) {
-                        asset.detachRelation(originalRelation);
-                    } else if (resolvedAssetConfigs.length === 1) {
-                        originalRelation.assetConfig = resolvedAssetConfigs[0];
-                        initializeAndRegisterRelation(originalRelation);
-                    } else if (asset.attachRelation) {
-                        resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
-                            var relation = new originalRelation.constructor({
-                                from: asset,
-                                assetConfig: resolvedAssetConfig
-                            });
-                            relation.from.attachRelation(relation, 'before', originalRelation);
-                            initializeAndRegisterRelation(relation);
-                        });
-                        asset.detachRelation(originalRelation);
-                    } else {
-                        cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support attachRelation"));
-                    }
-                }, this);
-                if (initializedRelations.length) {
-                    initializedRelations.forEach(function (relation) {
-                        traverse(relation.to, relation.from.url || fromUrl, this.parallel());
-                    }, this);
-                } else {
-                    process.nextTick(this);
-                }
-            }),
-            cb
-        );
-    })(originAsset, originAsset.url, function (err) {
-        cb(err, siteGraph);
-    });
-}
-
-exports.populate = function (includeRelationsLambda) {
-    includeRelationsLambda = includeRelationsLambda || function () {return true;};
     return function (siteGraph, cb) {
+
+        function traverse(asset, fromUrl, cb) {
+            if (asset.id in populatedAssets) {
+                return cb();
+            }
+            populatedAssets[asset.id] = true;
+            var filteredOriginalRelations;
+            step(
+                function () {
+                    asset.getOriginalRelations(this);
+                },
+                error.passToFunction(cb, function (originalRelations) {
+                    filteredOriginalRelations = includeRelationLambda ? originalRelations.filter(includeRelationLambda) : originalRelations;
+                    if (filteredOriginalRelations.length) {
+                        var group = this.group();
+                        filteredOriginalRelations.forEach(function (relation) {
+                            resolveAssetConfigWithCustomProtocols(siteGraph, relation.assetConfig, asset.url || fromUrl, group());
+                        }, this);
+                    } else {
+                        return cb();
+                    }
+                }),
+                error.passToFunction(cb, function (resolvedAssetConfigArrays) {
+                    var initializedRelations = [];
+                    function initializeAndRegisterRelation(relation) {
+                        relation.to = siteGraph.registerAsset(relation.assetConfig);
+                        if (initializedRelations.length) {
+                            siteGraph.registerRelation(relation, 'after', initializedRelations[initializedRelations.length - 1]);
+                        } else {
+                            siteGraph.registerRelation(relation, 'first');
+                        }
+                        initializedRelations.push(relation);
+                    }
+                    resolvedAssetConfigArrays.forEach(function (resolvedAssetConfigs, i) {
+                        if (!_.isArray(resolvedAssetConfigs)) {
+                            // Simple siteGraph.resolveAssetConfig case
+                            resolvedAssetConfigs = [resolvedAssetConfigs];
+                        }
+                        var originalRelation = filteredOriginalRelations[i];
+                        if (resolvedAssetConfigs.length === 0) {
+                            asset.detachRelation(originalRelation);
+                        } else if (resolvedAssetConfigs.length === 1) {
+                            originalRelation.assetConfig = resolvedAssetConfigs[0];
+                            initializeAndRegisterRelation(originalRelation);
+                        } else if (asset.attachRelation) {
+                            resolvedAssetConfigs.forEach(function (resolvedAssetConfig) {
+                                var relation = new originalRelation.constructor({
+                                    from: asset,
+                                    assetConfig: resolvedAssetConfig
+                                });
+                                relation.from.attachRelation(relation, 'before', originalRelation);
+                                initializeAndRegisterRelation(relation);
+                            });
+                            asset.detachRelation(originalRelation);
+                        } else {
+                            cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support attachRelation"));
+                        }
+                    }, this);
+                    if (initializedRelations.length) {
+                        initializedRelations.forEach(function (relation) {
+                            traverse(relation.to, relation.from.url || fromUrl, this.parallel());
+                        }, this);
+                    } else {
+                        process.nextTick(this);
+                    }
+                }),
+                cb
+            );
+        }
+
         step(
             function () {
                 siteGraph.findAssets('isInitial', true).forEach(function (asset) {
-                    populateFromAsset(siteGraph, asset, this.parallel());
+                    traverse(asset, siteGraph.root, this.parallel());
                 }, this);
                 process.nextTick(this.parallel());
             },
-            error.passToFunction(cb, function () {
-                process.nextTick(function () {
-                    cb(null, siteGraph);
-                });
-            })
+            cb
         );
     };
 };

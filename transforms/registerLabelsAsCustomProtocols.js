@@ -44,9 +44,7 @@ exports.registerLabelsAsCustomProtocols = function registerLabelsAsCustomProtoco
                 });
                 process.nextTick(group()); // Make sure it's called at least once
             },
-            error.passToFunction(cb, function () {
-                cb(null, siteGraph);
-            })
+            cb
         );
     };
 };

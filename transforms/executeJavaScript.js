@@ -4,7 +4,7 @@ var jsdom = require('jsdom'),
 
 exports.executeJavaScript = function (options) {
     if (!options.environment) {
-        throw new Error("transforms.executeJavaScript: no 'envoronment' option provided");
+        throw new Error("transforms.executeJavaScript: no 'environment' option provided");
     }
     return function (siteGraph, cb) {
         siteGraph.findAssets('isInitial', true).forEach(function (initialAsset) {
@@ -18,8 +18,7 @@ exports.executeJavaScript = function (options) {
                 Script.runInNewContext(uglify.uglify.gen_code(relation.to.parseTree), window);
             });
         });
-        process.nextTick(function () {
-            cb(null, siteGraph);
-        });
+
+        process.nextTick(cb);
     };
 };

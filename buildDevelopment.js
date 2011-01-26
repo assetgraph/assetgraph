@@ -4,7 +4,7 @@ var SiteGraph = require('./SiteGraph'),
     transforms = require('./transforms'),
     commandLineOptions = require('./camelOptimist')({usage: 'FIXME', demand: ['root']});
 
-new SiteGraph({root: commandLineOptions.root + '/'}).applyTransforms(
+new SiteGraph({root: commandLineOptions.root + '/'}).applyTransform(
     transforms.addInitialAssets(commandLineOptions._),
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label || []),
     transforms.populate(function (relation) {

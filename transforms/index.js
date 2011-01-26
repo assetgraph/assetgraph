@@ -1,6 +1,7 @@
 ['addInitialAssets',
  'populate',
  'inlineDirtyAssets',
+ 'bundleJavaScriptAndCSS',
  'moveAssetsToStaticDir',
  'registerLabelsAsCustomProtocols',
  'minifyAssets',

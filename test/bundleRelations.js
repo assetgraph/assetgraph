@@ -6,23 +6,36 @@ var vows = require('vows'),
 vows.describe('Bundle stylesheets').addBatch({
     'After loading a test case with 1 HTML, 2 stylesheets, and 3 images': {
         topic: function () {
-            var siteGraph = new SiteGraph({root: __dirname + '/bundleRelations'}),
-                htmlAsset = siteGraph.registerAsset('index.html');
-            transforms.populate(siteGraph, htmlAsset, function () {return true;}, this.callback);
+            new SiteGraph({root: __dirname + '/bundleRelations'}).applyTransform(
+                transforms.addInitialAssets('index.html'),
+                transforms.populate(),
+                this.callback
+            );
         },
-        'the graph contains the expected assets and relations': function (siteGraph) {
+        'the graph contains 6 assets': function (siteGraph) {
             assert.equal(siteGraph.assets.length, 6);
+        },
+        'the graph contains 1 HTML asset': function (siteGraph) {
             assert.equal(siteGraph.findAssets('type', 'HTML').length, 1);
+        },
+        'the graph contains 3 PNG assets': function (siteGraph) {
             assert.equal(siteGraph.findAssets('type', 'PNG').length, 3);
+        },
+        'the graph contains 2 CSS assets': function (siteGraph) {
             assert.equal(siteGraph.findAssets('type', 'CSS').length, 2);
+        },
+        'the graph contains 2 HTMLStyle relations': function (siteGraph) {
             assert.equal(siteGraph.findRelations('type', 'HTMLStyle').length, 2);
+        },
+        'the graph contains 4 CSSBackgroundImage relations': function (siteGraph) {
             assert.equal(siteGraph.findRelations('type', 'CSSBackgroundImage').length, 4);
         },
         'then bundling the HTMLStyles': {
             topic: function (siteGraph) {
-                var htmlAsset = siteGraph.findAssets('type', 'HTML')[0],
-                    htmlStyles = siteGraph.findRelations('type', 'HTMLStyle');
-                transforms.bundleRelations(siteGraph, htmlStyles, this.callback);
+                siteGraph.applyTransform(
+                    transforms.bundleJavaScriptAndCSS(),
+                    this.callback
+                );
             },
             'the number of HTMLStyles should be down to one': function (siteGraph) {
                 assert.equal(siteGraph.findRelations('type', 'HTMLStyle').length, 1);

@@ -17,11 +17,7 @@ exports.inlineDirtyAssets = function () {
                 }, this);
                 process.nextTick(this.parallel()); // Just in case there're no dirty assets
             },
-            error.passToFunction(cb, function () {
-                process.nextTick(function () {
-                    cb(null, siteGraph);
-                });
-            })
+            cb
         );
     };
 };

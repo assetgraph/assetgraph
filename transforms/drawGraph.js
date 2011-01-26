@@ -25,8 +25,7 @@ exports.drawGraph = function drawGraph(targetFileName) {
             g.addEdge(relation.from.id.toString(), relation.to.id.toString());
         });
         g.output(path.extname(targetFileName).substr(1), targetFileName);
-        process.nextTick(function () {
-            cb(null, siteGraph);
-        });
+
+        process.nextTick(cb);
     }
 };

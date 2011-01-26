@@ -352,7 +352,7 @@ SiteGraph.prototype = {
     },
 
     // Add your callback as the last transform at the end of the list
-    applyTransforms: function () { // ...
+    applyTransform: function () { // ...
         var that = this,
             transforms = _.toArray(arguments),
             nextStepNo = 0;
@@ -360,8 +360,6 @@ SiteGraph.prototype = {
             if (err) {
                 throw err;
             }
-//console.log(nextStepNo + " " + transforms[nextStepNo]);
-console.log(nextStepNo);
             if (nextStepNo < transforms.length) {
                 var nextTransform = transforms[nextStepNo];
                 nextStepNo += 1;

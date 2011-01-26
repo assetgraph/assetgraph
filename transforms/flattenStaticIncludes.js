@@ -29,9 +29,7 @@ function flattenStaticIncludesForAsset(siteGraph, asset, cb) {
             htmlScriptRelation.to.isDirty = true;
         });
     });
-    process.nextTick(function () {
-        cb(null, siteGraph);
-    });
+    process.nextTick(cb);
 };
 
 exports.flattenStaticIncludes = function flattenStaticIncludes() {

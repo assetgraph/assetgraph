@@ -1,5 +1,6 @@
 var fs = require('fs'),
     step = require('step'),
+    error = require('../error'),
     fileUtils = require('../fileUtils');
 
 exports.writeInitialAssetsBackToDisc = function writeInitialAssetsBackToDisc() {
@@ -14,9 +15,7 @@ if (asset.type !== 'HTML') return;
                     }));
                 }, this);
             },
-            function () {
-                cb(null, siteGraph);
-            }
+            cb
         );
     };
 };
