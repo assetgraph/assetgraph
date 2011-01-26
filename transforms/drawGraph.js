@@ -9,7 +9,7 @@ exports.drawGraph = function drawGraph(targetFileName) {
         function registerAssetAsNode(asset, namePrefix) {
             seenNodes[asset.id] = true;
             g.addNode(asset.id.toString(), {
-                label: "\"" + (namePrefix || '') + (asset.url ? '' : 'i:') + asset.toString() + "\""
+                label: "\"" + (namePrefix || '') + (asset.url ? path.basename(asset.url) : 'i:' + asset.toString()) + "\""
             });
         }
         siteGraph.assets.forEach(function (asset) {
