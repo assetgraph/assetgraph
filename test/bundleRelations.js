@@ -9,7 +9,7 @@ vows.describe('Bundle stylesheets').addBatch({
             new SiteGraph({root: __dirname + '/bundleRelations'}).applyTransform(
                 transforms.addInitialAssets('index.html'),
                 transforms.populate(),
-                this.callback
+                transforms.escapeToCallback(this.callback)
             );
         },
         'the graph contains 6 assets': function (siteGraph) {
@@ -34,7 +34,7 @@ vows.describe('Bundle stylesheets').addBatch({
             topic: function (siteGraph) {
                 siteGraph.applyTransform(
                     transforms.bundleJavaScriptAndCSS(),
-                    this.callback
+                    transforms.escapeToCallback(this.callback)
                 );
             },
             'the number of HTMLStyles should be down to one': function (siteGraph) {

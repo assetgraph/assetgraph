@@ -9,7 +9,7 @@ vows.describe('Sprite background images').addBatch({
             new SiteGraph({root: __dirname + '/spriteBackgroundImages'}).applyTransform(
                 transforms.addInitialAssets('style.css'),
                 transforms.populate(),
-                this.callback
+                transforms.escapeToCallback(this.callback)
             );
         },
         'the graph contains 5 assets': function (siteGraph) {
@@ -29,7 +29,10 @@ vows.describe('Sprite background images').addBatch({
         },
         'then spriting the background images': {
             topic: function (siteGraph) {
-                siteGraph.applyTransform(transforms.spriteBackgroundImages(), this.callback);
+                siteGraph.applyTransform(
+                    transforms.spriteBackgroundImages(),
+                    transforms.escapeToCallback(this.callback)
+                );
             },
             'the number of PNG assets should be down to one': function (siteGraph) {
                 assert.equal(siteGraph.findAssets('type', 'PNG').length, 1);

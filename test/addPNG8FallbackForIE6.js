@@ -10,7 +10,7 @@ vows.describe('Add PNG8 fallback for IE6').addBatch({
             new SiteGraph({root: __dirname + '/addPNG8FallbackForIE6'}).applyTransform(
                 transforms.addInitialAssets('style.css'),
                 transforms.populate(),
-                this.callback
+                transforms.escapeToCallback(this.callback)
             );
         },
         'the graph contains the expected assets and relations': function (siteGraph) {
@@ -21,7 +21,10 @@ vows.describe('Add PNG8 fallback for IE6').addBatch({
         },
         'then running the addPNG8FallbackForIE6 transform': {
             topic: function (siteGraph) {
-                transforms.addPNG8FallbackForIE6(siteGraph, this.callback);
+                siteGraph.applyTransform(
+                    transforms.addPNG8FallbackForIE6(),
+                    transforms.escapeToCallback(this.callback)
+                );
             },
             'the number of PNG assets should be 3': function (siteGraph) {
                 assert.equal(siteGraph.findAssets('type', 'PNG').length, 3);

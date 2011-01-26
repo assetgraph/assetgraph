@@ -9,7 +9,7 @@ vows.describe('Cache manifest').addBatch({
             new SiteGraph({root: __dirname + '/cacheManifest/existingCacheManifest/'}).applyTransform(
                 transforms.addInitialAssets('index.html'),
                 transforms.populate(),
-                this.callback
+                transforms.escapeToCallback(this.callback)
             );
         },
         'the graph should contain 3 relations': function (siteGraph) {
@@ -32,7 +32,7 @@ vows.describe('Cache manifest').addBatch({
             new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifest/'}).applyTransform(
                 transforms.addInitialAssets('index.html'),
                 transforms.populate(),
-                this.callback
+                transforms.escapeToCallback(this.callback)
             );
         },
         'the graph contains 3 assets': function (siteGraph) {
@@ -52,7 +52,10 @@ vows.describe('Cache manifest').addBatch({
         },
         'then adding a cache manifest to the HTML file using the "single page" method': {
             topic: function (siteGraph) {
-                siteGraph.applyTransform(transforms.addCacheManifestSinglePage(), this.callback);
+                siteGraph.applyTransform(
+                    transforms.addCacheManifestSinglePage(),
+                    transforms.escapeToCallback(this.callback)
+                );
             },
             'the graph should contain a cache manifest': function (siteGraph) {
                 assert.equal(siteGraph.findAssets('type', 'CacheManifest').length, 1);
@@ -66,7 +69,8 @@ vows.describe('Cache manifest').addBatch({
         topic: function () {
             new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifestMultiPage/'}).applyTransform(
                 transforms.addInitialAssets('index.html'),
-                transforms.populate()
+                transforms.populate(),
+                transforms.escapeToCallback(this.callback)
             );
         },
         'the graph contains 3 assets': function (siteGraph) {
@@ -89,7 +93,10 @@ vows.describe('Cache manifest').addBatch({
         },
         'then adding a cache manifest to the HTML file using the "site map" method': {
             topic: function (siteGraph) {
-                siteGraph.applyTransform(transforms.addCacheManifestSiteMap(), this.callback);
+                siteGraph.applyTransform(
+                    transforms.addCacheManifestSiteMap(),
+                    transforms.escapeToCallback(this.callback)
+                );
             },
             'the graph should contain the manifest': function (siteGraph) {
                 assert.equal(siteGraph.findAssets('type', 'CacheManifest').length, 1);
