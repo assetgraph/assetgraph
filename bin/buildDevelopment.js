@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-var SiteGraph = require('./SiteGraph'),
-    transforms = require('./transforms'),
-    commandLineOptions = require('./camelOptimist')({usage: 'FIXME', demand: ['root']});
+var SiteGraph = require('../lib/SiteGraph'),
+    transforms = require('../lib/transforms'),
+    commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root']});
 
 new SiteGraph({root: commandLineOptions.root + '/'}).applyTransform(
     transforms.addInitialAssets(commandLineOptions._),

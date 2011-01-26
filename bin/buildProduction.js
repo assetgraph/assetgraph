@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-var SiteGraph = require('./SiteGraph'),
-    transforms = require('./transforms'),
-    fileUtils = require('./fileUtils'),
-    commandLineOptions = require('./camelOptimist')({usage: 'FIXME', demand: ['root', 'out-root', 'static-dir']}),
+var SiteGraph = require('../lib/SiteGraph'),
+    transforms = require('../lib/transforms'),
+    fileUtils = require('../lib/fileUtils'),
+    commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root', 'out-root', 'static-dir']}),
     siteGraph = new SiteGraph({root: commandLineOptions.root}),
     outRoot = fileUtils.fsPathToFileUrl(commandLineOptions.outRoot, true), // forceDirectory
     staticDir = commandLineOptions.staticDir || 'static',
