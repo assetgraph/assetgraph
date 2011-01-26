@@ -134,12 +134,13 @@ function populateFromAsset(siteGraph, originAsset, includeRelationLambda, cb) {
     });
 }
 
-exports.populate = function (options) {
+exports.populate = function (includeRelationsLambda) {
+    includeRelationsLambda = includeRelationsLambda || function () {return true;};
     return function (siteGraph, cb) {
         step(
             function () {
                 siteGraph.findAssets('isInitial', true).forEach(function (asset) {
-                    populateFromAsset(siteGraph, asset, options.includeRelationsLambda, this.parallel());
+                    populateFromAsset(siteGraph, asset, this.parallel());
                 }, this);
                 process.nextTick(this.parallel());
             },
