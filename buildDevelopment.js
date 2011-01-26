@@ -13,26 +13,33 @@ var util = require('util'),
     siteGraph = new SiteGraph({root: commandLineOptions.root + '/'}),
     templates = [];
 
+siteGraph.applyTransforms(
+    transforms.registerLabelsAsCustomProtocols(commandLineOptions.label || []),
+    transforms.populate({
+        initial: commandLineOptions._,
+        includeRelations: function (relation) {
+            return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment',
+                    'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
+            }
+        }
+    ),
+    transforms.flattenStaticIncludes(),
+    transforms.executeJavaScript({environment: 'buildDevelopment'}),
+    transforms.inlineDirtyAssets(),
+    function (siteGraph) {
+        templates.forEach(function (template) {
+            var callback = this.parallel();
+            template.serialize(error.throwException(function (src) {
+                fs.writeFile(fileUtils.fileUrlToFsPath(template.url).replace(/\.template$/, ''), src, 'utf8', callback);
+            }));
+        }, this);
+    }
+);
+
 step(
     function () {
         transforms.registerLabelsAsCustomProtocols(siteGraph, commandLineOptions.label || [], this);
     },
-    error.logAndExit(function () {
-        var group = this.group();
-        commandLineOptions._.forEach(function (templateUrl) {
-            var template = siteGraph.registerAsset(templateUrl);
-            templates.push(template);
-            transforms.populate(siteGraph, template, function (relation) {
-                return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment',
-                        'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
-            }, group());
-        });
-    }),
-    error.logAndExit(function () {
-        templates.forEach(function (template) {
-            transforms.flattenStaticIncludes(siteGraph, template, this.parallel());
-        }, this);
-    }),
     error.logAndExit(function () {
         transforms.executeJavaScriptIfEnvironment(siteGraph, templates[0], 'buildDevelopment', this);
     }),

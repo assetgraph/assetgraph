@@ -57,10 +57,11 @@ function resolveAssetConfigWithCustomProtocols(siteGraph, assetConfig, fromUrl, 
     } else {
         cb(new Error("Cannot resolve assetConfig"));
     }
-};
+}
 
-exports.populate = function populate(siteGraph, originAsset, includeRelationLambda, cb) {
-    var populatedAssets = {};
+var populatedAssets = {}; // FIXME: One more jab at using SiteGraph's indices?
+
+function populateFromAsset(siteGraph, originAsset, includeRelationLambda, cb) {
     (function traverse(asset, fromUrl, cb) {
         if (asset.id in populatedAssets) {
             return cb();
@@ -131,4 +132,28 @@ exports.populate = function populate(siteGraph, originAsset, includeRelationLamb
     })(originAsset, originAsset.url, function (err) {
         cb(err, siteGraph);
     });
+}
+
+exports.populate = function (options) {
+    return function (siteGraph, cb) {
+        if ('initial' in options && !_.isArray(options.initial)) {
+            options.initial = [options.initial];
+        }
+        var initialAssets = options.initial.map(function (asset) {
+            if (asset.isAsset) {
+                return asset;
+            } else {
+                return siteGraph.registerAsset(initialAssetConfig, true);
+            }
+        });
+
+        step(
+            function () {
+                initialAssets.forEach(function (templateUrl) {
+                    populateFromAsset(siteGraph, template, options.includeRelationsLambda, this.parallel());
+                }, this);
+            },
+            cb
+        );
+    };
 };

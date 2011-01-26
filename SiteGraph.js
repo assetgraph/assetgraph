@@ -12,7 +12,7 @@ var util = require('util'),
     error = require('./error'),
     allIndices = {
         relation: ['type', 'from', 'to'],
-        asset: ['type']
+        asset: ['type', 'isInitial']
     };
 
 function SiteGraph(config) {
@@ -123,7 +123,7 @@ SiteGraph.prototype = {
     // "file:///home/foo/thething.jpg"
     // "http://example.com/hereiam.css"
     // {originalSrc: "thesource", type: "CSS"}
-    registerAsset: function (asset) {
+    registerAsset: function (asset, isInitial) {
         if (!asset.isAsset) {
             var resolvedAssetConfig = this.resolveAssetConfig(asset);
             if (resolvedAssetConfig.url && this.assetsByUrl[resolvedAssetConfig.url]) {
@@ -135,6 +135,7 @@ SiteGraph.prototype = {
             }
             asset = new assets[resolvedAssetConfig.type](resolvedAssetConfig);
         }
+        asset.isInitial = true;
         this.assets.push(asset);
         this._addToIndices('asset', asset);
         return asset;
@@ -348,6 +349,18 @@ SiteGraph.prototype = {
             }
         }
         return assetConfig;
+    },
+
+    applyTransforms: function (cb) { // ...
+        var nextStepNo = 0;
+        function executeNextStep () {
+            if (nextStep < arguments.length) {
+                arguments[nextStepNo](this, executeNextStep);
+                nextStepNo += 1;
+            } else {
+                cb(null, this);
+            }
+        }
     }
 };
 
