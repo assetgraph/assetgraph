@@ -296,8 +296,8 @@ SiteGraph.prototype = {
             };
         }
         if (assetConfig.url) {
-            var urlObj = URL.parse(assetConfig.url);
-            if (/^data:/.test(assetConfig.url)) {
+            var protocol = assetConfig.url.substr(0, assetConfig.url.indexOf(':'));
+            if (protocol === 'data') {
                 var dataUrlMatch = assetConfig.url.match(/^data:([\w\/\-]+)(;base64)?,(.*)$/);
                 if (dataUrlMatch) {
                     var contentType = dataUrlMatch[1],
@@ -317,7 +317,7 @@ SiteGraph.prototype = {
                     throw new Error("Cannot parse data url: " + assetConfig.url);
                 }
             }
-            if (/^file:/.test(assetConfig.url)) {
+            if (protocol === 'file') {
                 assetConfig.originalSrcProxy = function (cb) {
                     var fsPath = fileUtils.fileUrlToFsPath(assetConfig.url);
                     // Will be invoked in the asset's scope, so this.encoding works out.
@@ -327,7 +327,7 @@ SiteGraph.prototype = {
                         return fs.createReadStream(fsPath, {encoding: this.encoding});
                     }
                 };
-            } else if (/^https?:/.test(assetConfig.url)) {
+            } else if (protocol === 'http' || protocol === 'https') {
                 assetConfig.originalSrcProxy = function (cb) {
                     // FIXME: Find a way to return a stream if cb is undefined
                     request({
