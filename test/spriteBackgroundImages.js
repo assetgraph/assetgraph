@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
-    SiteGraph = require('../SiteGraph'),
-    transforms = require('../transforms');
+    SiteGraph = require('../lib/SiteGraph'),
+    transforms = require('../lib/transforms');
 
 vows.describe('Sprite background images').addBatch({
     'After loading a test case with images and spriting instructions': {

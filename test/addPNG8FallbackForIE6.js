@@ -1,8 +1,8 @@
 var vows = require('vows'),
     assert = require('assert'),
     step = require('step'),
-    SiteGraph = require('../SiteGraph'),
-    transforms = require('../transforms');
+    SiteGraph = require('../lib/SiteGraph'),
+    transforms = require('../lib/transforms');
 
 vows.describe('Add PNG8 fallback for IE6').addBatch({
     'After loading a the test case': {

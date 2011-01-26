@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
-    SiteGraph = require('../SiteGraph'),
-    transforms = require('../transforms');
+    SiteGraph = require('../lib/SiteGraph'),
+    transforms = require('../lib/transforms');
 
 vows.describe('Cache manifest').addBatch({
     'After loading a single-page test case with an existing cache manifest': {

@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
-    SiteGraph = require('../SiteGraph'),
-    transforms = require('../transforms');
+    SiteGraph = require('../lib/SiteGraph'),
+    transforms = require('../lib/transforms');
 
 vows.describe('Bundle stylesheets').addBatch({
     'After loading a test case with 1 HTML, 2 stylesheets, and 3 images': {
