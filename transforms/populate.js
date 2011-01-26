@@ -60,15 +60,15 @@ function resolveAssetConfigWithCustomProtocols(siteGraph, assetConfig, fromUrl, 
 }
 
 exports.populate = function (includeRelationLambda) {
-    var populatedAssets = {}; // FIXME: One more jab at using SiteGraph's indices?
+    var assetsSeenDuringPopulation = {};
 
     return function (siteGraph, cb) {
 
         function traverse(asset, fromUrl, cb) {
-            if (asset.id in populatedAssets) {
+            if (asset.id in assetsSeenDuringPopulation) {
                 return cb();
             }
-            populatedAssets[asset.id] = true;
+            assetsSeenDuringPopulation[asset.id] = true;
             var filteredOriginalRelations;
             step(
                 function () {
@@ -118,7 +118,7 @@ exports.populate = function (includeRelationLambda) {
                             });
                             asset.detachRelation(originalRelation);
                         } else {
-                            cb(new Error("assetConfig resolved to multiple, and " + originalRelation.type + " doesn't support attachRelation"));
+                            cb(new Error("assetConfig resolved to multiple, but " + originalRelation.type + " doesn't support attachRelation"));
                         }
                     }, this);
                     if (initializedRelations.length) {
