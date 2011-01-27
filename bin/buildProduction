@@ -9,7 +9,7 @@ var SiteGraph = require('../lib/SiteGraph'),
     staticDir = commandLineOptions.staticDir || 'static',
     htmlAssets = [];
 
-siteGraph.applyTransform(
+siteGraph.transform(
     function (siteGraph, cb) {
         fileUtils.mkpath(fileUtils.fileUrlToFsPath(outRoot) + staticDir, cb);
     },
