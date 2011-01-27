@@ -10,7 +10,7 @@ var SiteGraph = require('../lib/SiteGraph'),
     htmlAssets = [];
 
 siteGraph.transform(
-    function (siteGraph, cb) {
+    function createStaticDir(siteGraph, cb) {
         fileUtils.mkpath(fileUtils.fileUrlToFsPath(outRoot) + staticDir, cb);
     },
     transforms.addInitialAssets(commandLineOptions._),
