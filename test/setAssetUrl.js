@@ -9,7 +9,7 @@ vows.describe('Changing the url of assets').addBatch({
     'After loading a test case with three assets': {
         topic: function () {
             new SiteGraph({root: __dirname + '/setAssetUrl/'}).transform(
-                transforms.addInitialAssets('index.html'),
+                transforms.addAssets('index.html'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
             );

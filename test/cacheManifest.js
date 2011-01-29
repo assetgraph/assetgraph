@@ -7,7 +7,7 @@ vows.describe('Cache manifest').addBatch({
     'After loading a single-page test case with an existing cache manifest': {
         topic: function () {
             new SiteGraph({root: __dirname + '/cacheManifest/existingCacheManifest/'}).transform(
-                transforms.addInitialAssets('index.html'),
+                transforms.addAssets('index.html'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
             );
@@ -30,7 +30,7 @@ vows.describe('Cache manifest').addBatch({
     'After loading a test case with no manifest': {
         topic: function () {
             new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifest/'}).transform(
-                transforms.addInitialAssets('index.html'),
+                transforms.addAssets('index.html'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
             );
@@ -68,7 +68,7 @@ vows.describe('Cache manifest').addBatch({
     'After loading a multi-page test case with no manifest': {
         topic: function () {
             new SiteGraph({root: __dirname + '/cacheManifest/noCacheManifestMultiPage/'}).transform(
-                transforms.addInitialAssets('index.html'),
+                transforms.addAssets('index.html'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
             );

@@ -5,7 +5,7 @@ var SiteGraph = require('../lib/SiteGraph'),
     commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root']});
 
 new SiteGraph({root: commandLineOptions.root + '/'}).transform(
-    transforms.addInitialAssets(commandLineOptions._),
+    transforms.addAssets(commandLineOptions._),
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label || []),
     transforms.populate(function (relation) {
         return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment', 'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;

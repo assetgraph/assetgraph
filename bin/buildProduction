@@ -13,7 +13,7 @@ siteGraph.transform(
     function createStaticDir(siteGraph, cb) {
         fileUtils.mkpath(fileUtils.fileUrlToFsPath(outRoot) + staticDir, cb);
     },
-    transforms.addInitialAssets(commandLineOptions._),
+    transforms.addAssets(commandLineOptions._),
     transforms.populate(function (relation) {
         return relation.type !== 'JavaScriptStaticInclude';
     }),

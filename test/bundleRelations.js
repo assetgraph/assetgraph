@@ -7,7 +7,7 @@ vows.describe('Bundle stylesheets').addBatch({
     'After loading a test case with 1 HTML, 2 stylesheets, and 3 images': {
         topic: function () {
             new SiteGraph({root: __dirname + '/bundleRelations'}).transform(
-                transforms.addInitialAssets('index.html'),
+                transforms.addAssets('index.html'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
             );

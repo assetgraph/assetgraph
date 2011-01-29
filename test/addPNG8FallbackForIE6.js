@@ -8,7 +8,7 @@ vows.describe('Add PNG8 fallback for IE6').addBatch({
     'After loading a the test case': {
         topic: function () {
             new SiteGraph({root: __dirname + '/addPNG8FallbackForIE6'}).transform(
-                transforms.addInitialAssets('style.css'),
+                transforms.addAssets('style.css'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
             );
