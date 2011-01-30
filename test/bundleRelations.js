@@ -43,7 +43,7 @@ vows.describe('Bundle stylesheets').addBatch({
             'there should be a single CSS': function (assetGraph) {
                 assert.equal(assetGraph.findAssets('type', 'CSS').length, 1);
             },
-            'the CSSBackgroundImage relations should be reregistered to the bundle': function (assetGraph) {
+            'the CSSBackgroundImage relations should be attached to the bundle': function (assetGraph) {
                 var cssBackgroundImages = assetGraph.findRelations('type', 'CSSBackgroundImage'),
                     bundle = assetGraph.findAssets('type', 'CSS')[0];
                 assert.equal(cssBackgroundImages.length, 4);
