@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-var SiteGraph = require('../lib/SiteGraph'),
+var AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root']});
 
-new SiteGraph({root: commandLineOptions.root + '/'}).transform(
+new AssetGraph({root: commandLineOptions.root + '/'}).transform(
     transforms.addAssets(commandLineOptions._),
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label || []),
     transforms.populate(function (relation) {
