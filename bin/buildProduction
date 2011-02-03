@@ -13,7 +13,7 @@ assetGraph.transform(
     function createStaticDir(assetGraph, cb) {
         fileUtils.mkpath(fileUtils.fileUrlToFsPath(outRoot) + staticDir, cb);
     },
-    transforms.addAssets(commandLineOptions._),
+    transforms.loadAssets(commandLineOptions._),
     transforms.populate(function (relation) {
         return relation.type !== 'JavaScriptStaticInclude';
     }),

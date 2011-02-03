@@ -14,7 +14,8 @@
         "step": ">=0.0.3",
         "optimist": ">=0.1.4",
         "cssom": ">=0.2.0",
-        "request": ">=1.2.0"
+        "request": ">=1.2.0",
+        "glob": ">=1.1.0"
     },
     "devDependencies": {
         "vows": ">=0.5.3"

@@ -8,7 +8,7 @@ vows.describe('Add PNG8 fallback for IE6').addBatch({
     'After loading a the test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/addPNG8FallbackForIE6'}).transform(
-                transforms.addAssets('style.css'),
+                transforms.loadAssets('style.css'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
             );

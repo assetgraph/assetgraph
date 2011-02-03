@@ -7,7 +7,7 @@ vows.describe('Sprite background images').addBatch({
     'After loading a test case with images and spriting instructions': {
         topic: function () {
             new AssetGraph({root: __dirname + '/spriteBackgroundImages'}).transform(
-                transforms.addAssets('style.css'),
+                transforms.loadAssets('style.css'),
                 transforms.populate(),
                 transforms.escapeToCallback(this.callback)
             );
@@ -18,7 +18,7 @@ vows.describe('Sprite background images').addBatch({
         'the graph contains 3 PNGs': function (assetGraph) {
             assert.equal(assetGraph.findAssets('type', 'PNG').length, 3);
         },
-        'the graph contains one CSS assets': function (assetGraph) {
+        'the graph contains one CSS asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets('type', 'CSS').length, 1);
         },
         'the graph contains a single CSSSpritePlaceholder relation': function (assetGraph) {
