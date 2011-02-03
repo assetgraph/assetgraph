@@ -5,8 +5,8 @@ var AssetGraph = require('../lib/AssetGraph'),
     commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root']});
 
 new AssetGraph({root: commandLineOptions.root + '/'}).transform(
-    transforms.loadAssets(commandLineOptions._),
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label || []),
+    transforms.loadAssets(commandLineOptions._),
     transforms.populate(function (relation) {
         return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment', 'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
     }),
