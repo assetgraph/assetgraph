@@ -1,0 +1,22 @@
+{
+  "todo" : [
+    "use a unified coding style",
+    "make sources pass jslint validation",
+    "investigate merging upstream changes from HEAD with dav's node-htmlparser fork",
+    "consolidate/clean TODOs",
+    "consider a cleaner way to do 'private' variables (as apposed to x._imPrivateISwear)",
+    "consider implementing dom level2/core",
+    "consider implementing dom level3"
+  ],
+  "done" : [
+    "consider implementing dom level2 hmtl/events",
+    "consider implementing HTML based elements in level1 (no tests currently.. boo)",
+    "ensure doc.documentElement is updated in long living dom documents",
+    "pass YUI3 dom and selector tests via browser augmentation",
+    "move node-htmlparser dependence out into a utility area",
+    "allow YUI3 to run on top of jsdom",
+    "run sizzle and pure templating on node",
+    "build browser compatibility layer",
+    "build dom level 1"
+  ]
+}

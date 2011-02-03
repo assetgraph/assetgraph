@@ -1,3 +1,0 @@
-[submodule "lib/3rdparty/papandreou-jsdom"]
-	path = lib/3rdparty/papandreou-jsdom
-	url = git://github.com/papandreou/jsdom.git
