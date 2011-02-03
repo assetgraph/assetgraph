@@ -1,0 +1,3 @@
+body {
+    filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/quux.png')";
+}

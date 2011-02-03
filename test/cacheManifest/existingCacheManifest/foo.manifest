@@ -1,2 +1,8 @@
 CACHE MANIFEST
 foo.png
+
+NETWORK:
+/helloworld.php
+
+FALLBACK:
+heresthething.asp foo.png
