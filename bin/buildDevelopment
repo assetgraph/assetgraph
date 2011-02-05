@@ -13,6 +13,8 @@ new AssetGraph({root: commandLineOptions.root + '/'}).transform(
     }),
     transforms.flattenStaticIncludes(),
     transforms.executeJavaScript({environment: 'buildDevelopment'}),
-    transforms.inlineDirtyAssets(),
+    transforms.inlineAssets(function (asset) {
+        return asset.isDirty;
+    }),
     transforms.writeInitialAssetsBackToDisc()
 );
