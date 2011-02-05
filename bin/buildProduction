@@ -5,7 +5,7 @@ var AssetGraph = require('../lib/AssetGraph'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root', 'out-root', 'static-dir']}),
     assetGraph = new AssetGraph({root: commandLineOptions.root}),
-    outRoot = fileUtils.fsPathToFileUrl(commandLineOptions.outRoot, true), // forceDirectory
+    outRoot = fileUtils.fsDirToFileUrl(commandLineOptions.outRoot),
     staticDir = commandLineOptions.staticDir || 'static',
     htmlAssets = [];
 
