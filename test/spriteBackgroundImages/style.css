@@ -1,22 +1,22 @@
 .icon {
-    -one-sprite-selector-for-group: 'icons';
+    -one-sprite-selector-for-group: icons;
     -one-sprite-packer: horizontal;
     -one-sprite-background-color: transparent;
 }
 
 .icon-foo {
-    -one-sprite-group: 'icons';
+    -one-sprite-group: icons;
     -one-sprite-padding: 10 10 10 10;
     background-image: url(foo.png);
 }
 
 .icon-bar {
-    -one-sprite-group: 'icons';
+    -one-sprite-group: icons;
     background-image: url(bar.png);
 }
 
 .icon-quux {
-    -one-sprite-group: 'icons';
+    -one-sprite-group: icons;
     -one-sprite-no-group-selector: true;
     background-image: url(quux.png);
 }
