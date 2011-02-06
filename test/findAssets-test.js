@@ -1,0 +1,42 @@
+var URL = require('url'),
+    vows = require('vows'),
+    assert = require('assert'),
+    AssetGraph = require('../lib/AssetGraph'),
+    transforms = require('../lib/transforms'),
+    assets = require('../lib/assets'),
+    step = require('step');
+
+vows.describe('AssetGraph.findAssets').addBatch({
+    'Load test case': {
+        topic: function () {
+            new AssetGraph().transform(
+                transforms.loadAssets(
+                    {type: 'HTML', originalSrc: 'a', foo: 'bar'},
+                    {type: 'HTML', originalSrc: 'b', foo: 'bar'},
+                    {type: 'HTML', originalSrc: 'c', foo: 'quux'},
+                    {type: 'CSS',  originalSrc: 'd'},
+                    {type: 'CSS',  originalSrc: 'e'},
+                    {type: 'PNG',  originalSrc: 'f'}
+                ),
+                transforms.escapeToCallback(this.callback)
+            );
+        },
+        'and lookup single value of unindexed property': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({foo: 'bar'}).length, 2);
+        },
+        'and lookup multiple values of unindexed property': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({foo: ['bar', 'quux']}).length, 3);
+        },
+        'and lookup single value of indexed property': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 3);
+            assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 2);
+            assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
+        },
+        'and lookup multiple values of indexed property': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: ['CSS', 'HTML']}).length, 5);
+            assert.equal(assetGraph.findAssets({type: ['PNG', 'CSS', 'HTML']}).length, 6);
+            assert.equal(assetGraph.findAssets({type: ['PNG', 'HTML']}).length, 4);
+            assert.equal(assetGraph.findAssets({type: ['CSS', 'PNG']}).length, 3);
+        }
+    }
+})['export'](module);
