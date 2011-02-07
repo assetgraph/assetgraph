@@ -10,7 +10,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label || []),
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate(function (relation) {
-        return ['HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptIfEnvironment', 'HTMLStyle', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
+        return ['HTMLScript', 'JavaScriptStaticInclude', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
     }),
     transforms.flattenStaticIncludes(),
     transforms.executeJavaScript({environment: 'buildDevelopment'}),
