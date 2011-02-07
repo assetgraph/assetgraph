@@ -3,8 +3,7 @@
 var AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     fileUtils = require('../lib/fileUtils'),
-    commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root']}),
-    inlineAssetUrlMatcher = commandLineOptions.inline && fileUtils.makeFileUrlMatcher(commandLineOptions.inline);
+    commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root']});
 
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label || []),
@@ -14,8 +13,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     }),
     transforms.flattenStaticIncludes(),
     transforms.executeJavaScript({environment: 'buildDevelopment'}),
-    transforms.inlineAssets(function (asset) {
-        return asset.isDirty || (asset.url && inlineAssetUrlMatcher && inlineAssetUrlMatcher(asset.url));
-    }),
+    transforms.inlineAssets({isDirty: true}),
+    transforms.inlineAssets({url: fileUtils.makeFileUrlMatcher(commandLineOptions.inline)}), // FIXME: OR queries?
     transforms.writeInitialAssetsBackToDisc()
 );
