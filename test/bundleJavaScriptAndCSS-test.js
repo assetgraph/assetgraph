@@ -33,9 +33,7 @@ vows.describe('Bundle stylesheets').addBatch({
         'then bundling the HTMLStyles': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-transforms.drawGraph('before.svg'),
                     transforms.bundleJavaScriptAndCSS(),
-transforms.drawGraph('after.svg'),
                     transforms.escapeToCallback(this.callback)
                 );
             },
