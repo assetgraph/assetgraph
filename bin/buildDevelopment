@@ -8,9 +8,7 @@ var AssetGraph = require('../lib/AssetGraph'),
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label || []),
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
-    transforms.populate(function (relation) {
-        return ['HTMLScript', 'JavaScriptStaticInclude', 'CSSBackgroundImage'].indexOf(relation.type) !== -1;
-    }),
+    transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude', 'CSSBackgroundImage']}),
     transforms.flattenStaticIncludes(),
     transforms.executeJavaScript({environment: 'buildDevelopment'}),
     transforms.inlineAssets({isDirty: true}),
