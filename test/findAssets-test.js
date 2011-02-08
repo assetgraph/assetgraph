@@ -14,9 +14,9 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     {type: 'HTML', originalSrc: 'a', foo: 'bar'},
                     {type: 'HTML', originalSrc: 'b', foo: 'bar'},
                     {type: 'HTML', originalSrc: 'c', foo: 'quux'},
-                    {type: 'CSS',  originalSrc: 'd'},
+                    {type: 'CSS',  originalSrc: 'd', foo: 'baz'},
                     {type: 'CSS',  originalSrc: 'e'},
-                    {type: 'PNG',  originalSrc: 'f'}
+                    {type: 'PNG',  originalSrc: 'f', foo: 'baz'}
                 ),
                 transforms.escapeToCallback(this.callback)
             );
@@ -37,6 +37,11 @@ vows.describe('AssetGraph.findAssets').addBatch({
             assert.equal(assetGraph.findAssets({type: ['PNG', 'CSS', 'HTML']}).length, 6);
             assert.equal(assetGraph.findAssets({type: ['PNG', 'HTML']}).length, 4);
             assert.equal(assetGraph.findAssets({type: ['CSS', 'PNG']}).length, 3);
-        }
+        },
+        'and lookup multiple properties': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({foo: 'baz', type: 'CSS'}).length, 1);
+            assert.equal(assetGraph.findAssets({foo: 'bar', type: 'HTML'}).length, 2);
+            assert.equal(assetGraph.findAssets({foo: 'quux', type: 'PNG'}).length, 0);
+        },
     }
 })['export'](module);
