@@ -9,8 +9,8 @@ massive changes.
 
 Currently it does the following:
 
-* Build the asset graph programmatically or load it from disk or via
-  http.
+* Build an asset graph programmatically or load it from disk or a
+  remote server via http.
 * Find explicit dependencies between JavaScript and CSS roll them out
   as ``<script>`` and ``<link rel='stylesheet'>`` tags in your
   HTML. For now only a homegrown one.include syntax is supported, but
@@ -26,7 +26,7 @@ Currently it does the following:
   ``-one-sprite`` prefix.
 * Help getting your static assets on a CDN by allowing you to easily
   rewrite all references to them.
-* Use Graphviz to visualize your dependencies at any optimization step.
+* Use Graphviz to visualize your dependencies at any step.
 
 Design
 ======
@@ -69,7 +69,7 @@ Usage
 -----
 
 TODO... For now, have a look at ``buildDevelopment`` and
-``buildProduction`` in the ``lib`` folder.
+``buildProduction`` in the ``bin`` folder.
 
 License
 -------
