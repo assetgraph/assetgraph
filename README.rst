@@ -15,9 +15,11 @@ The projects dependencies are noted in the `package.json`-file, and they can
 be automatically installed with ``npm install`` or `npm link`.
 
 Of particular note, `node-canvas <https://github.com/learnboost/node-canvas>`_
-is not a pure-node module and requires the Cairo development sources
-(`libcairo2-dev` on Ubuntu & friends) and compilation of some glue C++-code to
-work.
+is not a pure-node module and requires the Cairo development sources version
+1.10 or later (`libcairo2-dev` on Ubuntu & friends) and compilation of some
+glue C++-code to work.
+
+Likewise, ``pngquant`` is required to help squash PNG files in size.
 
 Testing
 -------
