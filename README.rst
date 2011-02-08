@@ -4,9 +4,9 @@ Asset Graph
 Asset Graph is a highly integrated build/compilation tool for JavaScript
 projects. A dependency graph is built for all resources in the project.
 
- * Only the relevant parts of the sources / assets is included.
- * Images are automatically sprited (including a special version for IE6).
- * Minification of JavaScript.
+* Only the relevant parts of the sources / assets is included.
+* Images are automatically sprited (including a special version for IE6).
+* Minification of JavaScript.
 
 Building
 --------
