@@ -14,5 +14,6 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.executeJavaScript({environment: 'buildDevelopment'}),
     transforms.inlineAssets({isDirty: true}),
     transforms.inlineAssets({url: fileUtils.makeFileUrlMatcher(commandLineOptions.inline)}), // FIXME: OR queries?
-    transforms.writeInitialAssetsBackToDisc()
+    transforms.moveAssets({isInitial: true}, function (asset) {return asset.url.replace(/\.template$/, "");}),
+    transforms.writeAssetsToDisc({isInitial: true})
 );

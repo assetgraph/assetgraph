@@ -2,12 +2,12 @@
 
 var AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
+    query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root', 'out-root', 'static-dir']}),
     assetGraph = new AssetGraph({root: commandLineOptions.root}),
     outRoot = fileUtils.fsDirToFileUrl(commandLineOptions.outRoot),
-    staticDir = commandLineOptions.staticDir || 'static',
-    htmlAssets = [];
+    staticDir = commandLineOptions.staticDir || 'static';
 
 assetGraph.transform(
     function createStaticDir(assetGraph, cb) {
@@ -21,5 +21,5 @@ assetGraph.transform(
     transforms.addCacheManifestSinglePage(), // Query?
     transforms.minifyAssets(),
     transforms.moveAssetsToStaticDir(staticDir),
-    transforms.writeAssetsToDisc(outRoot)
+    transforms.writeAssetsToDisc({}, outRoot)
 );
