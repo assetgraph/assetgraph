@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-var AssetGraph = require('../lib/AssetGraph'),
+var _ = require('underscore'),
+    AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root']});
 
 new AssetGraph({root: commandLineOptions.root}).transform(
-    transforms.registerLabelsAsCustomProtocols(commandLineOptions.label || []),
+    transforms.registerLabelsAsCustomProtocols(_.flatten(commandLineOptions.label)),
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude', 'CSSBackgroundImage']}),
     transforms.flattenStaticIncludes(),
