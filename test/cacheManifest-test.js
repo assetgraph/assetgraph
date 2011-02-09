@@ -29,7 +29,7 @@ vows.describe('Cache manifest').addBatch({
         'then running the addCacheManifestSinglePage transform': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-                    transforms.addCacheManifestSinglePage(),
+                    transforms.addCacheManifestSinglePage({isInitial: true}),
                     transforms.escapeToCallback(this.callback)
                 );
             },
@@ -81,7 +81,7 @@ vows.describe('Cache manifest').addBatch({
         'then adding a cache manifest to the HTML file using the "single page" method': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-                    transforms.addCacheManifestSinglePage(),
+                    transforms.addCacheManifestSinglePage({isInitial: true}),
                     transforms.escapeToCallback(this.callback)
                 );
             },
@@ -122,7 +122,7 @@ vows.describe('Cache manifest').addBatch({
         'then adding a cache manifest to the HTML file using the "site map" method': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-                    transforms.addCacheManifestSiteMap(),
+                    transforms.addCacheManifestSiteMap({isInitial: true}),
                     transforms.escapeToCallback(this.callback)
                 );
             },
@@ -160,7 +160,7 @@ vows.describe('Cache manifest').addBatch({
         'then running the addCacheManifestSiteMap transform': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-                    transforms.addCacheManifestSiteMap(),
+                    transforms.addCacheManifestSiteMap({isInitial: true}),
                     transforms.escapeToCallback(this.callback)
                 );
             },

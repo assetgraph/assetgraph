@@ -18,7 +18,7 @@ assetGraph.transform(
     transforms.bundleJavaScriptAndCSS(),
     transforms.spriteBackgroundImages(),
     transforms.addPNG8FallbackForIE6(),
-    transforms.addCacheManifestSinglePage(), // Query?
+    transforms.addCacheManifestSinglePage({isInitial: true}),
     transforms.minifyAssets(),
     transforms.moveAssetsToStaticDir(staticDir),
     transforms.writeAssetsToDisc({}, outRoot)
