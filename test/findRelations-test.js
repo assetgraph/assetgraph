@@ -104,6 +104,18 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     originalSrc: query.not('a')
                 }
             }).length, 2);
+        },
+        'and lookup relations using query.exists': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({
+                from: {
+                    foo: query.exists
+                }
+            }).length, 6);
+            assert.equal(assetGraph.findRelations({
+                from: {
+                    foo: query.not(query.exists)
+                }
+            }).length, 1);
         }
     }
 })['export'](module);
