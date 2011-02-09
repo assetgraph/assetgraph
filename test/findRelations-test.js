@@ -5,6 +5,7 @@ var URL = require('url'),
     transforms = require('../lib/transforms'),
     assets = require('../lib/assets'),
     relations = require('../lib/relations'),
+    query = require('../lib/query'),
     step = require('step');
 
 vows.describe('AssetGraph.findAssets').addBatch({
@@ -95,6 +96,14 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     originalSrc: /^a$/
                 }
             }).length, 1);
+        },
+        'and lookup relations by negative match': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({
+                type: query.not('CSSBackgroundImage'),
+                from: {
+                    originalSrc: query.not('a')
+                }
+            }).length, 2);
         }
     }
 })['export'](module);

@@ -14,7 +14,7 @@ assetGraph.transform(
         fileUtils.mkpath(fileUtils.fileUrlToFsPath(outRoot) + staticDir, cb);
     },
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
-    transforms.populate({type: function (type) {return type !== 'JavaScriptStaticInclude'}}), // FIXME: query
+    transforms.populate({type: query.not('JavaScriptStaticInclude')}),
     transforms.bundleJavaScriptAndCSS(),
     transforms.spriteBackgroundImages(),
     transforms.addPNG8FallbackForIE6(),
