@@ -21,10 +21,11 @@ vows.describe('Cache manifest').addBatch({
         'the graph contains a single cache manifest': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
         },
-        'the cache manifest has an outgoing relation to an image': function (assetGraph) {
+        'the cache manifest has an outgoing relation to an image in the FALLBACK section': function (assetGraph) {
             var outgoingRelations = assetGraph.findRelations({from: assetGraph.findAssets({type: 'CacheManifest'})[0]}); // FIXME: query
             assert.equal(outgoingRelations.length, 1);
             assert.equal(outgoingRelations[0].to.type, 'PNG');
+            assert.equal(outgoingRelations[0].sectionName, 'FALLBACK');
         },
         'then running the addCacheManifestSinglePage transform': {
             topic: function (assetGraph) {
@@ -46,11 +47,25 @@ vows.describe('Cache manifest').addBatch({
                     assetGraph.findAssets({type: 'CacheManifest'})[0].serialize(this.callback);
                 },
                 'it should only point to foo.png once': function (src) {
-                    assert.equal(src.match(/^foo.png/gm).length, 1);
+                    var fooPngMatches = src.match(/\bfoo.png/gm);
+                    assert.isArray(fooPngMatches);
+                    assert.equal(fooPngMatches.length, 1);
                 },
                 'it should still contain the original NETWORK and FALLBACK sections': function (src) {
                     assert.isTrue(src.indexOf("NETWORK:\n/helloworld.php\n") !== -1);
                     assert.isTrue(src.indexOf("FALLBACK:\nheresthething.asp foo.png\n") !== -1);
+                },
+                'then move the foo.png asset to a different url and serialize the manifest again': {
+                    topic: function (previousSrc, assetGraph) {
+                        assetGraph.setAssetUrl(assetGraph.findAssets({url: /foo.png$/})[0], assetGraph.root + 'somewhere/else/quux.png');
+                        assetGraph.findAssets({type: 'CacheManifest'})[0].serialize(this.callback);
+                    },
+                    'there should be no mention of foo.png': function (src) {
+                        assert.isNull(src.match(/\bfoo.png/gm));
+                    },
+                    'the entry in the FALLBACK section should point at the new url': function (src) {
+                        assert.isTrue(src.indexOf("FALLBACK:\nheresthething.asp somewhere/else/quux.png\n") !== -1);
+                    }
                 }
             }
         }
