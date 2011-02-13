@@ -19,6 +19,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.addPNG8FallbackForIE6(),
     transforms.addCacheManifestSinglePage({isInitial: true}),
     transforms.minifyAssets(),
-    transforms.moveAssetsToStaticDir(staticDir),
+    transforms.moveAssetsToDirectory({isInitial: query.not(true)}, '/' + staticDir),
+    transforms.renameAssetsToMD5Prefix({isInitial: query.not(true)}),
     transforms.writeAssetsToDisc({}, outRoot)
 );
