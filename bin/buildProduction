@@ -6,6 +6,7 @@ var AssetGraph = require('../lib/AssetGraph'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root', 'out-root', 'static-dir']}),
     outRoot = fileUtils.fsDirToFileUrl(commandLineOptions.outRoot),
+    cdnRoot = commandLineOptions.cdnRoot && fileUtils.ensureTrailingSlash(commandLineOptions.cdnRoot),
     staticDir = commandLineOptions.staticDir || 'static';
 
 new AssetGraph({root: commandLineOptions.root}).transform(
@@ -20,6 +21,12 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.addCacheManifestSinglePage({isInitial: true}),
     transforms.minifyAssets(),
     transforms.moveAssetsToDirectory({isInitial: query.not(true)}, '/' + staticDir),
+    (cdnRoot ? transforms.moveAssetsToNewRoot({
+        type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']
+    }, cdnRoot) : transforms.noop()),
     transforms.renameAssetsToMD5Prefix({isInitial: query.not(true)}),
-    transforms.writeAssetsToDisc({}, outRoot)
+    transforms.parallel(
+        transforms.writeAssetsToDisc({url: /^file:/}, outRoot),
+        cdnRoot ? transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnRoot)}, outRoot, cdnRoot) : transforms.noop()
+    )
 );
