@@ -41,10 +41,10 @@ Asset Graph provides a basic data model that allows you to populate,
 query, and manipulate the graph at a high level of
 abstraction. Additionally, each individual asset can be inspected and
 massaged using a relevant API: DOM for HTML (using `jsdom
-<https://github.com/tmpvar/jsdom>`), CSSOM for CSS (using `NV's CSSOM
-module <https://github.com/NV/CSSOM>`), and an abstract syntax tree
+<https://github.com/tmpvar/jsdom>`_), CSSOM for CSS (using `NV's CSSOM
+module <https://github.com/NV/CSSOM>`_), and an abstract syntax tree
 for JavaScript (powered by `UglifyJS
-<https://github.com/mishoo/UglifyJS/>`' parser).
+<https://github.com/mishoo/UglifyJS/>`_' parser).
 
 Building
 --------
