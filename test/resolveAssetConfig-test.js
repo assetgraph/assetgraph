@@ -61,5 +61,19 @@ vows.describe('resolveAssetConfig').addBatch({
             assert.isObject(resolvedAssetConfigs[1]);
             assert.equal(resolvedAssetConfigs[1].type, 'PNG');
         }
+    },
+    'expand dir without trailing slash': {
+        topic: resolveAssetConfig('subdir'),
+        'should resolve to dir/index.html': function (resolvedAssetConfig) {
+            assert.equal(resolvedAssetConfig.type, 'HTML');
+            assert.equal(resolvedAssetConfig.url, 'file://' + assetGraphRoot + 'subdir/index.html');
+        }
+    },
+    'expand dir with trailing slash': {
+        topic: resolveAssetConfig('subdir'),
+        'should resolve to dir/index.html': function (resolvedAssetConfig) {
+            assert.equal(resolvedAssetConfig.type, 'HTML');
+            assert.equal(resolvedAssetConfig.url, 'file://' + assetGraphRoot + 'subdir/index.html');
+        }
     }
 })['export'](module);
