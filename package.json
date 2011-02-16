@@ -20,7 +20,7 @@
         "graphviz": ">=0.0.3"
     },
     "devDependencies": {
-        "vows": ">=0.5.3"
+        "vows": ">=0.5.6"
     },
     "engines": {
         "node": ">=0.2.6"
