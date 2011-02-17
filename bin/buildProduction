@@ -17,11 +17,11 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.addPNG8FallbackForIE6(),
     transforms.addCacheManifestSinglePage({isInitial: true}),
     transforms.minifyAssets(),
-    transforms.moveAssetsToDirectory({isInitial: query.not(true)}, '/' + staticDir),
+    transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.exists, type: query.not('HTML')}, '/' + staticDir),
     (cdnRoot ? transforms.moveAssetsToNewRoot({
         type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']
     }, cdnRoot) : transforms.noop()),
-    transforms.renameAssetsToMD5Prefix({isInitial: query.not(true)}),
+    transforms.renameAssetsToMD5Prefix({type: query.not('HTML'), url: query.exists}),
     transforms.parallel(
         transforms.writeAssetsToDisc({url: /^file:/}, outRoot),
         cdnRoot ? transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnRoot)}, outRoot, cdnRoot) : transforms.noop()
