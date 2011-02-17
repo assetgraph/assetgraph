@@ -10,9 +10,6 @@ var AssetGraph = require('../lib/AssetGraph'),
     staticDir = commandLineOptions.staticDir || 'static';
 
 new AssetGraph({root: commandLineOptions.root}).transform(
-    function createStaticDir(assetGraph, cb) {
-        fileUtils.mkpath(fileUtils.fileUrlToFsPath(outRoot) + staticDir, cb);
-    },
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({type: query.not('JavaScriptStaticInclude'), to: query.not(/^https?:/)}),
     transforms.bundleJavaScriptAndCSS(),
