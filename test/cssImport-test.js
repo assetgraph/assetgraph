@@ -1,13 +1,9 @@
-var URL = require('url'),
-    vows = require('vows'),
+var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    assets = require('../lib/assets'),
-    relations = require('../lib/relations'),
-    step = require('step');
+    transforms = require('../lib/transforms');
 
-vows.describe('getStaticUrl in JavaScript asset').addBatch({
+vows.describe('css @import').addBatch({
     'After loading test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/cssImport/'}).transform(
