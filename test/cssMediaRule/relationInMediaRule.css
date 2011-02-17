@@ -1,0 +1,10 @@
+@media handheld {
+    div > div {
+        background: url(foo.png);
+    }
+    @media screen {
+        span {
+            background: url(foo.png);
+        }
+    }
+}
