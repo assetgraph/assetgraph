@@ -105,15 +105,15 @@ vows.describe('AssetGraph.findAssets').addBatch({
                 }
             }).length, 2);
         },
-        'and lookup relations using query.exists': function (assetGraph) {
+        'and lookup relations using query.defined': function (assetGraph) {
             assert.equal(assetGraph.findRelations({
                 from: {
-                    foo: query.exists
+                    foo: query.defined
                 }
             }).length, 6);
             assert.equal(assetGraph.findRelations({
                 from: {
-                    foo: query.not(query.exists)
+                    foo: query.undefined
                 }
             }).length, 1);
         }
