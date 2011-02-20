@@ -7,7 +7,7 @@ var vows = require('vows'),
 function resolveAssetConfig(assetConfig, fromUrl, cb) {
     return function () {
         var assetGraph = new AssetGraph({root: assetGraphRoot});
-        assetGraph.resolver.resolve(assetConfig, fromUrl || assetGraph.root, cb || this.callback);
+        assetGraph.resolver.resolve(assetConfig, fromUrl || assetGraph.resolver.root, cb || this.callback);
     };
 }
 

@@ -40,7 +40,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
         },
         'then move one of the assets pointed to by a JavaScriptStaticUrl relation and serialize the JavaScript asset': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], assetGraph.root + 'static/a76a76a7a.json');
+                assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], assetGraph.resolver.root + 'static/a76a76a7a.json');
                 assetGraph.findAssets({type: 'JavaScript'})[0].serialize(this.callback);
             },
             'the resulting JavaScript should map the url correctly': function (src) {

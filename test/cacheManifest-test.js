@@ -38,7 +38,7 @@ vows.describe('Cache manifest').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
             },
             'the manifest should have a relation to bar.png': function (assetGraph) {
-                var barPng = assetGraph.assetsByUrl[assetGraph.root + 'bar.png'],
+                var barPng = assetGraph.assetsByUrl[assetGraph.resolver.root + 'bar.png'],
                     manifest = assetGraph.findAssets({type: 'CacheManifest'})[0];
                 assert.equal(assetGraph.findRelations({from: manifest, to: barPng}).length, 1); // FIXME: query
             },
@@ -57,7 +57,7 @@ vows.describe('Cache manifest').addBatch({
                 },
                 'then move the foo.png asset to a different url and serialize the manifest again': {
                     topic: function (previousSrc, assetGraph) {
-                        assetGraph.setAssetUrl(assetGraph.findAssets({url: /foo.png$/})[0], assetGraph.root + 'somewhere/else/quux.png');
+                        assetGraph.setAssetUrl(assetGraph.findAssets({url: /foo.png$/})[0], assetGraph.resolver.root + 'somewhere/else/quux.png');
                         assetGraph.findAssets({type: 'CacheManifest'})[0].serialize(this.callback);
                     },
                     'there should be no mention of foo.png': function (src) {

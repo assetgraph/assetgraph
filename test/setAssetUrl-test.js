@@ -26,7 +26,7 @@ vows.describe('Changing the url of assets').addBatch({
         'then moving the first HTML asset one level down:': {
             topic: function (assetGraph) {
                 var initialHTML = assetGraph.findAssets({type: 'HTML'})[0];
-                assetGraph.setAssetUrl(initialHTML, assetGraph.root + 'bogus/index.html');
+                assetGraph.setAssetUrl(initialHTML, assetGraph.resolver.root + 'bogus/index.html');
                 return assetGraph;
             },
             'the relative url of the anchor relation should have changed': function (assetGraph) {
@@ -36,7 +36,7 @@ vows.describe('Changing the url of assets').addBatch({
             'then moving the other page one level down': {
                 topic: function (assetGraph) {
                     var otherHTML = assetGraph.findAssets({type: 'HTML'})[1];
-                    assetGraph.setAssetUrl(otherHTML, assetGraph.root + 'fluff/otherpage.html');
+                    assetGraph.setAssetUrl(otherHTML, assetGraph.resolver.root + 'fluff/otherpage.html');
                     return assetGraph;
                 },
                 'the relative url of the anchor relation should be updated': function (assetGraph) {
