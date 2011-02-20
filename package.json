@@ -9,7 +9,7 @@
     ],
     "dependencies": {
         "uglify-js": ">=0.0.1",
-        "jsdom": ">=0.1.23",
+        "jsdom": ">=0.2.0",
         "underscore": ">=1.1.3",
         "step": ">=0.0.3",
         "optimist": ">=0.1.4",
