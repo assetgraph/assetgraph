@@ -4,7 +4,7 @@ var vows = require('vows'),
     transforms = require('../lib/transforms');
 
 vows.describe('executeJavaScriptConditionalBlocks').addBatch({
-    'After loading test case and executing the conditional blocks': {
+    'After loading test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/runJavaScriptConditionalBlocks'}).transform(
                 transforms.loadAssets('index.html'),
