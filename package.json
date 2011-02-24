@@ -30,6 +30,7 @@
     },
     "bin": {
         "buildDevelopment": "./bin/buildDevelopment",
-        "buildProduction": "./bin/buildProduction"
+        "buildProduction": "./bin/buildProduction",
+        "flattenOneInclude": "./bin/flattenOneInclude"
     }
 }

@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+
+var fs = require('fs'),
+    _ = require('underscore'),
+    step = require('step'),
+    error = require('../lib/error'),
+    assets = require('../lib/assets'),
+    AssetGraph = require('../lib/AssetGraph'),
+    transforms = require('../lib/transforms'),
+    fileUtils = require('../lib/fileUtils'),
+    commandLineOptions = require('../lib/camelOptimist')({
+        usage: '$1 [--root <dir>] [-o <outputJavaScriptFile>] <inputJavaScriptFile>',
+        check: function (argv) {
+            if (argv._.length !== 1 || !/\.js$/.test(argv._[0])) {
+                throw "Please specify a single JavaScript file on the command line";
+            }
+        }
+    });
+
+new AssetGraph({root: commandLineOptions.root}).transform(
+    transforms.registerLabelsAsCustomProtocols(_.flatten(commandLineOptions.label)),
+    transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
+    transforms.populate({type: 'JavaScriptStaticInclude'}),
+    function (err, assetGraph, cb) {
+        var initialAssets = assetGraph.findAssets({isInitial: true});
+        if (initialAssets.length !== 1 || initialAssets[0].type !== 'JavaScript') {
+            return process.nextTick(cb);
+        }
+        step(
+            function () {
+                var group = this.group(),
+                    seenAssets = {};
+                // FIXME: There should be an 'eachAssetPostOrder' helper in AssetGraph.
+                initialAssets.forEach(function (initialAsset) {
+                    var stack = [];
+                    (function traversePostorder(asset) {
+                        if (!seenAssets[asset.id]) {
+                            seenAssets[asset.id] = true;
+                            stack.push(asset);
+                            assetGraph.findRelations({from: asset}).forEach(function (relation) {
+                                traversePostorder(relation.to);
+                                assetGraph.detachAndRemoveRelation(relation);
+                            });
+                            asset.getOriginalSrc(group());
+                            assetGraph.removeAsset(asset);
+                        }
+                    }(initialAsset));
+                });
+            },
+            error.passToFunction(cb, function (srcs) {
+                var flattenedSrc = srcs.join("\n").replace(/one\.include\(([^\)]*)\);?\n?/g, "");
+                if ('o' in commandLineOptions) {
+                    fs.writeFile(commandLineOptions.o, flattenedSrc, assets.JavaScript.prototype.encoding, cb);
+                } else {
+                    console.log(flattenedSrc);
+                }
+            })
+        );
+    }
+);
