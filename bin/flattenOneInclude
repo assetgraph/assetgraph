@@ -9,7 +9,7 @@ var fs = require('fs'),
     transforms = require('../lib/transforms'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('../lib/camelOptimist')({
-        usage: '$1 [--root <dir>] [-o <outputJavaScriptFile>] <inputJavaScriptFile>',
+        usage: '$0 [--root <dir>] [-o <outputJavaScriptFile>] <inputJavaScriptFile>',
         check: function (argv) {
             if (argv._.length !== 1 || !/\.js$/.test(argv._[0])) {
                 throw "Please specify a single JavaScript file on the command line";
