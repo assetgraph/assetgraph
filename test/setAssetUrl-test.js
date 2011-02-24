@@ -11,7 +11,7 @@ vows.describe('Changing the url of assets').addBatch({
             new AssetGraph({root: __dirname + '/setAssetUrl/'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph should contain 3 assets': function (assetGraph) {

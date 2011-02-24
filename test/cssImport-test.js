@@ -9,7 +9,7 @@ vows.describe('css @import').addBatch({
             new AssetGraph({root: __dirname + '/cssImport/'}).transform(
                 transforms.loadAssets('index.css'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph should contain two CSS assets': function (assetGraph) {

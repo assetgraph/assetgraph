@@ -14,7 +14,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             new AssetGraph({root: __dirname + '/getStaticUrl/'}).transform(
                 transforms.loadAssets('getStaticUrlWildcard.js'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph should contain a single JavaScript asset': function (assetGraph) {
@@ -46,7 +46,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             new AssetGraph({root: __dirname + '/getStaticUrl/'}).transform(
                 transforms.loadAssets('getStaticUrlWildcard.js'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'then serialize the JavaScript asset': {
@@ -62,7 +62,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                             originalSrc: src
                         }),
                         transforms.populate(),
-                        transforms.escapeToCallback(this.callback)
+                        this.callback
                     );
                 },
                 'the graph should contain a single JavaScript asset': function (assetGraph) {

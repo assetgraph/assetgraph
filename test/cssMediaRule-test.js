@@ -9,7 +9,7 @@ vows.describe('css @media rule').addBatch({
             new AssetGraph({root: __dirname + '/cssMediaRule/'}).transform(
                 transforms.loadAssets('relationInMediaRule.css'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph should contain two CSSBackgroundImage relation': function (assetGraph) {

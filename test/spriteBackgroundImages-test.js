@@ -9,7 +9,7 @@ vows.describe('Sprite background images').addBatch({
             new AssetGraph({root: __dirname + '/spriteBackgroundImages'}).transform(
                 transforms.loadAssets('style.css'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph contains 5 assets': function (assetGraph) {
@@ -31,7 +31,7 @@ vows.describe('Sprite background images').addBatch({
             topic: function (assetGraph) {
                 assetGraph.transform(
                     transforms.spriteBackgroundImages(),
-                    transforms.escapeToCallback(this.callback)
+                    this.callback
                 );
             },
             'the number of PNG assets should be down to one': function (assetGraph) {

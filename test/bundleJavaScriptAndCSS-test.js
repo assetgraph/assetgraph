@@ -9,7 +9,7 @@ vows.describe('Bundle stylesheets').addBatch({
             new AssetGraph({root: __dirname + '/bundleJavaScriptAndCSS'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph contains 6 assets': function (assetGraph) {
@@ -34,7 +34,7 @@ vows.describe('Bundle stylesheets').addBatch({
             topic: function (assetGraph) {
                 assetGraph.transform(
                     transforms.bundleJavaScriptAndCSS(),
-                    transforms.escapeToCallback(this.callback)
+                    this.callback
                 );
             },
             'the number of HTMLStyles should be down to one': function (assetGraph) {

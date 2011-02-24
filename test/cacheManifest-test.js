@@ -9,7 +9,7 @@ vows.describe('Cache manifest').addBatch({
             new AssetGraph({root: __dirname + '/cacheManifest/existingCacheManifest/'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph should contain 4 relations': function (assetGraph) {
@@ -31,7 +31,7 @@ vows.describe('Cache manifest').addBatch({
             topic: function (assetGraph) {
                 assetGraph.transform(
                     transforms.addCacheManifestSinglePage({isInitial: true}),
-                    transforms.escapeToCallback(this.callback)
+                    this.callback
                 );
             },
             'there should still be a single cache manifest asset': function (assetGraph) {
@@ -75,7 +75,7 @@ vows.describe('Cache manifest').addBatch({
             new AssetGraph({root: __dirname + '/cacheManifest/noCacheManifest/'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph contains 3 assets': function (assetGraph) {
@@ -97,7 +97,7 @@ vows.describe('Cache manifest').addBatch({
             topic: function (assetGraph) {
                 assetGraph.transform(
                     transforms.addCacheManifestSinglePage({isInitial: true}),
-                    transforms.escapeToCallback(this.callback)
+                    this.callback
                 );
             },
             'the graph should contain a cache manifest': function (assetGraph) {
@@ -113,7 +113,7 @@ vows.describe('Cache manifest').addBatch({
             new AssetGraph({root: __dirname + '/cacheManifest/noCacheManifestMultiPage/'}).transform(
                 transforms.loadAssets('*.html'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph contains 3 assets': function (assetGraph) {
@@ -138,7 +138,7 @@ vows.describe('Cache manifest').addBatch({
             topic: function (assetGraph) {
                 assetGraph.transform(
                     transforms.addCacheManifestSiteMap({isInitial: true}),
-                    transforms.escapeToCallback(this.callback)
+                    this.callback
                 );
             },
             'the graph should contain the manifest': function (assetGraph) {
@@ -157,7 +157,7 @@ vows.describe('Cache manifest').addBatch({
             new AssetGraph({root: __dirname + '/cacheManifest/existingCacheManifestMultiPage/'}).transform(
                 transforms.loadAssets('*.html'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph should contain two HTML assets': function (assetGraph) {
@@ -176,7 +176,7 @@ vows.describe('Cache manifest').addBatch({
             topic: function (assetGraph) {
                 assetGraph.transform(
                     transforms.addCacheManifestSiteMap({isInitial: true}),
-                    transforms.escapeToCallback(this.callback)
+                    this.callback
                 );
             },
             'the graph should contain two cache manifests': function (assetGraph) {

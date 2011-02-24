@@ -18,7 +18,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     {type: 'CSS',  originalSrc: 'e'},
                     {type: 'PNG',  originalSrc: 'f', foo: 'baz'}
                 ),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'and lookup single value of unindexed property': function (assetGraph) {

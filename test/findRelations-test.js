@@ -20,7 +20,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     {type: 'CSS',  originalSrc: 'e'},
                     {type: 'PNG',  originalSrc: 'f', foo: 'baz'}
                 ),
-                function (assetGraph, cb) {
+                function (err, assetGraph, cb) {
                     assetGraph.addRelation(new relations.HTMLStyle({
                         from: assetGraph.findAssets({originalSrc: 'a'})[0],
                         to: assetGraph.findAssets({originalSrc: 'd'})[0]
@@ -51,7 +51,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     }));
                     process.nextTick(cb);
                 },
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'and lookup relations by a single indexed property': function (assetGraph) {

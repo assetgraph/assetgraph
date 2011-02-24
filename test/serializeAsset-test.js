@@ -11,7 +11,7 @@ vows.describe('serialize asset').addBatch({
             new AssetGraph({root: __dirname + '/serializeAsset/'}).transform(
                 transforms.loadAssets('purplealpha24bit.png',
                                       'http://gofish.dk/purplealpha24bit.png'),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'then serializing the PNG loaded from disc': {

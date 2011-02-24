@@ -9,7 +9,7 @@ vows.describe('executeJavaScriptConditionalBlocks').addBatch({
             new AssetGraph({root: __dirname + '/runJavaScriptConditionalBlocks'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph should contain a JavaScriptConditionalBlock relation': function (assetGraph) {
@@ -19,7 +19,7 @@ vows.describe('executeJavaScriptConditionalBlocks').addBatch({
             topic: function (assetGraph) {
                 assetGraph.transform(
                     transforms.runJavaScriptConditionalBlocks({type: 'HTML'}, 'theEnvironment'),
-                    transforms.escapeToCallback(this.callback)
+                    this.callback
                 );
             },
             'the HTML should contain a new <div> with a greeting from the conditional block': function (assetGraph) {

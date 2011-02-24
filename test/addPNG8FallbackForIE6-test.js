@@ -10,7 +10,7 @@ vows.describe('Add PNG8 fallback for IE6').addBatch({
             new AssetGraph({root: __dirname + '/addPNG8FallbackForIE6'}).transform(
                 transforms.loadAssets('style.css'),
                 transforms.populate(),
-                transforms.escapeToCallback(this.callback)
+                this.callback
             );
         },
         'the graph contains the expected assets and relations': function (assetGraph) {
@@ -23,7 +23,7 @@ vows.describe('Add PNG8 fallback for IE6').addBatch({
             topic: function (assetGraph) {
                 assetGraph.transform(
                     transforms.addPNG8FallbackForIE6(),
-                    transforms.escapeToCallback(this.callback)
+                    this.callback
                 );
             },
             'the number of PNG assets should be 3': function (assetGraph) {
