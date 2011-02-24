@@ -7,7 +7,7 @@ var _ = require('underscore'),
     commandLineOptions = require('../lib/camelOptimist')({usage: 'FIXME', demand: ['root']});
 
 new AssetGraph({root: commandLineOptions.root}).transform(
-    transforms.registerLabelsAsCustomProtocols(_.flatten(commandLineOptions.label)),
+    transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude', 'CSSBackgroundImage']}),
     transforms.flattenStaticIncludes(),

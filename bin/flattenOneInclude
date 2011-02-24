@@ -18,7 +18,7 @@ var fs = require('fs'),
     });
 
 new AssetGraph({root: commandLineOptions.root}).transform(
-    transforms.registerLabelsAsCustomProtocols(_.flatten(commandLineOptions.label)),
+    transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({type: 'JavaScriptStaticInclude'}),
     function (err, assetGraph, cb) {
