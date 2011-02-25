@@ -12,7 +12,7 @@ vows.describe('css @media rule').addBatch({
                 this.callback
             );
         },
-        'the graph should contain two CSSBackgroundImage relation': function (assetGraph) {
+        'the graph should contain two CSSBackgroundImage relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CSSBackgroundImage'}).length, 2);
         }
     }
