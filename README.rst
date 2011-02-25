@@ -49,7 +49,7 @@ for JavaScript (powered by `UglifyJS
 Building
 --------
 
-Most of the projects dependencies are noted in the ``package.json``-file, and
+Most of the project's dependencies are noted in the ``package.json``-file, and
 they can be automatically installed with ``npm install`` or ``npm link``.
 
 Of particular note, `node-canvas <https://github.com/learnboost/node-canvas>`_
