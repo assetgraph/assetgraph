@@ -4,10 +4,10 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms');
 
-vows.describe('Add PNG8 fallback for IE6').addBatch({
+vows.describe('Postprocess images').addBatch({
     'After loading a the test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/addPNG8FallbackForIE6'}).transform(
+            new AssetGraph({root: __dirname + '/postProcessBackgroundImages/'}).transform(
                 transforms.loadAssets('style.css'),
                 transforms.populate(),
                 this.callback
@@ -19,10 +19,10 @@ vows.describe('Add PNG8 fallback for IE6').addBatch({
             assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 1);
             assert.equal(assetGraph.findRelations({type: 'CSSBackgroundImage'}).length, 2);
         },
-        'then running the addPNG8FallbackForIE6 transform': {
+        'then running the postProcessBackgroundImages transform': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-                    transforms.addPNG8FallbackForIE6(),
+                    transforms.postProcessBackgroundImages(),
                     this.callback
                 );
             },
