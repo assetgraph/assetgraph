@@ -6,7 +6,7 @@ var vows = require('vows'),
 vows.describe('Bundle stylesheets').addBatch({
     'After loading a test case with 1 HTML, 2 stylesheets, and 3 images': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleJavaScriptAndCSS'}).transform(
+            new AssetGraph({root: __dirname + '/bundleAssets'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
                 this.callback
@@ -33,7 +33,7 @@ vows.describe('Bundle stylesheets').addBatch({
         'then bundling the HTMLStyles': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-                    transforms.bundleJavaScriptAndCSS(),
+                    transforms.bundleAssets({type: 'CSS'}),
                     this.callback
                 );
             },
