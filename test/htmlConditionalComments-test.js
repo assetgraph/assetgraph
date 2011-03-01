@@ -14,10 +14,10 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
                 this.callback
             );
         },
-        'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 3);
+        'the graph should contain 9 assets': function (assetGraph) {
+            assert.equal(assetGraph.assets.length, 9);
         },
-        'then move the script asset to a different url and serialize the HTML': {
+        'then moving the script asset to a different url and serializing the HTML': {
             topic: function (assetGraph) {
                 assetGraph.setAssetUrl(assetGraph.findAssets({type: 'JavaScript'})[0], assetGraph.resolver.root + 'fixIE6ForTheLoveOfGod.js');
                 assetGraph.serializeAsset(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
@@ -27,7 +27,27 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
                 assert.notEqual(src.indexOf('<script src="fixIE6ForTheLoveOfGod.js"></script>'), -1);
             },
             'the not-Internet Explorer conditional comment construct should be left alone': function (src) {
-                assert.notEqual(src.indexOf('<!--[if !IE]><!--> Not IE <!--<![endif]-->'), -1);
+                assert.notEqual(src.indexOf('<!--[if !IE]><!-->Not IE<!--<![endif]-->'), -1);
+            },
+            'then externalizing the CSS and JavaScript and minifying the HTML': {
+                topic: function (_, assetGraph) {
+                    assetGraph.transform(
+                        transforms.externalizeAssets({type: ['CSS', 'JavaScript']}),
+                        transforms.minifyAssets({url: /index\.html$/}),
+                        this.callback
+                    );
+                },
+                'and serialize the HTML again': {
+                    topic: function (assetGraph) {
+                        assetGraph.serializeAsset(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
+                    },
+                    'the conditional comments should still be there': function (src) {
+                        assert.notEqual(src.indexOf('Good old'), -1);
+                        assert.notEqual(src.indexOf('<script src="fixIE6ForTheLoveOfGod.js"></script>'), -1);
+                        assert.notEqual(src.indexOf('<!--[if !IE]><!-->Not IE<!--<![endif]-->'), -1);
+                        assert.isTrue(/<!--\[if IE\]><link rel="stylesheet" href="[^\"]+\.css"><!\[endif\]-->/.test(src));
+                    }
+                }
             }
         }
     }

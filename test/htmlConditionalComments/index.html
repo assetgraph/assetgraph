@@ -6,6 +6,23 @@ Internet Explorer 6!
 <script src='fixIE6.js'></script>
 <![endif]-->
 
-<!--[if !IE]><!--> Not IE <!--<![endif]-->
+<!--[if !IE]><!-->Not IE<!--<![endif]-->
+
+Another one with scripts in it:
+<!--[if IE 6]>
+    <script type="text/javascript" src="pngfix.js"></script>
+    <script type="text/javascript">
+        document.write('hello!');
+    </script>
+<![endif]-->
+
+And an inline stylesheet:
+<!--[if IE]>
+    <style type="text/css">
+        #thething {
+            background: url(images/IEhack.png);
+        }
+    </style>
+<![endif]-->
 
 </body>
