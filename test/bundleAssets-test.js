@@ -6,7 +6,7 @@ var vows = require('vows'),
 vows.describe('Bundle stylesheets').addBatch({
     'After loading a test case with 1 HTML, 2 stylesheets, and 3 images': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleAssets'}).transform(
+            new AssetGraph({root: __dirname + '/bundleAssets/singleHtml'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
                 this.callback
@@ -50,6 +50,43 @@ vows.describe('Bundle stylesheets').addBatch({
                 cssBackgroundImages.forEach(function (cssBackgroundImage) {
                     assert.equal(cssBackgroundImage.from, bundle);
                 });
+            }
+        }
+    },
+    'After loading a test case with two HTML assets that relate to some of the same CSS assets': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleAssets/twoHtmls'}).transform(
+                transforms.loadAssets('1.html', '2.html'),
+                transforms.populate(),
+                this.callback
+            );
+        },
+        'the graph should contain 2 HTML assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 2);
+        },
+        'the graph should contain 4 CSS assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 4);
+        },
+        'then bundling the CSS assets': {
+            topic: function (assetGraph) {
+                assetGraph.transform(
+                    transforms.bundleAssets({type: 'CSS'}),
+                    this.callback
+                );
+            },
+            'the graph should contain 3 CSS assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 3);
+            },
+            'the CSS assets with a single relation pointing at them should remain unbundled': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({url: /\/a\.css$/}).length, 1);
+                assert.equal(assetGraph.findAssets({url: /\/d\.css$/}).length, 1);
+            },
+            'the last CSS asset in the graph should contain the rules from b.css and c.css': function (assetGraph) {
+                var cssAssets = assetGraph.findAssets({type: 'CSS'}),
+                    cssRules = cssAssets[cssAssets.length - 1].parseTree.cssRules;
+                assert.equal(cssRules.length, 2);
+                assert.equal(cssRules[0].style.color, 'beige');
+                assert.equal(cssRules[1].style.color, 'crimson');
             }
         }
     }
