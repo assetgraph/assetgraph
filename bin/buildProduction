@@ -5,9 +5,10 @@ var AssetGraph = require('../lib/AssetGraph'),
     query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('../lib/3rdparty/papandreou-optimist').
-        usage('$0 --root <inputRootDirectory> --out-root <outputRootDirectory> [--cdn-root <url>] [--static-dir <directoryName>] <htmlFile>...').
-        camelCase().
-        demand(['root', 'outRoot']).argv,
+        usage('$0 --root <inputRootDirectory> --out-root <outputRootDirectory> [--cdn-root <url>] [--manifest] [--static-dir <directoryName>] <htmlFile>...').
+        boolean('manifest').
+        demand(['root', 'out-root']).
+        camelCase().argv,
     outRoot = fileUtils.fsDirToFileUrl(commandLineOptions.outRoot),
     cdnRoot = commandLineOptions.cdnRoot && fileUtils.ensureTrailingSlash(commandLineOptions.cdnRoot),
     staticDir = commandLineOptions.staticDir || 'static';
@@ -20,7 +21,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.bundleAssets({type: 'JavaScript'}),
     transforms.spriteBackgroundImages(),
     transforms.postProcessBackgroundImages(),
-    transforms.addCacheManifestSinglePage({isInitial: true}),
+    commandLineOptions.manifest ? transforms.addCacheManifestSinglePage({isInitial: true}) : transforms.noop(),
     transforms.minifyAssets(),
     transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not('HTML')}, '/' + staticDir),
     (cdnRoot ? transforms.moveAssetsToNewRoot({
