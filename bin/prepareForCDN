@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+
+var AssetGraph = require('../lib/AssetGraph'),
+    transforms = require('../lib/transforms'),
+    query = require('../lib/query'),
+    fileUtils = require('../lib/fileUtils'),
+    commandLineOptions = require('../lib/3rdparty/papandreou-optimist').
+        usage('$0 --root <inputRootDirectory> --out-root <outputRootDirectory> --cdn-root <url> <htmlFile>...').
+        demand(['root', 'out-root', 'cdn-root']).
+        camelCase().argv,
+    outRoot = fileUtils.fsDirToFileUrl(commandLineOptions.outRoot),
+    cdnRoot = fileUtils.ensureTrailingSlash(commandLineOptions.cdnRoot);
+
+new AssetGraph({root: commandLineOptions.root}).transform(
+    transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
+    transforms.populate({to: query.not(/^https?:/)}),
+    transforms.moveAssetsToNewRoot({type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']}, cdnRoot),
+    transforms.renameAssetsToMD5Prefix({type: query.not('HTML'), url: query.defined}),
+    transforms.parallel(
+        transforms.writeAssetsToDisc({url: /^file:/}, outRoot),
+        transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnRoot)}, outRoot, cdnRoot)
+    )
+);

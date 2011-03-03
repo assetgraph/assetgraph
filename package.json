@@ -31,6 +31,7 @@
     "bin": {
         "buildDevelopment": "./bin/buildDevelopment",
         "buildProduction": "./bin/buildProduction",
-        "flattenOneInclude": "./bin/flattenOneInclude"
+        "flattenOneInclude": "./bin/flattenOneInclude",
+        "prepareForCDN": "./bin/prepareForCDN"
     }
 }
