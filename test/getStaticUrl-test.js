@@ -85,7 +85,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                         assetGraph.findAssets({type: 'JavaScript'})[0].serialize(this.callback);
                     },
                     'the resulting JavaScript should map the url correctly': function (src) {
-                        assert.equal(new Function(src + 'return theThing;')(), 'static/a76a76a7a.json');
+                        assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');
                     }
                 }
             }
