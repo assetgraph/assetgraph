@@ -12,7 +12,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
     'After loading test case with a wildcard getStaticUrl': {
         topic: function () {
             new AssetGraph({root: __dirname + '/getStaticUrl/'}).transform(
-                transforms.loadAssets('getStaticUrlWildcard.js'),
+                transforms.loadAssets('index.html'),
                 transforms.populate(),
                 this.callback
             );
@@ -44,7 +44,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
     'After loading test case with a wildcard getStaticUrl': {
         topic: function () {
             new AssetGraph({root: __dirname + '/getStaticUrl/'}).transform(
-                transforms.loadAssets('getStaticUrlWildcard.js'),
+                transforms.loadAssets('index.html'),
                 transforms.populate(),
                 this.callback
             );
@@ -57,9 +57,9 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 topic: function (src) {
                     new AssetGraph({root: __dirname + '/getStaticUrl/'}).transform(
                         transforms.loadAssets({
-                            url: 'file://' + __dirname + '/getStaticUrl/output.js',
-                            type: 'JavaScript',
-                            originalSrc: src
+                            url: 'file://' + __dirname + '/getStaticUrl/index2.html',
+                            type: 'HTML',
+                            originalSrc: "<html><body><script>" + src + "</script></body></html>"
                         }),
                         transforms.populate(),
                         this.callback
