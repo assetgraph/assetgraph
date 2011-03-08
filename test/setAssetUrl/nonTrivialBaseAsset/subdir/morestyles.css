@@ -1,0 +1,3 @@
+div {
+    behavior: url(subdir/theBehavior.htc); /* Relative to the HTML document! */
+}

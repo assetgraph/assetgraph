@@ -3,12 +3,13 @@ var URL = require('url'),
     assert = require('assert'),
     step = require('step'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms');
+    transforms = require('../lib/transforms'),
+    query = require('../lib/query');
 
 vows.describe('Changing the url of assets').addBatch({
     'After loading a test case with three assets': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/setAssetUrl/'}).transform(
+            new AssetGraph({root: __dirname + '/setAssetUrl/simple/'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
                 this.callback
@@ -47,6 +48,68 @@ vows.describe('Changing the url of assets').addBatch({
                     var relativeUrl = assetGraph.findRelations({type: 'HTMLImage'})[0].node.getAttribute('src');
                     assert.equal(relativeUrl, '../foo.png');
                 }
+            }
+        }
+    },
+    'After loading a test case with an HTML asset that has multiple levels of inline assets': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/setAssetUrl/multipleLevelsOfInline/'}).transform(
+                transforms.loadAssets('index.html'),
+                transforms.populate(),
+                this.callback
+            );
+        },
+        'the graph should a single CSS asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 1);
+        },
+        'the graph should a single inline HTML asset (conditional comment)': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'HTML', url: query.undefined}).length, 1);
+        },
+        'the graph should a single non-inline HTML asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'HTML', url: query.defined}).length, 1);
+        },
+        'then moving the HTML asset one level down': {
+            topic: function (assetGraph) {
+                assetGraph.transform(
+                    transforms.moveAssets({type: 'HTML', url: query.defined}, function (asset) {
+                        return assetGraph.resolver.root + "subdir/index.html";
+                    }),
+                    this.callback
+                );
+            },
+            'the CSSBackgroundImage url should be relative to /subdir': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'CSSBackgroundImage'})[0].cssRule.style['background-image'], 'url(../foo.png)');
+            }
+        }
+    },
+    'After loading a test case with an HTML asset and a distant HTC asset that has the HTML as its base asset': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/setAssetUrl/nonTrivialBaseAsset/'}).transform(
+                transforms.loadAssets('index.html'),
+                transforms.populate(),
+                this.callback
+            );
+        },
+        'the graph should contain three CSS assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 3);
+        },
+        'the graph should a single HTML asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
+        },
+        'the graph should a single HTC asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'HTC'}).length, 1);
+        },
+        'then moving the HTML asset one level down': {
+            topic: function (assetGraph) {
+                assetGraph.transform(
+                    transforms.moveAssets({type: 'HTML', url: query.defined}, function (asset) {
+                        return assetGraph.resolver.root + "subdir/index.html";
+                    }),
+                    this.callback
+                );
+            },
+            'the CSSBehavior url should be relative to /subdir': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'CSSBehavior'})[0].cssRule.style.behavior, 'url(theBehavior.htc)');
             }
         }
     }
