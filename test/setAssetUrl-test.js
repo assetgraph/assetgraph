@@ -93,20 +93,16 @@ vows.describe('Changing the url of assets').addBatch({
         'the graph should contain three CSS assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 3);
         },
-        'the graph should a single HTML asset': function (assetGraph) {
+        'the graph should contain a single HTML asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
         },
-        'the graph should a single HTC asset': function (assetGraph) {
+        'the graph should contain a single HTC asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTC'}).length, 1);
         },
         'then moving the HTML asset one level down': {
             topic: function (assetGraph) {
-                assetGraph.transform(
-                    transforms.moveAssets({type: 'HTML', url: query.defined}, function (asset) {
-                        return assetGraph.resolver.root + "subdir/index.html";
-                    }),
-                    this.callback
-                );
+                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'HTML', url: query.defined})[0], assetGraph.resolver.root + 'subdir/index.html');
+                return assetGraph;
             },
             'the CSSBehavior url should be relative to /subdir': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'CSSBehavior'})[0].cssRule.style.behavior, 'url(theBehavior.htc)');

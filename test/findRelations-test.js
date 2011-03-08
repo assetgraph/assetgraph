@@ -13,12 +13,12 @@ vows.describe('AssetGraph.findAssets').addBatch({
         topic: function () {
             new AssetGraph().transform(
                 transforms.loadAssets(
-                    {type: 'HTML', originalSrc: 'a', foo: 'bar'},
-                    {type: 'HTML', originalSrc: 'b', foo: 'bar'},
-                    {type: 'HTML', originalSrc: 'c', foo: 'quux'},
-                    {type: 'CSS',  originalSrc: 'd', foo: 'baz'},
-                    {type: 'CSS',  originalSrc: 'e'},
-                    {type: 'PNG',  originalSrc: 'f', foo: 'baz'}
+                    {type: 'HTML', url: 'a', originalSrc: 'a', foo: 'bar'},
+                    {type: 'HTML', url: 'b', originalSrc: 'b', foo: 'bar'},
+                    {type: 'HTML', url: 'c', originalSrc: 'c', foo: 'quux'},
+                    {type: 'CSS',  url: 'd', originalSrc: 'd', foo: 'baz'},
+                    {type: 'CSS',  url: 'e', originalSrc: 'e'},
+                    {type: 'PNG',  url: 'f', originalSrc: 'f', foo: 'baz'}
                 ),
                 function (err, assetGraph, cb) {
                     assetGraph.addRelation(new relations.HTMLStyle({
