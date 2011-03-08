@@ -23,11 +23,11 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.postProcessBackgroundImages(),
     commandLineOptions.manifest ? transforms.addCacheManifestSinglePage({isInitial: true}) : transforms.noop(),
     transforms.minifyAssets(),
-    transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not('HTML')}, '/' + staticDir),
+    transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not(['HTML', 'CacheManifest'])}, '/' + staticDir),
     (cdnRoot ? transforms.moveAssetsToNewRoot({
         type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']
     }, cdnRoot) : transforms.noop()),
-    transforms.renameAssetsToMD5Prefix({type: query.not('HTML'), url: query.defined}),
+    transforms.renameAssetsToMD5Prefix({type: query.not(['HTML', 'CacheManifest']), url: query.defined}),
     transforms.parallel(
         transforms.writeAssetsToDisc({url: /^file:/}, outRoot),
         cdnRoot ? transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnRoot)}, outRoot, cdnRoot) : transforms.noop()
