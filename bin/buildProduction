@@ -10,8 +10,7 @@ var AssetGraph = require('../lib/AssetGraph'),
         demand(['root', 'out-root']).
         camelCase().argv,
     outRoot = fileUtils.fsDirToFileUrl(commandLineOptions.outRoot),
-    cdnRoot = commandLineOptions.cdnRoot && fileUtils.ensureTrailingSlash(commandLineOptions.cdnRoot),
-    staticDir = commandLineOptions.staticDir || 'static';
+    cdnRoot = commandLineOptions.cdnRoot && fileUtils.ensureTrailingSlash(commandLineOptions.cdnRoot);
 
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
@@ -23,7 +22,8 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.postProcessBackgroundImages(),
     commandLineOptions.manifest ? transforms.addCacheManifestSinglePage({isInitial: true}) : transforms.noop(),
     transforms.minifyAssets(),
-    transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not(['HTML', 'CacheManifest'])}, '/' + staticDir),
+    transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not(['HTML', 'CacheManifest'])},
+                                     '/' + (commandLineOptions.staticDir || 'static')),
     (cdnRoot ? transforms.moveAssetsToNewRoot({
         type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']
     }, cdnRoot) : transforms.noop()),

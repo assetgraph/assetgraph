@@ -3,6 +3,7 @@
 var _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
+    query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('../lib/3rdparty/papandreou-optimist').
         usage('$0 --root <inputRootDirectory> <htmlFile> ...').
@@ -12,7 +13,7 @@ var _ = require('underscore'),
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
-    transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude', 'CSSBackgroundImage']}),
+    transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude', 'CSSBackgroundImage'], to: query.not(/^https?:/)}),
     transforms.flattenStaticIncludes(),
     transforms.runJavaScriptConditionalBlocks({type: 'HTML'}, 'buildDevelopment'),
     transforms.inlineAssets({url: fileUtils.makeFileUrlMatcher(commandLineOptions.inline)}), // FIXME: OR queries?
