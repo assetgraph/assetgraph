@@ -8,7 +8,7 @@ var vows = require('vows'),
 vows.describe('Inlining an asset').addBatch({
     'After loading a test case with an HTML asset that has an external CSS asset in a conditional comment': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/inlineRelation/'}).transform(
+            new AssetGraph({root: __dirname + '/inlineAsset/'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
                 this.callback
@@ -29,7 +29,7 @@ vows.describe('Inlining an asset').addBatch({
         'then inlining the CSS and serializing the HTML': {
             topic: function (assetGraph) {
                 var callback = this.callback;
-                assetGraph.inlineRelation(assetGraph.findRelations({type: 'HTMLStyle'})[0], function (err) {
+                assetGraph.inlineAsset(assetGraph.findAssets({type: 'CSS'})[0], function (err) {
                     if (err) {
                         return callback(err);
                     }
