@@ -15,7 +15,7 @@ var AssetGraph = require('../lib/AssetGraph'),
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({type: query.not('JavaScriptStaticInclude'), to: query.not(/^https?:/)}),
-    transforms.externalizeAssets({type: ['CSS', 'JavaScript']}),
+    transforms.externalizeRelations({type: ['HTMLStyle', 'HTMLScript']}),
     transforms.bundleAssets({type: 'CSS'}),
     transforms.bundleAssets({type: 'JavaScript'}),
     transforms.spriteBackgroundImages(),
