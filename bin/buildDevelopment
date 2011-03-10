@@ -14,7 +14,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude', 'CSSBackgroundImage'], to: query.not(/^https?:/)}),
-    transforms.flattenStaticIncludes(),
+    transforms.flattenStaticIncludes({isInitial: true}),
     transforms.runJavaScriptConditionalBlocks({type: 'HTML'}, 'buildDevelopment'),
     transforms.inlineRelations({from: {isInitial: true, type: 'HTML'}, to: {isDirty: true, type: ['CSS', 'JavaScript']}}),
     transforms.inlineAssets({url: fileUtils.makeFileUrlMatcher(commandLineOptions.inline)}), // FIXME: OR queries?
