@@ -1,0 +1,19 @@
+.x-html-editor-tb .x-edit-bold, .x-menu-item img.x-edit-bold {
+    background-position:0 0;
+    background-image:url(../images/foo/bar/foo.png);
+}
+
+.x-html-editor-tb .x-edit-italic, .x-menu-item img.x-edit-italic {
+    background-position:-16px 0;
+    background-image:url(../images/foo/bar/foo.png);
+}
+
+.x-html-editor-tb .x-edit-underline, .x-menu-item img.x-edit-underline {
+    background-position:-32px 0;
+    background-image:url(../images/foo/bar/foo.png);
+}
+
+.x-html-editor-tb .x-edit-forecolor, .x-menu-item img.x-edit-forecolor {
+    background-position:-160px 0;
+    background-image:url(../images/foo/bar/foo.png);
+}
