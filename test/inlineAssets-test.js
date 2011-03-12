@@ -8,7 +8,7 @@ var vows = require('vows'),
 vows.describe('Inlining an asset').addBatch({
     'After loading a test case with an HTML asset that has an external CSS asset in a conditional comment': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/inlineAsset/'}).transform(
+            new AssetGraph({root: __dirname + '/inlineAssets/'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
                 this.callback
@@ -37,7 +37,8 @@ vows.describe('Inlining an asset').addBatch({
                 });
             },
             'the CSSBackgroundImage url should be relative to the HTML asset': function (src) {
-                assert.notEqual(src.indexOf("url(some/directory/foo.png)"), -1);
+                var matches = src.match(/url\(some\/directory\/foo\.png\)/g);
+                assert.equal(matches.length, 2);
             }
         }
     }
