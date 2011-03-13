@@ -33,7 +33,7 @@ vows.describe('Bundle stylesheets').addBatch({
         'then bundling the HTMLStyles': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-                    transforms.bundleAssets({type: 'CSS'}),
+                    transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}),
                     this.callback
                 );
             },
@@ -70,7 +70,7 @@ vows.describe('Bundle stylesheets').addBatch({
         'then bundling the CSS assets': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-                    transforms.bundleAssets({type: 'CSS'}),
+                    transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}),
                     this.callback
                 );
             },
