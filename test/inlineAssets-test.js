@@ -36,7 +36,7 @@ vows.describe('Inlining an asset').addBatch({
                     assetGraph.serializeAsset(assetGraph.findAssets({type: 'HTML', url: query.defined})[0], callback);
                 });
             },
-            'the CSSBackgroundImage url should be relative to the HTML asset': function (src) {
+            'the CSSImage url should be relative to the HTML asset': function (src) {
                 var matches = src.match(/url\(some\/directory\/foo\.png\)/g);
                 assert.equal(matches.length, 2);
             }

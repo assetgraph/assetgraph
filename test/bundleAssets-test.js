@@ -27,8 +27,8 @@ vows.describe('Bundle stylesheets').addBatch({
         'the graph contains 2 HTMLStyle relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HTMLStyle'}).length, 2);
         },
-        'the graph contains 4 CSSBackgroundImage relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CSSBackgroundImage'}).length, 4);
+        'the graph contains 4 CSSImage relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 4);
         },
         'then bundling the HTMLStyles': {
             topic: function (assetGraph) {
@@ -43,8 +43,8 @@ vows.describe('Bundle stylesheets').addBatch({
             'there should be a single CSS': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 1);
             },
-            'all CSSBackgroundImage relations should be attached to the bundle': function (assetGraph) {
-                var cssBackgroundImages = assetGraph.findRelations({type: 'CSSBackgroundImage'}),
+            'all CSSImage relations should be attached to the bundle': function (assetGraph) {
+                var cssBackgroundImages = assetGraph.findRelations({type: 'CSSImage'}),
                     bundle = assetGraph.findAssets({type: 'CSS'})[0];
                 assert.equal(cssBackgroundImages.length, 4);
                 cssBackgroundImages.forEach(function (cssBackgroundImage) {

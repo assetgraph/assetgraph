@@ -26,9 +26,9 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
         'the graph should contain one PNG asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
         },
-        'the PNG should have 4 incoming CSSBackgroundImage relations with the CSS as their base asset': function (assetGraph) {
+        'the PNG should have 4 incoming CSSImage relations with the CSS as their base asset': function (assetGraph) {
             var cssAsset = assetGraph.findAssets({type: 'CSS'})[0],
-                cssBackgroundImageRelations = assetGraph.findRelations({type: 'CSSBackgroundImage', to: assetGraph.findAssets({type: 'PNG'})[0]});
+                cssBackgroundImageRelations = assetGraph.findRelations({type: 'CSSImage', to: assetGraph.findAssets({type: 'PNG'})[0]});
             assert.equal(cssBackgroundImageRelations.length, 4);
             cssBackgroundImageRelations.forEach(function (cssBackgroundImageRelation) {
                 assert.equal(assetGraph.getBaseAssetForRelation(cssBackgroundImageRelation), cssAsset);
@@ -50,7 +50,7 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
                     );
                 },
                 'all the background-image urls should be relative to the HTML': function (assetGraph) {
-                    assetGraph.findRelations({type: 'CSSBackgroundImage'}).forEach(function (relation) {
+                    assetGraph.findRelations({type: 'CSSImage'}).forEach(function (relation) {
                         assert.equal(relation.cssRule.style[relation.propertyName], "url(resources/images/foo/bar/foo.png)");
                     });
                 },

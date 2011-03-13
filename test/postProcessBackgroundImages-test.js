@@ -17,7 +17,7 @@ vows.describe('Postprocess images').addBatch({
             assert.equal(assetGraph.assets.length, 3);
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 2);
             assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 1);
-            assert.equal(assetGraph.findRelations({type: 'CSSBackgroundImage'}).length, 2);
+            assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 2);
         },
         'then running the postProcessBackgroundImages transform': {
             topic: function (assetGraph) {
@@ -29,13 +29,13 @@ vows.describe('Postprocess images').addBatch({
             'the number of PNG assets should be 3': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 3);
             },
-            'the first two CSSBackgroundImage relations should be in the same cssRule': function (assetGraph) {
-                var cssBackgroundImages = assetGraph.findRelations({type: 'CSSBackgroundImage'});
+            'the first two CSSImage relations should be in the same cssRule': function (assetGraph) {
+                var cssBackgroundImages = assetGraph.findRelations({type: 'CSSImage'});
                 assert.equal(cssBackgroundImages[0].cssRule, cssBackgroundImages[1].cssRule);
             },
             'then fetching the source of the two images': {
                 topic: function (assetGraph) {
-                    var cssBackgroundImages = assetGraph.findRelations({type: 'CSSBackgroundImage'});
+                    var cssBackgroundImages = assetGraph.findRelations({type: 'CSSImage'});
                     step(
                         function () {
                             cssBackgroundImages[0].to.getOriginalSrc(this.parallel());

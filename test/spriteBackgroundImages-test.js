@@ -24,8 +24,8 @@ vows.describe('Sprite background images').addBatch({
         'the graph contains a single CSSSpritePlaceholder relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CSSSpritePlaceholder'}).length, 1);
         },
-        'the graph contains 3 CSSBackgroundImage relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CSSBackgroundImage'}).length, 3);
+        'the graph contains 3 CSSImage relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 3);
         },
         'then spriting the background images': {
             topic: function (assetGraph) {

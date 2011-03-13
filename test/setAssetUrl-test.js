@@ -77,8 +77,8 @@ vows.describe('Changing the url of assets').addBatch({
                     this.callback
                 );
             },
-            'the CSSBackgroundImage url should be relative to /subdir': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'CSSBackgroundImage'})[0].cssRule.style['background-image'], 'url(../foo.png)');
+            'the CSSImage url should be relative to /subdir': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'CSSImage'})[0].cssRule.style['background-image'], 'url(../foo.png)');
             }
         }
     },

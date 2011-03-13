@@ -41,11 +41,11 @@ vows.describe('AssetGraph.findAssets').addBatch({
                         from: assetGraph.findAssets({originalSrc: 'b'})[0],
                         to: assetGraph.findAssets({originalSrc: 'e'})[0]
                     }));
-                    assetGraph.addRelation(new relations.CSSBackgroundImage({
+                    assetGraph.addRelation(new relations.CSSImage({
                         from: assetGraph.findAssets({originalSrc: 'd'})[0],
                         to: assetGraph.findAssets({originalSrc: 'f'})[0]
                     }));
-                    assetGraph.addRelation(new relations.CSSBackgroundImage({
+                    assetGraph.addRelation(new relations.CSSImage({
                         from: assetGraph.findAssets({originalSrc: 'e'})[0],
                         to: assetGraph.findAssets({originalSrc: 'f'})[0]
                     }));
@@ -55,7 +55,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
             );
         },
         'and lookup relations by a single indexed property': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CSSBackgroundImage'}).length, 2);
+            assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 2);
         },
         'and lookup relations by multiple indexed properties': function (assetGraph) {
             assert.equal(assetGraph.findRelations({
@@ -85,7 +85,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
         },
         'and lookup relations by structured query with regexps': function (assetGraph) {
             assert.equal(assetGraph.findRelations({
-                type: /CSSBack|HTMLAn/,
+                type: /CSSIm|HTMLAn/,
                 from: {
                     originalSrc: /^[ad]$/
                 }
@@ -99,7 +99,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
         },
         'and lookup relations by negative match': function (assetGraph) {
             assert.equal(assetGraph.findRelations({
-                type: query.not('CSSBackgroundImage'),
+                type: query.not('CSSImage'),
                 from: {
                     originalSrc: query.not('a')
                 }
