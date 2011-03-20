@@ -3,7 +3,7 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms');
 
-vows.describe('css @import').addBatch({
+vows.describe('HTML with <link rel="alternate">').addBatch({
     'After loading test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/htmlAlternateLink/'}).transform(
