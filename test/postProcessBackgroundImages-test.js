@@ -1,11 +1,12 @@
 var vows = require('vows'),
     assert = require('assert'),
+    _ = require('underscore'),
     step = require('step'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms');
 
 vows.describe('Postprocess images').addBatch({
-    'After loading a the test case': {
+    'After loading the test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/postProcessBackgroundImages/'}).transform(
                 transforms.loadAssets('style.css'),
@@ -45,8 +46,8 @@ vows.describe('Postprocess images').addBatch({
                     );
                 },
                 'should return something that looks like PNGs': function (err, firstSrc, secondSrc) {
-                    assert.isTrue(/^\u0089PNG/.test(firstSrc));
-                    assert.isTrue(/^\u0089PNG/.test(secondSrc));
+                    assert.deepEqual(_.toArray(firstSrc.slice(0, 4)), [0x89, 0x50, 0x4e, 0x47]);
+                    assert.deepEqual(_.toArray(secondSrc.slice(0, 4)), [0x89, 0x50, 0x4e, 0x47]);
                 },
                 'the second one should be smaller than the first': function (err, firstSrc, secondSrc) {
                     assert.lesser(secondSrc.length, firstSrc.length);

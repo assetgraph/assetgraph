@@ -18,7 +18,8 @@
         "request": ">=1.2.0",
         "glob": ">=2.0.5",
         "canvas": ">=0.4.3",
-        "graphviz": ">=0.0.3"
+        "graphviz": ">=0.0.3",
+        "bufferjs": ">=0.2.1"
     },
     "devDependencies": {
         "vows": ">=0.5.6"
