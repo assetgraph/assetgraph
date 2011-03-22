@@ -16,8 +16,7 @@ vows.describe('Charset test').addBatch({
             );
         },
         'the body should be decoded correctly': function (assetGraph) {
-            // Hmmm.. Or maybe originalSrc should always be a buffer?
-            assert.notEqual(assetGraph.findAssets()[0].originalSrc.indexOf('æøåÆØÅ'), -1);
+             assert.notEqual(assetGraph.findAssets()[0].decodedSrc.indexOf('æøåÆØÅ'), -1);
         },
         'the parseTree should be decoded correctly': function (assetGraph) {
             assert.equal(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'æøåÆØÅ');
