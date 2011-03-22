@@ -45,5 +45,20 @@ vows.describe('Charset test').addBatch({
             assert.equal(assetGraph.findAssets({type: 'HTML'})[1].parseTree.body.firstChild.nodeValue,
                          "\u0263a");
         }
+    },
+    'After loading a CSS asset with @charset declaration of iso-8859-1': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/charset/'}).transform(
+                transforms.loadAssets('iso-8859-1.css'),
+                transforms.populate(),
+                this.callback
+            );
+        },
+        'the body should be decoded correctly': function (assetGraph) {
+             assert.notEqual(assetGraph.findAssets()[0].decodedSrc.indexOf('æøå'), -1);
+        },
+        'the parseTree should be decoded correctly': function (assetGraph) {
+            assert.equal(assetGraph.findAssets()[0].parseTree.cssRules[0].style.foo, 'æøå');
+        }
     }
 })['export'](module);
