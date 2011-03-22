@@ -39,8 +39,8 @@ vows.describe('Postprocess images').addBatch({
                     var cssBackgroundImages = assetGraph.findRelations({type: 'CSSImage'});
                     step(
                         function () {
-                            cssBackgroundImages[0].to.getOriginalSrc(this.parallel());
-                            cssBackgroundImages[1].to.getOriginalSrc(this.parallel());
+                            cssBackgroundImages[0].to.getRawSrc(this.parallel());
+                            cssBackgroundImages[1].to.getRawSrc(this.parallel());
                         },
                         this.callback
                     );

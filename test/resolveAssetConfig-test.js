@@ -48,7 +48,7 @@ vows.describe('resolveAssetConfig').addBatch({
         topic: resolveAssetConfig('data:text/html;base64,SGVsbG8sIHdvcmxkIQo='),
         'should decode correctly': function (resolvedAssetConfig) {
             assert.isObject(resolvedAssetConfig);
-            assert.equal(resolvedAssetConfig.originalSrc, "Hello, world!\n");
+            assert.equal(resolvedAssetConfig.rawSrc, "Hello, world!\n");
         }
     },
     'parent dir + wildcard': {

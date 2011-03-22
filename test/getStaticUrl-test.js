@@ -59,7 +59,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                         transforms.loadAssets({
                             url: 'file://' + __dirname + '/getStaticUrl/index2.html',
                             type: 'HTML',
-                            originalSrc: "<html><body><script>" + src + "</script></body></html>"
+                            rawSrc: "<html><body><script>" + src + "</script></body></html>"
                         }),
                         transforms.populate(),
                         this.callback

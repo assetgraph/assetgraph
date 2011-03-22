@@ -11,12 +11,12 @@ vows.describe('AssetGraph.findAssets').addBatch({
         topic: function () {
             new AssetGraph().transform(
                 transforms.loadAssets(
-                    {type: 'HTML', originalSrc: 'a', foo: 'bar'},
-                    {type: 'HTML', originalSrc: 'b', foo: 'bar'},
-                    {type: 'HTML', originalSrc: 'c', foo: 'quux'},
-                    {type: 'CSS',  originalSrc: 'd', foo: 'baz'},
-                    {type: 'CSS',  originalSrc: 'e'},
-                    {type: 'PNG',  originalSrc: 'f', foo: 'baz'}
+                    {type: 'HTML', rawSrc: 'a', foo: 'bar'},
+                    {type: 'HTML', rawSrc: 'b', foo: 'bar'},
+                    {type: 'HTML', rawSrc: 'c', foo: 'quux'},
+                    {type: 'CSS',  rawSrc: 'd', foo: 'baz'},
+                    {type: 'CSS',  rawSrc: 'e'},
+                    {type: 'PNG',  rawSrc: 'f', foo: 'baz'}
                 ),
                 this.callback
             );
