@@ -9,7 +9,7 @@ var URL = require('url'),
 vows.describe('Charset test').addBatch({
     'After loading HTML with a meta tag specifying iso-8859-1': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/charset/'}).transform(
+            new AssetGraph({root: __dirname + '/encoding/'}).transform(
                 transforms.loadAssets('iso-8859-1.html'),
                 transforms.populate(),
                 this.callback
@@ -30,25 +30,9 @@ vows.describe('Charset test').addBatch({
             }
         }
     },
-    'After loading HTML with a data: url anchor': {
-        topic: function () {
-            new AssetGraph({root: __dirname + '/charset/'}).transform(
-                transforms.loadAssets('dataUrl.html'),
-                transforms.populate(),
-                this.callback
-            );
-        },
-        'the graph should contain 2 HTML assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 2);
-        },
-        'the body of the data: url HTML should contain a smiley character': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'HTML'})[1].parseTree.body.firstChild.nodeValue,
-                         "\u0263a");
-        }
-    },
     'After loading a CSS asset with @charset declaration of iso-8859-1': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/charset/'}).transform(
+            new AssetGraph({root: __dirname + '/encoding/'}).transform(
                 transforms.loadAssets('iso-8859-1.css'),
                 transforms.populate(),
                 this.callback
