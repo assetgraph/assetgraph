@@ -17,10 +17,10 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
         'the graph should contain 9 assets': function (assetGraph) {
             assert.equal(assetGraph.assets.length, 9);
         },
-        'then moving the script asset to a different url and serializing the HTML': {
+        'then moving the script asset to a different url and getting the HTML as text': {
             topic: function (assetGraph) {
                 assetGraph.setAssetUrl(assetGraph.findAssets({type: 'JavaScript'})[0], assetGraph.resolver.root + 'fixIE6ForTheLoveOfGod.js');
-                assetGraph.serializeAsset(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
+                assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
             },
             'the conditional comment should still be there and contain the updated <script>': function (src) {
                 assert.notEqual(src.indexOf('Good old'), -1);
@@ -37,9 +37,9 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
                         this.callback
                     );
                 },
-                'and serialize the HTML again': {
+                'and get the HTML as text again': {
                     topic: function (assetGraph) {
-                        assetGraph.serializeAsset(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
+                        assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
                     },
                     'the conditional comments should still be there': function (src) {
                         assert.notEqual(src.indexOf('Good old'), -1);

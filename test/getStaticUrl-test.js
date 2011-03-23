@@ -31,10 +31,10 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
         'the graph should contain 3 JSON assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JSON'}).length, 3);
         },
-        'then move one of the assets pointed to by a JavaScriptStaticUrl relation and serialize the JavaScript asset': {
+        'then move one of the assets pointed to by a JavaScriptStaticUrl relation and get the JavaScript asset as text': {
             topic: function (assetGraph) {
                 assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], assetGraph.resolver.root + 'static/a76a76a7a.json');
-                assetGraph.findAssets({type: 'JavaScript'})[0].serialize(this.callback);
+                assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0], this.callback);
             },
             'the resulting JavaScript should map the url correctly': function (src) {
                 assert.equal(new Function(src + 'return theThing;')(), 'static/a76a76a7a.json');
@@ -49,9 +49,9 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 this.callback
             );
         },
-        'then serialize the JavaScript asset': {
+        'then get the JavaScript asset as text': {
             topic: function (assetGraph) {
-                assetGraph.findAssets({type: 'JavaScript'})[0].serialize(this.callback);
+                assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0], this.callback);
             },
             'then populate a new graph from the resulting JavaScript': {
                 topic: function (src) {
@@ -79,10 +79,10 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 'the graph should contain 3 JSON assets': function (assetGraph) {
                     assert.equal(assetGraph.findAssets({type: 'JSON'}).length, 3);
                 },
-                'then move one of the assets pointed to by a JavaScriptStaticUrl relation and serialize the JavaScript asset': {
+                'then move one of the assets pointed to by a JavaScriptStaticUrl relation and get the JavaScript asset as text': {
                     topic: function (assetGraph) {
                         assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], assetGraph.resolver.root + 'static/a76a76a7a.json');
-                        assetGraph.findAssets({type: 'JavaScript'})[0].serialize(this.callback);
+                        assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0], this.callback);
                     },
                     'the resulting JavaScript should map the url correctly': function (src) {
                         assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');

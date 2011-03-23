@@ -8,7 +8,7 @@ var URL = require('url'),
 vows.describe('serialize asset').addBatch({
     'After loading test case with a the same PNG image loaded from disc and http': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/serializeAsset/'}).transform(
+            new AssetGraph({root: __dirname + '/getSerializedAsset/'}).transform(
                 transforms.loadAssets('purplealpha24bit.png',
                                       'http://gofish.dk/purplealpha24bit.png'),
                 this.callback
@@ -16,7 +16,7 @@ vows.describe('serialize asset').addBatch({
         },
         'then serializing the PNG loaded from disc': {
             topic: function (assetGraph) {
-                assetGraph.findAssets()[0].serialize(this.callback);
+                assetGraph.getSerializedAsset(assetGraph.findAssets()[0], this.callback);
             },
             'the length should be 8285': function (src) {
                 assert.equal(src.length, 8285);
@@ -24,7 +24,7 @@ vows.describe('serialize asset').addBatch({
         },
         'then serializing the PNG loaded via http': {
             topic: function (assetGraph) {
-                assetGraph.findAssets()[1].serialize(this.callback);
+                assetGraph.getSerializedAsset(assetGraph.findAssets()[1], this.callback);
             },
             'the length should be 8285': function (src) {
                 assert.equal(src.length, 8285);

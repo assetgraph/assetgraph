@@ -34,9 +34,9 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
                 assert.equal(assetGraph.getBaseAssetForRelation(cssBackgroundImageRelation), cssAsset);
             });
         },
-        'then serializing the CSS': {
+        'then get the CSS as text': {
             topic: function (assetGraph) {
-                assetGraph.serializeAsset(assetGraph.findAssets({type: 'CSS'})[0], this.callback);
+                assetGraph.getAssetText(assetGraph.findAssets({type: 'CSS'})[0], this.callback);
             },
             'the src should contain four occurrences of the corrected url': function (src) {
                 var matches = src.match(/url\(\.\.\/\.\.\/images\/foo\/bar\/foo\.png\)/g);
@@ -54,9 +54,9 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
                         assert.equal(relation.cssRule.style[relation.propertyName], "url(resources/images/foo/bar/foo.png)");
                     });
                 },
-                'then serialize the HTML': {
+                'then get the HTML as text': {
                     topic: function (assetGraph) {
-                        assetGraph.serializeAsset(assetGraph.findAssets({type: 'HTML'})[0], this.callback);
+                        assetGraph.getAssetText(assetGraph.findAssets({type: 'HTML'})[0], this.callback);
                     },
                     'there should be four occurrences of the corrected background-image url': function (src) {
                         var matches = src.match(/url\(resources\/images\/foo\/bar\/foo\.png\)/g);

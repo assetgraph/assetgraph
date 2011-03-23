@@ -26,14 +26,14 @@ vows.describe('Inlining an asset').addBatch({
         'the graph should contain one PNG asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
         },
-        'then inlining the CSS and serializing the HTML': {
+        'then inlining the CSS and getting the HTML as text': {
             topic: function (assetGraph) {
                 var callback = this.callback;
                 assetGraph.inlineAsset(assetGraph.findAssets({type: 'CSS'})[0], function (err) {
                     if (err) {
                         return callback(err);
                     }
-                    assetGraph.serializeAsset(assetGraph.findAssets({type: 'HTML', url: query.defined})[0], callback);
+                    assetGraph.getAssetText(assetGraph.findAssets({type: 'HTML', url: query.defined})[0], callback);
                 });
             },
             'the CSSImage url should be relative to the HTML asset': function (src) {

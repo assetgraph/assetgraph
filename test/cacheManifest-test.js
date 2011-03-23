@@ -42,9 +42,9 @@ vows.describe('Cache manifest').addBatch({
                     manifest = assetGraph.findAssets({type: 'CacheManifest'})[0];
                 assert.equal(assetGraph.findRelations({from: manifest, to: barPng}).length, 1); // FIXME: query
             },
-            'then serializing the manifest': {
+            'then get the manifest as text': {
                 topic: function (assetGraph) {
-                    assetGraph.findAssets({type: 'CacheManifest'})[0].serialize(this.callback);
+                    assetGraph.getAssetText(assetGraph.findAssets({type: 'CacheManifest'})[0], this.callback);
                 },
                 'it should only point to foo.png once': function (src) {
                     var fooPngMatches = src.match(/\bfoo.png/gm);
@@ -55,10 +55,10 @@ vows.describe('Cache manifest').addBatch({
                     assert.isTrue(src.indexOf("NETWORK:\n/helloworld.php\n") !== -1);
                     assert.isTrue(src.indexOf("FALLBACK:\nheresthething.asp foo.png\n") !== -1);
                 },
-                'then move the foo.png asset to a different url and serialize the manifest again': {
+                'then move the foo.png asset to a different url and get the manifest as text again': {
                     topic: function (previousSrc, assetGraph) {
                         assetGraph.setAssetUrl(assetGraph.findAssets({url: /foo.png$/})[0], assetGraph.resolver.root + 'somewhere/else/quux.png');
-                        assetGraph.findAssets({type: 'CacheManifest'})[0].serialize(this.callback);
+                        assetGraph.getAssetText(assetGraph.findAssets({type: 'CacheManifest'})[0], this.callback);
                     },
                     'there should be no mention of foo.png': function (src) {
                         assert.isNull(src.match(/\bfoo.png/gm));
