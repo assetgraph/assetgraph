@@ -4,6 +4,7 @@ var URL = require('url'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     assets = require('../lib/assets'),
+    relations = require('../lib/relations'),
     step = require('step');
 
 vows.describe('AssetGraph.findAssets').addBatch({
@@ -21,27 +22,68 @@ vows.describe('AssetGraph.findAssets').addBatch({
                 this.callback
             );
         },
-        'and lookup single value of unindexed property': function (assetGraph) {
+        'then lookup single value of unindexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({foo: 'bar'}).length, 2);
+            assert.equal(assetGraph.findAssets({foo: 'baz'}).length, 2);
+            assert.equal(assetGraph.findAssets({foo: 'quux'}).length, 1);
+            assert.equal(assetGraph.findAssets({foo: ['quux']}).length, 1);
+            assert.equal(assetGraph.findAssets({foo: undefined}).length, 1);
         },
-        'and lookup multiple values of unindexed property': function (assetGraph) {
+        'then lookup multiple values of unindexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({foo: ['bar', 'quux']}).length, 3);
+            assert.equal(assetGraph.findAssets({foo: ['bar', 'baz']}).length, 4);
+            assert.equal(assetGraph.findAssets({foo: ['quux', undefined]}).length, 2);
         },
-        'and lookup single value of indexed property': function (assetGraph) {
+        'then lookup single value of indexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 3);
             assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 2);
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
         },
-        'and lookup multiple values of indexed property': function (assetGraph) {
+        'then lookup multiple values of indexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: ['CSS', 'HTML']}).length, 5);
             assert.equal(assetGraph.findAssets({type: ['PNG', 'CSS', 'HTML']}).length, 6);
             assert.equal(assetGraph.findAssets({type: ['PNG', 'HTML']}).length, 4);
             assert.equal(assetGraph.findAssets({type: ['CSS', 'PNG']}).length, 3);
         },
-        'and lookup multiple properties': function (assetGraph) {
+        'then lookup multiple properties': function (assetGraph) {
             assert.equal(assetGraph.findAssets({foo: 'baz', type: 'CSS'}).length, 1);
             assert.equal(assetGraph.findAssets({foo: 'bar', type: 'HTML'}).length, 2);
             assert.equal(assetGraph.findAssets({foo: 'quux', type: 'PNG'}).length, 0);
         },
+        'then lookup based on incoming relations': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'HTML', incoming: {type: 'HTMLAnchor'}}).length, 0);
+        },
+        'then lookup based on outgoing relations': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({outgoing: {type: 'HTMLAnchor'}}).length, 0);
+        },
+        'then add some relations to the graph': {
+            topic: function (assetGraph) {
+                assetGraph.addRelation(new relations.HTMLAnchor({
+                    from: assetGraph.findAssets({rawSrc: 'a'})[0],
+                    to: assetGraph.findAssets({rawSrc: 'b'})[0]
+                }));
+                assetGraph.addRelation(new relations.HTMLAnchor({ // Identical to the first
+                    from: assetGraph.findAssets({rawSrc: 'a'})[0],
+                    to: assetGraph.findAssets({rawSrc: 'b'})[0]
+                }));
+                assetGraph.addRelation(new relations.HTMLAnchor({
+                    from: assetGraph.findAssets({rawSrc: 'a'})[0],
+                    to: assetGraph.findAssets({rawSrc: 'c'})[0]
+                }));
+                assetGraph.addRelation(new relations.CSSImage({
+                    from: assetGraph.findAssets({rawSrc: 'e'})[0],
+                    to: assetGraph.findAssets({rawSrc: 'f'})[0]
+                }));
+                return assetGraph;
+            },
+            'then lookup based on incoming relations': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'HTML', incoming: {type: 'HTMLAnchor'}}).length, 2);
+                assert.equal(assetGraph.findAssets({incoming: {type: 'HTMLAnchor'}}).length, 2);
+            },
+            'then lookup based on outgoing relations': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({outgoing: {type: 'HTMLAnchor'}}).length, 1);
+                assert.equal(assetGraph.findAssets({outgoing: {to: {rawSrc: 'f'}}}).length, 1);
+            }
+        }
     }
 })['export'](module);
