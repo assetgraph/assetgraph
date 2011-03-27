@@ -20,7 +20,8 @@
         "canvas": ">=0.4.3",
         "graphviz": ">=0.0.3",
         "bufferjs": ">=0.2.1",
-        "iconv": ">=1.0.0"
+        "iconv": ">=1.0.0",
+        "seq": ">=0.2.1"
     },
     "devDependencies": {
         "vows": ">=0.5.6"
