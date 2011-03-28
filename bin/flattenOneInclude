@@ -55,5 +55,6 @@ new AssetGraph({root: commandLineOptions.root}).transform(
                 }
             })
         );
-    }
+    },
+    transforms.reportErrorAndTerminate()
 );

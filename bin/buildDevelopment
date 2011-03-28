@@ -21,5 +21,6 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.inlineAssets({url: fileUtils.makeFileUrlMatcher(commandLineOptions.inline)}), // FIXME: OR queries?
     transforms.prettyPrintAssets({isInitial: true}),
     transforms.moveAssets({isInitial: true}, function (asset) {return asset.url.replace(/\.template$/, "");}),
-    transforms.writeAssetsToDisc({isInitial: true})
+    transforms.writeAssetsToDisc({isInitial: true}),
+    transforms.reportErrorAndTerminate()
 );

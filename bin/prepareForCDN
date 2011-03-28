@@ -19,5 +19,6 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.parallel(
         transforms.writeAssetsToDisc({url: /^file:/}, outRoot),
         transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnRoot)}, outRoot, cdnRoot)
-    )
+    ),
+    transforms.reportErrorAndTerminate()
 );
