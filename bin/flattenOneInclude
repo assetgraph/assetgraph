@@ -8,13 +8,14 @@ var fs = require('fs'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     fileUtils = require('../lib/fileUtils'),
-    commandLineOptions = require('../lib/3rdparty/papandreou-optimist').
+    commandLineOptions = require('optimist').
         usage('$0 [--root <dir>] [-o <outputJavaScriptFile>] <inputJavaScriptFile>').
         check(function (argv) {
             if (argv._.length !== 1 || !/\.js$/.test(argv._[0])) {
                 throw "Please specify a single JavaScript file on the command line";
             }
-        }).argv;
+        }).
+        argv;
 
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),

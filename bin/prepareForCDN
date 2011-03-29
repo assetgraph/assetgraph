@@ -4,10 +4,11 @@ var AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
-    commandLineOptions = require('../lib/3rdparty/papandreou-optimist').
+    commandLineOptions = require('optimist').
         usage('$0 --root <inputRootDirectory> --out-root <outputRootDirectory> --cdn-root <url> <htmlFile>...').
         demand(['root', 'out-root', 'cdn-root']).
-        camelCase().argv,
+        camelCase().
+        argv,
     outRoot = fileUtils.fsDirToFileUrl(commandLineOptions.outRoot),
     cdnRoot = fileUtils.ensureTrailingSlash(commandLineOptions.cdnRoot);
 

@@ -5,10 +5,11 @@ var _ = require('underscore'),
     transforms = require('../lib/transforms'),
     query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
-    commandLineOptions = require('../lib/3rdparty/papandreou-optimist').
+    commandLineOptions = require('optimist').
         usage('$0 --root <inputRootDirectory> <htmlFile> ...').
         demand(['root']).
-        camelCase().argv;
+        camelCase().
+        argv;
 
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
