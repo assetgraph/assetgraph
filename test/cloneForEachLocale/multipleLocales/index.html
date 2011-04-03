@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<script>
+one = {
+    include: function () {},
+    tr: function (keyName, defaultValue) {
+        return defaultValue;
+    },
+    trPattern: function (keyName, defaultValue) {
+        return function () { // placeHolderValue, ...
+            var placeHolderValues = arguments;
+            return defaultValue.replace(/\{(\d+)\}|((?:[^\{\\]|\\[\\\{])+)/g, function ($0, placeHolderNumberStr, text) {
+                if (placeHolderNumberStr) {
+                    return placeHolderValues[parseInt(placeHolderNumberStr, 10)];
+                } else {
+                    return text.replace(/\\([\\\{])/g, "$1");
+                }
+            });
+        };
+    }
+};
+one.include('index.i18n');
+
+if (one.buildDevelopment) {
+    document.title = one.tr('oneTrInJavaScriptConditionalBlock');
+}
+
+function plainOneTr() {
+    return one.tr('plainOneTr', 'Plain default');
+}
+
+function callOneTrPattern() {
+    return one.trPattern('callOneTrPattern', 'Boring {0} default pattern')("and stupid");
+}
+
+var nonInvokedTrPattern = one.trPattern('nonInvokedTrPattern', 'Welcome to Default Country, Mr. {0}');
+</script>
+</body>
+<html>

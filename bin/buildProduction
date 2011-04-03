@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-var AssetGraph = require('../lib/AssetGraph'),
+var _ = require('underscore'),
+    AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
@@ -20,6 +21,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.externalizeAssets({incoming: {type: ['HTMLStyle', 'HTMLScript']}}),
     transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}),
     transforms.bundleAssets({type: 'JavaScript', incoming: {type: 'HTMLScript'}}),
+    transforms.cloneForEachLocale({type: 'HTML', isInitial: true}, _.flatten(['da', 'en_US'])), // FIXME: Use commandLineOptions.locale(s)
     transforms.spriteBackgroundImages(),
     transforms.postProcessBackgroundImages(),
     commandLineOptions.manifest ? transforms.addCacheManifestSinglePage({isInitial: true}) : transforms.noop(),
