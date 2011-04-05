@@ -33,7 +33,7 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
                 topic: function (_, assetGraph) {
                     assetGraph.transform(
                         transforms.externalizeAssets({type: ['CSS', 'JavaScript']}),
-                        transforms.minifyAssets({url: /index\.html$/}),
+                        transforms.minifyAssets({type: 'HTML'}),
                         this.callback
                     );
                 },
