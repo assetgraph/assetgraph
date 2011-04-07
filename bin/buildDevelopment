@@ -19,7 +19,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.inlineAssets({isDirty: true, type: 'CSS', incoming: {type: 'HTMLStyle', from: {isInitial: true, type: 'HTML'}}}),
     transforms.inlineAssets({isDirty: true, type: 'JavaScript', incoming: {type: 'HTMLScript', from: {isInitial: true, type: 'HTML'}}}),
     transforms.runJavaScriptConditionalBlocks({type: 'HTML'}, 'buildDevelopment'),
-    transforms.inlineAssets({url: fileUtils.makeFileUrlMatcher(commandLineOptions.inline)}), // FIXME: OR queries?
+    commandLineOptions.inline ? transforms.inlineAssets({url: fileUtils.makeFileUrlMatcher(commandLineOptions.inline)}) : transforms.noop(),
     transforms.prettyPrintAssets({isInitial: true}),
     transforms.moveAssets({isInitial: true}, function (asset) {return asset.url.replace(/\.template$/, "");}),
     transforms.writeAssetsToDisc({isInitial: true}),
