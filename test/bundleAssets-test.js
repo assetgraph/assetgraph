@@ -64,8 +64,8 @@ vows.describe('Bundle stylesheets').addBatch({
         'the graph should contain 2 HTML assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 2);
         },
-        'the graph should contain 4 CSS assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 4);
+        'the graph should contain 5 CSS assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 5);
         },
         'then bundling the CSS assets': {
             topic: function (assetGraph) {
@@ -74,14 +74,20 @@ vows.describe('Bundle stylesheets').addBatch({
                     this.callback
                 );
             },
-            'the graph should contain 3 CSS assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 3);
+            'the graph should contain 4 CSS assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 4);
             },
             'the CSS assets with a single relation pointing at them should remain unbundled': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/a\.css$/}).length, 1);
                 assert.equal(assetGraph.findAssets({url: /\/d\.css$/}).length, 1);
             },
-            'the last CSS asset in the graph should contain the rules from b.css and c.css': function (assetGraph) {
+            'e.css should remain unbundled because it occurs at different positions in 1.html and 2.html': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({url: /\/e\.css$/}).length, 1);
+            },
+            'b.css and c.css should no longer be in the graph': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({url: /\/[bc]\.css$/}).length, 0);
+            },
+            'the last CSS asset in the graph should consist of the rules from b.css and c.css': function (assetGraph) {
                 var cssAssets = assetGraph.findAssets({type: 'CSS'}),
                     cssRules = cssAssets[cssAssets.length - 1].parseTree.cssRules;
                 assert.equal(cssRules.length, 2);
