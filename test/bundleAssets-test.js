@@ -48,7 +48,7 @@ vows.describe('Bundle stylesheets').addBatch({
                     bundle = assetGraph.findAssets({type: 'CSS'})[0];
                 assert.equal(cssBackgroundImages.length, 4);
                 cssBackgroundImages.forEach(function (cssBackgroundImage) {
-                    assert.equal(cssBackgroundImage.from, bundle);
+                    assert.equal(cssBackgroundImage.from.id, bundle.id);
                 });
             }
         }
