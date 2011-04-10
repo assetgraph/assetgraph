@@ -33,5 +33,6 @@ new AssetGraph({root: commandLineOptions.root}).transform(
         transforms.writeAssetsToDisc({url: /^file:/}, outRoot),
         cdnRoot ? transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnRoot)}, outRoot, cdnRoot) : transforms.noop()
     ),
+    transforms.stats(),
     transforms.reportErrorAndTerminate()
 );
