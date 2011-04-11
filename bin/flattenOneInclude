@@ -2,11 +2,12 @@
 
 var fs = require('fs'),
     _ = require('underscore'),
-    step = require('step'),
+    seq = require('seq'),
     error = require('../lib/error'),
     assets = require('../lib/assets'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
+    traversal = require('../lib/traversal'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('optimist').
         usage('$0 [--root <dir>] [-o <outputJavaScriptFile>] <inputJavaScriptFile>').
@@ -22,40 +23,30 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({type: 'JavaScriptStaticInclude'}),
     function (err, assetGraph, cb) {
-        var initialAssets = assetGraph.findAssets({isInitial: true});
-        if (initialAssets.length !== 1 || initialAssets[0].type !== 'JavaScript') {
-            return process.nextTick(cb);
-        }
-        step(
-            function () {
-                var group = this.group(),
-                    seenAssets = {};
-                // FIXME: There should be an 'eachAssetPostOrder' helper in AssetGraph.
-                initialAssets.forEach(function (initialAsset) {
-                    var stack = [];
-                    (function traversePostorder(asset) {
-                        if (!seenAssets[asset.id]) {
-                            seenAssets[asset.id] = true;
-                            stack.push(asset);
-                            assetGraph.findRelations({from: asset}).forEach(function (relation) {
-                                traversePostorder(relation.to);
-                                assetGraph.detachAndRemoveRelation(relation);
-                            });
-                            asset.getOriginalSrc(group());
-                            assetGraph.removeAsset(asset);
-                        }
-                    }(initialAsset));
+        seq()
+            .extend(assetGraph.findAssets({isInitial: true}))
+            .seq(function (initialAsset) {
+                this(null, traversal.collectAssetsPostOrder(assetGraph, initialAsset, {to: {type: 'JavaScript'}}));
+            })
+            .flatten()
+            .parMap(function (asset) {
+                assetGraph.findRelations({from: asset}).forEach(function (outgoingRelation) {
+                    assetGraph.detachAndRemoveRelation(outgoingRelation);
                 });
-            },
-            error.passToFunction(cb, function (srcs) {
-                var flattenedSrc = srcs.join("\n").replace(/one\.include\(([^\)]*)\);?\n?/g, "");
+                asset.getDecodedSrc(this);
+            })
+            .seq(function () {
+                var flattenedSrc = this.stack.join("\n").replace(/one\.include\(([^\)]*)\);?\n?/g, "");
                 if ('o' in commandLineOptions) {
                     fs.writeFile(commandLineOptions.o, flattenedSrc, assets.JavaScript.prototype.encoding, cb);
                 } else {
                     console.log(flattenedSrc);
                 }
             })
-        );
+            .seq(function () {
+                cb();
+            })
+            ['catch'](cb);
     },
     transforms.reportErrorAndTerminate()
 );
