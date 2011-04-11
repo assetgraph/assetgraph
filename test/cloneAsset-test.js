@@ -17,19 +17,21 @@ vows.describe('Cloning assets').addBatch({
         'the graph should contain 3 HTML assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 3);
         },
+        'the graph should contain a single PNG asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
+        },
+        'the graph should contain a single inline CSS asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'CSS', url: query.undefined}).length, 1);
+        },
         'then cloning the first HTML asset': {
             topic: function (assetGraph) {
                 var indexHtml = assetGraph.findAssets({type: 'HTML'})[0],
                     callback = this.callback;
-                assetGraph.cloneAssetAndOutgoingRelations(indexHtml, function (err, assetClone, outgoingRelations) {
+                assetGraph.cloneAsset(indexHtml, function (err, assetClone) {
                     if (err) {
                         return callback(err);
                     }
-                    assetClone.url = indexHtml.url.replace(/\.html$/, ".clone.html");
-                    assetGraph.addAsset(assetClone);
-                    outgoingRelations.forEach(function (outgoingRelation) {
-                        assetGraph.addRelation(outgoingRelation);
-                    });
+                    assetGraph.setAssetUrl(assetClone, indexHtml.url.replace(/\.html$/, ".clone.html"));
                     callback(null, assetGraph);
                 });
             },
@@ -41,6 +43,15 @@ vows.describe('Cloning assets').addBatch({
             },
             'the clone should have an HTMLAnchor relation to yetanotherpage.html': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({from: {url: /\/index\.clone\.html$/}, to: {url: /\/yetanotherpage\.html$/}}).length, 1);
+            },
+            'the clone should have an HTMLStyle relation to an inline stylesheet': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({from: {url: /\/index\.clone\.html$/}, to: {type: 'CSS'}}).length, 1);
+            },
+            'the graph should still contain a single PNG asset': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
+            },
+            'the graph should contain two inline CSS assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'CSS', url: query.undefined}).length, 2);
             },
             'then getting the text of the original and the cloned asset': {
                 topic: function (assetGraph) {
