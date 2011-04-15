@@ -6,22 +6,23 @@ var _ = require('underscore'),
     query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('optimist').
-        usage('$0 --root <inputRootDirectory> --out-root <outputRootDirectory> [--cdn-root <url>] [--manifest] [--static-dir <directoryName>] <htmlFile>...').
+        usage('$0 --root <inputRootDirectory> --out-root <outputRootDirectory> [--locale <localeId>,...] [--cdn-root <url>] [--manifest] [--static-dir <directoryName>] <htmlFile>...').
         boolean('manifest').
         demand(['root', 'out-root']).
         camelCase().
         argv,
     outRoot = fileUtils.fsDirToFileUrl(commandLineOptions.outRoot),
-    cdnRoot = commandLineOptions.cdnRoot && fileUtils.ensureTrailingSlash(commandLineOptions.cdnRoot);
+    cdnRoot = commandLineOptions.cdnRoot && fileUtils.ensureTrailingSlash(commandLineOptions.cdnRoot),
+    localeIds = commandLineOptions.locale && _.flatten(_.flatten([commandLineOptions.locale]).map(function (localeId) {return localeId.split(",");}));
 
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({type: query.not('JavaScriptStaticInclude'), to: query.not(/^https?:/)}),
     transforms.removeOneIncludeStatements({type: 'JavaScript'}),
     transforms.externalizeAssets({incoming: {type: ['HTMLStyle', 'HTMLScript']}}),
+    localeIds ? transforms.cloneForEachLocale({type: 'HTML', isInitial: true}, localeIds) : transforms.noop(),
     transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}),
     transforms.bundleAssets({type: 'JavaScript', incoming: {type: 'HTMLScript'}}),
-    transforms.cloneForEachLocale({type: 'HTML', isInitial: true}, _.flatten(['da', 'en_US'])), // FIXME: Use commandLineOptions.locale(s)
     transforms.spriteBackgroundImages(),
     transforms.postProcessBackgroundImages(),
     commandLineOptions.manifest ? transforms.addCacheManifestSinglePage({isInitial: true}) : transforms.noop(),
