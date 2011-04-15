@@ -37,6 +37,7 @@
         "buildDevelopment": "./bin/buildDevelopment",
         "buildProduction": "./bin/buildProduction",
         "flattenOneInclude": "./bin/flattenOneInclude",
-        "prepareForCDN": "./bin/prepareForCDN"
+        "prepareForCDN": "./bin/prepareForCDN",
+        "refreshI18N": "./bin/refreshI18N"
     }
 }

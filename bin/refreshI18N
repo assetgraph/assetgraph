@@ -1,0 +1,176 @@
+#!/usr/bin/env node
+
+var _ = require('underscore'),
+    seq = require('seq'),
+    AssetGraph = require('../lib/AssetGraph'),
+    assets = require('../lib/assets'),
+    relations = require('../lib/relations'),
+    transforms = require('../lib/transforms'),
+    query = require('../lib/query'),
+    error = require('../lib/error'),
+    i18nTools = require('../lib/i18nTools'),
+    uglifyAST = require('../lib/uglifyAST'),
+    fileUtils = require('../lib/fileUtils'),
+    commandLineOptions = require('optimist').
+        usage('$0 [--label <labelName>=<dir> ...] --root <inputRootDirectory> --locale <localeId>,... <htmlFile>...').
+        demand(['root', 'locale']).
+        argv,
+    localeIds = _.flatten(_.flatten([commandLineOptions.locale]).map(function (localeId) {return localeId.split(",");}));
+
+new AssetGraph({root: commandLineOptions.root}).transform(
+    transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
+    transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
+    transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude'], to: query.not(/^https?:/)}),
+    function (err, assetGraph, cb) {
+        if (err) {
+            throw err;
+        }
+        var occurrencesByKey = {}, // key => array of "occurrence" objects: {asset: ..., type: ..., node, ..., defaultValueAST: ...}
+            prioritizedLocaleIdsByLocaleId = {},
+            newI18NRelationsByJavaScriptId = {};
+
+        localeIds.forEach(function (localeId) {
+            prioritizedLocaleIdsByLocaleId[localeId] = i18nTools.expandLocaleIdToPrioritizedList(localeId);
+        });
+
+        seq()
+            .extend(assetGraph.findAssets({type: 'HTML', isInitial: true}))
+            .seqEach(function (htmlAsset) {
+                var callback = this,
+                    subgraph = assetGraph.createSubgraph(htmlAsset, {type: ['HTMLScript', 'JavaScriptStaticInclude']});
+                seq()
+                    .extend(subgraph.findAssets({type: 'JavaScript'}))
+                    .parEach(function (javaScript) {
+                        javaScript.getParseTree(this.into(javaScript.id));
+                    })
+                    .parEach(function (javaScript) {
+                        var hasOneTr = false;
+                        i18nTools.eachOneTrInAST(javaScript.parseTree, function (type, key, node, defaultValueAST) {
+                            hasOneTr = true;
+                            (occurrencesByKey[key] = occurrencesByKey[key] || []).push({
+                                asset: javaScript,
+                                type: type,
+                                node: node,
+                                defaultValueAST: defaultValueAST
+                            });
+                        });
+                        this();
+                    })
+                    .seq(function () {
+                        callback();
+                    })
+                    ['catch'](callback);
+            })
+            .empty()
+            .extend(assetGraph.findAssets({type: 'I18N'}))
+            .parEach(function (i18nAsset) {
+                i18nAsset.getParseTree(this);
+            })
+            .seq(function () {
+                var i18nAssets = this.stack;
+                _.keys(occurrencesByKey).forEach(function (key) {
+                    var occurrences = occurrencesByKey[key];
+                    if (occurrences.length > 1) {
+                        for (var i = 1 ; i < occurrences.length ; i += 1) {
+                            if (!_.isEqual(occurrences[0].defaultValueAST, occurrences[1].defaultValueAST)) {
+                                console.warn("Default values for " + key + " are different");
+                            }
+                        }
+                    }
+                    var numFound = 0,
+                        foundByLocaleId = {};
+                    i18nAssets.forEach(function (i18nAsset) {
+                        if (key in i18nAsset.parseTree) {
+                            numFound += 1;
+                            localeIds.forEach(function (localeId) {
+                                var prioritizedLocaleIds = prioritizedLocaleIdsByLocaleId[localeId];
+                                for (var i = 0 ; i < prioritizedLocaleIds.length ; i += 1) {
+                                    if (prioritizedLocaleIds[i] in i18nAsset.parseTree[key]) {
+                                        return; // Found
+                                    }
+                                }
+                                var leastSpecificLocaleId = prioritizedLocaleIds[prioritizedLocaleIds.length - 1],
+                                    value = null;
+                                if (leastSpecificLocaleId === 'en' && occurrences[0].defaultValueAST) {
+                                    value = uglifyAST.astToObj(occurrences[0].defaultValueAST);
+                                }
+                                i18nAsset.parseTree[key][leastSpecificLocaleId] = value;
+                                console.log(i18nAsset.url + ": " + key + " already found, added entry for " + leastSpecificLocaleId);
+
+                                assetGraph.markAssetDirty(i18nAsset);
+                            });
+                        }
+                    });
+                    if (numFound === 0) {
+                        console.log("Key " + key + " not found in any I18N asset");
+                        var addToI18NForJavaScriptAsset,
+                            includingAssetsById = {};
+                        occurrences.forEach(function (occurrence) {
+                            includingAssetsById[occurrence.asset.id] = occurrence.asset;
+                        });
+                        var includingAssets = _.values(includingAssetsById);
+                        if (includingAssets.length === 1) {
+                            addToI18NForJavaScriptAsset = includingAssets[0];
+                        } else {
+                            console.log(key + " occurs in multiple JavaScripts, choosing the last-seen one");
+                            addToI18NForJavaScriptAsset = includingAssets[includingAssets.length - 1];
+                        }
+                        var existingI18NRelations = assetGraph.findRelations({from: addToI18NForJavaScriptAsset, to: {type: 'I18N'}}),
+                            i18nAsset;
+                        if (existingI18NRelations.length === 0) {
+                            i18nAsset = new assets.I18N({
+                                isDirty: true,
+                                parseTree: {}
+                            });
+                            var relation = new relations.JavaScriptStaticInclude({
+                                from: addToI18NForJavaScriptAsset,
+                                to: i18nAsset
+                            });
+                            (newI18NRelationsByJavaScriptId[addToI18NForJavaScriptAsset.id] = newI18NRelationsByJavaScriptId[addToI18NForJavaScriptAsset.id] || []).push(relation);
+                            i18nAsset.url = (addToI18NForJavaScriptAsset.url || this.getBaseAssetForRelation(relation)).replace(/(?:\.js|\.html)?$/, ".i18n");
+                            console.log("Creating " + i18nAsset.url);
+                            assetGraph.addAsset(i18nAsset);
+                            assetGraph.addRelation(relation);
+                        } else {
+                            if (existingI18NRelations.length > 1) {
+                                console.warn(addToI18NForJavaScriptAsset + " has multiple I18N relations, choosing the first one");
+                            }
+                            i18nAsset = existingI18NRelations[0].to;
+                        }
+                        i18nAsset.parseTree[key] = {};
+                        localeIds.forEach(function (localeId) {
+                            var prioritizedList = prioritizedLocaleIdsByLocaleId[localeId],
+                                leastSpecificLocaleId = prioritizedList[prioritizedList.length - 1],
+                                value = null;
+                            if (leastSpecificLocaleId === 'en' && occurrences[0].defaultValueAST) {
+                                value = uglifyAST.astToObj(occurrences[0].defaultValueAST);
+                            }
+                            i18nAsset.parseTree[key][leastSpecificLocaleId] = value;
+                        });
+                    } else if (numFound > 1) {
+                        console.error("Key " + key + " found in multiple I18N assets");
+                    }
+                });
+                // Hack: Inject the new relations at the top of the file
+                _.each(newI18NRelationsByJavaScriptId, function (i18nRelations, javaScriptId) {
+                    var javaScript = assetGraph.idIndex[javaScriptId];
+                    assetGraph.markAssetDirty(javaScript);
+                    javaScript.getText = function (cb) {
+                        javaScript.getDecodedSrc(error.passToFunction(err, function (decodedSrc) {
+                            cb(null, i18nRelations.map(function (i18nRelation) {
+                                return "one.include('" +
+                                    fileUtils.buildRelativeUrl(i18nRelation.from.url || assetGraph.findBaseAssetForRelation(i18nRelation).url, i18nRelation.to.url) +
+                                    "');\n";
+                            }).join("") + decodedSrc);
+                        }));
+                    };
+                });
+                cb();
+            })
+            ['catch'](cb);
+    },
+    transforms.prettyPrintAssets({type: 'I18N', isDirty: true}),
+    transforms.stats(),
+    transforms.writeAssetsToDisc({type: ['I18N', 'JavaScript'], isDirty: true}),
+    transforms.reportErrorAndTerminate()
+);
