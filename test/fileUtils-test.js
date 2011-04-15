@@ -1,7 +1,5 @@
-var URL = require('url'),
-    vows = require('vows'),
+var vows = require('vows'),
     assert = require('assert'),
-    step = require('step'),
     fileUtils = require('../lib/fileUtils');
 
 vows.describe('Utility functions in fileUtils').addBatch({

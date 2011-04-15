@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    step = require('step'),
+    seq = require('seq'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms');
 
@@ -36,14 +36,16 @@ vows.describe('Postprocess images').addBatch({
             },
             'then fetching the source of the two images': {
                 topic: function (assetGraph) {
-                    var cssBackgroundImages = assetGraph.findRelations({type: 'CSSImage'});
-                    step(
-                        function () {
-                            cssBackgroundImages[0].to.getRawSrc(this.parallel());
-                            cssBackgroundImages[1].to.getRawSrc(this.parallel());
-                        },
-                        this.callback
-                    );
+                    var callback = this.callback;
+                    seq()
+                        .extend(assetGraph.findRelations({type: 'CSSImage'}))
+                        .parMap(function (cssImage) {
+                            cssImage.to.getRawSrc(this);
+                        })
+                        .seq(function (firstSrc, secondSrc) {
+                            callback(null, firstSrc, secondSrc);
+                        })
+                        ['catch'](callback);
                 },
                 'should return something that looks like PNGs': function (err, firstSrc, secondSrc) {
                     assert.deepEqual(_.toArray(firstSrc.slice(0, 4)), [0x89, 0x50, 0x4e, 0x47]);

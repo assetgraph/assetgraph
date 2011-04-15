@@ -1,11 +1,9 @@
-var URL = require('url'),
-    vows = require('vows'),
+var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     assets = require('../lib/assets'),
-    relations = require('../lib/relations'),
-    step = require('step');
+    relations = require('../lib/relations');
 
 vows.describe('AssetGraph.findAssets').addBatch({
     'Load test case': {
