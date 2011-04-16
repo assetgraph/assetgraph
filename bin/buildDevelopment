@@ -14,7 +14,7 @@ var _ = require('underscore'),
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
-    transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude', 'CSSImage', 'JavaScriptConditionalBlock'], to: query.not(/^https?:/)}),
+    transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude', 'CSSImage'], to: query.not(/^https?:/)}),
     transforms.flattenStaticIncludes({isInitial: true}),
     transforms.inlineAssets({isDirty: true, type: 'CSS', incoming: {type: 'HTMLStyle', from: {isInitial: true, type: 'HTML'}}}),
     transforms.inlineAssets({isDirty: true, type: 'JavaScript', incoming: {type: 'HTMLScript', from: {isInitial: true, type: 'HTML'}}}),

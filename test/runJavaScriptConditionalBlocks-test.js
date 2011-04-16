@@ -12,8 +12,8 @@ vows.describe('executeJavaScriptConditionalBlocks').addBatch({
                 this.callback
             );
         },
-        'the graph should contain a JavaScriptConditionalBlock relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptConditionalBlock'}).length, 1);
+        'the graph should contain a single JavaScript asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
         },
         'then running the conditional blocks': {
             topic: function (assetGraph) {
