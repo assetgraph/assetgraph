@@ -12,17 +12,14 @@ vows.describe('Sprite background images').addBatch({
                 this.callback
             );
         },
-        'the graph contains 5 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 5);
+        'the graph contains 4 assets': function (assetGraph) {
+            assert.equal(assetGraph.assets.length, 4);
         },
         'the graph contains 3 PNGs': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 3);
         },
         'the graph contains one CSS asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 1);
-        },
-        'the graph contains a single CSSSpritePlaceholder relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CSSSpritePlaceholder'}).length, 1);
         },
         'the graph contains 3 CSSImage relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 3);
@@ -36,9 +33,6 @@ vows.describe('Sprite background images').addBatch({
             },
             'the number of PNG assets should be down to one': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
-            },
-            'the sprite placeholder should be gone': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'CSSSpritePlaceholder'}).length, 0);
             }
         }
     }
