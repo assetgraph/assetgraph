@@ -4,24 +4,6 @@
 </head>
 <body>
 <script>
-one = {
-    include: function () {},
-    tr: function (keyName, defaultValue) {
-        return defaultValue;
-    },
-    trPattern: function (keyName, defaultValue) {
-        return function () { // placeHolderValue, ...
-            var placeHolderValues = arguments;
-            return defaultValue.replace(/\{(\d+)\}|((?:[^\{\\]|\\[\\\{])+)/g, function ($0, placeHolderNumberStr, text) {
-                if (placeHolderNumberStr) {
-                    return placeHolderValues[parseInt(placeHolderNumberStr, 10)];
-                } else {
-                    return text.replace(/\\([\\\{])/g, "$1");
-                }
-            });
-        };
-    }
-};
 one.include('index.i18n');
 
 if (one.buildDevelopment) {

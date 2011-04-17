@@ -1,8 +1,38 @@
 var vows = require('vows'),
     assert = require('assert'),
+    vm = require('vm'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
-    query = require('../lib/query');
+    query = require('../lib/query'),
+    i18nTools = require('../lib/i18nTools');
+
+function getJavaScriptTextAndBootstrappedContext(assetGraph, htmlQueryObj, cb) {
+    var htmlAsset = assetGraph.findAssets(htmlQueryObj)[0],
+        htmlScriptRelations = assetGraph.findRelations({from: htmlAsset, to: {type: 'JavaScript'}}),
+        inlineJavaScript;
+
+    if (htmlScriptRelations[0].node.getAttribute('id') === 'oneBootstrapper') {
+        inlineJavaScript = htmlScriptRelations[1].to;
+    } else {
+        inlineJavaScript = htmlScriptRelations[0].to;
+    }
+    assetGraph.getAssetText(inlineJavaScript, function (err, text) {
+        if (err) {
+            return cb(err);
+        }
+        i18nTools.getBootstrappedContext(assetGraph, assetGraph.findAssets(htmlQueryObj)[0], function (err, context) {
+            if (err) {
+                return callback(err);
+            }
+            cb(null, text, context);
+        });
+    });
+}
+
+function evaluateInContext(src, context) {
+    vm.runInContext("result = (function () {" + src + "}());", context);
+    return context.result;
+}
 
 vows.describe('Make a clone of each HTML file for each language').addBatch({
     'After loading simple test case': {
@@ -25,6 +55,7 @@ vows.describe('Make a clone of each HTML file for each language').addBatch({
         'then running the cloneForEachLocale transform': {
             topic: function (assetGraph) {
                 assetGraph.transform(
+                    transforms.injectOneBootstrapper({type: 'HTML'}),
                     transforms.cloneForEachLocale({type: 'HTML'}, ['en_US', 'da']),
                     this.callback
                 );
@@ -71,27 +102,28 @@ vows.describe('Make a clone of each HTML file for each language').addBatch({
             new AssetGraph({root: __dirname + '/cloneForEachLocale/multipleLocales/'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
+                transforms.injectOneBootstrapper({type: 'HTML', isInitial: true}),
                 this.callback
             );
         },
-        'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 3);
+        'the graph should contain 4 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 4);
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
-            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.undefined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.undefined}).length, 2);
             assert.equal(assetGraph.findAssets({type: 'I18N'}).length, 1);
         },
         'then get the inline JavaScript asset as text': {
             topic: function (assetGraph) {
-                assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0], this.callback);
+                getJavaScriptTextAndBootstrappedContext(assetGraph, {type: 'HTML'}, this.callback);
             },
-            'the plainOneTr function should use the default pattern': function (src) {
-                assert.equal(new Function(src + "; return plainOneTr();")(), "Plain default");
+            'the plainOneTr function should use the default pattern': function (err, text, context) {
+                assert.equal(evaluateInContext(text + "; return plainOneTr()", context), 'Plain default');
             },
-            'the callOneTrPattern function should use the default pattern': function (src) {
-                assert.equal(new Function(src + "; return callOneTrPattern();")(), "Boring and stupid default pattern");
+            'the callOneTrPattern function should use the default pattern': function (err, text, context) {
+                assert.equal(evaluateInContext(text + "; return callOneTrPattern()", context), 'Boring and stupid default pattern');
             },
-            'the nonInvokedTrPattern should use the default pattern': function (src) {
-                assert.equal(new Function(src + "; return nonInvokedTrPattern('X');")(), "Welcome to Default Country, Mr. X");
+            'the nonInvokedTrPattern should use the default pattern': function (err, text, context) {
+                assert.equal(evaluateInContext(text + "; return nonInvokedTrPattern('X')", context), 'Welcome to Default Country, Mr. X');
             }
         },
         'then run the cloneForEachLocale transform': {
@@ -106,35 +138,49 @@ vows.describe('Make a clone of each HTML file for each language').addBatch({
             'the graph should contain 2 HTML assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 2);
             },
-            'the graph should contain 2 JavaScript assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            'the graph should contain 4 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
             },
-            'then get the American English JavaScript as text': {
+            'then get the American English JavaScript as text along with the bootstrapped context': {
                 topic: function (assetGraph) {
-                    assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript', incoming: {from: {url: /\/index\.en_US\.html$/}}})[0], this.callback);
+                    getJavaScriptTextAndBootstrappedContext(assetGraph, {type: 'HTML', url: /\/index\.en_US\.html$/}, this.callback);
                 },
-                'the plainOneTr function should use the "en" pattern': function (src) {
-                    assert.equal(new Function(src + "; return plainOneTr();")(), "Plain English");
+                'the plainOneTr function should use the "en" pattern': function (err, text, context) {
+                    assert.equal(evaluateInContext(text + "; return plainOneTr()", context), 'Plain English');
                 },
-                'the callOneTrPattern function should use the "en" pattern': function (src) {
-                    assert.equal(new Function(src + "; return callOneTrPattern();")(), "Boring and stupid English pattern");
+                'the callOneTrPattern function should use the "en" pattern': function (err, text, context) {
+                    assert.equal(evaluateInContext(text + "; return callOneTrPattern();", context), "Boring and stupid English pattern");
                 },
-                'the nonInvokedTrPattern should use the "en_US" pattern': function (src) {
-                    assert.equal(new Function(src + "; return nonInvokedTrPattern('X');")(), "Welcome to America, Mr. X");
+                'the nonInvokedTrPattern should use the "en_US" pattern': function (err, text, context) {
+                    assert.equal(evaluateInContext(text + "; return nonInvokedTrPattern('X');", context), "Welcome to America, Mr. X");
                 }
             },
             'then get the Danish JavaScript as text': {
                 topic: function (assetGraph) {
-                    assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript', incoming: {from: {url: /\/index\.da\.html$/}}})[0], this.callback);
+                    getJavaScriptTextAndBootstrappedContext(assetGraph, {type: 'HTML', url: /\/index\.da\.html$/}, this.callback);
                 },
-                'the plainOneTr function should use the "da" pattern': function (src) {
-                    assert.equal(new Function(src + "; return plainOneTr();")(), "Jævnt dansk");
+                'the plainOneTr function should use the "en" pattern': function (err, text, context) {
+                    assert.equal(evaluateInContext(text + "; return plainOneTr()", context), 'Jævnt dansk');
                 },
-                'the callOneTrPattern function should use the "da" pattern': function (src) {
-                    assert.equal(new Function(src + "; return callOneTrPattern();")(), "Kedeligt and stupid dansk mønster");
+                'the callOneTrPattern function should use the "en" pattern': function (err, text, context) {
+                    assert.equal(evaluateInContext(text + "; return callOneTrPattern();", context), "Kedeligt and stupid dansk mønster");
                 },
-                'the nonInvokedTrPattern should use the "da" pattern': function (src) {
-                    assert.equal(new Function(src + "; return nonInvokedTrPattern('X');")(), "Velkommen til Danmark, hr. X");
+                'the nonInvokedTrPattern should use the "en_US" pattern': function (err, text, context) {
+                    assert.equal(evaluateInContext(text + "; return nonInvokedTrPattern('X');", context), "Velkommen til Danmark, hr. X");
+                }
+            },
+            'the run the buildDevelopment conditional blocks': {
+                topic: function (assetGraph) {
+                    assetGraph.transform(
+                        transforms.runJavaScriptConditionalBlocks({isInitial: true}, 'buildDevelopment'),
+                        this.callback
+                    );
+                },
+                'the American English HTML asset should contain the American English title': function (assetGraph) {
+                    assert.equal(assetGraph.findAssets({type: 'HTML', url: /\/index\.en_US\.html$/})[0].parseTree.title, "The awesome document title");
+                },
+                'the Danish HTML asset should contain the Danish title': function (assetGraph) {
+                    assert.equal(assetGraph.findAssets({type: 'HTML', url: /\/index\.da\.html$/})[0].parseTree.title, "Dokumentets vidunderlige titel");
                 }
             }
         }
