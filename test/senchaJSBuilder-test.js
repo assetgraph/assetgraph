@@ -7,8 +7,8 @@ var vows = require('vows'),
 vows.describe('resolvers.SenchaJSBuilder test').addBatch({
     'After loading a test case with three assets': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/senchaJSBuilder/'}).transform(
-                transforms.registerLabelsAsCustomProtocols('mylabel=' + __dirname + '/senchaJSBuilder/foo.jsb2'),
+            new AssetGraph({root: __dirname + '/senchaJSBuilder/rewriteBackgroundImageUrls/'}).transform(
+                transforms.registerLabelsAsCustomProtocols('mylabel=' + __dirname + '/senchaJSBuilder/rewriteBackgroundImageUrls/foo.jsb2'),
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
                 transforms.flattenStaticIncludes({isInitial: true}),
@@ -60,6 +60,92 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
                         var matches = src.match(/url\(resources\/images\/foo\/bar\/foo\.png\)/g);
                         assert.equal(matches.length, 4);
                     }
+                }
+            }
+        }
+    },
+    'After loading a test case with an HTML asset and a jsb2 describing packages that depend on each other': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/senchaJSBuilder/dependentPackages/'}).transform(
+                transforms.registerLabelsAsCustomProtocols('mylabel=' + __dirname + '/senchaJSBuilder/dependentPackages/foo.jsb2'),
+                transforms.loadAssets('index.html'),
+                transforms.populate(),
+                this.callback
+            );
+        },
+        'the graph should contain a single HTML asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
+        },
+        'the graph should contain a single inline JavaScript asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.undefined}).length, 1);
+        },
+        'the graph should contain 3 JavaScriptStaticInclude relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptStaticInclude'}).length, 3);
+        },
+        'then get the inline JavaScript as text': {
+            topic: function (assetGraph) {
+                assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript', url: query.undefined})[0], this.callback);
+            },
+            'it should contain 3 one.include statements': function (text) {
+                assert.equal(text.match(/one.include/g).length, 3);
+            },
+            'then running transforms.flattenStaticIncludes': {
+                topic: function (text, assetGraph) {
+                    assetGraph.transform(
+                        transforms.flattenStaticIncludes({isInitial: true}),
+                        this.callback
+                    );
+                },
+                'the graph should contain 3 HTMLScript relations': function (assetGraph) {
+                    assert.equal(assetGraph.findRelations({type: 'HTMLScript'}).length, 3);
+                },
+                'The order should be A1.js, B1.js, C1.js': function (assetGraph) {
+                    assert.deepEqual(assetGraph.findRelations({type: 'HTMLScript'}).map(function (htmlScript) {
+                        return htmlScript._getRawUrlString();
+                    }), ['js/A1.js', 'js/B1.js', 'js/C1.js']);
+                }
+            }
+        }
+    },
+    'After loading a test case with includes of overlapping jsb2 packages': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/senchaJSBuilder/dependentPackages/'}).transform(
+                transforms.registerLabelsAsCustomProtocols('mylabel=' + __dirname + '/senchaJSBuilder/dependentPackages/foo.jsb2'),
+                transforms.loadAssets('overlappingIncludes.html'),
+                transforms.populate(),
+                this.callback
+            );
+        },
+        'the graph should contain a single HTML asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
+        },
+        'the graph should contain a single inline JavaScript asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.undefined}).length, 1);
+        },
+        'the graph should contain 4 JavaScriptStaticInclude relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptStaticInclude'}).length, 4);
+        },
+        'then get the inline JavaScript as text': {
+            topic: function (assetGraph) {
+                assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript', url: query.undefined})[0], this.callback);
+            },
+            'it should contain 4 one.include statements': function (text) {
+                assert.equal(text.match(/one.include/g).length, 4);
+            },
+            'then running transforms.flattenStaticIncludes': {
+                topic: function (text, assetGraph) {
+                    assetGraph.transform(
+                        transforms.flattenStaticIncludes({isInitial: true}),
+                        this.callback
+                    );
+                },
+                'the graph should contain 3 HTMLScript relations': function (assetGraph) {
+                    assert.equal(assetGraph.findRelations({type: 'HTMLScript'}).length, 3);
+                },
+                'The order should be A1.js, B1.js, C1.js': function (assetGraph) {
+                    assert.deepEqual(assetGraph.findRelations({type: 'HTMLScript'}).map(function (htmlScript) {
+                        return htmlScript._getRawUrlString();
+                    }), ['js/A1.js', 'js/B1.js', 'js/C1.js']);
                 }
             }
         }
