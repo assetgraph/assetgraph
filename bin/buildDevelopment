@@ -19,6 +19,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.flattenStaticIncludes({isInitial: true}),
     transforms.inlineAssets({isDirty: true, type: 'CSS', incoming: {type: 'HTMLStyle', from: {isInitial: true, type: 'HTML'}}}),
     transforms.inlineAssets({isDirty: true, type: 'JavaScript', incoming: {type: 'HTMLScript', from: {isInitial: true, type: 'HTML'}}}),
+    transforms.prettyPrintAssets({type: 'JavaScript', incoming: {type: 'HTMLScript', from: {isInitial: true, type: 'HTML'}}}),
     transforms.runJavaScriptConditionalBlocks({type: 'HTML'}, 'buildDevelopment'),
     commandLineOptions.inline ? transforms.inlineAssets({url: fileUtils.makeFileUrlMatcher(commandLineOptions.inline)}) : transforms.noop(),
     transforms.prettyPrintAssets({isInitial: true}),
