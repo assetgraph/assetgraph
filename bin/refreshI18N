@@ -146,6 +146,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
                                 value = uglifyAST.astToObj(occurrences[0].defaultValueAST);
                             }
                             i18nAsset.parseTree[key][leastSpecificLocaleId] = value;
+                            assetGraph.markAssetDirty(i18nAsset);
                         });
                     } else if (numFound > 1) {
                         console.error("Key " + key + " found in multiple I18N assets");
