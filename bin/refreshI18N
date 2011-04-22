@@ -157,11 +157,17 @@ new AssetGraph({root: commandLineOptions.root}).transform(
                     assetGraph.markAssetDirty(javaScript);
                     javaScript.getText = function (cb) {
                         javaScript.getDecodedSrc(error.passToFunction(err, function (decodedSrc) {
-                            cb(null, i18nRelations.map(function (i18nRelation) {
+                            var oneIncludeStatements = i18nRelations.map(function (i18nRelation) {
                                 return "one.include('" +
                                     fileUtils.buildRelativeUrl(i18nRelation.from.url || assetGraph.findBaseAssetForRelation(i18nRelation).url, i18nRelation.to.url) +
                                     "');\n";
-                            }).join("") + decodedSrc);
+                            }).join("");
+                            var matchSplitAfterLastOneIncludeLine = decodedSrc.match(/^([\s\S]*one\.include[^\n]*\n)([\s\S]*)$/);
+                            if (matchSplitAfterLastOneIncludeLine) {
+                                cb(null, matchSplitAfterLastOneIncludeLine[1] + "\n" + oneIncludeStatements + matchSplitAfterLastOneIncludeLine[2]);
+                            } else {
+                                cb(null, oneIncludeStatements + decodedSrc);
+                            }
                         }));
                     };
                 });
