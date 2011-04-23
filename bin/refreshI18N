@@ -25,6 +25,10 @@ new AssetGraph({root: commandLineOptions.root}).transform(
         if (err) {
             throw err;
         }
+        // We don't want to overwrite the "initially dirty" assets, such as ext-base.js.
+        assetGraph.findAssets({isDirty: true}).forEach(function (dirtyAsset) {
+            dirtyAsset.isDirty = false;
+        });
         var occurrencesByKey = {}, // key => array of "occurrence" objects: {asset: ..., type: ..., node, ..., defaultValueAST: ...}
             prioritizedLocaleIdsByLocaleId = {},
             newI18NRelationsByJavaScriptId = {};
