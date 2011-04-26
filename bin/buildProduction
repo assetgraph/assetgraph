@@ -28,6 +28,8 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.postProcessBackgroundImages(),
     commandLineOptions.manifest ? transforms.addCacheManifestSinglePage({isInitial: true}) : transforms.noop(),
     transforms.minifyAssets(),
+    transforms.computeSerializedSize({type: ['JavaScript', 'CSS']}),
+    transforms.inlineAssets({type: ['JavaScript', 'CSS'], serializedSize: function (serializedSize) {return serializedSize < 4096;}}),
     transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not('CacheManifest')},
                                      '/' + (commandLineOptions.staticDir || 'static')),
     (cdnRoot ? transforms.moveAssetsToNewRoot({
