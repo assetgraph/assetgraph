@@ -84,12 +84,12 @@ vows.describe('Bundle stylesheets, createOneBundlePerIncludingAsset strategy').a
                 assert.equal(cssRules[1].style.color, 'beige');
                 assert.equal(cssRules[2].style.color, 'crimson');
                 assert.equal(cssRules[3].style.color, 'deeppink');
-                assert.equal(cssRules[4].style.color, '#eeeeee');
+                assert.equal(cssRules[4].style.color, '#eeeee0');
             },
             'the bundle attached to 2.html should consist of the rules from {e,b,c}.css in the right order': function (assetGraph) {
                 var cssRules = assetGraph.findAssets({type: 'CSS', incoming: {from: {url: /\/2\.html$/}}})[0].parseTree.cssRules;
                 assert.equal(cssRules.length, 3);
-                assert.equal(cssRules[0].style.color, '#eeeeee');
+                assert.equal(cssRules[0].style.color, '#eeeee0');
                 assert.equal(cssRules[1].style.color, 'beige');
                 assert.equal(cssRules[2].style.color, 'crimson');
             }
