@@ -6,7 +6,7 @@ var _ = require('underscore'),
     query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('optimist').
-        usage('$0 --root <inputRootDirectory> --out-root <outputRootDirectory> [--locale <localeId>,...] [--cdn-root <url>] [--manifest] [--static-dir <directoryName>] <htmlFile>...').
+        usage('$0 --root <inputRootDirectory> --out-root <outputRootDirectory> [--locale <localeId>,...] [--cdn-root <url>] [--manifest] <htmlFile>...').
         boolean('manifest').
         demand(['root', 'out-root']).
         camelCase().
@@ -32,8 +32,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.minifyAssets(),
     transforms.computeSerializedSize({type: ['JavaScript', 'CSS']}),
     transforms.inlineRelations({type: ['HTMLStyle', 'HTMLScript'], to: {serializedSize: function (serializedSize) {return serializedSize < 4096;}}}),
-    transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not('CacheManifest')},
-                                     '/' + (commandLineOptions.staticDir || 'static')),
+    transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not('CacheManifest')}, '/static'),
     (cdnRoot ? transforms.moveAssetsToNewRoot({
         type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']
     }, cdnRoot) : transforms.noop()),
