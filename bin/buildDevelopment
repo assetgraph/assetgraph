@@ -17,6 +17,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude', 'CSSImage'], to: query.not(/^https?:/)}),
     transforms.injectOneBootstrapper({isInitial: true}),
     transforms.flattenStaticIncludes({isInitial: true}),
+    transforms.removeEmptyAssets({type: 'JavaScript'}),
     transforms.inlineAssets({isDirty: true, type: 'CSS', incoming: {type: 'HTMLStyle', from: {isInitial: true, type: 'HTML'}}}),
     transforms.convertHTMLStylesToInlineCSSImports(),
     transforms.inlineAssets({isDirty: true, type: 'JavaScript', incoming: {type: 'HTMLScript', from: {isInitial: true, type: 'HTML'}}}),

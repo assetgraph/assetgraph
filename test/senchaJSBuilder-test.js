@@ -96,13 +96,13 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
                         this.callback
                     );
                 },
-                'the graph should contain 3 HTMLScript relations': function (assetGraph) {
-                    assert.equal(assetGraph.findRelations({type: 'HTMLScript'}).length, 3);
+                'the graph should contain 4 HTMLScript relations': function (assetGraph) {
+                    assert.equal(assetGraph.findRelations({type: 'HTMLScript'}).length, 4);
                 },
-                'The order should be A1.js, B1.js, C1.js': function (assetGraph) {
+                'The order should be A1.js, B1.js, C1.js, inline script': function (assetGraph) {
                     assert.deepEqual(assetGraph.findRelations({type: 'HTMLScript'}).map(function (htmlScript) {
                         return htmlScript._getRawUrlString();
-                    }), ['js/A1.js', 'js/B1.js', 'js/C1.js']);
+                    }), ['js/A1.js', 'js/B1.js', 'js/C1.js', undefined]);
                 }
             }
         }
@@ -139,13 +139,13 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
                         this.callback
                     );
                 },
-                'the graph should contain 3 HTMLScript relations': function (assetGraph) {
-                    assert.equal(assetGraph.findRelations({type: 'HTMLScript'}).length, 3);
+                'the graph should contain 4 HTMLScript relations': function (assetGraph) {
+                    assert.equal(assetGraph.findRelations({type: 'HTMLScript'}).length, 4);
                 },
-                'The order should be A1.js, B1.js, C1.js': function (assetGraph) {
+                'The order should be A1.js, B1.js, C1.js, inline script': function (assetGraph) {
                     assert.deepEqual(assetGraph.findRelations({type: 'HTMLScript'}).map(function (htmlScript) {
                         return htmlScript._getRawUrlString();
-                    }), ['js/A1.js', 'js/B1.js', 'js/C1.js']);
+                    }), ['js/A1.js', 'js/B1.js', 'js/C1.js', undefined]);
                 }
             }
         }
