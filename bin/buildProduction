@@ -24,7 +24,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.externalizeAssets({incoming: {type: ['HTMLStyle', 'HTMLScript']}}),
     transforms.mergeIdenticalAssets({type: ['JavaScript', 'CSS']}),
     localeIds ? transforms.cloneForEachLocale({type: 'HTML', isInitial: true}, localeIds) : transforms.noop(),
-    transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}),
+    transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle', node: function (node) {return !node.getAttribute('media');}}}),
     transforms.bundleAssets({type: 'JavaScript', incoming: {type: 'HTMLScript'}}),
     transforms.spriteBackgroundImages(),
     transforms.postProcessBackgroundImages(),
