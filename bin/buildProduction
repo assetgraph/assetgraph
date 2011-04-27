@@ -19,6 +19,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({type: query.not('JavaScriptStaticInclude'), to: query.not(/^https?:/)}),
     transforms.removeOneIncludeStatements({type: 'JavaScript'}),
+    transforms.convertCSSImportsToHTMLStyles(),
     transforms.externalizeAssets({incoming: {type: ['HTMLStyle', 'HTMLScript']}}),
     transforms.mergeIdenticalAssets({type: ['JavaScript', 'CSS']}),
     localeIds ? transforms.cloneForEachLocale({type: 'HTML', isInitial: true}, localeIds) : transforms.noop(),
