@@ -40,10 +40,10 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
                 var matches = src.match(/url\(\.\.\/\.\.\/images\/foo\/bar\/foo\.png\)/g);
                 assert.equal(matches.length, 4);
             },
-            'then inlining the CSS': {
+            'then inlining the HTMLStyle relations': {
                 topic: function (_, assetGraph) {
                     assetGraph.transform(
-                        transforms.inlineAssets({type: 'CSS'}),
+                        transforms.inlineRelations({type: 'HTMLStyle'}),
                         this.callback
                     );
                 },

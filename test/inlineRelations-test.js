@@ -4,10 +4,10 @@ var vows = require('vows'),
     transforms = require('../lib/transforms'),
     query = require('../lib/query');
 
-vows.describe('Inlining an asset').addBatch({
+vows.describe('Inlining relations').addBatch({
     'After loading a test case with an HTML asset that has an external CSS asset in a conditional comment': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/inlineAssets/'}).transform(
+            new AssetGraph({root: __dirname + '/inlineRelations/'}).transform(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
                 this.callback
@@ -28,7 +28,7 @@ vows.describe('Inlining an asset').addBatch({
         'then inlining the CSS and getting the HTML as text': {
             topic: function (assetGraph) {
                 var callback = this.callback;
-                assetGraph.inlineAsset(assetGraph.findAssets({type: 'CSS'})[0], function (err) {
+                assetGraph.inlineRelation(assetGraph.findRelations({type: 'HTMLStyle'})[0], function (err) {
                     if (err) {
                         return callback(err);
                     }
