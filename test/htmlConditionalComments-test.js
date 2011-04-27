@@ -30,7 +30,7 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
             'then externalizing the CSS and JavaScript and minifying the HTML': {
                 topic: function (_, assetGraph) {
                     assetGraph.transform(
-                        transforms.externalizeAssets({type: ['CSS', 'JavaScript']}),
+                        transforms.externalizeRelations({type: ['HTMLStyle', 'HTMLScript']}),
                         transforms.minifyAssets({type: 'HTML'}),
                         this.callback
                     );

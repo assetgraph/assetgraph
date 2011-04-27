@@ -10,7 +10,7 @@ vows.describe('Externalizing and merging identical assets').addBatch({
             new AssetGraph({root: __dirname + '/externalizeAndMergeIdenticalAssets/'}).transform(
                 transforms.loadAssets('first.html', 'second.html'),
                 transforms.populate(),
-                transforms.externalizeAssets({type: 'JavaScript'}),
+                transforms.externalizeRelations({type: 'HTMLScript'}),
                 this.callback
             );
         },
