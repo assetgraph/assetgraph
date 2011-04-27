@@ -3,7 +3,7 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms');
 
-vows.describe('Bundle stylesheets, createSharedBundles strategy').addBatch({
+vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatch({
     'After loading a test case with 1 HTML, 2 stylesheets, and 3 images': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleAssets/singleHtml'}).transform(
@@ -33,7 +33,7 @@ vows.describe('Bundle stylesheets, createSharedBundles strategy').addBatch({
         'then bundling the HTMLStyles': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-                    transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}, 'createSharedBundles'),
+                    transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}, 'oneBundlePerIncludingAsset'),
                     this.callback
                 );
             },
@@ -70,29 +70,28 @@ vows.describe('Bundle stylesheets, createSharedBundles strategy').addBatch({
         'then bundling the CSS assets': {
             topic: function (assetGraph) {
                 assetGraph.transform(
-                    transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}, 'createSharedBundles'),
+                    transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}, 'oneBundlePerIncludingAsset'),
                     this.callback
                 );
             },
-            'the graph should contain 4 CSS assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 4);
+            'the graph should contain 2 CSS assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 2);
             },
-            'the CSS assets with a single relation pointing at them should remain unbundled': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({url: /\/a\.css$/}).length, 1);
-                assert.equal(assetGraph.findAssets({url: /\/d\.css$/}).length, 1);
+            'the bundle attached to 1.html should consist of the rules from {a,b,c,d,e}.css in the right order': function (assetGraph) {
+                var cssRules = assetGraph.findAssets({type: 'CSS', incoming: {from: {url: /\/1\.html$/}}})[0].parseTree.cssRules;
+                assert.equal(cssRules.length, 5);
+                assert.equal(cssRules[0].style.color, 'azure');
+                assert.equal(cssRules[1].style.color, 'beige');
+                assert.equal(cssRules[2].style.color, 'crimson');
+                assert.equal(cssRules[3].style.color, 'deeppink');
+                assert.equal(cssRules[4].style.color, '#eeeee0');
             },
-            'e.css should remain unbundled because it occurs at different positions in 1.html and 2.html': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({url: /\/e\.css$/}).length, 1);
-            },
-            'b.css and c.css should no longer be in the graph': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({url: /\/[bc]\.css$/}).length, 0);
-            },
-            'the last CSS asset in the graph should consist of the rules from b.css and c.css': function (assetGraph) {
-                var cssAssets = assetGraph.findAssets({type: 'CSS'}),
-                    cssRules = cssAssets[cssAssets.length - 1].parseTree.cssRules;
-                assert.equal(cssRules.length, 2);
-                assert.equal(cssRules[0].style.color, 'beige');
-                assert.equal(cssRules[1].style.color, 'crimson');
+            'the bundle attached to 2.html should consist of the rules from {e,b,c}.css in the right order': function (assetGraph) {
+                var cssRules = assetGraph.findAssets({type: 'CSS', incoming: {from: {url: /\/2\.html$/}}})[0].parseTree.cssRules;
+                assert.equal(cssRules.length, 3);
+                assert.equal(cssRules[0].style.color, '#eeeee0');
+                assert.equal(cssRules[1].style.color, 'beige');
+                assert.equal(cssRules[2].style.color, 'crimson');
             }
         }
     }
