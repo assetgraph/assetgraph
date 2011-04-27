@@ -29,6 +29,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle', node: function (node) {return !node.getAttribute('media');}}}),
     transforms.bundleAssets({type: 'JavaScript', incoming: {type: 'HTMLScript'}}),
     commandLineOptions.manifest ? transforms.addCacheManifestSinglePage({isInitial: true}) : transforms.noop(),
+    transforms.compressJavaScript(),
     transforms.minifyAssets(),
     transforms.computeSerializedSize({type: ['JavaScript', 'CSS']}),
     transforms.inlineRelations({type: ['HTMLStyle', 'HTMLScript'], to: {serializedSize: function (serializedSize) {return serializedSize < 4096;}}}),
