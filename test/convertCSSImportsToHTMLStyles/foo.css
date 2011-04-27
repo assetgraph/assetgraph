@@ -1,0 +1,5 @@
+@import "foo2.css" print;
+
+body {
+    color: teal;
+}

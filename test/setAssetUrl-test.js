@@ -14,15 +14,15 @@ vows.describe('Changing the url of assets').addBatch({
             );
         },
         'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 3);
+            assert.equal(assetGraph.findAssets().length, 3);
         },
-        'the graph should contain 2 HTML files': function (assetGraph) {
+        'the graph should contain 2 HTML assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 2);
         },
         'the graph should contain one PNG asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
         },
-        'then moving the first HTML asset one level down:': {
+        'then moving the first HTML asset one level down': {
             topic: function (assetGraph) {
                 var initialHTML = assetGraph.findAssets({type: 'HTML'})[0];
                 assetGraph.setAssetUrl(initialHTML, assetGraph.resolver.root + 'bogus/index.html');

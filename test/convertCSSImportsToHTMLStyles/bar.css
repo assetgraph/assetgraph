@@ -1,0 +1,5 @@
+body div {
+    color: tan;
+    background-image: url(foo.png);
+    filter: AlphaImageLoader(src="foo.png");
+}
