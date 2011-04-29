@@ -5,11 +5,12 @@ var _ = require('underscore'),
     transforms = require('../lib/transforms'),
     query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
-    commandLineOptions = require('optimist').
-        usage('$0 [--label <labelName>=<dir> ...] --root <inputRootDirectory> <htmlFile> ...').
-        demand(['root']).
-        camelCase().
-        argv;
+    commandLineOptions = require('optimist')
+        .usage('$0 [--label <labelName>=<dir> ...] [--css-imports] --root <inputRootDirectory> <htmlFile> ...')
+        .boolean('css-imports')
+        .demand(['root'])
+        .camelCase()
+        .argv;
 
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
@@ -19,7 +20,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.flattenStaticIncludes({isInitial: true}),
     transforms.removeEmptyAssets({type: 'JavaScript'}),
     transforms.inlineRelations({type: 'HTMLStyle', from: {isInitial: true, type: 'HTML'}, to: {isDirty: true}}),
-    transforms.convertHTMLStylesToInlineCSSImports(),
+    commandLineOptions.cssImports ? transforms.convertHTMLStylesToInlineCSSImports() : transforms.noop(),
     transforms.inlineRelations({type: 'HTMLScript', from: {isInitial: true, type: 'HTML'}, to: {isDirty: true}}),
     transforms.prettyPrintAssets({type: 'JavaScript', incoming: {type: 'HTMLScript', from: {isInitial: true, type: 'HTML'}}}),
     transforms.prettyPrintAssets({type: 'CSS', incoming: {type: 'HTMLStyle', from: {isInitial: true, type: 'HTML'}}}),
