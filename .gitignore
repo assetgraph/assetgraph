@@ -1,2 +1,1 @@
-*.svg
-/test/*.svg
+/node_modules
