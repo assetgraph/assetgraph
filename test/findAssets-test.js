@@ -3,7 +3,8 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     assets = require('../lib/assets'),
-    relations = require('../lib/relations');
+    relations = require('../lib/relations'),
+    query = require('../lib/query');
 
 vows.describe('AssetGraph.findAssets').addBatch({
     'Load test case': {
@@ -25,12 +26,12 @@ vows.describe('AssetGraph.findAssets').addBatch({
             assert.equal(assetGraph.findAssets({foo: 'baz'}).length, 2);
             assert.equal(assetGraph.findAssets({foo: 'quux'}).length, 1);
             assert.equal(assetGraph.findAssets({foo: ['quux']}).length, 1);
-            assert.equal(assetGraph.findAssets({foo: undefined}).length, 1);
+            assert.equal(assetGraph.findAssets({foo: query.undefined}).length, 1);
         },
         'then lookup multiple values of unindexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({foo: ['bar', 'quux']}).length, 3);
             assert.equal(assetGraph.findAssets({foo: ['bar', 'baz']}).length, 4);
-            assert.equal(assetGraph.findAssets({foo: ['quux', undefined]}).length, 2);
+            assert.equal(assetGraph.findAssets({foo: query.or('quux', query.undefined)}).length, 2);
         },
         'then lookup single value of indexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 3);
