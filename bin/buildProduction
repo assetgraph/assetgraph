@@ -17,7 +17,8 @@ var _ = require('underscore'),
 
 new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
-    transforms.populate({type: query.not('JavaScriptStaticInclude'), to: query.not(/^https?:/)}),
+    transforms.populate(query.or({to: /\.i18n$/}, {type: query.not('JavaScriptStaticInclude'), to: query.not(/^https?:/)})),
+    transforms.stripDevelopmentModeFromOneBootstrapper({type: 'HTML', isInitial: true}),
     transforms.removeOneIncludeStatements({type: 'JavaScript'}),
     transforms.convertCSSImportsToHTMLStyles(),
     transforms.removeEmptyAssets({type: ['CSS', 'JavaScript']}),
@@ -29,6 +30,7 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.bundleAssets({type: 'JavaScript', incoming: {type: 'HTMLScript'}}),
     transforms.compressJavaScript({type: 'JavaScript'}),
     localeIds && transforms.cloneForEachLocale({type: 'HTML', isInitial: true}, localeIds),
+    transforms.removeAssets({type: 'I18N'}),
     commandLineOptions.manifest && transforms.addCacheManifestSinglePage({isInitial: true}),
     transforms.minifyAssets(),
     transforms.computeSerializedSize({type: ['JavaScript', 'CSS']}),
