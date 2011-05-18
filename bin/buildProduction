@@ -28,19 +28,17 @@ new AssetGraph({root: commandLineOptions.root}).transform(
     transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle', node: function (node) {return !node.getAttribute('media');}}}),
     transforms.bundleAssets({type: 'JavaScript', incoming: {type: 'HTMLScript'}}),
     transforms.compressJavaScript({type: 'JavaScript'}),
-    localeIds ? transforms.cloneForEachLocale({type: 'HTML', isInitial: true}, localeIds) : transforms.noop(),
-    commandLineOptions.manifest ? transforms.addCacheManifestSinglePage({isInitial: true}) : transforms.noop(),
+    localeIds && transforms.cloneForEachLocale({type: 'HTML', isInitial: true}, localeIds),
+    commandLineOptions.manifest && transforms.addCacheManifestSinglePage({isInitial: true}),
     transforms.minifyAssets(),
     transforms.computeSerializedSize({type: ['JavaScript', 'CSS']}),
     transforms.inlineRelations({type: ['HTMLStyle', 'HTMLScript'], to: {serializedSize: function (serializedSize) {return serializedSize < 4096;}}}),
     transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not('CacheManifest')}, '/static'),
-    (cdnRoot ? transforms.moveAssetsToNewRoot({
-        type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']
-    }, cdnRoot) : transforms.noop()),
+    cdnRoot && transforms.moveAssetsToNewRoot({type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']}, cdnRoot),
     transforms.renameAssetsToMD5Prefix({isInitial: query.not(true), type: query.not('CacheManifest')}),
     transforms.parallel(
         transforms.writeAssetsToDisc({url: /^file:/}, outRoot),
-        cdnRoot ? transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnRoot)}, outRoot, cdnRoot) : transforms.noop()
+        cdnRoot && transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnRoot)}, outRoot, cdnRoot)
     ),
     transforms.stats(),
     transforms.reportErrorAndTerminate()
