@@ -18,7 +18,9 @@ var fs = require('fs'),
         }).
         argv;
 
-new AssetGraph({root: commandLineOptions.root}).transform(
+new AssetGraph({root: commandLineOptions.root}).on('transform', function (transform, elapsedTime) {
+    console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
+}).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({type: 'JavaScriptStaticInclude'}),
