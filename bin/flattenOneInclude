@@ -8,7 +8,7 @@ var fs = require('fs'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     traversal = require('../lib/traversal'),
-    fileUtils = require('../lib/fileUtils'),
+    urlTools = require('../lib/util/urlTools'),
     commandLineOptions = require('optimist').
         usage('$0 [--root <dir>] [-o <outputJavaScriptFile>] <inputJavaScriptFile>').
         check(function (argv) {
@@ -22,7 +22,7 @@ new AssetGraph({root: commandLineOptions.root}).on('transform', function (transf
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
 }).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
-    transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
+    transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate({type: 'JavaScriptStaticInclude'}),
     function (err, assetGraph, cb) {
         seq()

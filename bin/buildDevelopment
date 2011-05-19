@@ -4,7 +4,7 @@ var _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     query = require('../lib/query'),
-    fileUtils = require('../lib/fileUtils'),
+    urlTools = require('../lib/util/urlTools'),
     commandLineOptions = require('optimist')
         .usage('$0 [--label <labelName>=<dir> ...] [--cssimports] [--inline <wildCard>] --root <inputRootDirectory> <htmlFile> ...')
         .boolean('cssimports')
@@ -15,7 +15,7 @@ new AssetGraph({root: commandLineOptions.root}).on('transform', function (transf
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
 }).transform(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
-    transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
+    transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate({type: ['HTMLStyle', 'HTMLScript', 'JavaScriptStaticInclude', 'CSSImage'], to: query.not(/^https?:/)}),
     transforms.injectOneBootstrapper({isInitial: true}),
     transforms.flattenStaticIncludes({isInitial: true}),
@@ -26,7 +26,7 @@ new AssetGraph({root: commandLineOptions.root}).on('transform', function (transf
     transforms.prettyPrintAssets({type: 'JavaScript', incoming: {type: 'HTMLScript', from: {isInitial: true, type: 'HTML'}}}),
     transforms.prettyPrintAssets({type: 'CSS', incoming: {type: 'HTMLStyle', from: {isInitial: true, type: 'HTML'}}}),
     transforms.runJavaScriptConditionalBlocks({type: 'HTML'}, 'buildDevelopment'),
-    commandLineOptions.inline && transforms.inlineRelations({to: {url: fileUtils.makeFileUrlMatcher(commandLineOptions.inline)}}),
+    commandLineOptions.inline && transforms.inlineRelations({to: {url: urlTools.makeFileUrlMatcher(commandLineOptions.inline)}}),
     transforms.prettyPrintAssets({isInitial: true}),
     transforms.moveAssets({isInitial: true}, function (asset) {return asset.url.replace(/\.template$/, "");}),
     transforms.writeAssetsToDisc({isInitial: true}),

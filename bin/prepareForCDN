@@ -3,18 +3,18 @@
 var AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     query = require('../lib/query'),
-    fileUtils = require('../lib/fileUtils'),
+    urlTools = require('../lib/util/urlTools'),
     commandLineOptions = require('optimist').
         usage('$0 --root <inputRootDirectory> --outroot <outputRootDirectory> --cdnroot <url> <htmlFile>...').
         demand(['root', 'outroot', 'cdnroot']).
         argv,
-    outroot = fileUtils.fsDirToFileUrl(commandLineOptions.outroot),
-    cdnroot = fileUtils.ensureTrailingSlash(commandLineOptions.cdnroot);
+    outroot = urlTools.fsDirToFileUrl(commandLineOptions.outroot),
+    cdnroot = urlTools.ensureTrailingSlash(commandLineOptions.cdnroot);
 
 new AssetGraph({root: commandLineOptions.root}).on('transform', function (transform, elapsedTime) {
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
 }).transform(
-    transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
+    transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate({to: query.not(/^https?:/)}),
     transforms.moveAssetsToNewRoot({type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']}, cdnroot),
     transforms.renameAssetsToMD5Prefix({type: query.not(['HTML', 'CacheManifest']), url: query.defined}),

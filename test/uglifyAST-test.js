@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     uglify = require('uglify-js'),
-    uglifyAST = require('../lib/uglifyAST');
+    uglifyAST = require('../lib/util/uglifyAST');
 
 function testCase(ast, obj) {
     return {

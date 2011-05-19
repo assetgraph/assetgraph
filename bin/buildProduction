@@ -4,20 +4,20 @@ var _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     query = require('../lib/query'),
-    fileUtils = require('../lib/fileUtils'),
+    urlTools = require('../lib/util/urlTools'),
     commandLineOptions = require('optimist').
         usage('$0 --root <inputRootDirectory> --outroot <outputRootDirectory> [--locale <localeId>,...] [--cdnroot <url>] [--manifest] <htmlFile>...').
         boolean('manifest').
         demand(['root', 'outroot']).
         argv,
-    outroot = fileUtils.fsDirToFileUrl(commandLineOptions.outroot),
-    cdnroot = commandLineOptions.cdnroot && fileUtils.ensureTrailingSlash(commandLineOptions.cdnroot),
+    outroot = urlTools.fsDirToFileUrl(commandLineOptions.outroot),
+    cdnroot = commandLineOptions.cdnroot && urlTools.ensureTrailingSlash(commandLineOptions.cdnroot),
     localeIds = commandLineOptions.locale && _.flatten(_.flatten([commandLineOptions.locale]).map(function (localeId) {return localeId.split(",");}));
 
 new AssetGraph({root: commandLineOptions.root}).on('transform', function (transform, elapsedTime) {
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
 }).transform(
-    transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
+    transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate(query.or({to: /\.i18n$/}, {type: query.not('JavaScriptStaticInclude'), to: query.not(/^https?:/)})),
     transforms.stripDevelopmentModeFromOneBootstrapper({type: 'HTML', isInitial: true}),
     transforms.removeOneIncludeStatements({type: 'JavaScript'}),
