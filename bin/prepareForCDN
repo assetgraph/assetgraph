@@ -13,6 +13,9 @@ var AssetGraph = require('../lib/AssetGraph'),
 
 new AssetGraph({root: commandLineOptions.root}).on('transform', function (transform, elapsedTime) {
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
+}).on('error', function (err) {
+    console.error(err.stack);
+    process.exit(1);
 }).transform(
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate({to: query.not(/^https?:/)}),
@@ -21,6 +24,5 @@ new AssetGraph({root: commandLineOptions.root}).on('transform', function (transf
     transforms.parallel(
         transforms.writeAssetsToDisc({url: /^file:/}, outroot),
         transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnroot)}, outroot, cdnroot)
-    ),
-    transforms.reportErrorAndTerminate()
+    )
 );

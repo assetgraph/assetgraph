@@ -16,6 +16,9 @@ var _ = require('underscore'),
 
 new AssetGraph({root: commandLineOptions.root}).on('transform', function (transform, elapsedTime) {
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
+}).on('error', function (err) {
+    console.error(err.stack);
+    process.exit(1);
 }).transform(
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate(query.or({to: /\.i18n$/}, {type: query.not('JavaScriptStaticInclude'), to: query.not(/^https?:/)})),
@@ -43,6 +46,5 @@ new AssetGraph({root: commandLineOptions.root}).on('transform', function (transf
         transforms.writeAssetsToDisc({url: /^file:/}, outroot),
         cdnroot && transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnroot)}, outroot, cdnroot)
     ),
-    transforms.stats(),
-    transforms.reportErrorAndTerminate()
+    transforms.stats()
 );
