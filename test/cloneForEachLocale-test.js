@@ -4,7 +4,7 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = require('../lib/transforms'),
     query = require('../lib/query'),
-    i18nTools = require('../lib/i18nTools');
+    i18nTools = require('../lib/util/i18nTools');
 
 function getJavaScriptTextAndBootstrappedContext(assetGraph, htmlQueryObj, cb) {
     var htmlAsset = assetGraph.findAssets(htmlQueryObj)[0],

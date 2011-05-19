@@ -7,10 +7,10 @@ var _ = require('underscore'),
     relations = require('../lib/relations'),
     transforms = require('../lib/transforms'),
     query = require('../lib/query'),
-    error = require('../lib/error'),
-    i18nTools = require('../lib/i18nTools'),
-    uglifyAST = require('../lib/uglifyAST'),
-    fileUtils = require('../lib/fileUtils'),
+    error = require('../lib/util/error'),
+    i18nTools = require('../lib/util/i18nTools'),
+    uglifyAST = require('../lib/util/uglifyAST'),
+    urlTools = require('../lib/util/urlTools'),
     commandLineOptions = require('optimist').
         usage('$0 [--label <labelName>=<dir> ...] --root <inputRootDirectory> --locale <localeId>,... <htmlFile>...').
         demand(['root', 'locale']).
