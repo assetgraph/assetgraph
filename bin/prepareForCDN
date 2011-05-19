@@ -5,23 +5,22 @@ var AssetGraph = require('../lib/AssetGraph'),
     query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('optimist').
-        usage('$0 --root <inputRootDirectory> --out-root <outputRootDirectory> --cdn-root <url> <htmlFile>...').
-        demand(['root', 'out-root', 'cdn-root']).
-        camelCase().
+        usage('$0 --root <inputRootDirectory> --outroot <outputRootDirectory> --cdnroot <url> <htmlFile>...').
+        demand(['root', 'outroot', 'cdnroot']).
         argv,
-    outRoot = fileUtils.fsDirToFileUrl(commandLineOptions.outRoot),
-    cdnRoot = fileUtils.ensureTrailingSlash(commandLineOptions.cdnRoot);
+    outroot = fileUtils.fsDirToFileUrl(commandLineOptions.outroot),
+    cdnroot = fileUtils.ensureTrailingSlash(commandLineOptions.cdnroot);
 
 new AssetGraph({root: commandLineOptions.root}).on('transform', function (transform, elapsedTime) {
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
 }).transform(
     transforms.loadAssets(commandLineOptions._.map(fileUtils.fsFilePathToFileUrl)),
     transforms.populate({to: query.not(/^https?:/)}),
-    transforms.moveAssetsToNewRoot({type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']}, cdnRoot),
+    transforms.moveAssetsToNewRoot({type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']}, cdnroot),
     transforms.renameAssetsToMD5Prefix({type: query.not(['HTML', 'CacheManifest']), url: query.defined}),
     transforms.parallel(
-        transforms.writeAssetsToDisc({url: /^file:/}, outRoot),
-        transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnRoot)}, outRoot, cdnRoot)
+        transforms.writeAssetsToDisc({url: /^file:/}, outroot),
+        transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnroot)}, outroot, cdnroot)
     ),
     transforms.reportErrorAndTerminate()
 );

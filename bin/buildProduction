@@ -6,13 +6,12 @@ var _ = require('underscore'),
     query = require('../lib/query'),
     fileUtils = require('../lib/fileUtils'),
     commandLineOptions = require('optimist').
-        usage('$0 --root <inputRootDirectory> --out-root <outputRootDirectory> [--locale <localeId>,...] [--cdn-root <url>] [--manifest] <htmlFile>...').
+        usage('$0 --root <inputRootDirectory> --outroot <outputRootDirectory> [--locale <localeId>,...] [--cdnroot <url>] [--manifest] <htmlFile>...').
         boolean('manifest').
-        demand(['root', 'out-root']).
-        camelCase().
+        demand(['root', 'outroot']).
         argv,
-    outRoot = fileUtils.fsDirToFileUrl(commandLineOptions.outRoot),
-    cdnRoot = commandLineOptions.cdnRoot && fileUtils.ensureTrailingSlash(commandLineOptions.cdnRoot),
+    outroot = fileUtils.fsDirToFileUrl(commandLineOptions.outroot),
+    cdnroot = commandLineOptions.cdnroot && fileUtils.ensureTrailingSlash(commandLineOptions.cdnroot),
     localeIds = commandLineOptions.locale && _.flatten(_.flatten([commandLineOptions.locale]).map(function (localeId) {return localeId.split(",");}));
 
 new AssetGraph({root: commandLineOptions.root}).on('transform', function (transform, elapsedTime) {
@@ -38,11 +37,11 @@ new AssetGraph({root: commandLineOptions.root}).on('transform', function (transf
     transforms.computeSerializedSize({type: ['JavaScript', 'CSS']}),
     transforms.inlineRelations({type: ['HTMLStyle', 'HTMLScript'], to: {serializedSize: function (serializedSize) {return serializedSize < 4096;}}}),
     transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not('CacheManifest')}, '/static'),
-    cdnRoot && transforms.moveAssetsToNewRoot({type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']}, cdnRoot),
+    cdnroot && transforms.moveAssetsToNewRoot({type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']}, cdnroot),
     transforms.renameAssetsToMD5Prefix({isInitial: query.not(true), type: query.not('CacheManifest')}),
     transforms.parallel(
-        transforms.writeAssetsToDisc({url: /^file:/}, outRoot),
-        cdnRoot && transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnRoot)}, outRoot, cdnRoot)
+        transforms.writeAssetsToDisc({url: /^file:/}, outroot),
+        cdnroot && transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnroot)}, outroot, cdnroot)
     ),
     transforms.stats(),
     transforms.reportErrorAndTerminate()
