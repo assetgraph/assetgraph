@@ -8,11 +8,10 @@ var vows = require('vows'),
 vows.describe('Cloning assets').addBatch({
     'After loading a test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/cloneAsset/'}).transform(
+            new AssetGraph({root: __dirname + '/cloneAsset/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain 3 HTML assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 3);

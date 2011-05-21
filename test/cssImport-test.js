@@ -6,11 +6,10 @@ var vows = require('vows'),
 vows.describe('css @import').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/cssImport/'}).transform(
+            new AssetGraph({root: __dirname + '/cssImport/'}).queue(
                 transforms.loadAssets('index.css'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain two CSS assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 2);

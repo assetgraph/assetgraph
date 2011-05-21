@@ -6,11 +6,10 @@ var vows = require('vows'),
 vows.describe('css @media rule').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/cssMediaRule/'}).transform(
+            new AssetGraph({root: __dirname + '/cssMediaRule/'}).queue(
                 transforms.loadAssets('relationInMediaRule.css'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain two CSSImage relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 2);

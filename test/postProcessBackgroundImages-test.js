@@ -8,11 +8,10 @@ var vows = require('vows'),
 vows.describe('Postprocess images').addBatch({
     'After loading the test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/postProcessBackgroundImages/'}).transform(
+            new AssetGraph({root: __dirname + '/postProcessBackgroundImages/'}).queue(
                 transforms.loadAssets('style.css'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph contains the expected assets and relations': function (assetGraph) {
             assert.equal(assetGraph.assets.length, 3);
@@ -22,10 +21,7 @@ vows.describe('Postprocess images').addBatch({
         },
         'then running the postProcessBackgroundImages transform': {
             topic: function (assetGraph) {
-                assetGraph.transform(
-                    transforms.postProcessBackgroundImages(),
-                    this.callback
-                );
+                assetGraph.queue(transforms.postProcessBackgroundImages()).run(this.callback);
             },
             'the number of PNG assets should be 3': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 3);

@@ -7,11 +7,10 @@ var vows = require('vows'),
 vows.describe('Inlining relations').addBatch({
     'After loading a test case with an HTML asset that has an external CSS asset in a conditional comment': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/inlineRelations/'}).transform(
+            new AssetGraph({root: __dirname + '/inlineRelations/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain 4 assets': function (assetGraph) {
             assert.equal(assetGraph.assets.length, 4);

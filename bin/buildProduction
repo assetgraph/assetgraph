@@ -14,12 +14,12 @@ var _ = require('underscore'),
     cdnroot = commandLineOptions.cdnroot && urlTools.ensureTrailingSlash(commandLineOptions.cdnroot),
     localeIds = commandLineOptions.locale && _.flatten(_.flatten([commandLineOptions.locale]).map(function (localeId) {return localeId.split(",");}));
 
-new AssetGraph({root: commandLineOptions.root}).on('transform', function (transform, elapsedTime) {
+new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (transform, elapsedTime) {
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
 }).on('error', function (err) {
     console.error(err.stack);
     process.exit(1);
-}).transform(
+}).queue(
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate(query.or({to: /\.i18n$/}, {type: query.not('JavaScriptStaticInclude'), to: query.not(/^https?:/)})),
     transforms.stripDevelopmentModeFromOneBootstrapper({type: 'HTML', isInitial: true}),
@@ -47,4 +47,4 @@ new AssetGraph({root: commandLineOptions.root}).on('transform', function (transf
         cdnroot && transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnroot)}, outroot, cdnroot)
     ),
     transforms.stats()
-);
+).run();

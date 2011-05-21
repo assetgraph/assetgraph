@@ -9,7 +9,7 @@ var vows = require('vows'),
 vows.describe('AssetGraph.findAssets').addBatch({
     'Load test case': {
         topic: function () {
-            new AssetGraph().transform(
+            new AssetGraph().queue(
                 transforms.loadAssets(
                     {type: 'HTML', rawSrc: 'a', foo: 'bar'},
                     {type: 'HTML', rawSrc: 'b', foo: 'bar'},
@@ -17,9 +17,8 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     {type: 'CSS',  rawSrc: 'd', foo: 'baz'},
                     {type: 'CSS',  rawSrc: 'e'},
                     {type: 'PNG',  rawSrc: 'f', foo: 'baz'}
-                ),
-                this.callback
-            );
+                )
+            ).run(this.callback);
         },
         'then lookup single value of unindexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({foo: 'bar'}).length, 2);

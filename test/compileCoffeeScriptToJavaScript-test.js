@@ -7,21 +7,17 @@ var vows = require('vows'),
 vows.describe('Compiling CoffeeScript to JavaScript').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/compileCoffeeScriptToJavaScript/'}).transform(
+            new AssetGraph({root: __dirname + '/compileCoffeeScriptToJavaScript/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate({to: query.not(/^http:/)}),
-                this.callback
-            );
+                transforms.populate({to: query.not(/^http:/)})
+            ).run(this.callback);
         },
         'the graph should contain two CoffeeScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'CoffeeScript'}).length, 2);
         },
         'then run the compileCoffeeScriptToJavaScript transform': {
             topic: function (assetGraph) {
-                assetGraph.transform(
-                    transforms.compileCoffeeScriptToJavaScript({type: 'CoffeeScript'}),
-                    this.callback
-                );
+                assetGraph.queue(transforms.compileCoffeeScriptToJavaScript({type: 'CoffeeScript'})).run(this.callback);
             },
             'the graph should contain no CoffeeScript assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CoffeeScript'}).length, 0);

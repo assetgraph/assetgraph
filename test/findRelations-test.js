@@ -9,7 +9,7 @@ var vows = require('vows'),
 vows.describe('AssetGraph.findAssets').addBatch({
     'Load test case': {
         topic: function () {
-            new AssetGraph().transform(
+            new AssetGraph().queue(
                 transforms.loadAssets(
                     {type: 'HTML', url: 'a', rawSrc: 'a', foo: 'bar'},
                     {type: 'HTML', url: 'b', rawSrc: 'b', foo: 'bar'},
@@ -18,7 +18,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     {type: 'CSS',  url: 'e', rawSrc: 'e'},
                     {type: 'PNG',  url: 'f', rawSrc: 'f', foo: 'baz'}
                 ),
-                function (err, assetGraph, cb) {
+                function (assetGraph, cb) {
                     assetGraph.addRelation(new relations.HTMLStyle({
                         from: assetGraph.findAssets({rawSrc: 'a'})[0],
                         to: assetGraph.findAssets({rawSrc: 'd'})[0]
@@ -48,9 +48,8 @@ vows.describe('AssetGraph.findAssets').addBatch({
                         to: assetGraph.findAssets({rawSrc: 'f'})[0]
                     }));
                     process.nextTick(cb);
-                },
-                this.callback
-            );
+                }
+            ).run(this.callback);
         },
         'and lookup relations by a single indexed property': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 2);

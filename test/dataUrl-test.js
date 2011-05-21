@@ -7,11 +7,10 @@ var vows = require('vows'),
 vows.describe('data: url').addBatch({
     'After loading HTML with data: url anchors': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/dataUrl/'}).transform(
+            new AssetGraph({root: __dirname + '/dataUrl/'}).queue(
                 transforms.loadAssets('dataUrl.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain 3 HTML assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 3);

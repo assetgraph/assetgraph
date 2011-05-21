@@ -9,11 +9,10 @@ var vows = require('vows'),
 vows.describe('getStaticUrl in JavaScript asset').addBatch({
     'After loading test case with a wildcard getStaticUrl': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/getStaticUrl/'}).transform(
+            new AssetGraph({root: __dirname + '/getStaticUrl/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain a single JavaScript asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
@@ -41,11 +40,10 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
     },
     'After loading test case with a wildcard getStaticUrl': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/getStaticUrl/'}).transform(
+            new AssetGraph({root: __dirname + '/getStaticUrl/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'then get the JavaScript asset as text': {
             topic: function (assetGraph) {
@@ -53,15 +51,14 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             },
             'then populate a new graph from the resulting JavaScript': {
                 topic: function (src) {
-                    new AssetGraph({root: __dirname + '/getStaticUrl/'}).transform(
+                    new AssetGraph({root: __dirname + '/getStaticUrl/'}).queue(
                         transforms.loadAssets({
                             url: 'file://' + __dirname + '/getStaticUrl/index2.html',
                             type: 'HTML',
                             rawSrc: "<html><body><script>" + src + "</script></body></html>"
                         }),
-                        transforms.populate(),
-                        this.callback
-                    );
+                        transforms.populate()
+                    ).run(this.callback);
                 },
                 'the graph should contain a single JavaScript asset': function (assetGraph) {
                     assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);

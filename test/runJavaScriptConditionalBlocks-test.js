@@ -6,21 +6,17 @@ var vows = require('vows'),
 vows.describe('executeJavaScriptConditionalBlocks').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/runJavaScriptConditionalBlocks'}).transform(
+            new AssetGraph({root: __dirname + '/runJavaScriptConditionalBlocks'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain a single JavaScript asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
         },
         'then running the conditional blocks': {
             topic: function (assetGraph) {
-                assetGraph.transform(
-                    transforms.runJavaScriptConditionalBlocks({type: 'HTML'}, 'theEnvironment'),
-                    this.callback
-                );
+                assetGraph.queue(transforms.runJavaScriptConditionalBlocks({type: 'HTML'}, 'theEnvironment')).run(this.callback);
             },
             'the HTML should contain a new <div> with a greeting from the conditional block': function (assetGraph) {
                 var html = assetGraph.findAssets({type: 'HTML'})[0],

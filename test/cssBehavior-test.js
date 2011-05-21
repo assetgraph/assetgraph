@@ -6,11 +6,10 @@ var vows = require('vows'),
 vows.describe('css behavior').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/cssBehavior/'}).transform(
+            new AssetGraph({root: __dirname + '/cssBehavior/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain a single HTC asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTC'}).length, 1);

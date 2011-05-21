@@ -1,7 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
     assetGraphRoot = __dirname + '/resolveAssetConfig/';
 
 function resolveAssetConfig(assetConfig, fromUrl, cb) {

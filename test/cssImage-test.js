@@ -6,11 +6,10 @@ var vows = require('vows'),
 vows.describe('CSS images').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/cssImage/'}).transform(
+            new AssetGraph({root: __dirname + '/cssImage/'}).queue(
                 transforms.loadAssets('index.css'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain 9 CSSImage relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 9);

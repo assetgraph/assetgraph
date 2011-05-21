@@ -7,11 +7,10 @@ var vows = require('vows'),
 vows.describe('Charset test').addBatch({
     'After loading HTML with a meta tag specifying iso-8859-1': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/encoding/'}).transform(
+            new AssetGraph({root: __dirname + '/encoding/'}).queue(
                 transforms.loadAssets('iso-8859-1.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the body should be decoded correctly': function (assetGraph) {
              assert.notEqual(assetGraph.findAssets()[0].decodedSrc.indexOf('æøåÆØÅ'), -1);
@@ -30,11 +29,10 @@ vows.describe('Charset test').addBatch({
     },
     'After loading a CSS asset with @charset declaration of iso-8859-1': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/encoding/'}).transform(
+            new AssetGraph({root: __dirname + '/encoding/'}).queue(
                 transforms.loadAssets('iso-8859-1.css'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the body should be decoded correctly': function (assetGraph) {
              assert.notEqual(assetGraph.findAssets()[0].decodedSrc.indexOf('æøå'), -1);

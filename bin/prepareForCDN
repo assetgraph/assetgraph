@@ -11,12 +11,12 @@ var AssetGraph = require('../lib/AssetGraph'),
     outroot = urlTools.fsDirToFileUrl(commandLineOptions.outroot),
     cdnroot = urlTools.ensureTrailingSlash(commandLineOptions.cdnroot);
 
-new AssetGraph({root: commandLineOptions.root}).on('transform', function (transform, elapsedTime) {
+new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (transform, elapsedTime) {
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
 }).on('error', function (err) {
     console.error(err.stack);
     process.exit(1);
-}).transform(
+}).queue(
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate({to: query.not(/^https?:/)}),
     transforms.moveAssetsToNewRoot({type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']}, cdnroot),
@@ -25,4 +25,4 @@ new AssetGraph({root: commandLineOptions.root}).on('transform', function (transf
         transforms.writeAssetsToDisc({url: /^file:/}, outroot),
         transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnroot)}, outroot, cdnroot)
     )
-);
+).run();

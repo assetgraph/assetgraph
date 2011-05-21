@@ -6,11 +6,10 @@ var vows = require('vows'),
 vows.describe('Parsing conditional comments in HTML').addBatch({
     'After loading a test case with conditional comments': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/htmlConditionalComments/'}).transform(
+            new AssetGraph({root: __dirname + '/htmlConditionalComments/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain 9 assets': function (assetGraph) {
             assert.equal(assetGraph.assets.length, 9);
@@ -29,11 +28,10 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
             },
             'then externalizing the CSS and JavaScript and minifying the HTML': {
                 topic: function (_, assetGraph) {
-                    assetGraph.transform(
+                    assetGraph.queue(
                         transforms.externalizeRelations({type: ['HTMLStyle', 'HTMLScript']}),
-                        transforms.minifyAssets({type: 'HTML'}),
-                        this.callback
-                    );
+                        transforms.minifyAssets({type: 'HTML'})
+                    ).run(this.callback);
                 },
                 'and get the HTML as text again': {
                     topic: function (assetGraph) {

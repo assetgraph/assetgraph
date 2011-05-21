@@ -11,12 +11,12 @@ var _ = require('underscore'),
         .demand(['root'])
         .argv;
 
-new AssetGraph({root: commandLineOptions.root}).on('transform', function (transform, elapsedTime) {
+new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (transform, elapsedTime) {
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
 }).on('error', function (err) {
     console.error(err.stack);
     process.exit(1);
-}).transform(
+}).queue(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate({type: ['HTMLStyle', 'HTMLScript', 'JavaScriptStaticInclude', 'CSSImage'], to: query.not(/^https?:/)}),
@@ -33,4 +33,4 @@ new AssetGraph({root: commandLineOptions.root}).on('transform', function (transf
     transforms.prettyPrintAssets({isInitial: true}),
     transforms.moveAssets({isInitial: true}, function (asset) {return asset.url.replace(/\.template$/, "");}),
     transforms.writeAssetsToDisc({isInitial: true})
-);
+).run();

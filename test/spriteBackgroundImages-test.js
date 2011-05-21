@@ -6,11 +6,10 @@ var vows = require('vows'),
 vows.describe('Sprite background images').addBatch({
     'After loading a test case with images and spriting instructions': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/spriteBackgroundImages'}).transform(
+            new AssetGraph({root: __dirname + '/spriteBackgroundImages'}).queue(
                 transforms.loadAssets('style.css'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph contains 4 assets': function (assetGraph) {
             assert.equal(assetGraph.assets.length, 4);
@@ -26,10 +25,7 @@ vows.describe('Sprite background images').addBatch({
         },
         'then spriting the background images': {
             topic: function (assetGraph) {
-                assetGraph.transform(
-                    transforms.spriteBackgroundImages(),
-                    this.callback
-                );
+                assetGraph.queue(transforms.spriteBackgroundImages()).run(this.callback);
             },
             'the number of PNG assets should be down to one': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);

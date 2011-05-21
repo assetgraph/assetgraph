@@ -6,11 +6,10 @@ var vows = require('vows'),
 vows.describe('serialize asset').addBatch({
     'After loading test case with a the same PNG image loaded from disc and http': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/getSerializedAsset/'}).transform(
+            new AssetGraph({root: __dirname + '/getSerializedAsset/'}).queue(
                 transforms.loadAssets('purplealpha24bit.png',
-                                      'http://gofish.dk/purplealpha24bit.png'),
-                this.callback
-            );
+                                      'http://gofish.dk/purplealpha24bit.png')
+            ).run(this.callback);
         },
         'then serializing the PNG loaded from disc': {
             topic: function (assetGraph) {

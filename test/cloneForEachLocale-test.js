@@ -37,11 +37,10 @@ function evaluateInContext(src, context) {
 vows.describe('Make a clone of each HTML file for each language').addBatch({
     'After loading simple test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/cloneForEachLocale/simple/'}).transform(
+            new AssetGraph({root: __dirname + '/cloneForEachLocale/simple/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain one HTML asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
@@ -54,11 +53,10 @@ vows.describe('Make a clone of each HTML file for each language').addBatch({
         },
         'then running the cloneForEachLocale transform': {
             topic: function (assetGraph) {
-                assetGraph.transform(
+                assetGraph.queue(
                     transforms.injectOneBootstrapper({type: 'HTML'}),
-                    transforms.cloneForEachLocale({type: 'HTML'}, ['en_US', 'da']),
-                    this.callback
-                );
+                    transforms.cloneForEachLocale({type: 'HTML'}, ['en_US', 'da'])
+                ).run(this.callback);
             },
             'the graph should contain 2 HTML assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 2);
@@ -99,12 +97,11 @@ vows.describe('Make a clone of each HTML file for each language').addBatch({
     },
     'After loading test case with multiple locales': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/cloneForEachLocale/multipleLocales/'}).transform(
+            new AssetGraph({root: __dirname + '/cloneForEachLocale/multipleLocales/'}).queue(
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
-                transforms.injectOneBootstrapper({type: 'HTML', isInitial: true}),
-                this.callback
-            );
+                transforms.injectOneBootstrapper({type: 'HTML', isInitial: true})
+            ).run(this.callback);
         },
         'the graph should contain 4 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 4);
@@ -128,12 +125,10 @@ vows.describe('Make a clone of each HTML file for each language').addBatch({
         },
         'then run the cloneForEachLocale transform': {
             topic: function (assetGraph) {
-                var callback = this.callback;
-                assetGraph.transform(
+                assetGraph.queue(
                     transforms.cloneForEachLocale({isInitial: true}, ['da', 'en_US']),
-                    transforms.prettyPrintAssets({type: 'JavaScript'}),
-                    this.callback
-                );
+                    transforms.prettyPrintAssets({type: 'JavaScript'})
+                ).run(this.callback);
             },
             'the graph should contain 2 HTML assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 2);
@@ -171,10 +166,7 @@ vows.describe('Make a clone of each HTML file for each language').addBatch({
             },
             'the run the buildDevelopment conditional blocks': {
                 topic: function (assetGraph) {
-                    assetGraph.transform(
-                        transforms.runJavaScriptConditionalBlocks({isInitial: true}, 'buildDevelopment'),
-                        this.callback
-                    );
+                    assetGraph.queue(transforms.runJavaScriptConditionalBlocks({isInitial: true}, 'buildDevelopment')).run(this.callback);
                 },
                 'the American English HTML asset should contain the American English title': function (assetGraph) {
                     assert.equal(assetGraph.findAssets({type: 'HTML', url: /\/index\.en_US\.html$/})[0].parseTree.title, "The awesome document title");

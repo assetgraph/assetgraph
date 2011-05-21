@@ -7,11 +7,10 @@ var vows = require('vows'),
 vows.describe('Converting CSS @import rules to <link rel="stylesheet">').addBatch({
     'After loading a test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/convertCSSImportsToHTMLStyles/'}).transform(
+            new AssetGraph({root: __dirname + '/convertCSSImportsToHTMLStyles/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate(),
-                this.callback
-            );
+                transforms.populate()
+            ).run(this.callback);
         },
         'the graph should contain 1 HTML asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
@@ -24,10 +23,7 @@ vows.describe('Converting CSS @import rules to <link rel="stylesheet">').addBatc
         },
         'then run the convertCSSImportsToHTMLStyles transform': {
             topic: function (assetGraph) {
-                assetGraph.transform(
-                    transforms.convertCSSImportsToHTMLStyles({type: 'HTML'}),
-                    this.callback
-                );
+                assetGraph.queue(transforms.convertCSSImportsToHTMLStyles({type: 'HTML'})).run(this.callback);
             },
             'the graph should contain 4 CSS assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 4);
@@ -51,10 +47,7 @@ vows.describe('Converting CSS @import rules to <link rel="stylesheet">').addBatc
                 },
                 'then run the bundleAssets transform on the HTMLStyles': {
                     topic: function (_, assetGraph) {
-                        assetGraph.transform(
-                            transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}),
-                            this.callback
-                        );
+                        assetGraph.queue(transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}})).run(this.callback);
                     },
                     'there should be a single HTMLStyle relation': function (assetGraph) {
                         assert.equal(assetGraph.findRelations({type: 'HTMLStyle'}).length, 1);
