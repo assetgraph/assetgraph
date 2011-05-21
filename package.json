@@ -24,7 +24,8 @@
         "bufferjs": ">=0.2.1",
         "iconv": ">=1.0.0",
         "seq": ">=0.2.1",
-        "temp": "=0.2.0"
+        "temp": "=0.2.0",
+        "coffee-script": "=1.1.1"
     },
     "devDependencies": {
         "vows": ">=0.5.6"
