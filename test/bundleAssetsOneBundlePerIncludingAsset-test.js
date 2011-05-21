@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms');
+    transforms = AssetGraph.transforms;
 
 vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatch({
     'After loading a test case with 1 HTML, 2 stylesheets, and 3 images': {

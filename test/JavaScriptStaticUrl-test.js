@@ -1,7 +1,8 @@
 var vows = require('vows'),
     assert = require('assert'),
     uglify = require('uglify-js'),
-    relations = require('../lib/relations');
+    AssetGraph = require('../lib/AssetGraph'),
+    relations = AssetGraph.relations;
 
 vows.describe('UrlMap').addBatch({
     'UrlMap with wildcards': {

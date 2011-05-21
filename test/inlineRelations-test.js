@@ -1,8 +1,8 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    query = require('../lib/query');
+    transforms = AssetGraph.transforms,
+    query = AssetGraph.query;
 
 vows.describe('Inlining relations').addBatch({
     'After loading a test case with an HTML asset that has an external CSS asset in a conditional comment': {

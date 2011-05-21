@@ -4,10 +4,10 @@ var fs = require('fs'),
     _ = require('underscore'),
     seq = require('seq'),
     error = require('../lib/error'),
-    assets = require('../lib/assets'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    traversal = require('../lib/traversal'),
+    assets = AssetGraph.assets,
+    transforms = AssetGraph.transforms,
+    traversal = AssetGraph.traversal,
     urlTools = require('../lib/util/urlTools'),
     commandLineOptions = require('optimist').
         usage('$0 [--root <dir>] [-o <outputJavaScriptFile>] <inputJavaScriptFile>').

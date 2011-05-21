@@ -1,8 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    query = require('../lib/query');
+    transforms = AssetGraph.transforms;
 
 vows.describe('Converting CSS @import rules to <link rel="stylesheet">').addBatch({
     'After loading a test case': {

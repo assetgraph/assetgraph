@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms');
+    transforms = AssetGraph.transforms;
 
 vows.describe('serialize asset').addBatch({
     'After loading test case with a the same PNG image loaded from disc and http': {

@@ -1,8 +1,8 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    query = require('../lib/query');
+    transforms = AssetGraph.transforms,
+    query = AssetGraph.query;
 
 vows.describe('Externalizing and merging identical assets').addBatch({
     'After loading a test with multiple inline scripts then externalizing them': {

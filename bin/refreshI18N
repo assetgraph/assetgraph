@@ -3,10 +3,7 @@
 var _ = require('underscore'),
     seq = require('seq'),
     AssetGraph = require('../lib/AssetGraph'),
-    assets = require('../lib/assets'),
-    relations = require('../lib/relations'),
-    transforms = require('../lib/transforms'),
-    query = require('../lib/query'),
+    transforms = AssetGraph.transforms,
     error = require('../lib/util/error'),
     i18nTools = require('../lib/util/i18nTools'),
     uglifyAST = require('../lib/util/uglifyAST'),
@@ -25,7 +22,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
 }).queue(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
-    transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude'], to: query.not(/^https?:/)}),
+    transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude'], to: AssetGraph.query.not(/^https?:/)}),
     function (err, assetGraph, cb) {
         if (err) {
             throw err;
@@ -127,11 +124,11 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
                         var existingI18NRelations = assetGraph.findRelations({from: addToI18NForJavaScriptAsset, to: {type: 'I18N'}}),
                             i18nAsset;
                         if (existingI18NRelations.length === 0) {
-                            i18nAsset = new assets.I18N({
+                            i18nAsset = new AssetGraph.assets.I18N({
                                 isDirty: true,
                                 parseTree: {}
                             });
-                            var relation = new relations.JavaScriptStaticInclude({
+                            var relation = new AssetGraph.relations.JavaScriptStaticInclude({
                                 from: addToI18NForJavaScriptAsset,
                                 to: i18nAsset
                             });

@@ -1,8 +1,8 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    query = require('../lib/query');
+    transforms = AssetGraph.transforms,
+    query = AssetGraph.query;
 
 vows.describe('Compiling CoffeeScript to JavaScript').addBatch({
     'After loading test case': {

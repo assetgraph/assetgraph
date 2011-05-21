@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms');
+    transforms = AssetGraph.transforms;
 
 vows.describe('Cache manifest').addBatch({
     'After loading a single-page test case with an existing cache manifest': {

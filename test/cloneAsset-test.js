@@ -2,8 +2,8 @@ var vows = require('vows'),
     assert = require('assert'),
     seq = require('seq'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    query = require('../lib/query');
+    transforms = AssetGraph.transforms,
+    query = AssetGraph.query;
 
 vows.describe('Cloning assets').addBatch({
     'After loading a test case': {

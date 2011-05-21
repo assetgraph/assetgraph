@@ -1,10 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    assets = require('../lib/assets'),
-    relations = require('../lib/relations'),
-    query = require('../lib/query');
+    transforms = AssetGraph.transforms;
 
 vows.describe('getStaticUrl in JavaScript asset').addBatch({
     'After loading test case with a wildcard getStaticUrl': {

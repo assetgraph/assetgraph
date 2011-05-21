@@ -3,7 +3,7 @@ var vows = require('vows'),
     _ = require('underscore'),
     seq = require('seq'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms');
+    transforms = AssetGraph.transforms;
 
 vows.describe('Postprocess images').addBatch({
     'After loading the test case': {

@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms');
+    transforms = AssetGraph.transforms;
 
 vows.describe('Sprite background images').addBatch({
     'After loading a test case with images and spriting instructions': {

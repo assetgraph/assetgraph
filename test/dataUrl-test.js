@@ -1,8 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    query = require('../lib/query');
+    transforms = AssetGraph.transforms;
 
 vows.describe('data: url').addBatch({
     'After loading HTML with data: url anchors': {

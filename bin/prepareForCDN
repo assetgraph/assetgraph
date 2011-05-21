@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 var AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    query = require('../lib/query'),
+    transforms = AssetGraph.transforms,
+    query = AssetGraph.query,
     urlTools = require('../lib/util/urlTools'),
     commandLineOptions = require('optimist').
         usage('$0 --root <inputRootDirectory> --outroot <outputRootDirectory> --cdnroot <url> <htmlFile>...').

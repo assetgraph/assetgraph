@@ -2,8 +2,8 @@ var vows = require('vows'),
     assert = require('assert'),
     vm = require('vm'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = require('../lib/transforms'),
-    query = require('../lib/query'),
+    transforms = AssetGraph.transforms,
+    query = AssetGraph.query,
     i18nTools = require('../lib/util/i18nTools');
 
 function getJavaScriptTextAndBootstrappedContext(assetGraph, htmlQueryObj, cb) {
