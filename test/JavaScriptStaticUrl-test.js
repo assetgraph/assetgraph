@@ -1,12 +1,12 @@
 var vows = require('vows'),
     assert = require('assert'),
     uglify = require('uglify-js'),
-    UrlMap = require('../lib/UrlMap');
+    relations = require('../lib/relations');
 
 vows.describe('UrlMap').addBatch({
     'UrlMap with wildcards': {
         topic: function () {
-            var urlMap = new UrlMap({
+            var urlMap = new relations.JavaScriptStaticUrl.UrlMap({
                 originalUrl: 'file:///foo/*/*.json',
                 wildCardValueASTs: [
                     uglify.parser.parse('(b || "abc")')[1][0][1], // strip 'toplevel' and 'stat' nodes
