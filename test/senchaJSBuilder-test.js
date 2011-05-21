@@ -18,7 +18,7 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
         },
         'the graph should contain one CSS asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'CSS', url: query.defined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'CSS', url: query.isDefined}).length, 1);
         },
         'the graph should contain one PNG asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
@@ -72,14 +72,14 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
         },
         'the graph should contain a single inline JavaScript asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.undefined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.isUndefined}).length, 1);
         },
         'the graph should contain 3 JavaScriptStaticInclude relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptStaticInclude'}).length, 3);
         },
         'then get the inline JavaScript as text': {
             topic: function (assetGraph) {
-                assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript', url: query.undefined})[0], this.callback);
+                assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript', url: query.isUndefined})[0], this.callback);
             },
             'it should contain 3 one.include statements': function (text) {
                 assert.equal(text.match(/one.include/g).length, 3);
@@ -111,14 +111,14 @@ vows.describe('resolvers.SenchaJSBuilder test').addBatch({
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
         },
         'the graph should contain a single inline JavaScript asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.undefined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.isUndefined}).length, 1);
         },
         'the graph should contain 4 JavaScriptStaticInclude relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptStaticInclude'}).length, 4);
         },
         'then get the inline JavaScript as text': {
             topic: function (assetGraph) {
-                assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript', url: query.undefined})[0], this.callback);
+                assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript', url: query.isUndefined})[0], this.callback);
             },
             'it should contain 4 one.include statements': function (text) {
                 assert.equal(text.match(/one.include/g).length, 4);

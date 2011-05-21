@@ -101,15 +101,15 @@ vows.describe('AssetGraph.findAssets').addBatch({
                 }
             }).length, 2);
         },
-        'and lookup relations using query.defined': function (assetGraph) {
+        'and lookup relations using query.isDefined': function (assetGraph) {
             assert.equal(assetGraph.findRelations({
                 from: {
-                    foo: query.defined
+                    foo: query.isDefined
                 }
             }).length, 6);
             assert.equal(assetGraph.findRelations({
                 from: {
-                    foo: query.undefined
+                    foo: query.isUndefined
                 }
             }).length, 1);
         }

@@ -31,7 +31,7 @@ vows.describe('Inlining relations').addBatch({
                     if (err) {
                         return callback(err);
                     }
-                    assetGraph.getAssetText(assetGraph.findAssets({type: 'HTML', url: query.defined})[0], callback);
+                    assetGraph.getAssetText(assetGraph.findAssets({type: 'HTML', url: query.isDefined})[0], callback);
                 });
             },
             'the CSSImage url should be relative to the HTML asset': function (src) {

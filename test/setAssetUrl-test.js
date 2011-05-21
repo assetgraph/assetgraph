@@ -59,15 +59,15 @@ vows.describe('Changing the url of assets').addBatch({
             assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 1);
         },
         'the graph should a single inline HTML asset (conditional comment)': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'HTML', url: query.undefined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'HTML', url: query.isUndefined}).length, 1);
         },
         'the graph should a single non-inline HTML asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'HTML', url: query.defined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'HTML', url: query.isDefined}).length, 1);
         },
         'then moving the HTML asset one level down': {
             topic: function (assetGraph) {
                 assetGraph.queue(
-                    transforms.moveAssets({type: 'HTML', url: query.defined}, function (asset) {
+                    transforms.moveAssets({type: 'HTML', url: query.isDefined}, function (asset) {
                         return assetGraph.resolver.root + "subdir/index.html";
                     })
                 ).run(this.callback);
@@ -95,7 +95,7 @@ vows.describe('Changing the url of assets').addBatch({
         },
         'then moving the HTML asset one level down': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'HTML', url: query.defined})[0], assetGraph.resolver.root + 'subdir/index.html');
+                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'HTML', url: query.isDefined})[0], assetGraph.resolver.root + 'subdir/index.html');
                 return assetGraph;
             },
             'the CSSBehavior url should be relative to /subdir': function (assetGraph) {

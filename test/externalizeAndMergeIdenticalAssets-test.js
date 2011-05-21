@@ -14,7 +14,7 @@ vows.describe('Externalizing and merging identical assets').addBatch({
             ).run(this.callback);
         },
         'the graph should contain 7 non-inline JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.defined}).length, 7);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.isDefined}).length, 7);
         },
         'then run the mergeIdenticalAssets transform': {
             topic: function (assetGraph) {

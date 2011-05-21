@@ -46,7 +46,7 @@ vows.describe('Make a clone of each HTML file for each language').addBatch({
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
         },
         'the graph should contain one inline JavaScript asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.undefined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.isUndefined}).length, 1);
         },
         'the graph should contain one I18N asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'I18N'}).length, 1);
@@ -106,7 +106,7 @@ vows.describe('Make a clone of each HTML file for each language').addBatch({
         'the graph should contain 4 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 4);
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
-            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.undefined}).length, 2);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.isUndefined}).length, 2);
             assert.equal(assetGraph.findAssets({type: 'I18N'}).length, 1);
         },
         'then get the inline JavaScript asset as text': {

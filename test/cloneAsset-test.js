@@ -20,7 +20,7 @@ vows.describe('Cloning assets').addBatch({
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
         },
         'the graph should contain a single inline CSS asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'CSS', url: query.undefined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'CSS', url: query.isUndefined}).length, 1);
         },
         'then cloning the first HTML asset': {
             topic: function (assetGraph) {
@@ -50,7 +50,7 @@ vows.describe('Cloning assets').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
             },
             'the graph should contain two inline CSS assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'CSS', url: query.undefined}).length, 2);
+                assert.equal(assetGraph.findAssets({type: 'CSS', url: query.isUndefined}).length, 2);
             },
             'then getting the text of the original and the cloned asset': {
                 topic: function (assetGraph) {
