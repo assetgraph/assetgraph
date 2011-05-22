@@ -16,7 +16,7 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
         },
         'then moving the script asset to a different url and getting the HTML as text': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'JavaScript'})[0], assetGraph.resolver.root + 'fixIE6ForTheLoveOfGod.js');
+                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'JavaScript'})[0], assetGraph.root + 'fixIE6ForTheLoveOfGod.js');
                 assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
             },
             'the conditional comment should still be there and contain the updated <script>': function (src) {

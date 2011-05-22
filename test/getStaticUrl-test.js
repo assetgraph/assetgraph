@@ -27,7 +27,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
         },
         'then move one of the assets pointed to by a JavaScriptStaticUrl relation and get the JavaScript asset as text': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], assetGraph.resolver.root + 'static/a76a76a7a.json');
+                assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], assetGraph.root + 'static/a76a76a7a.json');
                 assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0], this.callback);
             },
             'the resulting JavaScript should map the url correctly': function (src) {
@@ -73,7 +73,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 },
                 'then move one of the assets pointed to by a JavaScriptStaticUrl relation and get the JavaScript asset as text': {
                     topic: function (assetGraph) {
-                        assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], assetGraph.resolver.root + 'static/a76a76a7a.json');
+                        assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], assetGraph.root + 'static/a76a76a7a.json');
                         assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0], this.callback);
                     },
                     'the resulting JavaScript should map the url correctly': function (src) {

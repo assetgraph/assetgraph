@@ -1,8 +1,9 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
+    assets = AssetGraph.assets,
     relations = AssetGraph.relations,
+    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('AssetGraph.findAssets').addBatch({
@@ -10,12 +11,12 @@ vows.describe('AssetGraph.findAssets').addBatch({
         topic: function () {
             new AssetGraph().queue(
                 transforms.loadAssets(
-                    {type: 'HTML', url: 'a', rawSrc: 'a', foo: 'bar'},
-                    {type: 'HTML', url: 'b', rawSrc: 'b', foo: 'bar'},
-                    {type: 'HTML', url: 'c', rawSrc: 'c', foo: 'quux'},
-                    {type: 'CSS',  url: 'd', rawSrc: 'd', foo: 'baz'},
-                    {type: 'CSS',  url: 'e', rawSrc: 'e'},
-                    {type: 'PNG',  url: 'f', rawSrc: 'f', foo: 'baz'}
+                    new assets.HTML({url: 'a', rawSrc: 'a', foo: 'bar'}),
+                    new assets.HTML({url: 'b', rawSrc: 'b', foo: 'bar'}),
+                    new assets.HTML({url: 'c', rawSrc: 'c', foo: 'quux'}),
+                    new assets.CSS({url: 'd', rawSrc: 'd', foo: 'baz'}),
+                    new assets.CSS({url: 'e', rawSrc: 'e'}),
+                    new assets.PNG({url: 'f', rawSrc: 'f', foo: 'baz'})
                 ),
                 function (assetGraph, cb) {
                     assetGraph.addRelation(new relations.HTMLStyle({

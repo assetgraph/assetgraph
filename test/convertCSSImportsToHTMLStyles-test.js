@@ -68,7 +68,7 @@ vows.describe('Converting CSS @import rules to <link rel="stylesheet">').addBatc
                     },
                     'then change the url of the HTML asset': {
                         topic: function (assetGraph) {
-                            assetGraph.setAssetUrl(assetGraph.findAssets({type: 'HTML'})[0], assetGraph.resolver.root + 'subdir/index2.html');
+                            assetGraph.setAssetUrl(assetGraph.findAssets({type: 'HTML'})[0], assetGraph.root + 'subdir/index2.html');
                             return assetGraph;
                         },
                         'the CSSAlphaImageLoader relation should be relative to the new HTML url': function (assetGraph) {
