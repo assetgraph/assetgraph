@@ -4,7 +4,7 @@ var vows = require('vows'),
     transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
-vows.describe('resolvers.SenchaJSBuilder test').addBatch({
+vows.describe('resolvers.senchaJSBuilder test').addBatch({
     'After loading a test case with three assets': {
         topic: function () {
             new AssetGraph({root: __dirname + '/senchaJSBuilder/rewriteBackgroundImageUrls/'}).queue(
