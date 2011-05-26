@@ -12,7 +12,7 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
             ).run(this.callback);
         },
         'the graph should contain 9 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 9);
+            assert.equal(assetGraph.findAssets().length, 9);
         },
         'then moving the script asset to a different url and getting the HTML as text': {
             topic: function (assetGraph) {

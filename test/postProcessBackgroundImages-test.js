@@ -14,7 +14,7 @@ vows.describe('Postprocess images').addBatch({
             ).run(this.callback);
         },
         'the graph contains the expected assets and relations': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 3);
+            assert.equal(assetGraph.findAssets().length, 3);
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 2);
             assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 1);
             assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 2);

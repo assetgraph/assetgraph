@@ -13,7 +13,7 @@ vows.describe('Inlining relations').addBatch({
             ).run(this.callback);
         },
         'the graph should contain 4 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 4);
+            assert.equal(assetGraph.findAssets().length, 4);
         },
         'the graph should contain 2 HTML assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 2);

@@ -12,7 +12,7 @@ vows.describe('Sprite background images').addBatch({
             ).run(this.callback);
         },
         'the graph contains 4 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 4);
+            assert.equal(assetGraph.findAssets().length, 4);
         },
         'the graph contains 3 PNGs': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 3);

@@ -13,7 +13,7 @@ vows.describe('Remove empty assets').addBatch({
             ).run(this.callback);
         },
         'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 3);
+            assert.equal(assetGraph.findAssets().length, 3);
         },
         'then running the removeEmptyAssets transform on CSS and JavaScript assets': {
             topic: function (assetGraph) {

@@ -12,7 +12,7 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
             ).run(this.callback);
         },
         'the graph contains 6 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 6);
+            assert.equal(assetGraph.findAssets().length, 6);
         },
         'the graph contains 1 HTML asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);

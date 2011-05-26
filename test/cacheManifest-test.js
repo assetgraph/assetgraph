@@ -12,10 +12,10 @@ vows.describe('Cache manifest').addBatch({
             ).run(this.callback);
         },
         'the graph should contain 4 relations': function (assetGraph) {
-            assert.equal(assetGraph.relations.length, 4);
+            assert.equal(assetGraph.findRelations().length, 4);
         },
         'the graph should contain 4 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 4);
+            assert.equal(assetGraph.findAssets().length, 4);
         },
         'the graph contains a single cache manifest': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
@@ -74,10 +74,10 @@ vows.describe('Cache manifest').addBatch({
             ).run(this.callback);
         },
         'the graph contains 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 3);
+            assert.equal(assetGraph.findAssets().length, 3);
         },
         'the graph contains 3 relations': function (assetGraph) {
-            assert.equal(assetGraph.relations.length, 3);
+            assert.equal(assetGraph.findRelations().length, 3);
         },
         'the graph contains a single PNG asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
@@ -108,10 +108,10 @@ vows.describe('Cache manifest').addBatch({
             ).run(this.callback);
         },
         'the graph contains 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.assets.length, 3);
+            assert.equal(assetGraph.findAssets().length, 3);
         },
         'the graph contains 4 relations': function (assetGraph) {
-            assert.equal(assetGraph.relations.length, 4);
+            assert.equal(assetGraph.findRelations().length, 4);
         },
         'the graph contains 1 PNG': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 1);
