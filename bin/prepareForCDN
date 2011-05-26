@@ -20,7 +20,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate({to: query.not(/^https?:/)}),
     transforms.moveAssetsToNewRoot({type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']}, cdnroot),
-    transforms.renameAssetsToMD5Prefix({type: query.not(['HTML', 'CacheManifest']), url: query.defined}),
+    transforms.renameAssetsToMD5Prefix({type: query.not(['HTML', 'CacheManifest']), url: query.isDefined}),
     transforms.parallel(
         transforms.writeAssetsToDisc({url: /^file:/}, outroot),
         transforms.writeAssetsToDisc({url: query.createPrefixMatcher(cdnroot)}, outroot, cdnroot)

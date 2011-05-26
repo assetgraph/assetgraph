@@ -38,8 +38,8 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
     commandLineOptions.manifest && transforms.addCacheManifestSinglePage({isInitial: true}),
     transforms.minifyAssets(),
     transforms.computeSerializedSize({type: ['JavaScript', 'CSS']}),
-    transforms.inlineRelations({type: ['HTMLStyle', 'HTMLScript'], to: {serializedSize: function (serializedSize) {return serializedSize < 4096;}}}),
-    transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.defined, type: query.not('CacheManifest')}, '/static'),
+    transforms.inlineRelations({type: ['HTMLStyle', 'HTMLScript'], to: {serializedSize: function (serializedSize) {console.log("sz", serializedSize); return serializedSize < 4096;}}}),
+    transforms.moveAssetsToDirectory({isInitial: query.not(true), url: query.isDefined, type: query.not('CacheManifest')}, '/static'),
     cdnroot && transforms.moveAssetsToNewRoot({type: ['PNG', 'GIF', 'JPEG', 'ICO', 'CSS', 'JavaScript', 'CacheManifest']}, cdnroot),
     transforms.renameAssetsToMD5Prefix({isInitial: query.not(true), type: query.not('CacheManifest')}),
     transforms.parallel(
