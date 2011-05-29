@@ -9,7 +9,7 @@ vows.describe('Compiling CoffeeScript to JavaScript').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/compileCoffeeScriptToJavaScript/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate({to: {url: query.not(/^http:/)}})
+                transforms.populate({followRelations: {to: {url: query.not(/^http:/)}}})
             ).run(this.callback);
         },
         'the graph should contain two CoffeeScript assets': function (assetGraph) {

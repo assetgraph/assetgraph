@@ -9,7 +9,7 @@ vows.describe('transforms.populate test').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/populate/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate({to: {type: query.not('CSS')}})
+                transforms.populate({followRelations: {to: {type: query.not('CSS')}}})
             ).run(this.callback);
         },
         'the graph should contain no CSS assets': function (assetGraph) {
