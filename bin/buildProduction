@@ -6,7 +6,7 @@ var _ = require('underscore'),
     query = AssetGraph.query,
     urlTools = require('../lib/util/urlTools'),
     commandLineOptions = require('optimist').
-        usage('$0 --root <inputRootDirectory> --outroot <outputRootDirectory> [--locale <localeId>,...] [--cdnroot <url>] [--manifest] <htmlFile>...').
+        usage('$0 --root <inputRootDirectory> [--label <labelName>=<dir> ...] --outroot <outputRootDirectory> [--locale <localeId>,...] [--cdnroot <url>] [--manifest] <htmlFile>...').
         boolean('manifest').
         demand(['root', 'outroot']).
         argv,
@@ -20,10 +20,11 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
     console.error(err.stack);
     process.exit(1);
 }).queue(
+    transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
-    transforms.populate(query.or({to: /\.i18n$/}, {type: query.not('JavaScriptStaticInclude'), to: query.not(/^https?:/)})),
+    transforms.populate(query.or({to: {type: 'I18N'}}, {type: query.not('JavaScriptStaticInclude'), to: {url: query.not(/^https?:/)}})),
     transforms.stripDevelopmentModeFromOneBootstrapper({type: 'HTML', isInitial: true}),
-    transforms.removeOneIncludeStatements({type: 'JavaScript'}),
+    transforms.removeRelations({type: 'JavaScriptStaticInclude', to: {type: query.not('I18N')}}),
     transforms.convertCSSImportsToHTMLStyles(),
     transforms.removeEmptyAssets({type: ['CSS', 'JavaScript']}),
     transforms.externalizeRelations({type: ['HTMLStyle', 'HTMLScript']}),

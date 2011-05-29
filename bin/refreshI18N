@@ -22,7 +22,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
 }).queue(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
-    transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude'], to: AssetGraph.query.not(/^https?:/)}),
+    transforms.populate({type: ['HTMLScript', 'JavaScriptStaticInclude'], to: {url: AssetGraph.query.not(/^https?:/)}}),
     function (err, assetGraph, cb) {
         if (err) {
             throw err;
