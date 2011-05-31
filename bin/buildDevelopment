@@ -19,7 +19,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
 }).queue(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
-    transforms.populate({followRelations: {type: ['HTMLStyle', 'HTMLScript', 'JavaScriptStaticInclude', 'CSSImage'], to: {url: query.not(/^https?:/)}}}),
+    transforms.populate({followRelations: {type: ['HTMLStyle', 'HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptExtJS4Include', 'CSSImage'], to: {url: query.not(/^https?:/)}}}),
     transforms.injectOneBootstrapper({isInitial: true}),
     transforms.flattenStaticIncludes({isInitial: true}),
     transforms.removeEmptyAssets({type: 'JavaScript'}),
