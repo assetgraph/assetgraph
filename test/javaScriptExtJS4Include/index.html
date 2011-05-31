@@ -3,8 +3,14 @@
 <head></head>
 <body>
     <script>
+        Ext.Loader.setPath('Quux', './quuxroot');
+
         Ext.require('Foo.Bar', function () {
-            console.log("I'm ready!");
+            console.log("Foo.Bar ready!");
+        });
+
+        Ext.require('Quux.Bar', function () {
+            console.log("Quux.Bar ready!");
         });
     </script>
 </body>
