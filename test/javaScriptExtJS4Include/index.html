@@ -4,6 +4,9 @@
 <body>
     <script>
         Ext.Loader.setPath('Quux', './quuxroot');
+        Ext.Loader.setPath('Ext', './3rdparty/ext');
+
+        Ext.require('Ext.SomethingInCoreUtil');
 
         Ext.require('Foo.Bar', function () {
             console.log("Foo.Bar ready!");

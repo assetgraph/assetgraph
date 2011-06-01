@@ -22,7 +22,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
 }).queue(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
-    transforms.populate({followRelations: query.or({to: {type: 'I18N'}}, {type: query.not('JavaScriptStaticInclude'), to: {url: query.not(/^https?:/)}})}),
+    transforms.populate({followRelations: query.or({to: {type: 'I18N'}}, {type: query.not(['JavaScriptStaticInclude', 'JavaScriptExtJS4Include']), to: {url: query.not(/^https?:/)}})}),
     transforms.stripDevelopmentModeFromOneBootstrapper({type: 'HTML', isInitial: true}),
     transforms.removeRelations({type: 'JavaScriptStaticInclude'}, {detach: true, unresolved: true}),
     transforms.convertCSSImportsToHTMLStyles(),

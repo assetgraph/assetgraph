@@ -8,7 +8,9 @@ vows.describe('resolvers.senchaJSBuilder test').addBatch({
     'After loading a test case with three assets': {
         topic: function () {
             new AssetGraph({root: __dirname + '/senchaJSBuilder/rewriteBackgroundImageUrls/'}).queue(
-                transforms.registerLabelsAsCustomProtocols({mylabel: __dirname + '/senchaJSBuilder/rewriteBackgroundImageUrls/foo.jsb2'}),
+                transforms.registerLabelsAsCustomProtocols([
+                    {name: 'mylabel', url: __dirname + '/senchaJSBuilder/rewriteBackgroundImageUrls/foo.jsb2'}
+                ]),
                 transforms.loadAssets('index.html'),
                 transforms.populate(),
                 transforms.flattenStaticIncludes({isInitial: true})
@@ -63,7 +65,9 @@ vows.describe('resolvers.senchaJSBuilder test').addBatch({
     'After loading a test case with an HTML asset and a jsb2 describing packages that depend on each other': {
         topic: function () {
             new AssetGraph({root: __dirname + '/senchaJSBuilder/dependentPackages/'}).queue(
-                transforms.registerLabelsAsCustomProtocols({mylabel: __dirname + '/senchaJSBuilder/dependentPackages/foo.jsb2'}),
+                transforms.registerLabelsAsCustomProtocols([
+                    {name: 'mylabel', url: __dirname + '/senchaJSBuilder/dependentPackages/foo.jsb2'}
+                ]),
                 transforms.loadAssets('index.html'),
                 transforms.populate()
             ).run(this.callback);
@@ -102,7 +106,9 @@ vows.describe('resolvers.senchaJSBuilder test').addBatch({
     'After loading a test case with includes of overlapping jsb2 packages': {
         topic: function () {
             new AssetGraph({root: __dirname + '/senchaJSBuilder/dependentPackages/'}).queue(
-                transforms.registerLabelsAsCustomProtocols({mylabel: __dirname + '/senchaJSBuilder/dependentPackages/foo.jsb2'}),
+                transforms.registerLabelsAsCustomProtocols([
+                    {name: 'mylabel', url: __dirname + '/senchaJSBuilder/dependentPackages/foo.jsb2'}
+                ]),
                 transforms.loadAssets('overlappingIncludes.html'),
                 transforms.populate()
             ).run(this.callback);
