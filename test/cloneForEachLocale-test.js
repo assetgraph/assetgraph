@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     vm = require('vm'),
-    error = require('../lib/util/error'),
+    passError = require('../lib/util/passError'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms,
     query = AssetGraph.query,
@@ -21,7 +21,7 @@ function getJavaScriptTextAndBootstrappedContext(assetGraph, htmlQueryObj, cb) {
         if (err) {
             return cb(err);
         }
-        i18nTools.getBootstrappedContext(assetGraph, assetGraph.findAssets(htmlQueryObj)[0], error.passToFunction(cb, function (context) {
+        i18nTools.getBootstrappedContext(assetGraph, assetGraph.findAssets(htmlQueryObj)[0], passError(cb, function (context) {
             cb(null, text, context);
         }));
     });
