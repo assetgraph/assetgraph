@@ -20,7 +20,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
     console.error(err.stack);
     process.exit(1);
 }).queue(
-    transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
+    commandLineOptions.label && transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate({followRelations: query.or({to: {type: 'I18N'}}, {type: query.not(['JavaScriptStaticInclude', 'JavaScriptExtJS4Include']), to: {url: query.not(/^https?:/)}})}),
     transforms.stripDevelopmentModeFromOneBootstrapper({type: 'HTML', isInitial: true}),
