@@ -3,7 +3,6 @@
 var fs = require('fs'),
     _ = require('underscore'),
     seq = require('seq'),
-    error = require('../lib/error'),
     AssetGraph = require('../lib/AssetGraph'),
     assets = AssetGraph.assets,
     transforms = AssetGraph.transforms,

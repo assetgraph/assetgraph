@@ -4,7 +4,7 @@ var _ = require('underscore'),
     seq = require('seq'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms,
-    error = require('../lib/util/error'),
+    passError = require('../lib/util/passError'),
     i18nTools = require('../lib/util/i18nTools'),
     uglifyAST = require('../lib/util/uglifyAST'),
     urlTools = require('../lib/util/urlTools'),
@@ -163,7 +163,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
                     var javaScript = assetGraph.idIndex[javaScriptId];
                     assetGraph.markAssetDirty(javaScript);
                     javaScript.getText = function (cb) {
-                        javaScript.getDecodedSrc(error.passToFunction(err, function (decodedSrc) {
+                        javaScript.getDecodedSrc(passError(cb, function (decodedSrc) {
                             var oneIncludeStatements = i18nRelations.map(function (i18nRelation) {
                                 return "one.include('" +
                                     urlTools.buildRelativeUrl(i18nRelation.from.url || assetGraph.findBaseAssetForRelation(i18nRelation).url, i18nRelation.to.url) +
