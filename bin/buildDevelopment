@@ -17,7 +17,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
     console.error(err.stack);
     process.exit(1);
 }).queue(
-    transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
+    commandLineOptions.label && transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate({followRelations: {type: ['HTMLStyle', 'HTMLScript', 'JavaScriptStaticInclude', 'JavaScriptExtJS4Include', 'CSSImage'], to: {url: query.not(/^https?:/)}}}),
     transforms.injectOneBootstrapper({isInitial: true}),
