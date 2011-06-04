@@ -19,7 +19,7 @@
         "cssmin": "=0.3.0",
         "request": "=1.9.5",
         "glob": "=2.0.6",
-        "canvas": "=0.5.4",
+        "canvas": "=0.6.0",
         "graphviz": "=0.0.3",
         "bufferjs": "=1.0.1",
         "iconv": "=1.1.0",
