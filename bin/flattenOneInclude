@@ -39,8 +39,9 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
                 });
                 asset.getDecodedSrc(this);
             })
-            .seq(function () {
-                var flattenedSrc = this.stack.join("\n").replace(/one\.include\(([^\)]*)\);?\n?/g, "");
+            .unflatten()
+            .seq(function (decodedSrcs) {
+                var flattenedSrc = decodedSrcs.join("\n").replace(/one\.include\(([^\)]*)\);?\n?/g, "");
                 if ('o' in commandLineOptions) {
                     fs.writeFile(commandLineOptions.o, flattenedSrc, assets.JavaScript.prototype.encoding, cb);
                 } else {

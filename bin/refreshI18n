@@ -72,8 +72,8 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
             .parEach(function (i18nAsset) {
                 i18nAsset.getParseTree(this);
             })
-            .seq(function () {
-                var i18nAssets = this.stack;
+            .unflatten()
+            .seq(function (i18nAssets) {
                 _.keys(occurrencesByKey).forEach(function (key) {
                     var occurrences = occurrencesByKey[key];
                     if (occurrences.length > 1) {
