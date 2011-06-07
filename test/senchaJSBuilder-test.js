@@ -78,8 +78,8 @@ vows.describe('resolvers.senchaJSBuilder test').addBatch({
         'the graph should contain a single inline JavaScript asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.isUndefined}).length, 1);
         },
-        'the graph should contain 3 JavaScriptStaticInclude relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptStaticInclude'}).length, 3);
+        'the graph should contain 3 JavaScriptOneInclude relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptOneInclude'}).length, 3);
         },
         'then get the inline JavaScript as text': {
             topic: function (assetGraph) {
@@ -119,8 +119,8 @@ vows.describe('resolvers.senchaJSBuilder test').addBatch({
         'the graph should contain a single inline JavaScript asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.isUndefined}).length, 1);
         },
-        'the graph should contain 4 JavaScriptStaticInclude relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptStaticInclude'}).length, 4);
+        'the graph should contain 4 JavaScriptOneInclude relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptOneInclude'}).length, 4);
         },
         'then get the inline JavaScript as text': {
             topic: function (assetGraph) {

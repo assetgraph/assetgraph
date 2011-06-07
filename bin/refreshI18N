@@ -22,7 +22,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
 }).queue(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
-    transforms.populate({followRelations: {type: ['HTMLScript', 'JavaScriptStaticInclude'], to: {url: AssetGraph.query.not(/^https?:/)}}}),
+    transforms.populate({followRelations: {type: ['HTMLScript', 'JavaScriptOneInclude'], to: {url: AssetGraph.query.not(/^https?:/)}}}),
     function (err, assetGraph, cb) {
         if (err) {
             throw err;
@@ -43,7 +43,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
             .extend(assetGraph.findAssets({type: 'HTML', isInitial: true}))
             .seqEach(function (htmlAsset) {
                 var callback = this,
-                    subgraph = assetGraph.createSubgraph(htmlAsset, {type: ['HTMLScript', 'JavaScriptStaticInclude']});
+                    subgraph = assetGraph.createSubgraph(htmlAsset, {type: ['HTMLScript', 'JavaScriptOneInclude']});
                 seq()
                     .extend(subgraph.findAssets({type: 'JavaScript'}))
                     .parEach(function (javaScript) {
@@ -128,7 +128,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
                                 isDirty: true,
                                 parseTree: {}
                             });
-                            var relation = new AssetGraph.relations.JavaScriptStaticInclude({
+                            var relation = new AssetGraph.relations.JavaScriptOneInclude({
                                 from: addToI18NForJavaScriptAsset,
                                 to: i18nAsset
                             });

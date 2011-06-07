@@ -25,7 +25,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
 }).queue(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
-    transforms.populate({followRelations: {type: 'JavaScriptStaticInclude'}}),
+    transforms.populate({followRelations: {type: 'JavaScriptOneInclude'}}),
     function (err, assetGraph, cb) {
         seq()
             .extend(assetGraph.findAssets({isInitial: true}))

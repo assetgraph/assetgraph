@@ -14,10 +14,10 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
         'the graph should contain a single JavaScript asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
         },
-        'the graph should contain 3 JavaScriptStaticUrl relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptStaticUrl'}).length, 3);
+        'the graph should contain 3 JavaScriptOneGetStaticUrl relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 3);
         },
-        'the JavaScriptStaticUrl relations should have the right originalUrl properties': function (assetGraph) {
+        'the JavaScriptOneGetStaticUrl relations should have the right originalUrl properties': function (assetGraph) {
             assert.equal(assetGraph.findRelations({originalUrl: 'json/a.json'}).length, 1);
             assert.equal(assetGraph.findRelations({originalUrl: 'json/b.json'}).length, 1);
             assert.equal(assetGraph.findRelations({originalUrl: 'json/c.json'}).length, 1);
@@ -25,7 +25,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
         'the graph should contain 3 JSON assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JSON'}).length, 3);
         },
-        'then move one of the assets pointed to by a JavaScriptStaticUrl relation and get the JavaScript asset as text': {
+        'then move one of the assets pointed to by a JavaScriptOneGetStaticUrl relation and get the JavaScript asset as text': {
             topic: function (assetGraph) {
                 assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], assetGraph.root + 'static/a76a76a7a.json');
                 assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0], this.callback);
@@ -60,10 +60,10 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 'the graph should contain a single JavaScript asset': function (assetGraph) {
                     assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
                 },
-                'the graph should contain 3 JavaScriptStaticUrl relations': function (assetGraph) {
-                    assert.equal(assetGraph.findRelations({type: 'JavaScriptStaticUrl'}).length, 3);
+                'the graph should contain 3 JavaScriptOneGetStaticUrl relations': function (assetGraph) {
+                    assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 3);
                 },
-                'the JavaScriptStaticUrl relations should have the right originalUrl properties': function (assetGraph) {
+                'the JavaScriptOneGetStaticUrl relations should have the right originalUrl properties': function (assetGraph) {
                     assert.equal(assetGraph.findRelations({originalUrl: 'json/a.json'}).length, 1);
                     assert.equal(assetGraph.findRelations({originalUrl: 'json/b.json'}).length, 1);
                     assert.equal(assetGraph.findRelations({originalUrl: 'json/c.json'}).length, 1);
@@ -71,7 +71,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 'the graph should contain 3 JSON assets': function (assetGraph) {
                     assert.equal(assetGraph.findAssets({type: 'JSON'}).length, 3);
                 },
-                'then move one of the assets pointed to by a JavaScriptStaticUrl relation and get the JavaScript asset as text': {
+                'then move one of the assets pointed to by a JavaScriptOneGetStaticUrl relation and get the JavaScript asset as text': {
                     topic: function (assetGraph) {
                         assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], assetGraph.root + 'static/a76a76a7a.json');
                         assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0], this.callback);

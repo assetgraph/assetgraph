@@ -4,10 +4,10 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph'),
     relations = AssetGraph.relations;
 
-vows.describe('UrlMap').addBatch({
+vows.describe('one.getStaticUrl').addBatch({
     'UrlMap with wildcards': {
         topic: function () {
-            var urlMap = new relations.JavaScriptStaticUrl.UrlMap({
+            var urlMap = new relations.JavaScriptOneGetStaticUrl.UrlMap({
                 originalUrl: 'file:///foo/*/*.json',
                 wildCardValueASTs: [
                     uglify.parser.parse('(b || "abc")')[1][0][1], // strip 'toplevel' and 'stat' nodes
