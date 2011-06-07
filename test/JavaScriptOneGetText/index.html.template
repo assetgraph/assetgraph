@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+<script>
+    alert("Hello, my name is " + one.getText('name.txt'));
+</script>
+</html>
