@@ -42,6 +42,6 @@
         "buildProduction": "./bin/buildProduction",
         "flattenOneInclude": "./bin/flattenOneInclude",
         "prepareForCDN": "./bin/prepareForCDN",
-        "refreshI18N": "./bin/refreshI18N"
+        "refreshI18n": "./bin/refreshI18n"
     }
 }

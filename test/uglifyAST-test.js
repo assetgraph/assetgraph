@@ -1,13 +1,13 @@
 var vows = require('vows'),
     assert = require('assert'),
     uglify = require('uglify-js'),
-    uglifyAST = require('../lib/util/uglifyAST');
+    uglifyAst = require('../lib/util/uglifyAst');
 
 function testCase(ast, obj) {
     return {
         'from ast to obj': {
             topic: function () {
-                return uglifyAST.astToObj(ast);
+                return uglifyAst.astToObj(ast);
             },
             'should produce the expected JavaScript object': function (_obj) {
                 assert.deepEqual(_obj, obj);
@@ -23,9 +23,9 @@ function testCase(ast, obj) {
         },
         'from obj to ast': {
             topic: function () {
-                return uglifyAST.objToAST(obj);
+                return uglifyAst.objToAst(obj);
             },
-            'should produce the expected AST': function (_ast) {
+            'should produce the expected Ast': function (_ast) {
                 assert.deepEqual(_ast, ast);
             }
         },
@@ -33,14 +33,14 @@ function testCase(ast, obj) {
             topic: function () {
                 return uglify.parser.parse('(' + JSON.stringify(obj) + ')')[1][0][1]; // Strip 'toplevel' and 'stat' nodes
             },
-            'should produce the expected AST': function (_ast) {
+            'should produce the expected Ast': function (_ast) {
                 assert.deepEqual(_ast, ast);
             }
         }
     };
 }
 
-vows.describe('Converting JavaScript objects to Uglify ASTs and vice versa').addBatch({
+vows.describe('Converting JavaScript objects to Uglify Asts and vice versa').addBatch({
     'convert null': testCase(
         ['name', 'null'],
         null

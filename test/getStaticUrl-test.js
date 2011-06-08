@@ -22,8 +22,8 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             assert.equal(assetGraph.findRelations({originalUrl: 'json/b.json'}).length, 1);
             assert.equal(assetGraph.findRelations({originalUrl: 'json/c.json'}).length, 1);
         },
-        'the graph should contain 3 JSON assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JSON'}).length, 3);
+        'the graph should contain 3 Json assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Json'}).length, 3);
         },
         'then move one of the assets pointed to by a JavaScriptOneGetStaticUrl relation and get the JavaScript asset as text': {
             topic: function (assetGraph) {
@@ -51,7 +51,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                     new AssetGraph({root: __dirname + '/getStaticUrl/'}).queue(
                         transforms.loadAssets({
                             url: 'file://' + __dirname + '/getStaticUrl/index2.html',
-                            type: 'HTML',
+                            type: 'Html',
                             rawSrc: "<html><body><script>" + src + "</script></body></html>"
                         }),
                         transforms.populate()
@@ -68,8 +68,8 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                     assert.equal(assetGraph.findRelations({originalUrl: 'json/b.json'}).length, 1);
                     assert.equal(assetGraph.findRelations({originalUrl: 'json/c.json'}).length, 1);
                 },
-                'the graph should contain 3 JSON assets': function (assetGraph) {
-                    assert.equal(assetGraph.findAssets({type: 'JSON'}).length, 3);
+                'the graph should contain 3 Json assets': function (assetGraph) {
+                    assert.equal(assetGraph.findAssets({type: 'Json'}).length, 3);
                 },
                 'then move one of the assets pointed to by a JavaScriptOneGetStaticUrl relation and get the JavaScript asset as text': {
                     topic: function (assetGraph) {

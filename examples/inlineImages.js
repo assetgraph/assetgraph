@@ -6,6 +6,6 @@ var AssetGraph = require('../lib/AssetGraph'),
 AssetGraph({root: __dirname + '/inlineImages'}).queue(
     transforms.loadAssets('*.html'),
     transforms.populate(),
-    transforms.inlineRelations({type: ['HTMLImage', 'CSSImage']}),
-    transforms.writeAssetsToStdout({type: 'HTML'})
+    transforms.inlineRelations({type: ['HtmlImage', 'CssImage']}),
+    transforms.writeAssetsToStdout({type: 'Html'})
 ).run();

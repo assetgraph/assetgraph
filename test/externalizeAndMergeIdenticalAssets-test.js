@@ -10,7 +10,7 @@ vows.describe('Externalizing and merging identical assets').addBatch({
             new AssetGraph({root: __dirname + '/externalizeAndMergeIdenticalAssets/'}).queue(
                 transforms.loadAssets('first.html', 'second.html'),
                 transforms.populate(),
-                transforms.externalizeRelations({type: 'HTMLScript'})
+                transforms.externalizeRelations({type: 'HtmlScript'})
             ).run(this.callback);
         },
         'the graph should contain 7 non-inline JavaScript assets': function (assetGraph) {

@@ -14,7 +14,7 @@ vows.describe('resolveAssetConfig').addBatch({
     'relative path': {
         topic: resolveAssetConfig('foo.png'),
         'should return assetConfig with expanded url': function (resolvedAssetConfig) {
-            assert.equal(resolvedAssetConfig.type, 'PNG');
+            assert.equal(resolvedAssetConfig.type, 'Png');
         }
     },
     'wildcard: *.png': {
@@ -23,9 +23,9 @@ vows.describe('resolveAssetConfig').addBatch({
             assert.isArray(resolvedAssetConfigs);
             assert.equal(resolvedAssetConfigs.length, 2);
             assert.isObject(resolvedAssetConfigs[0]);
-            assert.equal(resolvedAssetConfigs[0].type, 'PNG');
+            assert.equal(resolvedAssetConfigs[0].type, 'Png');
             assert.isObject(resolvedAssetConfigs[1]);
-            assert.equal(resolvedAssetConfigs[1].type, 'PNG');
+            assert.equal(resolvedAssetConfigs[1].type, 'Png');
         }
     },
     'http: url': {
@@ -33,7 +33,7 @@ vows.describe('resolveAssetConfig').addBatch({
         'should return assetConfig with a single entry': function (resolvedAssetConfig) {
             assert.isObject(resolvedAssetConfig);
             assert.equal(resolvedAssetConfig.url, 'http://www.example.com/foo.gif');
-            assert.equal(resolvedAssetConfig.type, 'GIF');
+            assert.equal(resolvedAssetConfig.type, 'Gif');
         }
     },
     'custom url (find parent directory case)': {
@@ -52,26 +52,26 @@ vows.describe('resolveAssetConfig').addBatch({
     },
     'parent dir + wildcard': {
         topic: resolveAssetConfig('otherdirectory:onemorelevel/*.png', 'file://' + assetGraphRoot + 'directory'),
-        'should resolve to two PNGs': function (resolvedAssetConfigs) {
+        'should resolve to two Pngs': function (resolvedAssetConfigs) {
             assert.isArray(resolvedAssetConfigs);
             assert.equal(resolvedAssetConfigs.length, 2);
             assert.isObject(resolvedAssetConfigs[0]);
-            assert.equal(resolvedAssetConfigs[0].type, 'PNG');
+            assert.equal(resolvedAssetConfigs[0].type, 'Png');
             assert.isObject(resolvedAssetConfigs[1]);
-            assert.equal(resolvedAssetConfigs[1].type, 'PNG');
+            assert.equal(resolvedAssetConfigs[1].type, 'Png');
         }
     },
     'expand dir without trailing slash': {
         topic: resolveAssetConfig('subdir'),
         'should resolve to dir/index.html': function (resolvedAssetConfig) {
-            assert.equal(resolvedAssetConfig.type, 'HTML');
+            assert.equal(resolvedAssetConfig.type, 'Html');
             assert.equal(resolvedAssetConfig.url, 'file://' + assetGraphRoot + 'subdir/index.html');
         }
     },
     'expand dir with trailing slash': {
         topic: resolveAssetConfig('subdir'),
         'should resolve to dir/index.html': function (resolvedAssetConfig) {
-            assert.equal(resolvedAssetConfig.type, 'HTML');
+            assert.equal(resolvedAssetConfig.type, 'Html');
             assert.equal(resolvedAssetConfig.url, 'file://' + assetGraphRoot + 'subdir/index.html');
         }
     }

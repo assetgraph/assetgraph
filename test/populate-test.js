@@ -9,17 +9,17 @@ vows.describe('transforms.populate test').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/populate/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate({followRelations: {to: {type: query.not('CSS')}}})
+                transforms.populate({followRelations: {to: {type: query.not('Css')}}})
             ).run(this.callback);
         },
-        'the graph should contain no CSS assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 0);
+        'the graph should contain no Css assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 0);
         },
-        'the graph should contain no resolved HTMLStyle relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HTMLStyle'}).length, 0);
+        'the graph should contain no resolved HtmlStyle relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 0);
         },
-        'the graph should contain an HTMLStyle relation with to:{isResolved:true} and an absolute url': function (assetGraph) {
-            var htmlStyles = assetGraph.findRelations({type: 'HTMLStyle'}, true);
+        'the graph should contain an HtmlStyle relation with to:{isResolved:true} and an absolute url': function (assetGraph) {
+            var htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'}, true);
             assert.equal(htmlStyles.length, 1);
             assert.notEqual(htmlStyles[0].to.isAsset, true);
             assert.equal(htmlStyles[0].to.isResolved, true);

@@ -9,7 +9,7 @@ vows.describe('one.getStaticUrl').addBatch({
         topic: function () {
             var urlMap = new relations.JavaScriptOneGetStaticUrl.UrlMap({
                 originalUrl: 'file:///foo/*/*.json',
-                wildCardValueASTs: [
+                wildCardValueAsts: [
                     uglify.parser.parse('(b || "abc")')[1][0][1], // strip 'toplevel' and 'stat' nodes
                     uglify.parser.parse('(a < 10 ? 123 : (a < 100 ? 456 : 789))')[1][0][1]
                 ]
@@ -19,10 +19,10 @@ vows.describe('one.getStaticUrl').addBatch({
             urlMap.addExpandedUrl('file:///foo/def/789.json');
             urlMap.addExpandedUrl('file:///foo/ghi/123.json');
             urlMap.mapExpandedUrl('file:///foo/def/789.json', 'bogus');
-            return urlMap.toExpressionAST();
+            return urlMap.toExpressionAst();
         },
-        'should DTRT': function (expressionAST) {
-            var src = uglify.uglify.gen_code(expressionAST);
+        'should DTRT': function (expressionAst) {
+            var src = uglify.uglify.gen_code(expressionAst);
             assert.equal(new Function('var a = 4, b = false; return ' + src + ';')(), 'file:///foo/abc/123.json');
             assert.equal(new Function('var a = 50, b = false; return ' + src + ';')(), 'file:///foo/abc/456.json');
             assert.equal(new Function('var a = 150, b = "def"; return ' + src + ';')(), 'bogus');

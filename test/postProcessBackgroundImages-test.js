@@ -15,26 +15,26 @@ vows.describe('Postprocess images').addBatch({
         },
         'the graph contains the expected assets and relations': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 3);
-            assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 2);
-            assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 1);
-            assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 2);
+            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 2);
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 2);
         },
         'then running the postProcessBackgroundImages transform': {
             topic: function (assetGraph) {
                 assetGraph.queue(transforms.postProcessBackgroundImages()).run(this.callback);
             },
-            'the number of PNG assets should be 3': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 3);
+            'the number of Png assets should be 3': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Png'}).length, 3);
             },
-            'the first two CSSImage relations should be in the same cssRule': function (assetGraph) {
-                var cssBackgroundImages = assetGraph.findRelations({type: 'CSSImage'});
+            'the first two CssImage relations should be in the same cssRule': function (assetGraph) {
+                var cssBackgroundImages = assetGraph.findRelations({type: 'CssImage'});
                 assert.equal(cssBackgroundImages[0].cssRule, cssBackgroundImages[1].cssRule);
             },
             'then fetching the source of the two images': {
                 topic: function (assetGraph) {
                     var callback = this.callback;
                     seq()
-                        .extend(assetGraph.findRelations({type: 'CSSImage'}))
+                        .extend(assetGraph.findRelations({type: 'CssImage'}))
                         .parMap(function (cssImage) {
                             cssImage.to.getRawSrc(this);
                         })
@@ -43,7 +43,7 @@ vows.describe('Postprocess images').addBatch({
                         })
                         ['catch'](callback);
                 },
-                'should return something that looks like PNGs': function (err, firstSrc, secondSrc) {
+                'should return something that looks like Pngs': function (err, firstSrc, secondSrc) {
                     assert.deepEqual(_.toArray(firstSrc.slice(0, 4)), [0x89, 0x50, 0x4e, 0x47]);
                     assert.deepEqual(_.toArray(secondSrc.slice(0, 4)), [0x89, 0x50, 0x4e, 0x47]);
                 },

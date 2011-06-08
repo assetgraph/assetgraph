@@ -25,9 +25,9 @@ vows.describe('Compiling CoffeeScript to JavaScript').addBatch({
             'the graph should contain two JavaScript assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
             },
-            'then get the HTML asset as text': {
+            'then get the Html asset as text': {
                 topic: function (assetGraph) {
-                    assetGraph.getAssetText(assetGraph.findAssets({type: 'HTML'})[0], this.callback);
+                    assetGraph.getAssetText(assetGraph.findAssets({type: 'Html'})[0], this.callback);
                 },
                 'there should be no occurrences of "text/coffeescript"': function (text) {
                     assert.equal(text.indexOf('text/coffeescript'), -1);

@@ -14,20 +14,20 @@ vows.describe('<object><param name="src" value="..."></object> test').addBatch({
                 })
             ).run(this.callback);
         },
-        'the graph should contain 3 HTMLObject relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HTMLObject'}, true).length, 3);
+        'the graph should contain 3 HtmlObject relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlObject'}, true).length, 3);
         },
-        'the urls of the HTMLObject relations should be correct': function (assetGraph) {
-            assert.deepEqual(assetGraph.findRelations({type: 'HTMLObject'}, true).map(function (relation) {return relation._getRawUrlString();}),
+        'the urls of the HtmlObject relations should be correct': function (assetGraph) {
+            assert.deepEqual(assetGraph.findRelations({type: 'HtmlObject'}, true).map(function (relation) {return relation._getRawUrlString();}),
                             ['themovie.swf', 'theothermovie.swf', 'yetanothermovie.swf']);
         },
         'then move the index.html asset one subdir down': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'HTML'})[0], assetGraph.root + 'foo/index.html');
+                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html'})[0], assetGraph.root + 'foo/index.html');
                 return assetGraph;
             },
-            'the urls of the HTMLObject relations should have ../ prepended': function (assetGraph) {
-                assert.deepEqual(assetGraph.findRelations({type: 'HTMLObject'}, true).map(function (relation) {return relation._getRawUrlString();}),
+            'the urls of the HtmlObject relations should have ../ prepended': function (assetGraph) {
+                assert.deepEqual(assetGraph.findRelations({type: 'HtmlObject'}, true).map(function (relation) {return relation._getRawUrlString();}),
                                  ['../themovie.swf', '../theothermovie.swf', '../yetanothermovie.swf']);
             }
         }

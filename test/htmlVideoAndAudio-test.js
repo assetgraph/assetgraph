@@ -14,18 +14,18 @@ vows.describe('<video> and <audio> test').addBatch({
                 })
             ).run(this.callback);
         },
-        'the graph should contain 4 HTMLVideo relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HTMLVideo'}, true).length, 4);
+        'the graph should contain 4 HtmlVideo relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlVideo'}, true).length, 4);
         },
-        'the graph should contain 2 HTMLVideoPoster relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HTMLVideoPoster'}, true).length, 2);
+        'the graph should contain 2 HtmlVideoPoster relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlVideoPoster'}, true).length, 2);
         },
-        'the graph should contain 4 HTMLAudio relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HTMLAudio'}, true).length, 4);
+        'the graph should contain 4 HtmlAudio relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlAudio'}, true).length, 4);
         },
-        'then change the url of the main HTML document': {
+        'then change the url of the main Html document': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'HTML'})[0], 'http://example.com/foo/bar.html');
+                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html'})[0], 'http://example.com/foo/bar.html');
                 return assetGraph;
             },
             'the relative urls of the relations should begin with ../': function (assetGraph) {

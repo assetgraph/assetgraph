@@ -3,7 +3,7 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms;
 
-vows.describe('HTML with <link rel="alternate">').addBatch({
+vows.describe('Html with <link rel="alternate">').addBatch({
     'After loading test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/htmlAlternateLink/'}).queue(
@@ -11,14 +11,14 @@ vows.describe('HTML with <link rel="alternate">').addBatch({
                 transforms.populate()
             ).run(this.callback);
         },
-        'the graph should contain two RSS assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'RSS'}).length, 2);
+        'the graph should contain two Rss assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Rss'}).length, 2);
         },
         'the graph should contain a single Atom asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Atom'}).length, 1);
         },
-        'the graph should contain a single XML asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'XML'}).length, 1);
+        'the graph should contain a single Xml asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Xml'}).length, 1);
         }
     }
 })['export'](module);

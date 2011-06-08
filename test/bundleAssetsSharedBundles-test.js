@@ -4,7 +4,7 @@ var vows = require('vows'),
     transforms = AssetGraph.transforms;
 
 vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
-    'After loading a test case with 1 HTML, 2 stylesheets, and 3 images': {
+    'After loading a test case with 1 Html, 2 stylesheets, and 3 images': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleAssets/singleHtml'}).queue(
                 transforms.loadAssets('index.html'),
@@ -14,34 +14,34 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
         'the graph contains 6 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 6);
         },
-        'the graph contains 1 HTML asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 1);
+        'the graph contains 1 Html asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
         },
-        'the graph contains 3 PNG assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'PNG'}).length, 3);
+        'the graph contains 3 Png assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 3);
         },
-        'the graph contains 2 CSS assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 2);
+        'the graph contains 2 Css assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
         },
-        'the graph contains 2 HTMLStyle relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HTMLStyle'}).length, 2);
+        'the graph contains 2 HtmlStyle relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 2);
         },
-        'the graph contains 4 CSSImage relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CSSImage'}).length, 4);
+        'the graph contains 4 CssImage relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 4);
         },
-        'then bundling the HTMLStyles': {
+        'then bundling the HtmlStyles': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}, 'sharedBundles')).run(this.callback);
+                assetGraph.queue(transforms.bundleAssets({type: 'Css', incoming: {type: 'HtmlStyle'}}, 'sharedBundles')).run(this.callback);
             },
-            'the number of HTMLStyles should be down to one': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HTMLStyle'}).length, 1);
+            'the number of HtmlStyles should be down to one': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 1);
             },
-            'there should be a single CSS': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 1);
+            'there should be a single Css': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
             },
-            'all CSSImage relations should be attached to the bundle': function (assetGraph) {
-                var cssBackgroundImages = assetGraph.findRelations({type: 'CSSImage'}),
-                    bundle = assetGraph.findAssets({type: 'CSS'})[0];
+            'all CssImage relations should be attached to the bundle': function (assetGraph) {
+                var cssBackgroundImages = assetGraph.findRelations({type: 'CssImage'}),
+                    bundle = assetGraph.findAssets({type: 'Css'})[0];
                 assert.equal(cssBackgroundImages.length, 4);
                 cssBackgroundImages.forEach(function (cssBackgroundImage) {
                     assert.equal(cssBackgroundImage.from.id, bundle.id);
@@ -49,27 +49,27 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
             }
         }
     },
-    'After loading a test case with two HTML assets that relate to some of the same CSS assets': {
+    'After loading a test case with two Html assets that relate to some of the same Css assets': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleAssets/twoHtmls'}).queue(
                 transforms.loadAssets('1.html', '2.html'),
                 transforms.populate()
             ).run(this.callback);
         },
-        'the graph should contain 2 HTML assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'HTML'}).length, 2);
+        'the graph should contain 2 Html assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
         },
-        'the graph should contain 5 CSS assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 5);
+        'the graph should contain 5 Css assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 5);
         },
-        'then bundling the CSS assets': {
+        'then bundling the Css assets': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.bundleAssets({type: 'CSS', incoming: {type: 'HTMLStyle'}}, 'sharedBundles')).run(this.callback);
+                assetGraph.queue(transforms.bundleAssets({type: 'Css', incoming: {type: 'HtmlStyle'}}, 'sharedBundles')).run(this.callback);
             },
-            'the graph should contain 4 CSS assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'CSS'}).length, 4);
+            'the graph should contain 4 Css assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 4);
             },
-            'the CSS assets with a single relation pointing at them should remain unbundled': function (assetGraph) {
+            'the Css assets with a single relation pointing at them should remain unbundled': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/a\.css$/}).length, 1);
                 assert.equal(assetGraph.findAssets({url: /\/d\.css$/}).length, 1);
             },
@@ -79,8 +79,8 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
             'b.css and c.css should no longer be in the graph': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/[bc]\.css$/}).length, 0);
             },
-            'the last CSS asset in the graph should consist of the rules from b.css and c.css': function (assetGraph) {
-                var cssAssets = assetGraph.findAssets({type: 'CSS'}),
+            'the last Css asset in the graph should consist of the rules from b.css and c.css': function (assetGraph) {
+                var cssAssets = assetGraph.findAssets({type: 'Css'}),
                     cssRules = cssAssets[cssAssets.length - 1].parseTree.cssRules;
                 assert.equal(cssRules.length, 2);
                 assert.equal(cssRules[0].style.color, 'beige');

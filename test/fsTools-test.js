@@ -14,25 +14,25 @@ vows.describe('Utility functions in fsTools').addBatch({
     },
     'dirExists(existing dir)': {
         topic: function () {
-            fsTools.dirExistsCached(__dirname + "/cacheManifest", this.callback);
+            fsTools.dirExistsCached(__dirname + "/CacheManifest", this.callback);
         },
         'should return true': function (err, dirExists) {
             assert.isNull(err);
             assert.isTrue(dirExists);
         }
     },
-    'findParentDirCached(__dirname + "/cacheManifest", "cacheManifest")': {
+    'findParentDirCached(__dirname + "/CacheManifest", "CacheManifest")': {
         topic: function () {
-            fsTools.findParentDirCached(__dirname + "/cacheManifest", "cacheManifest", this.callback);
+            fsTools.findParentDirCached(__dirname + "/CacheManifest", "CacheManifest", this.callback);
         },
         'should find the cacheManifest dir': function (err, result) {
             assert.isNull(err);
-            assert.equal(result, __dirname + '/cacheManifest');
+            assert.equal(result, __dirname + '/CacheManifest');
         }
     },
-    'findParentDirCached(__dirname + "/cacheManifest", "bogus")': {
+    'findParentDirCached(__dirname + "/CacheManifest", "bogus")': {
         topic: function () {
-            fsTools.findParentDirCached(__dirname + "/cacheManifest", "bogus", this.callback);
+            fsTools.findParentDirCached(__dirname + "/CacheManifest", "bogus", this.callback);
         },
         'should give an error': function (err, result) {
             assert.instanceOf(err, Error);

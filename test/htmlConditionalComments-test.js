@@ -3,7 +3,7 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms;
 
-vows.describe('Parsing conditional comments in HTML').addBatch({
+vows.describe('Parsing conditional comments in Html').addBatch({
     'After loading a test case with conditional comments': {
         topic: function () {
             new AssetGraph({root: __dirname + '/htmlConditionalComments/'}).queue(
@@ -14,7 +14,7 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
         'the graph should contain 9 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 9);
         },
-        'then moving the script asset to a different url and getting the HTML as text': {
+        'then moving the script asset to a different url and getting the Html as text': {
             topic: function (assetGraph) {
                 assetGraph.setAssetUrl(assetGraph.findAssets({type: 'JavaScript'})[0], assetGraph.root + 'fixIE6ForTheLoveOfGod.js');
                 assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
@@ -26,14 +26,14 @@ vows.describe('Parsing conditional comments in HTML').addBatch({
             'the not-Internet Explorer conditional comment construct should be left alone': function (src) {
                 assert.notEqual(src.indexOf('<!--[if !IE]><!-->Not IE<!--<![endif]-->'), -1);
             },
-            'then externalizing the CSS and JavaScript and minifying the HTML': {
+            'then externalizing the Css and JavaScript and minifying the Html': {
                 topic: function (_, assetGraph) {
                     assetGraph.queue(
-                        transforms.externalizeRelations({type: ['HTMLStyle', 'HTMLScript']}),
-                        transforms.minifyAssets({type: 'HTML'})
+                        transforms.externalizeRelations({type: ['HtmlStyle', 'HtmlScript']}),
+                        transforms.minifyAssets({type: 'Html'})
                     ).run(this.callback);
                 },
-                'and get the HTML as text again': {
+                'and get the Html as text again': {
                     topic: function (assetGraph) {
                         assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
                     },

@@ -4,14 +4,14 @@ var vows = require('vows'),
     transforms = AssetGraph.transforms;
 
 vows.describe('serialize asset').addBatch({
-    'After loading test case with a the same PNG image loaded from disc and http': {
+    'After loading test case with a the same Png image loaded from disc and http': {
         topic: function () {
             new AssetGraph({root: __dirname + '/getSerializedAsset/'}).queue(
                 transforms.loadAssets('purplealpha24bit.png',
                                       'http://gofish.dk/purplealpha24bit.png')
             ).run(this.callback);
         },
-        'then serializing the PNG loaded from disc': {
+        'then serializing the Png loaded from disc': {
             topic: function (assetGraph) {
                 assetGraph.getSerializedAsset(assetGraph.findAssets()[0], this.callback);
             },
@@ -19,7 +19,7 @@ vows.describe('serialize asset').addBatch({
                 assert.equal(src.length, 8285);
             }
         },
-        'then serializing the PNG loaded via http': {
+        'then serializing the Png loaded via http': {
             topic: function (assetGraph) {
                 assetGraph.getSerializedAsset(assetGraph.findAssets()[1], this.callback);
             },

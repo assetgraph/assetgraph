@@ -14,19 +14,19 @@ vows.describe('<embed src="..."> test').addBatch({
                 })
             ).run(this.callback);
         },
-        'the graph should contain one HTMLEmbed relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HTMLEmbed'}, true).length, 1);
+        'the graph should contain one HtmlEmbed relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true).length, 1);
         },
-        'the urls of the HTMLEmbed relation should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HTMLEmbed'}, true)[0]._getRawUrlString(), 'foo.swf');
+        'the urls of the HtmlEmbed relation should be correct': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true)[0]._getRawUrlString(), 'foo.swf');
         },
         'then move the index.html asset one subdir down': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'HTML'})[0], assetGraph.root + 'foo/index.html');
+                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html'})[0], assetGraph.root + 'foo/index.html');
                 return assetGraph;
             },
-            'the urls of the HTMLEmbed relation should have ../ prepended': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HTMLEmbed'}, true)[0]._getRawUrlString(), '../foo.swf');
+            'the urls of the HtmlEmbed relation should have ../ prepended': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true)[0]._getRawUrlString(), '../foo.swf');
             }
         }
     }

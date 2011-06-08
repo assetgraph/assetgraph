@@ -4,7 +4,7 @@ var vows = require('vows'),
     transforms = AssetGraph.transforms;
 
 vows.describe('Charset test').addBatch({
-    'After loading HTML with a meta tag specifying iso-8859-1': {
+    'After loading Html with a meta tag specifying iso-8859-1': {
         topic: function () {
             new AssetGraph({root: __dirname + '/encoding/'}).queue(
                 transforms.loadAssets('iso-8859-1.html'),
@@ -17,7 +17,7 @@ vows.describe('Charset test').addBatch({
         'the parseTree should be decoded correctly': function (assetGraph) {
             assert.equal(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'æøåÆØÅ');
         },
-        'then reserializing the HTML asset': {
+        'then reserializing the Html asset': {
             topic: function (assetGraph) {
                 assetGraph.getSerializedAsset(assetGraph.findAssets()[0], this.callback);
             },
@@ -26,7 +26,7 @@ vows.describe('Charset test').addBatch({
             }
         }
     },
-    'After loading a CSS asset with @charset declaration of iso-8859-1': {
+    'After loading a Css asset with @charset declaration of iso-8859-1': {
         topic: function () {
             new AssetGraph({root: __dirname + '/encoding/'}).queue(
                 transforms.loadAssets('iso-8859-1.css'),
