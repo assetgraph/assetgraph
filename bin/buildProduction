@@ -22,9 +22,12 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
 }).queue(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
-    transforms.populate({followRelations: query.or({to: {type: 'I18n'}}, {type: query.not(['JavaScriptOneInclude', 'JavaScriptExtJsRequire']), to: {url: query.not(/^https?:/)}})}),
+    transforms.populate({
+        followRelations: query.or({to: {type: 'I18n'}},
+                                  {type: query.not(['JavaScriptOneInclude', 'JavaScriptExtJsRequire']), to: {url: query.not(/^https?:/)}})
+    }),
     transforms.stripDevelopmentModeFromOneBootstrapper({type: 'Html', isInitial: true}),
-    transforms.removeRelations({type: 'JavaScriptOneInclude'}, {detach: true, unresolved: true}),
+    transforms.removeRelations({type: 'JavaScriptOneInclude', to: {type: query.not('I18n')}}, {detach: true, unresolved: true}),
     transforms.inlineJavaScriptOneGetText(),
     transforms.convertCssImportsToHtmlStyles(),
     transforms.removeEmptyAssets({type: ['Css', 'JavaScript']}),
@@ -36,7 +39,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
     transforms.bundleAssets({type: 'JavaScript', incoming: {type: 'HtmlScript'}}),
     transforms.compressJavaScript({type: 'JavaScript'}),
     localeIds && transforms.cloneForEachLocale({type: 'Html', isInitial: true}, localeIds),
-    transforms.removeAssets({type: 'I18n'}),
+    transforms.removeAssets({type: 'I18n'}, true),
     commandLineOptions.manifest && transforms.addCacheManifestSinglePage({isInitial: true}),
     transforms.minifyAssets(),
     transforms.computeSerializedSize({type: ['JavaScript', 'Css']}),
