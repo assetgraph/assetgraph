@@ -27,7 +27,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
                                   {type: query.not(['JavaScriptOneInclude', 'JavaScriptExtJsRequire']), to: {url: query.not(/^https?:/)}})
     }),
     transforms.stripDevelopmentModeFromOneBootstrapper({type: 'Html', isInitial: true}),
-    transforms.removeRelations({type: 'JavaScriptOneInclude', to: {type: query.not('I18n')}}, {detach: true, unresolved: true}),
+    transforms.removeRelations({type: 'JavaScriptOneInclude', to: {type: ['Css', 'JavaScript']}}, {detach: true, unresolved: true}),
     transforms.inlineJavaScriptOneGetText(),
     transforms.convertCssImportsToHtmlStyles(),
     transforms.removeEmptyAssets({type: ['Css', 'JavaScript']}),
