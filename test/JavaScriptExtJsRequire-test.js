@@ -16,11 +16,11 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
                 transforms.populate()
             ).run(this.callback);
         },
-        'the graph should contain 9 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 9);
+        'the graph should contain 10 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 10);
         },
-        'the graph should contain 7 JavaScriptExtJsRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptExtJsRequire'}).length, 7);
+        'the graph should contain 8 JavaScriptExtJsRequire relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptExtJsRequire'}).length, 8);
         },
         'then run the flattenStaticIncludes transform': {
             topic: function (assetGraph) {
@@ -37,6 +37,7 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
                     'quuxroot/Base.js',
                     'quuxroot/Baz.js',
                     'quuxroot/SomeMixin.js',
+                    'quuxroot/SomethingLazyLoaded.js',
                     'quuxroot/Bar.js',
                     undefined
                 ]);
