@@ -17,16 +17,12 @@ var _ = require('underscore'),
 new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (transform, elapsedTime) {
     console.log((elapsedTime / 1000).toFixed(3) + " secs: " + transform.name);
 }).on('error', function (err) {
-    console.error(err.stack);
     process.exit(1);
 }).queue(
     transforms.registerLabelsAsCustomProtocols(commandLineOptions.label),
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
     transforms.populate({followRelations: {type: ['HtmlScript', 'JavaScriptOneInclude'], to: {url: AssetGraph.query.not(/^https?:/)}}}),
-    function (err, assetGraph, cb) {
-        if (err) {
-            throw err;
-        }
+    function (assetGraph, cb) {
         // We don't want to overwrite the "initially dirty" assets, such as ext-base.js.
         assetGraph.findAssets({isDirty: true}).forEach(function (dirtyAsset) {
             dirtyAsset.isDirty = false;
@@ -43,9 +39,10 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
             .extend(assetGraph.findAssets({type: 'Html', isInitial: true}))
             .seqEach(function (htmlAsset) {
                 var callback = this,
-                    subgraph = assetGraph.createSubgraph(htmlAsset, {type: ['HtmlScript', 'JavaScriptOneInclude']});
-                seq()
-                    .extend(subgraph.findAssets({type: 'JavaScript'}))
+                    javaScriptAssets = AssetGraph.traversal.collectAssetsPostOrder(assetGraph, htmlAsset, {type: ['HtmlScript', 'JavaScriptOneInclude']}).filter(function (asset) {
+                        return asset.type === 'JavaScript';
+                    });
+                seq(javaScriptAssets)
                     .parEach(function (javaScript) {
                         javaScript.getParseTree(this.into(javaScript.id));
                     })
