@@ -39,7 +39,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
             .extend(assetGraph.findAssets({type: 'Html', isInitial: true}))
             .seqEach(function (htmlAsset) {
                 var callback = this,
-                    javaScriptAssets = AssetGraph.traversal.collectAssetsPostOrder(assetGraph, htmlAsset, {type: ['HtmlScript', 'JavaScriptOneInclude']}).filter(function (asset) {
+                    javaScriptAssets = assetGraph.collectAssetsPostOrder(htmlAsset, {type: ['HtmlScript', 'JavaScriptOneInclude']}).filter(function (asset) {
                         return asset.type === 'JavaScript';
                     });
                 seq(javaScriptAssets)

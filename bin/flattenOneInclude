@@ -6,7 +6,6 @@ var fs = require('fs'),
     AssetGraph = require('../lib/AssetGraph'),
     assets = AssetGraph.assets,
     transforms = AssetGraph.transforms,
-    traversal = AssetGraph.traversal,
     urlTools = require('../lib/util/urlTools'),
     commandLineOptions = require('optimist').
         usage('$0 [--root <dir>] [-o <outputJavaScriptFile>] <inputJavaScriptFile>').
@@ -30,7 +29,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
         seq()
             .extend(assetGraph.findAssets({isInitial: true}))
             .seq(function (initialAsset) {
-                this(null, traversal.collectAssetsPostOrder(assetGraph, initialAsset, {to: {type: 'JavaScript'}}));
+                this(null, assetGraph.collectAssetsPostOrder(initialAsset, {to: {type: 'JavaScript'}}));
             })
             .flatten()
             .parMap(function (asset) {
