@@ -43,7 +43,7 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
     commandLineOptions.manifest && transforms.addCacheManifestSinglePage({isInitial: true}),
     transforms.minifyAssets(),
     transforms.computeSerializedSize({type: ['JavaScript', 'Css']}),
-    transforms.inlineRelations({type: ['HtmlStyle', 'HtmlScript'], to: {serializedSize: function (serializedSize) {return serializedSize < 4096;}}}),
+    transforms.inlineRelations({type: ['HtmlStyle', 'HtmlScript'], from: {type: query.not('HtmlConditionalComment')}, to: function (asset) {return asset.serializedSize < 4096;}}),
     transforms.moveAssetsToDirectory({isInitial: query.not(true), type: query.not('CacheManifest')}, '/static'),
     cdnroot && transforms.moveAssetsToNewRoot({type: ['Png', 'Gif', 'Jpeg', 'Ico', 'Css', 'JavaScript', 'CacheManifest']}, cdnroot),
     transforms.renameAssetsToMd5Prefix({isInitial: query.not(true), type: query.not('CacheManifest')}),
