@@ -1,1 +1,1 @@
-alert("I am a dependent file");
+alert("I am being depended upon");
