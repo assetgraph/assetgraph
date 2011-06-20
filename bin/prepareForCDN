@@ -18,7 +18,10 @@ new AssetGraph({root: commandLineOptions.root}).on('afterTransform', function (t
     process.exit(1);
 }).queue(
     transforms.loadAssets(commandLineOptions._.map(urlTools.fsFilePathToFileUrl)),
-    transforms.populate({followRelations: {to: {url: query.not(/^https?:/)}}}),
+    transforms.populate({
+        onError: function (err) {console.warn(err.message);},
+        followRelations: {type: query.not('HtmlAnchor'), to: {url: query.not(/^https?:/)}}
+    }),
     transforms.moveAssetsToNewRoot({type: ['Png', 'Gif', 'Jpeg', 'Ico', 'Css', 'JavaScript', 'CacheManifest']}, cdnroot),
     transforms.renameAssetsToMd5Prefix({type: query.not(['Html', 'CacheManifest']), url: query.isDefined}),
     transforms.parallel(
