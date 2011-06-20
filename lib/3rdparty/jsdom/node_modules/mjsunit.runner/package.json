@@ -1,0 +1,25 @@
+{ "name" : "mjsunit.runner"
+, "version" : "0.1.3"
+, "description" : "Command line mjsunit runner which provides an easy way to hook into mjsunit and start running tests immediately.."
+, "keywords" : [ "testing", "test", "runner", "unit testing", "command line" ]
+, "maintainers" :
+  [ { "name" : "Elijah Insua", "email" : "tmpvar@gmail.com" }
+  ]
+, "bugs" :
+  { "mail" : "tmpvar@gmail.com"
+  , "web" : "http://github.com/tmpvar/mjsunit.runner/issues"
+  }
+, "licenses" :
+  [ { "type" : "MIT"
+    , "url" : "http://github.com/tmpvar/mjsunit.runner/blob/master/LICENSE.txt"
+    }
+  ]
+, "repositories" :
+  [ { "type" : "git"
+    , "url" : "git://github.com/tmpvar/mjsunit.runner.git"
+    }
+  ]
+, "dependencies" : {}
+, "engines" : { "node": ">=0.1.9" }
+, "directories" : { "lib" : "lib" }
+}
