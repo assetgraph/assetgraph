@@ -7,7 +7,12 @@ builder tool we are using at One.com for some of our web apps. It's in
 a somewhat usable early alpha state, but still likely to undergo
 massive changes.
 
-Currently it does the following:
+Check out `the slides from a presentation of AssetGraph
+<http://gofish.dk/assetgraph.pdf>`_ held at `the Öresund JavaScript Meetup
+<http://www.meetup.com/The-Oresund-JavaScript-Meetup/>`_ on June 16th,
+2011.
+
+Currently AssetGraph does the following:
 
 * Build an asset graph programmatically or load it from disk or a
   remote server via http.
