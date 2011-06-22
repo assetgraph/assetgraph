@@ -36,29 +36,11 @@ vows.describe('resolveAssetConfig').addBatch({
             assert.equal(resolvedAssetConfig.type, 'Gif');
         }
     },
-    'custom url (find parent directory case)': {
-        topic: resolveAssetConfig('directory:quux.png'),
-        'should find the directory and the file': function (resolvedAssetConfig) {
-            assert.isObject(resolvedAssetConfig);
-            assert.equal(resolvedAssetConfig.url, 'file://' + assetGraphRoot + 'directory/quux.png');
-        }
-    },
     'data: url': {
         topic: resolveAssetConfig('data:text/html;base64,SGVsbG8sIHdvcmxkIQo='),
         'should decode correctly': function (resolvedAssetConfig) {
             assert.isObject(resolvedAssetConfig);
             assert.equal(resolvedAssetConfig.rawSrc, "Hello, world!\n");
-        }
-    },
-    'parent dir + wildcard': {
-        topic: resolveAssetConfig('otherdirectory:onemorelevel/*.png', 'file://' + assetGraphRoot + 'directory'),
-        'should resolve to two Pngs': function (resolvedAssetConfigs) {
-            assert.isArray(resolvedAssetConfigs);
-            assert.equal(resolvedAssetConfigs.length, 2);
-            assert.isObject(resolvedAssetConfigs[0]);
-            assert.equal(resolvedAssetConfigs[0].type, 'Png');
-            assert.isObject(resolvedAssetConfigs[1]);
-            assert.equal(resolvedAssetConfigs[1].type, 'Png');
         }
     },
     'expand dir without trailing slash': {

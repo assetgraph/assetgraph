@@ -2,7 +2,7 @@ AssetGraph
 ==========
 
 AssetGraph is an extensible framework for optimizing web pages and web
-applications. It represents the third generation of the production
+applications. It's the core of the third generation of the production
 builder tool we are using at One.com for some of our web apps. It's in
 a somewhat usable early alpha state, but still likely to undergo
 massive changes.
@@ -11,6 +11,9 @@ Check out `the slides from a presentation of AssetGraph
 <http://gofish.dk/assetgraph.pdf>`_ held at `the Öresund JavaScript Meetup
 <http://www.meetup.com/The-Oresund-JavaScript-Meetup/>`_ on June 16th,
 2011.
+
+The complete AssetGraph-based build system mentioned in the slides can
+be found `here <https://github.com/One-com/assetgraph-builder>`_.
 
 Currently AssetGraph does the following:
 
@@ -26,12 +29,13 @@ Currently AssetGraph does the following:
 * Move all CSS, JavaScript, image assets etc. to a static dir and
   rename them to md5.extension so the web server can be configured to
   set a far-future Cache-Control.
-* Optimize CSS background images by creating sprite images. The
-  spriting is guided by a set of custom CSS properties with a
-  ``-one-sprite`` prefix.
 * Help getting your static assets on a CDN by allowing you to easily
   rewrite all references to them.
 * Use Graphviz to visualize your dependencies at any step.
+* Using the separate `assetgraph-sprite transform
+  <https://github.com/One-com/assetgraph-sprite>`_: Optimize CSS
+  background images by creating sprite images. The spriting is guided
+  by a set of custom CSS properties with a ``-one-sprite`` prefix.
 
 Design
 ======
@@ -51,34 +55,20 @@ module <https://github.com/NV/CSSOM>`_), and an abstract syntax tree
 for JavaScript (powered by `UglifyJS
 <https://github.com/mishoo/UglifyJS/>`_' parser).
 
-Building
---------
+Installation
+------------
 
-Most of the project's dependencies are noted in the ``package.json``-file, and
-they can be automatically installed with ``npm install`` or ``npm link``.
+Make sure you have `node.js <http://nodejs.org>`_ and `npm <http://npmjs.org/>`_ installed, then run::
 
-Of particular note, `node-canvas <https://github.com/learnboost/node-canvas>`_
-is not a pure-node module and requires the Cairo development sources version
-1.10 or later (`libcairo2-dev` on Ubuntu & friends) and compilation of some
-glue C++-code to work.
-
-Likewise, ``pngquant`` is required to help squash PNG files in size.
-
-Testing
--------
-
-To check if everything works, run `vows <http://vowsjs.org/>`_ in the base
-directory.
+    $ npm install assetgraph
 
 Usage
 -----
 
-TODO... For now, have a look at ``buildDevelopment`` and
-``buildProduction`` in the ``bin`` folder.
+TODO... For now, have a look at the `examples` folder.
 
 License
 -------
 
 AssetGraph is licensed under a standard 3-clause BSD license -- see the
 ``LICENSE``-file for details.
-

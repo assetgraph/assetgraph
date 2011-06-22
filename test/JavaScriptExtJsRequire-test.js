@@ -2,16 +2,19 @@ var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms,
+    resolvers = require('../lib/resolvers'),
+    urlTools = require('../lib/util/urlTools'),
     query = AssetGraph.query;
 
 vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
     'After loading a test case with three assets': {
         topic: function () {
             new AssetGraph({root: __dirname + '/JavaScriptExtJsRequire/'}).queue(
-                transforms.registerLabelsAsCustomProtocols([
-                    {name: 'Quux', url: __dirname + '/JavaScriptExtJsRequire/quuxroot'},
-                    {name: 'Ext', type: 'extJs4Dir', url: __dirname + '/JavaScriptExtJsRequire/3rdparty/ext/src'}
-                ]),
+                function (assetGraph) {
+                    assetGraph.resolverByProtocol.Foo = resolvers.fixedDirectory(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/Foo'));
+                    assetGraph.resolverByProtocol.Quux = resolvers.fixedDirectory(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/quuxroot'));
+                    assetGraph.resolverByProtocol.Ext = resolvers.extJs4Dir(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/3rdparty/ext/src'));
+                },
                 transforms.loadAssets('index.html'),
                 transforms.populate()
             ).run(this.callback);

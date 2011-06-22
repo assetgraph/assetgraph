@@ -38,12 +38,12 @@ vows.describe('Utility functions in fsTools').addBatch({
             assert.instanceOf(err, Error);
         }
     },
-    'findParentDirCached(__dirname, "spriteBackgroundImages")': {
+    'findParentDirCached(__dirname, "htmlObject")': {
         topic: function () {
-            fsTools.findParentDirCached(__dirname, "spriteBackgroundImages", this.callback);
+            fsTools.findParentDirCached(__dirname, "htmlObject", this.callback);
         },
-        'should find the spriteBackgroundImages dir': function (err, result) {
-            assert.equal(result, __dirname + '/spriteBackgroundImages');
+        'should find the htmlObject dir': function (err, result) {
+            assert.equal(result, __dirname + '/htmlObject');
         }
     }
 })['export'](module);
