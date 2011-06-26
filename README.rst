@@ -1,7 +1,8 @@
 AssetGraph
 ==========
 
-AssetGraph is an extensible framework for optimizing web pages and web
+AssetGraph is an extensible, `node.js <http://nodejs.org/>`_-based
+framework for manipulating and optimizing web pages and web
 applications. It's the core of the third generation of the production
 builder tool we are using at One.com for some of our web apps. It's in
 a somewhat usable early alpha state, but still likely to undergo
@@ -37,16 +38,13 @@ Currently AssetGraph does the following:
   background images by creating sprite images. The spriting is guided
   by a set of custom CSS properties with a ``-one-sprite`` prefix.
 
-Design
-======
-
 The observation that inspired the project is that most of the above
 optimizations are easily expressed in terms of graph manipulations,
 where the nodes are the assets (HTML, CSS, images, JavaScript...) and
 the edges are the relations between them, e.g. anchor tags, image
 tags, favorite icons, css background-image properties and so on.
 
-Asset Graph provides a basic data model that allows you to populate,
+AssetGraph provides a basic data model that allows you to populate,
 query, and manipulate the graph at a high level of
 abstraction. Additionally, each individual asset can be inspected and
 massaged using a relevant API: DOM for HTML (using `jsdom
@@ -56,16 +54,91 @@ for JavaScript (powered by `UglifyJS
 <https://github.com/mishoo/UglifyJS/>`_' parser).
 
 Installation
-------------
+============
 
-Make sure you have `node.js <http://nodejs.org>`_ and `npm <http://npmjs.org/>`_ installed, then run::
+Make sure you have node.js and `npm <http://npmjs.org/>`_ installed,
+then run::
 
     $ npm install assetgraph
 
-Usage
------
+Basic usage
+===========
 
-TODO... For now, have a look at the `examples` folder.
+Creating an AssetGraph object::
+
+    var AssetGraph = require('assetgraph'),
+        ag = new AssetGraph(optionsObject);
+
+Currently the only supported option is `root`, which specifies the
+root url of the graph. It can be provided either as a fully qualified
+url or a (optionally relative) file system path, and it defaults to
+the current directory. The `root` option is required to resolve
+root-relative urls in files loaded from disc. The AssetGraph
+constructor normalizes the root to an absolute url ending in a slash
+and makes it available as the `root` property of the AssetGraph
+instance.
+
+Example usage::
+
+    console.log(new AssetGraph().root); // 'file:///current/working/dir/'
+
+    var ag = new AssetGraph({root: '/home/thatguy/my/project'});
+    console.log(ag.root); // 'file:///home/thatguy/my/project/'
+
+    // When the graph is populated, root-relative urls in relations will be resolved relative to this url,
+    // e.g. /foo/bar.png => file:///home/thatguy/my/project/foo/bar.png
+
+
+Querying the graph
+------------------
+
+AssetGraph supports a flexible syntax for finding assets and relations
+in a populated graph using the `findAssets` and `findRelations`
+methods. Both methods take a query object as the first argument. Some
+basic examples::
+
+    // Get an array containing all assets in the graph:
+    var allAssets = assetGraph.findAssets();
+
+    // Find assets by type:
+    var htmlAssets = assetGraph.findAssets({type: 'Html'});
+
+    // Find assets by matching a regular expression against the url:
+    var localImageAssets = assetGraph.findAssets({url: /^file:.*\.(?:png|gif|jpg)$/});
+
+    // Find assets by predicate function:
+    var orphanedJavaScriptAssets = assetGraph.findAssets(function (asset) {
+        return asset.type === 'JavaScript' && assetGraph.findRelations({to: asset}).length === 0;
+    });
+
+    // Find all HtmlScript (<script src=...> and inline <script>) relations:
+    var allHtmlScriptRelations = assetGraph.findRelations({type: 'HtmlScript'});
+
+Query objects have "and" semantics, so all conditions must be met for
+a multi-criteria query to match::
+
+    var textBasedAssetsOnGoogleCom = assetGraph.findAssets({
+        isText: true,
+        url: /^https?:\/\/(?:www\.)google\.com\//
+    });
+
+    // Find assets by existence of incoming relations (experimental feature):
+    var importedCssAssets = assetGraph.findAssets({type: 'Css', incoming: {type: 'CssImport'}})
+
+Relation queries can contain nested asset queries when querying the
+`to` and `from` properties::
+
+    // Find all HtmlAnchor (<a href=...>) relations pointing at local images:
+    assetGraph.findRelations({
+        type: 'HtmlAnchor',
+        to: {isImage: true, url: /^file:/}
+    });
+
+Transforms and workflows
+========================
+
+TODO. Look in the `examples` folder for now.
+
 
 License
 -------
