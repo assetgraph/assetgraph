@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms,
     query = AssetGraph.query;
@@ -23,7 +24,7 @@ vows.describe('transforms.populate test').addBatch({
             assert.equal(htmlStyles.length, 1);
             assert.notEqual(htmlStyles[0].to.isAsset, true);
             assert.equal(htmlStyles[0].to.isResolved, true);
-            assert.equal(htmlStyles[0].to.url, assetGraph.root + 'style.css');
+            assert.equal(htmlStyles[0].to.url, urlTools.resolveUrl(assetGraph.root, 'style.css'));
         }
     }
 })['export'](module);

@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms,
     query = AssetGraph.query;
@@ -25,7 +26,7 @@ vows.describe('Edge side include test').addBatch({
         },
         'then move the index.html one subdir down': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/index\.html/})[0], assetGraph.root + 'foo/index.html');
+                assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/index\.html/})[0], urlTools.resolveUrl(assetGraph.root, 'foo/index.html'));
                 return assetGraph;
             },
             'the url of the unpopulated HtmlEdgeSideInclude relation should be updated': function (assetGraph) {

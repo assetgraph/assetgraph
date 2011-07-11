@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms;
 
@@ -68,7 +69,7 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
                     },
                     'then change the url of the Html asset': {
                         topic: function (assetGraph) {
-                            assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html'})[0], assetGraph.root + 'subdir/index2.html');
+                            assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html'})[0], urlTools.resolveUrl(assetGraph.root, 'subdir/index2.html'));
                             return assetGraph;
                         },
                         'the CssAlphaImageLoader relation should be relative to the new Html url': function (assetGraph) {

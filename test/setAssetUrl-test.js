@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms,
     query = AssetGraph.query;
@@ -24,7 +25,7 @@ vows.describe('Changing the url of assets').addBatch({
         'then moving the first Html asset one level down': {
             topic: function (assetGraph) {
                 var initialHtml = assetGraph.findAssets({type: 'Html'})[0];
-                assetGraph.setAssetUrl(initialHtml, assetGraph.root + 'bogus/index.html');
+                assetGraph.setAssetUrl(initialHtml, urlTools.resolveUrl(assetGraph.root, 'bogus/index.html'));
                 return assetGraph;
             },
             'the relative url of the anchor relation should have changed': function (assetGraph) {
@@ -34,7 +35,7 @@ vows.describe('Changing the url of assets').addBatch({
             'then moving the other page one level down': {
                 topic: function (assetGraph) {
                     var otherHtml = assetGraph.findAssets({type: 'Html'})[1];
-                    assetGraph.setAssetUrl(otherHtml, assetGraph.root + 'fluff/otherpage.html');
+                    assetGraph.setAssetUrl(otherHtml, urlTools.resolveUrl(assetGraph.root, 'fluff/otherpage.html'));
                     return assetGraph;
                 },
                 'the relative url of the anchor relation should be updated': function (assetGraph) {
@@ -68,7 +69,7 @@ vows.describe('Changing the url of assets').addBatch({
             topic: function (assetGraph) {
                 assetGraph.queue(
                     transforms.moveAssets({type: 'Html', url: query.isDefined}, function (asset) {
-                        return assetGraph.root + "subdir/index.html";
+                        return urlTools.resolveUrl(assetGraph.root, "subdir/index.html");
                     })
                 ).run(this.callback);
             },
@@ -95,7 +96,7 @@ vows.describe('Changing the url of assets').addBatch({
         },
         'then moving the Html asset one level down': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html', url: query.isDefined})[0], assetGraph.root + 'subdir/index.html');
+                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html', url: query.isDefined})[0], urlTools.resolveUrl(assetGraph.root, 'subdir/index.html'));
                 return assetGraph;
             },
             'the CssBehavior url should be relative to /subdir': function (assetGraph) {

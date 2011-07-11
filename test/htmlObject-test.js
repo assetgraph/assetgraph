@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms,
     query = AssetGraph.query;
@@ -23,7 +24,7 @@ vows.describe('<object><param name="src" value="..."></object> test').addBatch({
         },
         'then move the index.html asset one subdir down': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html'})[0], assetGraph.root + 'foo/index.html');
+                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html'})[0], urlTools.resolveUrl(assetGraph.root, 'foo/index.html'));
                 return assetGraph;
             },
             'the urls of the HtmlObject relations should have ../ prepended': function (assetGraph) {
