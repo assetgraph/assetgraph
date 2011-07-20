@@ -11,12 +11,12 @@ vows.describe('AssetGraph.findAssets').addBatch({
         topic: function () {
             new AssetGraph().queue(
                 transforms.loadAssets(
-                    new assets.Html({decodedSrc: 'a', foo: 'bar'}),
-                    new assets.Html({decodedSrc: 'b', foo: 'bar'}),
-                    new assets.Html({decodedSrc: 'c', foo: 'quux'}),
-                    new assets.Css({decodedSrc: 'd', foo: 'baz'}),
-                    new assets.Css({decodedSrc: 'e'}),
-                    new assets.Png({decodedSrc: 'f', foo: 'baz'})
+                    new assets.Html({text: 'a', foo: 'bar'}),
+                    new assets.Html({text: 'b', foo: 'bar'}),
+                    new assets.Html({text: 'c', foo: 'quux'}),
+                    new assets.Css({text: 'd', foo: 'baz'}),
+                    new assets.Css({text: 'e'}),
+                    new assets.Png({text: 'f', foo: 'baz'})
                 )
             ).run(this.callback);
         },
@@ -57,20 +57,20 @@ vows.describe('AssetGraph.findAssets').addBatch({
         'then add some relations to the graph': {
             topic: function (assetGraph) {
                 assetGraph.addRelation(new relations.HtmlAnchor({
-                    from: assetGraph.findAssets({decodedSrc: 'a'})[0],
-                    to: assetGraph.findAssets({decodedSrc: 'b'})[0]
+                    from: assetGraph.findAssets({text: 'a'})[0],
+                    to: assetGraph.findAssets({text: 'b'})[0]
                 }));
                 assetGraph.addRelation(new relations.HtmlAnchor({ // Identical to the first
-                    from: assetGraph.findAssets({decodedSrc: 'a'})[0],
-                    to: assetGraph.findAssets({decodedSrc: 'b'})[0]
+                    from: assetGraph.findAssets({text: 'a'})[0],
+                    to: assetGraph.findAssets({text: 'b'})[0]
                 }));
                 assetGraph.addRelation(new relations.HtmlAnchor({
-                    from: assetGraph.findAssets({decodedSrc: 'a'})[0],
-                    to: assetGraph.findAssets({decodedSrc: 'c'})[0]
+                    from: assetGraph.findAssets({text: 'a'})[0],
+                    to: assetGraph.findAssets({text: 'c'})[0]
                 }));
                 assetGraph.addRelation(new relations.CssImage({
-                    from: assetGraph.findAssets({decodedSrc: 'e'})[0],
-                    to: assetGraph.findAssets({decodedSrc: 'f'})[0]
+                    from: assetGraph.findAssets({text: 'e'})[0],
+                    to: assetGraph.findAssets({text: 'f'})[0]
                 }));
                 return assetGraph;
             },
@@ -80,7 +80,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
             },
             'then lookup based on outgoing relations': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({outgoing: {type: 'HtmlAnchor'}}).length, 1);
-                assert.equal(assetGraph.findAssets({outgoing: {to: {decodedSrc: 'f'}}}).length, 1);
+                assert.equal(assetGraph.findAssets({outgoing: {to: {text: 'f'}}}).length, 1);
             }
         }
     }

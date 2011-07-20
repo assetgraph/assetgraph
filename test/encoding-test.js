@@ -12,7 +12,7 @@ vows.describe('Charset test').addBatch({
             ).run(this.callback);
         },
         'the body should be decoded correctly': function (assetGraph) {
-             assert.notEqual(assetGraph.findAssets()[0].decodedSrc.indexOf('æøåÆØÅ'), -1);
+             assert.notEqual(assetGraph.findAssets()[0].text.indexOf('æøåÆØÅ'), -1);
         },
         'the parseTree should be decoded correctly': function (assetGraph) {
             assert.equal(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'æøåÆØÅ');
@@ -34,7 +34,7 @@ vows.describe('Charset test').addBatch({
             ).run(this.callback);
         },
         'the body should be decoded correctly': function (assetGraph) {
-             assert.notEqual(assetGraph.findAssets()[0].decodedSrc.indexOf('æøå'), -1);
+             assert.notEqual(assetGraph.findAssets()[0].text.indexOf('æøå'), -1);
         },
         'the parseTree should be decoded correctly': function (assetGraph) {
             assert.equal(assetGraph.findAssets()[0].parseTree.cssRules[0].style.foo, 'æøå');

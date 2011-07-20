@@ -24,13 +24,13 @@ vows.describe('Externalizing and merging identical assets').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
             },
             'first.html and second.html should each have a relation to the externalized "TypeThree" script': function (assetGraph) {
-                var typeTwos = assetGraph.findAssets({type: 'JavaScript', decodedSrc: /TypeTwo/});
+                var typeTwos = assetGraph.findAssets({type: 'JavaScript', text: /TypeTwo/});
                 assert.equal(typeTwos.length, 1);
                 assert.equal(assetGraph.findRelations({from: {url: /first\.html$/}, to: typeTwos[0]}).length, 1);
                 assert.equal(assetGraph.findRelations({from: {url: /second\.html$/}, to: typeTwos[0]}).length, 1);
             },
             'first.html and second.html should each have a relation to the externalized "TypeThree" script': function (assetGraph) {
-                var typeThrees = assetGraph.findAssets({type: 'JavaScript', decodedSrc: /TypeThree/});
+                var typeThrees = assetGraph.findAssets({type: 'JavaScript', text: /TypeThree/});
                 assert.equal(typeThrees.length, 1);
                 assert.equal(assetGraph.findRelations({from: {url: /first\.html$/}, to: typeThrees[0]}).length, 1);
                 assert.equal(assetGraph.findRelations({from: {url: /second\.html$/}, to: typeThrees[0]}).length, 1);
@@ -39,7 +39,7 @@ vows.describe('Externalizing and merging identical assets').addBatch({
                 assert.equal(assetGraph.findRelations({
                     from: assetGraph.findAssets({url: /first\.html$/})[0],
                     to: {
-                        decodedSrc: /TypeOne/
+                        text: /TypeOne/
                     }
                 }).length, 2);
             }
