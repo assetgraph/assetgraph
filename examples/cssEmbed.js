@@ -19,11 +19,11 @@ new AssetGraph({root: commandLineOptions.root}).queue(
     transforms.inlineRelations({type: 'CssImage'}),
     function(assetGraph, cb) {
         var initialCssAsset = assetGraph.findAssets({isInitial: true})[0];
-        assetGraph.getSerializedAsset(initialCssAsset, passError(cb, function (src) {
+        assetGraph.getAssetRawSrc(initialCssAsset, passError(cb, function (rawSrc) {
             if (commandLineOptions.o) {
-                fs.writeFile(commandLineOptions.o, src, null, cb);
+                fs.writeFile(commandLineOptions.o, rawSrc, null, cb);
             } else {
-                process.stdout.write(src);
+                process.stdout.write(rawSrc);
                 cb();
             }
         }));
