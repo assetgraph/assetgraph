@@ -25,14 +25,9 @@ vows.describe('Cloning assets').addBatch({
         'then cloning the first Html asset': {
             topic: function (assetGraph) {
                 var indexHtml = assetGraph.findAssets({type: 'Html'})[0],
-                    callback = this.callback;
-                assetGraph.cloneAsset(indexHtml, function (err, assetClone) {
-                    if (err) {
-                        return callback(err);
-                    }
-                    assetGraph.setAssetUrl(assetClone, indexHtml.url.replace(/\.html$/, ".clone.html"));
-                    callback(null, assetGraph);
-                });
+                    assetClone = assetGraph.cloneAsset(indexHtml);
+                assetGraph.setAssetUrl(assetClone, indexHtml.url.replace(/\.html$/, ".clone.html"));
+                return assetGraph;
             },
             'the clone should be in the graph': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/index\.clone\.html$/}).length, 1);
@@ -52,23 +47,9 @@ vows.describe('Cloning assets').addBatch({
             'the graph should contain two inline Css assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css', url: query.isUndefined}).length, 2);
             },
-            'then getting the text of the original and the cloned asset': {
-                topic: function (assetGraph) {
-                    var cb = this.callback;
-                    seq().extend(assetGraph.findAssets({url: /\/index(?:\.clone)?.html/})).
-                        parMap(function (asset) {
-                            assetGraph.getAssetText(asset, this);
-                        }).
-                        seq(function (originalText, cloneText) {
-                            cb(null, originalText, cloneText);
-                        })
-                        ['catch'](this.callback);
-                },
-                'they should be identical': function (err, originalText, cloneText) {
-                    assert.isString(originalText);
-                    assert.isString(cloneText);
-                    assert.equal(originalText, cloneText);
-                }
+            'the text of the original and the cloned asset should be identical': function (assetGraph) {
+                var originalAndCloned = assetGraph.findAssets({url: /\/index(?:\.clone)?.html/});
+                assert.equal(originalAndCloned[0].text, originalAndCloned[1].text);
             }
         }
     }

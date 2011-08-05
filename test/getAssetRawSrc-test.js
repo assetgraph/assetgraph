@@ -13,7 +13,7 @@ vows.describe('get raw src of asset').addBatch({
         },
         'then serializing the Png loaded from disc': {
             topic: function (assetGraph) {
-                assetGraph.getAssetRawSrc(assetGraph.findAssets()[0], this.callback);
+                return assetGraph.getAssetRawSrc(assetGraph.findAssets()[0]);
             },
             'the length should be 8285': function (src) {
                 assert.equal(src.length, 8285);
@@ -21,7 +21,7 @@ vows.describe('get raw src of asset').addBatch({
         },
         'then serializing the Png loaded via http': {
             topic: function (assetGraph) {
-                assetGraph.getAssetRawSrc(assetGraph.findAssets()[1], this.callback);
+                return assetGraph.getAssetRawSrc(assetGraph.findAssets()[1]);
             },
             'the length should be 8285': function (src) {
                 assert.equal(src.length, 8285);

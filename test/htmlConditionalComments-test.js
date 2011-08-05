@@ -18,14 +18,14 @@ vows.describe('Parsing conditional comments in Html').addBatch({
         'then moving the script asset to a different url and getting the Html as text': {
             topic: function (assetGraph) {
                 assetGraph.setAssetUrl(assetGraph.findAssets({type: 'JavaScript'})[0], urlTools.resolveUrl(assetGraph.root, 'fixIE6ForTheLoveOfGod.js'));
-                assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
+                return assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0]);
             },
-            'the conditional comment should still be there and contain the updated <script>': function (src) {
-                assert.notEqual(src.indexOf('Good old'), -1);
-                assert.notEqual(src.indexOf('<script src="fixIE6ForTheLoveOfGod.js"></script>'), -1);
+            'the conditional comment should still be there and contain the updated <script>': function (text) {
+                assert.notEqual(text.indexOf('Good old'), -1);
+                assert.notEqual(text.indexOf('<script src="fixIE6ForTheLoveOfGod.js"></script>'), -1);
             },
-            'the not-Internet Explorer conditional comment construct should be left alone': function (src) {
-                assert.notEqual(src.indexOf('<!--[if !IE]><!-->Not IE<!--<![endif]-->'), -1);
+            'the not-Internet Explorer conditional comment construct should be left alone': function (text) {
+                assert.notEqual(text.indexOf('<!--[if !IE]><!-->Not IE<!--<![endif]-->'), -1);
             },
             'then externalizing the Css and JavaScript and minifying the Html': {
                 topic: function (_, assetGraph) {
@@ -36,13 +36,13 @@ vows.describe('Parsing conditional comments in Html').addBatch({
                 },
                 'and get the Html as text again': {
                     topic: function (assetGraph) {
-                        assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0], this.callback);
+                        return assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0]);
                     },
-                    'the conditional comments should still be there': function (src) {
-                        assert.notEqual(src.indexOf('Good old'), -1);
-                        assert.notEqual(src.indexOf('<script src="fixIE6ForTheLoveOfGod.js"></script>'), -1);
-                        assert.notEqual(src.indexOf('<!--[if !IE]><!-->Not IE<!--<![endif]-->'), -1);
-                        assert.isTrue(/<!--\[if IE\]><link rel="stylesheet" href="[^\"]+\.css"><!\[endif\]-->/.test(src));
+                    'the conditional comments should still be there': function (text) {
+                        assert.notEqual(text.indexOf('Good old'), -1);
+                        assert.notEqual(text.indexOf('<script src="fixIE6ForTheLoveOfGod.js"></script>'), -1);
+                        assert.notEqual(text.indexOf('<!--[if !IE]><!-->Not IE<!--<![endif]-->'), -1);
+                        assert.isTrue(/<!--\[if IE\]><link rel="stylesheet" href="[^\"]+\.css"><!\[endif\]-->/.test(text));
                     }
                 }
             }

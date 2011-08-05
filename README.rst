@@ -103,17 +103,21 @@ are the easiest way to get the objects created. See the section about
 transforms below.
 
 
-asset.getRawSrc(cb)
+asset.url (string)
+------------------
+
+The absolute url of the asset (uses the file: schema if loaded from
+disc). Will be `undefined` for inline assets.
+
+
+asset.rawSrc (getter)
+---------------------
+
+Buffer object representing the undecoded source of the asset.
+
+
+asset.text (getter)
 -------------------
-
-Get a Buffer object representing the undecoded source of the asset.
-
-The method is asynchronous; you must provide a callback which is to be
-called like this (standard node style): `cb(err, rawSrc)`.
-
-
-asset.getText(cb)
------------------
 
 Only supported for text-based assets (subclasses of `assets.Text`)
 such as `assets.Html`, `assets.JavaScript`, and `assets.Css`.
@@ -129,19 +133,16 @@ standard way to specify the charset within the file itself, so
 presently there's no way to load JavaScript from disc if it's not
 utf-8 or ASCII.
 
-The method is asynchronous; you must provide a callback which is to be
-called like this (standard node style): `cb(err, text)`.
 
-
-asset.getParseTree(cb)
-----------------------
+asset.parseTree (getter)
+------------------------
 
 Some asset classes support inspection and manipulation using a high
 level interface. When you're done modifying the parse tree, remember
 to tell the AssetGraph instance that the asset is now dirty by calling
 `asset.markDirty()`.
 
-These are the formats you'll get back:
+These are the formats you'll get:
 
 `assets.Html` and `assets.Xml`
   `jsdom <https://github.com/tmpvar/jsdom>`_ document object.
@@ -160,9 +161,6 @@ These are the formats you'll get back:
   manifest (`CACHE`, `NETWORK`, `REMOTE`). The value is an array with
   an item for each entry in the section. Refer to the source for
   details.
-
-The method is asynchronous; you must provide a callback which is to be
-called like this (standard node style): `cb(err, parseTree)`.
 
 
 asset.markDirty()

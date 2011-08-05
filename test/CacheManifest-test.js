@@ -22,7 +22,7 @@ vows.describe('Cache manifest').addBatch({
             assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
         },
         'the cache manifest has an outgoing relation to an image in the FALLBACK section': function (assetGraph) {
-            var outgoingRelations = assetGraph.findRelations({from: assetGraph.findAssets({type: 'CacheManifest'})[0]}); // FIXME: query
+            var outgoingRelations = assetGraph.findRelations({from: assetGraph.findAssets({type: 'CacheManifest'})[0]});
             assert.equal(outgoingRelations.length, 1);
             assert.equal(outgoingRelations[0].to.type, 'Png');
             assert.equal(outgoingRelations[0].sectionName, 'FALLBACK');
@@ -41,7 +41,7 @@ vows.describe('Cache manifest').addBatch({
             },
             'then get the manifest as text': {
                 topic: function (assetGraph) {
-                    assetGraph.getAssetText(assetGraph.findAssets({type: 'CacheManifest'})[0], this.callback);
+                    return assetGraph.getAssetText(assetGraph.findAssets({type: 'CacheManifest'})[0]);
                 },
                 'it should only point to foo.png once': function (src) {
                     var fooPngMatches = src.match(/\bfoo.png/gm);
@@ -55,7 +55,7 @@ vows.describe('Cache manifest').addBatch({
                 'then move the foo.png asset to a different url and get the manifest as text again': {
                     topic: function (previousSrc, assetGraph) {
                         assetGraph.setAssetUrl(assetGraph.findAssets({url: /foo.png$/})[0], urlTools.resolveUrl(assetGraph.root, 'somewhere/else/quux.png'));
-                        assetGraph.getAssetText(assetGraph.findAssets({type: 'CacheManifest'})[0], this.callback);
+                        return assetGraph.getAssetText(assetGraph.findAssets({type: 'CacheManifest'})[0]);
                     },
                     'there should be no mention of foo.png': function (src) {
                         assert.isNull(src.match(/\bfoo.png/gm));

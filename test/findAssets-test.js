@@ -16,7 +16,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     new assets.Html({text: 'c', foo: 'quux'}),
                     new assets.Css({text: 'd', foo: 'baz'}),
                     new assets.Css({text: 'e'}),
-                    new assets.Png({text: 'f', foo: 'baz'})
+                    new assets.Htc({text: 'f', foo: 'baz'})
                 )
             ).run(this.callback);
         },
@@ -35,18 +35,18 @@ vows.describe('AssetGraph.findAssets').addBatch({
         'then lookup single value of indexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 3);
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
-            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'Htc'}).length, 1);
         },
         'then lookup multiple values of indexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: ['Css', 'Html']}).length, 5);
-            assert.equal(assetGraph.findAssets({type: ['Png', 'Css', 'Html']}).length, 6);
-            assert.equal(assetGraph.findAssets({type: ['Png', 'Html']}).length, 4);
-            assert.equal(assetGraph.findAssets({type: ['Css', 'Png']}).length, 3);
+            assert.equal(assetGraph.findAssets({type: ['Htc', 'Css', 'Html']}).length, 6);
+            assert.equal(assetGraph.findAssets({type: ['Htc', 'Html']}).length, 4);
+            assert.equal(assetGraph.findAssets({type: ['Css', 'Htc']}).length, 3);
         },
         'then lookup multiple properties': function (assetGraph) {
             assert.equal(assetGraph.findAssets({foo: 'baz', type: 'Css'}).length, 1);
             assert.equal(assetGraph.findAssets({foo: 'bar', type: 'Html'}).length, 2);
-            assert.equal(assetGraph.findAssets({foo: 'quux', type: 'Png'}).length, 0);
+            assert.equal(assetGraph.findAssets({foo: 'quux', type: 'Htc'}).length, 0);
         },
         'then lookup based on incoming relations': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html', incoming: {type: 'HtmlAnchor'}}).length, 0);

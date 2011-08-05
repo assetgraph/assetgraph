@@ -26,16 +26,12 @@ vows.describe('Inlining relations').addBatch({
         },
         'then inlining the Css and getting the Html as text': {
             topic: function (assetGraph) {
-                var callback = this.callback;
-                assetGraph.inlineRelation(assetGraph.findRelations({type: 'HtmlStyle'})[0], function (err) {
-                    if (err) {
-                        return callback(err);
-                    }
-                    assetGraph.getAssetText(assetGraph.findAssets({type: 'Html', url: query.isDefined})[0], callback);
-                });
+                assetGraph.inlineRelation(assetGraph.findRelations({type: 'HtmlStyle'})[0]);
+                return assetGraph.getAssetText(assetGraph.findAssets({type: 'Html', url: query.isDefined})[0]);
             },
-            'the CssImage url should be relative to the Html asset': function (src) {
-                var matches = src.match(/url\(some\/directory\/foo\.png\)/g);
+            'the CssImage url should be relative to the Html asset': function (text) {
+                var matches = text.match(/url\(some\/directory\/foo\.png\)/g);
+                assert.isNotNull(matches);
                 assert.equal(matches.length, 2);
             }
         }

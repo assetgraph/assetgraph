@@ -18,19 +18,11 @@ new AssetGraph().queue(
     if (err) {
         throw err;
     }
-    var initialJavaScript = assetGraph.findAssets({isInitial: true})[0],
-        javaScriptAssetsInOrder = assetGraph.collectAssetsPostOrder(initialJavaScript);
     assetGraph.findRelations({type: 'JavaScriptOneInclude'}).forEach(function (relation) {
         assetGraph.detachAndRemoveRelation(relation);
     });
 
-    seq(javaScriptAssetsInOrder)
-        .parMap(function (javaScriptAsset) {
-            assetGraph.getAssetText(javaScriptAsset, this);
-        })
-        .unflatten()
-        .seq(function (texts) {
-            console.log('javascript:' + texts.join(';') + ';void(null);');
-        });
-    }
-);
+    console.log('javascript:' + assetGraph.collectAssetsPostOrder(assetGraph.findAssets({isInitial: true})[0]).map(function (javaScriptAsset) {
+        return assetGraph.getAssetText(javaScriptAsset);
+    }).join(';') + ';void(null)');
+});

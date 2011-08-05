@@ -11,43 +11,42 @@ vows.describe('AssetGraph.findAssets').addBatch({
         topic: function () {
             new AssetGraph().queue(
                 transforms.loadAssets(
-                    new assets.Html({url: 'a', rawSrc: 'a', foo: 'bar'}),
-                    new assets.Html({url: 'b', rawSrc: 'b', foo: 'bar'}),
-                    new assets.Html({url: 'c', rawSrc: 'c', foo: 'quux'}),
-                    new assets.Css({url: 'd', rawSrc: 'd', foo: 'baz'}),
-                    new assets.Css({url: 'e', rawSrc: 'e'}),
-                    new assets.Png({url: 'f', rawSrc: 'f', foo: 'baz'})
+                    new assets.Html({url: 'a', text: 'a', foo: 'bar'}),
+                    new assets.Html({url: 'b', text: 'b', foo: 'bar'}),
+                    new assets.Html({url: 'c', text: 'c', foo: 'quux'}),
+                    new assets.Css({url: 'd', text: 'd', foo: 'baz'}),
+                    new assets.Css({url: 'e', text: 'e'}),
+                    new assets.Png({url: 'f', rawSrc: new Buffer('f'), foo: 'baz'})
                 ),
-                function (assetGraph, cb) {
+                function (assetGraph) {
                     assetGraph.addRelation(new relations.HtmlStyle({
-                        from: assetGraph.findAssets({rawSrc: 'a'})[0],
-                        to: assetGraph.findAssets({rawSrc: 'd'})[0]
+                        from: assetGraph.findAssets({text: 'a'})[0],
+                        to: assetGraph.findAssets({text: 'd'})[0]
                     }));
                     assetGraph.addRelation(new relations.HtmlAnchor({
-                        from: assetGraph.findAssets({rawSrc: 'a'})[0],
-                        to: assetGraph.findAssets({rawSrc: 'b'})[0]
+                        from: assetGraph.findAssets({text: 'a'})[0],
+                        to: assetGraph.findAssets({text: 'b'})[0]
                     }));
                     assetGraph.addRelation(new relations.HtmlAnchor({
-                        from: assetGraph.findAssets({rawSrc: 'a'})[0],
-                        to: assetGraph.findAssets({rawSrc: 'c'})[0]
+                        from: assetGraph.findAssets({text: 'a'})[0],
+                        to: assetGraph.findAssets({text: 'c'})[0]
                     }));
                     assetGraph.addRelation(new relations.HtmlAnchor({
-                        from: assetGraph.findAssets({rawSrc: 'b'})[0],
-                        to: assetGraph.findAssets({rawSrc: 'c'})[0]
+                        from: assetGraph.findAssets({text: 'b'})[0],
+                        to: assetGraph.findAssets({text: 'c'})[0]
                     }));
                     assetGraph.addRelation(new relations.HtmlStyle({
-                        from: assetGraph.findAssets({rawSrc: 'b'})[0],
-                        to: assetGraph.findAssets({rawSrc: 'e'})[0]
+                        from: assetGraph.findAssets({text: 'b'})[0],
+                        to: assetGraph.findAssets({text: 'e'})[0]
                     }));
                     assetGraph.addRelation(new relations.CssImage({
-                        from: assetGraph.findAssets({rawSrc: 'd'})[0],
-                        to: assetGraph.findAssets({rawSrc: 'f'})[0]
+                        from: assetGraph.findAssets({text: 'd'})[0],
+                        to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0]
                     }));
                     assetGraph.addRelation(new relations.CssImage({
-                        from: assetGraph.findAssets({rawSrc: 'e'})[0],
-                        to: assetGraph.findAssets({rawSrc: 'f'})[0]
+                        from: assetGraph.findAssets({text: 'e'})[0],
+                        to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0]
                     }));
-                    process.nextTick(cb);
                 }
             ).run(this.callback);
         },
@@ -57,14 +56,14 @@ vows.describe('AssetGraph.findAssets').addBatch({
         'and lookup relations by multiple indexed properties': function (assetGraph) {
             assert.equal(assetGraph.findRelations({
                 type: 'HtmlAnchor',
-                from: assetGraph.findAssets({rawSrc: 'a'})[0]
+                from: assetGraph.findAssets({text: 'a'})[0]
             }).length, 2);
         },
         'and lookup relations by structured query': function (assetGraph) {
             assert.equal(assetGraph.findRelations({
                 type: 'HtmlAnchor',
                 to: {
-                    rawSrc: 'c',
+                    text: 'c',
                     foo: 'quux'
                 }
             }).length, 2);
@@ -73,7 +72,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
             assert.equal(assetGraph.findRelations({
                 type: ['HtmlAnchor', 'HtmlStyle'],
                 from: {
-                    rawSrc: ['a', 'b']
+                    text: ['a', 'b']
                 },
                 to: {
                     type: ['Html', 'Css']
@@ -84,13 +83,13 @@ vows.describe('AssetGraph.findAssets').addBatch({
             assert.equal(assetGraph.findRelations({
                 type: /CssIm|HtmlAn/,
                 from: {
-                    rawSrc: /^[ad]$/
+                    text: /^[ad]$/
                 }
             }).length, 3);
             assert.equal(assetGraph.findRelations({
                 type: /Style/,
                 from: {
-                    rawSrc: /^a$/
+                    text: /^a$/
                 }
             }).length, 1);
         },
@@ -98,7 +97,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
             assert.equal(assetGraph.findRelations({
                 type: query.not('CssImage'),
                 from: {
-                    rawSrc: query.not('a')
+                    text: query.not('a')
                 }
             }).length, 2);
         },

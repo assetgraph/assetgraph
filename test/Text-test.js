@@ -6,167 +6,201 @@ var vows = require('vows'),
     query = AssetGraph.query;
 
 vows.describe('assets.Text').addBatch({
-    'getText() on assets.Text with rawSrc property': {
+    'get text of assets.Text with rawSrc property': {
         topic: function () {
-            new assets.Text({
+            return new assets.Text({
                 rawSrc: new Buffer('Hello, world!\u263a')
-            }).getText(this.callback);
+            }).text;
         },
         'should return the right value': function (text) {
             assert.equal(text, 'Hello, world!\u263a');
         }
     },
 
-    'getText() on assets.Text with rawSrcProxy': {
+    'get text of assets.Text with rawSrcProxy': {
         topic: function () {
-            new assets.Text({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('Hello, world!\u263a'));
-                    });
-                }
-            }).getText(this.callback);
+            var callback = this.callback,
+                asset = new assets.Text({
+                    rawSrcProxy: function (cb) {
+                        process.nextTick(function () {
+                            cb(null, new Buffer('Hello, world!\u263a'));
+                        });
+                    }
+                });
+            asset.load(function (err) {
+                callback(err, !err && asset.text);
+            });
         },
         'should return the right value': function (text) {
             assert.equal(text, 'Hello, world!\u263a');
         }
     },
 
-    'getText() on assets.Text with text property': {
+    'get text of assets.Text with text property': {
         topic: function () {
-            new assets.Text({
+            return new assets.Text({
                 text: 'Hello, world!\u263a'
-            }).getText(this.callback);
+            }).text;
         },
         'should return the right value': function (text) {
             assert.equal(text, 'Hello, world!\u263a');
         }
     },
 
-    'getRawSrc() on assets.Text with rawSrc property': {
+    'get rawSrc of assets.Text with rawSrc property': {
         topic: function () {
-            new assets.Text({
+            return new assets.Text({
                 rawSrc: new Buffer('Hello, world!\u263a')
-            }).getRawSrc(this.callback);
+            }).rawSrc;
         },
         'should return the right value': function (rawSrc) {
             assert.equal(rawSrc.toString('utf-8'), 'Hello, world!\u263a');
         }
     },
 
-    'getRawSrc() on assets.Text with rawSrcProxy': {
+    'get rawSrc of assets.Text with rawSrcProxy': {
         topic: function () {
-            new assets.Text({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('Hello, world!\u263a'));
-                    });
-                }
-            }).getRawSrc(this.callback);
+            var callback = this.callback,
+                asset = new assets.Text({
+                    rawSrcProxy: function (cb) {
+                        process.nextTick(function () {
+                            cb(null, new Buffer('Hello, world!\u263a'));
+                        });
+                    }
+                });
+            asset.load(function (err) {
+                callback(err, !err && asset.rawSrc);
+            });
         },
         'should return the right value': function (rawSrc) {
             assert.equal(rawSrc.toString('utf-8'), 'Hello, world!\u263a');
         }
     },
 
-    'getRawSrc() on assets.Text with text property': {
+    'get rawSrc of assets.Text with text property': {
         topic: function () {
-            new assets.Text({
+            return new assets.Text({
                 text: 'Hello, world!\u263a'
-            }).getRawSrc(this.callback);
+            }).rawSrc;
         },
         'should return the right value': function (rawSrc) {
             assert.equal(rawSrc.toString('utf-8'), 'Hello, world!\u263a');
         }
     },
 
-    'getText() on assets.Html with rawSrc property': {
+    'get text of assets.Html with rawSrc property': {
         topic: function () {
-            new assets.Html({
+            return new assets.Html({
                 rawSrc: new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>')
-            }).getText(this.callback);
+            }).text;
         },
         'should return the right value': function (text) {
             assert.equal(text, '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
-    'getText() on assets.Html with rawSrcProxy': {
+    'get text of assets.Html with rawSrcProxy': {
         topic: function () {
-            new assets.Html({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'));
-                    });
-                }
-            }).getText(this.callback);
+            var callback = this.callback,
+                asset = new assets.Html({
+                    rawSrcProxy: function (cb) {
+                        process.nextTick(function () {
+                            cb(null, new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'));
+                        });
+                    }
+                });
+            asset.load(function (err) {
+                callback(err, !err && asset.text);
+            });
         },
         'should return the right value': function (text) {
             assert.equal(text, '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
-   'getText() on assets.Html with text property': {
+    'get text of assets.Html with text property': {
         topic: function () {
-            new assets.Html({
+            return new assets.Html({
                 text: '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'
-            }).getText(this.callback);
+            }).text;
         },
         'should return the right value': function (text) {
             assert.equal(text, '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
-    'getRawSrc() on assets.Html with rawSrc property': {
+    'get rawSrc of assets.Html with rawSrc property': {
         topic: function () {
-            new assets.Html({
+            return new assets.Html({
                 rawSrc: new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>')
-            }).getRawSrc(this.callback);
+            }).rawSrc;
         },
         'should return the right value': function (rawSrc) {
             assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
-    'getRawSrc() on assets.Html with rawSrcProxy': {
+    'get rawSrc of assets.Html with rawSrcProxy': {
         topic: function () {
-            new assets.Html({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'));
-                    });
-                }
-            }).getRawSrc(this.callback);
+            var callback = this.callback,
+                asset = new assets.Html({
+                    rawSrcProxy: function (cb) {
+                        process.nextTick(function () {
+                            cb(null, new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'));
+                        });
+                    }
+                });
+            asset.load(function (err) {
+                callback(err, !err && asset.rawSrc);
+            });
         },
         'should return the right value': function (rawSrc) {
             assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
-   'getRawSrc() on assets.Html with text property': {
+    'get rawSrc of assets.Html with text property': {
         topic: function () {
-            new assets.Html({
+            return new assets.Html({
                 text: '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'
-            }).getRawSrc(this.callback);
+            }).rawSrc;
         },
         'should return the right value': function (rawSrc) {
             assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
-    'getText() on assets.Html with rawSrc property and modified parse tree': {
+    'get text of assets.Html with rawSrc property and modified parse tree': {
         topic: function () {
             var htmlAsset = new assets.Html({
                 rawSrc: new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>')
             });
+            htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
+            htmlAsset.markDirty();
+            return htmlAsset.text;
+        },
+        'should return the right value': function (text) {
+            assert.equal(text, '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
+        }
+    },
+
+    'get text of assets.Html with rawSrcProxy and modified parse tree': {
+        topic: function () {
+            var htmlAsset = new assets.Html({
+                rawSrcProxy: function (cb) {
+                    process.nextTick(function () {
+                        cb(null, new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'));
+                    });
+                }
+            });
             var callback = this.callback;
-            htmlAsset.getParseTree(function (err, parseTree) {
+            htmlAsset.load(function (err) {
                 if (err) {
                     return callback(err);
                 }
-                parseTree.body.firstChild.nodeValue = 'Not so much!';
+                htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
                 htmlAsset.markDirty();
-                htmlAsset.getText(callback);
+                callback(null, htmlAsset.text);
             });
         },
         'should return the right value': function (text) {
@@ -174,7 +208,35 @@ vows.describe('assets.Text').addBatch({
         }
     },
 
-    'getText() on assets.Html with rawSrcProxy and modified parse tree': {
+    'get text of assets.Html with text property and modified parse tree': {
+        topic: function () {
+            var htmlAsset = new assets.Html({
+                text: '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'
+            });
+            htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
+            htmlAsset.markDirty();
+            return htmlAsset.text;
+        },
+        'should return the right value': function (text) {
+            assert.equal(text, '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
+        }
+    },
+
+    'get rawSrc of assets.Html with rawSrc property and modified parse tree': {
+        topic: function () {
+            var htmlAsset = new assets.Html({
+                rawSrc: new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>')
+            });
+            htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
+            htmlAsset.markDirty();
+            return htmlAsset.rawSrc;
+        },
+        'should return the right value': function (rawSrc) {
+            assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
+        }
+    },
+
+    'get rawSrc of assets.Html with rawSrcProxy and modified parse tree': {
         topic: function () {
             var htmlAsset = new assets.Html({
                 rawSrcProxy: function (cb) {
@@ -184,53 +246,13 @@ vows.describe('assets.Text').addBatch({
                 }
             });
             var callback = this.callback;
-            htmlAsset.getParseTree(function (err, parseTree) {
+            htmlAsset.load(function (err) {
                 if (err) {
                     return callback(err);
                 }
-                parseTree.body.firstChild.nodeValue = 'Not so much!';
+                htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
                 htmlAsset.markDirty();
-                htmlAsset.getText(callback);
-            });
-        },
-        'should return the right value': function (text) {
-            assert.equal(text, '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
-        }
-    },
-
-    'getText() on assets.Html with text property and modified parse tree': {
-        topic: function () {
-            var htmlAsset = new assets.Html({
-                text: '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'
-            });
-            var callback = this.callback;
-            htmlAsset.getParseTree(function (err, parseTree) {
-                if (err) {
-                    return callback(err);
-                }
-                parseTree.body.firstChild.nodeValue = 'Not so much!';
-                htmlAsset.markDirty();
-                htmlAsset.getText(callback);
-            });
-        },
-        'should return the right value': function (text) {
-            assert.equal(text, '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
-        }
-    },
-
-    'getRawSrc() on assets.Html with rawSrc property and modified parse tree': {
-        topic: function () {
-            var htmlAsset = new assets.Html({
-                rawSrc: new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>')
-            });
-            var callback = this.callback;
-            htmlAsset.getParseTree(function (err, parseTree) {
-                if (err) {
-                    return callback(err);
-                }
-                parseTree.body.firstChild.nodeValue = 'Not so much!';
-                htmlAsset.markDirty();
-                htmlAsset.getRawSrc(callback);
+                callback(null, htmlAsset.rawSrc);
             });
         },
         'should return the right value': function (rawSrc) {
@@ -238,44 +260,14 @@ vows.describe('assets.Text').addBatch({
         }
     },
 
-    'getRawSrc() on assets.Html with rawSrcProxy and modified parse tree': {
-        topic: function () {
-            var htmlAsset = new assets.Html({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'));
-                    });
-                }
-            });
-            var callback = this.callback;
-            htmlAsset.getParseTree(function (err, parseTree) {
-                if (err) {
-                    return callback(err);
-                }
-                parseTree.body.firstChild.nodeValue = 'Not so much!';
-                htmlAsset.markDirty();
-                htmlAsset.getRawSrc(callback);
-            });
-        },
-        'should return the right value': function (rawSrc) {
-            assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
-        }
-    },
-
-    'getRawSrc() on assets.Html with text property and modified parse tree': {
+    'get rawSrc of assets.Html with text property and modified parse tree': {
         topic: function () {
             var htmlAsset = new assets.Html({
                 text: '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>'
             });
-            var callback = this.callback;
-            htmlAsset.getParseTree(function (err, parseTree) {
-                if (err) {
-                    return callback(err);
-                }
-                parseTree.body.firstChild.nodeValue = 'Not so much!';
-                htmlAsset.markDirty();
-                htmlAsset.getRawSrc(callback);
-            });
+            htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
+            htmlAsset.markDirty();
+            return htmlAsset.rawSrc;
         },
         'should return the right value': function (rawSrc) {
             assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');

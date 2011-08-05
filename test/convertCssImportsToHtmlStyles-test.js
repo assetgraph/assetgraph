@@ -39,7 +39,7 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
             },
             'then get the Html asset as text': {
                 topic: function (assetGraph) {
-                    assetGraph.getAssetText(assetGraph.findAssets({type: 'Html'})[0], this.callback);
+                    return assetGraph.getAssetText(assetGraph.findAssets({type: 'Html'})[0]);
                 },
                 'the <link rel="stylesheet"> tags should be in the right order': function (text) {
                     assert.deepEqual(text.match(/href=\"([^\'\"]+)\"/g),
@@ -57,7 +57,7 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
                     },
                     'then get the parseTree of the resulting Css asset': {
                         topic: function (assetGraph) {
-                            assetGraph.findAssets({type: 'Css'})[0].getParseTree(this.callback);
+                            return assetGraph.findAssets({type: 'Css'})[0].parseTree;
                         },
                         'it should contain the rules from the original Css assets in the right order': function (cssStyleSheet) {
                             assert.equal(cssStyleSheet.cssRules.length, 4);

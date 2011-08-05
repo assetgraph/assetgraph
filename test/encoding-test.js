@@ -19,7 +19,7 @@ vows.describe('Charset test').addBatch({
         },
         'then reserializing the Html asset': {
             topic: function (assetGraph) {
-                assetGraph.getAssetRawSrc(assetGraph.findAssets()[0], this.callback);
+                return assetGraph.getAssetRawSrc(assetGraph.findAssets()[0]);
             },
             'the src should be encoded as iso-8859-1 again': function (rawSrc) {
                 assert.notEqual(rawSrc.toString('binary').indexOf("\u00e6\u00f8\u00e5\u00c6\u00d8\u00c5"), -1);

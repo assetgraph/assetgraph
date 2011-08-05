@@ -27,7 +27,7 @@ vows.describe('Compiling CoffeeScript to JavaScript').addBatch({
             },
             'then get the Html asset as text': {
                 topic: function (assetGraph) {
-                    assetGraph.getAssetText(assetGraph.findAssets({type: 'Html'})[0], this.callback);
+                    return assetGraph.getAssetText(assetGraph.findAssets({type: 'Html'})[0]);
                 },
                 'there should be no occurrences of "text/coffeescript"': function (text) {
                     assert.equal(text.indexOf('text/coffeescript'), -1);

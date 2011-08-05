@@ -32,23 +32,16 @@ vows.describe('Postprocess images').addBatch({
             },
             'then fetching the source of the two images': {
                 topic: function (assetGraph) {
-                    var callback = this.callback;
-                    seq()
-                        .extend(assetGraph.findRelations({type: 'CssImage'}))
-                        .parMap(function (cssImage) {
-                            cssImage.to.getRawSrc(this);
-                        })
-                        .seq(function (firstSrc, secondSrc) {
-                            callback(null, firstSrc, secondSrc);
-                        })
-                        ['catch'](callback);
+                    return assetGraph.findRelations({type: 'CssImage'}).map(function (cssImageRelation) {
+                        return cssImageRelation.to.rawSrc;
+                    });
                 },
-                'should return something that looks like Pngs': function (err, firstSrc, secondSrc) {
-                    assert.deepEqual(_.toArray(firstSrc.slice(0, 4)), [0x89, 0x50, 0x4e, 0x47]);
-                    assert.deepEqual(_.toArray(secondSrc.slice(0, 4)), [0x89, 0x50, 0x4e, 0x47]);
+                'should return something that looks like Pngs': function (rawSrcs) {
+                    assert.deepEqual(_.toArray(rawSrcs[0].slice(0, 4)), [0x89, 0x50, 0x4e, 0x47]);
+                    assert.deepEqual(_.toArray(rawSrcs[1].slice(0, 4)), [0x89, 0x50, 0x4e, 0x47]);
                 },
-                'the second one should be smaller than the first': function (err, firstSrc, secondSrc) {
-                    assert.lesser(secondSrc.length, firstSrc.length);
+                'the second one should be smaller than the first': function (rawSrcs) {
+                    assert.lesser(rawSrcs[1].length, rawSrcs[0].length);
                 }
             }
         }
