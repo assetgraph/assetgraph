@@ -41,7 +41,7 @@ vows.describe('Cache manifest').addBatch({
             },
             'then get the manifest as text': {
                 topic: function (assetGraph) {
-                    return assetGraph.getAssetText(assetGraph.findAssets({type: 'CacheManifest'})[0]);
+                    return assetGraph.findAssets({type: 'CacheManifest'})[0].text;
                 },
                 'it should only point to foo.png once': function (src) {
                     var fooPngMatches = src.match(/\bfoo.png/gm);
@@ -54,8 +54,8 @@ vows.describe('Cache manifest').addBatch({
                 },
                 'then move the foo.png asset to a different url and get the manifest as text again': {
                     topic: function (previousSrc, assetGraph) {
-                        assetGraph.setAssetUrl(assetGraph.findAssets({url: /foo.png$/})[0], urlTools.resolveUrl(assetGraph.root, 'somewhere/else/quux.png'));
-                        return assetGraph.getAssetText(assetGraph.findAssets({type: 'CacheManifest'})[0]);
+                        assetGraph.findAssets({url: /foo.png$/})[0].url = urlTools.resolveUrl(assetGraph.root, 'somewhere/else/quux.png');
+                        return assetGraph.findAssets({type: 'CacheManifest'})[0].text;
                     },
                     'there should be no mention of foo.png': function (src) {
                         assert.isNull(src.match(/\bfoo.png/gm));

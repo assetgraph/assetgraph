@@ -28,8 +28,8 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
         },
         'then move one of the assets pointed to by a JavaScriptOneGetStaticUrl relation and get the JavaScript asset as text': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], urlTools.resolveUrl(assetGraph.root, 'static/a76a76a7a.json'));
-                return assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0]);
+                assetGraph.findAssets({url: /\/a.json/})[0].url = urlTools.resolveUrl(assetGraph.root, 'static/a76a76a7a.json');
+                return assetGraph.findAssets({type: 'JavaScript'})[0].text;
             },
             'the resulting JavaScript should map the url correctly': function (src) {
                 assert.equal(new Function(src + 'return theThing;')(), 'static/a76a76a7a.json');
@@ -49,7 +49,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                     transforms.loadAssets({
                         url: 'file://' + __dirname + '/getStaticUrl/index2.html',
                         type: 'Html',
-                        text: "<html><body><script>" + assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0]) + "</script></body></html>"
+                        text: "<html><body><script>" + assetGraph.findAssets({type: 'JavaScript'})[0].text + "</script></body></html>"
                     }),
                     transforms.populate()
                 ).run(this.callback);
@@ -70,8 +70,8 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             },
             'then move one of the assets pointed to by a JavaScriptOneGetStaticUrl relation and get the JavaScript asset as text': {
                 topic: function (assetGraph) {
-                    assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/a.json/})[0], urlTools.resolveUrl(assetGraph.root, 'static/a76a76a7a.json'));
-                    return assetGraph.getAssetText(assetGraph.findAssets({type: 'JavaScript'})[0]);
+                    assetGraph.findAssets({url: /\/a.json/})[0].url = urlTools.resolveUrl(assetGraph.root, 'static/a76a76a7a.json');
+                    return assetGraph.findAssets({type: 'JavaScript'})[0].text;
                 },
                 'the resulting JavaScript should map the url correctly': function (src) {
                     assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');

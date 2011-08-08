@@ -39,7 +39,7 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
             },
             'then get the Html asset as text': {
                 topic: function (assetGraph) {
-                    return assetGraph.getAssetText(assetGraph.findAssets({type: 'Html'})[0]);
+                    return assetGraph.findAssets({type: 'Html'})[0].text;
                 },
                 'the <link rel="stylesheet"> tags should be in the right order': function (text) {
                     assert.deepEqual(text.match(/href=\"([^\'\"]+)\"/g),
@@ -69,11 +69,11 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
                     },
                     'then change the url of the Html asset': {
                         topic: function (assetGraph) {
-                            assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html'})[0], urlTools.resolveUrl(assetGraph.root, 'subdir/index2.html'));
+                            assetGraph.findAssets({type: 'Html'})[0].url = urlTools.resolveUrl(assetGraph.root, 'subdir/index2.html');
                             return assetGraph;
                         },
                         'the CssAlphaImageLoader relation should be relative to the new Html url': function (assetGraph) {
-                            assert.equal(assetGraph.findRelations({type: 'CssAlphaImageLoader'})[0]._getRawUrlString(), '../foo.png');
+                            assert.equal(assetGraph.findRelations({type: 'CssAlphaImageLoader'})[0].url, '../foo.png');
                         }
                     }
                 }

@@ -21,7 +21,7 @@ vows.describe('flattenStaticIncludes transform').addBatch({
                 assetGraph.runTransform(transforms.flattenStaticIncludes({type: 'Html'}), this.callback);
             },
             'the injected <script> tags should be in the right order': function (assetGraph) {
-                assert.deepEqual(assetGraph.findRelations({from: assetGraph.findAssets({type: 'Html'})[0]}).map(function (relation) {return relation._getRawUrlString();}),
+                assert.deepEqual(assetGraph.findRelations({from: assetGraph.findAssets({type: 'Html'})[0]}).map(function (relation) {return relation.url;}),
                                 [
                                     'a.js',
                                     'b.js',

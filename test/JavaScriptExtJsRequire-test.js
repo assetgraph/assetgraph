@@ -31,7 +31,7 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
             },
             'the graph should contain two HtmlScript relations pointing at /Foo/Bar.js and the inline script, respectively': function (assetGraph) {
                 var htmlScriptUrls = assetGraph.findRelations({from: {isInitial: true}, type: 'HtmlScript'}).map(function (relation) {
-                    return relation._getRawUrlString();
+                    return relation.url;
                 });
                 assert.deepEqual(htmlScriptUrls, [
                     '3rdparty/ext/src/core/src/lang/SomethingInCoreLang.js',

@@ -17,8 +17,8 @@ vows.describe('Parsing conditional comments in Html').addBatch({
         },
         'then moving the script asset to a different url and getting the Html as text': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'JavaScript'})[0], urlTools.resolveUrl(assetGraph.root, 'fixIE6ForTheLoveOfGod.js'));
-                return assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0]);
+                assetGraph.findAssets({type: 'JavaScript'})[0].url = urlTools.resolveUrl(assetGraph.root, 'fixIE6ForTheLoveOfGod.js');
+                return assetGraph.findAssets({url: /index\.html$/})[0].text;
             },
             'the conditional comment should still be there and contain the updated <script>': function (text) {
                 assert.notEqual(text.indexOf('Good old'), -1);
@@ -36,7 +36,7 @@ vows.describe('Parsing conditional comments in Html').addBatch({
                 },
                 'and get the Html as text again': {
                     topic: function (assetGraph) {
-                        return assetGraph.getAssetText(assetGraph.findAssets({url: /index\.html$/})[0]);
+                        return assetGraph.findAssets({url: /index\.html$/})[0].text;
                     },
                     'the conditional comments should still be there': function (text) {
                         assert.notEqual(text.indexOf('Good old'), -1);

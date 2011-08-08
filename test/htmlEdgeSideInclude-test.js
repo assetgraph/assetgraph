@@ -26,11 +26,11 @@ vows.describe('Edge side include test').addBatch({
         },
         'then move the index.html one subdir down': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({url: /\/index\.html/})[0], urlTools.resolveUrl(assetGraph.root, 'foo/index.html'));
+                assetGraph.findAssets({url: /\/index\.html/})[0].url = urlTools.resolveUrl(assetGraph.root, 'foo/index.html');
                 return assetGraph;
             },
             'the url of the unpopulated HtmlEdgeSideInclude relation should be updated': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({to: {url: /\.php$/}, type: 'HtmlEdgeSideInclude'}, true)[0]._getRawUrlString(),
+                assert.equal(assetGraph.findRelations({to: {url: /\.php$/}, type: 'HtmlEdgeSideInclude'}, true)[0].url,
                              '../dynamicStuff/getTitleForReferringPage.php');
             }
         }

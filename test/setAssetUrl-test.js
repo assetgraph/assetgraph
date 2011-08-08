@@ -25,7 +25,7 @@ vows.describe('Changing the url of assets').addBatch({
         'then moving the first Html asset one level down': {
             topic: function (assetGraph) {
                 var initialHtml = assetGraph.findAssets({type: 'Html'})[0];
-                assetGraph.setAssetUrl(initialHtml, urlTools.resolveUrl(assetGraph.root, 'bogus/index.html'));
+                initialHtml.url = urlTools.resolveUrl(assetGraph.root, 'bogus/index.html');
                 return assetGraph;
             },
             'the relative url of the anchor relation should have changed': function (assetGraph) {
@@ -35,7 +35,7 @@ vows.describe('Changing the url of assets').addBatch({
             'then moving the other page one level down': {
                 topic: function (assetGraph) {
                     var otherHtml = assetGraph.findAssets({type: 'Html'})[1];
-                    assetGraph.setAssetUrl(otherHtml, urlTools.resolveUrl(assetGraph.root, 'fluff/otherpage.html'));
+                    otherHtml.url = urlTools.resolveUrl(assetGraph.root, 'fluff/otherpage.html');
                     return assetGraph;
                 },
                 'the relative url of the anchor relation should be updated': function (assetGraph) {
@@ -96,7 +96,7 @@ vows.describe('Changing the url of assets').addBatch({
         },
         'then moving the Html asset one level down': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html', url: query.isDefined})[0], urlTools.resolveUrl(assetGraph.root, 'subdir/index.html'));
+                assetGraph.findAssets({type: 'Html', url: query.isDefined})[0].url = urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
                 return assetGraph;
             },
             'the CssBehavior url should be relative to /subdir': function (assetGraph) {

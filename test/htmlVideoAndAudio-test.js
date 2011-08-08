@@ -25,11 +25,11 @@ vows.describe('<video> and <audio> test').addBatch({
         },
         'then change the url of the main Html document': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html'})[0], 'http://example.com/foo/bar.html');
+                assetGraph.findAssets({type: 'Html'})[0].url = 'http://example.com/foo/bar.html';
                 return assetGraph;
             },
             'the relative urls of the relations should begin with ../': function (assetGraph) {
-                assert.deepEqual(assetGraph.findRelations({}, true).map(function (relation) {return relation._getRawUrlString();}),
+                assert.deepEqual(assetGraph.findRelations({}, true).map(function (relation) {return relation.url;}),
                                  [
                                      '../movie1.mp4',
                                      '../movie1.jpg',

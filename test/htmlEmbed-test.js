@@ -19,15 +19,15 @@ vows.describe('<embed src="..."> test').addBatch({
             assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true).length, 1);
         },
         'the urls of the HtmlEmbed relation should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true)[0]._getRawUrlString(), 'foo.swf');
+            assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true)[0].url, 'foo.swf');
         },
         'then move the index.html asset one subdir down': {
             topic: function (assetGraph) {
-                assetGraph.setAssetUrl(assetGraph.findAssets({type: 'Html'})[0], urlTools.resolveUrl(assetGraph.root, 'foo/index.html'));
+                assetGraph.findAssets({type: 'Html'})[0].url = urlTools.resolveUrl(assetGraph.root, 'foo/index.html');
                 return assetGraph;
             },
             'the urls of the HtmlEmbed relation should have ../ prepended': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true)[0]._getRawUrlString(), '../foo.swf');
+                assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true)[0].url, '../foo.swf');
             }
         }
     }
