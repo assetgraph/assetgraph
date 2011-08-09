@@ -15,16 +15,16 @@ vows.describe('get raw src of asset').addBatch({
             topic: function (assetGraph) {
                 return assetGraph.findAssets()[0].rawSrc;
             },
-            'the length should be 8285': function (src) {
-                assert.equal(src.length, 8285);
+            'the length should be 8285': function (rawSrc) {
+                assert.equal(rawSrc.length, 8285);
             }
         },
         'then serializing the Png loaded via http': {
             topic: function (assetGraph) {
                 return assetGraph.findAssets()[1].rawSrc;
             },
-            'the length should be 8285': function (src) {
-                assert.equal(src.length, 8285);
+            'the length should be 8285': function (rawSrc) {
+                assert.equal(rawSrc.length, 8285);
             }
         }
     }
