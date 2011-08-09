@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms,
     query = AssetGraph.query;
@@ -21,7 +22,7 @@ vows.describe('flattenStaticIncludes transform').addBatch({
                 assetGraph.runTransform(transforms.flattenStaticIncludes({type: 'Html'}), this.callback);
             },
             'the injected <script> tags should be in the right order': function (assetGraph) {
-                assert.deepEqual(assetGraph.findRelations({from: assetGraph.findAssets({type: 'Html'})[0]}).map(function (relation) {return relation.url;}),
+                assert.deepEqual(_.pluck(assetGraph.findRelations({from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'),
                                 [
                                     'a.js',
                                     'b.js',

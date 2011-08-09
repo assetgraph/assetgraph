@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms,
     query = AssetGraph.query;
@@ -29,7 +30,7 @@ vows.describe('<video> and <audio> test').addBatch({
                 return assetGraph;
             },
             'the relative urls of the relations should begin with ../': function (assetGraph) {
-                assert.deepEqual(assetGraph.findRelations({}, true).map(function (relation) {return relation.url;}),
+                assert.deepEqual(_.pluck(assetGraph.findRelations({}, true), 'href'),
                                  [
                                      '../movie1.mp4',
                                      '../movie1.jpg',
