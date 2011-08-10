@@ -2,8 +2,7 @@ var vows = require('vows'),
     assert = require('assert'),
     seq = require('seq'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
-    query = AssetGraph.query;
+    transforms = AssetGraph.transforms;
 
 vows.describe('Cloning assets').addBatch({
     'After loading a test case': {
@@ -20,7 +19,7 @@ vows.describe('Cloning assets').addBatch({
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
         },
         'the graph should contain a single inline Css asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css', url: query.isUndefined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'Css', isInline: true}).length, 1);
         },
         'then cloning the first Html asset': {
             topic: function (assetGraph) {
@@ -45,7 +44,7 @@ vows.describe('Cloning assets').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
             },
             'the graph should contain two inline Css assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Css', url: query.isUndefined}).length, 2);
+                assert.equal(assetGraph.findAssets({type: 'Css', isInline: true}).length, 2);
             },
             'the text of the original and the cloned asset should be identical': function (assetGraph) {
                 var originalAndCloned = assetGraph.findAssets({url: /\/index(?:\.clone)?.html/});

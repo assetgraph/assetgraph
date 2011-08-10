@@ -27,7 +27,7 @@ vows.describe('Inlining relations').addBatch({
         'then inlining the Css and getting the Html as text': {
             topic: function (assetGraph) {
                 assetGraph.inlineRelation(assetGraph.findRelations({type: 'HtmlStyle'})[0]);
-                return assetGraph.findAssets({type: 'Html', url: query.isDefined})[0].text;
+                return assetGraph.findAssets({type: 'Html', isInline: true})[0].text;
             },
             'the CssImage url should be relative to the Html asset': function (text) {
                 var matches = text.match(/url\(some\/directory\/foo\.png\)/g);

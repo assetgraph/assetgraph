@@ -2,8 +2,7 @@ var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
-    query = AssetGraph.query;
+    transforms = AssetGraph.transforms;
 
 vows.describe('Changing the url of assets').addBatch({
     'After loading a test case with three assets': {
@@ -60,15 +59,15 @@ vows.describe('Changing the url of assets').addBatch({
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
         },
         'the graph should a single inline Html asset (conditional comment)': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html', url: query.isUndefined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'Html', isInline: true}).length, 1);
         },
         'the graph should a single non-inline Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html', url: query.isDefined}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'Html', isInline: false}).length, 1);
         },
         'then moving the Html asset one level down': {
             topic: function (assetGraph) {
                 assetGraph.queue(
-                    transforms.moveAssets({type: 'Html', url: query.isDefined}, function (asset) {
+                    transforms.moveAssets({type: 'Html', isInline: false}, function (asset) {
                         return urlTools.resolveUrl(assetGraph.root, "subdir/index.html");
                     })
                 ).run(this.callback);
@@ -96,7 +95,7 @@ vows.describe('Changing the url of assets').addBatch({
         },
         'then moving the Html asset one level down': {
             topic: function (assetGraph) {
-                assetGraph.findAssets({type: 'Html', url: query.isDefined})[0].url = urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
+                assetGraph.findAssets({type: 'Html', isInline: false})[0].url = urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
                 return assetGraph;
             },
             'the CssBehavior url should be relative to /subdir': function (assetGraph) {

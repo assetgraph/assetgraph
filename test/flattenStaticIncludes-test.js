@@ -15,7 +15,7 @@ vows.describe('flattenStaticIncludes transform').addBatch({
         },
         'the graph should contain 10 JavaScript assets, including two inline ones': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 10);
-            assert.equal(assetGraph.findAssets({type: 'JavaScript', url: query.isUndefined}).length, 2);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: true}).length, 2);
         },
         'then run the flattenStaticIncludes transform on the Html asset': {
             topic: function (assetGraph) {
