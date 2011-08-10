@@ -17,7 +17,7 @@ vows.describe('Remove empty assets').addBatch({
         },
         'then running the removeEmptyAssets transform on Css and JavaScript assets': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.removeEmptyAssets({type: query.or('Css', 'JavaScript')})).run(this.callback);
+                assetGraph.queue(transforms.removeAssets({isEmpty: true, type: query.or('Css', 'JavaScript')})).run(this.callback);
             },
             'the graph should contain 1 asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets().length, 1);
