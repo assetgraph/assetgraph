@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms,
     resolvers = require('../lib/resolvers'),
@@ -30,10 +31,7 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
                 assetGraph.queue(transforms.flattenStaticIncludes({isInitial: true})).run(this.callback);
             },
             'the graph should contain two HtmlScript relations pointing at /Foo/Bar.js and the inline script, respectively': function (assetGraph) {
-                var htmlScriptUrls = assetGraph.findRelations({from: {isInitial: true}, type: 'HtmlScript'}).map(function (relation) {
-                    return relation.url;
-                });
-                assert.deepEqual(htmlScriptUrls, [
+                assert.deepEqual(_.pluck(assetGraph.findRelations({from: {isInitial: true}, type: 'HtmlScript'}), 'href'), [
                     '3rdparty/ext/src/core/src/lang/SomethingInCoreLang.js',
                     '3rdparty/ext/src/core/src/util/SomethingInCoreUtil.js',
                     'Foo/Bar.js',

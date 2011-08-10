@@ -1,4 +1,5 @@
-var vows = require('vows'),
+var _ = require('underscore'),
+    vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
@@ -19,8 +20,8 @@ vows.describe('<object><param name="src" value="..."></object> test').addBatch({
             assert.equal(assetGraph.findRelations({type: 'HtmlObject'}, true).length, 3);
         },
         'the urls of the HtmlObject relations should be correct': function (assetGraph) {
-            assert.deepEqual(assetGraph.findRelations({type: 'HtmlObject'}, true).map(function (relation) {return relation.url;}),
-                            ['themovie.swf', 'theothermovie.swf', 'yetanothermovie.swf']);
+            assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlObject'}, true), 'href'),
+                             ['themovie.swf', 'theothermovie.swf', 'yetanothermovie.swf']);
         },
         'then move the index.html asset one subdir down': {
             topic: function (assetGraph) {
@@ -28,7 +29,7 @@ vows.describe('<object><param name="src" value="..."></object> test').addBatch({
                 return assetGraph;
             },
             'the urls of the HtmlObject relations should have ../ prepended': function (assetGraph) {
-                assert.deepEqual(assetGraph.findRelations({type: 'HtmlObject'}, true).map(function (relation) {return relation.url;}),
+                assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlObject'}, true), 'href'),
                                  ['../themovie.swf', '../theothermovie.swf', '../yetanothermovie.swf']);
             }
         }
