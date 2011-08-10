@@ -27,11 +27,19 @@ vows.describe('Inlining relations').addBatch({
         'then inlining the Css and getting the Html as text': {
             topic: function (assetGraph) {
                 assetGraph.inlineRelation(assetGraph.findRelations({type: 'HtmlStyle'})[0]);
-                return assetGraph.findAssets({type: 'Html', isInline: true})[0].text;
+                return assetGraph;
             },
-            'the CssImage url should be relative to the Html asset': function (text) {
-                var matches = text.match(/url\(some\/directory\/foo\.png\)/g);
+            'there should be exactly one inline Css asset': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Css', isInline: true}).length, 1);
+            },
+            'the CssImage href should be relative to the Html asset': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'CssImage'})[0].href, 'some/directory/foo.png');
+            },
+            'the CssImage as found in the reserialized text of the Html asset should be relative to the Html asset': function (assetGraph) {
+                var text = assetGraph.findAssets({type: 'Html'})[0].text,
+                    matches = text.match(/url\((.*?foo\.png)\)/g);
                 assert.isNotNull(matches);
+                assert.equal(matches[1], "url(some\/directory\/foo.png)");
                 assert.equal(matches.length, 2);
             }
         }
