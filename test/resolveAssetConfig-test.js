@@ -1,12 +1,25 @@
 var vows = require('vows'),
     assert = require('assert'),
+    passError = require('../lib/util/passError'),
     AssetGraph = require('../lib/AssetGraph'),
     assetGraphRoot = __dirname + '/resolveAssetConfig/';
 
-function resolveAssetConfig(assetConfig, fromUrl, cb) {
+function resolveAssetConfig(assetConfig, fromUrl) {
     return function () {
         var assetGraph = new AssetGraph({root: assetGraphRoot});
-        AssetGraph.assets.resolveConfig(assetConfig, fromUrl || assetGraph.root, assetGraph, cb || this.callback);
+        AssetGraph.assets.resolveConfig(assetConfig, fromUrl || assetGraph.root, assetGraph, this.callback);
+    };
+}
+
+function resolveAssetConfigAndEnsureType(assetConfig, fromUrl) {
+    return function () {
+        var callback = this.callback,
+            assetGraph = new AssetGraph({root: assetGraphRoot});
+        AssetGraph.assets.resolveConfig(assetConfig, fromUrl || assetGraph.root, assetGraph, passError(callback, function (resolvedAssetConfig) {
+            AssetGraph.assets.ensureAssetConfigHasType(resolvedAssetConfig, passError(callback, function () {
+                callback(null, resolvedAssetConfig);
+            }));
+        }));
     };
 }
 
@@ -44,14 +57,14 @@ vows.describe('resolveAssetConfig').addBatch({
         }
     },
     'expand dir without trailing slash': {
-        topic: resolveAssetConfig('subdir'),
+        topic: resolveAssetConfigAndEnsureType('subdir'),
         'should resolve to dir/index.html': function (resolvedAssetConfig) {
             assert.equal(resolvedAssetConfig.type, 'Html');
             assert.equal(resolvedAssetConfig.url, 'file://' + assetGraphRoot + 'subdir/index.html');
         }
     },
     'expand dir with trailing slash': {
-        topic: resolveAssetConfig('subdir'),
+        topic: resolveAssetConfigAndEnsureType('subdir'),
         'should resolve to dir/index.html': function (resolvedAssetConfig) {
             assert.equal(resolvedAssetConfig.type, 'Html');
             assert.equal(resolvedAssetConfig.url, 'file://' + assetGraphRoot + 'subdir/index.html');

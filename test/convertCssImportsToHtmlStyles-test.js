@@ -73,7 +73,7 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
                             return assetGraph;
                         },
                         'the CssAlphaImageLoader relation should be relative to the new Html url': function (assetGraph) {
-                            assert.equal(assetGraph.findRelations({type: 'CssAlphaImageLoader'})[0].url, '../foo.png');
+                            assert.equal(assetGraph.findRelations({type: 'CssAlphaImageLoader'})[0].href, '../foo.png');
                         }
                     }
                 }

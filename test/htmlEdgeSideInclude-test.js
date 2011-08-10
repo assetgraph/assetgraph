@@ -30,7 +30,7 @@ vows.describe('Edge side include test').addBatch({
                 return assetGraph;
             },
             'the url of the unpopulated HtmlEdgeSideInclude relation should be updated': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({to: {url: /\.php$/}, type: 'HtmlEdgeSideInclude'}, true)[0].url,
+                assert.equal(assetGraph.findRelations({to: {url: /\.php$/}, type: 'HtmlEdgeSideInclude'}, true)[0].href,
                              '../dynamicStuff/getTitleForReferringPage.php');
             }
         }
