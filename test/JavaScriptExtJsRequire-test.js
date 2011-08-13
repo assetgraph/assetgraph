@@ -75,7 +75,6 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
                     return assetGraph;
                 },
                 'the Ext.require(\'Foo.Bar\', function () {...}); statement should have turned into Ext.require([], function () {...}': function (assetGraph) {
-                    console.warn(assetGraph.findAssets({isInline: true, type: 'JavaScript'})[0].text);
                     assert.notEqual(assetGraph.findAssets({isInline: true, type: 'JavaScript'})[0].text.indexOf("Ext.require([]"), -1);
                 },
                 'then detach the next Ext.require relation from the inline script': {
