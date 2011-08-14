@@ -1,5 +1,5 @@
 Ext.define('Quux.Bar', {
-    'extends': 'Quux.Base',
+    extend: 'Quux.Base',
     requires: ['Quux.Baz'],
     mixins: ['Quux.SomeMixin'],
     uses: 'Quux.SomethingLazyLoaded',
