@@ -1,0 +1,1 @@
+one.include('b.js');
