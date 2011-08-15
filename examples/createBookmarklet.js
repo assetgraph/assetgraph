@@ -13,16 +13,13 @@ var AssetGraph = require('../lib/AssetGraph'),
 new AssetGraph().queue(
     transforms.loadAssets(commandLineOptions._),
     transforms.populate(),
-    transforms.minifyAssets()
-).run(function (err, assetGraph) {
-    if (err) {
-        throw err;
+    transforms.minifyAssets(),
+    function (assetGraph) {
+        assetGraph.findRelations({type: 'JavaScriptOneInclude'}).forEach(function (relation) {
+            relation.from.detachRelation(relation);
+        });
+        console.log('javascript:' + assetGraph.collectAssetsPostOrder(assetGraph.findAssets({isInitial: true})[0]).map(function (javaScriptAsset) {
+            return javaScriptAsset.text;
+        }).join(';') + ';void(null)');
     }
-    assetGraph.findRelations({type: 'JavaScriptOneInclude'}).forEach(function (relation) {
-        assetGraph.detachAndRemoveRelation(relation);
-    });
-
-    console.log('javascript:' + assetGraph.collectAssetsPostOrder(assetGraph.findAssets({isInitial: true})[0]).map(function (javaScriptAsset) {
-        return assetGraph.getAssetText(javaScriptAsset);
-    }).join(';') + ';void(null)');
-});
+).run();
