@@ -16,7 +16,7 @@ new AssetGraph().queue(
     transforms.minifyAssets(),
     function (assetGraph) {
         assetGraph.findRelations({type: 'JavaScriptOneInclude'}).forEach(function (relation) {
-            relation.from.detachRelation(relation);
+            relation.detach();
         });
         console.log('javascript:' + assetGraph.collectAssetsPostOrder(assetGraph.findAssets({isInitial: true})[0]).map(function (javaScriptAsset) {
             return javaScriptAsset.text;

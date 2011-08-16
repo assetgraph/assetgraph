@@ -17,9 +17,9 @@ vows.describe('css @import').addBatch({
         'the graph should contain one CssImport relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CssImport'}).length, 1);
         },
-        'then removing the CssImport relation': {
+        'then detaching the CssImport relation': {
             topic: function (assetGraph) {
-                assetGraph.findRelations({type: 'CssImport'})[0].remove();
+                assetGraph.findRelations({type: 'CssImport'})[0].detach();
                 return assetGraph;
             },
             'there should only be a single rule left in index.css': function (assetGraph) {
