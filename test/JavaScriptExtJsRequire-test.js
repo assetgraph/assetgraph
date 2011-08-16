@@ -37,8 +37,8 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
                     'Foo/Bar.js',
                     'quuxroot/Base.js',
                     'quuxroot/Baz.js',
+                    'quuxroot/SomethingElse.js',
                     'quuxroot/SomeMixin.js',
-                    'quuxroot/SomethingLazyLoaded.js',
                     'quuxroot/Bar.js',
                     undefined
                 ]);
