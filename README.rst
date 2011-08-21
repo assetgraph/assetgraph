@@ -5,8 +5,8 @@ AssetGraph is an extensible, `node.js <http://nodejs.org/>`_-based
 framework for manipulating and optimizing web pages and web
 applications. It's the core of the third generation of the production
 builder tool we are using at One.com for some of our web apps. It's in
-a somewhat usable early alpha state, but still likely to undergo
-massive changes.
+a working state, but as indicated by the pre-1.0.0 version number,
+still likely to undergo changes.
 
 Check out `the slides from a presentation of AssetGraph
 <http://gofish.dk/assetgraph.pdf>`_ held at `the Öresund JavaScript Meetup
@@ -16,14 +16,17 @@ Check out `the slides from a presentation of AssetGraph
 The complete AssetGraph-based build system mentioned in the slides can
 be found `here <https://github.com/One-com/assetgraph-builder>`_.
 
-Currently AssetGraph does the following:
+
+Features
+========
 
 * Build an asset graph programmatically or load it from disk or a
   remote server via http.
 * Find explicit dependencies between JavaScript and CSS roll them out
   as ``<script>`` and ``<link rel='stylesheet'>`` tags in your
-  HTML. For now only a homegrown one.include syntax is supported, but
-  the parsing phase can be adapted to almost any syntax.
+  HTML. For now only the ExtJS 4 syntax and a homegrown `one.include`
+  syntax are supported, but the parsing phase can be adapted to almost
+  any syntax. More script loaders will be added later.
 * Bundle and inline CSS and JavaScript.
 * Create a cache manifest with references to all the assets your web
   app needs to be usable offline.
@@ -61,116 +64,11 @@ then run::
 
     $ npm install assetgraph
 
-Basic usage
-===========
 
-Creating an AssetGraph object::
+API documentation
+=================
 
-    var AssetGraph = require('assetgraph'),
-        ag = new AssetGraph(options);
-
-Currently the only supported option is `root`, which specifies the
-root url of the graph. It is required for AssetGraph to be able to
-resolve root-relative urls in assets loaded from disc. It can be
-specified either as a fully qualified url or a (optionally relative)
-file system path, and it defaults to the current directory. The
-AssetGraph constructor normalizes the root to an absolute url ending
-in a slash and makes it available as the `root` property of the
-AssetGraph instance.
-
-Example usage::
-
-    console.log(new AssetGraph().root); // 'file:///current/working/dir/'
-
-    var ag = new AssetGraph({root: '/home/thatguy/my/project'});
-    console.log(ag.root); // 'file:///home/thatguy/my/project/'
-
-    // When the graph is populated, root-relative urls in relations will be resolved relative to this url,
-    // e.g. /foo/bar.png => file:///home/thatguy/my/project/foo/bar.png
-
-
-Assets
-------
-
-An asset object represents a single node in an AssetGraph, but can be
-used and manipulated on its own outside the graph context. It can even
-be present in multiple AssetGraphs at once.
-
-Most of the time it's unnecessary to create asset objects
-directly. When you need to manipulate assets that already exist on
-disc or on a web server, the `loadAssets` and `populate` transforms
-are the easiest way to get the objects created. See the section about
-transforms below.
-
-
-asset.url (string)
-------------------
-
-The absolute url of the asset (uses the file: schema if loaded from
-disc). Will be `undefined` for inline assets.
-
-
-asset.rawSrc (getter)
----------------------
-
-Buffer object representing the undecoded source of the asset.
-
-
-asset.text (getter)
--------------------
-
-Only supported for text-based assets (subclasses of `assets.Text`)
-such as `assets.Html`, `assets.JavaScript`, and `assets.Css`.
-
-Get a JavaScript string with the decoded text contents of the
-asset. Unlike browsers AssetGraph doesn't try to sniff the charset of
-your text-based assets. It will fall back to assuming utf-8 if it's
-unable to determine the encoding/charset from HTTP headers, `<meta
-http-equiv='Content-Type'>` tags (Html), `@charset` (Css), so if for
-some reason you're not using utf-8 for all your text-based assets,
-make sure to provide those hints. Other asset types provide no
-standard way to specify the charset within the file itself, so
-presently there's no way to load JavaScript from disc if it's not
-utf-8 or ASCII.
-
-
-asset.parseTree (getter)
-------------------------
-
-Some asset classes support inspection and manipulation using a high
-level interface. When you're done modifying the parse tree, remember
-to tell the AssetGraph instance that the asset is now dirty by calling
-`asset.markDirty()`.
-
-These are the formats you'll get:
-
-`assets.Html` and `assets.Xml`
-  `jsdom <https://github.com/tmpvar/jsdom>`_ document object.
-
-`assets.Css`
-  `CSSOM <https://github.com/NV/CSSOM>`_ CSSStyleSheet object.
-
-`assets.JavaScript`
-  `UglifyJS <https://github.com/mishoo/UglifyJS>`_ AST object.
-
-`assets.Json`
-  Regular JavaScript object (the result of JSON.parse on the decoded source).
-
-`assets.CacheManifest`
-  A JavaScript object with a key for each section present in the
-  manifest (`CACHE`, `NETWORK`, `REMOTE`). The value is an array with
-  an item for each entry in the section. Refer to the source for
-  details.
-
-
-asset.markDirty()
------------------
-
-Sets the `dirty` flag of the asset, which is the way to say that the
-asset has been manipulated since it was first loaded (read from disc
-or loaded via http). For inline assets the flag is set if the asset
-has been manipulated since it was last synchronized with (copied into)
-its containing asset.
+A work in progress. Look `here <http://gofish.dk/assetgraph/api.html>`_.
 
 
 Querying the graph
@@ -178,24 +76,29 @@ Querying the graph
 
 AssetGraph supports a flexible syntax for finding assets and relations
 in a populated graph using the `findAssets` and `findRelations`
-methods. Both methods take a query object as the first argument. Some
-basic examples::
+methods. Both methods take a query object as the first argument. Below
+are some basic examples.
 
-    // Get an array containing all assets in the graph:
+Get an array containing all assets in the graph::
+
     var allAssets = assetGraph.findAssets();
 
-    // Find assets by type:
+Find assets by type::
+
     var htmlAssets = assetGraph.findAssets({type: 'Html'});
 
-    // Find assets by matching a regular expression against the url:
+Find assets by matching a regular expression against the url::
+
     var localImageAssets = assetGraph.findAssets({url: /^file:.*\.(?:png|gif|jpg)$/});
 
-    // Find assets by predicate function:
+Find assets by predicate function::
+
     var orphanedJavaScriptAssets = assetGraph.findAssets(function (asset) {
         return asset.type === 'JavaScript' && assetGraph.findRelations({to: asset}).length === 0;
     });
 
-    // Find all HtmlScript (<script src=...> and inline <script>) relations:
+Find all HtmlScript (<script src=...> and inline <script>) relations::
+
     var allHtmlScriptRelations = assetGraph.findRelations({type: 'HtmlScript'});
 
 Query objects have "and" semantics, so all conditions must be met for
@@ -206,13 +109,15 @@ a multi-criteria query to match::
         url: /^https?:\/\/(?:www\.)google\.com\//
     });
 
-    // Find assets by existence of incoming relations (experimental feature):
+Find assets by existence of incoming relations (experimental feature)::
+
     var importedCssAssets = assetGraph.findAssets({type: 'Css', incoming: {type: 'CssImport'}})
 
 Relation queries can contain nested asset queries when querying the
-`to` and `from` properties::
+`to` and `from` properties.
 
-    // Find all HtmlAnchor (<a href=...>) relations pointing at local images:
+Find all HtmlAnchor (<a href=...>) relations pointing at local images::
+
     assetGraph.findRelations({
         type: 'HtmlAnchor',
         to: {isImage: true, url: /^file:/}
