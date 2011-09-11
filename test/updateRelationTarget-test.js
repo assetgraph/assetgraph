@@ -11,7 +11,7 @@ function getTargetFileNames(relations) {
     });
 }
 
-vows.describe('AssetGraph.updateRelationTarget').addBatch({
+vows.describe('relation.updateTarget').addBatch({
     'After loading test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/updateRelationTarget/'}).queue(
@@ -37,8 +37,7 @@ vows.describe('AssetGraph.updateRelationTarget').addBatch({
         },
         'then update the target of the relation pointing at b.js': {
             topic: function (assetGraph) {
-                assetGraph.updateRelationTarget(assetGraph.findRelations({to: {url: /\/b\.js$/}})[0],
-                                                assetGraph.findAssets({url: /\/d\.js$/})[0]);
+                assetGraph.findRelations({to: {url: /\/b\.js$/}})[0].updateTarget(assetGraph.findAssets({url: /\/d\.js$/})[0]);
                 return assetGraph;
             },
             'the relations should be in the correct global order': function (assetGraph) {
