@@ -24,7 +24,7 @@ vows.describe('Cloning assets').addBatch({
         'then cloning the first Html asset': {
             topic: function (assetGraph) {
                 var indexHtml = assetGraph.findAssets({type: 'Html'})[0],
-                    assetClone = assetGraph.cloneAsset(indexHtml);
+                    assetClone = indexHtml.clone();
                 assetClone.url = indexHtml.url.replace(/\.html$/, ".clone.html");
                 return assetGraph;
             },
