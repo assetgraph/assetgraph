@@ -26,7 +26,7 @@ vows.describe('Inlining relations').addBatch({
         },
         'then inlining the Css and getting the Html as text': {
             topic: function (assetGraph) {
-                assetGraph.inlineRelation(assetGraph.findRelations({type: 'HtmlStyle'})[0]);
+                assetGraph.findRelations({type: 'HtmlStyle'})[0].inline();
                 return assetGraph;
             },
             'there should be exactly one inline Css asset': function (assetGraph) {
