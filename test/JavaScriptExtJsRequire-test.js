@@ -63,7 +63,7 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
         },
         'then detach the first Ext.require relation from the inline script': {
             topic: function (assetGraph) {
-                assetGraph.detachAndRemoveRelation(assetGraph.findRelations({from: assetGraph.findAssets({isInline: true, type: 'JavaScript'})[0]})[0]);
+                assetGraph.findRelations({from: assetGraph.findAssets({isInline: true, type: 'JavaScript'})[0]})[0].detach();
                 return assetGraph;
             },
             'the Ext.require(\'Ext.SomethingInCoreUtil\'); statement should be gone': function (assetGraph) {
@@ -71,7 +71,7 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
             },
             'then detach the next Ext.require relation from the inline script': {
                 topic: function (assetGraph) {
-                    assetGraph.detachAndRemoveRelation(assetGraph.findRelations({from: assetGraph.findAssets({isInline: true, type: 'JavaScript'})[0]})[0]);
+                    assetGraph.findRelations({from: assetGraph.findAssets({isInline: true, type: 'JavaScript'})[0]})[0].detach();
                     return assetGraph;
                 },
                 'the Ext.require(\'Foo.Bar\', function () {...}); statement should have turned into Ext.require([], function () {...}': function (assetGraph) {
@@ -79,7 +79,7 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
                 },
                 'then detach the next Ext.require relation from the inline script': {
                     topic: function (assetGraph) {
-                        assetGraph.detachAndRemoveRelation(assetGraph.findRelations({from: assetGraph.findAssets({isInline: true, type: 'JavaScript'})[0]})[0]);
+                        assetGraph.findRelations({from: assetGraph.findAssets({isInline: true, type: 'JavaScript'})[0]})[0].detach();
                         return assetGraph;
                     },
                     'the Ext.require([\'Quux.Bar\'], function () {...}); statement should have turned into Ext.require([], function () {...}': function (assetGraph) {

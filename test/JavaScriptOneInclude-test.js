@@ -19,9 +19,9 @@ vows.describe('one.include test').addBatch({
         'the graph should contain 2 JavaScriptOneInclude relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptOneInclude'}).length, 2);
         },
-        'then detach the first JavaScriptOneInclude relation': {
+        'then detach and remove the first JavaScriptOneInclude relation': {
             topic: function (assetGraph) {
-                assetGraph.detachAndRemoveRelation(assetGraph.findRelations({type: 'JavaScriptOneInclude'})[0]);
+                assetGraph.findRelations({type: 'JavaScriptOneInclude'})[0].detach();
                 return assetGraph;
             },
             'the one.include(\'foo.js\') statement should be removed from the text of index.js': function (assetGraph) {
@@ -35,10 +35,9 @@ vows.describe('one.include test').addBatch({
                     text: "alert('quux.js');"
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
-                assetGraph.attachAndAddRelation(new AssetGraph.relations.JavaScriptOneInclude({
-                    from: assetGraph.findAssets({url: /\/index\.js$/})[0],
+                new AssetGraph.relations.JavaScriptOneInclude({
                     to: newJavaScriptAsset
-                }), 'first');
+                }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'first');
                 return assetGraph;
             },
             'the one.include statements should be in the correct order': function (assetGraph) {
@@ -52,10 +51,9 @@ vows.describe('one.include test').addBatch({
                         text: "alert('baz.js');"
                     });
                     assetGraph.addAsset(newJavaScriptAsset);
-                    assetGraph.attachAndAddRelation(new AssetGraph.relations.JavaScriptOneInclude({
-                        from: assetGraph.findAssets({url: /\/index\.js$/})[0],
+                    new AssetGraph.relations.JavaScriptOneInclude({
                         to: newJavaScriptAsset
-                    }), 'after', assetGraph.findRelations({to: {url: /\/quux\.js$/}})[0]);
+                    }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'after', assetGraph.findRelations({to: {url: /\/quux\.js$/}})[0]);
                     return assetGraph;
                 },
                 'the one.include statements should be in the correct order': function (assetGraph) {
@@ -69,10 +67,9 @@ vows.describe('one.include test').addBatch({
                             text: "alert('bazze.js');"
                         });
                         assetGraph.addAsset(newJavaScriptAsset);
-                        assetGraph.attachAndAddRelation(new AssetGraph.relations.JavaScriptOneInclude({
-                            from: assetGraph.findAssets({url: /\/index\.js$/})[0],
+                        new AssetGraph.relations.JavaScriptOneInclude({
                             to: newJavaScriptAsset
-                        }), 'before', assetGraph.findRelations({to: {url: /\/bar\.js$/}})[0]);
+                        }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'before', assetGraph.findRelations({to: {url: /\/bar\.js$/}})[0]);
                         return assetGraph;
                     },
                     'the one.include statements should be in the correct order': function (assetGraph) {
@@ -86,10 +83,9 @@ vows.describe('one.include test').addBatch({
                                 text: "alert('prinzenrolle.js');"
                             });
                             assetGraph.addAsset(newJavaScriptAsset);
-                            assetGraph.attachAndAddRelation(new AssetGraph.relations.JavaScriptOneInclude({
-                                from: assetGraph.findAssets({url: /\/index\.js$/})[0],
+                            new AssetGraph.relations.JavaScriptOneInclude({
                                 to: newJavaScriptAsset
-                            }), 'last');
+                            }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'last');
                             return assetGraph;
                         },
                         'the one.include statements should be in the correct order': function (assetGraph) {
@@ -116,7 +112,7 @@ vows.describe('one.include test').addBatch({
         },
         'then detach the first JavaScriptOneInclude relation': {
             topic: function (assetGraph) {
-                assetGraph.detachAndRemoveRelation(assetGraph.findRelations({type: 'JavaScriptOneInclude'})[0]);
+                assetGraph.findRelations({type: 'JavaScriptOneInclude'})[0].detach();
                 return assetGraph;
             },
             'the one.include(\'foo.js\') statement should be removed from the text of index.js': function (assetGraph) {
@@ -130,10 +126,9 @@ vows.describe('one.include test').addBatch({
                     text: "alert('quux.js');"
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
-                assetGraph.attachAndAddRelation(new AssetGraph.relations.JavaScriptOneInclude({
-                    from: assetGraph.findAssets({url: /\/index\.js$/})[0],
+                new AssetGraph.relations.JavaScriptOneInclude({
                     to: newJavaScriptAsset
-                }), 'first');
+                }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'first');
                 return assetGraph;
             },
             'the one.include statements should be in the correct order': function (assetGraph) {
@@ -147,10 +142,9 @@ vows.describe('one.include test').addBatch({
                         text: "alert('baz.js');"
                     });
                     assetGraph.addAsset(newJavaScriptAsset);
-                    assetGraph.attachAndAddRelation(new AssetGraph.relations.JavaScriptOneInclude({
-                        from: assetGraph.findAssets({url: /\/index\.js$/})[0],
+                    new AssetGraph.relations.JavaScriptOneInclude({
                         to: newJavaScriptAsset
-                    }), 'after', assetGraph.findRelations({to: {url: /\/quux\.js$/}})[0]);
+                    }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'after', assetGraph.findRelations({to: {url: /\/quux\.js$/}})[0]);
                     return assetGraph;
                 },
                 'the one.include statements should be in the correct order': function (assetGraph) {
@@ -164,10 +158,9 @@ vows.describe('one.include test').addBatch({
                             text: "alert('bazze.js');"
                         });
                         assetGraph.addAsset(newJavaScriptAsset);
-                        assetGraph.attachAndAddRelation(new AssetGraph.relations.JavaScriptOneInclude({
-                            from: assetGraph.findAssets({url: /\/index\.js$/})[0],
+                        new AssetGraph.relations.JavaScriptOneInclude({
                             to: newJavaScriptAsset
-                        }), 'before', assetGraph.findRelations({to: {url: /\/bar\.js$/}})[0]);
+                        }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'before', assetGraph.findRelations({to: {url: /\/bar\.js$/}})[0]);
                         return assetGraph;
                     },
                     'the one.include statements should be in the correct order': function (assetGraph) {
@@ -181,10 +174,9 @@ vows.describe('one.include test').addBatch({
                                 text: "alert('prinzenrolle.js');"
                             });
                             assetGraph.addAsset(newJavaScriptAsset);
-                            assetGraph.attachAndAddRelation(new AssetGraph.relations.JavaScriptOneInclude({
-                                from: assetGraph.findAssets({url: /\/index\.js$/})[0],
+                            new AssetGraph.relations.JavaScriptOneInclude({
                                 to: newJavaScriptAsset
-                            }), 'last');
+                            }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'last');
                             return assetGraph;
                         },
                         'the one.include statements should be in the correct order': function (assetGraph) {
