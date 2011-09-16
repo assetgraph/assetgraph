@@ -18,7 +18,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
         'the graph should contain one JavaScriptOneGetStaticUrl relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 1);
         },
-        'the StaticUrlMapEntry relations should have the right originalUrl properties': function (assetGraph) {
+        'the StaticUrlMapEntry relations should have the right hrefs': function (assetGraph) {
             assert.equal(assetGraph.findRelations({href: 'json/a.json'}).length, 1);
             assert.equal(assetGraph.findRelations({href: 'json/b.json'}).length, 1);
             assert.equal(assetGraph.findRelations({href: 'json/c.json'}).length, 1);
@@ -60,7 +60,10 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             'the graph should contain one JavaScriptOneGetStaticUrl relation': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 1);
             },
-            'the JavaScriptOneGetStaticUrl relations should have the right originalUrl properties': function (assetGraph) {
+            'the graph should contain 3 StaticUrlMapEntry relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 3);
+            },
+            'the StaticUrlMapEntry relations should have the right hrefs': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({href: 'json/a.json'}).length, 1);
                 assert.equal(assetGraph.findRelations({href: 'json/b.json'}).length, 1);
                 assert.equal(assetGraph.findRelations({href: 'json/c.json'}).length, 1);

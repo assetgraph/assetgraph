@@ -37,7 +37,9 @@ vows.describe('relation.updateTarget').addBatch({
         },
         'then update the target of the relation pointing at b.js': {
             topic: function (assetGraph) {
-                assetGraph.findRelations({to: {url: /\/b\.js$/}})[0].updateTarget(assetGraph.findAssets({url: /\/d\.js$/})[0]);
+                var relation = assetGraph.findRelations({to: {url: /\/b\.js$/}})[0];
+                relation.to = assetGraph.findAssets({url: /\/d\.js$/})[0];
+                relation.refreshHref();
                 return assetGraph;
             },
             'the relations should be in the correct global order': function (assetGraph) {
