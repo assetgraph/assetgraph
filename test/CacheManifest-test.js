@@ -49,7 +49,7 @@ vows.describe('Cache manifest').addBatch({
                     assert.equal(fooPngMatches.length, 1);
                 },
                 'it should still contain the original NETWORK and FALLBACK sections': function (src) {
-                    assert.isTrue(src.indexOf("NETWORK:\n/helloworld.php\n") !== -1);
+                    assert.isTrue(src.indexOf("NETWORK:\n# I am a comment\n/helloworld.php\n") !== -1);
                     assert.isTrue(src.indexOf("FALLBACK:\nheresthething.asp foo.png\n") !== -1);
                 },
                 'then move the foo.png asset to a different url and get the manifest as text again': {

@@ -1,5 +1,6 @@
 CACHE MANIFEST
 NETWORK:
+# I am a comment
 /helloworld.php
 
 FALLBACK:
