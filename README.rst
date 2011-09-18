@@ -127,8 +127,321 @@ Find all HtmlAnchor (<a href=...>) relations pointing at local images::
 Transforms and workflows
 ========================
 
-TODO. Look in the `examples` folder for now.
+AssetGraph comes with a collection of premade transforms that you can
+combine into a build procedure.
 
+
+transforms.addCacheManifest([queryObj])
+---------------------------------------
+
+Add a `CacheManifest` asset to each `Html` asset in the graph (or to
+all `Html` assets matched by `queryObj` if provided). The cache
+manifests will contain relations to all assets reachable by traversing
+the graph through relations other than `HtmlAnchor`.
+
+
+transforms.bundleAssets({type: 'Css'|'JavaScript', incoming: {type: ...}}[, strategyName])
+------------------------------------------------------------------------------------------
+
+Bundle `Css` or `JavaScript` assets. At the very minimum the query
+object must specify both the type of asset to bundle and the type of
+the including relations (`HtmlStyle` or `HtmlScript`), but can include
+additional criteria.
+
+The `strategyName` (string) parameter can be either:
+
+``oneBundlePerIncludingAsset`` (the default)
+  Each unique asset pointing to one or more of the assets being
+  bundled will get its own bundle. This can lead to duplication if
+  eg. several `Html` assets point to the same sets of assets, but
+  guarantees that the number of http requests is kept low.
+
+``sharedBundles``
+  Create as many bundles as needed, optimizing for combined byte size
+  of the bundles rather than http requests. Warning: Not as well
+  tested as `oneBundlePerIncludingAsset`.
+
+Note that a conditional comment within an `Html` asset conveniently
+counts as a separate including asset, so in the below example `ie.css`
+and `all.css` won't be bundled together:
+
+    <![if IE]><link rel='stylesheet' href='ie.css'><![endif]-->
+    <link rel='stylesheet' href='all.css'>
+
+The created bundles will be placed at the root of the asset graph with
+names derived from their unique id (for example
+`file://root/of/graph/124.css`) and will replace the original assets.
+
+
+transforms.compileCoffeeScriptToJavaScript([queryObj])
+------------------------------------------------------
+
+Finds all `CoffeeScript` assets in the graph (or those specified by
+`queryObj`), compiles them to `JavaScript` assets and replaces the
+originals.
+
+
+transforms.compressJavaScript([queryObj[, compressorName[, compressorOptions]]])
+--------------------------------------------------------------------------------
+
+Compresses all `JavaScript` assets in the graph (or those specified by
+`queryObj`).
+
+The `compressorName` (string) parameter can be either:
+
+`uglify` (the default and the fastest)
+  The excellent `UglifyJS <https://github.com/mishoo/UglifyJS>`_ compressor.
+  If provided, the `compressorOptions` object will be passed to UglifyJS' `ast_squeeze` command.
+
+`yuicompressor`
+  Yahoo's YUICompressor though Tim-Smart's `node-yuicompressor module <https://github.com/Tim-Smart/node-yui-compressor>`_.
+  If provided, the `compressorOptions` object will be passed as the second argument to `require('yui-compressor').compile`.
+
+`closurecompiler`
+  Google's Closure Compiler through Tim-Smart's `node-closure module <https://github.com/Tim-Smart/node-closure>`_.
+  If provided, the `compressorOptions` object will be passed as the second argument to `require('closure-compiler').compile`.
+
+
+transforms.convertCssImportsToHtmlStyles([queryObj])
+----------------------------------------------------
+
+Finds all `Html` assets in the graph (or those specified by
+`queryObj`), finds all `CssImport` relations (`@import url(...)`) in
+inline and external CSS and converts them to `HtmlStyle` relations
+directly from the Html document.
+
+Effectively the inverse of `transforms.convertHtmlStylesToInlineCssImports`.
+
+Example::
+
+    <style type='text/css'>
+        @import url(print.css) print;
+        @import url(foo.css);
+        body {color: red;}
+    </style>
+
+is turned into::
+
+   <link rel='stylesheet' href='print.css' media='print'>
+   <link rel='stylesheet' href='foo.css'>
+   <style type='text/css'>
+       body {color: red;}
+   </style>
+
+
+transforms.convertHtmlStylesToInlineCssImports([queryObj])
+----------------------------------------------------------
+
+Finds all `Html` assets in the graph (or those specified by
+`queryObj`), finds all outgoing, non-inline `HtmlStyle` relations
+(`<link rel='stylesheet' href='...'>`) and turns them into groups of
+`CssImport` relations (`@import url(...)`) in inline stylesheets. A
+maximum of 31 `CssImports` will be created per inline stylesheet.
+
+Example::
+
+     <link rel='stylesheet' href='foo.css'>
+     <link rel='stylesheet' href='bar.css'>
+
+is turned into::
+
+     <style type='text/css'>
+         @import url(foo.css);
+         @import url(bar.css);
+     </style>
+
+This is a workaround for `the limit of 31 stylesheets in Internet
+Explorer <= 8 <http://social.msdn.microsoft.com/Forums/en-US/iewebdevelopment/thread/ad1b6e88-bbfa-4cc4-9e95-3889b82a7c1d/>`_.
+This transform allows you to have up to 31*31 stylesheets in the
+development version of your HTML and still have it work in older
+Internet Explorer versions.
+
+
+transforms.drawGraph(fileName)
+------------------------------
+
+Uses the Graphviz `dot` command through `node-graphviz
+<https://github.com/glejeune/node-graphviz>`_ to render the current
+contents of the graph and writes the result to `fileName`. The image
+format is automatically derived from the extension and can be any of
+`these <http://www.graphviz.org/doc/info/output.html>`_. Using `.svg`
+is recommended.
+
+Requires Graphviz to be installed, `sudo apt-get install graphviz` on
+Debian/Ubuntu.
+
+
+transforms.executeJavaScriptInOrder(queryObj[, context])
+----------------------------------------------------------
+
+Experimental: For each asset matched by (or those matched by
+queryObj), find all reachable `JavaScript` assets and execute them in
+order.
+
+If the `context` parameter is specified, it will be used as `the
+execution context
+<http://nodejs.org/docs/latest/api/vm.html#vm.runInContext>`_. Otherwise
+a new context will be created using `vm.createContext
+<http://nodejs.org/docs/latest/api/vm.html#vm.createContext>`.
+
+
+transforms.externalizeRelations([queryObj])
+-------------------------------------------
+
+Finds all inline relations in the graph (or those matched by
+`queryObj`) and makes them external. The file names will be derived
+from the unique ids of the assets.
+
+For example::
+
+     <script>foo = 'bar';</script>
+     <style type='text/css'>body {color: maroon;}</style>
+
+could be turned into::
+
+     <script src='4.js'></script>
+     <link rel='stylesheet' href='5.css'>
+
+
+transforms.flattenStaticIncludes(queryObj)
+------------------------------------------
+
+Finds all `Html` assets in the graph (or those matched by `queryObj`),
+finds all `JavaScript` and `Css` assets reachable through
+`HtmlScript`, `HtmlStyle`, `JavaScriptOneInclude`, and
+`JavaScriptExtJsRequire` relations and rolls them out as plain
+`HtmlScript` (`<script src='...'>`) and `HtmlStyle` (`<link
+rel='stylesheet' href='...'>`) relations.
+
+If your project uses deeply nested `one.include` statements, this
+transform allows you to create a "development version" that works in a
+browser. Refer to `the buildDevelopment script from AssetGraph-builder
+<https://github.com/One-com/assetgraph-builder/blob/master/bin/buildDevelopment>`_.
+
+For example::
+
+    <head></head>
+    <body>
+        <script>one.include('foo.js');</script>
+    </body>
+
+where `foo.js` contains::
+
+    one.include('bar.js');
+    one.include('quux.css');
+    var blah = 'baz';
+    ...
+
+is turned into::
+
+    <head>
+        <link rel='stylesheet' href='quux.css'>
+    </head>
+    <script src='bar.js'></script>
+    <script src='foo.js'></script>
+
+
+transforms.inlineCssImagesWithLegacyFallback([queryObj[, sizeThreshold]])
+--------------------------------------------------------
+
+Finds all `Html` assets in the graph (or those matched by `queryObj`),
+finds all directly reachable `Css` assets, and converts the outgoing
+`CssImage` relations (`background-image` etc.) to `data:` urls,
+subject to these criteria:
+
+1) If `sizeThreshold` is specified, images with a greater byte size
+won't be inlined.
+
+2) To avoid duplication, images referenced by more than one `CssImage`
+relation won't be inlined.
+
+If any image is inlined an Internet Explorer-only version of the
+stylesheet will be created and referenced from the `Html` asset in a
+conditional comment.
+
+For example::
+
+    <link rel='stylesheet' href='foo.css'>
+
+where `foo.css` contains::
+
+    body {background-image: url(small.png);}
+
+is turned into::
+
+    <!--[IE]><link rel="stylesheet" href="8.css"><![endif]-->
+    <!--[if !IE]>--><link rel="stylesheet" href="foo.css"><!--<![endif]-->
+
+where `8.css` is a copy of the original `foo.css`, and `foo.css` now contains:
+
+    body {background-image: url(data;image/png;base64,iVBORw0KGgoAAAANSUhE...)}
+
+
+transforms.inlineRelations([queryObj])
+--------------------------------------
+
+Inlines all relations in the graph (or those matched by `queryObj`).
+
+
+transforms.loadAssets(fileName...)
+----------------------------------
+
+transforms.mergeIdenticalAssets([queryObj])
+-------------------------------------------
+
+transforms.minifyAssets([queryObj])
+-----------------------------------
+
+transforms.moveAssets
+---------------------
+
+transforms.moveAssetsToDirectory
+--------------------------------
+
+transforms.moveAssetsToNewRoot
+------------------------------
+
+transforms.parallel
+-------------------
+
+transforms.populate
+-------------------
+
+transforms.postProcessBackgroundImages
+--------------------------------------
+
+transforms.prettyPrintAssets
+----------------------------
+
+transforms.removeAssets
+-----------------------
+
+transforms.removeRelations
+--------------------------
+
+transforms.renameAssetsToMd5Prefix
+----------------------------------
+
+transforms.setAssetContentType
+------------------------------
+
+transforms.setAssetEncoding
+---------------------------
+
+transforms.setAssetExtension
+----------------------------
+
+transforms.startOverIfAssetSourceFilesChange
+--------------------------------------------
+
+transforms.stats
+----------------
+
+transforms.writeAssetsToDisc
+----------------------------
+
+transforms.writeAssetsToStdout
+------------------------------
 
 License
 -------
