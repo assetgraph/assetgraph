@@ -27,9 +27,9 @@ vows.describe('Cache manifest').addBatch({
             assert.equal(outgoingRelations[0].to.type, 'Png');
             assert.equal(outgoingRelations[0].sectionName, 'FALLBACK');
         },
-        'then running the addCacheManifestSinglePage transform': {
+        'then running the addCacheManifest transform': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.addCacheManifestSinglePage({isInitial: true})).run(this.callback);
+                assetGraph.queue(transforms.addCacheManifest({isInitial: true})).run(this.callback);
             },
             'there should still be a single cache manifest asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
@@ -89,9 +89,9 @@ vows.describe('Cache manifest').addBatch({
         'the graph contains a single Css asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
         },
-        'then adding a cache manifest to the Html file using the "single page" method': {
+        'then adding a cache manifest to the Html file': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.addCacheManifestSinglePage({isInitial: true})).run(this.callback);
+                assetGraph.queue(transforms.addCacheManifest({isInitial: true})).run(this.callback);
             },
             'the graph should contain a cache manifest': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
@@ -126,18 +126,23 @@ vows.describe('Cache manifest').addBatch({
         'the graph contains 2 Html image relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlImage'}).length, 2);
         },
-        'then adding a cache manifest to the Html file using the "site map" method': {
+        'then adding a cache manifest to each of the Html files': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.addCacheManifestSiteMap({isInitial: true})).run(this.callback);
+                assetGraph.queue(transforms.addCacheManifest({isInitial: true})).run(this.callback);
             },
-            'the graph should contain the manifest': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
+            'the graph should contain 2 CacheManifest assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 2);
             },
-            'the manifest should have 3 outgoing relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({from: assetGraph.findAssets({type: 'CacheManifest'})[0]}).length, 3);
+            'the manifest for index.html should have 2 outgoing relations pointing at foo.png and otherpage.html': function (assetGraph) {
+                var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/index\.html$/}}});
+                assert.equal(assetGraph.findRelations({from: cacheManifest}).length, 2);
+                assert.equal(assetGraph.findRelations({from: cacheManifest, to: {url: /\/foo\.png$/}}).length, 1);
+                assert.equal(assetGraph.findRelations({from: cacheManifest, to: {url: /\/otherpage\.html$/}}).length, 1);
             },
-            'the manifest should have 2 incoming relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({to: assetGraph.findAssets({type: 'CacheManifest'})[0]}).length, 2);
+            'the manifest for otherpage.html should have 1 outgoing relation pointing at foo.png': function (assetGraph) {
+                var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/otherpage\.html$/}}});
+                assert.equal(assetGraph.findRelations({from: cacheManifest}).length, 1);
+                assert.equal(assetGraph.findRelations({from: cacheManifest})[0].to, assetGraph.findAssets({url: /\/foo\.png$/})[0]);
             }
         }
     },
@@ -160,17 +165,25 @@ vows.describe('Cache manifest').addBatch({
         'the graph should contain two Png assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 2);
         },
-        'then running the addCacheManifestSiteMap transform': {
+        'then running the addCacheManifest transform': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.addCacheManifestSiteMap({isInitial: true})).run(this.callback);
+                assetGraph.queue(transforms.addCacheManifest({isInitial: true})).run(this.callback);
             },
             'the graph should contain two cache manifests': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 2);
             },
-            'the cache manifests should both refer to all assets': function (assetGraph) {
-                var manifests = assetGraph.findAssets({type: 'CacheManifest'});
-                assert.equal(assetGraph.findRelations({from: manifests[0]}).length, 6);
-                assert.equal(assetGraph.findRelations({from: manifests[1]}).length, 6);
+            'the cache manifest for pageone.html should now refer to style.css, quux.png, and foo.png': function (assetGraph) {
+                var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/pageone\.html$/}}})[0];
+                assert.equal(assetGraph.findRelations({from: cacheManifest}).length, 3);
+                assert.equal(assetGraph.findRelations({from: cacheManifest, to: {url: /\/style\.css/}}).length, 1);
+                assert.equal(assetGraph.findRelations({from: cacheManifest, to: {url: /\/quux\.png/}}).length, 1);
+                assert.equal(assetGraph.findRelations({from: cacheManifest, to: {url: /\/foo\.png/}}).length, 1);
+            },
+            'the cache manifest for pagetwo.html should now refer to style.css, and quux.png': function (assetGraph) {
+                var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/pagetwo\.html$/}}})[0];
+                assert.equal(assetGraph.findRelations({from: cacheManifest}).length, 2);
+                assert.equal(assetGraph.findRelations({from: cacheManifest, to: {url: /\/style\.css/}}).length, 1);
+                assert.equal(assetGraph.findRelations({from: cacheManifest, to: {url: /\/quux\.png/}}).length, 1);
             }
         }
     }
