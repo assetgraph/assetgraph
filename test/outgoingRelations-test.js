@@ -3,6 +3,7 @@ var vows = require('vows'),
     urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
     assets = AssetGraph.assets,
+    relations = AssetGraph.relations,
     transforms = AssetGraph.transforms;
 
 vows.describe('asset.outgoingRelations').addBatch({
@@ -63,13 +64,53 @@ vows.describe('asset.outgoingRelations').addBatch({
             'the graph should contain 1 unresolved CssImage relation': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'CssImage'}, true).length - assetGraph.findRelations({type: 'CssImage'}).length, 1);
             },
-            'then overwrite the text of the Html asset and include an anchor that points at the other document': {
-                topic: function (assetGraph, htmlAsset) {
-                    htmlAsset.text = '<!DOCTYPE html>\n<html><head></head><body><a href="baz.html">Another link text</a></body></html>';
+            'then overwrite the text of foo.html and include an anchor that points at baz.html': {
+                topic: function (assetGraph, fooHtml) {
+                    fooHtml.text = '<!DOCTYPE html>\n<html><head></head><body><a href="baz.html">Another link text</a></body></html>';
                     return assetGraph;
                 },
-                'the graph should contain a single HtmlAnchor relation pointing at quux.html': function (assetGraph) {
+                'the graph should contain a single HtmlAnchor relation pointing at baz.html': function (assetGraph) {
                     assert.equal(assetGraph.findRelations({type: 'HtmlAnchor', to: assetGraph.findAssets({type: 'Html', url: /\/baz\.html$/})}).length, 1);
+                },
+                'then attach a new HtmlAnchor relation pointing at quux.html': {
+                    topic: function (assetGraph) {
+                        var fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0];
+                        new relations.HtmlAnchor({to: assetGraph.findAssets({url: /\/quux\.html$/})[0]}).attach(fooHtml, 'after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
+                        return assetGraph;
+                    },
+                    'both baz.html and quux.html should be mentioned in the text of foo.html': function (assetGraph) {
+                        var text = assetGraph.findAssets({url: /\/foo\.html$/})[0].text;
+                        assert.matches(text, /baz\.html/);
+                        assert.matches(text, /quux\.html/);
+                    },
+                    'then remove foo.html from the graph': {
+                        topic: function (assetGraph) {
+                            var fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0];
+                            assetGraph.removeAsset(fooHtml);
+                            return {fooHtml: fooHtml, assetGraph: assetGraph};
+                        },
+                        'the outgoingRelations property of foo.html should contain the two HtmlAnchor relations': function (obj) {
+                            var fooHtml = obj.fooHtml;
+                            assert.equal(fooHtml.outgoingRelations.length, 2);
+                            assert.equal(fooHtml.outgoingRelations[0].type, 'HtmlAnchor');
+                            assert.equal(fooHtml.outgoingRelations[0].to.url, 'http://example.com/baz.html');
+                            assert.equal(fooHtml.outgoingRelations[1].type, 'HtmlAnchor');
+                            assert.equal(fooHtml.outgoingRelations[1].to.url, 'http://example.com/quux.html');
+                        },
+                        'the graph should contain no HtmlAnchor relations': function (obj) {
+                            var assetGraph = obj.assetGraph;
+                            assert.equal(assetGraph.findRelations({type: 'HtmlAnchor'}).length, 0);
+                        },
+                        'then add foo.html to the graph again': {
+                            topic: function (obj) {
+                                obj.assetGraph.addAsset(obj.fooHtml);
+                                return obj.assetGraph;
+                            },
+                            'the HtmlAnchor relations should be in the graph again': function (assetGraph) {
+                                assert.equal(assetGraph.findRelations({type: 'HtmlAnchor'}).length, 2);
+                            }
+                        }
+                    }
                 }
             }
         }
