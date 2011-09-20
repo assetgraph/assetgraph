@@ -24,11 +24,28 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
             'the graph should contain 6 Css assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 6);
             },
-            'the graph should contain 2 HtmlConditionalComment relation': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlConditionalComment'}).length, 2);
+            'the graph should contain 4 HtmlConditionalComment relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlConditionalComment'}).length, 4);
             },
             'the graph should contain 3 inline CssImage relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'CssImage', to: {isInline: true}}).length, 3);
+            },
+            'the Html asset should contain 6 <link> tags': function (assetGraph) {
+                var captures = assetGraph.findAssets({type: 'Html'})[0].text.match(/<link[^>]*>/g);
+                assert.isNotNull(captures);
+                assert.equal(captures.length, 6);
+            },
+            'the Html asset should contain 2 non-IE conditional comment markers': function (assetGraph) {
+                var captures = assetGraph.findAssets({type: 'Html'})[0].text.match(/<!--\[if !IE\]>-->/g);
+                assert.isNotNull(captures);
+                assert.equal(captures.length, 2);
+            },
+            'the Html asset should contain 2 IE conditional comment markers with link tags in them': function (assetGraph) {
+                var text = assetGraph.findAssets({type: 'Html'})[0].text;
+                assert.matches(text, /<!--\[if IE\]><link[^>]*><!\[\endif]-->/);
+                var captures = text.match(/<!--\[if IE\]><link[^>]*><!\[\endif]-->/g);
+                assert.isNotNull(captures);
+                assert.equal(captures.length, 2);
             }
         }
     }
