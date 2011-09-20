@@ -15,6 +15,9 @@ vows.describe('Asset test').addBatch({
         'the extension should be the empty string': function (htmlAsset) {
             assert.equal(htmlAsset.extension, '');
         },
+        'the file name should be "index"': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, 'index');
+        },
         'then set the extension property to ".foo"': {
             topic: function (htmlAsset) {
                 htmlAsset.extension = '.foo';
@@ -22,6 +25,9 @@ vows.describe('Asset test').addBatch({
             },
             'the extension property should be ".foo"': function (htmlAsset) {
                 assert.equal(htmlAsset.extension, '.foo');
+            },
+            'the fileName property should be updated to "index.foo"': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'index.foo');
             },
             'the url property should be updated': function (htmlAsset) {
                 assert.equal(htmlAsset.url, 'http://example.com/index.foo');
@@ -34,6 +40,9 @@ vows.describe('Asset test').addBatch({
                 'the extension property should be updated': function (htmlAsset) {
                     assert.equal(htmlAsset.extension, '.dhtml');
                 },
+                'the fileName property should be updated': function (htmlAsset) {
+                    assert.equal(htmlAsset.fileName, 'heythere.dhtml');
+                },
                 'then set the url of the asset to null (inline it)': {
                     topic: function (htmlAsset) {
                         htmlAsset.url = null;
@@ -41,8 +50,40 @@ vows.describe('Asset test').addBatch({
                     },
                     'the extension property should still have the previous value': function (htmlAsset) {
                         assert.equal(htmlAsset.extension, '.dhtml');
+                    },
+                    'the fileName property should still have the previous value': function (htmlAsset) {
+                        assert.equal(htmlAsset.fileName, 'heythere.dhtml');
                     }
                 }
+            }
+        }
+    },
+    'Instantiate an Html asset with an extensionless url': {
+        topic: function () {
+            return new assets.Html({
+                text: 'foo',
+                url: 'http://example.com/index'
+            });
+        },
+        'the extension should be the empty string': function (htmlAsset) {
+            assert.equal(htmlAsset.extension, '');
+        },
+        'the file name should be "index"': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, 'index');
+        },
+        'then set the fileName property to "thething.foo"': {
+            topic: function (htmlAsset) {
+                htmlAsset.fileName = 'thething.foo';
+                return htmlAsset;
+            },
+            'the extension property should be ".foo"': function (htmlAsset) {
+                assert.equal(htmlAsset.extension, '.foo');
+            },
+            'the fileName property should be "thething.foo"': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'thething.foo');
+            },
+            'the url property should be updated': function (htmlAsset) {
+                assert.equal(htmlAsset.url, 'http://example.com/thething.foo');
             }
         }
     },
@@ -56,13 +97,19 @@ vows.describe('Asset test').addBatch({
         'the extension property should return the right value': function (htmlAsset) {
             assert.equal(htmlAsset.extension, '.blah');
         },
+        'the fileName property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.extension, 'index.blah');
+        },
         'then set the extension property to ".blerg"': {
             topic: function (htmlAsset) {
                 htmlAsset.extension = '.blerg';
                 return htmlAsset;
             },
-            'the extension should be .blerg': function (htmlAsset) {
+            'the extension property should be ".blerg"': function (htmlAsset) {
                 assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should be "index.blerg"': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'index.blerg');
             },
             'the url property should be updated': function (htmlAsset) {
                 assert.equal(htmlAsset.url, 'http://example.com/index.blerg');
@@ -79,16 +126,80 @@ vows.describe('Asset test').addBatch({
         'the extension property should return the right value': function (htmlAsset) {
             assert.equal(htmlAsset.extension, '.blah');
         },
+        'the fileName property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.extension, 'index.blah');
+        },
+        'then set the fileName property to "index.blerg"': {
+            topic: function (htmlAsset) {
+                htmlAsset.fileName = 'index.blerg';
+                return htmlAsset;
+            },
+            'the extension property should be ".blerg"': function (htmlAsset) {
+                assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should be "index.blerg"': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'index.blerg');
+            },
+            'the url property should be updated': function (htmlAsset) {
+                assert.equal(htmlAsset.url, 'http://example.com/index.blerg');
+            }
+        }
+    },
+    'Instantiate an Html asset with an url that has an extension': {
+        topic: function () {
+            return new assets.Html({
+                text: 'foo',
+                url: 'http://example.com/index.blah'
+            });
+        },
+        'the extension property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.extension, '.blah');
+        },
+        'the fileName property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, 'index.blah');
+        },
         'then set the extension property to ""': {
             topic: function (htmlAsset) {
                 htmlAsset.extension = '';
                 return htmlAsset;
             },
-            'the extension should be ""': function (htmlAsset) {
+            'the extension property should be ""': function (htmlAsset) {
                 assert.equal(htmlAsset.extension, '');
+            },
+            'the fileName property should be "index"': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'index');
             },
             'the url property should be updated': function (htmlAsset) {
                 assert.equal(htmlAsset.url, 'http://example.com/index');
+            }
+        }
+    },
+    'Instantiate an Html asset with an url that has an extension': {
+        topic: function () {
+            return new assets.Html({
+                text: 'foo',
+                url: 'http://example.com/index.blah'
+            });
+        },
+        'the extension property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.extension, '.blah');
+        },
+        'the fileName property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, 'index.blah');
+        },
+        'then set the fileName property to ""': {
+            topic: function (htmlAsset) {
+                htmlAsset.fileName = '';
+                return htmlAsset;
+            },
+            'the extension property should be ""': function (htmlAsset) {
+                assert.equal(htmlAsset.extension, '');
+            },
+            'the fileName property should be ""': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, '');
+            },
+            'the url property should be updated': function (htmlAsset) {
+                assert.equal(htmlAsset.url, 'http://example.com/');
             }
         }
     },
@@ -102,13 +213,19 @@ vows.describe('Asset test').addBatch({
         'the extension property should return the right value': function (htmlAsset) {
             assert.equal(htmlAsset.extension, '.blah');
         },
+        'the fileName property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, 'index.blah');
+        },
         'then set the extension property to ".blerg"': {
             topic: function (htmlAsset) {
                 htmlAsset.extension = '.blerg';
                 return htmlAsset;
             },
-            'the extension should be .blerg': function (htmlAsset) {
+            'the extension property should be ".blerg"': function (htmlAsset) {
                 assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should be "index.blerg"': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'index.blerg');
             },
             'the url property should be updated': function (htmlAsset) {
                 assert.equal(htmlAsset.url, 'http://example.com/index.blerg#yay');
@@ -118,8 +235,84 @@ vows.describe('Asset test').addBatch({
                     htmlAsset.extension = "";
                     return htmlAsset;
                 },
+                'the extension property should be updated': function (htmlAsset) {
+                    assert.equal(htmlAsset.extension, '');
+                },
+                'the fileName property should be updated': function (htmlAsset) {
+                    assert.equal(htmlAsset.fileName, 'index');
+                },
                 'the url property should be updated': function (htmlAsset) {
                     assert.equal(htmlAsset.url, 'http://example.com/index#yay');
+                }
+            }
+        }
+    },
+    'Instantiate an Html asset with an url that has an extension and a fragment identifier': {
+        topic: function () {
+            return new assets.Html({
+                text: 'foo',
+                url: 'http://example.com/index.blah#yay'
+            });
+        },
+        'the extension property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.extension, '.blah');
+        },
+        'the fileName property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, 'index.blah');
+        },
+        'then set the fileName property to "index.blerg"': {
+            topic: function (htmlAsset) {
+                htmlAsset.extension = '.blerg';
+                return htmlAsset;
+            },
+            'the extension property should be ".blerg"': function (htmlAsset) {
+                assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should be "index.blerg"': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'index.blerg');
+            },
+            'the url property should be updated': function (htmlAsset) {
+                assert.equal(htmlAsset.url, 'http://example.com/index.blerg#yay');
+            }
+        }
+    },
+    'Instantiate an Html asset with an url that has an extension and a query string': {
+        topic: function () {
+            return new assets.Html({
+                text: 'foo',
+                url: 'http://example.com/index.blah?yay=bar'
+            });
+        },
+        'the extension property should be the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.extension, '.blah');
+        },
+        'the fileName property should be the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, 'index.blah');
+        },
+        'then set the extension property to ".blerg"': {
+            topic: function (htmlAsset) {
+                htmlAsset.extension = '.blerg';
+                return htmlAsset;
+            },
+            'the extension property should be .blerg': function (htmlAsset) {
+                assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should be updated': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'index.blerg');
+            },
+            'the url property should be updated': function (htmlAsset) {
+                assert.equal(htmlAsset.url, 'http://example.com/index.blerg?yay=bar');
+            },
+            'then set the extension to ""': {
+                topic: function (htmlAsset) {
+                    htmlAsset.extension = "";
+                    return htmlAsset;
+                },
+                'the fileName property should be updated': function (htmlAsset) {
+                    assert.equal(htmlAsset.fileName, 'index');
+                },
+                'the url property should be updated': function (htmlAsset) {
+                    assert.equal(htmlAsset.url, 'http://example.com/index?yay=bar');
                 }
             }
         }
@@ -131,27 +324,68 @@ vows.describe('Asset test').addBatch({
                 url: 'http://example.com/index.blah?yay=bar'
             });
         },
+        'the extension property should be the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.extension, '.blah');
+        },
+        'the fileName property should be the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, 'index.blah');
+        },
+        'then set the fileName property to "index.blerg"': {
+            topic: function (htmlAsset) {
+                htmlAsset.fileName = 'index.blerg';
+                return htmlAsset;
+            },
+            'the extension property should be .blerg': function (htmlAsset) {
+                assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should be updated': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'index.blerg');
+            },
+            'the url property should be updated': function (htmlAsset) {
+                assert.equal(htmlAsset.url, 'http://example.com/index.blerg?yay=bar');
+            }
+        }
+    },
+    'Instantiate an Html asset with an url that has an extension, a query string, and a fragment identifier': {
+        topic: function () {
+            return new assets.Html({
+                text: 'foo',
+                url: 'http://example.com/index.blah?yay=bar#really'
+            });
+        },
         'the extension property should return the right value': function (htmlAsset) {
             assert.equal(htmlAsset.extension, '.blah');
+        },
+        'the fileName property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, 'index.blah');
         },
         'then set the extension property to ".blerg"': {
             topic: function (htmlAsset) {
                 htmlAsset.extension = '.blerg';
                 return htmlAsset;
             },
-            'the extension should be .blerg': function (htmlAsset) {
+            'the extension property should be .blerg': function (htmlAsset) {
                 assert.equal(htmlAsset.extension, '.blerg');
             },
+            'the fileName property should be .blerg': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'index.blerg');
+            },
             'the url property should be updated': function (htmlAsset) {
-                assert.equal(htmlAsset.url, 'http://example.com/index.blerg?yay=bar');
+                assert.equal(htmlAsset.url, 'http://example.com/index.blerg?yay=bar#really');
             },
             'then set the extension to ""': {
                 topic: function (htmlAsset) {
                     htmlAsset.extension = "";
                     return htmlAsset;
                 },
+                'the extension property should be updated': function (htmlAsset) {
+                    assert.equal(htmlAsset.extension, '');
+                },
+                'the fileName property should be updated': function (htmlAsset) {
+                    assert.equal(htmlAsset.fileName, 'index');
+                },
                 'the url property should be updated': function (htmlAsset) {
-                    assert.equal(htmlAsset.url, 'http://example.com/index?yay=bar');
+                    assert.equal(htmlAsset.url, 'http://example.com/index?yay=bar#really');
                 }
             }
         }
@@ -166,13 +400,19 @@ vows.describe('Asset test').addBatch({
         'the extension property should return the right value': function (htmlAsset) {
             assert.equal(htmlAsset.extension, '.blah');
         },
-        'then set the extension property to ".blerg"': {
+        'the fileName property should return the right value': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, 'index.blah');
+        },
+        'then set the fileName property to "index.blerg"': {
             topic: function (htmlAsset) {
-                htmlAsset.extension = '.blerg';
+                htmlAsset.fileName = 'index.blerg';
                 return htmlAsset;
             },
-            'the extension should be .blerg': function (htmlAsset) {
+            'the extension property should be updated': function (htmlAsset) {
                 assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should be updated': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'index.blerg');
             },
             'the url property should be updated': function (htmlAsset) {
                 assert.equal(htmlAsset.url, 'http://example.com/index.blerg?yay=bar#really');
@@ -181,6 +421,12 @@ vows.describe('Asset test').addBatch({
                 topic: function (htmlAsset) {
                     htmlAsset.extension = "";
                     return htmlAsset;
+                },
+                'the extension property should be updated': function (htmlAsset) {
+                    assert.equal(htmlAsset.extension, '');
+                },
+                'the fileName property should be updated': function (htmlAsset) {
+                    assert.equal(htmlAsset.fileName, 'index');
                 },
                 'the url property should be updated': function (htmlAsset) {
                     assert.equal(htmlAsset.url, 'http://example.com/index?yay=bar#really');
@@ -197,13 +443,19 @@ vows.describe('Asset test').addBatch({
         'the extension property should be ".html" (the defaultExtension)': function (htmlAsset) {
             assert.equal(htmlAsset.extension, '.html');
         },
+        'the fileName property should be undefined': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, undefined);
+        },
         'then set the extension property to ".blerg"': {
             topic: function (htmlAsset) {
                 htmlAsset.extension = '.blerg';
                 return htmlAsset;
             },
-            'the extension should be .blerg': function (htmlAsset) {
+            'the extension property should be updated': function (htmlAsset) {
                 assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName should still be undefined': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, undefined);
             },
             'the url property should still be falsy': function (htmlAsset) {
                 assert.isTrue(!htmlAsset.url);
@@ -220,13 +472,48 @@ vows.describe('Asset test').addBatch({
         'the extension property should be ".yay"': function (htmlAsset) {
             assert.equal(htmlAsset.extension, '.yay');
         },
+        'the fileName property should be undefined': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, undefined);
+        },
         'then set the extension property to ".blerg"': {
             topic: function (htmlAsset) {
                 htmlAsset.extension = '.blerg';
                 return htmlAsset;
             },
-            'the extension should be .blerg': function (htmlAsset) {
+            'the extension property should be .blerg': function (htmlAsset) {
                 assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should still be undefined': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, undefined);
+            },
+            'the url property should still be falsy': function (htmlAsset) {
+                assert.isTrue(!htmlAsset.url);
+            }
+        }
+    },
+    'Instantiate an Html asset with no url but a fileName of "thething.yay"': {
+        topic: function () {
+            return new assets.Html({
+                fileName: 'thething.yay',
+                text: 'foo'
+            });
+        },
+        'the extension property should be ".yay"': function (htmlAsset) {
+            assert.equal(htmlAsset.extension, '.yay');
+        },
+        'the fileName property should be "thething.yay"': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, "thething.yay");
+        },
+        'then set the extension property to ".blerg"': {
+            topic: function (htmlAsset) {
+                htmlAsset.extension = '.blerg';
+                return htmlAsset;
+            },
+            'the extension property should be .blerg': function (htmlAsset) {
+                assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should be updated': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, 'thething.blerg');
             },
             'the url property should still be falsy': function (htmlAsset) {
                 assert.isTrue(!htmlAsset.url);
@@ -243,13 +530,48 @@ vows.describe('Asset test').addBatch({
         'the extension property should be ""': function (htmlAsset) {
             assert.equal(htmlAsset.extension, '');
         },
+        'the fileName property should be undefined': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, undefined);
+        },
         'then set the extension property to ".blerg"': {
             topic: function (htmlAsset) {
                 htmlAsset.extension = '.blerg';
                 return htmlAsset;
             },
-            'the extension should be .blerg': function (htmlAsset) {
+            'the extension property should be .blerg': function (htmlAsset) {
                 assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should still be undefined': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, undefined);
+            },
+            'the url property should still be falsy': function (htmlAsset) {
+                assert.isTrue(!htmlAsset.url);
+            }
+        }
+    },
+    'Instantiate an Html asset with no url but a fileName of ""': {
+        topic: function () {
+            return new assets.Html({
+                fileName: '',
+                text: 'foo'
+            });
+        },
+        'the extension property should be ""': function (htmlAsset) {
+            assert.equal(htmlAsset.extension, '');
+        },
+        'the fileName property should be ""': function (htmlAsset) {
+            assert.equal(htmlAsset.fileName, "");
+        },
+        'then set the extension property to ".blerg"': {
+            topic: function (htmlAsset) {
+                htmlAsset.extension = '.blerg';
+                return htmlAsset;
+            },
+            'the extension property should be .blerg': function (htmlAsset) {
+                assert.equal(htmlAsset.extension, '.blerg');
+            },
+            'the fileName property should be ".blerg"': function (htmlAsset) {
+                assert.equal(htmlAsset.fileName, ".blerg");
             },
             'the url property should still be falsy': function (htmlAsset) {
                 assert.isTrue(!htmlAsset.url);
