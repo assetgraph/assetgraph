@@ -108,6 +108,39 @@ vows.describe('asset.outgoingRelations').addBatch({
                             },
                             'the HtmlAnchor relations should be in the graph again': function (assetGraph) {
                                 assert.equal(assetGraph.findRelations({type: 'HtmlAnchor'}).length, 2);
+                            },
+                            'then clone foo.html': {
+                                topic: function (assetGraph) {
+                                    var fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0],
+                                        clone = fooHtml.clone();
+                                    clone.url = 'http://example.com/fooclone1.html';
+                                    return assetGraph;
+                                },
+                                'the clone should have populated relations to baz.html and quux.html': function (assetGraph) {
+                                    var clone = assetGraph.findAssets({url: /\/fooclone1\.html$/})[0];
+                                    assert.notEqual(clone, undefined);
+                                    var outgoingRelations = assetGraph.findRelations({from: clone});
+                                    assert.equal(outgoingRelations.length, 2);
+                                    assert.equal(outgoingRelations[0].to.url, 'http://example.com/baz.html');
+                                    assert.equal(outgoingRelations[1].to.url, 'http://example.com/quux.html');
+                                },
+                                'then change the url of foo.html and clone it again': {
+                                    topic: function (assetGraph) {
+                                        var fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0];
+                                        fooHtml.url = 'http://example.com/another/place/foo.html';
+                                        var clone = fooHtml.clone();
+                                        clone.url = 'http://example.com/another/place/fooclone2.html';
+                                        return assetGraph;
+                                    },
+                                    'the clone should have populated relations to baz.html and quux.html': function (assetGraph) {
+                                        var clone = assetGraph.findAssets({url: /\/fooclone2\.html$/})[0];
+                                        assert.notEqual(clone, undefined);
+                                        var outgoingRelations = assetGraph.findRelations({from: clone});
+                                        assert.equal(outgoingRelations.length, 2);
+                                        assert.equal(outgoingRelations[0].to.url, 'http://example.com/baz.html');
+                                        assert.equal(outgoingRelations[1].to.url, 'http://example.com/quux.html');
+                                    }
+                                }
                             }
                         }
                     }
