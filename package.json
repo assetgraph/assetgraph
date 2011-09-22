@@ -36,7 +36,7 @@
     "directories": {
         "lib": "./lib"
     },
-    "publicationConfig": {
+    "publishConfig": {
         "registry": "http://registry.npmjs.org/"
     },
     "main": "lib/index.js"
