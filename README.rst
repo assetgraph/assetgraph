@@ -127,8 +127,32 @@ Find all HtmlAnchor (<a href=...>) relations pointing at local images::
 Transforms and workflows
 ========================
 
-AssetGraph comes with a collection of premade transforms that you can
-combine into a build procedure.
+AssetGraph comes with a collection of premade "transforms" that you
+can use as high level building blocks when putting together your build
+procedure. Most transforms work on a set of assets or relations and
+usually accept a query object so they can be scoped to work on only a
+specific subset of the graph.
+
+Usually you'll start by loading some initial assets from disc or via
+http using the ``loadAssets`` transform, then get the related assets
+added using the ``populate`` transform, then do the actual
+processing. Eventually you'll probably write the resulting assets back
+to disc.
+
+Thus the skeleton looks something like this::
+
+    var AssetGraph = require('assetgraph'),
+        transforms = AssetGraph.transforms;
+
+    new AssetGraph({root: '/the/root/directory/'}).queue(
+        transforms.loadAssets('*.html'), // Load all Html assets in the root dir
+        transforms.populate({followRelations: {type: 'HtmlAnchor'}}), // Follow <a href=...>
+        // More work...
+        transforms.writeAssetsToDisc({type: 'Html'}) // Overwrite existing files
+    ).run(finishedCallback);
+
+In the following sections the built-in transforms are documented
+individually:
 
 
 transforms.addCacheManifest([queryObj])
@@ -363,13 +387,17 @@ conditional comment.
 
 For example::
 
+    assetGraph.runTransform(transforms.inlineCssImagesWithLegacyFallback(), cb);
+
+where ``assetGraph`` contains an Html asset with this fragment::
+
     <link rel='stylesheet' href='foo.css'>
 
-where ``foo.css`` contains::
+and ``foo.css`` contains::
 
     body {background-image: url(small.png);}
 
-is turned into::
+will be turned into::
 
     <!--[IE]><link rel="stylesheet" href="8.css"><![endif]-->
     <!--[if !IE]>--><link rel="stylesheet" href="foo.css"><!--<![endif]-->
@@ -382,23 +410,106 @@ where ``8.css`` is a copy of the original ``foo.css``, and ``foo.css`` now conta
 transforms.inlineRelations([queryObj])
 --------------------------------------
 
-Inlines all relations in the graph (or those matched by ``queryObj``).
+Inlines all relations in the graph (or those matched by
+``queryObj``). Only works on relation types that support inlining, for
+example ``HtmlScript``, ``HtmlStyle``, and ``CssImage``.
+
+Example::
+
+    assetGraph.runTransform(transforms.inlineRelations({type: ['HtmlStyle', 'CssImage']}));
+
+where ``assetGraph`` contains an Html asset with this fragment::
+
+    <link rel='stylesheet' href='foo.css'>
+
+and foo.css contains::
+
+    body {background-image: url(small.png);}
+
+will be turned into::
+
+    <style type='text/css'>body {background-image: url(data;image/png;base64,iVBORw0KGgoAAAANSUhE...)}</style>
+
+Note that ``foo.css`` and the ``CssImage`` will still be modelled as
+separate assets after being inlined, so they can be manipulated the
+same way as when they were external.
 
 
-transforms.loadAssets(fileName...)
+transforms.loadAssets(fileName|wildcard|url|Asset[, ...])
 ----------------------------------
+
+Add new assets to the graph and make sure they are loaded. Several
+syntaxes are supported, for example::
+
+    transforms.loadAssets('a.html', 'b.css') // Relative to assetGraph.root
+    transforms.loadAssets(new AssetGraph.assets.JavaScript({
+        url: "http://example.com/index.html",
+        text: "var foo = bar;" // The source is specified, won't be loaded
+    });
+
+``file://`` urls support wildcard expansion::
+
+    transforms.loadAssets('file:///foo/bar/*.html') // Wildcard expansion
+    transforms.loadAssets('*.html') // assetGraph.root must be file://...
+
 
 transforms.mergeIdenticalAssets([queryObj])
 -------------------------------------------
 
+Compute the MD5 sum of every asset in the graph (or those specified by
+``queryObj`` and remove duplicates. The relations pointing at the
+removed assets are updated to point at the copy that is kept.
+
+For example::
+
+    assetGraph.runTransform(transforms.mergeIdenticalAssets(), cb);
+
+where ``assetGraph`` contains an ``Html`` asset with this fragment::
+
+    <head>
+        <style type='text/css'>body {background-image: url(foo.png);}</style>
+    </head>
+    <body>
+        <img src='bar.png'>
+    </body>
+
+will be turned into the following if ``foo.png`` and ``bar.png`` are identical::
+
+    <head>
+        <style type='text/css'>body {background-image: url(foo.png);}</style>
+    </head>
+    <body>
+        <img src='foo.png'>
+    </body>
+
+and the ``bar.png`` asset will be removed from the graph.
+
+
 transforms.minifyAssets([queryObj])
 -----------------------------------
+
+Minify all assets in the graph, or those specified by
+``queryObj``. Only has an effect for asset types that support
+minification, and what actually happens also varies:
+
+``Html`` and ``Xml``:
+  Pure-whitespace text nodes are removed immediately.
+
+``Json``, ``JavaScript``, and ``Css``:
+  The asset gets marked as minified (``isPretty`` is set to
+  ``false``), which doesn't affect the in-memory representation
+  (``asset.parseTree``), but is honored when the asset is serialized.
+  For ``JavaScript`` this only governs the amount of whitespace
+  (UglifyJS' ``beautify`` parameter); for how to apply variable
+  renaming and other compression techniques see
+  ``transforms.compressJavaScript``.
+
 
 transforms.moveAssets
 ---------------------
 
-transforms.moveAssetsToDirectory
---------------------------------
+transforms.moveAssetsInOrder
+----------------------------
 
 transforms.moveAssetsToNewRoot
 ------------------------------
@@ -412,17 +523,17 @@ transforms.populate
 transforms.postProcessBackgroundImages
 --------------------------------------
 
-transforms.prettyPrintAssets
-----------------------------
+transforms.prettyPrintAssets(queryObj)
+--------------------------------------
+
+The inverse of ``transforms.minifyAssets``.
+
 
 transforms.removeAssets
 -----------------------
 
 transforms.removeRelations
 --------------------------
-
-transforms.renameAssetsToMd5Prefix
-----------------------------------
 
 transforms.setAssetContentType
 ------------------------------
