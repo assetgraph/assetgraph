@@ -399,12 +399,17 @@ and ``foo.css`` contains::
 
 will be turned into::
 
-    <!--[IE]><link rel="stylesheet" href="8.css"><![endif]-->
-    <!--[if !IE]>--><link rel="stylesheet" href="foo.css"><!--<![endif]-->
+    <!--[if IE]><link rel="stylesheet" href="foo.css"><![endif]-->
+    <!--[if !IE]>--><link rel="stylesheet" href="1234.css"><!--<![endif]-->
 
-where ``8.css`` is a copy of the original ``foo.css``, and ``foo.css`` now contains:
+where ``1234.css`` is a copy of the original ``foo.css`` with the
+images inlined as ``data:`` urls::
 
     body {background-image: url(data;image/png;base64,iVBORw0KGgoAAAANSUhE...)}
+
+The file name ``1234.css`` is just an example. The actual asset file
+name will be derived from the unique id of the copy and be placed at
+the root of the assetgraph.
 
 
 transforms.inlineRelations([queryObj])
