@@ -25,7 +25,7 @@ vows.describe('Parsing conditional comments in Html').addBatch({
                 assert.matches(text, /<script src="fixIE6ForTheLoveOfGod\.js"><\/script>/);
             },
             'the not-Internet Explorer conditional comment construct should be intact': function (text) {
-                assert.matches(text, /<!--\[if !IE\]><!-->Not IE<!--<!\[endif\]-->/);
+                assert.matches(text, /<!--\[if !IE\]>\s*-->Not IE<!--\s*<!\[endif\]-->/);
             },
             'then externalizing the Css and JavaScript and minifying the Html': {
                 topic: function (_, assetGraph) {
@@ -41,7 +41,7 @@ vows.describe('Parsing conditional comments in Html').addBatch({
                     'the conditional comments should still be there': function (text) {
                         assert.matches(text, /Good old/);
                         assert.matches(text, /<script src="fixIE6ForTheLoveOfGod\.js"><\/script>/);
-                        assert.matches(text, /<!--\[if !IE\]><!-->Not IE<!--<!\[endif\]-->/);
+                        assert.matches(text, /<!--\[if !IE\]>\s*-->Not IE<!--\s*<!\[endif\]-->/);
                         assert.matches(text, /<!--\[if IE\]><link rel="stylesheet" href="[^\"]+\.css"><!\[endif\]-->/);
                     }
                 }
