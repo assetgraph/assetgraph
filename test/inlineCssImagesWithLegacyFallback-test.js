@@ -40,6 +40,11 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
                 assert.isNotNull(captures);
                 assert.equal(captures.length, 5);
             },
+            'the media=handheld attribute should occur twice now that smallImages.css has been rolled out in two versions': function (assetGraph) {
+                var captures = assetGraph.findAssets({type: 'Html'})[0].text.match(/media=['"]handheld/g);
+                assert.isNotNull(captures);
+                assert.equal(captures.length, 2);
+            },
             'the Html asset should contain 2 IE conditional comment markers with link tags in them': function (assetGraph) {
                 var text = assetGraph.findAssets({type: 'Html'})[0].text;
                 assert.matches(text, /<!--\[if IE\]><link[^>]*><!\[\endif]-->/);
