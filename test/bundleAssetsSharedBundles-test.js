@@ -98,8 +98,8 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
         'the graph should contain 5 HtmlStyle relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 5);
         },
-        'the graph should contain 1 HtmlConditionalComment relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlConditionalComment'}).length, 1);
+        'the graph should contain 2 HtmlConditionalComment relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlConditionalComment'}).length, 2);
         },
         'then bundling the HtmlStyles': {
             topic: function (assetGraph) {
@@ -123,8 +123,8 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
                 assert.equal(cssAsset.parseTree.cssRules.length, 1);
                 assert.equal(cssAsset.parseTree.cssRules[0].style.getPropertyValue('color'), '#eeeeee');
             },
-            'the conditional comment should have one outgoing HtmlStyle relation consisting of the rules from c.css and d.css': function (assetGraph) {
-                var conditionalCommentBody = assetGraph.findAssets({type: 'Html', isInline: true})[0],
+            'the second conditional comment should have one outgoing HtmlStyle relation consisting of the rules from c.css and d.css': function (assetGraph) {
+                var conditionalCommentBody = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlConditionalComment'})[1].to,
                     htmlStyles = assetGraph.findRelations({from: conditionalCommentBody});
                 assert.equal(htmlStyles.length, 1);
                 assert.equal(htmlStyles[0].to.parseTree.cssRules.length, 2);
