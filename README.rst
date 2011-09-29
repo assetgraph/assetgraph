@@ -549,6 +549,9 @@ transforms.setAssetEncoding
 transforms.setAssetExtension
 ----------------------------
 
+transforms.setHtmlImageDimensions
+---------------------------------
+
 transforms.startOverIfAssetSourceFilesChange
 --------------------------------------------
 
