@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src='js/theScript.js'></script>
+<style>
+.body {color:red;}
+</style>
+</head>
+<body>
+</body>
+</html>
