@@ -17,7 +17,7 @@
         "optimist": "=0.2.6",
         "cssmin": "=0.3.0",
         "request": "=2.1.1",
-        "glob": "~2.0.7",
+        "glob": "=2.0.9",
         "graphviz": "=0.0.3",
         "bufferjs": "=1.0.1",
         "iconv": "=1.1.0",
