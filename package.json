@@ -23,7 +23,7 @@
         "iconv": "=1.1.2",
         "seq": "=0.3.5",
         "temp": "=0.2.0",
-        "coffee-script": "=1.1.1",
+        "coffee-script": "=1.1.2",
         "htmlparser": ">=1.7.0",
         "jsdom": "=0.2.5",
         "cssom-papandreou": "=0.2.0-patch1"
