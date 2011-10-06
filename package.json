@@ -14,7 +14,7 @@
         "yui-compressor": "=0.1.3",
         "closure-compiler": "=0.1.1",
         "underscore": "=1.2.0",
-        "optimist": "=0.1.9",
+        "optimist": "=0.2.6",
         "cssmin": "=0.3.0",
         "request": "~2.0.2",
         "glob": "~2.0.7",
