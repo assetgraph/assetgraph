@@ -21,7 +21,7 @@
         "graphviz": "=0.0.3",
         "bufferjs": "=1.0.2",
         "iconv": "=1.1.2",
-        "seq": ">=0.3.0 <0.4",
+        "seq": "=0.3.5",
         "temp": "=0.2.0",
         "coffee-script": "=1.1.1",
         "htmlparser": ">=1.7.0",
