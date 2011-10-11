@@ -516,9 +516,6 @@ transforms.moveAssets
 transforms.moveAssetsInOrder
 ----------------------------
 
-transforms.moveAssetsToNewRoot
-------------------------------
-
 transforms.parallel
 -------------------
 
