@@ -215,16 +215,21 @@ Compresses all ``JavaScript`` assets in the graph (or those specified by
 The ``compressorName`` (string) parameter can be either:
 
 ``uglify`` (the default and the fastest)
-  The excellent `UglifyJS <https://github.com/mishoo/UglifyJS>`_ compressor.
-  If provided, the ``compressorOptions`` object will be passed to UglifyJS' ``ast_squeeze`` command.
+  The excellent `UglifyJS <https://github.com/mishoo/UglifyJS>`_
+  compressor.  If provided, the ``compressorOptions`` object will be
+  passed to UglifyJS' ``ast_squeeze`` command.
 
 ``yuicompressor``
-  Yahoo's YUICompressor though Tim-Smart's `node-yuicompressor module <https://github.com/Tim-Smart/node-yui-compressor>`_.
-  If provided, the ``compressorOptions`` object will be passed as the second argument to ``require('yui-compressor').compile``.
+  Yahoo's YUICompressor though Tim-Smart's `node-yuicompressor module
+  <https://github.com/Tim-Smart/node-yui-compressor>`_.  If provided,
+  the ``compressorOptions`` object will be passed as the second
+  argument to ``require('yui-compressor').compile``.
 
 ``closurecompiler``
-  Google's Closure Compiler through Tim-Smart's `node-closure module <https://github.com/Tim-Smart/node-closure>`_.
-  If provided, the ``compressorOptions`` object will be passed as the second argument to ``require('closure-compiler').compile``.
+  Google's Closure Compiler through Tim-Smart's `node-closure module
+  <https://github.com/Tim-Smart/node-closure>`_.  If provided, the
+  ``compressorOptions`` object will be passed as the second argument
+  to ``require('closure-compiler').compile``.
 
 
 transforms.convertCssImportsToHtmlStyles([queryObj])
@@ -510,14 +515,84 @@ minification, and what actually happens also varies:
   ``transforms.compressJavaScript``.
 
 
-transforms.moveAssets
----------------------
+transforms.moveAssets(queryObj, newUrlFunctionOrString)
+-------------------------------------------------------
 
-transforms.moveAssetsInOrder
-----------------------------
+Change the url of all assets matching ``queryObj``. If the second
+argument is a function, it will be called with each asset as the first
+argument and the assetGraph instance as the second and the url of the
+asset will be changed according to the return value:
 
-transforms.parallel
--------------------
+* If a falsy value is returned, nothing happens; the asset keeps its
+  current url.
+* If a non-absolute url is returned, it is resolved from
+  ``assetGraph.root``.
+* If the url ends in a slash, the file name part of the old url is
+  appended.
+
+Move all ``Css`` and ``Png`` assets to a root-relative url::
+
+    transforms.moveAssets({type: 'Css'}, '/images/')
+
+If the graph contains ``http://example.com/foo/bar.css`` and
+``assetGraph.root`` is ``file:///my/local/dir/``, the resulting url will
+be ``file:///my/local/dir/images/bar.css``.
+
+Move all non-inline ``JavaScript`` and ``Css`` assets to either
+``http://example.com/js/`` or ``http://example.com/css/``, preserving
+the current file name part of their url:
+
+   transforms.moveAssets({type: ['JavaScript', 'Css'], isInline: false}, function (asset, assetGraph) {
+       return "http://example.com/" + asset.type.toLowerCase() + "/" + asset.fileName;
+   });
+
+The assets are moved in no particular order. Compare with
+``transforms.moveAssetsInOrder``.
+
+
+transforms.moveAssetsInOrder(queryObj, newUrlFunctionOrString)
+--------------------------------------------------------------
+
+Does the same as ``transforms.moveAssets``, but makes sure that the
+"leaf assets" are moved before the assets that have outgoing relations
+to them.
+
+The typical use case for this is when you want to rename assets to
+``<hashOfContents>.<extension>`` while making sure that the hashes of
+the assets that have already been moved don't change as a result of
+updating the urls of the related assets after the fact.
+
+Here's a simplified example taken from ``buildProduction`` in
+`assetgraph-builder <http://github.com/One-com/assetgraph-builder>`_
+
+    transforms.moveAssetsInOrder({type: ['JavaScript', 'Css', 'Jpeg', 'Gif', 'Png']}, function (asset) {
+        return '/static/' + asset.md5Hex.substr(0, 10) + asset.extension;
+    })
+
+If a graph contains an ``Html`` asset with a relation to a ``Css`` asset
+that again has a relation to a ``Png`` asset, the above snippet will
+always move the ``Png`` asset before the ``Css`` asset, thus making it
+safe to compute the md5 of the respective assets when the function is
+invoked.
+
+Obviously this only works for graphs (or subsets of graphs)
+that don't contain cycles, and if that's not the case, an error will
+be thrown.
+
+
+transforms.parallel(transform1, transform2[, ...])
+-------------------------------------------
+
+Executes two or more transforms in parallel. This is only relevant for
+async transforms that perform I/O. It is the obligation of the caller
+to make sure that the transforms don't interfere with each other.
+
+Example::
+
+    transforms.parallel(
+        transform.writeAssetsToDisc({url: /^file:/}, "outputDirForFileUrl/"),
+        transform.writeAssetsToDisc({url: /^http:\/\/example\.com\/, "outputDirForExampleCom/"})
+    )
 
 transforms.populate
 -------------------
