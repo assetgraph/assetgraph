@@ -2,7 +2,7 @@
     "name": "assetgraph",
     "description": "Optimization framework for web pages and applications",
     "repository": "git://github.com/One-com/assetgraph.git",
-    "version": "0.3.15",
+    "version": "0.3.16-pre",
     "maintainers": [
         {
             "name": "Andreas Lind Petersen",
