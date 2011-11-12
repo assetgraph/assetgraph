@@ -597,9 +597,6 @@ Example::
 transforms.populate
 -------------------
 
-transforms.postProcessBackgroundImages
---------------------------------------
-
 transforms.prettyPrintAssets(queryObj)
 --------------------------------------
 
