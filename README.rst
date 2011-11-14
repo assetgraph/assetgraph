@@ -206,6 +206,14 @@ Finds all ``CoffeeScript`` assets in the graph (or those specified by
 originals.
 
 
+transforms.compileLessToCss([queryObj])
+------------------------------------------------------
+
+Finds all ``Less`` assets in the graph (or those specified by
+``queryObj``), compiles them to ``Css`` assets and replaces the
+originals.
+
+
 transforms.compressJavaScript([queryObj[, compressorName[, compressorOptions]]])
 --------------------------------------------------------------------------------
 
