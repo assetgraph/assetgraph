@@ -15,7 +15,7 @@
         "coffee-script": "= 1.1.2",
         "cssmin": "= 0.3.0",
         "cssom-papandreou": "= 0.2.0-patch1",
-        "glob": "= 2.0.9",
+        "glob": "= 2.1.0",
         "graphviz": "= 0.0.3",
         "iconv": "= 1.1.2",
         "jsdom": "= 0.2.9",
