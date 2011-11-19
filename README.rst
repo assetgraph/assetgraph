@@ -394,6 +394,10 @@ won't be inlined.
 2) To avoid duplication, images referenced by more than one
 ``CssImage`` relation won't be inlined.
 
+3) A ``CssImage`` relation residing in a CSS rule with a
+``-one-image-inline: true`` declaration will always be inlined. This
+takes precedence over the first two criteria.
+
 If any image is inlined an Internet Explorer-only version of the
 stylesheet will be created and referenced from the ``Html`` asset in a
 conditional comment.
@@ -522,6 +526,8 @@ minification, and what actually happens also varies:
   renaming and other compression techniques see
   ``transforms.compressJavaScript``.
 
+Compare to ``transforms.prettyPrintAssets``.
+
 
 transforms.moveAssets(queryObj, newUrlFunctionOrString)
 -------------------------------------------------------
@@ -602,44 +608,256 @@ Example::
         transform.writeAssetsToDisc({url: /^http:\/\/example\.com\/, "outputDirForExampleCom/"})
     )
 
-transforms.populate
--------------------
+transforms.populate(options)
+----------------------------
+
+Add assets to the graph by recursively following "dangling
+relations". This is the preferred way to load a complete web site or
+web application into an ``AssetGraph`` instance after using
+``transforms.loadAssets`` to add one or more assets to serve as the
+starting point for the population. The loading of the assets happens
+in parallel.
+
+The ``options`` object can contain these properties:
+
+``followRelations``: queryObj
+  Limits the set of relations that are followed. The default is to
+  follow all relations.
+
+``onError``: function (err, assetGraph, asset)
+  If there's an error loading an asset and an ``onError`` function is
+  specified, it will be called, and the population will continue. If
+  not specified, the population will stop and pass on the error to its
+  callback. (This is poorly thought out and should be removed or
+  redesigned).
+
+``concurrency``: Number
+  The maximum number of assets that can be loading at once (defaults to 100).
+
+Example::
+
+    new AssetGraph().queue(
+        transforms.addAssets('a.html'),
+        transforms.populate({
+            followRelations: {type: 'HtmlAnchor', to: {url: /\/[bc]\.html$/}}
+        })
+    ).run();
+
+If ``a.html`` links to ``b.html``, and ``b.html`` links to ``c.html``
+(using ``<a href="...">``), all three assets will be in the graph
+after ``transforms.populate`` is done. If ``c.html`` happens to link
+to ``d.html``, ``d.html`` won't be added.
+
 
 transforms.prettyPrintAssets(queryObj)
 --------------------------------------
 
-The inverse of ``transforms.minifyAssets``.
+Pretty-print all assets in the graph, or those specified by
+``queryObj``. Only has an effect for asset types that support pretty
+printing (``JavaScript``, ``Css``, ``Html``, ``Xml``, and ``Json``).
+
+The asset gets marked as pretty printed (``isPretty`` is set to
+``true``), which doesn't affect the in-memory representation
+(``asset.parseTree``), but is honored when the asset is
+serialized. For ``Xml``, and ``Html``, however, the existing
+whitespace-only text nodes in the document are removed immediately.
+
+Compare to ``transforms.minifyAssets``.
+
+Example::
+
+    // Pretty-print all Html and Css assets:
+    transforms.prettyPrintAssets({type: ['Html', 'Css']})
 
 
-transforms.removeAssets
------------------------
+transforms.removeAssets(queryObj[, detachIncomingRelations])
+------------------------------------------------------------
 
-transforms.removeRelations
+Remove all assets in the graph, or those specified by ``queryObj``,
+along with their incoming relations. If ``detachIncomingRelations`` is
+set to ``true``, the incoming relations will also be detached (removed
+from the parse tree of the source asset). This is not supported by
+all relation types.
+
+Example::
+
+    var AssetGraph = require('assetgraph'),
+        transforms = AssetGraph.transforms;
+    var ag = new AssetGraph().queue(
+        // Add a Html asset with an inline Css asset:
+        transforms.loadAssets(new AssetGraph.assets.Html({
+            text: '<html><head><style type="text/css">body {color: red;}</style></head></html>'
+        })),
+        // Remove the inline Css asset and detach the incoming HtmlStyle relation:
+        transforms.removeAssets({type: 'Css'}, true),
+        // Now the graph only contains the Html asset (without the <style> element):
+        transforms.writeAssetsToStdout({type: 'Html'})
+        // '<html><head></head></html>'
+    ).run();
+
+
+transforms.removeRelations(queryObj, [options])
+-----------------------------------------------
+
+Remove all assets in the graph, or those specified by ``queryObj``.
+
+The ``options`` object can contain these properties:
+
+``detach``: Boolean
+  Whether to also detach the relations (remove their nodes from the
+  parse tree of the source asset). Only supported for some relation
+  types. Defaults to ``false``.
+
+``unresolved``: Boolean
+  Whether to remove unresolved relations too ("dangling" ones whose
+  target assets aren't in the graph). Defaults to ``false``.
+
+``removeOrphan``: Boolean
+  Whether to also remove assets that become "orphans" as a result of
+  removing their last incoming relation.
+
+
+transforms.setAssetContentType(queryObj, contentType)
+-----------------------------------------------------
+
+Updates the ``contentType`` property of all assets matching
+``queryObj``. After an asset is loaded, the ``contentType`` property
+is only kept around as a handy piece of metadata, so updating it has
+no side effects. It's mostly useful if want to upload a "snapshot" of
+an AssetGraph to a WebDAV server or similar.
+
+
+transforms.setAssetEncoding(queryObj, newEncoding)
+--------------------------------------------------
+
+Changes the encoding (charset) of the assets matched by ``queryObj``
+to ``encoding`` (``utf-8``, ``windows-1252``, ``TIS-620``, etc.).
+Only works for text-based assets. Affects the ``rawSrc`` property of
+the asset, the decoded ``text`` property remains unchanged.
+
+Uses `node-iconv <http://github.com/bnoordhuis/node-iconv>`_ to do the
+actual text conversion, so make sure the charset is supported.
+
+As a convenient side effect, ``Html`` assets with a ``<head>`` element
+will get a ``<meta http-equiv="Content-Type" content="...">`` appended
+specifying the new encoding. If such a ``<meta>`` already exists, it
+will be updated.
+
+Example::
+
+    var AssetGraph = require('assetgraph'),
+        transforms = AssetGraph.transforms;
+    new AssetGraph().queue(
+        // Add a Html asset with an inline Css asset:
+        transforms.loadAssets(new AssetGraph.assets.Html({
+            text: '<html><head></head>æ</html>'
+        })),
+        transforms.setAssetEncoding({type: 'Html'}, 'iso-8859-1'),
+        transforms.writeAssetsToStdout({type: 'Html'})
+        // <html><head></head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head>�</html>
+    ).run();
+
+
+transforms.setAssetExtension(queryObj, extension)
+-------------------------------------------------
+
+Changes the extension part of the urls of all non-inline assets
+matching ``queryObj`` to ``extension``. The extension should include
+the leading dot like the ``require('path').extname()`` function.
+
+Example::
+
+    var AssetGraph = require('assetgraph'),
+        transforms = AssetGraph.transforms;
+    new AssetGraph().queue(
+        transforms.loadAssets('http://example.com/foo.html'),
+        transforms.setAssetExtension({type: 'Html'}, '.bar')
+        function (assetGraph) {
+            // assetGraph.findAssets({type: 'Html'})[0].url === 'http://example.com/foo.bar'
+        }
+    ).run();
+
+
+transforms.setHtmlImageDimensions(queryObj)
+-------------------------------------------
+
+Sets the ``width`` and ``height`` attributes of the ``img`` elements
+underlying all ``HtmlImage`` relations, or those matching
+``queryObj``. Only works when the image pointed to be the relation is
+in the graph.
+
+Example::
+
+    var AssetGraph = require('assetgraph'),
+        transforms = AssetGraph.transforms;
+    new AssetGraph().queue(
+        transforms.loadAssets('hasanimage.html'),
+        transforms.populate(),
+        // assetGraph.findAssets({type: 'Html'})[0].text === '<body><img src="foo.png"></body>'
+        transforms.setHtmlImageDimensions()
+        // assetGraph.findAssets({type: 'Html'})[0].text === '<body><img src="foo.png" width="29" height="32"></body>'
+    ).run();
+
+
+transforms.startOverIfAssetSourceFilesChange(queryObj)
+------------------------------------------------------
+
+Starts watching all ``file://`` assets (or those matching
+``queryObj``) as they're added to the graph, and reruns all the
+following transformations when a source file is changed on disc.
+
+Used to power ``buildDevelopment --watch`` in `AssetGraph-builder
+<http://github.com/One-com/assetgraph-builder>`_. Should be considered
+experimental.
+
+
+transforms.stats(queryObj)
 --------------------------
 
-transforms.setAssetContentType
-------------------------------
+Dumps an ASCII table with some basic stats about all the assets in the
+graph (or those matching ``queryObj``) in their current state.
 
-transforms.setAssetEncoding
----------------------------
+Example::
 
-transforms.setAssetExtension
-----------------------------
+           Ico   1   1.1 KB
+           Png  28 196.8 KB
+           Gif 145 129.4 KB
+          Json   2  60.1 KB
+           Css   2 412.6 KB
+    JavaScript  34   1.5 MB
+          Html   1   1.3 KB
+        Total: 213   2.2 MB
 
-transforms.setHtmlImageDimensions
----------------------------------
 
-transforms.startOverIfAssetSourceFilesChange
---------------------------------------------
+transforms.writeAssetsToDisc(queryObj, outRoot[, root])
+-----------------------------------------------------
 
-transforms.stats
-----------------
+Writes the assets matching ``queryObj`` to disc. The ``outRoot``
+parameter must be a ``file://`` url specifying the directory where the
+files should be output. The optional ``root`` parameter specifies the
+url that you want to correspond to the ``outRoot`` directory (defaults
+to the ``root`` property of the AssetGraph instance).
 
-transforms.writeAssetsToDisc
-----------------------------
+Directories will be created as needed.
 
-transforms.writeAssetsToStdout
-------------------------------
+Example::
+
+    var AssetGraph = require('assetgraph'),
+        transforms = AssetGraph.transforms;
+    new AssetGraph({root: 'http://example.com/'}).queue(
+        transforms.loadAssets('http://example.com/bar/quux/foo.html',
+                              'http://example.com/bar/baz.html'),
+        // Will write the two assets to /my/output/dir/quux/foo.html and /my/output/dir/baz.html:
+        transforms.writeAssetsToDisc({type: 'Html'} 'file:///my/output/dir/', 'http://example.com/bar/')
+    ).run();
+
+
+transforms.writeAssetsToStdout(queryObj)
+----------------------------------------
+
+Writes all assets in the graph (or those specified by ``queryObj``) to
+stdout. Mostly useful for piping out a single asset.
+
 
 License
 -------
