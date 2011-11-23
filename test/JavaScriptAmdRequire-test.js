@@ -14,8 +14,8 @@ vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
         'the graph should contain a HtmlRequireJsMain relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'}).length, 1);
         },
-        'the graph should contain 3 JavaScriptAmdRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 3);
+        'the graph should contain 4 JavaScriptAmdRequire relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 4);
         },
         'the graph should contain 2 JavaScriptAmdDefine relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 2);
