@@ -17,6 +17,9 @@ vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
         'the graph should contain 3 JavaScriptAmdRequire relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 3);
         },
+        'the graph should contain 2 JavaScriptAmdDefine relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 2);
+        },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
         },
