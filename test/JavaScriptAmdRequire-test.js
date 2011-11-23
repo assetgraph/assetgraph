@@ -4,9 +4,23 @@ var vows = require('vows'),
     transforms = AssetGraph.transforms;
 
 vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
-    'After loading test case': {
+    'After loading test case with an Html asset that loads require.js and uses it in an inline script': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/'}).queue(
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/simple/'}).queue(
+                transforms.loadAssets('index.html'),
+                transforms.populate()
+            ).run(this.callback);
+        },
+        'the graph should contain 3 JavaScriptAmdRequire relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 3);
+        },
+        'the graph should contain 5 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+        },
+    },
+    'After loading test case with an Html asset that loads require.js and includes a data-main attribute on the script tag': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withDataMain/'}).queue(
                 transforms.loadAssets('index.html'),
                 transforms.populate()
             ).run(this.callback);
