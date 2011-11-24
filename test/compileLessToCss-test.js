@@ -22,7 +22,7 @@ vows.describe('Compiling LESS to CSS').addBatch({
             'the graph should contain no Less assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Less'}).length, 0);
             },
-            'the graph should contain one Css assets': function (assetGraph) {
+            'the graph should contain one Css asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
             },
             'then get the Html asset as text': {
