@@ -31,6 +31,9 @@ vows.describe('Compiling Stylus to CSS').addBatch({
                 },
                 'the Css should be the output of the less compiler': function (cssText) {
                     assert.equal(cssText,
+                        'body {\n' +
+                        '  color: #f00;\n' +
+                        '}\n' +
                         'body a {\n' +
                         '  font: 12px/1.4 "Lucida Grande", Arial, sans-serif;\n' +
                         '  background: #000;\n' +
