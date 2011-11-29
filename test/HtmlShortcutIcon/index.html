@@ -5,8 +5,10 @@
     <link rel="shortcut icon" href="foo.png"> <!-- IE<=9 -->
     <link rel="SHORTCUT ICON" href="foo.png"> <!-- IE<=9 -->
     <link rel="icon" href="foo.png"> <!-- Other browsers -->
-    <link rel="other stuff in rel besides icon" href="foo.png">
+    <link rel="other stuff in rel besides icon" href="foo.png"> <!-- Also valid -->
     <link rel="apple-touch-icon" href="foo.png">
+    <link rel="apple-touch-icon-precomposed" href="foo.png">
+    <link rel="apple-touch-icon-invalid" href="foo.png"> <!-- Shouldn't be recognized as a relation -->
     <link rel="AN apple-touch-icon and then some" href="foo.png">
 </head>
 <body>

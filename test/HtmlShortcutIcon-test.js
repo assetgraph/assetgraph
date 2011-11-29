@@ -14,8 +14,8 @@ vows.describe('relations.HtmlShortcutIcon').addBatch({
         'the graph should contain 2 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 2);
         },
-        'the graph should contain 6 HtmlShortcutIcon relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlShortcutIcon'}).length, 6);
+        'the graph should contain 7 HtmlShortcutIcon relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlShortcutIcon'}).length, 7);
         },
         'then attach two more HtmlShortcutIcon relation before and after the first one': {
             topic: function (assetGraph) {
@@ -32,8 +32,8 @@ vows.describe('relations.HtmlShortcutIcon').addBatch({
                 }).attach(htmlAsset, 'before', firstExistingHtmlShortcutIconRelation);
                 return assetGraph;
             },
-            'the graph should contain 8 HtmlShortcutIcon relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlShortcutIcon'}).length, 8);
+            'the graph should contain 9 HtmlShortcutIcon relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlShortcutIcon'}).length, 9);
             },
             'the Html should contain three properly formatted <link> tags': function (assetGraph) {
                 var matches = assetGraph.findAssets({type: 'Html'})[0].text.match(/<link rel="shortcut icon" href="foo.png">/g);
