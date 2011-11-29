@@ -8,7 +8,7 @@ var vows = require('vows'),
 vows.describe('<video> and <audio> test').addBatch({
     'After loading test': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/htmlVideoAndAudio/'}).queue(
+            new AssetGraph({root: __dirname + '/HtmlVideoAndHtmlAudio/'}).queue(
                 transforms.loadAssets('index.html'),
                 transforms.populate({
                     followRelations: function () {return false;}

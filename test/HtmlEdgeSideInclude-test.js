@@ -8,7 +8,7 @@ var vows = require('vows'),
 vows.describe('Edge side include test').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/htmlEdgeSideInclude/'}).queue(
+            new AssetGraph({root: __dirname + '/HtmlEdgeSideInclude/'}).queue(
                 transforms.loadAssets('index.html'),
                 transforms.populate({
                     followRelations: {to: {url: /\.html$/}}

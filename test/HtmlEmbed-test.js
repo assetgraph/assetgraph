@@ -8,7 +8,7 @@ var vows = require('vows'),
 vows.describe('<embed src="..."> test').addBatch({
     'After loading test': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/htmlEmbed/'}).queue(
+            new AssetGraph({root: __dirname + '/HtmlEmbed/'}).queue(
                 transforms.loadAssets('index.html'),
                 transforms.populate({
                     followRelations: function () {return false;}

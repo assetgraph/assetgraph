@@ -9,7 +9,7 @@ var _ = require('underscore'),
 vows.describe('<object><param name="src" value="..."></object> test').addBatch({
     'After loading test': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/htmlObject/'}).queue(
+            new AssetGraph({root: __dirname + '/HtmlObject/'}).queue(
                 transforms.loadAssets('index.html'),
                 transforms.populate({
                     followRelations: function () {return false;}

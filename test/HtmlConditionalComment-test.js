@@ -7,7 +7,7 @@ var vows = require('vows'),
 vows.describe('Parsing conditional comments in Html').addBatch({
     'After loading a test case with conditional comments': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/htmlConditionalComments/'}).queue(
+            new AssetGraph({root: __dirname + '/HtmlConditionalComment/'}).queue(
                 transforms.loadAssets('index.html'),
                 transforms.populate()
             ).run(this.callback);
