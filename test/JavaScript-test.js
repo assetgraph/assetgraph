@@ -1,12 +1,13 @@
 var vows = require('vows'),
     assert = require('assert'),
+    _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms;
 
 vows.describe('assets.JavaScript').addBatch({
     'After loading test case that has a parse error in an inline JavaScript asset': {
         topic: function () {
-            var assetGraph = new AssetGraph({root: __dirname + '/JavaScript/'}).queue(
+            new AssetGraph({root: __dirname + '/JavaScript/'}).queue(
                 transforms.loadAssets('parseErrorInInlineJavaScript.html')
             ).run(this.callback);
         },
@@ -33,6 +34,22 @@ vows.describe('assets.JavaScript').addBatch({
             assert.matches(err.message, /parseError\.js/);
             assert.matches(err.message, /line 6\b/);
             assert.matches(err.message, /column 13\b/);
+        }
+    },
+    'after loading test case with relations located at multiple levels in the parse tree': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScript/relationsDepthFirst/'}).queue(
+                transforms.loadAssets('relationsDepthFirst.js'),
+                transforms.populate()
+            ).run(this.callback);
+        },
+        'the relations should be in depth-first order in the graph': function (assetGraph) {
+            assert.deepEqual(_.pluck(assetGraph.findRelations(), 'href'),
+                             [
+                                 'foo.js',
+                                 'data.json',
+                                 'bar.js'
+                             ]);
         }
     }
 })['export'](module);
