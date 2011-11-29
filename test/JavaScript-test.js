@@ -39,12 +39,12 @@ vows.describe('assets.JavaScript').addBatch({
     'after loading test case with relations located at multiple levels in the parse tree': {
         topic: function () {
             new AssetGraph({root: __dirname + '/JavaScript/relationsDepthFirst/'}).queue(
-                transforms.loadAssets('relationsDepthFirst.js'),
+                transforms.loadAssets('index.html'),
                 transforms.populate()
             ).run(this.callback);
         },
         'the relations should be in depth-first order in the graph': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findRelations(), 'href'),
+            assert.deepEqual(_.pluck(assetGraph.findRelations({from: {type: 'JavaScript'}}), 'href'),
                              [
                                  'foo.js',
                                  'data.json',
