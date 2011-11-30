@@ -1,3 +1,3 @@
-var //builtInModule = require('util'),
+var builtInModule = require('util'), // Should be ignored
     localModule = require('./otherModule'),
     indexJsInSubdir = require('./subdir');
