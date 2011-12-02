@@ -17,7 +17,7 @@ vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
-        },
+        }
     },
     'After loading test case with an Html asset that loads require.js and includes a data-main attribute on the script tag': {
         topic: function () {
