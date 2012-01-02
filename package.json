@@ -41,5 +41,8 @@
     "publishConfig": {
         "registry": "http://registry.npmjs.org/"
     },
-    "main": "lib/index.js"
+    "main": "lib/index.js",
+    "scripts": {
+        "prepublish": "vows"
+    }
 }
