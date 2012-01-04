@@ -14,7 +14,7 @@
         "closure-compiler": "= 0.1.1",
         "coffee-script": "= 1.1.2",
         "cssmin": "= 0.3.0",
-        "cssom-papandreou": "= 0.2.1-patch1",
+        "cssom-papandreou": "= 0.2.2-patch1",
         "glob": ">= 2.0.9",
         "graphviz": "= 0.0.3",
         "iconv": "= 1.1.2",
