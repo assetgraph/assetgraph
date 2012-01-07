@@ -31,6 +31,12 @@ vows.describe('Compiling CoffeeScript to JavaScript').addBatch({
                 },
                 'there should be no occurrences of "text/coffeescript"': function (text) {
                     assert.equal(text.indexOf('text/coffeescript'), -1);
+                },
+                'there should be no occurrences of "index.coffee"': function (text) {
+                    assert.equal(text.indexOf('index.coffee'), -1);
+                },
+                'there should be a <script src="index.js">': function (text) {
+                    assert.notEqual(text.indexOf('<script src="index.js">'), -1);
                 }
             }
         }

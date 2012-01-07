@@ -31,6 +31,12 @@ vows.describe('Compiling LESS to CSS').addBatch({
                 },
                 'there should be no occurrences of "stylesheet/less"': function (text) {
                     assert.equal(text.indexOf('stylesheet/less'), -1);
+                },
+                'there should be no occurrences of "styles.less"': function (text) {
+                    assert.equal(text.indexOf('styles.less'), -1);
+                },
+                'there should be a <link rel="stylesheet" href="styles.css">': function (text) {
+                    assert.notEqual(text.indexOf('<link rel="stylesheet" href="styles.css">'), -1);
                 }
             },
             'then get the Css as text': {
