@@ -11,7 +11,6 @@
     ],
     "dependencies": {
         "bufferjs": "= 1.0.2",
-        "closure-compiler": "= 0.1.1",
         "coffee-script": "= 1.1.2",
         "cssmin": "= 0.3.0",
         "cssom-papandreou": "= 0.2.2-patch1",
@@ -24,11 +23,12 @@
         "seq": "= 0.3.5",
         "stylus": "= 0.19.3",
         "uglify-js": "= 1.1.1",
-        "underscore": "= 1.2.0",
-        "yui-compressor": "= 0.1.3"
+        "underscore": "= 1.2.0"
     },
     "devDependencies": {
+        "closure-compiler": "= 0.1.1",
         "iconv": "= 1.1.3",
+        "yui-compressor": "= 0.1.3",
         "vows": ">= 0.6.0"
     },
     "engines": {
