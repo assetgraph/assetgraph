@@ -321,7 +321,7 @@ If the ``context`` parameter is specified, it will be used as `the
 execution context
 <http://nodejs.org/docs/latest/api/vm.html#vm.runInContext>`_. Otherwise
 a new context will be created using `vm.createContext
-<http://nodejs.org/docs/latest/api/vm.html#vm.createContext>`.
+<http://nodejs.org/docs/latest/api/vm.html#vm.createContext>`_.
 
 
 transforms.externalizeRelations([queryObj])
@@ -479,7 +479,7 @@ transforms.mergeIdenticalAssets([queryObj])
 -------------------------------------------
 
 Compute the MD5 sum of every asset in the graph (or those specified by
-``queryObj`` and remove duplicates. The relations pointing at the
+``queryObj``) and remove duplicates. The relations pointing at the
 removed assets are updated to point at the copy that is kept.
 
 For example::
@@ -554,7 +554,7 @@ be ``file:///my/local/dir/images/bar.css``.
 
 Move all non-inline ``JavaScript`` and ``Css`` assets to either
 ``http://example.com/js/`` or ``http://example.com/css/``, preserving
-the current file name part of their url:
+the current file name part of their url::
 
    transforms.moveAssets({type: ['JavaScript', 'Css'], isInline: false}, function (asset, assetGraph) {
        return "http://example.com/" + asset.type.toLowerCase() + "/" + asset.fileName;
@@ -577,7 +577,7 @@ the assets that have already been moved don't change as a result of
 updating the urls of the related assets after the fact.
 
 Here's a simplified example taken from ``buildProduction`` in
-`assetgraph-builder <http://github.com/One-com/assetgraph-builder>`_
+`assetgraph-builder <http://github.com/One-com/assetgraph-builder>`_::
 
     transforms.moveAssetsInOrder({type: ['JavaScript', 'Css', 'Jpeg', 'Gif', 'Png']}, function (asset) {
         return '/static/' + asset.md5Hex.substr(0, 10) + asset.extension;
