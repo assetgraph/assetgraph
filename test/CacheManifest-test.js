@@ -35,8 +35,10 @@ vows.describe('Cache manifest').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
             },
             'the manifest should have a relation to bar.png': function (assetGraph) {
-                var barPng = assetGraph.urlIndex[urlTools.resolveUrl(assetGraph.root, 'bar.png')],
-                    manifest = assetGraph.findAssets({type: 'CacheManifest'})[0];
+                var manifest = assetGraph.findAssets({type: 'CacheManifest'})[0],
+                    barPng = assetGraph.findAssets({
+                        url: urlTools.resolveUrl(assetGraph.root, 'bar.png')
+                    });
                 assert.equal(assetGraph.findRelations({from: manifest, to: barPng}).length, 1); // FIXME: query
             },
             'then get the manifest as text': {
