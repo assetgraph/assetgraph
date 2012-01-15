@@ -49,22 +49,36 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
                     topic: function (_, assetGraph) {
                         assetGraph.queue(transforms.bundleRelations({type: 'HtmlStyle'})).run(this.callback);
                     },
-                    'there should be a single HtmlStyle relation': function (assetGraph) {
-                        assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 1);
+                    'there should be 2 HtmlStyle relations': function (assetGraph) {
+                        assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 2);
                     },
-                    'there should be a single Css asset': function (assetGraph) {
-                        assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+                    'the first HtmlStyle relation should have media="print"': function (assetGraph) {
+                        assert.equal(assetGraph.findRelations({type: 'HtmlStyle'})[0].node.getAttribute('media'), 'print');
+                    },
+                    'the second HtmlStyle relation should have no media attribute': function (assetGraph) {
+                        assert.isFalse(assetGraph.findRelations({type: 'HtmlStyle'})[1].node.hasAttribute('media'));
+                    },
+                    'there should be 2 Css assets': function (assetGraph) {
+                        assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
+                    },
+                    'then get the parseTree of the first resulting Css asset': {
+                        topic: function (assetGraph) {
+                            return assetGraph.findAssets({type: 'Css'})[0];
+                        },
+                        'it should contain the rule from the print stylesheet': function (cssAsset) {
+                            assert.equal(cssAsset.parseTree.cssRules.length, 1);
+                            assert.equal(cssAsset.parseTree.cssRules[0].style['background-color'], 'maroon');
+                        }
                     },
                     'then get the parseTree of the resulting Css asset': {
                         topic: function (assetGraph) {
-                            return assetGraph.findAssets({type: 'Css'})[0].parseTree;
+                            return assetGraph.findAssets({type: 'Css'})[1];
                         },
-                        'it should contain the rules from the original Css assets in the right order': function (cssStyleSheet) {
-                            assert.equal(cssStyleSheet.cssRules.length, 4);
-                            assert.equal(cssStyleSheet.cssRules[0].style['background-color'], 'maroon');
-                            assert.equal(cssStyleSheet.cssRules[1].style.color, 'teal');
-                            assert.equal(cssStyleSheet.cssRules[2].style.color, 'tan');
-                            assert.equal(cssStyleSheet.cssRules[3].style.color, 'blue');
+                        'it should contain the rules from the non-print original Css assets in the right order': function (cssAsset) {
+                            assert.equal(cssAsset.parseTree.cssRules.length, 3);
+                            assert.equal(cssAsset.parseTree.cssRules[0].style.color, 'teal');
+                            assert.equal(cssAsset.parseTree.cssRules[1].style.color, 'tan');
+                            assert.equal(cssAsset.parseTree.cssRules[2].style.color, 'blue');
                         }
                     },
                     'then change the url of the Html asset': {

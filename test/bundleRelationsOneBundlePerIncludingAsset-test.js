@@ -131,5 +131,60 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
                 assert.equal(htmlStyles[0].to.parseTree.cssRules[1].style.getPropertyValue('color'), '#dddddd');
             }
         }
+    },
+    'After loading test case with stylesheets with different media attributes': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRelations/differentMedia/'}).queue(
+                transforms.loadAssets('index.html'),
+                transforms.populate()
+            ).run(this.callback);
+        },
+        'the graph contains 3 Html assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 3);
+        },
+        'the graph contains 7 Css assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 7);
+        },
+        'then run the bundleRelations transform': {
+            topic: function (assetGraph) {
+                assetGraph.runTransform(transforms.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset'), this.callback);
+            },
+            'the graph should contain 5 Css assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 5);
+            },
+            'the graph should contain 5 HtmlStyle relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 5);
+            },
+            'the first Html asset should have 4 outgoing HtmlStyle relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'}).length, 4);
+            },
+            'the first HtmlStyle relation should have no media attribute': function (assetGraph) {
+                assert.isFalse(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[0].node.hasAttribute('media'));
+            },
+            'the first HtmlStyle relation should point at a Css asset containing the rules from a.css and b.css': function (assetGraph) {
+                var htmlStyle = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[0];
+                assert.equal(htmlStyle.to.parseTree.cssRules.length, 2);
+                assert.equal(htmlStyle.to.parseTree.cssRules[0].style.getPropertyValue('color'), '#aaaaaa');
+                assert.equal(htmlStyle.to.parseTree.cssRules[1].style.getPropertyValue('color'), '#bbbbbb');
+            },
+            'the second HtmlStyle relation should have the correct media attribute': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[1].node.getAttribute('media'), 'aural and (device-aspect-ratio: 16/9)');
+            },
+            'the second HtmlStyle relation should point at a Css asset containing the rules from c.css and d.css': function (assetGraph) {
+                var htmlStyle = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[1];
+                assert.equal(htmlStyle.to.parseTree.cssRules.length, 2);
+                assert.equal(htmlStyle.to.parseTree.cssRules[0].style.getPropertyValue('color'), '#cccccc');
+                assert.equal(htmlStyle.to.parseTree.cssRules[1].style.getPropertyValue('color'), '#dddddd');
+            },
+            'the third HtmlStyle relation should have the correct media attribute': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[2].node.getAttribute('media'), 'screen');
+            },
+            'the third HtmlStyle relation should point to e.css': function (assetGraph) {
+                assert.matches(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[2].to.url, /\/e\.css$/);
+            },
+            'the fourth HtmlStyle relation should point to f.css': function (assetGraph) {
+                assert.matches(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[3].to.url, /\/f\.css$/);
+            }
+        }
     }
 })['export'](module);
