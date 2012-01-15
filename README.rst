@@ -164,13 +164,11 @@ manifests will contain relations to all assets reachable by traversing
 the graph through relations other than ``HtmlAnchor``.
 
 
-transforms.bundleAssets({type: 'Css'|'JavaScript', incoming: {type: ...}}[, strategyName])
-------------------------------------------------------------------------------------------
+transforms.bundleRelations(queryObj[, strategyName])
+----------------------------------------------------
 
-Bundle ``Css`` or ``JavaScript`` assets. At the very minimum the query
-object must specify both the type of asset to bundle and the type of
-the including relations (``HtmlStyle`` or ``HtmlScript``), but can
-include additional criteria.
+Bundle the ``Css`` and ``JavaScript`` assets pointed to by the
+relations matched by ``queryObj``.
 
 The ``strategyName`` (string) parameter can be either:
 

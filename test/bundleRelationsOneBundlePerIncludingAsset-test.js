@@ -6,7 +6,7 @@ var vows = require('vows'),
 vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatch({
     'After loading a test case with 1 Html, 2 stylesheets, and 3 images': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleAssets/singleHtml'}).queue(
+            new AssetGraph({root: __dirname + '/bundleRelations/singleHtml'}).queue(
                 transforms.loadAssets('index.html'),
                 transforms.populate()
             ).run(this.callback);
@@ -31,7 +31,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'then bundling the HtmlStyles': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.bundleAssets({type: 'Css', incoming: {type: 'HtmlStyle'}}, 'oneBundlePerIncludingAsset')).run(this.callback);
+                assetGraph.queue(transforms.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset')).run(this.callback);
             },
             'the number of HtmlStyles should be down to one': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 1);
@@ -51,7 +51,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
     },
     'After loading a test case with two Html assets that relate to some of the same Css assets': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleAssets/twoHtmls'}).queue(
+            new AssetGraph({root: __dirname + '/bundleRelations/twoHtmls'}).queue(
                 transforms.loadAssets('1.html', '2.html'),
                 transforms.populate()
             ).run(this.callback);
@@ -64,7 +64,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'then bundling the Css assets': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.bundleAssets({type: 'Css', incoming: {type: 'HtmlStyle'}}, 'oneBundlePerIncludingAsset')).run(this.callback);
+                assetGraph.queue(transforms.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset')).run(this.callback);
             },
             'the graph should contain 2 Css assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
@@ -89,7 +89,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
     },
     'After loading a test case with 5 HtmlStyles in a Html asset, two of which is in a conditional comment': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleAssets/conditionalCommentInTheMiddle/'}).queue(
+            new AssetGraph({root: __dirname + '/bundleRelations/conditionalCommentInTheMiddle/'}).queue(
                 transforms.loadAssets('index.html'),
                 transforms.populate()
             ).run(this.callback);
@@ -102,7 +102,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'then bundling the HtmlStyles': {
             topic: function (assetGraph) {
-                assetGraph.runTransform(transforms.bundleAssets({type: 'Css', incoming: {type: 'HtmlStyle'}}, 'oneBundlePerIncludingAsset'), this.callback);
+                assetGraph.runTransform(transforms.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset'), this.callback);
             },
             'the graph should contain 3 HtmlStyle relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 3);

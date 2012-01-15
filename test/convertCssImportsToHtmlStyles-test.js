@@ -45,9 +45,9 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
                     assert.deepEqual(text.match(/href=\"([^\'\"]+)\"/g),
                                      ['href="foo2.css"', 'href="foo.css"', 'href="bar.css"']);
                 },
-                'then run the bundleAssets transform on the HtmlStyles': {
+                'then run the bundleRelations transform on the HtmlStyles': {
                     topic: function (_, assetGraph) {
-                        assetGraph.queue(transforms.bundleAssets({type: 'Css', incoming: {type: 'HtmlStyle'}})).run(this.callback);
+                        assetGraph.queue(transforms.bundleRelations({type: 'HtmlStyle'})).run(this.callback);
                     },
                     'there should be a single HtmlStyle relation': function (assetGraph) {
                         assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 1);
