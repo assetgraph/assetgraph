@@ -8,4 +8,6 @@ var one =
         }
     },
     theOneToGet = 'a',
-    theThing = one.getStaticUrl('json/*.json', theOneToGet);
+    theThing = one.getStaticUrl('json/*.json', theOneToGet),
+    theDoubleStarThing = one.getStaticUrl('json/**.json', 'subsubdir/d'),
+    theBracketThing = one.getStaticUrl('json/{b,c}.json', 'c');

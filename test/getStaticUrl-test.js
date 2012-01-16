@@ -15,28 +15,53 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
         'the graph should contain a single JavaScript asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
         },
-        'the graph should contain one JavaScriptOneGetStaticUrl relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 1);
+        'the graph should contain 3 JavaScriptOneGetStaticUrl relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 3);
+        },
+        'the graph should contain 3 StaticUrlMap assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'StaticUrlMap'}).length, 3);
+        },
+        'the graph should contain 9 StaticUrlMapEntry relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 9);
+        },
+        'the graph should contain 4 Json assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Json'}).length, 4);
         },
         'the StaticUrlMapEntry relations should have the right hrefs': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({href: 'json/a.json'}).length, 1);
-            assert.equal(assetGraph.findRelations({href: 'json/b.json'}).length, 1);
-            assert.equal(assetGraph.findRelations({href: 'json/c.json'}).length, 1);
+            assert.equal(assetGraph.findRelations({href: 'json/a.json'}).length, 2);
+            assert.equal(assetGraph.findRelations({href: 'json/b.json'}).length, 3);
+            assert.equal(assetGraph.findRelations({href: 'json/c.json'}).length, 3);
+            assert.equal(assetGraph.findRelations({href: 'json/subsubdir/d.json'}).length, 1);
         },
-        'the graph should contain 3 Json assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Json'}).length, 3);
-        },
-        'then move one of the assets pointed to by a JavaScriptOneGetStaticUrl relation and get the JavaScript asset as text': {
+        'then move one of the assets pointed to by a StaticUrlMapEntry relation': {
             topic: function (assetGraph) {
                 assetGraph.findAssets({url: /\/a.json/})[0].url = urlTools.resolveUrl(assetGraph.root, 'static/a76a76a7a.json');
-                return assetGraph.findAssets({type: 'JavaScript'})[0].text;
+                return assetGraph;
             },
-            'the resulting JavaScript should map the url correctly': function (src) {
-                assert.equal(new Function(src + 'return theThing;')(), 'static/a76a76a7a.json');
+            'the resulting JavaScript should map the url correctly': function (assetGraph) {
+                var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
+                assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');
+                assert.equal(new Function(src + ';return theDoubleStarThing;')(), 'json/subsubdir/d.json');
+                assert.equal(new Function(src + ';return theBracketThing;')(), 'json/c.json');
+            },
+            'then omit the one.getStaticUrl function calls': {
+                topic: function (assetGraph) {
+                    assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).forEach(function (javaScriptOneGetStaticUrl) {
+                        javaScriptOneGetStaticUrl.omitFunctionCall = true;
+                        javaScriptOneGetStaticUrl.inline();
+                    });
+                    return assetGraph;
+                },
+                'the JavaScript should still map the url correctly': function (assetGraph) {
+                    var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
+                    assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');
+                    assert.equal(new Function(src + ';return theDoubleStarThing;')(), 'json/subsubdir/d.json');
+                    assert.equal(new Function(src + ';return theBracketThing;')(), 'json/c.json');
+               }
             }
         }
     },
-    'After loading test case with a wildcard getStaticUrl': {
+    'After loading the test case with a wildcard getStaticUrl again': {
         topic: function () {
             new AssetGraph({root: __dirname + '/getStaticUrl/'}).queue(
                 transforms.loadAssets('index.html'),
@@ -57,27 +82,49 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             'the graph should contain a single JavaScript asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
             },
-            'the graph should contain one JavaScriptOneGetStaticUrl relation': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 1);
+            'the graph should contain 3 JavaScriptOneGetStaticUrl relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 3);
             },
-            'the graph should contain 3 StaticUrlMapEntry relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 3);
+            'the graph should contain 3 StaticUrlMap assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'StaticUrlMap'}).length, 3);
+            },
+            'the graph should contain 9 StaticUrlMapEntry relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 9);
+            },
+            'the graph should contain 4 Json assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Json'}).length, 4);
             },
             'the StaticUrlMapEntry relations should have the right hrefs': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({href: 'json/a.json'}).length, 1);
-                assert.equal(assetGraph.findRelations({href: 'json/b.json'}).length, 1);
-                assert.equal(assetGraph.findRelations({href: 'json/c.json'}).length, 1);
+                assert.equal(assetGraph.findRelations({href: 'json/a.json'}).length, 2);
+                assert.equal(assetGraph.findRelations({href: 'json/b.json'}).length, 3);
+                assert.equal(assetGraph.findRelations({href: 'json/c.json'}).length, 3);
+                assert.equal(assetGraph.findRelations({href: 'json/subsubdir/d.json'}).length, 1);
             },
-            'the graph should contain 3 Json assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Json'}).length, 3);
-            },
-            'then move one of the assets pointed to by a JavaScriptOneGetStaticUrl relation and get the JavaScript asset as text': {
+            'then move one of the assets pointed to by a JavaScriptOneGetStaticUrl relation': {
                 topic: function (assetGraph) {
                     assetGraph.findAssets({url: /\/a.json/})[0].url = urlTools.resolveUrl(assetGraph.root, 'static/a76a76a7a.json');
-                    return assetGraph.findAssets({type: 'JavaScript'})[0].text;
+                    return assetGraph;
                 },
-                'the resulting JavaScript should map the url correctly': function (src) {
+                'the resulting JavaScript should map the url correctly': function (assetGraph) {
+                    var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
                     assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');
+                    assert.equal(new Function(src + ';return theDoubleStarThing;')(), 'json/subsubdir/d.json');
+                    assert.equal(new Function(src + ';return theBracketThing;')(), 'json/c.json');
+                },
+                'then omit the one.getStaticUrl function calls': {
+                    topic: function (assetGraph) {
+                        assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).forEach(function (javaScriptOneGetStaticUrl) {
+                            javaScriptOneGetStaticUrl.omitFunctionCall = true;
+                            javaScriptOneGetStaticUrl.inline();
+                        });
+                        return assetGraph;
+                    },
+                    'the JavaScript should still map the url correctly': function (assetGraph) {
+                        var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
+                        assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');
+                        assert.equal(new Function(src + ';return theDoubleStarThing;')(), 'json/subsubdir/d.json');
+                        assert.equal(new Function(src + ';return theBracketThing;')(), 'json/c.json');
+                    }
                 }
             }
         }
