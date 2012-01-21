@@ -18,7 +18,7 @@
         "optimist": "= 0.2.6",
         "request": "= 2.2.5",
         "seq": "= 0.3.5",
-        "uglify-js": "= 1.1.1",
+        "uglify-js": "= 1.2.5",
         "underscore": "= 1.2.0"
     },
     "devDependencies": {

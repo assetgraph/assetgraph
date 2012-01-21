@@ -17,7 +17,7 @@ vows.describe('assets.JavaScript').addBatch({
         'the error message should specify the url of the Html asset and the line number of the error': function (err, assetGraph) {
             assert.matches(err.message, /parseErrorInInlineJavaScript\.html/);
             assert.matches(err.message, /line 2\b/);
-            assert.matches(err.message, /column 8\b/);
+            assert.matches(err.message, /column 9\b/);
         }
     },
     'After loading test case that has a parse error in an external JavaScript asset': {
@@ -33,7 +33,7 @@ vows.describe('assets.JavaScript').addBatch({
         'the error message should specify the url of the external JavaScript asset and the line number of the error': function (err, assetGraph) {
             assert.matches(err.message, /parseError\.js/);
             assert.matches(err.message, /line 6\b/);
-            assert.matches(err.message, /column 13\b/);
+            assert.matches(err.message, /column 14\b/);
         }
     },
     'after loading test case with relations located at multiple levels in the parse tree': {
