@@ -5,7 +5,7 @@ var vows = require('vows'),
 
 vows.describe('transforms.compressJavaScript').addBatch(function () {
     var test = {};
-    [undefined, 'uglify', 'yuicompressor', 'closurecompiler'].forEach(function (compressorName) {
+    [undefined, 'uglifyJs', 'yuicompressor', 'closurecompiler'].forEach(function (compressorName) {
         test[String(compressorName)] = {
             topic: function () {
                 var assetGraph = new AssetGraph();

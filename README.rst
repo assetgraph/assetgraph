@@ -220,7 +220,7 @@ Compresses all ``JavaScript`` assets in the graph (or those specified by
 
 The ``compressorName`` (string) parameter can be either:
 
-``uglify`` (the default and the fastest)
+``uglifyJs`` (the default and the fastest)
   The excellent `UglifyJS <https://github.com/mishoo/UglifyJS>`_
   compressor.  If provided, the ``compressorOptions`` object will be
   passed to UglifyJS' ``ast_squeeze`` command.

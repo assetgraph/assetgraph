@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    uglify = require('uglify-js'),
+    uglifyJs = require('uglify-js'),
     uglifyAst = require('../lib/util/uglifyAst');
 
 function testCase(ast, obj) {
@@ -13,9 +13,9 @@ function testCase(ast, obj) {
                 assert.deepEqual(_obj, obj);
             }
         },
-        'from ast to obj through uglify.uglify.gen_code and eval': {
+        'from ast to obj through uglifyJs.uglify.gen_code and eval': {
             topic: function () {
-                return eval('(' + uglify.uglify.gen_code(['toplevel', [['stat', ast]]]) + ')');
+                return eval('(' + uglifyJs.uglify.gen_code(['toplevel', [['stat', ast]]]) + ')');
             },
             'should produce the expected JavaScript object': function (_obj) {
                 assert.deepEqual(_obj, obj);
@@ -29,9 +29,9 @@ function testCase(ast, obj) {
                 assert.deepEqual(_ast, ast);
             }
         },
-        'from obj to ast through JSON.stringify and uglify.parser': {
+        'from obj to ast through JSON.stringify and uglifyJs.parser': {
             topic: function () {
-                return uglify.parser.parse('(' + JSON.stringify(obj) + ')')[1][0][1]; // Strip 'toplevel' and 'stat' nodes
+                return uglifyJs.parser.parse('(' + JSON.stringify(obj) + ')')[1][0][1]; // Strip 'toplevel' and 'stat' nodes
             },
             'should produce the expected Ast': function (_ast) {
                 assert.deepEqual(_ast, ast);
