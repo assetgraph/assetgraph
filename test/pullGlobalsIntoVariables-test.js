@@ -17,13 +17,22 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                     url: 'file:///foo.js',
                     text: getFunctionBodySource(function () {
                         var MATHMIN = 2;
+                        var parseInt = function () {
+                            return 99;
+                        };
+                        function parseFloat () {
+                            return 99.0;
+                        }
+                        var quux = function isFinite() {
+                            return false;
+                        };
                         var id = setTimeout(function foo() {
-                            var bar = Math.min(Math.min(4, 6), Math.max(4, 6) + Math.floor(8.2) + foo.bar.quux.baz + foo.bar.quux.w00p);
+                            var bar = Math.min(Math.min(4, 6), Math.max(4, 6) + Math.floor(8.2) + foo.bar.quux.baz + foo.bar.quux.w00p + parseInt('123') + parseInt('456'), parseFloat('99.5') + parseFloat('99.5') + isFinite(1) + isFinite(1));
                             setTimeout(foo, 100);
                         }, 100);
                     })
                 }),
-                transforms.pullGlobalsIntoVariables({type: 'JavaScript'}, ['foo.bar.quux', 'setTimeout', 'Math', 'Math.max', 'Math.floor', 'Math.min']),
+                transforms.pullGlobalsIntoVariables({type: 'JavaScript'}, ['foo.bar.quux', 'setTimeout', 'Math', 'Math.max', 'Math.floor', 'Math.min', 'isFinite', 'parseFloat', 'parseInt']),
                 transforms.prettyPrintAssets()
             ).run(this.callback);
         },
@@ -35,8 +44,17 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                              var MATHMIN_ = MATH.min;
                              var FOOBARQUUX = foo.bar.quux;
                              var MATHMIN = 2;
+                             var parseInt = function () {
+                                 return 99;
+                             };
+                             function parseFloat () {
+                                 return 99.0;
+                             }
+                             var quux = function isFinite() {
+                                 return false;
+                             };
                              var id = SETTIMEOUT(function foo() {
-                                 var bar = MATHMIN_(MATHMIN_(4, 6), MATH.max(4, 6) + MATH.floor(8.2) + FOOBARQUUX.baz + FOOBARQUUX.w00p);
+                                 var bar = MATHMIN_(MATHMIN_(4, 6), MATH.max(4, 6) + MATH.floor(8.2) + FOOBARQUUX.baz + FOOBARQUUX.w00p + parseInt('123') + parseInt('456'), parseFloat('99.5') + parseFloat('99.5') + isFinite(1) + isFinite(1));
                                  SETTIMEOUT(foo, 100);
                              }, 100);
                          }));;
