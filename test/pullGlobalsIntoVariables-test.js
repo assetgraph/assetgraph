@@ -11,7 +11,7 @@ function getFunctionBodySource(fn) {
 vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
     'After loading a test case with a single JavaScript asset, then running the pullGlobalsIntoVariables transform': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/setAssetUrl/simple/'}).queue(
+            new AssetGraph().queue(
                 transforms.loadAssets({
                     type: 'JavaScript',
                     url: 'file:///foo.js',
@@ -57,7 +57,32 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                                  var bar = MATHMIN_(MATHMIN_(4, 6), MATH.max(4, 6) + MATH.floor(8.2) + FOOBARQUUX.baz + FOOBARQUUX.w00p + parseInt('123') + parseInt('456'), parseFloat('99.5') + parseFloat('99.5') + isFinite(1) + isFinite(1));
                                  SETTIMEOUT(foo, 100);
                              }, 100);
-                         }));;
+                         })
+            );
+        }
+    },
+    'then load another test case with a single JavaScript then run the pullGlobalsIntoVariables transform with wrapInFunction=true': {
+        topic: function () {
+            new AssetGraph().queue(
+                transforms.loadAssets({
+                    type: 'JavaScript',
+                    url: 'file:///foo.js',
+                    text: getFunctionBodySource(function () {
+                        alert(Math.floor(10.8) + Math.floor(20.4) + Math.min(3, 5));
+                    })
+                }),
+                transforms.pullGlobalsIntoVariables({type: 'JavaScript'}, null, true),
+                transforms.prettyPrintAssets()
+            ).run(this.callback);
+        },
+        'the globals in the JavaScript should be provided as args to an immediately invoked function': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].text,
+                         getFunctionBodySource(function () {
+                             (function (MATH, MATHFLOOR) {
+                                 alert(MATHFLOOR(10.8) + MATHFLOOR(20.4) + MATH.min(3, 5));
+                             }(Math, Math.floor));
+                         })
+            );
         }
     }
 })['export'](module);
