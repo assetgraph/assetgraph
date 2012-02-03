@@ -17,13 +17,49 @@ The complete AssetGraph-based build system mentioned in the slides can
 be found `here <https://github.com/One-com/assetgraph-builder>`_.
 
 
+Assets and relations
+====================
+
+.. image:: http://gofish.dk/assetgraph/datastructure.png
+   :align: center
+   :width: 100%
+
+An AssetGraph object is a collection of assets (nodes) and the
+relations (edges) between them.
+
+These are some of the supported assets and associated relation types:
+
+HTML
+  ``<a>``, ``<link rel="stylesheet|shortcut icon|alternate">``, ``<script>``, ``<style>``,
+  ``<document manifest="...">`` ``<img>``, ``<video>``, ``<audio>``, ``<applet>``,
+  ``<embed>``, ``<esi:include>``, ``<iframe>``
+
+CSS
+  ``background-image: url(...)``, ``@import url(...)``, ``behavior: url(...)``,
+  ``filter: AlphaImageLoader(src='...')``
+
+JavaScript
+  AMD/RequireJS ``require`` and ``define``, CommonJS ``require(...)``,
+  homegrown ``one.include`` syntax for specifying requirements, and homegrown
+  ``one.getStaticUrl(...)`` and ``one.getText(...)`` syntax for referencing external files
+
+HTC
+  (same as for HTML)
+
+Cache manifest
+  Entries in the ``CACHE``, ``NETWORK`` and ``FALLBACK`` sections
+
+JSON, XML, PNG, GIF, JPEG, ICO
+  (none)
+
+
 Features
 ========
 
-* Build an asset graph programmatically or load it from disk or a
+* Build an AssetGraph programmatically or load it from disk or a
   remote server via http.
-* Find explicit dependencies between JavaScript and CSS roll them out
-  as ``<script>`` and ``<link rel='stylesheet'>`` tags in your
+* Find explicit dependencies between JavaScript and CSS and roll them
+  out as ``<script>`` and ``<link rel='stylesheet'>`` tags in your
   HTML. For now only the ExtJS 4 syntax and a homegrown `one.include`
   syntax are supported, but the parsing phase can be adapted to almost
   any syntax. More script loaders will be added later.
