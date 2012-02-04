@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    _ = require('underscore'),
     urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms;
@@ -73,23 +74,27 @@ vows.describe('Cache manifest').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/CacheManifest/noCacheManifest/'}).queue(
                 transforms.loadAssets('index.html'),
-                transforms.populate()
+                transforms.populate({followRelations: {to: {url: /^file:/}}})
             ).run(this.callback);
         },
-        'the graph contains 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 3);
+        'the graph contains 7 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 7);
         },
-        'the graph contains 3 relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations().length, 3);
+        'the graph contains 7 relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations().length, 7);
         },
         'the graph contains a single Png asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
         },
-        'the graph contains a single Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+        'the graph contains 3 Html assets, of which two are inline (conditional comments)': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 3);
+            assert.equal(assetGraph.findAssets({type: 'Html', isInline: true}).length, 2);
         },
         'the graph contains a single Css asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+        },
+        'the graph contains 2 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
         },
         'then adding a cache manifest to the Html file': {
             topic: function (assetGraph) {
@@ -98,8 +103,12 @@ vows.describe('Cache manifest').addBatch({
             'the graph should contain a cache manifest': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
             },
-            'the cache manifest should have 2 outgoing relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({from: assetGraph.findAssets({type: 'CacheManifest'})[0]}).length, 2); // FIXME: query
+            'the cache manifest should point at the right 3 assets': function (assetGraph) {
+                assert.deepEqual(_.pluck(assetGraph.findRelations({from: {type: 'CacheManifest'}}), 'href'), [
+                                     'foo.png',
+                                     'style.css',
+                                     'modernBrowsers.js'
+                ]);
             }
         }
     },
