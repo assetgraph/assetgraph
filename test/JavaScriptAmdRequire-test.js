@@ -4,7 +4,7 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph'),
     transforms = AssetGraph.transforms;
 
-vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
+vows.describe('relations.JavaScriptAmdRequire').addBatch({
     'After loading test case with an Html asset that loads require.js and uses it in an inline script': {
         topic: function () {
             new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/simple/'}).queue(
@@ -40,32 +40,6 @@ vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
         },
         'the graph should contain a Text asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
-        },
-        'then run the flattenStaticIncludes transform': {
-            topic: function (assetGraph) {
-                assetGraph.runTransform(transforms.flattenStaticIncludes(), this.callback);
-            },
-            'there should be no HtmlRequireJsMain relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'}).length, 0);
-            },
-            'there should be no JavaScriptAmdRequire relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 0);
-            },
-            'there should be no JavaScriptAmdDefine relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 0);
-            },
-            'the Html asset should have 4 outgoing HtmlScript relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index\.html$/}}).length, 4);
-            },
-            'the injected HtmlScript relations should come after the one pointing at require.js in the right order': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index\.html$/}}), 'href'),
-                                 [
-                                     'scripts/require.js',
-                                     'scripts/helper/yet/another.js',
-                                     'scripts/helper/util.js',
-                                     'scripts/main.js'
-                                 ]);
-            }
         }
     }
 })['export'](module);
