@@ -44,7 +44,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 transforms.populate()
             ).run(this.callback);
         },
-        'the graph should contain 2 JavaScript asset': function (assetGraph) {
+        'the graph should contain 2 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
         },
         'the graph should contain 1 Text asset': function (assetGraph) {
@@ -60,6 +60,57 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             'the resulting main.js should have a define("myTextFile.txt") and the "text!" prefix should be stripped from the require list': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
                              'define("myTextFile.txt","THE TEXT!\\n");require(["myTextFile.txt"],function(contentsOfMyTextFile){alert(contentsOfMyTextFile+", yay!")});define("main",function(){})'
+                );
+            }
+        }
+    },
+    'After loading test case with a module that has multiple incoming JavaScriptAmd* relations': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/multipleIncoming/'}).queue(
+                transforms.loadAssets('index.html'),
+                transforms.populate()
+            ).run(this.callback);
+        },
+        'the graph should contain 5 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+        },
+        'then running the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
+            },
+            'the resulting main.js should have the expected contents': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
+                             'define("popular",function(){alert("I\'m a popular helper module");return"foo"});define("module1",["popular"],function(){return"module1"});define("module2",["popular"],function(){});require(["module1","module2"],function(){alert("Got it all!")});define("main",function(){})'
+                );
+            }
+        }
+    },
+    'After loading test case with a module that is included via a script tag and a JavaScriptAmdRequire relation': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/nonOrphanedJavaScript/'}).queue(
+                transforms.loadAssets('index.html'),
+                transforms.populate()
+            ).run(this.callback);
+        },
+        'the graph should contain 3 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+        },
+        'the graph should still contain 2 HtmlScript relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
+        },
+        'then running the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
+            },
+            'the graph should still contain 3 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+            },
+            'the graph should still contain 2 HtmlScript relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
+            },
+            'the resulting main.js should have the expected contents': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
+                             'alert("includedInHtmlAndViaRequire.js");define("includedInHtmlAndViaRequire",function(){});require(["includedInHtmlAndViaRequire"],function(foo){alert("Here we are!")});define("main",function(){})'
                 );
             }
         }
