@@ -7,7 +7,7 @@ var vows = require('vows'),
     transforms = AssetGraph.transforms;
 
 vows.describe('transforms.bundleRequireJs').addBatch({
-    'After loading test case': {
+    'After loading the jquery-require-sample test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/jquery-require-sample/webapp/'}).queue(
                 transforms.loadAssets('app.html'),
@@ -34,6 +34,33 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 var requireJsOptimizerOutputAst = uglifyJs.parser.parse(fs.readFileSync(path.resolve(__dirname, 'bundleRequireJs/jquery-require-sample/webapp-build/scripts/main.js'), 'utf-8'));
                 assert.deepEqual(uglifyJs.uglify.gen_code(assetGraph.findAssets({type: 'JavaScript', url: /\/main\.js$/})[0].parseTree),
                                  uglifyJs.uglify.gen_code(requireJsOptimizerOutputAst));
+            }
+        }
+    },
+    'After loading test case with a text dependency': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/textDependency/'}).queue(
+                transforms.loadAssets('index.html'),
+                transforms.populate()
+            ).run(this.callback);
+        },
+        'the graph should contain 2 JavaScript asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+        },
+        'the graph should contain 1 Text asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
+        },
+        'then running the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
+            },
+            'the graph should contain no Text assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Text'}).length, 0);
+            },
+            'the resulting main.js should have a define("myTextFile.txt") and the "text!" prefix should be stripped from the require list': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
+                             'define("myTextFile.txt","THE TEXT!\\n");require(["myTextFile.txt"],function(contentsOfMyTextFile){alert(contentsOfMyTextFile+", yay!")});define("main",function(){})'
+                );
             }
         }
     }
