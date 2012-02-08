@@ -80,7 +80,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             },
             'the resulting main.js should have the expected contents': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
-                             'define("popular",function(){alert("I\'m a popular helper module");return"foo"});define("module1",["popular"],function(){return"module1"});define("module2",["popular"],function(){});require(["module1","module2"],function(){alert("Got it all!")});define("main",function(){})'
+                             'define("popular",function(){alert("I\'m a popular helper module");return"foo"});define("module1",["popular"],function(){return"module1"});define("module2",["popular"],function(){return"module2"});require(["module1","module2"],function(){alert("Got it all!")});define("main",function(){})'
                 );
             }
         }
