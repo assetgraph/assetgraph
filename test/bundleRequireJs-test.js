@@ -54,13 +54,23 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             topic: function (assetGraph) {
                 assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
             },
-            'the graph should contain 1 inline Text assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Text', isInline: true}).length, 1);
+            'the graph should contain one.getText relation pointing at myTextFile.txt': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetText', to: {url: /\/myTextFile\.txt$/}}).length, 1);
             },
             'the resulting main.js should have a define("myTextFile.txt") and the "text!" prefix should be stripped from the require list': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
-                             'define("myTextFile.txt","THE TEXT!\\n");require(["myTextFile.txt"],function(contentsOfMyTextFile){alert(contentsOfMyTextFile+", yay!")});define("main",function(){})'
+                             'define("myTextFile.txt",one.getText("myTextFile.txt"));require(["myTextFile.txt"],function(contentsOfMyTextFile){alert(contentsOfMyTextFile+", yay!")});define("main",function(){})'
                 );
+            },
+            'then inline the JavaScriptOneGetText relations': {
+                topic: function (assetGraph) {
+                    assetGraph.runTransform(transforms.inlineRelations({type: 'JavaScriptOneGetText'}), this.callback);
+                },
+                'main.js should should contain the contents of myTextFile.txt': function (assetGraph) {
+                    assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
+                                'define("myTextFile.txt","THE TEXT!\\n");require(["myTextFile.txt"],function(contentsOfMyTextFile){alert(contentsOfMyTextFile+", yay!")});define("main",function(){})'
+                    );
+                }
             }
         }
     },
