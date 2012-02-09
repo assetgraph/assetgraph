@@ -47,15 +47,15 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
         },
-        'the graph should contain 1 Text asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
+        'the graph should contain 1 non-inline Text asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Text', isInline: false}).length, 1);
         },
         'then running the bundleRequireJs transform': {
             topic: function (assetGraph) {
                 assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
             },
-            'the graph should contain no Text assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Text'}).length, 0);
+            'the graph should contain 1 inline Text assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Text', isInline: true}).length, 1);
             },
             'the resulting main.js should have a define("myTextFile.txt") and the "text!" prefix should be stripped from the require list': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
