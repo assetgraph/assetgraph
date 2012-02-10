@@ -178,5 +178,48 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 );
             }
         }
+    },
+    'After loading test case that uses require(...) to fetch a css file': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/cssRequire/'}).queue(
+                transforms.loadAssets('index.html'),
+                transforms.populate()
+            ).run(this.callback);
+        },
+        'the graph should contain 2 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+        },
+        'the graph should contain 1 JavaScriptAmdRequire relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 1);
+        },
+        'the graph should contain 1 Css asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+        },
+        'the graph should contain 1 CssImage relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 1);
+        },
+        'the graph should contain 1 Png asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+        },
+        'then running the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
+            },
+            'the graph should contain 2 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            },
+            'the graph should contain 1 JavaScriptAmdRequire relation': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 1);
+            },
+            'the graph should contain 1 Css asset': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+            },
+            'the graph should contain 1 CssImage relation': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 1);
+            },
+            'the graph should contain 1 Png asset': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+            }
+        }
     }
 })['export'](module);
