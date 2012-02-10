@@ -124,5 +124,26 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 );
             }
         }
+    },
+    'After loading test case that uses require(...) in a regular <script>': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/withoutHtmlRequireJsMain/'}).queue(
+                transforms.loadAssets('index.html'),
+                transforms.populate()
+            ).run(this.callback);
+        },
+        'the graph should contain 5 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+        },
+        'then running the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
+            },
+            'the resulting inline script should have the expected contents': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text,
+                             'define("popular",function(){alert("I\'m a popular helper module");return"foo"});define("module1",["popular"],function(){return"module1"});define("module2",["popular"],function(){return"module2"});require(["module1","module2"],function(){alert("Got it all!")})'
+                );
+            }
+        }
     }
 })['export'](module);
