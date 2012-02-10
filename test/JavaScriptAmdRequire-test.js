@@ -17,6 +17,19 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+        },
+        'then detach the JavaScriptAmdRequire relation pointing at a.js': {
+            topic: function (assetGraph) {
+                assetGraph.findRelations({to: {url: /\/a\.js$/}})[0].detach();
+                return assetGraph;
+            },
+            'the graph should contain 2 JavaScriptAmdRequire relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 2);
+            },
+            'a.js and the corresponding function parameter should be removed from the including asset': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text,
+                             'require(["some/module","b.js"],function(someModule,b){})');
+            }
         }
     },
     'After loading test case with an Html asset that loads require.js and includes a data-main attribute on the script tag': {

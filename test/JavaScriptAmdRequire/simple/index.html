@@ -4,7 +4,7 @@
 <body>
 <script src="scripts/require.js"></script>
 <script>
-    require(["some/module", "a.js", "b.js"], function(someModule) {
+    require(["some/module", "a.js", "b.js"], function(someModule, a, b) {
         //This function will be called when all the dependencies
         //listed above are loaded. Note that this function could
         //be called before the page is loaded.
