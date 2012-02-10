@@ -208,8 +208,11 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             'the graph should contain 2 JavaScript assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
             },
-            'the graph should contain 1 JavaScriptAmdRequire relation': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 1);
+            'the graph should contain no JavaScriptAmdRequire relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 0);
+            },
+            'the graph should contain 1 HtmlStyle relation': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 1);
             },
             'the graph should contain 1 Css asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
