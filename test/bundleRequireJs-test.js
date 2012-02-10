@@ -54,6 +54,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             topic: function (assetGraph) {
                 assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
             },
+            'the graph should contain 2 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            },
             'the graph should contain one.getText relation pointing at myTextFile.txt': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetText', to: {url: /\/myTextFile\.txt$/}}).length, 1);
             },
@@ -88,9 +91,36 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             topic: function (assetGraph) {
                 assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
             },
+            'the graph should contain 2 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            },
             'the resulting main.js should have the expected contents': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
                              'define("popular",function(){alert("I\'m a popular helper module");return"foo"});define("module1",["popular"],function(){return"module1"});define("module2",["popular"],function(){return"module2"});require(["module1","module2"],function(){alert("Got it all!")});define("main",function(){})'
+                );
+            }
+        }
+    },
+    'After loading a slightly different test case with a module that has multiple incoming JavaScriptAmd* relations': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/multipleIncoming2/'}).queue(
+                transforms.loadAssets('index.html'),
+                transforms.populate()
+            ).run(this.callback);
+        },
+        'the graph should contain 4 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
+        },
+        'then running the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
+            },
+            'the graph should contain 2 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            },
+            'the resulting main.js should have the expected contents': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
+	                         'define("module2",[],function(){return"module2"});define("module1",["module2"],function(){return"module1"});require(["module1","module2"],function(){alert("Got it all!")});define("main",function(){})'
                 );
             }
         }
@@ -138,6 +168,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'then running the bundleRequireJs transform': {
             topic: function (assetGraph) {
                 assetGraph.runTransform(transforms.bundleRequireJs({type: 'Html'}), this.callback);
+            },
+            'the graph should contain 2 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
             },
             'the resulting inline script should have the expected contents': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text,
