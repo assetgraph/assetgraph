@@ -1,15 +1,14 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('Charset test').addBatch({
     'After loading Html with a meta tag specifying iso-8859-1': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/encoding/'}).queue(
-                transforms.loadAssets('iso-8859-1.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/encoding/'})
+                .loadAssets('iso-8859-1.html')
+                .populate()
+                .run(this.callback)
         },
         'the body should be decoded correctly': function (assetGraph) {
              assert.notEqual(assetGraph.findAssets()[0].text.indexOf('æøåÆØÅ'), -1);
@@ -28,10 +27,10 @@ vows.describe('Charset test').addBatch({
     },
     'After loading a Css asset with @charset declaration of iso-8859-1': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/encoding/'}).queue(
-                transforms.loadAssets('iso-8859-1.css'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/encoding/'})
+                .loadAssets('iso-8859-1.css')
+                .populate()
+                .run(this.callback)
         },
         'the body should be decoded correctly': function (assetGraph) {
              assert.notEqual(assetGraph.findAssets()[0].text.indexOf('æøå'), -1);

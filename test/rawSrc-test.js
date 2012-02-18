@@ -6,10 +6,9 @@ var vows = require('vows'),
 vows.describe('get raw src of asset').addBatch({
     'After loading test case with the same Png image loaded from disc and http': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/rawSrc/'}).queue(
-                transforms.loadAssets('purplealpha24bit.png',
-                                      'http://gofish.dk/purplealpha24bit.png')
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/rawSrc/'})
+                .loadAssets('purplealpha24bit.png', 'http://gofish.dk/purplealpha24bit.png')
+                .run(this.callback)
         },
         'then serializing the Png loaded from disc': {
             topic: function (assetGraph) {

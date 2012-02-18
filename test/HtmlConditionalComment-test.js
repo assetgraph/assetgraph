@@ -1,16 +1,15 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('Parsing conditional comments in Html').addBatch({
     'After loading a test case with conditional comments': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/HtmlConditionalComment/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/HtmlConditionalComment/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 10 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 10);
@@ -29,10 +28,10 @@ vows.describe('Parsing conditional comments in Html').addBatch({
             },
             'then externalizing the Css and JavaScript and minifying the Html': {
                 topic: function (_, assetGraph) {
-                    assetGraph.queue(
-                        transforms.externalizeRelations({type: ['HtmlStyle', 'HtmlScript']}),
-                        transforms.minifyAssets({type: 'Html'})
-                    ).run(this.callback);
+                    assetGraph
+                        .externalizeRelations({type: ['HtmlStyle', 'HtmlScript']})
+                        .minifyAssets({type: 'Html'})
+                        .run(this.callback)
                 },
                 'and get the Html as text again': {
                     topic: function (assetGraph) {

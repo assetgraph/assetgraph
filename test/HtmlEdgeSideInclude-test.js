@@ -2,18 +2,17 @@ var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('Edge side include test').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/HtmlEdgeSideInclude/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate({
+            new AssetGraph({root: __dirname + '/HtmlEdgeSideInclude/'})
+                .loadAssets('index.html')
+                .populate({
                     followRelations: {to: {url: /\.html$/}}
                 })
-            ).run(this.callback);
+                .run(this.callback)
         },
         'the graph should contain two Html assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);

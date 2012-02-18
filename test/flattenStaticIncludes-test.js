@@ -2,16 +2,15 @@ var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('flattenStaticIncludes transform').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/flattenStaticIncludes/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/flattenStaticIncludes/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 10 JavaScript assets, including two inline ones': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 10);
@@ -19,7 +18,7 @@ vows.describe('flattenStaticIncludes transform').addBatch({
         },
         'then run the flattenStaticIncludes transform on the Html asset': {
             topic: function (assetGraph) {
-                assetGraph.runTransform(transforms.flattenStaticIncludes({type: 'Html'}), this.callback);
+                assetGraph.flattenStaticIncludes({type: 'Html'}).run(this.callback)
             },
             'the injected <script> tags should be in the right order': function (assetGraph) {
                 assert.deepEqual(_.pluck(assetGraph.findRelations({from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'),

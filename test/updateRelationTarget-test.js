@@ -2,7 +2,6 @@ var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 function getTargetFileNames(relations) {
@@ -14,10 +13,10 @@ function getTargetFileNames(relations) {
 vows.describe('relation.updateTarget').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/updateRelationTarget/'}).queue(
-                transforms.loadAssets('index.html', 'd.js'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/updateRelationTarget/'})
+                .loadAssets('index.html', 'd.js')
+                .populate()
+                .run(this.callback);
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);

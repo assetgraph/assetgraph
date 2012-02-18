@@ -1,23 +1,22 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('Compiling Stylus to CSS').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/compileStylusToCss/'}).queue(
-                transforms.loadAssets('example.styl'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/compileStylusToCss/'})
+                .loadAssets('example.styl')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain one Stylus asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Stylus'}).length, 1);
         },
         'then run the compileStylusToCss transform': {
             topic: function (assetGraph) {
-                assetGraph.runTransform(transforms.compileStylusToCss({type: 'Stylus'}), this.callback);
+                assetGraph.compileStylusToCss({type: 'Stylus'}).run(this.callback)
             },
             'the graph should contain no Stylus assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Stylus'}).length, 0);

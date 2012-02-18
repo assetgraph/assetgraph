@@ -3,8 +3,7 @@ var vows = require('vows'),
     urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
     assets = AssetGraph.assets,
-    relations = AssetGraph.relations,
-    transforms = AssetGraph.transforms;
+    relations = AssetGraph.relations;
 
 vows.describe('asset.outgoingRelations').addBatch({
     'After creating a standalone Html asset': {

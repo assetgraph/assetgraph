@@ -1,15 +1,14 @@
 var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('assets.JavaScript').addBatch({
     'After loading test case that has a parse error in an inline JavaScript asset': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/JavaScript/'}).queue(
-                transforms.loadAssets('parseErrorInInlineJavaScript.html')
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/JavaScript/'})
+                .loadAssets('parseErrorInInlineJavaScript.html')
+                .run(this.callback)
         },
         'it should result in an Error object': function (err, assetGraph) {
             assert.instanceOf(err, Error);
@@ -22,10 +21,10 @@ vows.describe('assets.JavaScript').addBatch({
     },
     'After loading test case that has a parse error in an external JavaScript asset': {
         topic: function () {
-            var assetGraph = new AssetGraph({root: __dirname + '/JavaScript/'}).queue(
-                transforms.loadAssets('parseErrorInExternalJavaScript.html'),
-                transforms.populate()
-            ).run(this.callback);
+            var assetGraph = new AssetGraph({root: __dirname + '/JavaScript/'})
+                .loadAssets('parseErrorInExternalJavaScript.html')
+                .populate()
+                .run(this.callback)
         },
         'it should result in an Error object': function (err, assetGraph) {
             assert.instanceOf(err, Error);
@@ -38,10 +37,10 @@ vows.describe('assets.JavaScript').addBatch({
     },
     'after loading test case with relations located at multiple levels in the parse tree': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/JavaScript/relationsDepthFirst/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/JavaScript/relationsDepthFirst/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the relations should be in depth-first order in the graph': function (assetGraph) {
             assert.deepEqual(_.pluck(assetGraph.findRelations({from: {type: 'JavaScript'}}), 'href'),

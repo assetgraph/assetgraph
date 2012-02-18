@@ -1,24 +1,23 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('Externalizing and merging identical assets').addBatch({
     'After loading a test with multiple inline scripts then externalizing them': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/externalizeAndMergeIdenticalAssets/'}).queue(
-                transforms.loadAssets('first.html', 'second.html'),
-                transforms.populate(),
-                transforms.externalizeRelations({type: 'HtmlScript'})
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/externalizeAndMergeIdenticalAssets/'})
+                .loadAssets('first.html', 'second.html')
+                .populate()
+                .externalizeRelations({type: 'HtmlScript'})
+                .run(this.callback)
         },
         'the graph should contain 7 non-inline JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: false}).length, 7);
         },
         'then run the mergeIdenticalAssets transform': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.mergeIdenticalAssets({type: 'JavaScript'})).run(this.callback);
+                assetGraph.mergeIdenticalAssets({type: 'JavaScript'}).run(this.callback)
             },
             'the graph should contain 3 JavaScript assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);

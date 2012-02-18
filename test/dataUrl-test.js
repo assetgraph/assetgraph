@@ -1,15 +1,14 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('data: url').addBatch({
     'After loading Html with data: url anchors': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/dataUrl/'}).queue(
-                transforms.loadAssets('dataUrl.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/dataUrl/'})
+                .loadAssets('dataUrl.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 8 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 8);

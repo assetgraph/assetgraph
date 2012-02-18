@@ -1,15 +1,14 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('css @import').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/CssImport/'}).queue(
-                transforms.loadAssets('index.css'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/CssImport/'})
+                .loadAssets('index.css')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain two Css assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);

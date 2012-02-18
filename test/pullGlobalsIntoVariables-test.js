@@ -1,8 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     uglifyJs = require('uglify-js'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 function getFunctionBodySource(fn) {
     return uglifyJs.uglify.gen_code(uglifyJs.parser.parse(fn.toString().replace(/^function \(\) \{\n|\}$/g, '')), {beautify: true});
@@ -11,8 +10,8 @@ function getFunctionBodySource(fn) {
 vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
     'After loading a test case with a single JavaScript asset, then running the pullGlobalsIntoVariables transform': {
         topic: function () {
-            new AssetGraph().queue(
-                transforms.loadAssets({
+            new AssetGraph()
+                .loadAssets({
                     type: 'JavaScript',
                     url: 'file:///foo.js',
                     text: getFunctionBodySource(function () {
@@ -31,10 +30,10 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                             setTimeout(foo, 100);
                         }, 100);
                     })
-                }),
-                transforms.pullGlobalsIntoVariables({type: 'JavaScript'}, ['foo.bar.quux', 'setTimeout', 'Math', 'Math.max', 'Math.floor', 'Math.min', 'isFinite', 'parseFloat', 'parseInt']),
-                transforms.prettyPrintAssets()
-            ).run(this.callback);
+                })
+                .pullGlobalsIntoVariables({type: 'JavaScript'}, ['foo.bar.quux', 'setTimeout', 'Math', 'Math.max', 'Math.floor', 'Math.min', 'isFinite', 'parseFloat', 'parseInt'])
+                .prettyPrintAssets()
+                .run(this.callback)
         },
         'the globals in the JavaScript should be hoisted': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].text,
@@ -63,17 +62,17 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
     },
     'then load another test case with a single JavaScript then run the pullGlobalsIntoVariables transform with wrapInFunction=true': {
         topic: function () {
-            new AssetGraph().queue(
-                transforms.loadAssets({
+            new AssetGraph()
+                .loadAssets({
                     type: 'JavaScript',
                     url: 'file:///foo.js',
                     text: getFunctionBodySource(function () {
                         alert(Math.floor(10.8) + Math.floor(20.4) + Math.min(3, 5));
                     })
-                }),
-                transforms.pullGlobalsIntoVariables({type: 'JavaScript'}, null, true),
-                transforms.prettyPrintAssets()
-            ).run(this.callback);
+                })
+                .pullGlobalsIntoVariables({type: 'JavaScript'}, null, true)
+                .prettyPrintAssets()
+                .run(this.callback)
         },
         'the globals in the JavaScript should be provided as args to an immediately invoked function': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].text,

@@ -1,16 +1,15 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('Inlining relations').addBatch({
     'After loading a test case with an Html asset that has an external Css asset in a conditional comment': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/inlineRelations/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/inlineRelations/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 4 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 4);

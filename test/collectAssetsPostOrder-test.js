@@ -2,16 +2,15 @@ var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('AssetGraph.collectAssetsPostOrder').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/collectAssetsPostOrder/'}).queue(
-                transforms.loadAssets('index.js'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/collectAssetsPostOrder/'})
+                .loadAssets('index.js')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 6 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 6);

@@ -2,7 +2,6 @@ var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
     assets = AssetGraph.assets,
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('assets.Text').addBatch({

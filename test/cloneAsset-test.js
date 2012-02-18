@@ -1,16 +1,15 @@
 var vows = require('vows'),
     assert = require('assert'),
     seq = require('seq'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('Cloning assets').addBatch({
     'After loading a test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/cloneAsset/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/cloneAsset/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 3 Html assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 3);

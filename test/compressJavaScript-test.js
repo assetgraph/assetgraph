@@ -1,7 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('transforms.compressJavaScript').addBatch(function () {
     var test = {};
@@ -10,7 +9,7 @@ vows.describe('transforms.compressJavaScript').addBatch(function () {
             topic: function () {
                 var assetGraph = new AssetGraph();
                 assetGraph.addAsset(new AssetGraph.assets.JavaScript({text: "var foo = 123;"}));
-                assetGraph.runTransform(transforms.compressJavaScript({type: 'JavaScript'}, compressorName), this.callback);
+                assetGraph.compressJavaScript({type: 'JavaScript'}, compressorName).run(this.callback)
             },
             'should yield a compressed JavaScript': function (assetGraph) {
                 var javaScripts = assetGraph.findAssets({type: 'JavaScript'});

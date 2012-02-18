@@ -2,16 +2,15 @@ var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('transforms.populate test').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/populate/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate({followRelations: {to: {type: query.not('Css')}}})
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/populate/'})
+                .loadAssets('index.html')
+                .populate({followRelations: {to: {type: query.not('Css')}}})
+                .run(this.callback)
         },
         'the graph should contain no Css assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 0);

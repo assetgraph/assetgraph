@@ -205,21 +205,22 @@ to disc.
 
 Thus the skeleton looks something like this::
 
-    var AssetGraph = require('assetgraph'),
-        transforms = AssetGraph.transforms;
+    var AssetGraph = require('assetgraph');
 
-    new AssetGraph({root: '/the/root/directory/'}).queue(
-        transforms.loadAssets('*.html'), // Load all Html assets in the root dir
-        transforms.populate({followRelations: {type: 'HtmlAnchor'}}), // Follow <a href=...>
+    new AssetGraph({root: '/the/root/directory/'})
+        .loadAssets('*.html') // Load all Html assets in the root dir
+        .populate({followRelations: {type: 'HtmlAnchor'}}) // Follow <a href=...>
         // More work...
-        transforms.writeAssetsToDisc({type: 'Html'}) // Overwrite existing files
-    ).run(finishedCallback);
+        .writeAssetsToDisc({type: 'Html'}) // Overwrite existing files
+        .run(function (err, assetGraph) {
+            // Done!
+        });
 
 In the following sections the built-in transforms are documented
 individually:
 
 
-transforms.addCacheManifest([queryObj])
+assetGraph.addCacheManifest([queryObj])
 ---------------------------------------
 
 Add a ``CacheManifest`` asset to each ``Html`` asset in the graph (or
@@ -228,7 +229,7 @@ manifests will contain relations to all assets reachable by traversing
 the graph through relations other than ``HtmlAnchor``.
 
 
-transforms.bundleRelations(queryObj[, strategyName])
+assetGraph.bundleRelations(queryObj[, strategyName])
 ----------------------------------------------------
 
 Bundle the ``Css`` and ``JavaScript`` assets pointed to by the
@@ -260,7 +261,7 @@ names derived from their unique id (for example
 assets.
 
 
-transforms.compileCoffeeScriptToJavaScript([queryObj])
+assetGraph.compileCoffeeScriptToJavaScript([queryObj])
 ------------------------------------------------------
 
 Finds all ``CoffeeScript`` assets in the graph (or those specified by
@@ -268,7 +269,7 @@ Finds all ``CoffeeScript`` assets in the graph (or those specified by
 originals.
 
 
-transforms.compileLessToCss([queryObj])
+assetGraph.compileLessToCss([queryObj])
 ---------------------------------------
 
 Finds all ``Less`` assets in the graph (or those specified by
@@ -276,7 +277,7 @@ Finds all ``Less`` assets in the graph (or those specified by
 originals.
 
 
-transforms.compressJavaScript([queryObj[, compressorName[, compressorOptions]]])
+assetGraph.compressJavaScript([queryObj[, compressorName[, compressorOptions]]])
 --------------------------------------------------------------------------------
 
 Compresses all ``JavaScript`` assets in the graph (or those specified by
@@ -302,7 +303,7 @@ The ``compressorName`` (string) parameter can be either:
   to ``require('closure-compiler').compile``.
 
 
-transforms.convertCssImportsToHtmlStyles([queryObj])
+assetGraph.convertCssImportsToHtmlStyles([queryObj])
 ----------------------------------------------------
 
 Finds all ``Html`` assets in the graph (or those specified by
@@ -310,7 +311,7 @@ Finds all ``Html`` assets in the graph (or those specified by
 url(...)``) in inline and external CSS and converts them to
 ``HtmlStyle`` relations directly from the Html document.
 
-Effectively the inverse of ``transforms.convertHtmlStylesToInlineCssImports``.
+Effectively the inverse of ``assetGraph.convertHtmlStylesToInlineCssImports``.
 
 Example::
 
@@ -329,7 +330,7 @@ is turned into::
    </style>
 
 
-transforms.convertHtmlStylesToInlineCssImports([queryObj])
+assetGraph.convertHtmlStylesToInlineCssImports([queryObj])
 ----------------------------------------------------------
 
 Finds all ``Html`` assets in the graph (or those specified by
@@ -358,7 +359,7 @@ development version of your HTML and still have it work in older
 Internet Explorer versions.
 
 
-transforms.drawGraph(fileName)
+assetGraph.drawGraph(fileName)
 ------------------------------
 
 Uses the Graphviz ``dot`` command through `node-graphviz
@@ -372,8 +373,8 @@ Requires Graphviz to be installed, ``sudo apt-get install graphviz`` on
 Debian/Ubuntu.
 
 
-transforms.executeJavaScriptInOrder(queryObj[, context])
-----------------------------------------------------------
+assetGraph.executeJavaScriptInOrder(queryObj[, context])
+--------------------------------------------------------
 
 Experimental: For each JavaScript asset in the graph (or those matched by
 queryObj), find all reachable ``JavaScript`` assets and execute them
@@ -386,7 +387,7 @@ a new context will be created using `vm.createContext
 <http://nodejs.org/docs/latest/api/vm.html#vm.createContext>`_.
 
 
-transforms.externalizeRelations([queryObj])
+assetGraph.externalizeRelations([queryObj])
 -------------------------------------------
 
 Finds all inline relations in the graph (or those matched by
@@ -404,7 +405,7 @@ could be turned into::
      <link rel='stylesheet' href='5.css'>
 
 
-transforms.flattenStaticIncludes([queryObj])
+assetGraph.flattenStaticIncludes([queryObj])
 --------------------------------------------
 
 Finds all ``Html`` assets in the graph (or those matched by
@@ -442,7 +443,7 @@ is turned into::
     <script src='foo.js'></script>
 
 
-transforms.inlineCssImagesWithLegacyFallback([queryObj[, sizeThreshold]])
+assetGraph.inlineCssImagesWithLegacyFallback([queryObj[, sizeThreshold]])
 -------------------------------------------------------------------------
 
 Finds all ``Html`` assets in the graph (or those matched by
@@ -466,7 +467,7 @@ conditional comment.
 
 For example::
 
-    assetGraph.runTransform(transforms.inlineCssImagesWithLegacyFallback(), cb);
+    assetGraph.inlineCssImagesWithLegacyFallback().once('complete', ...)
 
 where ``assetGraph`` contains an Html asset with this fragment::
 
@@ -491,7 +492,7 @@ name will be derived from the unique id of the copy and be placed at
 the root of the assetgraph.
 
 
-transforms.inlineRelations([queryObj])
+assetGraph.inlineRelations([queryObj])
 --------------------------------------
 
 Inlines all relations in the graph (or those matched by
@@ -500,7 +501,7 @@ example ``HtmlScript``, ``HtmlStyle``, and ``CssImage``.
 
 Example::
 
-    assetGraph.runTransform(transforms.inlineRelations({type: ['HtmlStyle', 'CssImage']}));
+    assetGraph.inlineRelations({type: ['HtmlStyle', 'CssImage']});
 
 where ``assetGraph`` contains an Html asset with this fragment::
 
@@ -519,25 +520,25 @@ separate assets after being inlined, so they can be manipulated the
 same way as when they were external.
 
 
-transforms.loadAssets(fileName|wildcard|url|Asset[, ...])
+assetGraph.loadAssets(fileName|wildcard|url|Asset[, ...])
 ---------------------------------------------------------
 
 Add new assets to the graph and make sure they are loaded. Several
 syntaxes are supported, for example::
 
-    transforms.loadAssets('a.html', 'b.css') // Relative to assetGraph.root
-    transforms.loadAssets(new AssetGraph.assets.JavaScript({
+    assetGraph.loadAssets('a.html', 'b.css'); // Relative to assetGraph.root
+    assetGraph.loadAssets(new AssetGraph.assets.JavaScript({
         url: "http://example.com/index.html",
         text: "var foo = bar;" // The source is specified, won't be loaded
     });
 
 ``file://`` urls support wildcard expansion::
 
-    transforms.loadAssets('file:///foo/bar/*.html') // Wildcard expansion
-    transforms.loadAssets('*.html') // assetGraph.root must be file://...
+    assetGraph.loadAssets('file:///foo/bar/*.html'); // Wildcard expansion
+    assetGraph.loadAssets('*.html'); // assetGraph.root must be file://...
 
 
-transforms.mergeIdenticalAssets([queryObj])
+assetGraph.mergeIdenticalAssets([queryObj])
 -------------------------------------------
 
 Compute the MD5 sum of every asset in the graph (or those specified by
@@ -546,7 +547,7 @@ removed assets are updated to point at the copy that is kept.
 
 For example::
 
-    assetGraph.runTransform(transforms.mergeIdenticalAssets(), cb);
+    assetGraph.mergeIdenticalAssets();
 
 where ``assetGraph`` contains an ``Html`` asset with this fragment::
 
@@ -569,7 +570,7 @@ will be turned into the following if ``foo.png`` and ``bar.png`` are identical::
 and the ``bar.png`` asset will be removed from the graph.
 
 
-transforms.minifyAssets([queryObj])
+assetGraph.minifyAssets([queryObj])
 -----------------------------------
 
 Minify all assets in the graph, or those specified by
@@ -586,12 +587,12 @@ minification, and what actually happens also varies:
   For ``JavaScript`` this only governs the amount of whitespace
   (UglifyJS' ``beautify`` parameter); for how to apply variable
   renaming and other compression techniques see
-  ``transforms.compressJavaScript``.
+  ``assetGraph.compressJavaScript``.
 
-Compare to ``transforms.prettyPrintAssets``.
+Compare to ``assetGraph.prettyPrintAssets``.
 
 
-transforms.moveAssets(queryObj, newUrlFunctionOrString)
+assetGraph.moveAssets(queryObj, newUrlFunctionOrString)
 -------------------------------------------------------
 
 Change the url of all assets matching ``queryObj``. If the second
@@ -608,7 +609,7 @@ asset will be changed according to the return value:
 
 Move all ``Css`` and ``Png`` assets to a root-relative url::
 
-    transforms.moveAssets({type: 'Css'}, '/images/')
+    assetGraph.moveAssets({type: 'Css'}, '/images/');
 
 If the graph contains ``http://example.com/foo/bar.css`` and
 ``assetGraph.root`` is ``file:///my/local/dir/``, the resulting url will
@@ -618,18 +619,18 @@ Move all non-inline ``JavaScript`` and ``Css`` assets to either
 ``http://example.com/js/`` or ``http://example.com/css/``, preserving
 the current file name part of their url::
 
-   transforms.moveAssets({type: ['JavaScript', 'Css'], isInline: false}, function (asset, assetGraph) {
+   assetGraph.moveAssets({type: ['JavaScript', 'Css'], isInline: false}, function (asset, assetGraph) {
        return "http://example.com/" + asset.type.toLowerCase() + "/" + asset.fileName;
    });
 
 The assets are moved in no particular order. Compare with
-``transforms.moveAssetsInOrder``.
+``assetGraph.moveAssetsInOrder``.
 
 
-transforms.moveAssetsInOrder(queryObj, newUrlFunctionOrString)
+assetGraph.moveAssetsInOrder(queryObj, newUrlFunctionOrString)
 --------------------------------------------------------------
 
-Does the same as ``transforms.moveAssets``, but makes sure that the
+Does the same as ``assetGraph.moveAssets``, but makes sure that the
 "leaf assets" are moved before the assets that have outgoing relations
 to them.
 
@@ -641,9 +642,9 @@ updating the urls of the related assets after the fact.
 Here's a simplified example taken from ``buildProduction`` in
 `assetgraph-builder <http://github.com/One-com/assetgraph-builder>`_::
 
-    transforms.moveAssetsInOrder({type: ['JavaScript', 'Css', 'Jpeg', 'Gif', 'Png']}, function (asset) {
+    assetGraph.moveAssetsInOrder({type: ['JavaScript', 'Css', 'Jpeg', 'Gif', 'Png']}, function (asset) {
         return '/static/' + asset.md5Hex.substr(0, 10) + asset.extension;
-    })
+    });
 
 If a graph contains an ``Html`` asset with a relation to a ``Css`` asset
 that again has a relation to a ``Png`` asset, the above snippet will
@@ -656,7 +657,7 @@ that don't contain cycles, and if that's not the case, an error will
 be thrown.
 
 
-transforms.parallel(transform1, transform2[, ...])
+assetGraph.parallel(transform1, transform2[, ...])
 --------------------------------------------------
 
 Executes two or more transforms in parallel. This is only relevant for
@@ -665,10 +666,11 @@ to make sure that the transforms don't interfere with each other.
 
 Example::
 
-    transforms.parallel(
-        transform.writeAssetsToDisc({url: /^file:/}, "outputDirForFileUrl/"),
-        transform.writeAssetsToDisc({url: /^http:\/\/example\.com\/, "outputDirForExampleCom/"})
-    )
+    var transforms = AssetGraph.transforms;
+    assetGraph.parallel(
+        transforms.writeAssetsToDisc({url: /^file:/}, "outputDirForFileUrl/"),
+        transforms.writeAssetsToDisc({url: /^http:\/\/example\.com\/, "outputDirForExampleCom/"})
+    );
 
 transforms.populate(options)
 ----------------------------
@@ -676,7 +678,7 @@ transforms.populate(options)
 Add assets to the graph by recursively following "dangling
 relations". This is the preferred way to load a complete web site or
 web application into an ``AssetGraph`` instance after using
-``transforms.loadAssets`` to add one or more assets to serve as the
+``assetGraph.loadAssets`` to add one or more assets to serve as the
 starting point for the population. The loading of the assets happens
 in parallel.
 
@@ -702,20 +704,22 @@ The ``options`` object can contain these properties:
 
 Example::
 
-    new AssetGraph().queue(
-        transforms.addAssets('a.html'),
-        transforms.populate({
+    new AssetGraph()
+        .addAssets('a.html')
+        .populate({
             followRelations: {type: 'HtmlAnchor', to: {url: /\/[bc]\.html$/}}
         })
-    ).run();
+        .once('complete', function (err, assetGraph) {
+            // Done!
+        });
 
 If ``a.html`` links to ``b.html``, and ``b.html`` links to ``c.html``
 (using ``<a href="...">``), all three assets will be in the graph
-after ``transforms.populate`` is done. If ``c.html`` happens to link
+after ``assetGraph.populate`` is done. If ``c.html`` happens to link
 to ``d.html``, ``d.html`` won't be added.
 
 
-transforms.prettyPrintAssets([queryObj])
+assetGraph.prettyPrintAssets([queryObj])
 ----------------------------------------
 
 Pretty-print all assets in the graph, or those specified by
@@ -728,15 +732,15 @@ The asset gets marked as pretty printed (``isPretty`` is set to
 serialized. For ``Xml``, and ``Html``, however, the existing
 whitespace-only text nodes in the document are removed immediately.
 
-Compare to ``transforms.minifyAssets``.
+Compare to ``assetGraph.minifyAssets``.
 
 Example::
 
     // Pretty-print all Html and Css assets:
-    transforms.prettyPrintAssets({type: ['Html', 'Css']})
+    assetGraph.prettyPrintAssets({type: ['Html', 'Css']});
 
 
-transforms.removeAssets([queryObj[, detachIncomingRelations]])
+assetGraph.removeAssets([queryObj[, detachIncomingRelations]])
 --------------------------------------------------------------
 
 Remove all assets in the graph, or those specified by ``queryObj``,
@@ -747,22 +751,23 @@ all relation types.
 
 Example::
 
-    var AssetGraph = require('assetgraph'),
-        transforms = AssetGraph.transforms;
-    var ag = new AssetGraph().queue(
+    var AssetGraph = require('assetgraph');
+    new AssetGraph()
         // Add a Html asset with an inline Css asset:
-        transforms.loadAssets(new AssetGraph.assets.Html({
+        .loadAssets(new AssetGraph.assets.Html({
             text: '<html><head><style type="text/css">body {color: red;}</style></head></html>'
-        })),
+        }))
         // Remove the inline Css asset and detach the incoming HtmlStyle relation:
-        transforms.removeAssets({type: 'Css'}, true),
+        .removeAssets({type: 'Css'}, true),
         // Now the graph only contains the Html asset (without the <style> element):
-        transforms.writeAssetsToStdout({type: 'Html'})
+        .writeAssetsToStdout({type: 'Html'})
         // '<html><head></head></html>'
-    ).run();
+        .once('complete', function (err, assetGraph) {
+            // Done!
+        });
 
 
-transforms.removeRelations([queryObj, [options]])
+assetGraph.removeRelations([queryObj, [options]])
 -------------------------------------------------
 
 Remove all relations in the graph, or those specified by ``queryObj``.
@@ -783,7 +788,7 @@ The ``options`` object can contain these properties:
   removing their last incoming relation.
 
 
-transforms.setAssetContentType(queryObj, contentType)
+assetGraph.setAssetContentType(queryObj, contentType)
 -----------------------------------------------------
 
 Updates the ``contentType`` property of all assets matching
@@ -793,7 +798,7 @@ no side effects. It's mostly useful if want to upload a "snapshot" of
 an AssetGraph to a WebDAV server or similar.
 
 
-transforms.setAssetEncoding(queryObj, newEncoding)
+assetGraph.setAssetEncoding(queryObj, newEncoding)
 --------------------------------------------------
 
 Changes the encoding (charset) of the assets matched by ``queryObj``
@@ -811,20 +816,22 @@ will be updated.
 
 Example::
 
-    var AssetGraph = require('assetgraph'),
-        transforms = AssetGraph.transforms;
-    new AssetGraph().queue(
+    var AssetGraph = require('assetgraph');
+
+    new AssetGraph()
         // Add a Html asset with an inline Css asset:
-        transforms.loadAssets(new AssetGraph.assets.Html({
+        .loadAssets(new AssetGraph.assets.Html({
             text: '<html><head></head>æ</html>'
-        })),
-        transforms.setAssetEncoding({type: 'Html'}, 'iso-8859-1'),
-        transforms.writeAssetsToStdout({type: 'Html'})
+        }))
+        .setAssetEncoding({type: 'Html'}, 'iso-8859-1')
+        .writeAssetsToStdout({type: 'Html'})
         // <html><head></head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head>�</html>
-    ).run();
+        .once('complete', function (err, assetGraph) {
+            // Done!
+        });
 
 
-transforms.setAssetExtension(queryObj, extension)
+assetGraph.setAssetExtension(queryObj, extension)
 -------------------------------------------------
 
 Changes the extension part of the urls of all non-inline assets
@@ -833,18 +840,19 @@ the leading dot like the ``require('path').extname()`` function.
 
 Example::
 
-    var AssetGraph = require('assetgraph'),
-        transforms = AssetGraph.transforms;
-    new AssetGraph().queue(
-        transforms.loadAssets('http://example.com/foo.html'),
-        transforms.setAssetExtension({type: 'Html'}, '.bar')
-        function (assetGraph) {
-            // assetGraph.findAssets({type: 'Html'})[0].url === 'http://example.com/foo.bar'
-        }
-    ).run();
+    var AssetGraph = require('assetgraph');
+
+    new AssetGraph()
+        .loadAssets('http://example.com/foo.html')
+        .setAssetExtension({type: 'Html'}, '.bar')
+        .once('complete', function (err, assetGraph) {
+            if (err) throw err;
+            console.log(assetGraph.findAssets({type: 'Html'})[0].url); // 'http://example.com/foo.bar'
+            // Done!
+        });
 
 
-transforms.setHtmlImageDimensions([queryObj])
+assetGraph.setHtmlImageDimensions([queryObj])
 ---------------------------------------------
 
 Sets the ``width`` and ``height`` attributes of the ``img`` elements
@@ -854,18 +862,20 @@ in the graph.
 
 Example::
 
-    var AssetGraph = require('assetgraph'),
-        transforms = AssetGraph.transforms;
-    new AssetGraph().queue(
-        transforms.loadAssets('hasanimage.html'),
-        transforms.populate(),
+    var AssetGraph = require('assetgraph');
+
+    new AssetGraph()
+        .loadAssets('hasanimage.html')
+        .populate()
         // assetGraph.findAssets({type: 'Html'})[0].text === '<body><img src="foo.png"></body>'
-        transforms.setHtmlImageDimensions()
+        .setHtmlImageDimensions()
         // assetGraph.findAssets({type: 'Html'})[0].text === '<body><img src="foo.png" width="29" height="32"></body>'
-    ).run();
+        .once('complete', function (err, assetGraph) {
+            // Done!
+        });
 
 
-transforms.startOverIfAssetSourceFilesChange([queryObj])
+assetGraph.startOverIfAssetSourceFilesChange([queryObj])
 --------------------------------------------------------
 
 Starts watching all non-inline ``file://`` assets (or those matching
@@ -877,7 +887,7 @@ Used to power ``buildDevelopment --watch`` in `AssetGraph-builder
 experimental.
 
 
-transforms.stats([queryObj])
+assetGraph.stats([queryObj])
 ----------------------------
 
 Dumps an ASCII table with some basic stats about all the assets in the
@@ -895,7 +905,7 @@ Example::
         Total: 213   2.2 MB
 
 
-transforms.writeAssetsToDisc(queryObj, outRoot[, root])
+assetGraph.writeAssetsToDisc(queryObj, outRoot[, root])
 -------------------------------------------------------
 
 Writes the assets matching ``queryObj`` to disc. The ``outRoot``
@@ -908,17 +918,19 @@ Directories will be created as needed.
 
 Example::
 
-    var AssetGraph = require('assetgraph'),
-        transforms = AssetGraph.transforms;
-    new AssetGraph({root: 'http://example.com/'}).queue(
-        transforms.loadAssets('http://example.com/bar/quux/foo.html',
-                              'http://example.com/bar/baz.html'),
+    var AssetGraph = require('assetgraph');
+
+    new AssetGraph({root: 'http://example.com/'})
+        .loadAssets('http://example.com/bar/quux/foo.html',
+                    'http://example.com/bar/baz.html')
         // Will write the two assets to /my/output/dir/quux/foo.html and /my/output/dir/baz.html:
-        transforms.writeAssetsToDisc({type: 'Html'} 'file:///my/output/dir/', 'http://example.com/bar/')
-    ).run();
+        .writeAssetsToDisc({type: 'Html'} 'file:///my/output/dir/', 'http://example.com/bar/')
+        .once('complete', function (err, assetGraph) {
+            // Done!
+        });
 
 
-transforms.writeAssetsToStdout([queryObj])
+assetGraph.writeAssetsToStdout([queryObj])
 ------------------------------------------
 
 Writes all assets in the graph (or those specified by ``queryObj``) to

@@ -2,16 +2,15 @@ var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('relations.HtmlScript').addBatch({
     'After loading test': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/HtmlScript/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/HtmlScript/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 6 HtmlScript relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlScript'}, true).length, 6);

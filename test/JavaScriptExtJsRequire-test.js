@@ -2,7 +2,6 @@ var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     resolvers = require('../lib/resolvers'),
     urlTools = require('../lib/util/urlTools'),
     query = AssetGraph.query;
@@ -10,15 +9,15 @@ var vows = require('vows'),
 vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
     'After loading a test case with three assets': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/JavaScriptExtJsRequire/'}).queue(
-                function (assetGraph) {
-                    assetGraph.resolverByProtocol.Foo = resolvers.fixedDirectory(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/Foo'));
-                    assetGraph.resolverByProtocol.Quux = resolvers.fixedDirectory(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/quuxroot'));
-                    assetGraph.resolverByProtocol.Ext = resolvers.extJs4Dir(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/3rdparty/ext/src'));
-                },
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            var assetGraph = new AssetGraph({root: __dirname + '/JavaScriptExtJsRequire/'});
+            assetGraph.resolverByProtocol.Foo = resolvers.fixedDirectory(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/Foo'));
+            assetGraph.resolverByProtocol.Quux = resolvers.fixedDirectory(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/quuxroot'));
+            assetGraph.resolverByProtocol.Ext = resolvers.extJs4Dir(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/3rdparty/ext/src'));
+
+            assetGraph
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 10 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 10);
@@ -28,7 +27,7 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
         },
         'then run the flattenStaticIncludes transform': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.flattenStaticIncludes({isInitial: true})).run(this.callback);
+                assetGraph.flattenStaticIncludes({isInitial: true}).run(this.callback)
             },
             'the graph should contain two HtmlScript relations pointing at /Foo/Bar.js and the inline script, respectively': function (assetGraph) {
                 assert.deepEqual(_.pluck(assetGraph.findRelations({from: {isInitial: true}, type: 'HtmlScript'}), 'href'), [
@@ -47,15 +46,15 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
     },
     'After loading the same test case again': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/JavaScriptExtJsRequire/'}).queue(
-                function (assetGraph) {
-                    assetGraph.resolverByProtocol.Foo = resolvers.fixedDirectory(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/Foo'));
-                    assetGraph.resolverByProtocol.Quux = resolvers.fixedDirectory(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/quuxroot'));
-                    assetGraph.resolverByProtocol.Ext = resolvers.extJs4Dir(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/3rdparty/ext/src'));
-                },
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            var assetGraph = new AssetGraph({root: __dirname + '/JavaScriptExtJsRequire/'});
+            assetGraph.resolverByProtocol.Foo = resolvers.fixedDirectory(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/Foo'));
+            assetGraph.resolverByProtocol.Quux = resolvers.fixedDirectory(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/quuxroot'));
+            assetGraph.resolverByProtocol.Ext = resolvers.extJs4Dir(urlTools.fsFilePathToFileUrl(__dirname + '/JavaScriptExtJsRequire/3rdparty/ext/src'));
+
+            assetGraph
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         // Need a vow here due to https://github.com/cloudhead/vows/issues/53
         'the graph should contain 10 assets': function (assetGraph) {

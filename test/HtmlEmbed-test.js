@@ -2,18 +2,17 @@ var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('<embed src="..."> test').addBatch({
     'After loading test': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/HtmlEmbed/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate({
+            new AssetGraph({root: __dirname + '/HtmlEmbed/'})
+                .loadAssets('index.html')
+                .populate({
                     followRelations: function () {return false;}
                 })
-            ).run(this.callback);
+                .run(this.callback)
         },
         'the graph should contain one HtmlEmbed relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true).length, 1);

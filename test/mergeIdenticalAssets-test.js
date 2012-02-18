@@ -1,15 +1,14 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('transforms.mergeIdenticalAssets').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/mergeIdenticalAssets/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/mergeIdenticalAssets/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 4 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 4);
@@ -28,7 +27,7 @@ vows.describe('transforms.mergeIdenticalAssets').addBatch({
         },
         'then running the mergeIdenticalAssets transform': {
             topic: function (assetGraph) {
-                assetGraph.runTransform(transforms.mergeIdenticalAssets(), this.callback);
+                assetGraph.mergeIdenticalAssets().run(this.callback)
             },
             'the graph should contain 1 Png asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);

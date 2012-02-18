@@ -2,16 +2,15 @@ var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
     urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('one.include test').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/JavaScriptOneInclude/topLevelStatements/'}).queue(
-                transforms.loadAssets('index.js'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/JavaScriptOneInclude/topLevelStatements/'})
+                .loadAssets('index.js')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
@@ -99,10 +98,10 @@ vows.describe('one.include test').addBatch({
     },
     'After loading a the same test case with original one.include statements in one sequenced statement': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/JavaScriptOneInclude/sequencedStatements/'}).queue(
-                transforms.loadAssets('index.js'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/JavaScriptOneInclude/sequencedStatements/'})
+                .loadAssets('index.js')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);

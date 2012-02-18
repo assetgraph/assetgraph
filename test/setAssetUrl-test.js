@@ -1,16 +1,15 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('Changing the url of assets').addBatch({
     'After loading a test case with three assets': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/setAssetUrl/simple/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/setAssetUrl/simple/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 3 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 3);
@@ -50,10 +49,10 @@ vows.describe('Changing the url of assets').addBatch({
     },
     'After loading a test case with an Html asset that has multiple levels of inline assets': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/setAssetUrl/multipleLevelsOfInline/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/setAssetUrl/multipleLevelsOfInline/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should a single Css asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
@@ -66,11 +65,9 @@ vows.describe('Changing the url of assets').addBatch({
         },
         'then moving the Html asset one level down': {
             topic: function (assetGraph) {
-                assetGraph.queue(
-                    transforms.moveAssets({type: 'Html', isInline: false}, function (asset) {
-                        return urlTools.resolveUrl(assetGraph.root, "subdir/index.html");
-                    })
-                ).run(this.callback);
+                assetGraph.moveAssets({type: 'Html', isInline: false}, function (asset) {
+                    return urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
+                }).run(this.callback)
             },
             'the CssImage url should be relative to /subdir': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'CssImage'})[0].cssRule.style['background-image'], 'url(../foo.png)');
@@ -79,10 +76,10 @@ vows.describe('Changing the url of assets').addBatch({
     },
     'After loading a test case with an Html asset and a distant Htc asset that has the Html as its base asset': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/setAssetUrl/nonTrivialBaseAsset/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/setAssetUrl/nonTrivialBaseAsset/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain three Css assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 3);

@@ -1,7 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     relations = AssetGraph.relations,
     assets = AssetGraph.assets,
     query = AssetGraph.query;
@@ -9,8 +8,8 @@ var vows = require('vows'),
 vows.describe('AssetGraph.findAssets').addBatch({
     'Load test case': {
         topic: function () {
-            new AssetGraph().queue(
-                transforms.loadAssets(
+            new AssetGraph()
+                .loadAssets(
                     new assets.Html({text: 'a', foo: 'bar'}),
                     new assets.Html({text: 'b', foo: 'bar'}),
                     new assets.Html({text: 'c', foo: 'quux'}),
@@ -18,7 +17,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     new assets.Css({text: 'e'}),
                     new assets.Htc({text: 'f', foo: 'baz'})
                 )
-            ).run(this.callback);
+                .run(this.callback)
         },
         'then lookup single value of unindexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({foo: 'bar'}).length, 2);

@@ -1,14 +1,13 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('assets.Css').addBatch({
     'After loading test case that has a parse error in an inline Css asset': {
         topic: function () {
-            var assetGraph = new AssetGraph({root: __dirname + '/Css/'}).queue(
-                transforms.loadAssets('parseErrorInInlineCss.html')
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/Css/'})
+                .loadAssets('parseErrorInInlineCss.html')
+                .run(this.callback)
         },
         'it should result in an Error object': function (err, assetGraph) {
             assert.instanceOf(err, Error);
@@ -19,10 +18,10 @@ vows.describe('assets.Css').addBatch({
     },
     'After loading test case that has a parse error in an external Css asset': {
         topic: function () {
-            var assetGraph = new AssetGraph({root: __dirname + '/Css/'}).queue(
-                transforms.loadAssets('parseErrorInExternalCss.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/Css/'})
+                .loadAssets('parseErrorInExternalCss.html')
+                .populate()
+                .run(this.callback)
         },
         'it should result in an Error object': function (err, assetGraph) {
             assert.instanceOf(err, Error);

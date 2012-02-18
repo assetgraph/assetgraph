@@ -1,15 +1,14 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('relations.HtmlShortcutIcon').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/HtmlShortcutIcon/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/HtmlShortcutIcon/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 2 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 2);

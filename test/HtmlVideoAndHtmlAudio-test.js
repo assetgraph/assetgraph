@@ -2,18 +2,17 @@ var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('<video> and <audio> test').addBatch({
     'After loading test': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/HtmlVideoAndHtmlAudio/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate({
+            new AssetGraph({root: __dirname + '/HtmlVideoAndHtmlAudio/'})
+                .loadAssets('index.html')
+                .populate({
                     followRelations: function () {return false;}
                 })
-            ).run(this.callback);
+                .run(this.callback)
         },
         'the graph should contain 4 HtmlVideo relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlVideo'}, true).length, 4);

@@ -2,16 +2,15 @@ var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
     urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('Cache manifest').addBatch({
     'After loading a single-page test case with an existing cache manifest': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/CacheManifest/existingCacheManifest/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/CacheManifest/existingCacheManifest/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 4 relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations().length, 4);
@@ -30,7 +29,7 @@ vows.describe('Cache manifest').addBatch({
         },
         'then running the addCacheManifest transform': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.addCacheManifest({isInitial: true})).run(this.callback);
+                assetGraph.addCacheManifest({isInitial: true}).run(this.callback)
             },
             'there should still be a single cache manifest asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
@@ -72,10 +71,10 @@ vows.describe('Cache manifest').addBatch({
     },
     'After loading a test case with no manifest': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/CacheManifest/noCacheManifest/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate({followRelations: {to: {url: /^file:/}}})
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/CacheManifest/noCacheManifest/'})
+                .loadAssets('index.html')
+                .populate({followRelations: {to: {url: /^file:/}}})
+                .run(this.callback)
         },
         'the graph contains 7 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 7);
@@ -98,7 +97,7 @@ vows.describe('Cache manifest').addBatch({
         },
         'then adding a cache manifest to the Html file': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.addCacheManifest({isInitial: true})).run(this.callback);
+                assetGraph.addCacheManifest({isInitial: true}).run(this.callback)
             },
             'the graph should contain a cache manifest': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 1);
@@ -114,10 +113,10 @@ vows.describe('Cache manifest').addBatch({
     },
     'After loading a multi-page test case with no manifest': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/CacheManifest/noCacheManifestMultiPage/'}).queue(
-                transforms.loadAssets('*.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/CacheManifest/noCacheManifestMultiPage/'})
+                .loadAssets('*.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph contains 3 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 3);
@@ -139,7 +138,7 @@ vows.describe('Cache manifest').addBatch({
         },
         'then adding a cache manifest to each of the Html files': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.addCacheManifest({isInitial: true})).run(this.callback);
+                assetGraph.addCacheManifest({isInitial: true}).run(this.callback)
             },
             'the graph should contain 2 CacheManifest assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 2);
@@ -159,10 +158,10 @@ vows.describe('Cache manifest').addBatch({
     },
     'After loading a multi-page test case with one existing manifest': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/CacheManifest/existingCacheManifestMultiPage/'}).queue(
-                transforms.loadAssets('*.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/CacheManifest/existingCacheManifestMultiPage/'})
+                .loadAssets('*.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain two Html assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
@@ -178,7 +177,7 @@ vows.describe('Cache manifest').addBatch({
         },
         'then running the addCacheManifest transform': {
             topic: function (assetGraph) {
-                assetGraph.queue(transforms.addCacheManifest({isInitial: true})).run(this.callback);
+                assetGraph.addCacheManifest({isInitial: true}).run(this.callback)
             },
             'the graph should contain two cache manifests': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CacheManifest'}).length, 2);

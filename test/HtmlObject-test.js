@@ -3,18 +3,17 @@ var _ = require('underscore'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
     AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms,
     query = AssetGraph.query;
 
 vows.describe('<object><param name="src" value="..."></object> test').addBatch({
     'After loading test': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/HtmlObject/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate({
+            new AssetGraph({root: __dirname + '/HtmlObject/'})
+                .loadAssets('index.html')
+                .populate({
                     followRelations: function () {return false;}
                 })
-            ).run(this.callback);
+                .run(this.callback)
         },
         'the graph should contain 3 HtmlObject relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlObject'}, true).length, 3);

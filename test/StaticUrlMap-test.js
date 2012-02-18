@@ -1,16 +1,15 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('StaticUrlMap test').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/StaticUrlMap/'}).queue(
-                transforms.loadAssets("index.html"),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/StaticUrlMap/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 2 JavaScriptOneGetStaticUrl relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 2);

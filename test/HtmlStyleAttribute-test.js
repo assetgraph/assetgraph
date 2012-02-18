@@ -1,15 +1,14 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('HtmlStyleAttribute test').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/HtmlStyleAttribute/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/HtmlStyleAttribute/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 3 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 3);
@@ -28,7 +27,7 @@ vows.describe('HtmlStyleAttribute test').addBatch({
         },
         'then inlining the image': {
             topic: function (assetGraph) {
-                assetGraph.runTransform(transforms.inlineRelations({type: 'CssImage'}), this.callback);
+                assetGraph.inlineRelations({type: 'CssImage'}).run(this.callback)
             },
             'the text of the Html asset should contain a data: url': function (assetGraph) {
                 assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,

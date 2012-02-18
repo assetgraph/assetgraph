@@ -1,17 +1,16 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('transforms.setHtmlImageDimensions').addBatch({
     'After loading a test case and running the setHtmlImageDimensions transform': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/setHtmlImageDimensions/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate(),
-                transforms.setHtmlImageDimensions()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/setHtmlImageDimensions/'})
+                .loadAssets('index.html')
+                .populate()
+                .setHtmlImageDimensions()
+                .run(this.callback)
         },
         'the first HtmlImage relation pointing at foo.png should have its dimensions specified': function (assetGraph) {
             var node = assetGraph.findRelations({type: 'HtmlImage', to: {url: /\/foo\.png$/}})[0].node;

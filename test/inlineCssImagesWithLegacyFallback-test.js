@@ -1,15 +1,14 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/'}).queue(
-                transforms.loadAssets('index.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 4 Css assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 4);
@@ -19,7 +18,9 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
         },
         'then running the inlineCssImagesWithLegacyFallback transform': {
             topic: function (assetGraph) {
-                assetGraph.runTransform(transforms.inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4), this.callback);
+                assetGraph
+                    .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4)
+                    .run(this.callback)
             },
             'the graph should contain 6 Css assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 6);

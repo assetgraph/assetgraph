@@ -1,7 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 // Really naive implementation, don't use for anything important:
 function bufferIndexOf(haystack, needle) {
@@ -21,10 +20,10 @@ function bufferIndexOf(haystack, needle) {
 vows.describe('Changing the encoding of assets').addBatch({
     'After loading test case with an iso-8859-1 Html asset with a meta tag': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/setAssetEncoding/'}).queue(
-                transforms.loadAssets('iso-8859-1-withMeta.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/setAssetEncoding/'})
+                .loadAssets('iso-8859-1-withMeta.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
@@ -34,7 +33,7 @@ vows.describe('Changing the encoding of assets').addBatch({
         },
         'then change the encoding to utf-8': {
             topic: function (assetGraph) {
-                assetGraph.runTransform(transforms.setAssetEncoding({type: 'Html'}, 'utf-8'), this.callback);
+                assetGraph.setAssetEncoding({type: 'Html'}, 'utf-8').run(this.callback)
             },
             'the contents should be recoded to utf-8': function (assetGraph) {
                 assert.notEqual(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer("æøå", 'utf-8')), -1);
@@ -50,10 +49,10 @@ vows.describe('Changing the encoding of assets').addBatch({
     },
     'After loading test case with an utf-8 Html asset without a meta tag': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/setAssetEncoding/'}).queue(
-                transforms.loadAssets('utf-8-withoutMeta.html'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/setAssetEncoding/'})
+                .loadAssets('utf-8-withoutMeta.html')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
@@ -63,7 +62,7 @@ vows.describe('Changing the encoding of assets').addBatch({
         },
         'then change the encoding to iso-8859-1': {
             topic: function (assetGraph) {
-                assetGraph.runTransform(transforms.setAssetEncoding({type: 'Html'}, 'iso-8859-1'), this.callback);
+                assetGraph.setAssetEncoding({type: 'Html'}, 'iso-8859-1').run(this.callback)
             },
             'the contents should be recoded to iso-8859-1': function (assetGraph) {
                 assert.notEqual(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer([0xe6, 0xf8, 0xe5])), -1);

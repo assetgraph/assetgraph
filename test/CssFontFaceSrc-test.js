@@ -1,15 +1,14 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
-    transforms = AssetGraph.transforms;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('css @font-face {src: ...}').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/CssFontFaceSrc/'}).queue(
-                transforms.loadAssets('index.css'),
-                transforms.populate()
-            ).run(this.callback);
+            new AssetGraph({root: __dirname + '/CssFontFaceSrc/'})
+                .loadAssets('index.css')
+                .populate()
+                .run(this.callback)
         },
         'the graph should contain one Css asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
