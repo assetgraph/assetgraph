@@ -12,7 +12,7 @@
     "dependencies": {
         "bufferjs": "= 1.0.2",
         "cssmin": "= 0.3.1",
-        "cssom-papandreou": "= 0.2.2-patch3",
+        "cssom-papandreou": "= 0.2.3-patch1",
         "glob": ">= 2.0.9 < 3.0.0",
         "jsdom": "= 0.2.10",
         "optimist": "= 0.3.1",
