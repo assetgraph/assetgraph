@@ -52,7 +52,7 @@ so eg. inline scripts and stylesheets are also first-class nodes in
 the graph. This means that you don't need to dig into the HTML of the
 containing asset to manipulate with them. An extreme example would be
 an Html asset with a conditional comment with an inline stylesheet
-with an inline image, which would be modelled as 4 separate assets:
+with an inline image, which would be modelled as 4 separate assets::
 
     <!DOCTYPE html>
     <html>
