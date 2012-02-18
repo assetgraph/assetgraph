@@ -1,0 +1,9 @@
+body {
+    color: black;
+}
+
+@font-face {
+    font-family: Delicious;
+    font-weight: bold;
+    src: url('Delicious-Bold.otf');
+}
