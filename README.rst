@@ -268,7 +268,7 @@ originals.
 
 
 transforms.compileLessToCss([queryObj])
-------------------------------------------------------
+---------------------------------------
 
 Finds all ``Less`` assets in the graph (or those specified by
 ``queryObj``), compiles them to ``Css`` assets and replaces the
@@ -374,7 +374,7 @@ Debian/Ubuntu.
 transforms.executeJavaScriptInOrder(queryObj[, context])
 ----------------------------------------------------------
 
-Experimental: For each asset matched by (or those matched by
+Experimental: For each JavaScript asset in the graph (or those matched by
 queryObj), find all reachable ``JavaScript`` assets and execute them
 in order.
 
@@ -403,8 +403,8 @@ could be turned into::
      <link rel='stylesheet' href='5.css'>
 
 
-transforms.flattenStaticIncludes(queryObj)
-------------------------------------------
+transforms.flattenStaticIncludes([queryObj])
+--------------------------------------------
 
 Finds all ``Html`` assets in the graph (or those matched by
 ``queryObj``), finds all ``JavaScript`` and ``Css`` assets reachable
@@ -442,7 +442,7 @@ is turned into::
 
 
 transforms.inlineCssImagesWithLegacyFallback([queryObj[, sizeThreshold]])
---------------------------------------------------------
+-------------------------------------------------------------------------
 
 Finds all ``Html`` assets in the graph (or those matched by
 ``queryObj``), finds all directly reachable ``Css`` assets, and
@@ -519,7 +519,7 @@ same way as when they were external.
 
 
 transforms.loadAssets(fileName|wildcard|url|Asset[, ...])
-----------------------------------
+---------------------------------------------------------
 
 Add new assets to the graph and make sure they are loaded. Several
 syntaxes are supported, for example::
@@ -656,7 +656,7 @@ be thrown.
 
 
 transforms.parallel(transform1, transform2[, ...])
--------------------------------------------
+--------------------------------------------------
 
 Executes two or more transforms in parallel. This is only relevant for
 async transforms that perform I/O. It is the obligation of the caller
@@ -680,6 +680,10 @@ starting point for the population. The loading of the assets happens
 in parallel.
 
 The ``options`` object can contain these properties:
+
+``from``: queryObj
+  Specifies the set assets of assets to start populating from
+  (defaults to all assets in the graph).
 
 ``followRelations``: queryObj
   Limits the set of relations that are followed. The default is to
@@ -710,8 +714,8 @@ after ``transforms.populate`` is done. If ``c.html`` happens to link
 to ``d.html``, ``d.html`` won't be added.
 
 
-transforms.prettyPrintAssets(queryObj)
---------------------------------------
+transforms.prettyPrintAssets([queryObj])
+----------------------------------------
 
 Pretty-print all assets in the graph, or those specified by
 ``queryObj``. Only has an effect for asset types that support pretty
@@ -731,8 +735,8 @@ Example::
     transforms.prettyPrintAssets({type: ['Html', 'Css']})
 
 
-transforms.removeAssets(queryObj[, detachIncomingRelations])
-------------------------------------------------------------
+transforms.removeAssets([queryObj[, detachIncomingRelations]])
+--------------------------------------------------------------
 
 Remove all assets in the graph, or those specified by ``queryObj``,
 along with their incoming relations. If ``detachIncomingRelations`` is
@@ -757,10 +761,10 @@ Example::
     ).run();
 
 
-transforms.removeRelations(queryObj, [options])
------------------------------------------------
+transforms.removeRelations([queryObj, [options]])
+-------------------------------------------------
 
-Remove all assets in the graph, or those specified by ``queryObj``.
+Remove all relations in the graph, or those specified by ``queryObj``.
 
 The ``options`` object can contain these properties:
 
@@ -839,8 +843,8 @@ Example::
     ).run();
 
 
-transforms.setHtmlImageDimensions(queryObj)
--------------------------------------------
+transforms.setHtmlImageDimensions([queryObj])
+---------------------------------------------
 
 Sets the ``width`` and ``height`` attributes of the ``img`` elements
 underlying all ``HtmlImage`` relations, or those matching
@@ -860,10 +864,10 @@ Example::
     ).run();
 
 
-transforms.startOverIfAssetSourceFilesChange(queryObj)
-------------------------------------------------------
+transforms.startOverIfAssetSourceFilesChange([queryObj])
+--------------------------------------------------------
 
-Starts watching all ``file://`` assets (or those matching
+Starts watching all non-inline ``file://`` assets (or those matching
 ``queryObj``) as they're added to the graph, and reruns all the
 following transformations when a source file is changed on disc.
 
@@ -872,8 +876,8 @@ Used to power ``buildDevelopment --watch`` in `AssetGraph-builder
 experimental.
 
 
-transforms.stats(queryObj)
---------------------------
+transforms.stats([queryObj])
+----------------------------
 
 Dumps an ASCII table with some basic stats about all the assets in the
 graph (or those matching ``queryObj``) in their current state.
@@ -891,7 +895,7 @@ Example::
 
 
 transforms.writeAssetsToDisc(queryObj, outRoot[, root])
------------------------------------------------------
+-------------------------------------------------------
 
 Writes the assets matching ``queryObj`` to disc. The ``outRoot``
 parameter must be a ``file://`` url specifying the directory where the
@@ -913,8 +917,8 @@ Example::
     ).run();
 
 
-transforms.writeAssetsToStdout(queryObj)
-----------------------------------------
+transforms.writeAssetsToStdout([queryObj])
+------------------------------------------
 
 Writes all assets in the graph (or those specified by ``queryObj``) to
 stdout. Mostly useful for piping out a single asset.
