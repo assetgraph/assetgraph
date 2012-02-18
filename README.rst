@@ -4,9 +4,7 @@ AssetGraph
 AssetGraph is an extensible, `node.js <http://nodejs.org/>`_-based
 framework for manipulating and optimizing web pages and web
 applications. It's the core of the third generation of the production
-builder tool we are using at One.com for some of our web apps. It's in
-a working state, but as indicated by the pre-1.0.0 version number,
-still likely to undergo changes.
+builder tool we are using at One.com for some of our web apps.
 
 Check out `the slides from a presentation of AssetGraph
 <http://gofish.dk/assetgraph.pdf>`_ held at `the Öresund JavaScript Meetup
@@ -20,18 +18,61 @@ be found `here <https://github.com/One-com/assetgraph-builder>`_.
 Assets and relations
 ====================
 
+All web build tools, even those that target very specific problems,
+have to get a bunch of boring stuff right just to get started, such
+as loading files from disc, parsing and serializing them, charsets,
+inlining, finding references to other files, resolution of and
+updating urls, etc.
+
+The observation that inspired the project is that most of these
+tasks can be viewed as graph problems, where the nodes are the
+assets (HTML, CSS, images, JavaScript...) and the edges are the
+relations between them, e.g. anchor tags, image tags, favorite
+icons, css background-image properties and so on.
+
 .. image:: http://gofish.dk/assetgraph/datastructure.png
    :align: center
    :width: 100%
 
 An AssetGraph object is a collection of assets (nodes) and the
-relations (edges) between them.
+relations (edges) between them. It's a basic data model that allows
+you to populate, query, and manipulate the graph at a high level of
+abstraction. For instance, if you change the url of an asset, all
+relations pointing at it are automatically updated.
+
+Additionally, each individual asset can be inspected and
+massaged using a relevant API: DOM for HTML (using `jsdom
+<https://github.com/tmpvar/jsdom>`_), CSSOM for CSS (using `NV's CSSOM
+module <https://github.com/NV/CSSOM>`_), and an abstract syntax tree
+for JavaScript (powered by `UglifyJS
+<https://github.com/mishoo/UglifyJS/>`_' parser).
+
+AssetGraph represents inline assets the same way as non-inline ones,
+so eg. inline scripts and stylesheets are also first-class nodes in
+the graph. This means that you don't need to dig into the HTML of the
+containing asset to manipulate with them. An extreme example would be
+an Html asset with a conditional comment with an inline stylesheet
+with an inline image, which would be modelled as 4 separate assets:
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <!--[if !IE]> -->
+        <style type='text/css'>
+          body {
+            background-image: url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==);
+         }
+        </style>
+      <!-- <![endif]-->
+    </head>
+    <body></body>
+    </html>
 
 These are some of the supported assets and associated relation types:
 
 HTML
   ``<a>``, ``<link rel="stylesheet|shortcut icon|alternate">``, ``<script>``, ``<style>``,
-  ``<document manifest="...">`` ``<img>``, ``<video>``, ``<audio>``, ``<applet>``,
+  ``<html manifest="...">`` ``<img>``, ``<video>``, ``<audio>``, ``<applet>``,
   ``<embed>``, ``<esi:include>``, ``<iframe>``
 
 CSS
@@ -77,20 +118,6 @@ Features
   background images by creating sprite images. The spriting is guided
   by a set of custom CSS properties with a ``-one-sprite`` prefix.
 
-The observation that inspired the project is that most of the above
-optimizations are easily expressed in terms of graph manipulations,
-where the nodes are the assets (HTML, CSS, images, JavaScript...) and
-the edges are the relations between them, e.g. anchor tags, image
-tags, favorite icons, css background-image properties and so on.
-
-AssetGraph provides a basic data model that allows you to populate,
-query, and manipulate the graph at a high level of
-abstraction. Additionally, each individual asset can be inspected and
-massaged using a relevant API: DOM for HTML (using `jsdom
-<https://github.com/tmpvar/jsdom>`_), CSSOM for CSS (using `NV's CSSOM
-module <https://github.com/NV/CSSOM>`_), and an abstract syntax tree
-for JavaScript (powered by `UglifyJS
-<https://github.com/mishoo/UglifyJS/>`_' parser).
 
 Installation
 ============
