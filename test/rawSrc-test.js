@@ -4,7 +4,7 @@ var vows = require('vows'),
     transforms = AssetGraph.transforms;
 
 vows.describe('get raw src of asset').addBatch({
-    'After loading test case with a the same Png image loaded from disc and http': {
+    'After loading test case with the same Png image loaded from disc and http': {
         topic: function () {
             new AssetGraph({root: __dirname + '/rawSrc/'}).queue(
                 transforms.loadAssets('purplealpha24bit.png',
