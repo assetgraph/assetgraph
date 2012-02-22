@@ -13,7 +13,7 @@
         "bufferjs": "= 1.0.2",
         "cssmin": "= 0.3.1",
         "cssom-papandreou": "= 0.2.3-patch1",
-        "glob": ">= 2.0.9 < 3.0.0",
+        "glob": "3.1.2",
         "jsdom": "= 0.2.10",
         "optimist": "= 0.3.1",
         "request": "= 2.2.5",
