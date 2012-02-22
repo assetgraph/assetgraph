@@ -48,11 +48,12 @@ for JavaScript (powered by `UglifyJS
 <https://github.com/mishoo/UglifyJS/>`_' parser).
 
 AssetGraph represents inline assets the same way as non-inline ones,
-so eg. inline scripts and stylesheets are also first-class nodes in
-the graph. This means that you don't need to dig into the HTML of the
-containing asset to manipulate with them. An extreme example would be
-an Html asset with a conditional comment with an inline stylesheet
-with an inline image, which would be modelled as 4 separate assets::
+so eg. inline scripts, stylesheets, and images specified as ``data:``
+urls are also first-class nodes in the graph. This means that you
+don't need to dig into the HTML of the containing asset to manipulate
+them. An extreme example would be an Html asset with a conditional
+comment with an inline stylesheet with an inline image, which are
+modelled as 4 separate assets::
 
     <!DOCTYPE html>
     <html>
