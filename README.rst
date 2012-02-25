@@ -657,21 +657,6 @@ that don't contain cycles, and if that's not the case, an error will
 be thrown.
 
 
-assetGraph.parallel(transform1, transform2[, ...])
---------------------------------------------------
-
-Executes two or more transforms in parallel. This is only relevant for
-async transforms that perform I/O. It is the obligation of the caller
-to make sure that the transforms don't interfere with each other.
-
-Example::
-
-    var transforms = AssetGraph.transforms;
-    assetGraph.parallel(
-        transforms.writeAssetsToDisc({url: /^file:/}, "outputDirForFileUrl/"),
-        transforms.writeAssetsToDisc({url: /^http:\/\/example\.com\/, "outputDirForExampleCom/"})
-    );
-
 transforms.populate(options)
 ----------------------------
 
