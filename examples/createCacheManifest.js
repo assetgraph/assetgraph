@@ -21,4 +21,5 @@ new AssetGraph({root: commandLineOptions.root})
     .if(commandLineOptions.updatehtml)
         .writeAssetsToDisc({type: 'Html', isInitial: true})
     .endif()
+    .writeStatsToStderr()
     .run();
