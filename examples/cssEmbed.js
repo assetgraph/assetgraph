@@ -16,7 +16,7 @@ new AssetGraph({root: commandLineOptions.root})
         followRelations: {type: 'CssImage'}
     })
     .inlineRelations({type: 'CssImage'})
-    .once('complete', function(assetGraph) {
+    .run(function (err, assetGraph) {
         var initialCssAsset = assetGraph.findAssets({isInitial: true})[0];
         if (commandLineOptions.o) {
             fs.writeFileSync(commandLineOptions.o, initialCssAsset.rawSrc, null);

@@ -13,11 +13,13 @@ new AssetGraph()
     .loadAssets(commandLineOptions._)
     .populate()
     .minifyAssets()
-    .once('complete', function (assetGraph) {
+    .queue(function (assetGraph) {
+        var javaScriptsInOrder = assetGraph.collectAssetsPostOrder(assetGraph.findAssets({isInitial: true})[0]);
         assetGraph.findRelations({type: 'JavaScriptOneInclude'}).forEach(function (relation) {
             relation.detach();
         });
-        console.log('javascript:' + assetGraph.collectAssetsPostOrder(assetGraph.findAssets({isInitial: true})[0]).map(function (javaScriptAsset) {
+        console.log('javascript:' + javaScriptsInOrder.map(function (javaScriptAsset) {
             return javaScriptAsset.text;
         }).join(';') + ';void(null)');
-    });
+    })
+    .run();

@@ -6,4 +6,5 @@ AssetGraph({root: __dirname + '/inlineImages'})
     .loadAssets('*.html')
     .populate()
     .inlineRelations({type: ['HtmlImage', 'CssImage']})
-    .writeAssetsToStdout({type: 'Html'});
+    .writeAssetsToStdout({type: 'Html'})
+    .run();

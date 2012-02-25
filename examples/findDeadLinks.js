@@ -10,4 +10,5 @@ AssetGraph({root: './'})
             console.error(asset.url + ': ' + err.message);
             process.exit(1);
         }
-    });
+    })
+    .run();

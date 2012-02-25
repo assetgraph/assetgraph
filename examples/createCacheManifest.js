@@ -18,8 +18,7 @@ new AssetGraph({root: commandLineOptions.root})
     })
     .addCacheManifest({type: 'Html'})
     .writeAssetsToDisc({type: 'CacheManifest', incoming: {from: {type: 'Html', isInitial: true}}})
-    .once('complete', function (assetGraph) {
-        if (commandLineOptions.updatehtml) {
-            assetGraph.writeAssetsToDisc({type: 'Html', isInitial: true});
-        }
-    });
+    .if(commandLineOptions.updatehtml)
+        .writeAssetsToDisc({type: 'Html', isInitial: true})
+    .endif()
+    .run();
