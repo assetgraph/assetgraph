@@ -8,7 +8,7 @@ vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptCommonJsRequire/'})
                 .loadAssets('index.js')
                 .populate()
-                .once('complete', this.callback);
+                .run(this.callback);
         },
         'the graph should contain 2 JavaScriptCommonJsRequire relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptCommonJsRequire'}).length, 2);

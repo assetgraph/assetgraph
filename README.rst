@@ -467,7 +467,9 @@ conditional comment.
 
 For example::
 
-    assetGraph.inlineCssImagesWithLegacyFallback().once('complete', ...)
+    assetGraph
+        .inlineCssImagesWithLegacyFallback()
+        .run(funtion (err, assetGraph) {...});
 
 where ``assetGraph`` contains an Html asset with this fragment::
 
@@ -694,7 +696,7 @@ Example::
         .populate({
             followRelations: {type: 'HtmlAnchor', to: {url: /\/[bc]\.html$/}}
         })
-        .once('complete', function (err, assetGraph) {
+        .run(function (err, assetGraph) {
             // Done!
         });
 
@@ -747,7 +749,7 @@ Example::
         // Now the graph only contains the Html asset (without the <style> element):
         .writeAssetsToStdout({type: 'Html'})
         // '<html><head></head></html>'
-        .once('complete', function (err, assetGraph) {
+        .run(function (err, assetGraph) {
             // Done!
         });
 
@@ -811,7 +813,7 @@ Example::
         .setAssetEncoding({type: 'Html'}, 'iso-8859-1')
         .writeAssetsToStdout({type: 'Html'})
         // <html><head></head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head>�</html>
-        .once('complete', function (err, assetGraph) {
+        .run(function (err, assetGraph) {
             // Done!
         });
 
@@ -830,7 +832,7 @@ Example::
     new AssetGraph()
         .loadAssets('http://example.com/foo.html')
         .setAssetExtension({type: 'Html'}, '.bar')
-        .once('complete', function (err, assetGraph) {
+        .run(function (err, assetGraph) {
             if (err) throw err;
             console.log(assetGraph.findAssets({type: 'Html'})[0].url); // 'http://example.com/foo.bar'
             // Done!
@@ -855,7 +857,7 @@ Example::
         // assetGraph.findAssets({type: 'Html'})[0].text === '<body><img src="foo.png"></body>'
         .setHtmlImageDimensions()
         // assetGraph.findAssets({type: 'Html'})[0].text === '<body><img src="foo.png" width="29" height="32"></body>'
-        .once('complete', function (err, assetGraph) {
+        .run(function (err, assetGraph) {
             // Done!
         });
 
@@ -910,7 +912,7 @@ Example::
                     'http://example.com/bar/baz.html')
         // Will write the two assets to /my/output/dir/quux/foo.html and /my/output/dir/baz.html:
         .writeAssetsToDisc({type: 'Html'} 'file:///my/output/dir/', 'http://example.com/bar/')
-        .once('complete', function (err, assetGraph) {
+        .run(function (err, assetGraph) {
             // Done!
         });
 
