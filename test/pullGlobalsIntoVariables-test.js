@@ -33,7 +33,7 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                 })
                 .pullGlobalsIntoVariables({type: 'JavaScript'}, ['foo.bar.quux', 'setTimeout', 'Math', 'Math.max', 'Math.floor', 'Math.min', 'isFinite', 'parseFloat', 'parseInt'])
                 .prettyPrintAssets()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the globals in the JavaScript should be hoisted': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].text,
@@ -72,7 +72,7 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                 })
                 .pullGlobalsIntoVariables({type: 'JavaScript'}, null, true)
                 .prettyPrintAssets()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the globals in the JavaScript should be provided as args to an immediately invoked function': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].text,

@@ -9,14 +9,14 @@ vows.describe('Compiling CoffeeScript to JavaScript').addBatch({
             new AssetGraph({root: __dirname + '/compileCoffeeScriptToJavaScript/'})
                 .loadAssets('index.html')
                 .populate({followRelations: {to: {url: query.not(/^http:/)}}})
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain two CoffeeScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'CoffeeScript'}).length, 2);
         },
         'then run the compileCoffeeScriptToJavaScript transform': {
             topic: function (assetGraph) {
-                assetGraph.compileCoffeeScriptToJavaScript({type: 'CoffeeScript'}).run(this.callback)
+                assetGraph.compileCoffeeScriptToJavaScript({type: 'CoffeeScript'}).run(this.callback);
             },
             'the graph should contain no CoffeeScript assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'CoffeeScript'}).length, 0);

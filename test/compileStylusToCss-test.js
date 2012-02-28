@@ -9,14 +9,14 @@ vows.describe('Compiling Stylus to CSS').addBatch({
             new AssetGraph({root: __dirname + '/compileStylusToCss/'})
                 .loadAssets('example.styl')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain one Stylus asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Stylus'}).length, 1);
         },
         'then run the compileStylusToCss transform': {
             topic: function (assetGraph) {
-                assetGraph.compileStylusToCss({type: 'Stylus'}).run(this.callback)
+                assetGraph.compileStylusToCss({type: 'Stylus'}).run(this.callback);
             },
             'the graph should contain no Stylus assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Stylus'}).length, 0);

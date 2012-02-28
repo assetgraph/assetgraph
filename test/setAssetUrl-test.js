@@ -9,7 +9,7 @@ vows.describe('Changing the url of assets').addBatch({
             new AssetGraph({root: __dirname + '/setAssetUrl/simple/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 3 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 3);
@@ -52,7 +52,7 @@ vows.describe('Changing the url of assets').addBatch({
             new AssetGraph({root: __dirname + '/setAssetUrl/multipleLevelsOfInline/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should a single Css asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
@@ -67,7 +67,7 @@ vows.describe('Changing the url of assets').addBatch({
             topic: function (assetGraph) {
                 assetGraph.moveAssets({type: 'Html', isInline: false}, function (asset) {
                     return urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
-                }).run(this.callback)
+                }).run(this.callback);
             },
             'the CssImage url should be relative to /subdir': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'CssImage'})[0].cssRule.style['background-image'], 'url(../foo.png)');
@@ -79,7 +79,7 @@ vows.describe('Changing the url of assets').addBatch({
             new AssetGraph({root: __dirname + '/setAssetUrl/nonTrivialBaseAsset/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain three Css assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 3);

@@ -10,7 +10,7 @@ vows.describe('one.include test').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptOneInclude/topLevelStatements/'})
                 .loadAssets('index.js')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
@@ -101,7 +101,7 @@ vows.describe('one.include test').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptOneInclude/sequencedStatements/'})
                 .loadAssets('index.js')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);

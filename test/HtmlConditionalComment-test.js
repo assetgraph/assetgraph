@@ -9,7 +9,7 @@ vows.describe('Parsing conditional comments in Html').addBatch({
             new AssetGraph({root: __dirname + '/HtmlConditionalComment/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 10 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 10);
@@ -31,7 +31,7 @@ vows.describe('Parsing conditional comments in Html').addBatch({
                     assetGraph
                         .externalizeRelations({type: ['HtmlStyle', 'HtmlScript']})
                         .minifyAssets({type: 'Html'})
-                        .run(this.callback)
+                        .run(this.callback);
                 },
                 'and get the Html as text again': {
                     topic: function (assetGraph) {

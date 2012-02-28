@@ -17,7 +17,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
                     new assets.Css({text: 'e'}),
                     new assets.Htc({text: 'f', foo: 'baz'})
                 )
-                .run(this.callback)
+                .run(this.callback);
         },
         'then lookup single value of unindexed property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({foo: 'bar'}).length, 2);

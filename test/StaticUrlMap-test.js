@@ -9,7 +9,7 @@ vows.describe('StaticUrlMap test').addBatch({
             new AssetGraph({root: __dirname + '/StaticUrlMap/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 2 JavaScriptOneGetStaticUrl relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 2);

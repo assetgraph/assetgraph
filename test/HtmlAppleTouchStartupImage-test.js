@@ -8,7 +8,7 @@ vows.describe('relations.HtmlAppleTouchStartupImage').addBatch({
             new AssetGraph({root: __dirname + '/HtmlAppleTouchStartupImage/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 2 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 2);

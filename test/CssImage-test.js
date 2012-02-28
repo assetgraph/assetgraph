@@ -8,7 +8,7 @@ vows.describe('relations.CssImage').addBatch({
             new AssetGraph({root: __dirname + '/CssImage/'})
                 .loadAssets('index.css')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 9 CssImage relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 9);

@@ -49,7 +49,7 @@ vows.describe('AssetGraph.findAssets').addBatch({
                         }));
                     }
                 )
-                .run(this.callback)
+                .run(this.callback);
         },
         'and lookup relations by a single indexed property': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 2);

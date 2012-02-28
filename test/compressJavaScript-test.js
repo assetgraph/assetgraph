@@ -9,7 +9,7 @@ vows.describe('transforms.compressJavaScript').addBatch(function () {
             topic: function () {
                 var assetGraph = new AssetGraph();
                 assetGraph.addAsset(new AssetGraph.assets.JavaScript({text: "var foo = 123;"}));
-                assetGraph.compressJavaScript({type: 'JavaScript'}, compressorName).run(this.callback)
+                assetGraph.compressJavaScript({type: 'JavaScript'}, compressorName).run(this.callback);
             },
             'should yield a compressed JavaScript': function (assetGraph) {
                 var javaScripts = assetGraph.findAssets({type: 'JavaScript'});

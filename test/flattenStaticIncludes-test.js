@@ -10,7 +10,7 @@ vows.describe('flattenStaticIncludes transform').addBatch({
             new AssetGraph({root: __dirname + '/flattenStaticIncludes/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 10 JavaScript assets, including two inline ones': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 10);
@@ -18,7 +18,7 @@ vows.describe('flattenStaticIncludes transform').addBatch({
         },
         'then run the flattenStaticIncludes transform on the Html asset': {
             topic: function (assetGraph) {
-                assetGraph.flattenStaticIncludes({type: 'Html'}).run(this.callback)
+                assetGraph.flattenStaticIncludes({type: 'Html'}).run(this.callback);
             },
             'the injected <script> tags should be in the right order': function (assetGraph) {
                 assert.deepEqual(_.pluck(assetGraph.findRelations({from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'),

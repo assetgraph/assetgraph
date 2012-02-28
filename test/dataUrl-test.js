@@ -8,7 +8,7 @@ vows.describe('data: url').addBatch({
             new AssetGraph({root: __dirname + '/dataUrl/'})
                 .loadAssets('dataUrl.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 8 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 8);

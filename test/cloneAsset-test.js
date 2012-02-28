@@ -9,7 +9,7 @@ vows.describe('Cloning assets').addBatch({
             new AssetGraph({root: __dirname + '/cloneAsset/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 3 Html assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 3);

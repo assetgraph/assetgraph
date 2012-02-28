@@ -10,7 +10,7 @@ vows.describe('transforms.setHtmlImageDimensions').addBatch({
                 .loadAssets('index.html')
                 .populate()
                 .setHtmlImageDimensions()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the first HtmlImage relation pointing at foo.png should have its dimensions specified': function (assetGraph) {
             var node = assetGraph.findRelations({type: 'HtmlImage', to: {url: /\/foo\.png$/}})[0].node;

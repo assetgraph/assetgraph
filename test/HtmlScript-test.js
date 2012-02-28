@@ -10,7 +10,7 @@ vows.describe('relations.HtmlScript').addBatch({
             new AssetGraph({root: __dirname + '/HtmlScript/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 6 HtmlScript relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlScript'}, true).length, 6);

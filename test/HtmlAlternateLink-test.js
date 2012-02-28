@@ -8,7 +8,7 @@ vows.describe('Html with <link rel="alternate">').addBatch({
             new AssetGraph({root: __dirname + '/HtmlAlternateLink/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 4 HtmlAlternateLink relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlAlternateLink'}).length, 4);

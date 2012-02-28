@@ -12,7 +12,7 @@ vows.describe('<embed src="..."> test').addBatch({
                 .populate({
                     followRelations: function () {return false;}
                 })
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain one HtmlEmbed relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true).length, 1);

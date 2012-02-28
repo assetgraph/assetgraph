@@ -17,7 +17,7 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
             assetGraph
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 10 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 10);
@@ -27,7 +27,7 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
         },
         'then run the flattenStaticIncludes transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenStaticIncludes({isInitial: true}).run(this.callback)
+                assetGraph.flattenStaticIncludes({isInitial: true}).run(this.callback);
             },
             'the graph should contain two HtmlScript relations pointing at /Foo/Bar.js and the inline script, respectively': function (assetGraph) {
                 assert.deepEqual(_.pluck(assetGraph.findRelations({from: {isInitial: true}, type: 'HtmlScript'}), 'href'), [
@@ -54,7 +54,7 @@ vows.describe('Ext.Loader, Ext.require and Ext.define (ExtJs 4)').addBatch({
             assetGraph
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         // Need a vow here due to https://github.com/cloudhead/vows/issues/53
         'the graph should contain 10 assets': function (assetGraph) {

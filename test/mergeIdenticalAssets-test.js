@@ -8,7 +8,7 @@ vows.describe('transforms.mergeIdenticalAssets').addBatch({
             new AssetGraph({root: __dirname + '/mergeIdenticalAssets/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 4 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 4);
@@ -27,7 +27,7 @@ vows.describe('transforms.mergeIdenticalAssets').addBatch({
         },
         'then running the mergeIdenticalAssets transform': {
             topic: function (assetGraph) {
-                assetGraph.mergeIdenticalAssets().run(this.callback)
+                assetGraph.mergeIdenticalAssets().run(this.callback);
             },
             'the graph should contain 1 Png asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);

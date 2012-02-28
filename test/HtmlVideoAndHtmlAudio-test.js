@@ -12,7 +12,7 @@ vows.describe('<video> and <audio> test').addBatch({
                 .populate({
                     followRelations: function () {return false;}
                 })
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 4 HtmlVideo relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlVideo'}, true).length, 4);

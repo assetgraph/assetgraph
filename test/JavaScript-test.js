@@ -8,7 +8,7 @@ vows.describe('assets.JavaScript').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/JavaScript/'})
                 .loadAssets('parseErrorInInlineJavaScript.html')
-                .run(this.callback)
+                .run(this.callback);
         },
         'it should result in an Error object': function (err, assetGraph) {
             assert.instanceOf(err, Error);
@@ -24,7 +24,7 @@ vows.describe('assets.JavaScript').addBatch({
             var assetGraph = new AssetGraph({root: __dirname + '/JavaScript/'})
                 .loadAssets('parseErrorInExternalJavaScript.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'it should result in an Error object': function (err, assetGraph) {
             assert.instanceOf(err, Error);
@@ -40,7 +40,7 @@ vows.describe('assets.JavaScript').addBatch({
             new AssetGraph({root: __dirname + '/JavaScript/relationsDepthFirst/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the relations should be in depth-first order in the graph': function (assetGraph) {
             assert.deepEqual(_.pluck(assetGraph.findRelations({from: {type: 'JavaScript'}}), 'href'),

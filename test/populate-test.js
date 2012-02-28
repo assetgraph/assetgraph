@@ -10,7 +10,7 @@ vows.describe('transforms.populate test').addBatch({
             new AssetGraph({root: __dirname + '/populate/'})
                 .loadAssets('index.html')
                 .populate({followRelations: {to: {type: query.not('Css')}}})
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain no Css assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 0);

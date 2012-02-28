@@ -8,7 +8,7 @@ vows.describe('css @font-face {src: ...}').addBatch({
             new AssetGraph({root: __dirname + '/CssFontFaceSrc/'})
                 .loadAssets('index.css')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain one Css asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);

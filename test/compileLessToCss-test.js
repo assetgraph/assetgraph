@@ -9,14 +9,14 @@ vows.describe('Compiling LESS to CSS').addBatch({
             new AssetGraph({root: __dirname + '/compileLessToCss/'})
                 .loadAssets('index.html')
                 .populate({followRelations: {to: {url: query.not(/^http:/)}}})
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain one Less asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Less'}).length, 1);
         },
         'then run the compileLessToCss transform': {
             topic: function (assetGraph) {
-                assetGraph.compileLessToCss({type: 'Less'}).run(this.callback)
+                assetGraph.compileLessToCss({type: 'Less'}).run(this.callback);
             },
             'the graph should contain no Less assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Less'}).length, 0);

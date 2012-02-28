@@ -8,7 +8,7 @@ vows.describe('HtmlStyleAttribute test').addBatch({
             new AssetGraph({root: __dirname + '/HtmlStyleAttribute/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 3 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 3);
@@ -27,7 +27,7 @@ vows.describe('HtmlStyleAttribute test').addBatch({
         },
         'then inlining the image': {
             topic: function (assetGraph) {
-                assetGraph.inlineRelations({type: 'CssImage'}).run(this.callback)
+                assetGraph.inlineRelations({type: 'CssImage'}).run(this.callback);
             },
             'the text of the Html asset should contain a data: url': function (assetGraph) {
                 assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,

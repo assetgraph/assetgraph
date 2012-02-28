@@ -10,7 +10,7 @@ vows.describe('AssetGraph.collectAssetsPostOrder').addBatch({
             new AssetGraph({root: __dirname + '/collectAssetsPostOrder/'})
                 .loadAssets('index.js')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 6 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 6);

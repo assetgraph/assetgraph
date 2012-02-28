@@ -8,7 +8,7 @@ vows.describe('get raw src of asset').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/rawSrc/'})
                 .loadAssets('purplealpha24bit.png', 'http://gofish.dk/purplealpha24bit.png')
-                .run(this.callback)
+                .run(this.callback);
         },
         'then serializing the Png loaded from disc': {
             topic: function (assetGraph) {

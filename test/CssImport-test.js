@@ -8,7 +8,7 @@ vows.describe('css @import').addBatch({
             new AssetGraph({root: __dirname + '/CssImport/'})
                 .loadAssets('index.css')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain two Css assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);

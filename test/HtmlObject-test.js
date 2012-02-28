@@ -13,7 +13,7 @@ vows.describe('<object><param name="src" value="..."></object> test').addBatch({
                 .populate({
                     followRelations: function () {return false;}
                 })
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 3 HtmlObject relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlObject'}, true).length, 3);

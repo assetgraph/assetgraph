@@ -9,7 +9,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/simple/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain 3 JavaScriptAmdRequire relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 3);
@@ -36,7 +36,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withDataMain/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'the graph should contain a HtmlRequireJsMain relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'}).length, 1);

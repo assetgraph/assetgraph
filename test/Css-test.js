@@ -7,7 +7,7 @@ vows.describe('assets.Css').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/Css/'})
                 .loadAssets('parseErrorInInlineCss.html')
-                .run(this.callback)
+                .run(this.callback);
         },
         'it should result in an Error object': function (err, assetGraph) {
             assert.instanceOf(err, Error);
@@ -21,7 +21,7 @@ vows.describe('assets.Css').addBatch({
             new AssetGraph({root: __dirname + '/Css/'})
                 .loadAssets('parseErrorInExternalCss.html')
                 .populate()
-                .run(this.callback)
+                .run(this.callback);
         },
         'it should result in an Error object': function (err, assetGraph) {
             assert.instanceOf(err, Error);
