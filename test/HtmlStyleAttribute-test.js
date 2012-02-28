@@ -10,14 +10,14 @@ vows.describe('HtmlStyleAttribute test').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 3);
+        'the graph should contain 4 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 4);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
         },
-        'the graph should contain 1 HtmlStyleAttribute relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlStyleAttribute'}).length, 1);
+        'the graph should contain 2 HtmlStyleAttribute relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlStyleAttribute'}).length, 2);
         },
         'the graph should contain 1 CssImage relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 1);
@@ -33,7 +33,7 @@ vows.describe('HtmlStyleAttribute test').addBatch({
                 assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,
                                /data:/);
             },
-            'then add a property to the Css and mark it dirty': {
+            'then add a property to the first Css and mark it dirty': {
                 topic: function (assetGraph) {
                     var cssAsset = assetGraph.findAssets({type: 'Css'})[0];
                     cssAsset.parseTree.cssRules[0].style.setProperty('line-height', '200%');
@@ -43,6 +43,17 @@ vows.describe('HtmlStyleAttribute test').addBatch({
                 'the new property should be in the text of the Html asset': function (assetGraph) {
                     assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,
                                    /line-height:/);
+                }
+            },
+            'then add a property to the second Css and mark it dirty': {
+                topic: function (assetGraph) {
+                    var cssAsset = assetGraph.findAssets({type: 'Css'})[1];
+                    cssAsset.parseTree.cssRules[0].style.setProperty('line-height', '200%');
+                    cssAsset.markDirty();
+                    return assetGraph;
+                },
+                'the Html should still contain both "foo" declarations': function (assetGraph) {
+                    assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /foo: bar; foo: quux;/);
                 }
             }
         }
