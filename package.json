@@ -14,7 +14,7 @@
         "cssmin": "= 0.3.1",
         "cssom-papandreou": "= 0.2.3-patch1",
         "glob": "3.1.2",
-        "jsdom": "= 0.2.10",
+        "jsdom": "= 0.2.13",
         "optimist": "= 0.3.1",
         "request": "= 2.2.5",
         "seq": "= 0.3.5",
