@@ -53,7 +53,7 @@ vows.describe('HtmlStyleAttribute test').addBatch({
                     return assetGraph;
                 },
                 'the Html should still contain both "foo" declarations': function (assetGraph) {
-                    assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /foo: bar; foo: quux;/);
+                    assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /foo:\s*bar;.*foo:\s*quux/);
                 }
             }
         }
