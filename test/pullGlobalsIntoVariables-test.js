@@ -8,6 +8,7 @@ function getFunctionBodySource(fn) {
 }
 
 vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
+/*
     'After loading a test case with a single JavaScript asset, then running the pullGlobalsIntoVariables transform': {
         topic: function () {
             new AssetGraph()
@@ -31,7 +32,7 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                         }, 100);
                     })
                 })
-                .pullGlobalsIntoVariables({type: 'JavaScript'}, ['foo.bar.quux', 'setTimeout', 'Math', 'Math.max', 'Math.floor', 'Math.min', 'isFinite', 'parseFloat', 'parseInt'])
+                .pullGlobalsIntoVariables({type: 'JavaScript'}, {globalNames: ['foo.bar.quux', 'setTimeout', 'Math', 'Math.max', 'Math.floor', 'Math.min', 'isFinite', 'parseFloat', 'parseInt']})
                 .prettyPrintAssets()
                 .run(this.callback);
         },
@@ -70,7 +71,7 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                         alert(Math.floor(10.8) + Math.floor(20.4) + Math.min(3, 5));
                     })
                 })
-                .pullGlobalsIntoVariables({type: 'JavaScript'}, null, true)
+                .pullGlobalsIntoVariables({type: 'JavaScript'}, {wrapInFunction: true})
                 .prettyPrintAssets()
                 .run(this.callback);
         },
@@ -82,6 +83,33 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                              }(Math, Math.floor));
                          })
             );
+        }
+    },
+*/
+    'After loading a test case with a single JavaScript asset, then running the pullGlobalsIntoVariables transform with stringLiterals:true': {
+        topic: function () {
+            new AssetGraph()
+                .loadAssets({
+                    type: 'JavaScript',
+                    url: 'file:///foo.js',
+                    text: getFunctionBodySource(function () {
+                        var a = "foobarquux",
+                            b = "foobarquux";
+                        f.foobarquux();
+                    })
+                })
+                .pullGlobalsIntoVariables({type: 'JavaScript'}, {stringLiterals: true})
+                .prettyPrintAssets()
+                .run(this.callback);
+        },
+        'the string literals should be pulled into a variable': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].text,
+                         getFunctionBodySource(function () {
+                 var FOOBARQUUX = "foobarquux";
+                 var a = FOOBARQUUX,
+                     b = FOOBARQUUX;
+                 f[FOOBARQUUX]();
+            }));
         }
     }
 })['export'](module);
