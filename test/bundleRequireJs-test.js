@@ -223,5 +223,48 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
             }
         }
+    },
+    'After loading test case that includes a one.getStaticUrl relation': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/withOneGetStaticUrl/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 5 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+        },
+        'the graph should contain 1 JavaScriptOneGetStaticUrl relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 1);
+        },
+        'the graph should contain 1 StaticUrlMapEntry relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 1);
+        },
+        'the graph should contain 1 Png asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+        },
+        'then running the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.bundleRequireJs({type: 'Html'}).run(this.callback);
+            },
+            'the graph should contain 2 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            },
+            'the graph should contain 1 JavaScriptOneGetStaticUrl relation': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 1);
+            },
+            'the graph should contain 1 StaticUrlMapEntry relation': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 1);
+            },
+            'the graph should contain 1 Png asset': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+            },
+            'the resulting main script should have the expected contents': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript', url: /\/main\.js$/})[0].text,
+                             'define("module2",function(){return"module2, who\'s my url?"+one.getStaticUrl("foo.png")});define("module1",["module2"],function(){return"module1"});define("module3",function(){alert("module3.js")});require(["module1","module2","module3"],function(){alert("Got it all")});define("main",function(){})'
+                );
+            }
+
+        }
     }
 })['export'](module);
