@@ -95,7 +95,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             },
             'the resulting main.js should have the expected contents': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
-                             'define("popular",function(){alert("I\'m a popular helper module");return"foo"});define("module1",["popular"],function(){return"module1"});define("module2",["popular"],function(){return"module2"});require(["module1","module2"],function(){alert("Got it all!")});define("main",function(){})'
+                             'define("popular",function(){alert("I\'m a popular helper module");return"foo"});define("module1",["popular"],function(){return"module1"});define("module2",["popular"],function(){return"module2"});require(["module1","module2"],function(module1,module2){alert("Got it all!")});define("main",function(){})'
                 );
             }
         }
@@ -119,7 +119,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             },
             'the resulting main.js should have the expected contents': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
-	                         'define("module2",[],function(){return"module2"});define("module1",["module2"],function(){return"module1"});require(["module1","module2"],function(){alert("Got it all!")});define("main",function(){})'
+	                         'define("module2",[],function(){return"module2"});define("module1",["module2"],function(){return"module1"});require(["module1","module2"],function(module1,module2){alert("Got it all!")});define("main",function(){})'
                 );
             }
         }
@@ -261,7 +261,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             },
             'the resulting main script should have the expected contents': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript', url: /\/main\.js$/})[0].text,
-                             'define("module2",function(){return"module2, who\'s my url?"+one.getStaticUrl("foo.png")});define("module1",["module2"],function(){return"module1"});define("module3",function(){alert("module3.js")});require(["module1","module2","module3"],function(){alert("Got it all")});define("main",function(){})'
+                             'define("module2",function(){return"module2, who\'s my url?"+one.getStaticUrl("foo.png")});define("module1",["module2"],function(){return"module1"});define("module3",function(){alert("module3.js")});require(["module1","module2","module3"],function(module1,module2,module3){alert("Got it all")});define("main",function(){})'
                 );
             }
 
