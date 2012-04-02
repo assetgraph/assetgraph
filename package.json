@@ -10,15 +10,15 @@
         }
     ],
     "dependencies": {
-        "bufferjs": "=1.0.2",
+        "bufferjs": "=1.1.0",
         "cssmin": "=0.3.1",
         "cssom-papandreou": "=0.2.3-patch2",
-        "glob": "=3.1.2",
+        "glob": "=3.1.9",
         "jsdom-papandreou": "=0.2.13-patch2",
         "optimist": "=0.3.1",
-        "request": "=2.2.5",
+        "request": "=2.9.153",
         "seq": "=0.3.5",
-        "uglify-js": "=1.2.5",
+        "uglify-js": "=1.2.6",
         "underscore": "=1.3.1"
     },
     "devDependencies": {
