@@ -41,7 +41,7 @@ vows.describe('Parsing conditional comments in Html').addBatch({
                         assert.matches(text, /Good old/);
                         assert.matches(text, /<script src="fixIE6ForTheLoveOfGod\.js"><\/script>/);
                         assert.matches(text, /<!--\[if !IE\]>\s*-->Not IE<!--\s*<!\[endif\]-->/);
-                        assert.matches(text, /<!--\[if IE\]><link rel="stylesheet" href="[^\"]+\.css"><!\[endif\]-->/);
+                        assert.matches(text, /<!--\[if IE\]><link rel="stylesheet" href="[^\"]+\.css" \/><!\[endif\]-->/);
                     }
                 }
             }

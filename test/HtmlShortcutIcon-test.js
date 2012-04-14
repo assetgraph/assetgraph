@@ -35,7 +35,7 @@ vows.describe('relations.HtmlShortcutIcon').addBatch({
                 assert.equal(assetGraph.findRelations({type: 'HtmlShortcutIcon'}).length, 9);
             },
             'the Html should contain three properly formatted <link> tags': function (assetGraph) {
-                var matches = assetGraph.findAssets({type: 'Html'})[0].text.match(/<link rel="shortcut icon" href="foo.png">/g);
+                var matches = assetGraph.findAssets({type: 'Html'})[0].text.match(/<link rel="shortcut icon" href="foo.png" \/>/g);
                 assert.isNotNull(matches);
                 assert.equal(matches.length, 3);
             }
