@@ -1,0 +1,7 @@
+body {
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='foo.png', sizingMethod='scale') progid:DXImageTransform.Microsoft.AlphaImageLoader(src='bar.png', sizingMethod='scale');
+}
+
+div {
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/foo.png', sizingMethod='scale');
+}
