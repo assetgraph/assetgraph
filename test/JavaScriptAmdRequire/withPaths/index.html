@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+    <!-- One of the examples from http://requirejs.org/docs/api.html#packages -->
+    <script type="text/javascript" src="scripts/require.js"></script>
+    <script type="text/javascript">
+      require.config({
+        //baseUrl: "/another/path",
+        paths: {
+            "some": "some/v1.0"
+        }
+        //waitSeconds: 15,
+        //locale: "fr-fr"
+      });
+      require( ["some/module", "my/module", "a.js", "b.js"],
+        function(someModule,    myModule) {
+            //This function will be called when all the dependencies
+            //listed above are loaded. Note that this function could
+            //be called before the page is loaded.
+            //This callback is optional.
+        }
+      );
+    </script>
+</body>
+</html>

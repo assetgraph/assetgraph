@@ -1,4 +1,4 @@
-var vows = require('vows'),
+ vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph');
@@ -52,6 +52,18 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
         },
         'the graph should contain a Text asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
+        }
+    },
+    'After loading test case with require.js and a paths setting': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withPaths/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 6 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 6);
         }
     }
 })['export'](module);
