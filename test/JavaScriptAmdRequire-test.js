@@ -65,5 +65,29 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
         'the graph should contain 6 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 6);
         }
+    },
+    'After loading test case with require.js, a baseUrl and a paths setting': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withPathsAndBaseUrl/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 7 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 7);
+        }
+    },
+    'After loading test case with require.js, data-main, a baseUrl and a paths setting': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withPathsBaseUrlAndDataMain/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 7 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 7);
+        }
     }
 })['export'](module);
