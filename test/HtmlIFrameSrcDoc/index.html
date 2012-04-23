@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+  <p>Due to a <a href="https://github.com/tautologistics/node-htmlparser/issues/45">bug in node-htmlparser</a> it's necessary to entitify the less thans and greater thans in the value of the srcdoc attribute.</p>
+  <iframe seamless sandbox src="gallery.html" srcdoc="&lt;p&gt;Yeah, you can see it &lt;a href=&quot;gallery.html&quot;&gt;in my gallery&lt;/a&gt;."></iframe>
+</body>
+</html>
