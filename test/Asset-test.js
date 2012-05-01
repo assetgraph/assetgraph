@@ -577,5 +577,28 @@ vows.describe('Asset test').addBatch({
                 assert.isTrue(!htmlAsset.url);
             }
         }
+    },
+    'Create AssetGraph with a loaded asset that has a link to an unloaded asset, then move the unloaded asset': {
+        topic: function () {
+            var assetGraph = new AssetGraph(),
+                fooHtml = new assets.Html({
+                    url: 'http://example.com/foo.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/bar.html">link text</a></body></html>'
+                }),
+                barHtml = new assets.Html({ // Not yet loaded
+                    url: 'http://example.com/bar.html'
+                });
+            assetGraph.addAsset(fooHtml);
+            assetGraph.addAsset(barHtml);
+            assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].to = barHtml;
+            barHtml.url = 'http://example.com/subdir/quux.html';
+            return assetGraph;
+        },
+        'the href of the HtmlAnchor relation should be updated correctly': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].href, 'subdir/quux.html');
+        },
+        'subdir/quux.html still should not be loaded': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html', url: /\/subdir\/quux\.html$/})[0].isLoaded, false);
+        }
     }
 })['export'](module);
