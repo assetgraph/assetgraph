@@ -11,8 +11,8 @@ vows.describe('Parsing conditional comments in Html').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 10 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 10);
+        'the graph should contain 11 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 11);
         },
         'then moving the script asset to a different url and getting the Html as text': {
             topic: function (assetGraph) {
@@ -35,13 +35,22 @@ vows.describe('Parsing conditional comments in Html').addBatch({
                 },
                 'and get the Html as text again': {
                     topic: function (assetGraph) {
-                        return assetGraph.findAssets({url: /index\.html$/})[0].text;
+                        return assetGraph.findAssets({url: /\/index\.html$/})[0].text;
                     },
                     'the conditional comments should still be there': function (text) {
                         assert.matches(text, /Good old/);
                         assert.matches(text, /<script src="fixIE6ForTheLoveOfGod\.js"><\/script>/);
                         assert.matches(text, /<!--\[if !IE\]>\s*-->Not IE<!--\s*<!\[endif\]-->/);
                         assert.matches(text, /<!--\[if IE\]><link rel="stylesheet" href="[^\"]+\.css" \/><!\[endif\]-->/);
+                    }
+                },
+                'then re-inline the IE gte 8 or non-IE conditional comment': {
+                    topic: function (assetGraph) {
+                        var relation = assetGraph.findRelations({type: 'HtmlConditionalComment', isInverted: true, condition: 'gte IE 8'})[0].inline();
+                        return assetGraph;
+                    },
+                    'the construct should be left intact': function (assetGraph) {
+                        assert.matches(assetGraph.findAssets({url: /\/index\.html$/})[0].text, /<!--\[if gte IE 8\]><!-->Yay<!--<!\[endif\]-->/);
                     }
                 }
             }

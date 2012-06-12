@@ -48,15 +48,15 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
             },
             'the Html asset should contain 1 IE 8 conditional comment marker with a link tag in it': function (assetGraph) {
                 var text = assetGraph.findAssets({type: 'Html'})[0].text;
-                assert.matches(text, /<!--\[if gte IE 8\]><link[^>]*><!\[\endif]-->/);
-                var captures = text.match(/<!--\[if lt IE 8\]><link[^>]*><!\[\endif]-->/g);
+                assert.matches(text, /<!--\[if gte IE 8\]><!--><link[^>]*><!--<!\[endif\]-->/);
+                var captures = text.match(/<!--\[if lt IE 8\]><link[^>]*><!\[endif\]-->/g);
                 assert.isNotNull(captures);
                 assert.equal(captures.length, 1);
             },
             'the Html asset should contain 1 IE 9 conditional comment marker with a link tag in it': function (assetGraph) {
                 var text = assetGraph.findAssets({type: 'Html'})[0].text;
-                assert.matches(text, /<!--\[if gte IE 9\]><link[^>]*><!\[\endif]-->/);
-                var captures = text.match(/<!--\[if lt IE 9\]><link[^>]*><!\[\endif]-->/g);
+                assert.matches(text, /<!--\[if gte IE 9\]><!--><link[^>]*><!--<!\[endif\]-->/);
+                var captures = text.match(/<!--\[if lt IE 9\]><link[^>]*><!\[endif\]-->/g);
                 assert.isNotNull(captures);
                 assert.equal(captures.length, 1);
             }
