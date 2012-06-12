@@ -89,5 +89,17 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
         'the graph should contain 7 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 7);
         }
+    },
+    'After loading test case where the require.config({...}) statement is in the data-main script': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withConfigInDataMain/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 6 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 6);
+        }
     }
 })['export'](module);
