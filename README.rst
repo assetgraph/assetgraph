@@ -844,7 +844,7 @@ assetGraph.setHtmlImageDimensions([queryObj])
 
 Sets the ``width`` and ``height`` attributes of the ``img`` elements
 underlying all ``HtmlImage`` relations, or those matching
-``queryObj``. Only works when the image pointed to be the relation is
+``queryObj``. Only works when the image pointed to by the relation is
 in the graph.
 
 Example::
