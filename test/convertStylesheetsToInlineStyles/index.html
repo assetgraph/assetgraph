@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type='text/css'>
+        @import url(other.css);
+        * {
+            padding: 0;
+        }
+        .a, .b {
+            color: red;
+        }
+        @media all {
+            .a, .b {
+                background-image: url(foo.png);
+            }
+        }
+        @media screen {
+            .a {
+                background-color: blue;
+            }
+        }
+        @media handheld {
+            .a {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="a"></div>
+    <div class="b"></div>
+    <div class="c"></div>
+</body>
+</html>
