@@ -10,8 +10,8 @@ vows.describe('transforms.convertStylesheetsToInlineStyles').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 4 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 4);
+        'the graph should contain 6 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 6);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
@@ -19,8 +19,8 @@ vows.describe('transforms.convertStylesheetsToInlineStyles').addBatch({
         'the graph should contain 1 Png asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
         },
-        'the graph should contain 2 Css assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
+        'the graph should contain 4 Css assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 4);
         },
         'then run the convertStylesheetsToInlineStyles transform with media=screen': {
             topic: function (assetGraph) {
@@ -41,8 +41,8 @@ vows.describe('transforms.convertStylesheetsToInlineStyles').addBatch({
                 var document = assetGraph.findAssets({type: 'Html'})[0].parseTree;
                 assert.equal(document.documentElement.getAttribute('style'), 'padding:0');
                 assert.equal(document.body.getAttribute('style'), 'padding:0');
-                assert.equal(document.querySelectorAll('.a')[0].getAttribute('style'), 'padding:0;color:red;background-color:blue');
-                assert.equal(document.querySelectorAll('.b')[0].getAttribute('style'), 'padding:0;color:red');
+                assert.equal(document.querySelectorAll('.a')[0].getAttribute('style'), 'padding:0;color:red;background-image:url(foo.png);background-color:blue');
+                assert.equal(document.querySelectorAll('.b')[0].getAttribute('style'), 'padding:0;color:red;background-image:url(foo.png)');
                 assert.equal(document.querySelectorAll('.c')[0].getAttribute('style'), 'font-weight:bold;padding:0');
             }
         }

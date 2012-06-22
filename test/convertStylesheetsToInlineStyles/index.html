@@ -3,6 +3,7 @@
 <head>
     <style type='text/css'>
         @import url(other.css);
+        @import url(wrongmedia.css) projection;
         * {
             padding: 0;
         }
@@ -23,6 +24,11 @@
             .a {
                 margin: 0;
             }
+        }
+    </style>
+    <style media="projection">
+        * {
+            font-weight: normal;
         }
     </style>
 </head>
