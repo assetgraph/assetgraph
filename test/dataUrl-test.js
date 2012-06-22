@@ -41,5 +41,16 @@ vows.describe('data: url').addBatch({
             assert.equal(assetGraph.findAssets({type: 'Text'})[3].text,
                          "ΩδΦ");
         }
+    },
+    'After loading Html with an unparsable data: url': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/dataUrl/'})
+                .loadAssets('unparsableDataUrl.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain no relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations().length, 0);
+        }
     }
 })['export'](module);

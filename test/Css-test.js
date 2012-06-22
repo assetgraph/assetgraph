@@ -5,9 +5,16 @@ var vows = require('vows'),
 vows.describe('assets.Css').addBatch({
     'After loading test case that has a parse error in an inline Css asset': {
         topic: function () {
+            var err,
+                callback = this.callback;
             new AssetGraph({root: __dirname + '/Css/'})
+                .on('error', function (_err) {
+                    err = _err;
+                })
                 .loadAssets('parseErrorInInlineCss.html')
-                .run(this.callback);
+                .run(function () {
+                    callback(err);
+                });
         },
         'it should result in an Error object': function (err, assetGraph) {
             assert.instanceOf(err, Error);
@@ -18,10 +25,17 @@ vows.describe('assets.Css').addBatch({
     },
     'After loading test case that has a parse error in an external Css asset': {
         topic: function () {
+            var err,
+                callback = this.callback;
             new AssetGraph({root: __dirname + '/Css/'})
+                .on('error', function (_err) {
+                    err = _err;
+                })
                 .loadAssets('parseErrorInExternalCss.html')
                 .populate()
-                .run(this.callback);
+                .run(function () {
+                    callback(err);
+                });
         },
         'it should result in an Error object': function (err, assetGraph) {
             assert.instanceOf(err, Error);

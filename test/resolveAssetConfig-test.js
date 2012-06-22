@@ -16,7 +16,7 @@ function resolveAssetConfigAndEnsureType(assetConfig, fromUrl) {
         var callback = this.callback,
             assetGraph = new AssetGraph({root: assetGraphRoot});
         AssetGraph.assets.resolveConfig(assetConfig, fromUrl || assetGraph.root, assetGraph, passError(callback, function (resolvedAssetConfig) {
-            AssetGraph.assets.ensureAssetConfigHasType(resolvedAssetConfig, passError(callback, function () {
+            AssetGraph.assets.ensureAssetConfigHasType(resolvedAssetConfig, assetGraph, passError(callback, function () {
                 callback(null, resolvedAssetConfig);
             }));
         }));
