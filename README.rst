@@ -102,9 +102,10 @@ Features
   remote server via http.
 * Find explicit dependencies between JavaScript and CSS and roll them
   out as ``<script>`` and ``<link rel='stylesheet'>`` tags in your
-  HTML. For now only the ExtJS 4 syntax and a homegrown `one.include`
-  syntax are supported, but the parsing phase can be adapted to almost
-  any syntax. More script loaders will be added later.
+  HTML. For now require.js/AMD, the ExtJS 4 syntax and a homegrown
+  `one.include` syntax are supported, but the parsing phase can be
+  adapted to almost any syntax. Support for more script loaders will
+  be added on demand.
 * Bundle and inline CSS and JavaScript.
 * Create a cache manifest with references to all the assets your web
   app needs to be usable offline.
