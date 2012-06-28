@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    passError = require('../lib/util/passError'),
+    passError = require('passerror'),
     AssetGraph = require('../lib/AssetGraph'),
     assetGraphRoot = __dirname + '/resolveAssetConfig/';
 
