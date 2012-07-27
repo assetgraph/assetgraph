@@ -61,7 +61,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         'the graph should contain 5 Css assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 5);
         },
-        'then bundling the Css assets': {
+        'then bundling the HtmlStyle relations': {
             topic: function (assetGraph) {
                 assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
             },
@@ -99,7 +99,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         'the graph should contain 2 HtmlConditionalComment relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlConditionalComment'}).length, 2);
         },
-        'then bundling the HtmlStyles': {
+        'then bundling the HtmlStyle relations': {
             topic: function (assetGraph) {
                 assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
             },
@@ -144,7 +144,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         'the graph contains 7 Css assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 7);
         },
-        'then run the bundleRelations transform': {
+        'then bundle the HtmlStyle relations': {
             topic: function (assetGraph) {
                 assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
             },
@@ -183,6 +183,41 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
             },
             'the fourth HtmlStyle relation should point to f.css': function (assetGraph) {
                 assert.matches(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[3].to.url, /\/f\.css$/);
+            }
+        }
+    },
+    'After loading a test case with some scripts that should not be bundled': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRelations/skippedScripts/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph contains 6 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 6);
+        },
+        'the graph contains 1 Html asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+        },
+        'the graph contains 5 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+        },
+        'then bundle the HtmlScript relations that do not have a nobundle attribute': {
+            topic: function (assetGraph) {
+                assetGraph.bundleRelations({type: 'HtmlScript', node: function (node) {return !node.hasAttribute('nobundle');}}, 'oneBundlePerIncludingAsset').run(this.callback);
+            },
+            'the graph contains 4 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
+            },
+            'the JavaScript assets have the expected contents': function (assetGraph) {
+                assert.deepEqual(assetGraph.findRelations({type: 'HtmlScript'}).map(function (htmlScript) {
+                    return htmlScript.to.text.replace(/\n/g, '');
+                }), [
+                    'alert("a.js");',
+                    'alert("b.js");alert("c.js")',
+                    'alert("d.js");',
+                    'alert("e.js");'
+                ]);
             }
         }
     }
