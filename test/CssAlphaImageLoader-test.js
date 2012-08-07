@@ -24,13 +24,13 @@ vows.describe('relations.CssImage').addBatch({
                                  [
                                      'images/quux.png',
                                      'bar.png',
-                                     'images/quux.png'
+                                     '/images/quux.png'
                                  ]);
             },
             'the CSS values should be updated accordingly': function (assetGraph) {
                 var cssRules = assetGraph.findAssets({type: 'Css'})[0].parseTree.cssRules;
                 assert.matches(cssRules[0].style.getPropertyValue('filter'), /src='images\/quux\.png'.*src='bar\.png'/);
-                assert.matches(cssRules[1].style.getPropertyValue('filter'), /src='images\/quux\.png'/);
+                assert.matches(cssRules[1].style.getPropertyValue('filter'), /src='\/images\/quux\.png'/);
             }
         }
     }
