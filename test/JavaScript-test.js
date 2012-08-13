@@ -64,5 +64,24 @@ vows.describe('assets.JavaScript').addBatch({
                                  'bar.js'
                              ]);
         }
+    },
+    'After loading test case that has a copyright notice in a JavaScript asset': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScript/'})
+                .loadAssets('copyrightNotice.js')
+                .run(this.callback);
+        },
+        'then manipulating the parseTree of the JavaScript asset and marking it dirty': {
+            topic: function (assetGraph) {
+                var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
+                javaScript.parseTree[1].push(["var",[["foo",["string","quux"]]]]);
+                javaScript.markDirty();
+                return assetGraph;
+            },
+            'the copyright notice should be preserved in the serialized asset': function (assetGraph) {
+                var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
+                assert.matches(javaScript.text, /Copyright blablabla/);
+            }
+        }
     }
 })['export'](module);
