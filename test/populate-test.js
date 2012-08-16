@@ -25,5 +25,19 @@ vows.describe('transforms.populate test').addBatch({
             assert.equal(htmlStyles[0].to.isResolved, true);
             assert.equal(htmlStyles[0].to.url, urlTools.resolveUrl(assetGraph.root, 'style.css'));
         }
+    },
+    'After loading test case with custom protocols and running transforms.populate': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/populate/'})
+                .loadAssets('index.html')
+                .populate({followRelations: {to: {type: query.not('Css')}}})
+                .run(this.callback);
+        },
+        'the graph should contain a single asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 1);
+        },
+        'the graph should contain no relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations().length, 0);
+        }
     }
 })['export'](module);
