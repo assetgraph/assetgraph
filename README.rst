@@ -133,7 +133,7 @@ then run::
 API documentation
 =================
 
-A work in progress. Look `here <http://gofish.dk/assetgraph/api.html>`_.
+A work in progress. Look `here <http://gofish.dk/assetgraph/api/>`_.
 
 
 Querying the graph

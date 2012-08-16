@@ -27,6 +27,7 @@
         "histogram": "=0.1.1"
     },
     "devDependencies": {
+        "onedox": "~0.0.1",
         "closure-compiler": "=0.1.1",
         "coffee-script": "=1.2.0",
         "less": "=1.2.1",
