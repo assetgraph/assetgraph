@@ -42,6 +42,8 @@
     },
     "main": "lib/index.js",
     "scripts": {
-        "prepublish": "npm install && vows"
+        "pretest": "npm install",
+        "test": "vows",
+        "prepublish": "npm test"
     }
 }
