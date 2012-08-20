@@ -29,7 +29,7 @@ vows.describe('transforms.populate test').addBatch({
     'After loading test case with custom protocols and running transforms.populate': {
         topic: function () {
             new AssetGraph({root: __dirname + '/populate/'})
-                .loadAssets('index.html')
+                .loadAssets('customProtocols.html')
                 .populate({followRelations: {to: {type: query.not('Css')}}})
                 .run(this.callback);
         },
