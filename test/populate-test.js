@@ -38,6 +38,11 @@ vows.describe('transforms.populate test').addBatch({
         },
         'the graph should contain no relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations().length, 0);
+        },
+        'the links should still be present in customProtocols.html': function (assetGraph) {
+            var matches = assetGraph.findAssets({url: /\/customProtocols\.html$/})[0].text.match(/<a [^>]*?>/g);
+            assert.isNotNull(matches);
+            assert.equal(matches.length, 4);
         }
     }
 })['export'](module);
