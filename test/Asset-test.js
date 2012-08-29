@@ -595,10 +595,22 @@ vows.describe('Asset test').addBatch({
             return assetGraph;
         },
         'the href of the HtmlAnchor relation should be updated correctly': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].href, 'subdir/quux.html');
+            assert.equal(assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].href, 'http://example.com/subdir/quux.html');
         },
         'subdir/quux.html still should not be loaded': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html', url: /\/subdir\/quux\.html$/})[0].isLoaded, false);
+        },
+        'then set the hrefType of the HtmlAnchor relation to "relative"': {
+            topic: function (assetGraph) {
+                assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].hrefType = 'relative';
+                return assetGraph;
+            },
+            'the href of the HtmlAnchor relation should be updated correctly': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].href, 'subdir/quux.html');
+            },
+            'subdir/quux.html still should not be loaded': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Html', url: /\/subdir\/quux\.html$/})[0].isLoaded, false);
+            }
         }
     }
 })['export'](module);

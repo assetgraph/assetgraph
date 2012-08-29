@@ -23,9 +23,12 @@ vows.describe('<video> and <audio> test').addBatch({
         'the graph should contain 4 HtmlAudio relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlAudio'}, true).length, 4);
         },
-        'then change the url of the main Html document': {
+        'then change the url of the main Html document and set the hrefType of the relations to "relative"': {
             topic: function (assetGraph) {
                 assetGraph.findAssets({type: 'Html'})[0].url = 'http://example.com/foo/bar.html';
+                assetGraph.findRelations({}, true).forEach(function (relation) {
+                    relation.hrefType = 'relative';
+                });
                 return assetGraph;
             },
             'the relative urls of the relations should begin with ../': function (assetGraph) {
