@@ -2,7 +2,7 @@ var vows = require('vows'),
     assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
-    uglifyJs = require('uglify-js'),
+    uglifyJs = require('uglify-js-papandreou'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('transforms.bundleRequireJs').addBatch({

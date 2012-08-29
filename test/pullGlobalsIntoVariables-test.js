@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    uglifyJs = require('uglify-js'),
+    uglifyJs = require('uglify-js-papandreou'),
     AssetGraph = require('../lib/AssetGraph');
 
 function getFunctionBodySource(fn) {
