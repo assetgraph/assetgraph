@@ -18,3 +18,7 @@
     background: url(foo.png);
     _background: url(foo.png);
 }
+
+.baz {
+    background-image: url(foo.png) !important;
+}
