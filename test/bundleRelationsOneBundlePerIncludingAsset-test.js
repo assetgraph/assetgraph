@@ -220,5 +220,17 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
                 ]);
             }
         }
+    },
+    'After loading a test case with some scripts with copyright notices, then running bundleRelations': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRelations/copyrightNotices/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRelations({type: 'HtmlScript'}, 'oneBundlePerIncludingAsset')
+                .run(this.callback);
+        },
+        'the bundled JavaScript should contain the copyright notices from both a.js and c.js at the top': function (assetGraph) {
+            assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /\/\*! Copyright a \*\/[\s\S]*\/\*! Copyright c \*\//);
+        }
     }
 })['export'](module);

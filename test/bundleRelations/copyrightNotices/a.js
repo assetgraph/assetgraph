@@ -1,0 +1,2 @@
+/*! Copyright a */
+alert('a');
