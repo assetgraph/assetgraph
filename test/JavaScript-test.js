@@ -69,5 +69,26 @@ vows.describe('assets.JavaScript').addBatch({
                 assert.matches(javaScript.text, /Copyright blablabla/);
             }
         }
+    },
+    'After loading test case with JavaScript assets that have regular comments as the first non-whitespace tokens': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScript/'})
+                .loadAssets('initialComment*.js')
+                .run(this.callback);
+        },
+        'then manipulating the parseTree of the JavaScript asset and marking it dirty': {
+            topic: function (assetGraph) {
+                assetGraph.findAssets({type: 'JavaScript'}).forEach(function (javaScript) {
+                    javaScript.parseTree[1].push(["var",[["foo",["string","quux"]]]]);
+                    javaScript.markDirty();
+                });
+                return assetGraph;
+            },
+            'the comments should be gone from the serialized asset': function (assetGraph) {
+                var javaScripts = assetGraph.findAssets({type: 'JavaScript'});
+                assert.isFalse(/Initial comment/.test(javaScripts[0].text));
+                assert.isFalse(/Initial comment/.test(javaScripts[1].text));
+            }
+        }
     }
 })['export'](module);
