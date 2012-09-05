@@ -17,7 +17,7 @@ vows.describe('Changing the url of assets').addBatch({
             assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), [
                 'relative.html',
                 '/rootRelative.html',
-                //'//example.com/protocolRelative.html',
+                '//example.com/protocolRelative.html',
                 'http://example.com/absolute.html'
             ]);
         },
@@ -25,7 +25,7 @@ vows.describe('Changing the url of assets').addBatch({
             assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), [
                 'relative',
                 'rootRelative',
-                //'protocolRelative',
+                'protocolRelative',
                 'absolute'
             ]);
         },
@@ -41,10 +41,10 @@ vows.describe('Changing the url of assets').addBatch({
                 assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), [
                     'relative2.html',
                     '/rootRelative2.html',
-                    //'//example.com/protocolRelative2.html',
+                    '//example.com/protocolRelative2.html',
                     'http://example.com/absolute2.html'
                 ]);
-            },
+            }
         }
     }
 })['export'](module);
