@@ -93,11 +93,27 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             'the graph should contain 2 JavaScript assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
             },
-            'the resulting main.js should have the expected contents': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
-                             'define("popular",function(){alert("I\'m a popular helper module");return"foo"});define("module1",["popular"],function(){return"module1"});define("module2",["popular"],function(){return"module2"});require(["module1","module2"],function(module1,module2){alert("Got it all!")});define("main",function(){})'
+            'the resulting main.js should have the expected parse tree': function (assetGraph) {
+                assert.equal(uglifyJs.uglify.gen_code(assetGraph.findAssets({url: /\/main\.js$/})[0].parseTree),
+                             uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+                                 define("popular", function(){
+                                     alert("I\'m a popular helper module");
+                                     return "foo";
+                                 });
+                                 define("module1", ["popular"], function () {
+                                     return"module1";
+                                 });
+                                 define("module2", ["popular"], function () {
+                                     return"module2";
+                                 });
+                                 require(["module1", "module2"], function (module1, module2) {
+                                     alert("Got it all!");
+                                 });
+                                 define("main", function () {});
+                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')))
                 );
             }
+
         }
     },
     'After loading a slightly different test case with a module that has multiple incoming JavaScriptAmd* relations': {
@@ -287,6 +303,37 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                              });
 
                              define("main",function(){});
+                         }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
+        }
+    },
+    'After loading the non-umd test case and running the bundleRequireJs transform': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/nonUmd/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRequireJs({type: 'Html'})
+                .run(this.callback);
+        },
+        'the bundled main script should have the expected contents': function (assetGraph) {
+            assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
+                         uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+                             (function(global){
+                                 var signals = function () {return true;};
+
+                                 if(typeof define === 'function' && define.amd) {
+                                     define('signals', function () { return signals; });
+                                 } else if (typeof module !== 'undefined' && module.exports) {
+                                     module.exports = signals;
+                                 } else {
+                                     global['signals'] = signals;
+                                 }
+                             }(this));
+
+                             require(['signals'], function (myUmdModule) {
+                                 alert(signals);
+                             });
+
+                             define("main", function () {});
                          }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
         }
     }
