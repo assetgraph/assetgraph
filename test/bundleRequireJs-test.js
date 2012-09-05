@@ -13,7 +13,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 5 assets': function (assetGraph) {
+        'the graph should contain 6 assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets().length, 6);
         },
         'the graph should contain 1 HtmlRequireJsMain relation': function (assetGraph) {
@@ -265,6 +265,29 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 );
             }
 
+        }
+    },
+    'After loading the umd test case and running the bundleRequireJs transform': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/umd/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRequireJs({type: 'Html'})
+                .run(this.callback);
+        },
+        'the bundled main script should have the expected contents': function (assetGraph) {
+            assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
+                         uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+                             define("myumdmodule", function () {
+                                 return true;
+                             });
+
+                             require(['myumdmodule'], function (myUmdModule) {
+                                 alert(myUmdModule);
+                             });
+
+                             define("main",function(){});
+                         }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
         }
     }
 })['export'](module);
