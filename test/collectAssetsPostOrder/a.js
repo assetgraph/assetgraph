@@ -1,1 +1,1 @@
-one.include('b.js');
+INCLUDE('b.js');

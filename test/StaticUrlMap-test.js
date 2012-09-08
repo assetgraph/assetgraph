@@ -11,8 +11,8 @@ vows.describe('StaticUrlMap test').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 2 JavaScriptOneGetStaticUrl relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 2);
+        'the graph should contain 2 JavaScriptGetStaticUrl relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 2);
         },
         'the graph should contain 2 StaticUrlMap assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'StaticUrlMap'}).length, 2);

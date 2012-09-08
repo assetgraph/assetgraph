@@ -1,2 +1,2 @@
-one.include('g.js');
+INCLUDE('g.js');
 alert('h');

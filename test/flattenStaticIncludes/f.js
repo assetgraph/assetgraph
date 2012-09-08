@@ -1,2 +1,2 @@
-one.include('e.js');
+INCLUDE('e.js');
 alert('e');

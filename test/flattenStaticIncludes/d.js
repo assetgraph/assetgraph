@@ -1,4 +1,4 @@
-one.include('a.js');
-one.include('b.js');
-one.include('c.js');
+INCLUDE('a.js');
+INCLUDE('b.js');
+INCLUDE('c.js');
 alert('d.js');

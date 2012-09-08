@@ -17,7 +17,7 @@ vows.describe('AssetGraph.collectAssetsPostOrder').addBatch({
         },
         'collectAssetsPostOrder should return the assets in the right order': function (assetGraph) {
             var initialAsset = assetGraph.findAssets({url: /index\.js$/})[0];
-            assert.deepEqual(_.pluck(assetGraph.collectAssetsPostOrder(initialAsset, {type: 'JavaScriptOneInclude'}), 'url').map(path.basename),
+            assert.deepEqual(_.pluck(assetGraph.collectAssetsPostOrder(initialAsset, {type: 'JavaScriptInclude'}), 'url').map(path.basename),
                              ['c.js', 'b.js', 'a.js', 'e.js', 'd.js', 'index.js']);
         }
     }

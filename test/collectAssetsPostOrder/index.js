@@ -1,2 +1,2 @@
-one.include('a.js');
-one.include('d.js');
+INCLUDE('a.js');
+INCLUDE('d.js');

@@ -56,17 +56,17 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             'the graph should contain 2 JavaScript assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
             },
-            'the graph should contain one.getText relation pointing at myTextFile.txt': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetText', to: {url: /\/myTextFile\.txt$/}}).length, 1);
+            'the graph should contain GETTEXT relation pointing at myTextFile.txt': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptGetText', to: {url: /\/myTextFile\.txt$/}}).length, 1);
             },
             'the resulting main.js should have a define("myTextFile.txt") and the "text!" prefix should be stripped from the require list': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
-                             'define("myTextFile.txt",one.getText("myTextFile.txt"));require(["myTextFile.txt"],function(contentsOfMyTextFile){alert(contentsOfMyTextFile+", yay!")})'
+                             'define("myTextFile.txt",GETTEXT("myTextFile.txt"));require(["myTextFile.txt"],function(contentsOfMyTextFile){alert(contentsOfMyTextFile+", yay!")})'
                 );
             },
-            'then inline the JavaScriptOneGetText relations': {
+            'then inline the JavaScriptGetText relations': {
                 topic: function (assetGraph) {
-                    assetGraph.inlineRelations({type: 'JavaScriptOneGetText'}).run(this.callback);
+                    assetGraph.inlineRelations({type: 'JavaScriptGetText'}).run(this.callback);
                 },
                 'main.js should should contain the contents of myTextFile.txt': function (assetGraph) {
                     assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
@@ -239,7 +239,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             }
         }
     },
-    'After loading test case that includes a one.getStaticUrl relation': {
+    'After loading test case that includes a GETSTATICURL relation': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/withOneGetStaticUrl/'})
                 .loadAssets('index.html')
@@ -249,8 +249,8 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
         },
-        'the graph should contain 1 JavaScriptOneGetStaticUrl relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 1);
+        'the graph should contain 1 JavaScriptGetStaticUrl relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 1);
         },
         'the graph should contain 1 StaticUrlMapEntry relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 1);
@@ -265,8 +265,8 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             'the graph should contain 2 JavaScript assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
             },
-            'the graph should contain 1 JavaScriptOneGetStaticUrl relation': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 1);
+            'the graph should contain 1 JavaScriptGetStaticUrl relation': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 1);
             },
             'the graph should contain 1 StaticUrlMapEntry relation': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 1);
@@ -276,7 +276,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             },
             'the resulting main script should have the expected contents': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript', url: /\/main\.js$/})[0].text,
-                             'define("module2",function(){return"module2, who\'s my url?"+one.getStaticUrl("foo.png")});define("module1",["module2"],function(){return"module1"});define("module3",function(){alert("module3.js")});require(["module1","module2","module3"],function(module1,module2,module3){alert("Got it all")})'
+                             'define("module2",function(){return"module2, who\'s my url?"+GETSTATICURL("foo.png")});define("module1",["module2"],function(){return"module1"});define("module3",function(){alert("module3.js")});require(["module1","module2","module3"],function(module1,module2,module3){alert("Got it all")})'
                 );
             }
 

@@ -14,8 +14,8 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
         'the graph should contain a single JavaScript asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
         },
-        'the graph should contain 3 JavaScriptOneGetStaticUrl relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 3);
+        'the graph should contain 3 JavaScriptGetStaticUrl relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 3);
         },
         'the graph should contain 3 StaticUrlMap assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'StaticUrlMap'}).length, 3);
@@ -43,11 +43,11 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 assert.equal(new Function(src + ';return theDoubleStarThing;')(), 'json/subsubdir/d.json');
                 assert.equal(new Function(src + ';return theBracketThing;')(), 'json/c.json');
             },
-            'then omit the one.getStaticUrl function calls': {
+            'then omit the GETSTATICURL function calls': {
                 topic: function (assetGraph) {
-                    assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).forEach(function (javaScriptOneGetStaticUrl) {
-                        javaScriptOneGetStaticUrl.omitFunctionCall = true;
-                        javaScriptOneGetStaticUrl.inline();
+                    assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).forEach(function (javaScriptGetStaticUrl) {
+                        javaScriptGetStaticUrl.omitFunctionCall = true;
+                        javaScriptGetStaticUrl.inline();
                     });
                     return assetGraph;
                 },
@@ -81,8 +81,8 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             'the graph should contain a single JavaScript asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
             },
-            'the graph should contain 3 JavaScriptOneGetStaticUrl relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).length, 3);
+            'the graph should contain 3 JavaScriptGetStaticUrl relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 3);
             },
             'the graph should contain 3 StaticUrlMap assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'StaticUrlMap'}).length, 3);
@@ -99,7 +99,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 assert.equal(assetGraph.findRelations({href: 'json/c.json'}).length, 3);
                 assert.equal(assetGraph.findRelations({href: 'json/subsubdir/d.json'}).length, 1);
             },
-            'then move one of the assets pointed to by a JavaScriptOneGetStaticUrl relation': {
+            'then move one of the assets pointed to by a JavaScriptGetStaticUrl relation': {
                 topic: function (assetGraph) {
                     assetGraph.findAssets({url: /\/a.json/})[0].url = urlTools.resolveUrl(assetGraph.root, 'static/a76a76a7a.json');
                     return assetGraph;
@@ -110,11 +110,11 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                     assert.equal(new Function(src + ';return theDoubleStarThing;')(), 'json/subsubdir/d.json');
                     assert.equal(new Function(src + ';return theBracketThing;')(), 'json/c.json');
                 },
-                'then omit the one.getStaticUrl function calls': {
+                'then omit the GETSTATICURL function calls': {
                     topic: function (assetGraph) {
-                        assetGraph.findRelations({type: 'JavaScriptOneGetStaticUrl'}).forEach(function (javaScriptOneGetStaticUrl) {
-                            javaScriptOneGetStaticUrl.omitFunctionCall = true;
-                            javaScriptOneGetStaticUrl.inline();
+                        assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).forEach(function (javaScriptGetStaticUrl) {
+                            javaScriptGetStaticUrl.omitFunctionCall = true;
+                            javaScriptGetStaticUrl.inline();
                         });
                         return assetGraph;
                     },
