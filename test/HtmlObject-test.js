@@ -10,13 +10,14 @@ vows.describe('<object><param name="src" value="..."></object> test').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/HtmlObject/'})
                 .loadAssets('index.html')
-                .populate({
-                    followRelations: function () {return false;}
-                })
+                .populate()
                 .run(this.callback);
         },
         'the graph should contain 3 HtmlObject relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlObject'}, true).length, 3);
+        },
+        'the graph should contain 3 Flash assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Flash'}).length, 3);
         },
         'the urls of the HtmlObject relations should be correct': function (assetGraph) {
             assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlObject'}, true), 'href'),

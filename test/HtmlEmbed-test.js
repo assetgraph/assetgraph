@@ -9,13 +9,14 @@ vows.describe('<embed src="..."> test').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/HtmlEmbed/'})
                 .loadAssets('index.html')
-                .populate({
-                    followRelations: function () {return false;}
-                })
+                .populate()
                 .run(this.callback);
         },
         'the graph should contain one HtmlEmbed relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true).length, 1);
+        },
+        'the graph should contain one Flash asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Flash'}, true).length, 1);
         },
         'the urls of the HtmlEmbed relation should be correct': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlEmbed'}, true)[0].href, 'foo.swf');
