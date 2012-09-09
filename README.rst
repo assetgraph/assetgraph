@@ -82,8 +82,8 @@ CSS
 
 JavaScript
   AMD/RequireJS ``require`` and ``define``, CommonJS ``require(...)``,
-  homegrown ``one.include`` syntax for specifying requirements, and homegrown
-  ``one.getStaticUrl(...)`` and ``one.getText(...)`` syntax for referencing external files
+  homegrown ``INCLUDE`` syntax for specifying requirements, and homegrown
+  ``GETSTATICURL(...)`` and ``GETTEXT(...)`` syntax for referencing external files
 
 HTC
   (same as for HTML)
@@ -103,7 +103,7 @@ Features
 * Find explicit dependencies between JavaScript and CSS and roll them
   out as ``<script>`` and ``<link rel='stylesheet'>`` tags in your
   HTML. For now require.js/AMD, the ExtJS 4 syntax and a homegrown
-  `one.include` syntax are supported, but the parsing phase can be
+  ``INCLUDE`` syntax are supported, but the parsing phase can be
   adapted to almost any syntax. Support for more script loaders will
   be added on demand.
 * Bundle and inline CSS and JavaScript.
@@ -416,7 +416,7 @@ through ``HtmlScript``, ``HtmlStyle``, ``JavaScriptOneInclude``, and
 ``HtmlScript`` (``<script src='...'>``) and ``HtmlStyle`` (``<link
 rel='stylesheet' href='...'>``) relations.
 
-If your project uses deeply nested ``one.include`` statements, this
+If your project uses deeply nested ``INCLUDE`` statements, this
 transform allows you to create a "development version" that works in a
 browser. Refer to `the buildDevelopment script from AssetGraph-builder
 <https://github.com/One-com/assetgraph-builder/blob/master/bin/buildDevelopment>`_.
@@ -425,13 +425,13 @@ For example::
 
     <head></head>
     <body>
-        <script>one.include('foo.js');</script>
+        <script>INCLUDE('foo.js');</script>
     </body>
 
 where ``foo.js`` contains::
 
-    one.include('bar.js');
-    one.include('quux.css');
+    INCLUDE('bar.js');
+    INCLUDE('quux.css');
     var blah = 'baz';
     ...
 
