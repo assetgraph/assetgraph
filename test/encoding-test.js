@@ -3,15 +3,17 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('Charset test').addBatch({
-    'After loading Html with a meta tag specifying iso-8859-1': {
+    'After loading Html assets with meta tags specifying iso-8859-1': {
         topic: function () {
             new AssetGraph({root: __dirname + '/encoding/'})
-                .loadAssets('iso-8859-1.html')
+                .loadAssets('iso-8859-1.html', 'iso-8859-1-simple-meta.html')
                 .populate()
                 .run(this.callback);
         },
         'the body should be decoded correctly': function (assetGraph) {
-             assert.notEqual(assetGraph.findAssets()[0].text.indexOf('æøåÆØÅ'), -1);
+            assetGraph.findAssets().forEach(function (asset) {
+                assert.notEqual(asset.text.indexOf('æøåÆØÅ'), -1);
+            });
         },
         'the parseTree should be decoded correctly': function (assetGraph) {
             assert.equal(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'æøåÆØÅ');

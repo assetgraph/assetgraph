@@ -18,7 +18,7 @@ function bufferIndexOf(haystack, needle) {
 }
 
 vows.describe('Changing the encoding of assets').addBatch({
-    'After loading test case with an iso-8859-1 Html asset with a meta tag': {
+    'After loading test case with an iso-8859-1 Html asset with a <meta http-equiv="content-type" ...> tag': {
         topic: function () {
             new AssetGraph({root: __dirname + '/setAssetEncoding/'})
                 .loadAssets('iso-8859-1-withMeta.html')
@@ -47,6 +47,35 @@ vows.describe('Changing the encoding of assets').addBatch({
             }
         }
     },
+    'After loading test case with an iso-8859-1 Html asset with a <meta charset="..."> tag': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/setAssetEncoding/'})
+                .loadAssets('iso-8859-1-withSimpleMeta.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 1 Html asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+        },
+        'the body of the asset should be decoded correctly': function (assetGraph) {
+            assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /æøå/);
+        },
+        'then change the encoding to utf-8': {
+            topic: function (assetGraph) {
+                assetGraph.setAssetEncoding({type: 'Html'}, 'utf-8').run(this.callback);
+            },
+            'the contents should be recoded to utf-8': function (assetGraph) {
+                assert.notEqual(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer("æøå", 'utf-8')), -1);
+            },
+            'there should be a single meta tag': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Html'})[0].text.match(/<meta/g).length, 1);
+            },
+            'the meta tag should specify utf-8 as the charset': function (assetGraph) {
+                assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,
+                               /<meta charset=(["']|)utf-8\1/i);
+            }
+        }
+    },
     'After loading test case with an utf-8 Html asset without a meta tag': {
         topic: function () {
             new AssetGraph({root: __dirname + '/setAssetEncoding/'})
@@ -72,7 +101,7 @@ vows.describe('Changing the encoding of assets').addBatch({
             },
             'the meta tag should specify iso-8859-1 as the charset': function (assetGraph) {
                 assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,
-                               /<meta http-equiv=(['"]|)Content-Type\1 content=(['"]|)text\/html; charset=iso-8859-1\2/i);
+                               /<meta charset=(['"]|)iso-8859-1\1/i);
             }
         }
     }
