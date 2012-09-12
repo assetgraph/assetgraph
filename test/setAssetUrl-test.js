@@ -99,5 +99,79 @@ vows.describe('Changing the url of assets').addBatch({
                 assert.equal(assetGraph.findRelations({type: 'CssBehavior'})[0].cssRule.style.behavior, 'url(theBehavior.htc)');
             }
         }
+    },
+    'After loading a test case with a single Html file': {
+        topic: function () {
+            new AssetGraph({root: 'file:///foo/bar/quux'})
+                .loadAssets(new AssetGraph.assets.Html({
+                    url: 'file:///foo/bar/quux/baz/index.html',
+                    text: '<!DOCTYPE html><html></html>'
+                }))
+                .run(this.callback);
+        },
+        'then change the url of the Html asset to a relative url': {
+            topic: function (assetGraph) {
+                assetGraph.findAssets()[0].url = 'otherdir/index.html';
+                return assetGraph;
+            },
+            'the asset url should be updated correctly': function (assetGraph) {
+                assert.equal(assetGraph.findAssets()[0].url, 'file:///foo/bar/quux/baz/otherdir/index.html');
+            },
+            'then update the asset url to a root-relative url': {
+                topic: function (assetGraph) {
+                    assetGraph.findAssets()[0].url = '/hey/index.html';
+                    return assetGraph;
+                },
+                'the asset url should be updated correctly': function (assetGraph) {
+                    assert.equal(assetGraph.findAssets()[0].url, 'file:///foo/bar/quux/hey/index.html');
+                },
+                'then update the asset url to a protocol-relative url': {
+                    topic: function (assetGraph) {
+                        assetGraph.findAssets()[0].url = '//hey.com/there/index.html';
+                        return assetGraph;
+                    },
+                    'the asset url should be updated correctly': function (assetGraph) {
+                        assert.equal(assetGraph.findAssets()[0].url, 'http://hey.com/there/index.html');
+                    },
+                    'then update the asset url to a relative url': {
+                        topic: function (assetGraph) {
+                            assetGraph.findAssets()[0].url = 'you/go/index.html';
+                            return assetGraph;
+                        },
+                        'the asset url should be updated correctly': function (assetGraph) {
+                            assert.equal(assetGraph.findAssets()[0].url, 'http://hey.com/there/you/go/index.html');
+                        },
+                        'then update the asset url to a root-relative url': {
+                            topic: function (assetGraph) {
+                                assetGraph.findAssets()[0].url = '/and/then/here.html';
+                                return assetGraph;
+                            },
+                            'the asset url should be updated correctly': function (assetGraph) {
+                                assert.equal(assetGraph.findAssets()[0].url, 'http://hey.com/and/then/here.html');
+                            },
+                            'then update the asset url to a protocol-relative url': {
+                                topic: function (assetGraph) {
+                                    assetGraph.findAssets()[0].url = '//example.com/then/here.html';
+                                    return assetGraph;
+                                },
+                                'the asset url should be updated correctly': function (assetGraph) {
+                                    assert.equal(assetGraph.findAssets()[0].url, 'http://example.com/then/here.html');
+                                },
+                                'then update the asset url to an absolute https url, then to a protocol-relative url': {
+                                    topic: function (assetGraph) {
+                                        assetGraph.findAssets()[0].url = 'https://example2.com/then/here.html';
+                                        assetGraph.findAssets()[0].url = '//example.com/then/here.html';
+                                        return assetGraph;
+                                    },
+                                    'the asset url should be updated correctly': function (assetGraph) {
+                                        assert.equal(assetGraph.findAssets()[0].url, 'https://example.com/then/here.html');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 })['export'](module);
