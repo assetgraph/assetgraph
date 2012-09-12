@@ -29,79 +29,90 @@ vows.describe('transforms.moveAssets').addBatch({
     },
     'After loading test case with a non-inline asset that is moved to a relative url': {
         topic: function () {
-            new AssetGraph({root: 'http://www.example.com/blah/'})
+            new AssetGraph({root: 'http://www.example.com/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/hey/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return 'otherdir/someotherplace.html';})
                 .run(this.callback);
         },
         'the url should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/blah/otherdir/someotherplace.html');
+            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/blah/hey/otherdir/someotherplace.html');
         }
     },
     'After loading test case with a non-inline asset that is moved to a relative url without a file name': {
         topic: function () {
-            new AssetGraph({root: 'http://www.example.com/blah/'})
+            new AssetGraph({root: 'http://www.example.com/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/yay/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return 'otherdir/';})
                 .run(this.callback);
         },
         'the url should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/blah/otherdir/quux.html');
+            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/blah/yay/otherdir/quux.html');
         }
     },
     'After loading test case with a non-inline asset that is moved to a relative url with ../': {
         topic: function () {
-            new AssetGraph({root: 'http://www.example.com/blah/'})
+            new AssetGraph({root: 'http://www.example.com/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/hey/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return '../someotherplace.html';})
                 .run(this.callback);
         },
         'the url should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/someotherplace.html');
+            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/blah/someotherplace.html');
         }
     },
     'After loading test case with a non-inline asset that is moved to a relative url with ../ but without a file name': {
         topic: function () {
-            new AssetGraph({root: 'http://www.example.com/blah/'})
-                .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/foo/bar/quux.html'})
+            new AssetGraph({root: 'file:///foo/bar/'})
+                .loadAssets({type: 'Html', text: "foo", url: 'file:///foo/bar/hey/blah/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return '../';})
+                .run(this.callback);
+        },
+        'the url should be correct': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'file:///foo/bar/hey/quux.html');
+        }
+    },
+    'After loading test case with a non-inline asset that is moved to a root-relative url': {
+        topic: function () {
+            new AssetGraph({root: 'file:///foo/bar/'})
+                .loadAssets({type: 'Html', text: "foo", url: 'file:///foo/bar/hello.html'})
+                .moveAssets({type: 'Html'}, function (asset) {return '/yay.html';})
+                .run(this.callback);
+        },
+        'the url should be correct': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'file:///foo/bar/yay.html');
+        }
+    },
+    'After loading test case with a non-inline asset that is moved to a root-relative url without a file name': {
+        topic: function () {
+            new AssetGraph({root: 'file:///foo/bar/'})
+                .loadAssets({type: 'Html', text: "foo", url: 'file:///foo/bar/blah/foo/quux.html'})
+                .moveAssets({type: 'Html'}, function (asset) {return '/';})
+                .run(this.callback);
+        },
+        'the url should be correct': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'file:///foo/bar/quux.html');
+        }
+    },
+    'After loading test case with a non-inline asset that is moved to a root-relative url without file name': {
+        topic: function () {
+            new AssetGraph({root: 'http://www.example.com/'})
+                .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/hey/quux.html'})
+                .moveAssets({type: 'Html'}, function (asset) {return '/';})
                 .run(this.callback);
         },
         'the url should be correct': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/quux.html');
         }
     },
-    'After loading test case with a non-inline asset that is moved to a root-relative url': {
+    'After loading test case with a non-inline asset that is moved to a root-relative url without file name, file: urls': {
         topic: function () {
-            new AssetGraph({root: 'http://www.example.com/blah/'})
-                .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/quux.html'})
-                .moveAssets({type: 'Html'}, function (asset) {return '/yay.html';})
-                .run(this.callback);
-        },
-        'the url should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/blah/yay.html');
-        }
-    },
-    'After loading test case with a non-inline asset that is moved to a root-relative url without a file name': {
-        topic: function () {
-            new AssetGraph({root: 'http://www.example.com/blah/'})
-                .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/foo/quux.html'})
+            new AssetGraph({root: 'file:///foo/bar/'})
+                .loadAssets({type: 'Html', text: "foo", url: 'file:///foo/bar/baz/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return '/';})
                 .run(this.callback);
         },
         'the url should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/blah/quux.html');
-        }
-    },
-    'After loading test case with a non-inline asset that is moved to a root-relative url without file name': {
-        topic: function () {
-            new AssetGraph({root: 'http://www.example.com/blah/'})
-                .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/hey/quux.html'})
-                .moveAssets({type: 'Html'}, function (asset) {return '/';})
-                .run(this.callback);
-        },
-        'the url should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/blah/quux.html');
+            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'file:///foo/bar/quux.html');
         }
     },
     'After loading test case with an inline asset that is moved to an absolute url': {
@@ -150,24 +161,24 @@ vows.describe('transforms.moveAssets').addBatch({
     },
     'After loading test case with an inline asset that is moved to a root-relative url': {
         topic: function () {
-            new AssetGraph({root: 'http://www.example.com/blah/'})
+            new AssetGraph({root: 'file:///foo/bar/'})
                 .loadAssets(new assets.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return '/there.html';})
                 .run(this.callback);
         },
         'the url should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/blah/there.html');
+            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'file:///foo/bar/there.html');
         }
     },
     'After loading test case with an inline asset that is moved to a root-relative url without a file name': {
         topic: function () {
-            new AssetGraph({root: 'http://www.example.com/blah/'})
+            new AssetGraph({root: 'file:///foo/bar/'})
                 .loadAssets(new assets.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return '/';})
                 .run(this.callback);
         },
         'the url should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'http://www.example.com/blah/');
+            assert.equal(assetGraph.findAssets({type: 'Html'})[0].url, 'file:///foo/bar/');
         }
     }
 })['export'](module);
