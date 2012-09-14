@@ -331,5 +331,26 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                              });
                          }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
         }
+    },
+    'After loading a test case with multiple Html files depending on the same modules, then running the bundleRequireJs transform': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/multipleHtmls/'})
+                .loadAssets('*.html')
+                .populate()
+                .bundleRequireJs({type: 'Html'})
+                .run(this.callback);
+        },
+        'app1.js should include the someDependency define': function (assetGraph) {
+            assert.matches(assetGraph.findAssets({url: /\/app1.js$/})[0].text, /define\(['"]someDependency/);
+        },
+        'app1.js should include the commonModule define': function (assetGraph) {
+            assert.matches(assetGraph.findAssets({url: /\/app1.js$/})[0].text, /define\(['"]commonModule/);
+        },
+        'app2.js should include the someDependency define': function (assetGraph) {
+            assert.matches(assetGraph.findAssets({url: /\/app2.js$/})[0].text, /define\(['"]someDependency/);
+        },
+        'app2.js should include the commonModule define': function (assetGraph) {
+            assert.matches(assetGraph.findAssets({url: /\/app2.js$/})[0].text, /define\(['"]commonModule/);
+        }
     }
 })['export'](module);
