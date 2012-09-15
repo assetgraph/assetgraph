@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    _ = require('underscore'),
     fs = require('fs'),
     path = require('path'),
     uglifyJs = require('uglify-js-papandreou'),
@@ -351,6 +352,22 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         },
         'app2.js should include the commonModule define': function (assetGraph) {
             assert.matches(assetGraph.findAssets({url: /\/app2.js$/})[0].text, /define\(['"]commonModule/);
+        }
+    },
+    'After loading a test case using the less! plugin, then running the bundleRequireJs transform': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/lessPlugin/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRequireJs({type: 'Html'})
+                .run(this.callback);
+        },
+        'index.html should have an HtmlStyle relation pointing at a.less': function (assetGraph) {
+            assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}}), 'href'), [
+                'b.less',
+                'a.less',
+                'c.less'
+            ]);
         }
     }
 })['export'](module);
