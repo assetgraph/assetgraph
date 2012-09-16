@@ -357,13 +357,20 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading a test case using the less! plugin, then running the bundleRequireJs transform': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/lessPlugin/'})
-                .loadAssets('index.html')
+                .loadAssets('index*.html')
                 .populate()
                 .bundleRequireJs({type: 'Html'})
                 .run(this.callback);
         },
-        'index.html should have an HtmlStyle relation pointing at a.less': function (assetGraph) {
+        'index.html should have a HtmlStyle relations pointing at the Less assets': function (assetGraph) {
             assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}}), 'href'), [
+                'b.less',
+                'a.less',
+                'c.less'
+            ]);
+        },
+        'index2.html should have a HtmlStyle relations pointing at the Less assets': function (assetGraph) {
+            assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index2\.html$/}}), 'href'), [
                 'b.less',
                 'a.less',
                 'c.less'
