@@ -1,0 +1,3 @@
+require([
+    'less!thisthing.less'
+]);
