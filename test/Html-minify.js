@@ -61,6 +61,14 @@ vows.describe('Html.minify').addBatch({
         '<!DOCTYPE html>\n<html>   <head> \r\n   </head> \n\n <body>    <div>    </div>    </body>    </html>',
         '<!DOCTYPE html>\n<html><head></head><body><div></div></body></html>'
     ),
+    'Text node consisting of a single non-breaking space should be left alone': createTestCase(
+        '<!DOCTYPE html>\n<html><head></head><body>&nbsp;<div></div></body></html>',
+        '<!DOCTYPE html>\n<html><head></head><body>&nbsp;<div></div></body></html>'
+    ),
+    'Non-breaking space should be treated as a regular character when compressing whitespace': createTestCase(
+        '<!DOCTYPE html>\n<html><head></head><body> &nbsp;  &nbsp; <div></div></body></html>',
+        '<!DOCTYPE html>\n<html><head></head><body>&nbsp; &nbsp;<div></div></body></html>'
+    ),
     'Neighbour text nodes adding up to a sequence of more than one whitespace char': createTestCase(
         '<!DOCTYPE html>\n<html><head></head><body><div>foo  </div></body></html>',
         '<!DOCTYPE html>\n<html><head></head><body><div>foo bar</div></body></html>',
