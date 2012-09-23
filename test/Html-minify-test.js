@@ -65,6 +65,18 @@ vows.describe('Html.minify').addBatch({
         '<!DOCTYPE html>\n<html><head></head><body>&nbsp;<div></div></body></html>',
         '<!DOCTYPE html>\n<html><head></head><body>&nbsp;<div></div></body></html>'
     ),
+    'Whitespace before and after <span data-i18n="..."> should be compressed down to one, but not completely removed': createTestCase(
+        '<!DOCTYPE html>\n<html><head></head><body>  Here is the thing:  <span data-i18n="blah">foo</span>  and furthermore...  </body></html>',
+        '<!DOCTYPE html>\n<html><head></head><body>Here is the thing: <span data-i18n="blah">foo</span> and furthermore...</body></html>'
+    ),
+    'Text nodes below tags with data-i18n should keep one leading/trailing space': createTestCase(
+        '<span data-i18n="ShowingXToYOfZ">\n' +
+        '    <span>1</span>\n' +
+        '     -                <span>50</span>\n' +
+        'of                      <span>0</span>\n' +
+        '            </span>\n',
+        '<span data-i18n="ShowingXToYOfZ"><span>1</span> - <span>50</span> of <span>0</span></span>'
+    ),
     'Non-breaking space should be treated as a regular character when compressing whitespace': createTestCase(
         '<!DOCTYPE html>\n<html><head></head><body> &nbsp;  &nbsp; <div></div></body></html>',
         '<!DOCTYPE html>\n<html><head></head><body>&nbsp; &nbsp;<div></div></body></html>'
