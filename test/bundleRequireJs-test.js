@@ -165,7 +165,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             },
             'the resulting main.js should have the expected contents': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].text,
-                             'alert("includedInHtmlAndViaRequire.js");require(["includedInHtmlAndViaRequire"],function(foo){alert("Here we are!")})'
+                             'alert("includedInHtmlAndViaRequire.js");require([],function(){alert("Here we are!")})'
                 );
             }
         }
