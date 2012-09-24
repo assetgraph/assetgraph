@@ -1,4 +1,5 @@
-[![build status](https://secure.travis-ci.org/One-com/assetgraph.png)](http://travis-ci.org/One-com/assetgraph)
+.. image:: https://secure.travis-ci.org/One-com/assetgraph.png
+
 AssetGraph
 ==========
 
