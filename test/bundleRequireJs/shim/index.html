@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            var require = {
+                shim: {
+                    nonAmdModule1: ['someDependency'],
+                    nonAmdModule2: {
+                        deps: ['someOtherDependency'],
+                        exports: 'foo'
+                    }
+                }
+            };
+        </script>
+        <script data-main="main" src="require.js"></script>
+    </head>
+    <body>
+    </body>
+</html>

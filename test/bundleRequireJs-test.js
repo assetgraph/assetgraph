@@ -376,5 +376,19 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 'c.less'
             ]);
         }
+    },
+    'After running the registerRequireJsConfig transform, then loading a test case with shims config': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/shim/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .run(this.callback);
+        },
+        'asset.requireJsConfig.shim should have the expected value': function (assetGraph) {
+            assert.deepEqual(assetGraph.requireJsConfig.shim, {
+                nonAmdModule1: ['someDependency'],
+                nonAmdModule2: ['someOtherDependency']
+            });
+        }
     }
 })['export'](module);
