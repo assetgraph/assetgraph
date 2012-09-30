@@ -10,6 +10,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading the jquery-require-sample test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/jquery-require-sample/webapp/'})
+                .registerRequireJsConfig()
                 .loadAssets('app.html')
                 .populate()
                 .run(this.callback);
@@ -40,6 +41,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading test case with a text dependency': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/textDependency/'})
+                .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
@@ -80,6 +82,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading test case with a module that has multiple incoming JavaScriptAmd* relations': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/multipleIncoming/'})
+                .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
@@ -119,6 +122,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading a slightly different test case with a module that has multiple incoming JavaScriptAmd* relations': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/multipleIncoming2/'})
+                .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
@@ -143,6 +147,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading test case with a module that is included via a script tag and a JavaScriptAmdRequire relation': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/nonOrphanedJavaScript/'})
+                .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
@@ -173,6 +178,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading test case that uses require(...) in a regular <script>': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/withoutHtmlRequireJsMain/'})
+                .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
@@ -197,6 +203,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading test case that uses require(...) to fetch a css file': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/cssRequire/'})
+                .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
@@ -243,6 +250,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading test case that includes a GETSTATICURL relation': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/withOneGetStaticUrl/'})
+                .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
@@ -286,6 +294,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading the umd test case and running the bundleRequireJs transform': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/umd/'})
+                .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
                 .bundleRequireJs({type: 'Html'})
@@ -307,6 +316,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading the non-umd test case and running the bundleRequireJs transform': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/nonUmd/'})
+                .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
                 .bundleRequireJs({type: 'Html'})
@@ -336,6 +346,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading a test case with multiple Html files depending on the same modules, then running the bundleRequireJs transform': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/multipleHtmls/'})
+                .registerRequireJsConfig()
                 .loadAssets('*.html')
                 .populate()
                 .bundleRequireJs({type: 'Html'})
@@ -357,6 +368,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading a test case using the less! plugin, then running the bundleRequireJs transform': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/lessPlugin/'})
+                .registerRequireJsConfig()
                 .loadAssets('index*.html')
                 .populate()
                 .bundleRequireJs({type: 'Html'})
