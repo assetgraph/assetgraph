@@ -398,9 +398,36 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         },
         'asset.requireJsConfig.shim should have the expected value': function (assetGraph) {
             assert.deepEqual(assetGraph.requireJsConfig.shim, {
-                nonAmdModule1: ['someDependency'],
-                nonAmdModule2: ['someOtherDependency']
+                nonAmdModule1: {deps: ['someDependency']},
+                nonAmdModule2: {exports: 'foo', deps: ['someOtherDependency']}
             });
+        },
+        'then populate the graph': {
+            topic: function (assetGraph) {
+                assetGraph.populate().run(this.callback);
+            },
+            'the graph should contain 2 JavaScriptShimRequire relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptShimRequire'}).length, 2);
+            },
+            'then run the bundleRequireJs transform': {
+                topic: function (assetGraph) {
+                    assetGraph.bundleRequireJs().run(this.callback);
+                },
+                'the resulting main script should have the expected contents': function (assetGraph) {
+                    assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
+                                 uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+                                     alert('someDependency');
+                                     alert('nonAmdModule1');
+
+                                     alert('someOtherDependency');
+                                     alert('nonAmdModule2');
+
+                                     require(['nonAmdModule2'], function (nonAmdModule2) {
+                                         alert("Got 'em all!");
+                                     });
+                                 }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
+                }
+            }
         }
     }
 })['export'](module);
