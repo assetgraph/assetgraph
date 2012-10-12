@@ -8,6 +8,8 @@ framework for manipulating and optimizing web pages and web
 applications. It's the core of the third generation of the production
 builder tool we are using at One.com for some of our web apps.
 
+If you are looking for a prepackaged build system take a look at `Assetgraph-builder <https://github.com/One-com/assetgraph-builder>`_
+
 Check out `the slides from a presentation of AssetGraph
 <http://gofish.dk/assetgraph.pdf>`_ held at `the Öresund JavaScript Meetup
 <http://www.meetup.com/The-Oresund-JavaScript-Meetup/>`_ on June 16th,
