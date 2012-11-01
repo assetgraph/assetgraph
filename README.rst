@@ -1,5 +1,3 @@
-.. image:: https://secure.travis-ci.org/One-com/assetgraph.png
-
 AssetGraph
 ==========
 
