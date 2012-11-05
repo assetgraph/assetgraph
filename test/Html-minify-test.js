@@ -123,5 +123,9 @@ vows.describe('Html.minify').addBatch({
     'trailing whitespace in inline tag followed by leading whitespace in child node of next sibling should be trimmed': createTestCase(
         '<div><span>foo </span><span><span> bar</span></span></div>',
         '<div><span>foo </span><span><span>bar</span></span></div>' // I'm actually not sure that this one is perfectly safe
+    ),
+    'whitespace inside anchor should be preserved': createTestCase(
+        '<ul>\n    <li>\n        <a><i></i> Bar</a>\n    </li>\n</ul>',
+        '<ul><li><a><i></i> Bar</a></li></ul>'
     )
 })['export'](module);
