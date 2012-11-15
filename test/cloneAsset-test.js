@@ -91,5 +91,33 @@ vows.describe('Cloning assets').addBatch({
                 }
             }
         }
+    },
+    'After loading a test case with a Css asset with an inline image': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/cloneAsset/cssWithInlineImage/'})
+                .loadAssets('index.css')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 2);
+        },
+        'then clone the Css asset': {
+            topic: function (assetGraph) {
+                assetGraph.findAssets({type: 'Css'})[0].clone();
+                return assetGraph;
+            },
+            'the graph should contain 2 Css assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
+            },
+            'the graph should contain 2 Png assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Png'}).length, 2);
+            },
+            'both Css assets should have an outgoing relation to an inline image': function (assetGraph) {
+                assetGraph.findAssets({type: 'Css'}).forEach(function (cssAsset) {
+                    assert.equal(assetGraph.findRelations({from: cssAsset, to: {isInline: true, isImage: true}}).length, 1);
+                });
+            }
+        }
     }
 })['export'](module);
