@@ -429,5 +429,31 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 }
             }
         }
+    },
+    'After loading a test case with a non-string item in the require array': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/nonString/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'The graph should contain 3 JavaScript assets with the expected urls': function (assetGraph) {
+            assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), [
+                assetGraph.root + 'main.js',
+                assetGraph.root + 'require.js',
+                assetGraph.root + 'something.js'
+            ]);
+        },
+        'then run the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .bundleRequireJs({type: 'Html'})
+                    .run(this.callback);
+            },
+            'the graph should contain 2 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            }
+        }
     }
 })['export'](module);
