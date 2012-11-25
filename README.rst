@@ -120,7 +120,7 @@ Features
 * Using the separate `assetgraph-sprite transform
   <https://github.com/One-com/assetgraph-sprite>`_: Optimize CSS
   background images by creating sprite images. The spriting is guided
-  by a set of custom CSS properties with a ``-one-sprite`` prefix.
+  by a set of custom CSS properties with a ``-ag-sprite`` prefix.
 
 
 Installation
@@ -461,7 +461,7 @@ won't be inlined.
 ``CssImage`` relation won't be inlined.
 
 3) A ``CssImage`` relation residing in a CSS rule with a
-``-one-image-inline: true`` declaration will always be inlined. This
+``-ag-image-inline: true`` declaration will always be inlined. This
 takes precedence over the first two criteria.
 
 If any image is inlined an Internet Explorer-only version of the
