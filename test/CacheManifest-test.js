@@ -76,18 +76,18 @@ vows.describe('Cache manifest').addBatch({
                 .populate({followRelations: {to: {url: /^file:/}}})
                 .run(this.callback);
         },
-        'the graph contains 7 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 7);
+        'the graph contains 6 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 6);
         },
-        'the graph contains 7 relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations().length, 7);
+        'the graph contains 6 relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations().length, 6);
         },
         'the graph contains a single Png asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
         },
-        'the graph contains 3 Html assets, of which two are inline (conditional comments)': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 3);
-            assert.equal(assetGraph.findAssets({type: 'Html', isInline: true}).length, 2);
+        'the graph contains 2 Html assets, of which one is inline (conditional comment)': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+            assert.equal(assetGraph.findAssets({type: 'Html', isInline: true}).length, 1);
         },
         'the graph contains a single Css asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);

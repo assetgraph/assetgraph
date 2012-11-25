@@ -86,7 +86,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
             }
         }
     },
-    'After loading a test case with 5 HtmlStyles in a Html asset, two of which is in a conditional comment': {
+    'After loading a test case with 5 HtmlStyles in a Html asset, two of which are in a conditional comment': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRelations/conditionalCommentInTheMiddle/'})
                 .loadAssets('index.html')
@@ -128,6 +128,49 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
                 assert.equal(htmlStyles[0].to.parseTree.cssRules.length, 2);
                 assert.equal(htmlStyles[0].to.parseTree.cssRules[0].style.getPropertyValue('color'), '#cccccc');
                 assert.equal(htmlStyles[0].to.parseTree.cssRules[1].style.getPropertyValue('color'), '#dddddd');
+            }
+        }
+    },
+    'After loading a test case with 5 HtmlStyles in a Html asset, two of which are in an inverted conditional comment': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRelations/invertedConditionalCommentInTheMiddle/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 5 HtmlStyle relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 5);
+        },
+        'the graph should contain 1 HtmlConditionalComment relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlConditionalComment'}).length, 1);
+        },
+        'then bundling the HtmlStyle relations': {
+            topic: function (assetGraph) {
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
+            },
+            'the graph should contain 3 HtmlStyle relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 3);
+            },
+            'index.html should have 3 outgoing HtmlStyle relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'}).length, 3);
+            },
+            'the first outgoing HtmlStyle relation of the Html asset should be a.css and b.css bundled': function (assetGraph) {
+                var cssRules = assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}})[0].to.parseTree.cssRules;
+                assert.equal(cssRules.length, 2);
+                assert.equal(cssRules[0].style.getPropertyValue('color'), '#aaaaaa');
+                assert.equal(cssRules[1].style.getPropertyValue('color'), '#bbbbbb');
+            },
+            'the second outgoing HtmlStyle relation of the Html asset should be c.css and d.css bundled': function (assetGraph) {
+                var cssRules = assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}})[1].to.parseTree.cssRules;
+                assert.equal(cssRules.length, 2);
+                assert.equal(cssRules[0].style.getPropertyValue('color'), '#cccccc');
+                assert.equal(cssRules[1].style.getPropertyValue('color'), '#dddddd');
+            },
+            'the third outgoing HtmlStyle relation of the Html asset should be the original e.css': function (assetGraph) {
+                var cssAsset = assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}})[2].to;
+                assert.matches(cssAsset.url, /\/e\.css$/);
+                assert.equal(cssAsset.parseTree.cssRules.length, 1);
+                assert.equal(cssAsset.parseTree.cssRules[0].style.getPropertyValue('color'), '#eeeeee');
             }
         }
     },
@@ -231,6 +274,51 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'the bundled JavaScript should contain the copyright notices from both a.js and c.js at the top': function (assetGraph) {
             assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /\/\*! Copyright a \*\/[\s\S]*\/\*! Copyright c \*\//);
+        }
+    },
+    'After loading a test case with 5 HtmlStyles in a Html asset, two of which is in a conditional comment': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRelations/conditionalCommentInTheMiddle/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 5 HtmlStyle relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 5);
+        },
+        'the graph should contain 2 HtmlConditionalComment relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlConditionalComment'}).length, 2);
+        },
+        'then bundling the HtmlStyle relations': {
+            topic: function (assetGraph) {
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
+            },
+            'the graph should contain 3 HtmlStyle relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 3);
+            },
+            'index.html should have 2 outgoing HtmlStyle relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}}).length, 2);
+            },
+            'the first outgoing HtmlStyle relation of the Html asset should be a.css and b.css bundled': function (assetGraph) {
+                var cssRules = assetGraph.findRelations({from: {url: /\/index\.html$/}})[0].to.parseTree.cssRules;
+                assert.equal(cssRules.length, 2);
+                assert.equal(cssRules[0].style.getPropertyValue('color'), '#aaaaaa');
+                assert.equal(cssRules[1].style.getPropertyValue('color'), '#bbbbbb');
+            },
+            'the second outgoing HtmlStyle relation of the Html asset should be the original e.css': function (assetGraph) {
+                var cssAsset = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[1].to;
+                assert.matches(cssAsset.url, /\/e\.css$/);
+                assert.equal(cssAsset.parseTree.cssRules.length, 1);
+                assert.equal(cssAsset.parseTree.cssRules[0].style.getPropertyValue('color'), '#eeeeee');
+            },
+            'the second conditional comment should have one outgoing HtmlStyle relation consisting of the rules from c.css and d.css': function (assetGraph) {
+                var conditionalCommentBody = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlConditionalComment'})[1].to,
+                    htmlStyles = assetGraph.findRelations({from: conditionalCommentBody});
+                assert.equal(htmlStyles.length, 1);
+                assert.equal(htmlStyles[0].to.parseTree.cssRules.length, 2);
+                assert.equal(htmlStyles[0].to.parseTree.cssRules[0].style.getPropertyValue('color'), '#cccccc');
+                assert.equal(htmlStyles[0].to.parseTree.cssRules[1].style.getPropertyValue('color'), '#dddddd');
+            }
         }
     }
 })['export'](module);
