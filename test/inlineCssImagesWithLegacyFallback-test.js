@@ -3,9 +3,9 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
-    'After loading test case': {
+    'After loading test case with a single Html asset': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/'})
+            new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/combo/'})
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
@@ -59,6 +59,58 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
                 var captures = text.match(/<!--\[if lt IE 9\]><link[^>]*><!\[endif\]-->/g);
                 assert.isNotNull(captures);
                 assert.equal(captures.length, 1);
+            }
+        }
+    },
+    'After loading test case with multiple Html asset that point at the same Css': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/multipleHtmls/'})
+                .loadAssets('*.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 Html assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+        },
+        'the graph should contain 1 Css asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+        },
+        'the graph should contain 1 image': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({isImage: true}).length, 1);
+        },
+        'then running the inlineCssImagesWithLegacyFallback transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4)
+                    .run(this.callback);
+            },
+            'the graph should contain 3 Css assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 3);
+            },
+            'the graph should contain 2 HtmlConditionalComment relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlConditionalComment'}).length, 2);
+            },
+            'the graph should contain 2 inline CssImage relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'CssImage', to: {isInline: true}}).length, 2);
+            },
+            '1.html should contain 2 <link> tags': function (assetGraph) {
+                var htmlAsset = assetGraph.findAssets({type: 'Html', url: /\/1.html$/})[0],
+                    captures = htmlAsset.text.match(/<link[^>]*>/g);
+                assert.isNotNull(captures);
+                assert.equal(captures.length, 2);
+            },
+            '2.html should contain 2 <link> tags': function (assetGraph) {
+                var htmlAsset = assetGraph.findAssets({type: 'Html', url: /\/2.html$/})[0],
+                    captures = htmlAsset.text.match(/<link[^>]*>/g);
+                assert.isNotNull(captures);
+                assert.equal(captures.length, 2);
+            },
+            'each Html asset should contain one >= IE8 conditional comment marker': function (assetGraph) {
+                assetGraph.findAssets({type: 'Html', isInline: false}).forEach(function (htmlAsset) {
+                    var captures = htmlAsset.text.match(/<!--\[if gte IE 8\]><!-->/g);
+                    assert.isNotNull(captures);
+                    assert.equal(captures.length, 1);
+                });
             }
         }
     }
