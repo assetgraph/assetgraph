@@ -509,9 +509,10 @@ won't be inlined.
 2) To avoid duplication, images referenced by more than one
 `CssImage` relation won't be inlined.
 
-3) A `CssImage` relation residing in a CSS rule with a
-`-ag-image-inline: true` declaration will always be inlined. This
-takes precedence over the first two criteria.
+3) A `CssImage` relation pointing at an image with an `inline` GET
+parameter will always be inlined (eg. `background-image:
+url(foo.png?inline);`). This takes precedence over the first two
+criteria.
 
 If any image is inlined an Internet Explorer-only version of the
 stylesheet will be created and referenced from the `Html` asset in a
