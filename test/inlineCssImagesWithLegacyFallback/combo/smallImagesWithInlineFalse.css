@@ -1,0 +1,7 @@
+h1 {
+    background-image: url(foo.png?inline=false);
+}
+
+h2 {
+    background-image: url(bar.png?somethingelse&inline=false#fragment);
+}
