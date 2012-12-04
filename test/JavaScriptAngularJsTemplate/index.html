@@ -40,7 +40,7 @@ angular.module('myApp', []).
       });
   }])
   .run(["$templateCache", function($templateCache) {
-    $templateCache.put("partials/4.html", "<h1>4: Template injected directly into <code>$templateCache</code></h1>");
+    $templateCache.put("partials/4.html", "<h1>4: Template with a relation (<img src='bar.png'>) injected directly into <code>$templateCache</code></h1>");
   }]);
   </script>
   <script type="text/ng-template" id="partials/2.html">
