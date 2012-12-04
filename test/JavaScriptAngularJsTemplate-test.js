@@ -44,13 +44,16 @@ vows.describe('relations.JavaScriptAngularJsTemplate').addBatch({
             'the graph should contain no JavaScriptAngularJsTemplateCacheAssignment relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'JavaScriptAngularJsTemplateCacheAssignment'}).length, 0);
             },
-            'the graph should contain 4 HtmlInlineScriptTemplate relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'}).length, 4);
+            'the graph should contain 3 HtmlInlineScriptTemplate relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'}).length, 3);
             },
             'one of the HtmlInlineScriptTemplateRelations should have an id of "partials/1.html" and point at an AngularJsTemplate asset with the correct contents': function (assetGraph) {
                 var relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) {return node.getAttribute('id') === 'partials/1.html';}})[0];
                 assert.ok(relation);
                 assert.equal(relation.to.text, '<h1>1: External template loaded asynchronously with <code>templateUrl: \'partials/1.html\'</code></h1>\n');
+            },
+            'none of the HtmlInlineScriptTemplateRelations should point at an asset with "3: Template" in its text': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', to: {text: /3: Template/}}).length, 0);
             },
             'one of the HtmlInlineScriptTemplateRelations should have an id of "partials/2.html" and point at an AngularJsTemplate asset with the correct contents': function (assetGraph) {
                 var relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) {return node.getAttribute('id') === 'partials/2.html';}})[0];
