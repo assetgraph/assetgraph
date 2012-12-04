@@ -16,11 +16,17 @@ vows.describe('relations.JavaScriptAngularJsTemplate').addBatch({
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
         },
-        'the graph should contain 3 JavaScriptAngularJsTemplate relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAngularJsTemplate'}).length, 3);
+        'the graph should contain 4 JavaScriptAngularJsTemplate relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAngularJsTemplate'}).length, 4);
         },
-        'the graph should contain 4 AngularJsTemplate assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'AngularJsTemplate'}).length, 4);
+        'the graph should contain 5 AngularJsTemplate assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'AngularJsTemplate'}).length, 5);
+        },
+        'the graph should have an inline AngularJsTemplate with <img src="foo.png"> in its text': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'AngularJsTemplate', isInline: true, text: /<img src="foo.png">/}).length, 1);
+        },
+        'the graph should have foo.png': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Png', url: /\/foo\.png$/}).length, 1);
         },
         'then run the inlineAngularJsTemplates transform': {
             topic: function (assetGraph) {
