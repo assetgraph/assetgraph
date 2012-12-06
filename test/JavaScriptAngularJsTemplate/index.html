@@ -1,0 +1,54 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+  <title>My AngularJS App</title>
+
+</head>
+<body>
+  <ul class="menu">
+    <li><a href="#/view1">view1</a></li>
+    <li><a href="#/view2">view2</a></li>
+    <li><a href="#/view3">view3</a></li>
+    <li><a href="#/view4">view4</a></li>
+  </ul>
+
+  <div ng-view></div>
+
+  <script src="vendor/angular.js"></script>
+  <script>
+angular.module('myApp', []).
+  config(['$routeProvider', function($routeProvider) {
+    $routeProvider
+      .when('/view1', {
+        templateUrl: 'partials/1.html',
+        controller: function () {}
+      })
+      .when('/view2', {
+        templateUrl: 'partials/2.html',
+        controller: function () {}
+      })
+      .when('/view3', {
+        template: '<h1>3: Template with a relation (<img src="foo.png">) inlined in a route configuration</h1>',
+        controller: function () {}
+      })
+      .when('/view4', {
+        templateUrl: 'partials/4.html',
+        controller: function () {}
+      })
+      .otherwise({
+        redirectTo: '/view1'
+      });
+  }])
+  .run(["$templateCache", function($templateCache) {
+    $templateCache.put("partials/4.html", "<h1>4: Template with a relation (<img src='bar.png'>) injected directly into <code>$templateCache</code></h1>");
+  }])
+  .run(["$templateCache", function(blarf) {
+    blarf.put("partials/5.html", "<h1>5: Template with a relation (<img src='quux.png'>) injected directly into <code>$templateCache</code>, but using a different variable name</h1>");
+  }]);
+  </script>
+  <script type="text/ng-template" id="partials/2.html">
+    <h1>2: Template in a &lt;script type="text/ng-template"&gt;-tag</h1>
+  </script>
+
+</body>
+</html>
