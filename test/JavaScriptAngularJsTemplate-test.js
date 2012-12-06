@@ -19,23 +19,29 @@ vows.describe('relations.JavaScriptAngularJsTemplate').addBatch({
         'the graph should contain 4 JavaScriptAngularJsTemplate relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptAngularJsTemplate'}).length, 4);
         },
-        'the graph should contain 6 AngularJsTemplate assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'AngularJsTemplate'}).length, 6);
+        'the graph should contain 7 AngularJsTemplate assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'AngularJsTemplate'}).length, 7);
         },
         'the graph should have an inline AngularJsTemplate with <img src="foo.png"> in its text': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'AngularJsTemplate', isInline: true, text: /<img src="foo.png">/}).length, 1);
         },
-        'the graph should contain one JavaScriptAngularJsTemplateCacheAssignment relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAngularJsTemplateCacheAssignment'}).length, 1);
+        'the graph should contain 2 JavaScriptAngularJsTemplateCacheAssignment relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAngularJsTemplateCacheAssignment'}).length, 2);
         },
         'the graph should have an inline AngularJsTemplate with <h1>4: Template injected directly into <code>$templateCache</code></h1> in its text': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'AngularJsTemplate', isInline: true, text: "<h1>4: Template with a relation (<img src='bar.png'>) injected directly into <code>$templateCache</code></h1>"}).length, 1);
+        },
+        'the graph should have an inline AngularJsTemplate with <h1>5: Template injected directly into <code>$templateCache</code></h1> in its text': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'AngularJsTemplate', isInline: true, text: "<h1>5: Template with a relation (<img src='quux.png'>) injected directly into <code>$templateCache</code>, but using a different variable name</h1>"}).length, 1);
         },
         'the graph should have foo.png': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png', url: /\/foo\.png$/}).length, 1);
         },
         'the graph should have bar.png': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png', url: /\/bar\.png$/}).length, 1);
+        },
+        'the graph should have quux.png': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Png', url: /\/quux\.png$/}).length, 1);
         },
         'then run the inlineAngularJsTemplates transform': {
             topic: function (assetGraph) {
@@ -44,8 +50,8 @@ vows.describe('relations.JavaScriptAngularJsTemplate').addBatch({
             'the graph should contain no JavaScriptAngularJsTemplateCacheAssignment relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'JavaScriptAngularJsTemplateCacheAssignment'}).length, 0);
             },
-            'the graph should contain 3 HtmlInlineScriptTemplate relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'}).length, 3);
+            'the graph should contain 4 HtmlInlineScriptTemplate relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'}).length, 4);
             },
             'one of the HtmlInlineScriptTemplateRelations should have an id of "partials/1.html" and point at an AngularJsTemplate asset with the correct contents': function (assetGraph) {
                 var relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) {return node.getAttribute('id') === 'partials/1.html';}})[0];
@@ -64,6 +70,11 @@ vows.describe('relations.JavaScriptAngularJsTemplate').addBatch({
                 var relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) {return node.getAttribute('id') === 'partials/4.html';}})[0];
                 assert.ok(relation);
                 assert.equal(relation.to.text, '<h1>4: Template with a relation (<img src=\'bar.png\'>) injected directly into <code>$templateCache</code></h1>');
+            },
+            'one of the HtmlInlineScriptTemplateRelations should have an id of "partials/5.html" and point at an AngularJsTemplate asset with the correct contents': function (assetGraph) {
+                var relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) {return node.getAttribute('id') === 'partials/5.html';}})[0];
+                assert.ok(relation);
+                assert.equal(relation.to.text, '<h1>5: Template with a relation (<img src=\'quux.png\'>) injected directly into <code>$templateCache</code>, but using a different variable name</h1>');
             }
         }
     }

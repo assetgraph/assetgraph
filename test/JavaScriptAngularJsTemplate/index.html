@@ -41,6 +41,9 @@ angular.module('myApp', []).
   }])
   .run(["$templateCache", function($templateCache) {
     $templateCache.put("partials/4.html", "<h1>4: Template with a relation (<img src='bar.png'>) injected directly into <code>$templateCache</code></h1>");
+  }])
+  .run(["$templateCache", function(blarf) {
+    blarf.put("partials/5.html", "<h1>5: Template with a relation (<img src='quux.png'>) injected directly into <code>$templateCache</code>, but using a different variable name</h1>");
   }]);
   </script>
   <script type="text/ng-template" id="partials/2.html">
