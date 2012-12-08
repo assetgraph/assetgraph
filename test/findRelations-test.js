@@ -1,8 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
-    assets = AssetGraph.assets,
-    relations = AssetGraph.relations,
     query = AssetGraph.query;
 
 vows.describe('AssetGraph.findAssets').addBatch({
@@ -10,40 +8,40 @@ vows.describe('AssetGraph.findAssets').addBatch({
         topic: function () {
             new AssetGraph()
                 .loadAssets(
-                    new assets.Html({url: 'a', text: 'a', foo: 'bar'}),
-                    new assets.Html({url: 'b', text: 'b', foo: 'bar'}),
-                    new assets.Html({url: 'c', text: 'c', foo: 'quux'}),
-                    new assets.Css({url: 'd', text: 'd', foo: 'baz'}),
-                    new assets.Css({url: 'e', text: 'e'}),
-                    new assets.Png({url: 'f', rawSrc: new Buffer('f'), foo: 'baz'})
+                    new AssetGraph.Html({url: 'a', text: 'a', foo: 'bar'}),
+                    new AssetGraph.Html({url: 'b', text: 'b', foo: 'bar'}),
+                    new AssetGraph.Html({url: 'c', text: 'c', foo: 'quux'}),
+                    new AssetGraph.Css({url: 'd', text: 'd', foo: 'baz'}),
+                    new AssetGraph.Css({url: 'e', text: 'e'}),
+                    new AssetGraph.Png({url: 'f', rawSrc: new Buffer('f'), foo: 'baz'})
                 )
                 .queue(
                     function (assetGraph) {
-                        assetGraph.addRelation(new relations.HtmlStyle({
+                        assetGraph.addRelation(new AssetGraph.HtmlStyle({
                             from: assetGraph.findAssets({text: 'a'})[0],
                             to: assetGraph.findAssets({text: 'd'})[0]
                         }));
-                        assetGraph.addRelation(new relations.HtmlAnchor({
+                        assetGraph.addRelation(new AssetGraph.HtmlAnchor({
                             from: assetGraph.findAssets({text: 'a'})[0],
                             to: assetGraph.findAssets({text: 'b'})[0]
                         }));
-                        assetGraph.addRelation(new relations.HtmlAnchor({
+                        assetGraph.addRelation(new AssetGraph.HtmlAnchor({
                             from: assetGraph.findAssets({text: 'a'})[0],
                             to: assetGraph.findAssets({text: 'c'})[0]
                         }));
-                        assetGraph.addRelation(new relations.HtmlAnchor({
+                        assetGraph.addRelation(new AssetGraph.HtmlAnchor({
                             from: assetGraph.findAssets({text: 'b'})[0],
                             to: assetGraph.findAssets({text: 'c'})[0]
                         }));
-                        assetGraph.addRelation(new relations.HtmlStyle({
+                        assetGraph.addRelation(new AssetGraph.HtmlStyle({
                             from: assetGraph.findAssets({text: 'b'})[0],
                             to: assetGraph.findAssets({text: 'e'})[0]
                         }));
-                        assetGraph.addRelation(new relations.CssImage({
+                        assetGraph.addRelation(new AssetGraph.CssImage({
                             from: assetGraph.findAssets({text: 'd'})[0],
                             to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0]
                         }));
-                        assetGraph.addRelation(new relations.CssImage({
+                        assetGraph.addRelation(new AssetGraph.CssImage({
                             from: assetGraph.findAssets({text: 'e'})[0],
                             to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0]
                         }));

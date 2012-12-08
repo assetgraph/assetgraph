@@ -7,7 +7,7 @@ var vows = require('vows'),
 function resolveAssetConfig(assetConfig, fromUrl) {
     return function () {
         var assetGraph = new AssetGraph({root: assetGraphRoot});
-        AssetGraph.assets.resolveConfig(assetConfig, fromUrl || assetGraph.root, assetGraph, this.callback);
+        assetGraph.resolveAssetConfig(assetConfig, fromUrl || assetGraph.root, this.callback);
     };
 }
 
@@ -15,8 +15,8 @@ function resolveAssetConfigAndEnsureType(assetConfig, fromUrl) {
     return function () {
         var callback = this.callback,
             assetGraph = new AssetGraph({root: assetGraphRoot});
-        AssetGraph.assets.resolveConfig(assetConfig, fromUrl || assetGraph.root, assetGraph, passError(callback, function (resolvedAssetConfig) {
-            AssetGraph.assets.ensureAssetConfigHasType(resolvedAssetConfig, assetGraph, passError(callback, function () {
+        assetGraph.resolveAssetConfig(assetConfig, fromUrl || assetGraph.root, passError(callback, function (resolvedAssetConfig) {
+            assetGraph.ensureAssetConfigHasType(resolvedAssetConfig, passError(callback, function () {
                 callback(null, resolvedAssetConfig);
             }));
         }));

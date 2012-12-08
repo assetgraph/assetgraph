@@ -5,7 +5,7 @@ var vows = require('vows'),
 function createTestCase(inputHtml, expectedOutputHtml, manipulator) {
     return {
         topic: function () {
-            var htmlAsset = new AssetGraph.assets.Html({text: inputHtml});
+            var htmlAsset = new AssetGraph.Html({text: inputHtml});
             if (manipulator) {
                 manipulator(htmlAsset);
                 htmlAsset.markDirty();

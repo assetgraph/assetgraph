@@ -3,7 +3,7 @@ var vows = require('vows'),
     _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph');
 
-vows.describe('relations.CssImage').addBatch({
+vows.describe('CssAlphaImageLoader').addBatch({
     'After loading test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/CssAlphaImageLoader/'})

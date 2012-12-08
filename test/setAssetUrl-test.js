@@ -103,7 +103,7 @@ vows.describe('Changing the url of assets').addBatch({
     'After loading a test case with a single Html file': {
         topic: function () {
             new AssetGraph({root: 'file:///foo/bar/quux'})
-                .loadAssets(new AssetGraph.assets.Html({
+                .loadAssets(new AssetGraph.Html({
                     url: 'file:///foo/bar/quux/baz/index.html',
                     text: '<!DOCTYPE html><html></html>'
                 }))

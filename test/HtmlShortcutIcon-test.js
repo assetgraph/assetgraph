@@ -2,7 +2,7 @@ var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph');
 
-vows.describe('relations.HtmlShortcutIcon').addBatch({
+vows.describe('HtmlShortcutIcon').addBatch({
     'After loading test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/HtmlShortcutIcon/'})
@@ -21,11 +21,11 @@ vows.describe('relations.HtmlShortcutIcon').addBatch({
                 var htmlAsset = assetGraph.findAssets({type: 'Html'})[0],
                     pngAsset = assetGraph.findAssets({type: 'Png'})[0],
                     firstExistingHtmlShortcutIconRelation = assetGraph.findRelations({type: 'HtmlShortcutIcon'})[0];
-                new AssetGraph.relations.HtmlShortcutIcon({
+                new AssetGraph.HtmlShortcutIcon({
                     from: htmlAsset,
                     to: pngAsset
                 }).attach(htmlAsset, 'after', firstExistingHtmlShortcutIconRelation);
-                new AssetGraph.relations.HtmlShortcutIcon({
+                new AssetGraph.HtmlShortcutIcon({
                     from: htmlAsset,
                     to: pngAsset
                 }).attach(htmlAsset, 'before', firstExistingHtmlShortcutIconRelation);

@@ -3,7 +3,7 @@ var vows = require('vows'),
     _ = require('underscore'),
     AssetGraph = require('../lib/AssetGraph');
 
-vows.describe('assets.JavaScript').addBatch({
+vows.describe('JavaScript').addBatch({
     'After loading test case that has a parse error in an inline JavaScript asset': {
         topic: function () {
             var err,

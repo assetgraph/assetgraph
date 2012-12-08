@@ -1,8 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph'),
-    assets = require('../lib/assets');
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('transforms.moveAssets').addBatch({
     'After loading test case with a non-inline asset that is moved to another absolute url': {
@@ -118,7 +117,7 @@ vows.describe('transforms.moveAssets').addBatch({
     'After loading test case with an inline asset that is moved to an absolute url': {
         topic: function () {
             new AssetGraph({root: 'http://www.example.com/blah/'})
-                .loadAssets(new assets.Html({text: "foo"}))
+                .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return 'http://www.example.com/foo/someotherplace.html';})
                 .run(this.callback);
         },
@@ -129,7 +128,7 @@ vows.describe('transforms.moveAssets').addBatch({
     'After loading test case with an inline asset that is moved to an absolute url without a file name': {
         topic: function () {
             new AssetGraph({root: 'http://www.example.com/blah/'})
-                .loadAssets(new assets.Html({text: "foo"}))
+                .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return 'http://www.example.com/foo/';})
                 .run(this.callback);
         },
@@ -140,7 +139,7 @@ vows.describe('transforms.moveAssets').addBatch({
     'After loading test case with an inline asset that is moved to a relative url': {
         topic: function () {
             new AssetGraph({root: 'http://www.example.com/blah/'})
-                .loadAssets(new assets.Html({text: "foo"}))
+                .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return 'here/there.html';})
                 .run(this.callback);
         },
@@ -151,7 +150,7 @@ vows.describe('transforms.moveAssets').addBatch({
     'After loading test case with an inline asset that is moved to a relative url without a file name': {
         topic: function () {
             new AssetGraph({root: 'http://www.example.com/blah/'})
-                .loadAssets(new assets.Html({text: "foo"}))
+                .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return 'here/';})
                 .run(this.callback);
         },
@@ -162,7 +161,7 @@ vows.describe('transforms.moveAssets').addBatch({
     'After loading test case with an inline asset that is moved to a root-relative url': {
         topic: function () {
             new AssetGraph({root: 'file:///foo/bar/'})
-                .loadAssets(new assets.Html({text: "foo"}))
+                .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return '/there.html';})
                 .run(this.callback);
         },
@@ -173,7 +172,7 @@ vows.describe('transforms.moveAssets').addBatch({
     'After loading test case with an inline asset that is moved to a root-relative url without a file name': {
         topic: function () {
             new AssetGraph({root: 'file:///foo/bar/'})
-                .loadAssets(new assets.Html({text: "foo"}))
+                .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return '/';})
                 .run(this.callback);
         },

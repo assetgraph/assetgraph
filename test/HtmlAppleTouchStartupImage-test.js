@@ -21,11 +21,11 @@ vows.describe('relations.HtmlAppleTouchStartupImage').addBatch({
                 var htmlAsset = assetGraph.findAssets({type: 'Html'})[0],
                     pngAsset = assetGraph.findAssets({type: 'Png'})[0],
                     existingHtmlAppleTouchStartupImageRelation = assetGraph.findRelations({type: 'HtmlAppleTouchStartupImage'})[0];
-                new AssetGraph.relations.HtmlAppleTouchStartupImage({
+                new AssetGraph.HtmlAppleTouchStartupImage({
                     from: htmlAsset,
                     to: pngAsset
                 }).attach(htmlAsset, 'after', existingHtmlAppleTouchStartupImageRelation);
-                new AssetGraph.relations.HtmlAppleTouchStartupImage({
+                new AssetGraph.HtmlAppleTouchStartupImage({
                     from: htmlAsset,
                     to: pngAsset
                 }).attach(htmlAsset, 'before', existingHtmlAppleTouchStartupImageRelation);

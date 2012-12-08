@@ -1,13 +1,12 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph'),
-    assets = AssetGraph.assets;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('Asset test').addBatch({
     'Instantiate an Html asset with an extensionless url': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index'
             });
@@ -60,7 +59,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an extensionless url': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index'
             });
@@ -89,7 +88,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an url that has an extension': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index.blah'
             });
@@ -118,7 +117,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an url that has an extension': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index.blah'
             });
@@ -147,7 +146,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an url that has an extension': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index.blah'
             });
@@ -176,7 +175,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an url that has an extension': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index.blah'
             });
@@ -205,7 +204,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an url that has an extension and a fragment identifier': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index.blah#yay'
             });
@@ -249,7 +248,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an url that has an extension and a fragment identifier': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index.blah#yay'
             });
@@ -278,7 +277,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an url that has an extension and a query string': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index.blah?yay=bar'
             });
@@ -319,7 +318,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an url that has an extension and a query string': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index.blah?yay=bar'
             });
@@ -348,7 +347,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an url that has an extension, a query string, and a fragment identifier': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index.blah?yay=bar#really'
             });
@@ -392,7 +391,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with an url that has an extension, a query string, and a fragment identifier': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo',
                 url: 'http://example.com/index.blah?yay=bar#really'
             });
@@ -436,7 +435,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with no url': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 text: 'foo'
             });
         },
@@ -464,7 +463,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with no url but an extension of ".yay"': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 extension: '.yay',
                 text: 'foo'
             });
@@ -493,7 +492,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with no url but a fileName of "thething.yay"': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 fileName: 'thething.yay',
                 text: 'foo'
             });
@@ -522,7 +521,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with no url but an extension of ""': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 extension: '',
                 text: 'foo'
             });
@@ -551,7 +550,7 @@ vows.describe('Asset test').addBatch({
     },
     'Instantiate an Html asset with no url but a fileName of ""': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 fileName: '',
                 text: 'foo'
             });
@@ -581,11 +580,11 @@ vows.describe('Asset test').addBatch({
     'Create AssetGraph with a loaded asset that has a link to an unloaded asset, then move the unloaded asset': {
         topic: function () {
             var assetGraph = new AssetGraph(),
-                fooHtml = new assets.Html({
+                fooHtml = new AssetGraph.Html({
                     url: 'http://example.com/foo.html',
                     text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/bar.html">link text</a></body></html>'
                 }),
-                barHtml = new assets.Html({ // Not yet loaded
+                barHtml = new AssetGraph.Html({ // Not yet loaded
                     url: 'http://example.com/bar.html'
                 });
             assetGraph.addAsset(fooHtml);

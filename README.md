@@ -601,7 +601,7 @@ syntaxes are supported, for example:
 
 ```javascript
 assetGraph.loadAssets('a.html', 'b.css'); // Relative to assetGraph.root
-assetGraph.loadAssets(new AssetGraph.assets.JavaScript({
+assetGraph.loadAssets(new AssetGraph.JavaScript({
     url: "http://example.com/index.html",
     text: "var foo = bar;" // The source is specified, won't be loaded
 });
@@ -840,7 +840,7 @@ Example:
 var AssetGraph = require('assetgraph');
 new AssetGraph()
     // Add a Html asset with an inline Css asset:
-    .loadAssets(new AssetGraph.assets.Html({
+    .loadAssets(new AssetGraph.Html({
         text: '<html><head><style type="text/css">body {color: red;}</style></head></html>'
     }))
     // Remove the inline Css asset and detach the incoming HtmlStyle relation:
@@ -911,7 +911,7 @@ var AssetGraph = require('assetgraph');
 
 new AssetGraph()
     // Add a Html asset with an inline Css asset:
-    .loadAssets(new AssetGraph.assets.Html({
+    .loadAssets(new AssetGraph.Html({
         text: '<html><head></head>æ</html>'
     }))
     .setAssetEncoding({type: 'Html'}, 'iso-8859-1')

@@ -47,7 +47,7 @@
     "publishConfig": {
         "registry": "http://registry.npmjs.org/"
     },
-    "main": "lib/index.js",
+    "main": "lib/AssetGraph.js",
     "scripts": {
         "pretest": "npm install",
         "test": "vows",

@@ -29,12 +29,12 @@ vows.describe('INCLUDE test').addBatch({
         },
         'then attach a new JavaScriptInclude relation before the other ones': {
             topic: function (assetGraph) {
-                var newJavaScriptAsset = new AssetGraph.assets.JavaScript({
+                var newJavaScriptAsset = new AssetGraph.JavaScript({
                     url: urlTools.resolveUrl(assetGraph.root, 'quux.js'),
                     text: "alert('quux.js');"
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
-                new AssetGraph.relations.JavaScriptInclude({
+                new AssetGraph.JavaScriptInclude({
                     to: newJavaScriptAsset
                 }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'first');
                 return assetGraph;
@@ -45,12 +45,12 @@ vows.describe('INCLUDE test').addBatch({
             },
             'then attach a new JavaScriptInclude relation after the quux.js one': {
                 topic: function (assetGraph) {
-                    var newJavaScriptAsset = new AssetGraph.assets.JavaScript({
+                    var newJavaScriptAsset = new AssetGraph.JavaScript({
                         url: urlTools.resolveUrl(assetGraph.root, 'baz.js'),
                         text: "alert('baz.js');"
                     });
                     assetGraph.addAsset(newJavaScriptAsset);
-                    new AssetGraph.relations.JavaScriptInclude({
+                    new AssetGraph.JavaScriptInclude({
                         to: newJavaScriptAsset
                     }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'after', assetGraph.findRelations({to: {url: /\/quux\.js$/}})[0]);
                     return assetGraph;
@@ -61,12 +61,12 @@ vows.describe('INCLUDE test').addBatch({
                 },
                 'then attach a new JavaScriptInclude relation before the bar.js one': {
                     topic: function (assetGraph) {
-                        var newJavaScriptAsset = new AssetGraph.assets.JavaScript({
+                        var newJavaScriptAsset = new AssetGraph.JavaScript({
                             url: urlTools.resolveUrl(assetGraph.root, 'bazze.js'),
                             text: "alert('bazze.js');"
                         });
                         assetGraph.addAsset(newJavaScriptAsset);
-                        new AssetGraph.relations.JavaScriptInclude({
+                        new AssetGraph.JavaScriptInclude({
                             to: newJavaScriptAsset
                         }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'before', assetGraph.findRelations({to: {url: /\/bar\.js$/}})[0]);
                         return assetGraph;
@@ -77,12 +77,12 @@ vows.describe('INCLUDE test').addBatch({
                     },
                     'then attach a new JavaScriptInclude relation in the last position': {
                         topic: function (assetGraph) {
-                            var newJavaScriptAsset = new AssetGraph.assets.JavaScript({
+                            var newJavaScriptAsset = new AssetGraph.JavaScript({
                                 url: urlTools.resolveUrl(assetGraph.root, 'prinzenrolle.js'),
                                 text: "alert('prinzenrolle.js');"
                             });
                             assetGraph.addAsset(newJavaScriptAsset);
-                            new AssetGraph.relations.JavaScriptInclude({
+                            new AssetGraph.JavaScriptInclude({
                                 to: newJavaScriptAsset
                             }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'last');
                             return assetGraph;
@@ -120,12 +120,12 @@ vows.describe('INCLUDE test').addBatch({
         },
         'then attach a new JavaScriptInclude relation before the other ones': {
             topic: function (assetGraph) {
-                var newJavaScriptAsset = new AssetGraph.assets.JavaScript({
+                var newJavaScriptAsset = new AssetGraph.JavaScript({
                     url: urlTools.resolveUrl(assetGraph.root, 'quux.js'),
                     text: "alert('quux.js');"
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
-                new AssetGraph.relations.JavaScriptInclude({
+                new AssetGraph.JavaScriptInclude({
                     to: newJavaScriptAsset
                 }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'first');
                 return assetGraph;
@@ -136,12 +136,12 @@ vows.describe('INCLUDE test').addBatch({
             },
             'then attach a new JavaScriptInclude relation after the quux.js one': {
                 topic: function (assetGraph) {
-                    var newJavaScriptAsset = new AssetGraph.assets.JavaScript({
+                    var newJavaScriptAsset = new AssetGraph.JavaScript({
                         url: urlTools.resolveUrl(assetGraph.root, 'baz.js'),
                         text: "alert('baz.js');"
                     });
                     assetGraph.addAsset(newJavaScriptAsset);
-                    new AssetGraph.relations.JavaScriptInclude({
+                    new AssetGraph.JavaScriptInclude({
                         to: newJavaScriptAsset
                     }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'after', assetGraph.findRelations({to: {url: /\/quux\.js$/}})[0]);
                     return assetGraph;
@@ -152,12 +152,12 @@ vows.describe('INCLUDE test').addBatch({
                 },
                 'then attach a new JavaScriptInclude relation before the bar.js one': {
                     topic: function (assetGraph) {
-                        var newJavaScriptAsset = new AssetGraph.assets.JavaScript({
+                        var newJavaScriptAsset = new AssetGraph.JavaScript({
                             url: urlTools.resolveUrl(assetGraph.root, 'bazze.js'),
                             text: "alert('bazze.js');"
                         });
                         assetGraph.addAsset(newJavaScriptAsset);
-                        new AssetGraph.relations.JavaScriptInclude({
+                        new AssetGraph.JavaScriptInclude({
                             to: newJavaScriptAsset
                         }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'before', assetGraph.findRelations({to: {url: /\/bar\.js$/}})[0]);
                         return assetGraph;
@@ -168,12 +168,12 @@ vows.describe('INCLUDE test').addBatch({
                     },
                     'then attach a new JavaScriptInclude relation in the last position': {
                         topic: function (assetGraph) {
-                            var newJavaScriptAsset = new AssetGraph.assets.JavaScript({
+                            var newJavaScriptAsset = new AssetGraph.JavaScript({
                                 url: urlTools.resolveUrl(assetGraph.root, 'prinzenrolle.js'),
                                 text: "alert('prinzenrolle.js');"
                             });
                             assetGraph.addAsset(newJavaScriptAsset);
-                            new AssetGraph.relations.JavaScriptInclude({
+                            new AssetGraph.JavaScriptInclude({
                                 to: newJavaScriptAsset
                             }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'last');
                             return assetGraph;

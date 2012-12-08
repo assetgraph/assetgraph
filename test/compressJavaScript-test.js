@@ -8,7 +8,7 @@ vows.describe('transforms.compressJavaScript').addBatch(function () {
         test[String(compressorName)] = {
             topic: function () {
                 var assetGraph = new AssetGraph();
-                assetGraph.addAsset(new AssetGraph.assets.JavaScript({text: "var foo = 123;"}));
+                assetGraph.addAsset(new AssetGraph.JavaScript({text: "var foo = 123;"}));
                 assetGraph.compressJavaScript({type: 'JavaScript'}, compressorName).run(this.callback);
             },
             'should yield a compressed JavaScript': function (assetGraph) {

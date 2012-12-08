@@ -2,7 +2,7 @@ var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph');
 
-vows.describe('relations.HtmlImageSrcSet, assets.ImageSrcSet, relations.ImageSrcSetEntry').addBatch({
+vows.describe('HtmlImageSrcSet, ImageSrcSet, ImageSrcSetEntry').addBatch({
     'After loading test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/HtmlImageSrcSet/'})

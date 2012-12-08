@@ -1,14 +1,12 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph'),
-    assets = AssetGraph.assets,
-    relations = AssetGraph.relations;
+    AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('asset.outgoingRelations').addBatch({
     'After creating a standalone Html asset': {
         topic: function () {
-            return new assets.Html({
+            return new AssetGraph.Html({
                 url: 'http://example.com/foo.html',
                 text:
                     '<!DOCTYPE html>\n' +
@@ -40,11 +38,11 @@ vows.describe('asset.outgoingRelations').addBatch({
         'then create an AssetGraph and add the asset to it along with two dummy document': {
             topic: function (htmlAsset) {
                 var assetGraph = new AssetGraph({root: 'http://example.com/'});
-                assetGraph.addAsset(new assets.Html({
+                assetGraph.addAsset(new AssetGraph.Html({
                     url: 'http://example.com/quux.html',
                     text: '<!DOCTYPE html>\n<html><head><title>Boring document</title></head></html>'
                 }));
-                assetGraph.addAsset(new assets.Html({
+                assetGraph.addAsset(new AssetGraph.Html({
                     url: 'http://example.com/baz.html',
                     text: '<!DOCTYPE html>\n<html><head><title>Another boring document</title></head></html>'
                 }));
@@ -74,7 +72,7 @@ vows.describe('asset.outgoingRelations').addBatch({
                 'then attach a new HtmlAnchor relation pointing at quux.html': {
                     topic: function (assetGraph) {
                         var fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0];
-                        new relations.HtmlAnchor({to: assetGraph.findAssets({url: /\/quux\.html$/})[0]}).attach(fooHtml, 'after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
+                        new AssetGraph.HtmlAnchor({to: assetGraph.findAssets({url: /\/quux\.html$/})[0]}).attach(fooHtml, 'after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
                         return assetGraph;
                     },
                     'both baz.html and quux.html should be mentioned in the text of foo.html': function (assetGraph) {
