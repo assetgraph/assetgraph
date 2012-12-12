@@ -127,5 +127,9 @@ vows.describe('Html.minify').addBatch({
     'whitespace inside anchor should be preserved': createTestCase(
         '<ul>\n    <li>\n        <a><i></i> Bar</a>\n    </li>\n</ul>',
         '<ul><li><a><i></i> Bar</a></li></ul>'
+    ),
+    'Whitespace after SSI include should be preserved': createTestCase(
+        '<div><span></span> <!--# echo "foo" --> bar</div>',
+        '<div><span></span> <!--# echo "foo" --> bar</div>'
     )
 })['export'](module);
