@@ -128,8 +128,16 @@ vows.describe('Html.minify').addBatch({
         '<ul>\n    <li>\n        <a><i></i> Bar</a>\n    </li>\n</ul>',
         '<ul><li><a><i></i> Bar</a></li></ul>'
     ),
-    'Whitespace after SSI include should be preserved': createTestCase(
+    'Whitespace after SSI include in non-blocklevel context should be preserved': createTestCase(
         '<div><span></span> <!--# echo "foo" --> bar</div>',
         '<div><span></span> <!--# echo "foo" --> bar</div>'
+    ),
+    'Whitespace before and after SSI include in blocklevel context should be removed': createTestCase(
+        '<div><div></div> <!--# echo "foo" --> </div>',
+        '<div><div></div><!--# echo "foo" --></div>'
+    ),
+    'Whitespace between </title> and conditional comment in <head> should be removed': createTestCase(
+        '<html><head><title>The title</title> <!--[if lt IE 8]><![endif]--></head></html>',
+        '<html><head><title>The title</title><!--[if lt IE 8]><![endif]--></head></html>'
     )
 })['export'](module);
