@@ -22,3 +22,12 @@
 .baz {
     background-image: url(foo.png) !important;
 }
+
+.barf {
+    -webkit-mask-image: url(foo.png);
+    -webkit-mask-image-source: url(foo.png);
+    -webkit-mask-box-image-source: url(foo.png);
+    -webkit-mask-box-image: url(foo.png);
+    mask: url(foo.png);
+    mask-box-image-source: url(foo.png);
+}

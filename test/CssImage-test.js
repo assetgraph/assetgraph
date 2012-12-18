@@ -11,8 +11,8 @@ vows.describe('CssImage').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 10 CssImage relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 10);
+        'the graph should contain 16 CssImage relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 16);
         },
         'then move foo.png to a different url': {
             topic: function (assetGraph) {
@@ -21,6 +21,12 @@ vows.describe('CssImage').addBatch({
             },
             'the references to it should be updated': function (assetGraph) {
                 assert.deepEqual(_.pluck(assetGraph.findRelations({to: assetGraph.findAssets({url: /\/foo2\.png$/})}), 'href'), [
+                    'dir/foo2.png',
+                    'dir/foo2.png',
+                    'dir/foo2.png',
+                    'dir/foo2.png',
+                    'dir/foo2.png',
+                    'dir/foo2.png',
                     'dir/foo2.png',
                     'dir/foo2.png',
                     'dir/foo2.png',
