@@ -44,22 +44,34 @@ vows.describe('flattenStaticIncludes transform').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 3 JavaScript assets, one of them inline': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+        'the graph should contain 5 JavaScript assets, one of them inline': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
             assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: true}).length, 1);
+        },
+        'the graph should contain 4 Css assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 4);
         },
         'then run the flattenStaticIncludes transform on the Html asset': {
             topic: function (assetGraph) {
                 assetGraph.flattenStaticIncludes({type: 'Html'}).run(this.callback);
             },
             'the injected <script> tags should be in the right order': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findRelations({from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'),
+                assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlScript', from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'),
                                 [
                                     'a.js',
-                                    'a.css',
-                                    'b.css',
                                     'b.js',
-                                    undefined
+                                    'c.js',
+                                    undefined,
+                                    'd.js'
+                                ]);
+            },
+            'the injected <link> tags should be in the right order': function (assetGraph) {
+                assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'),
+                                [
+                                    'a.css',
+                                    'c.css',
+                                    'd.css',
+                                    'b.css'
                                 ]);
             }
         }
