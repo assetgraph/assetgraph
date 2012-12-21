@@ -5,9 +5,9 @@ var vows = require('vows'),
     query = AssetGraph.query;
 
 vows.describe('flattenStaticIncludes transform').addBatch({
-    'After loading test case': {
+    'After loading a combo test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/flattenStaticIncludes/'})
+            new AssetGraph({root: __dirname + '/flattenStaticIncludes/combo/'})
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
@@ -32,6 +32,33 @@ vows.describe('flattenStaticIncludes transform').addBatch({
                                     'f.js',
                                     'g.js',
                                     'h.js',
+                                    undefined
+                                ]);
+            }
+        }
+    },
+    'After loading a test case where one of the INCLUDEd files is already included via a <script>': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/flattenStaticIncludes/duplicate/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 3 JavaScript assets, one of them inline': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: true}).length, 1);
+        },
+        'then run the flattenStaticIncludes transform on the Html asset': {
+            topic: function (assetGraph) {
+                assetGraph.flattenStaticIncludes({type: 'Html'}).run(this.callback);
+            },
+            'the injected <script> tags should be in the right order': function (assetGraph) {
+                assert.deepEqual(_.pluck(assetGraph.findRelations({from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'),
+                                [
+                                    'a.js',
+                                    'a.css',
+                                    'b.css',
+                                    'b.js',
                                     undefined
                                 ]);
             }
