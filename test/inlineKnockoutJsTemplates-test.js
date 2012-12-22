@@ -11,19 +11,19 @@ vows.describe('inlineKnockoutJsTemplates').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
         },
         'the graph should contain 3 non-inline JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: false}).length, 3);
         },
-        'the graph should contain 3 JavaScriptAmdRequire/JavaScriptAmdDefine relations pointing at Knockout.js templates': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: ['JavaScriptAmdRequire', 'JavaScriptAmdDefine'], to: {type: 'KnockoutJsTemplate'}}).length, 3);
+        'the graph should contain 4 JavaScriptAmdRequire/JavaScriptAmdDefine relations pointing at Knockout.js templates': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: ['JavaScriptAmdRequire', 'JavaScriptAmdDefine'], to: {type: 'KnockoutJsTemplate'}}).length, 4);
         },
         'the graph should contain 1 JavaScriptGetStaticUrl relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 1);
         },
-        'the graph should contain 2 KnockoutJsTemplate assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'KnockoutJsTemplate'}).length, 2);
+        'the graph should contain 3 KnockoutJsTemplate assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'KnockoutJsTemplate'}).length, 3);
         },
         'the graph should contain 1 Png asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
@@ -35,11 +35,12 @@ vows.describe('inlineKnockoutJsTemplates').addBatch({
             'the graph should contain no JavaScriptAmdRequire/JavaScriptAmdDefine relations pointing at Knockout.js templates': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: ['JavaScriptAmdRequire', 'JavaScriptAmdDefine'], to: {type: 'KnockoutJsTemplate'}}).length, 0);
             },
-            'the graph should contain 2 HtmlInlineScriptTemplate relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'}).length, 2);
+            'the graph should contain 4 HtmlInlineScriptTemplate relations, all of them from the main Html asset': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'}).length, 4);
+                assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', from: {url: /\/index\.html$/}}).length, 4);
             },
             'index.html should have the expected contents': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({url: /\/index\.html$/})[0].text, '<!DOCTYPE html>\n<html>\n<head></head>\n<body>\n    <script src="require.js" data-main="main"></script>\n<script type="text/html" id="foo"><img data-bind="attr: {src: GETSTATICURL(\'foo.png\')}">\n</script><script type="text/html" id="bar"><div>\n    <h1>bar.ko</h1>\n</div>\n</script></body>\n</html>\n');
+                assert.equal(assetGraph.findAssets({url: /\/index\.html$/})[0].text, '<!DOCTYPE html>\n<html>\n<head></head>\n<body>\n    <script src="require.js" data-main="main"></script>\n<script type="text/html" id="foo"><img data-bind="attr: {src: GETSTATICURL(\'foo.png\')}">\n</script><script type="text/html" id="bar"><div>\n    <h1>bar.ko</h1>\n</div>\n</script><script type="text/html" id="templateWithEmbeddedTemplate"><div data-bind="template: \'theEmbeddedTemplate\'"></div>\n\n</script><script type="text/html" id="theEmbeddedTemplate">\n    <h1>This is the embedded template, which should also end up in the main document</h1>\n</script></body>\n</html>\n');
             },
             'one of the HtmlInlineScriptTemplateRelations should have an id of "foo" and point at a KnockoutJsTemplate asset with the correct contents': function (assetGraph) {
                 var relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) {return node.getAttribute('id') === 'foo';}})[0];
