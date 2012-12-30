@@ -10,20 +10,20 @@ vows.describe('inlineKnockoutJsTemplates').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 1 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+        'the graph should contain 5 Html assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 5);
         },
         'the graph should contain 3 non-inline JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: false}).length, 3);
         },
-        'the graph should contain 4 JavaScriptAmdRequire/JavaScriptAmdDefine relations pointing at Knockout.js templates': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: ['JavaScriptAmdRequire', 'JavaScriptAmdDefine'], to: {type: 'KnockoutJsTemplate'}}).length, 4);
+        'the graph should contain 4 JavaScriptAmdRequire/JavaScriptAmdDefine relations pointing at Html assets': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: ['JavaScriptAmdRequire', 'JavaScriptAmdDefine'], to: {type: 'Html'}}).length, 4);
         },
         'the graph should contain 1 JavaScriptGetStaticUrl relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 1);
         },
-        'the graph should contain 3 KnockoutJsTemplate assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'KnockoutJsTemplate'}).length, 3);
+        'the graph should contain 5 Html assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 5);
         },
         'the graph should contain 1 Png asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
