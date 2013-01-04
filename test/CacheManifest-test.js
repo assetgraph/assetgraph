@@ -76,11 +76,11 @@ vows.describe('Cache manifest').addBatch({
                 .populate({followRelations: {to: {url: /^file:/}}})
                 .run(this.callback);
         },
-        'the graph contains 6 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 6);
+        'the graph contains 7 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 7);
         },
-        'the graph contains 6 relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations().length, 6);
+        'the graph contains 7 relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations().length, 7);
         },
         'the graph contains a single Png asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
@@ -92,8 +92,9 @@ vows.describe('Cache manifest').addBatch({
         'the graph contains a single Css asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
         },
-        'the graph contains 2 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+        'the graph contains 3 JavaScript assets, one of which has not been loaded': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', isLoaded: false}).length, 1);
         },
         'then adding a cache manifest to the Html file': {
             topic: function (assetGraph) {
