@@ -44,6 +44,7 @@
     "directories": {
         "lib": "./lib"
     },
+    "tag": "v1.0",
     "publishConfig": {
         "registry": "http://registry.npmjs.org/"
     },
