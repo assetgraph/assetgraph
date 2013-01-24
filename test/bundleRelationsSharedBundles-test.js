@@ -188,5 +188,24 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
                 assert.matches(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[3].to.url, /\/f\.css$/);
             }
         }
+    },
+    'after loading a test with two pages, each containing an external HtmlStyle followed by an inline one': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRelations/externalHtmlStyleFollowedByInlineStyle'})
+                .loadAssets('*.html')
+                .populate()
+                .bundleRelations({type: ['HtmlStyle']}, 'sharedBundles')
+                .run(this.callback);
+        },
+        'the graph should contain 3 Css assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 3);
+        },
+        'the graph should contain 1 non-inline Css asset whose url ends with /a.css': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css', isInline: false, url: /\/a\.css$/}).length, 1);
+        },
+        'the graph should 2 inline Css asset with the expected contents': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css', isInline: true}).length, 2);
+            assert.equal(assetGraph.findAssets({type: 'Css', isInline: true, text: '.body{foo:bar;}'}).length, 2);
+        }
     }
 })['export'](module);
