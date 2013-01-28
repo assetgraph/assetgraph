@@ -191,7 +191,7 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
     },
     'after loading a test with two pages, each containing an external HtmlStyle followed by an inline one': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRelations/externalHtmlStyleFollowedByInlineStyle'})
+            new AssetGraph({root: __dirname + '/bundleRelations/externalHtmlStyleFollowedByInlineStyle/'})
                 .loadAssets('*.html')
                 .populate()
                 .bundleRelations({type: ['HtmlStyle']}, 'sharedBundles')
@@ -206,6 +206,32 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
         'the graph should 2 inline Css asset with the expected contents': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css', isInline: true}).length, 2);
             assert.equal(assetGraph.findAssets({type: 'Css', isInline: true, text: '.body{foo:bar;}'}).length, 2);
+        }
+    },
+    'after loading a test with a duplicated script': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRelations/duplicateScript/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRelations({type: ['HtmlScript'], to: {isLoaded: true}}, 'sharedBundles')
+                .run(this.callback);
+        },
+        'the graph should contain 2 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+        },
+        'the graph should contain 1 non-inline JavaScript asset whose url ends with /a.css': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: false, url: /\/a\.js$/}).length, 1);
+        },
+        'the graph should contain 1 non-inline JavaScript asset whose url ends with /b.css': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: false, url: /\/b\.js$/}).length, 1);
+        },
+        'the graph should contain 3 HtmlScript relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 3);
+        },
+        'the graph should 2 JavaScript assets with the expected contents': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', text: 'alert("a");\n'}).length, 1);
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', text: 'alert("b");\n'}).length, 1);
         }
     }
 })['export'](module);
