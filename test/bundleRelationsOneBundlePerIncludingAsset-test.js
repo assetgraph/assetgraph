@@ -257,7 +257,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
                     return htmlScript.to.text.replace(/\n/g, '');
                 }), [
                     'alert("a.js");',
-                    'alert("b.js");alert("c.js")',
+                    'alert("b.js");alert("c.js");',
                     'alert("d.js");',
                     'alert("e.js");'
                 ]);

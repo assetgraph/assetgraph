@@ -27,7 +27,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
             },
             'a.js and the corresponding function parameter should be removed from the including asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text,
-                             'require(["some/module","b.js"],function(someModule,b){})');
+                             'require(["some/module","b.js"],function(someModule,b){});');
             }
         }
     },
