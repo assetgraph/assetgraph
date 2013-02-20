@@ -49,7 +49,6 @@
     },
     "main": "lib/AssetGraph.js",
     "scripts": {
-        "pretest": "npm install",
         "test": "vows",
         "prepublish": "npm test"
     }
