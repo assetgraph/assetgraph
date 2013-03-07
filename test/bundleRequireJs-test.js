@@ -313,6 +313,32 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                          }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
         }
     },
+    'After loading the umd test case where the wrapper has a dependency in the define call, then running the bundleRequireJs transform': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/umdWithDependency/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .bundleRequireJs({type: 'Html'})
+                .run(this.callback);
+        },
+        'the bundled main script should have the expected contents': function (assetGraph) {
+            assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
+                         uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+                             define("someDependency", function (){
+                                 alert("got the dependency!");
+                             });
+
+                             define("myumdmodule", ["someDependency"], function (someDependency) {
+                                 return true;
+                             });
+
+                             require(['myumdmodule'], function (myUmdModule) {
+                                 alert(myUmdModule);
+                             });
+                         }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
+        }
+    },
     'After loading the non-umd test case and running the bundleRequireJs transform': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/nonUmd/'})
@@ -438,7 +464,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'The graph should contain 3 JavaScript assets with the expected urls': function (assetGraph) {
+        'the graph should contain 3 JavaScript assets with the expected urls': function (assetGraph) {
             assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), [
                 assetGraph.root + 'main.js',
                 assetGraph.root + 'require.js',
