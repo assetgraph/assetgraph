@@ -62,8 +62,11 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 6 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 6);
+        'the graph should contain 7 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 7);
+        },
+        'the graph should contain 1 Text asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
         }
     },
     'After loading test case with require.js, a baseUrl and a paths setting': {
