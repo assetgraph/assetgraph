@@ -529,5 +529,55 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                              }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
             }
         }
+    },
+    'After loading a test case with a relative dependencies once again': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/relativeDependencies/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 4 JavaScript assets with the expected urls': function (assetGraph) {
+            assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), [
+                assetGraph.root + 'main.js',
+                assetGraph.root + 'require.js',
+                assetGraph.root + 'subdir/bar.js',
+                assetGraph.root + 'subdir/foo.js',
+                assetGraph.root + 'subdir/subsubdir/quux.js'
+            ]);
+        },
+        'then move quux.js and run the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                var quuxJs = assetGraph.findAssets({url: /\/quux\.js/})[0];
+                quuxJs.url = quuxJs.url.replace(/subsubdir/, 'othersubdir');
+                assetGraph
+                    .bundleRequireJs({type: 'Html'})
+                    .run(this.callback);
+            },
+            'the graph should contain 2 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            },
+            'the bundled JavaScript should have the expected contents': function (assetGraph) {
+                assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
+                             uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+                                 define("subdir/othersubdir/quux", function () {
+                                     alert("quux!");
+                                 });
+
+                                 define("subdir/bar", ["./othersubdir/quux"], function (quux) {
+                                     alert("bar!");
+                                 });
+
+                                 define("subdir/foo", ["./bar", "./othersubdir/quux"], function (bar) {
+                                     alert("foo!");
+                                 });
+
+                                 require(["subdir/foo"], function (foo) {
+                                     alert("Got 'em all!");
+                                 });
+                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
+            }
+        }
     }
 })['export'](module);
