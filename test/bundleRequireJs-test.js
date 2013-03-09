@@ -579,5 +579,21 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                              }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
             }
         }
+    },
+    'After loading a test case with a paths config that points jquery at a CDN': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/httpPath/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 3 JavaScript assets with the expected urls': function (assetGraph) {
+            assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'JavaScript', isInline: false}), 'url').sort(), [
+                assetGraph.root + 'main.js',
+                assetGraph.root + 'require.js',
+                'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'
+            ]);
+        }
     }
 })['export'](module);
