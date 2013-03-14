@@ -10,6 +10,7 @@
         }
     ],
     "dependencies": {
+        "async": "=0.2.6",
         "bufferjs": "=1.1.0",
         "createerror": "=0.0.1",
         "cssmin": "=0.3.1",
