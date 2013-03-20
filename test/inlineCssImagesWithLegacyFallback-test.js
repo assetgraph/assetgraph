@@ -118,5 +118,20 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
                 });
             }
         }
+    },
+    'After loading test case with a root-relative HtmlStyle, then running the inlineCssImagesWithLegacyFallback transform': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/rootRelative/'})
+                .loadAssets('index.html')
+                .populate()
+                .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4)
+                .run(this.callback);
+        },
+        'the graph should contain 2 HtmlStyle relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 2);
+        },
+        'the graph should contain 2 HtmlStyle relations with an hrefType of "rootRelative"': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlStyle', hrefType: 'rootRelative'}).length, 2);
+        }
     }
 })['export'](module);
