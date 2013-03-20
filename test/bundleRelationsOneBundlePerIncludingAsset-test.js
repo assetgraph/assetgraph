@@ -330,7 +330,12 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
                 .run(this.callback);
         },
         'the bundled Css should have the @import rules at the top': function (assetGraph) {
-            var cssAsset = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[0].to,
+            var htmlStyles = cssAsset = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'});
+
+            assert.equal(htmlStyles.length, 1);
+            assert.equal(htmlStyles[0].hrefType, 'relative');
+
+            var cssAsset = htmlStyles[0].to,
                 cssRules = cssAsset.parseTree.cssRules;
             assert.equal(cssRules.length, 5);
             assert.equal(cssRules[0].href, 'imported.css');
@@ -338,6 +343,20 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
             assert.equal(cssRules[2].style.getPropertyValue('color'), 'red');
             assert.equal(cssRules[3].style.getPropertyValue('color'), 'blue');
             assert.equal(cssRules[4].style.getPropertyValue('color'), 'yellow');
+        }
+    },
+    'After loading a test case with two stylesheets, one of which is referred to with a root-relative url, then running the bundleRelations transform': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRelations/rootRelative/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset')
+                .run(this.callback);
+        },
+        'the relation pointing at the bundled asset should have an hrefType of "rootRelative"': function (assetGraph) {
+            var htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'});
+            assert.equal(htmlStyles.length, 1);
+            assert.equal(htmlStyles[0].hrefType, 'rootRelative');
         }
     }
 })['export'](module);
