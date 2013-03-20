@@ -20,6 +20,12 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
         'the graph should contain 4 Css assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Css'}).length, 4);
         },
+        'the graph should contain 3 CssImport relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'CssImport'}).length, 3);
+        },
+        'the graph should contain 1 root-relative CssImport relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'CssImport', hrefType: 'rootRelative'}).length, 1);
+        },
         'then run the convertCssImportsToHtmlStyles transform': {
             topic: function (assetGraph) {
                 assetGraph.convertCssImportsToHtmlStyles({type: 'Html'}).run(this.callback);
@@ -29,6 +35,9 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
             },
             'the graph should contain 4 HtmlStyle relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 4);
+            },
+            'the graph should contain one root-relative HtmlStyle relation': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlStyle', hrefType: 'rootRelative'}).length, 1);
             },
             'the graph should contain no CssImport relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'CssImport'}).length, 0);
@@ -42,7 +51,7 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
                 },
                 'the <link rel="stylesheet"> tags should be in the right order': function (text) {
                     assert.deepEqual(text.match(/href=\"([^\'\"]+)\"/g),
-                                     ['href="foo2.css"', 'href="foo.css"', 'href="bar.css"']);
+                                     ['href="foo2.css"', 'href="foo.css"', 'href="/bar.css"']);
                 },
                 'then run the bundleRelations transform on the HtmlStyles': {
                     topic: function (_, assetGraph) {
