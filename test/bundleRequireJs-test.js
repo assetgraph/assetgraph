@@ -3,7 +3,7 @@ var vows = require('vows'),
     _ = require('underscore'),
     fs = require('fs'),
     path = require('path'),
-    uglifyJs = require('uglify-js-papandreou'),
+    uglifyJs = require('uglify-js'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('transforms.bundleRequireJs').addBatch({
@@ -32,9 +32,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
             },
             'main.js should be identical to the output of the require.js optimizer': function (assetGraph) {
-                var requireJsOptimizerOutputAst = uglifyJs.parser.parse(fs.readFileSync(path.resolve(__dirname, 'bundleRequireJs/jquery-require-sample/webapp-build/scripts/main.js'), 'utf-8'));
-                assert.deepEqual(uglifyJs.uglify.gen_code(assetGraph.findAssets({type: 'JavaScript', url: /\/main\.js$/})[0].parseTree),
-                                 uglifyJs.uglify.gen_code(requireJsOptimizerOutputAst));
+                var requireJsOptimizerOutputAst = uglifyJs.parse(fs.readFileSync(path.resolve(__dirname, 'bundleRequireJs/jquery-require-sample/webapp-build/scripts/main.js'), 'utf-8'));
+                assert.equal(assetGraph.findAssets({type: 'JavaScript', url: /\/main\.js$/})[0].parseTree.print_to_string(),
+                             requireJsOptimizerOutputAst.print_to_string());
             }
         }
     },
@@ -98,8 +98,8 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
             },
             'the resulting main.js should have the expected parse tree': function (assetGraph) {
-                assert.equal(uglifyJs.uglify.gen_code(assetGraph.findAssets({url: /\/main\.js$/})[0].parseTree),
-                             uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+                assert.equal(assetGraph.findAssets({url: /\/main\.js$/})[0].parseTree.print_to_string(),
+                             uglifyJs.parse(function () {
                                  define("popular", function(){
                                      alert("I\'m a popular helper module");
                                      return "foo";
@@ -113,10 +113,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                                  require(["module1", "module2"], function (module1, module2) {
                                      alert("Got it all!");
                                  });
-                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')))
+                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string()
                 );
             }
-
         }
     },
     'After loading a slightly different test case with a module that has multiple incoming JavaScriptAmd* relations': {
@@ -301,8 +300,8 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 .run(this.callback);
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
-            assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
-                         uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+            assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree.print_to_string(),
+                         uglifyJs.parse(function () {
                              define("myumdmodule", function () {
                                  return true;
                              });
@@ -310,7 +309,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                              require(['myumdmodule'], function (myUmdModule) {
                                  alert(myUmdModule);
                              });
-                         }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
+                         }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
         }
     },
     'After loading the umd test case where the wrapper has a dependency in the define call, then running the bundleRequireJs transform': {
@@ -323,8 +322,8 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 .run(this.callback);
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
-            assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
-                         uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+            assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree.print_to_string(),
+                         uglifyJs.parse(function () {
                              define("someDependency", function (){
                                  alert("got the dependency!");
                              });
@@ -336,7 +335,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                              require(['myumdmodule'], function (myUmdModule) {
                                  alert(myUmdModule);
                              });
-                         }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
+                         }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
         }
     },
     'After loading the non-umd test case and running the bundleRequireJs transform': {
@@ -349,8 +348,8 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 .run(this.callback);
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
-            assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
-                         uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+            assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree.print_to_string(),
+                         uglifyJs.parse(function () {
                              (function(global){
                                  var signals = function () {return true;};
 
@@ -366,7 +365,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                              require(['signals'], function (myUmdModule) {
                                  alert(signals);
                              });
-                         }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
+                         }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
         }
     },
     'After loading a test case with multiple Html files depending on the same modules, then running the bundleRequireJs transform': {
@@ -440,8 +439,8 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                     assetGraph.bundleRequireJs().run(this.callback);
                 },
                 'the resulting main script should have the expected contents': function (assetGraph) {
-                    assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
-                                 uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+                    assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree.print_to_string(),
+                                 uglifyJs.parse(function () {
                                      alert('someDependency');
                                      alert('nonAmdModule1');
 
@@ -451,7 +450,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                                      require(['nonAmdModule2'], function (nonAmdModule2) {
                                          alert("Got 'em all!");
                                      });
-                                 }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
+                                 }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
                 }
             }
         }
@@ -509,8 +508,8 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
             },
             'the bundled JavaScript should have the expected contents': function (assetGraph) {
-                assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
-                             uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+                assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree.print_to_string(),
+                             uglifyJs.parse(function () {
                                  define("subdir/subsubdir/quux", function () {
                                      alert("quux!");
                                  });
@@ -526,7 +525,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                                  require(["subdir/foo"], function (foo) {
                                      alert("Got 'em all!");
                                  });
-                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
+                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
             }
         }
     },
@@ -559,8 +558,8 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
             },
             'the bundled JavaScript should have the expected contents': function (assetGraph) {
-                assert.equal(uglifyJs.uglify.gen_code(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree),
-                             uglifyJs.uglify.gen_code(uglifyJs.parser.parse(function () {
+                assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.parseTree.print_to_string(),
+                             uglifyJs.parse(function () {
                                  define("subdir/othersubdir/quux", function () {
                                      alert("quux!");
                                  });
@@ -576,7 +575,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                                  require(["subdir/foo"], function (foo) {
                                      alert("Got 'em all!");
                                  });
-                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''))));
+                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
             }
         }
     },
