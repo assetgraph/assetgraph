@@ -21,7 +21,7 @@ vows.describe('HtmlDataBindAttribute test').addBatch({
         },
         'the parseTree getters of all inline JavaScript assets should return an AST': function (assetGraph) {
             assetGraph.findAssets({type: 'JavaScript'}).forEach(function (javaScript) {
-                assert.isArray(javaScript.parseTree);
+                assert.isObject(javaScript.parseTree);
             });
         },
         'then manipulating the first inline JavaScript': {
