@@ -1,6 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
+    uglifyJs = require('uglify-js'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('JavaScript').addBatch({
@@ -74,7 +75,14 @@ vows.describe('JavaScript').addBatch({
         'then manipulating the parseTree of the JavaScript asset and marking it dirty': {
             topic: function (assetGraph) {
                 var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
-                javaScript.parseTree[1].push(["var",[["foo",["string","quux"]]]]);
+                javaScript.parseTree.body.push(new uglifyJs.AST_Var({
+                    definitions: [
+                        new uglifyJs.AST_VarDef({
+                            name: new uglifyJs.AST_SymbolVar({name: 'foo'}),
+                            value: new uglifyJs.AST_String({value: 'quux'})
+                        })
+                    ]
+                }));
                 javaScript.markDirty();
                 return assetGraph;
             },
@@ -93,7 +101,14 @@ vows.describe('JavaScript').addBatch({
         'then manipulating the parseTree of the JavaScript asset and marking it dirty': {
             topic: function (assetGraph) {
                 assetGraph.findAssets({type: 'JavaScript'}).forEach(function (javaScript) {
-                    javaScript.parseTree[1].push(["var",[["foo",["string","quux"]]]]);
+                    javaScript.parseTree.body.push(new uglifyJs.AST_Var({
+                        definitions: [
+                            new uglifyJs.AST_VarDef({
+                                name: new uglifyJs.AST_SymbolVar({name: 'foo'}),
+                                value: new uglifyJs.AST_String({value: 'quux'})
+                            })
+                        ]
+                    }));
                     javaScript.markDirty();
                 });
                 return assetGraph;
