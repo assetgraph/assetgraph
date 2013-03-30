@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    uglifyJs = require('uglify-js'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('HtmlKnockoutContainerless test').addBatch({
@@ -22,7 +23,10 @@ vows.describe('HtmlKnockoutContainerless test').addBatch({
         'then manipulating the inline JavaScript': {
             topic: function (assetGraph) {
                 var javaScript = assetGraph.findAssets({type: 'JavaScript', isInline: true})[0];
-                javaScript.parseTree[1][0][1][1].push(['yup', ['string', 'right']]);
+                javaScript.parseTree.body[0].body.properties.push(new uglifyJs.AST_ObjectKeyVal({
+                    key: 'yup',
+                    value: new uglifyJs.AST_String({value: 'right'})
+                }));
                 javaScript.markDirty();
                 return assetGraph;
             },
