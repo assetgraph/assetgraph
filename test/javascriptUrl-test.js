@@ -1,5 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
+    uglifyJs = require('uglify-js'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('javascript: url test').addBatch({
@@ -25,7 +26,12 @@ vows.describe('javascript: url test').addBatch({
         'then manipulating the inline JavaScript': {
             topic: function (assetGraph) {
                 var javaScript = assetGraph.findAssets({type: 'JavaScript', isInline: true})[0];
-                javaScript.parseTree[1].push(['call', ['name', 'alert'], [['string', 'bar' ]]]);
+                javaScript.parseTree.body.push(new uglifyJs.AST_SimpleStatement({
+                    body: new uglifyJs.AST_Call({
+                        expression: new uglifyJs.AST_SymbolRef({name: 'alert'}),
+                        args: [new uglifyJs.AST_String({value: 'bar'})]
+                    })
+                }));
                 javaScript.markDirty();
                 return assetGraph;
             },
