@@ -1,14 +1,16 @@
 var vows = require('vows'),
     assert = require('assert'),
-    uglifyJs = require('uglify-js-papandreou'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib/AssetGraph'),
+    uglifyAst = AssetGraph.JavaScript.uglifyAst,
+    uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
 function getFunctionBodySource(fn) {
-    return uglifyJs.uglify.gen_code(uglifyJs.parser.parse(fn.toString().replace(/^function \(\) \{\n|\}$/g, '')), {beautify: true});
+    var outputStream = uglifyJs.OutputStream({beautify: true});
+    uglifyJs.parse(fn.toString().replace(/^function \(\) \{\n|\}$/g, '')).print(outputStream);
+    return outputStream.get();
 }
 
 vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
-/*
     'After loading a test case with a single JavaScript asset, then running the pullGlobalsIntoVariables transform': {
         topic: function () {
             new AssetGraph()
@@ -39,10 +41,10 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
         'the globals in the JavaScript should be hoisted': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].text,
                          getFunctionBodySource(function () {
-                             var SETTIMEOUT = setTimeout;
-                             var MATH = Math;
-                             var MATHMIN_ = MATH.min;
-                             var FOOBARQUUX = foo.bar.quux;
+                             var SETTIMEOUT = setTimeout,
+                                 MATH = Math,
+                                 MATHMIN_ = MATH.min,
+                                 FOOBARQUUX = foo.bar.quux;
                              var MATHMIN = 2;
                              var parseInt = function () {
                                  return 99;
@@ -85,7 +87,6 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
             );
         }
     },
-*/
     'After loading a test case with a single JavaScript asset, then running the pullGlobalsIntoVariables transform with stringLiterals:true': {
         topic: function () {
             new AssetGraph()
