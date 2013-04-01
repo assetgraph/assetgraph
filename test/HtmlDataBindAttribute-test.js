@@ -1,6 +1,8 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib/AssetGraph'),
+    uglifyJs = AssetGraph.JavaScript.uglifyJs,
+    uglifyAst = AssetGraph.JavaScript.uglifyAst;
 
 vows.describe('HtmlDataBindAttribute test').addBatch({
     'After loading test case': {
@@ -21,13 +23,16 @@ vows.describe('HtmlDataBindAttribute test').addBatch({
         },
         'the parseTree getters of all inline JavaScript assets should return an AST': function (assetGraph) {
             assetGraph.findAssets({type: 'JavaScript'}).forEach(function (javaScript) {
-                assert.isArray(javaScript.parseTree);
+                assert.isObject(javaScript.parseTree);
             });
         },
         'then manipulating the first inline JavaScript': {
             topic: function (assetGraph) {
                 var javaScript = assetGraph.findAssets({type: 'JavaScript', isInline: true})[0];
-                javaScript.parseTree[1][0][1][1].push(['yup', ['string', 'right']]);
+                javaScript.parseTree.body[0].body.properties.push(new uglifyJs.AST_ObjectKeyVal({
+                    key: 'yup',
+                    value: new uglifyJs.AST_String({value: 'right'})
+                }));
                 javaScript.markDirty();
                 return assetGraph;
             },
