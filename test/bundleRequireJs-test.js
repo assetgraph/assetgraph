@@ -595,5 +595,32 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'
             ]);
         }
+    },
+    'After loading a test case with a root-relative require alongside a non-root-relative require to the same file': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/rootRelative/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 1 Text asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
+        },
+        'then run the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.bundleRequireJs().run(this.callback);
+            },
+            'the JavaScript should have the expected contents': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.text,
+                             uglifyJs.parse(function () {
+                                 define("foo.txt", GETTEXT("foo.txt"));
+
+                                 require(['foo.txt', 'foo.txt'], function (fooText1,fooText2){
+                                     alert("fooText1=" + fooText1 + " fooText2=" + fooText2);
+                                 });
+                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
+            }
+        }
     }
 })['export'](module);
