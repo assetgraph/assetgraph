@@ -456,7 +456,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             }
         }
     },
-    'After loading a test case with a non-string item in the require array': {
+    'After loading a test case with a non-string items in the require array': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRequireJs/nonString/'})
                 .registerRequireJsConfig()
