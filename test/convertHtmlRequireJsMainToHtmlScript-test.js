@@ -3,7 +3,6 @@ var vows = require('vows'),
     _ = require('underscore'),
     fs = require('fs'),
     path = require('path'),
-    uglifyJs = require('uglify-js-papandreou'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('transforms.bundleRequireJs').addBatch({

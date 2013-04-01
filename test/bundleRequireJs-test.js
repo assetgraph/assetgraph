@@ -3,8 +3,9 @@ var vows = require('vows'),
     _ = require('underscore'),
     fs = require('fs'),
     path = require('path'),
-    uglifyJs = require('uglify-js'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib/AssetGraph'),
+    uglifyJs = AssetGraph.JavaScript.uglifyJs,
+    uglifyAst = AssetGraph.JavaScript.uglifyAst;
 
 vows.describe('transforms.bundleRequireJs').addBatch({
     'After loading the jquery-require-sample test case': {

@@ -1,7 +1,8 @@
 var vows = require('vows'),
     assert = require('assert'),
-    uglifyJs = require('uglify-js'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib/AssetGraph'),
+    uglifyJs = AssetGraph.JavaScript.uglifyJs,
+    uglifyAst = AssetGraph.JavaScript.uglifyAst;
 
 vows.describe('javascript: url test').addBatch({
     'After loading test case': {

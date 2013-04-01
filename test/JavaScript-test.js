@@ -1,8 +1,9 @@
 var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    uglifyJs = require('uglify-js'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib/AssetGraph'),
+    uglifyJs = AssetGraph.JavaScript.uglifyJs,
+    uglifyAst = AssetGraph.JavaScript.uglifyAst;
 
 vows.describe('JavaScript').addBatch({
     'After loading test case that has a parse error in an inline JavaScript asset': {
