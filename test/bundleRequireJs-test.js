@@ -643,5 +643,45 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                              }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
             }
         }
+    },
+    'After loading a test case with a paths config that maps theLibrary to 3rdparty/theLibrary': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/paths/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 5 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+        },
+        'then run the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.bundleRequireJs().run(this.callback);
+            },
+            'the JavaScript should have the expected contents': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.text,
+                             uglifyJs.parse(function () {
+                                 define('theLibrary', function () {
+                                     return 'the contents of theLibrary';
+                                 });
+
+                                 define("subdir/bar", function () { return "bar"; });
+
+                                 define("subdir/foo", ["./bar"], function (bar) { alert("Got bar: "+bar); return{}; });
+
+                                 require.config({
+                                     paths: {
+                                         theLibrary: '3rdparty/theLibrary'
+                                     }
+                                 });
+                                 require(['theLibrary', 'subdir/foo'], function (theLibrary) {
+                                     alert("Got the library: " + theLibrary);
+                                 });
+
+                                 define("main", function() {});
+                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
+            }
+        }
     }
 })['export'](module);
