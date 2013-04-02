@@ -460,7 +460,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
 
                                      alert('nonAmdModule2');
                                      window.foo = {bar: 'foo dot bar'};
-                                     define('nonAmdModule2', foo.bar);
+                                     define('nonAmdModule2', function () {return foo.bar;});
 
                                      require(['nonAmdModule1', 'nonAmdModule2'], function (nonAmdModule1, nonAmdModule2) {
                                          alert("Got 'em all!");
