@@ -81,9 +81,9 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 7);
         }
     },
-    'After loading test case with require.js, data-main, a baseUrl and a paths setting': {
+    'After loading test case with require.js, data-main and a paths setting': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withPathsBaseUrlAndDataMain/'})
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withPathsAndDataMain/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()

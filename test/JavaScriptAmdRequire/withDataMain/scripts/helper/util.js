@@ -10,6 +10,6 @@ define('explicitName', ["helper/yet/another"], function () {
 // Callback-less require
 require(["helper/yet/another"]);
 
-require(["./yet/another.js"], function () {
+require(["./yet/another"], function () {
     alert("Got the yet-another-helper using with the module-relative syntax");
 });

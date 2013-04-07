@@ -61,9 +61,9 @@ vows.describe('JavaScript').addBatch({
         'the relations should be in depth-first order in the graph': function (assetGraph) {
             assert.deepEqual(_.pluck(assetGraph.findRelations({from: {type: 'JavaScript'}}), 'href'),
                              [
-                                 'foo.js',
-                                 'data.json',
-                                 'bar.js'
+                                 './foo',
+                                 './data.json',
+                                 './bar'
                              ]);
         }
     },

@@ -1,1 +1,3 @@
-alert("Hello from a.js");
+define(function () {
+    alert("Hello from a.js");
+});

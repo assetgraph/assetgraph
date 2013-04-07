@@ -635,11 +635,11 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                              uglifyJs.parse(function () {
                                  define("foo.txt", GETTEXT("foo.txt"));
 
-                                 require(['foo.txt', 'foo.txt'], function (fooText1,fooText2){
+                                 require(['foo.txt', 'foo.txt'], function (fooText1, fooText2){
                                      alert("fooText1=" + fooText1 + " fooText2=" + fooText2);
                                  });
 
-                                 define("main", function() {});
+                                 define("main", function () {});
                              }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
             }
         }
@@ -680,6 +680,45 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                                  });
 
                                  define("main", function() {});
+                             }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
+            }
+        }
+    },
+    'After loading a test case with some document-relative dependencies': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRequireJs/documentRelativeDependencies/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 5 JavaScript loaded assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', isLoaded: true}).length, 5);
+        },
+        'then run the bundleRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.bundleRequireJs().run(this.callback);
+            },
+            'the JavaScript should have the expected contents': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.text,
+                             uglifyJs.parse(function () {
+                                 define('/thingAtTheRoot.js', function () {
+                                     return 'thing at the root';
+                                 });
+
+                                 define('anotherThingAtTheRoot.js', function () {
+                                     return 'another thing at the root';
+                                 });
+
+                                 define('thingInScripts', function () {
+                                     return 'thing in scripts';
+                                 });
+
+                                 require(['/thingAtTheRoot.js', 'anotherThingAtTheRoot.js', 'thingInScripts'], function (thingAtTheRoot, anotherThingAtTheRoot, thingInScripts) {
+                                     alert('got ' + thingAtTheRoot + ', ' + anotherThingAtTheRoot + ', and ' + thingInScripts);
+                                 });
+
+                                 define('main', function () {});
                              }.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, '')).print_to_string());
             }
         }
