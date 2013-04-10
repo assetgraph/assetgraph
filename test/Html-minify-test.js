@@ -33,6 +33,10 @@ vows.describe('Html.minify').addBatch({
         '<!DOCTYPE html>\n<html><head></head><body><!-- ko foreach: blah --><div></div><!--/ko --></body></html>',
         '<!DOCTYPE html>\n<html><head></head><body><!--ko foreach: blah--><div></div><!--/ko--></body></html>'
     ),
+    'Already minified Knockout containerless binding comment should be preserved': createTestCase(
+        '<!DOCTYPE html>\n<html><head></head><body><!--ko foreach: blah--><div></div><!--/ko--></body></html>',
+        '<!DOCTYPE html>\n<html><head></head><body><!--ko foreach: blah--><div></div><!--/ko--></body></html>'
+    ),
     'leading whitespace in first text node child of block-level': createTestCase(
         '<!DOCTYPE html>\n<html><head></head><body><div>   blah</div></body></html>',
         '<!DOCTYPE html>\n<html><head></head><body><div>blah</div></body></html>'
