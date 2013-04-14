@@ -662,7 +662,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             'the JavaScript should have the expected contents': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.text,
                              uglifyJs.parse(function () {
-                                 define('3rdparty/theLibrary', function () {
+                                 define('theLibrary', function () {
                                      return 'the contents of theLibrary';
                                  });
 
@@ -675,7 +675,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                                          theLibrary: '3rdparty/theLibrary'
                                      }
                                  });
-                                 require(['3rdparty/theLibrary', 'subdir/foo'], function (theLibrary) {
+                                 require(['theLibrary', 'subdir/foo'], function (theLibrary) {
                                      alert("Got the library: " + theLibrary);
                                  });
 

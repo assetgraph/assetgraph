@@ -89,8 +89,50 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 7 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 7);
+        'the graph should contain 8 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 8);
+        },
+        'then rename the module referenced as some/module': {
+            topic: function (assetGraph) {
+                assetGraph.findAssets({url: /\/some\/v1\.0\/module\.js$/})[0].fileName = 'moduleRenamed.js';
+                return assetGraph;
+            },
+            'the incoming relation should still utilize the paths setting': function (assetGraph) {
+                var relation = assetGraph.findRelations({to: {url: /\/some\/v1\.0\/moduleRenamed\.js$/}})[0];
+                assert.equal(relation.href, 'some/moduleRenamed');
+            },
+            'then move the module outside some/v1.0/': {
+                topic: function (assetGraph) {
+                    var asset = assetGraph.findAssets({url: /\/some\/v1\.0\/moduleRenamed\.js$/})[0];
+                    asset.url = asset.url.replace(/\/some\/v1.0\//, '/foo/bar/');
+                    return assetGraph;
+                },
+                'the incoming relation should no longer utilize the paths setting': function (assetGraph) {
+                    var relation = assetGraph.findRelations({to: {url: /\/foo\/bar\/moduleRenamed\.js$/}})[0];
+                    assert.equal(relation.href, 'foo/bar/moduleRenamed');
+                }
+            }
+        },
+        'then call refreshHref on the relation pointing at exactMatch': {
+            topic: function (assetGraph) {
+                var asset = assetGraph.findAssets({url: /\/this\/is\/an\/exactMatch\.js$/})[0].incomingRelations[0].refreshHref();
+                return assetGraph;
+            },
+            'the incoming relation should still utilize the paths setting': function (assetGraph) {
+                var relation = assetGraph.findRelations({to: {url: /\/this\/is\/an\/exactMatch\.js$/}})[0];
+                assert.equal(relation.href, 'exactMatch');
+            },
+            'then rename the module referenced as exactMatch': {
+                topic: function (assetGraph) {
+                    var asset = assetGraph.findAssets({url: /\/this\/is\/an\/exactMatch\.js$/})[0];
+                    asset.fileName = 'exactMatchNoLonger.js';
+                    return assetGraph;
+                },
+                'the incoming relation should no longer utilize the paths setting': function (assetGraph) {
+                    var relation = assetGraph.findRelations({to: {url: /\/this\/is\/an\/exactMatchNoLonger\.js$/}})[0];
+                    assert.equal(relation.href, 'this/is/an/exactMatchNoLonger');
+                }
+            }
         }
     },
     'After loading test case where the require.config({...}) statement is in the data-main script': {
