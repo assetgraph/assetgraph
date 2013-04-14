@@ -103,6 +103,24 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
         },
         'the graph should contain 6 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 6);
+        },
+        'then move my/module': {
+            topic: function (assetGraph) {
+                assetGraph.findAssets({url: /\/my\/module\.js$/})[0].fileName = "renamedModule.js";
+                return assetGraph;
+            },
+            'the href of its incoming JavaScriptAmdRequre relation should be updated': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({to: {url: /\/my\/renamedModule\.js$/}})[0].href, 'my/renamedModule');
+            },
+            'then change the hrefType of the relation pointing at my/renamedModule': {
+                topic: function (assetGraph) {
+                    assetGraph.findRelations({to: {url: /\/my\/renamedModule\.js$/}})[0].hrefType = 'documentRelative';
+                    return assetGraph;
+                },
+                'the href should be updated again': function (assetGraph) {
+                    assert.equal(assetGraph.findRelations({to: {url: /\/my\/renamedModule\.js$/}})[0].href, 'scripts/my/renamedModule.js');
+                }
+            }
         }
     }
 })['export'](module);
