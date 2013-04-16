@@ -113,14 +113,14 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 }
             }
         },
-        'then call refreshHref on the relation pointing at exactMatch': {
+        'then call refreshHref on the relation pointing at exactMatchFoo': {
             topic: function (assetGraph) {
                 var asset = assetGraph.findAssets({url: /\/this\/is\/an\/exactMatch\.js$/})[0].incomingRelations[0].refreshHref();
                 return assetGraph;
             },
             'the incoming relation should still utilize the paths setting': function (assetGraph) {
                 var relation = assetGraph.findRelations({to: {url: /\/this\/is\/an\/exactMatch\.js$/}})[0];
-                assert.equal(relation.href, 'exactMatch');
+                assert.equal(relation.href, 'exactMatchFoo');
             },
             'then rename the module referenced as exactMatch': {
                 topic: function (assetGraph) {

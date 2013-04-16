@@ -1,4 +1,4 @@
-require( ["some/module", "my/module", "exactMatch", "a", "b"],
+require( ["some/module", "my/module", "exactMatchFoo", "a", "b"],
   function(someModule, myModule) {
       //This function will be called when all the dependencies
       //listed above are loaded. Note that this function could
