@@ -19,10 +19,10 @@ function assertAstsEqual(topic, expected) {
     assert.equal(toAst(topic).print_to_string(), toAst(expected).print_to_string());
 }
 
-vows.describe('transforms.bundleRequireJs').addBatch({
+vows.describe('transforms.flattenRequireJs').addBatch({
     'After loading the jquery-require-sample test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/jquery-require-sample/webapp/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/jquery-require-sample/webapp/'})
                 .registerRequireJsConfig()
                 .loadAssets('app.html')
                 .populate()
@@ -37,10 +37,10 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
         },
-        'then running the bundleRequireJs transform': {
+        'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
                 assetGraph
-                    .bundleRequireJs({type: 'Html'})
+                    .flattenRequireJs({type: 'Html'})
                     .run(this.callback);
             },
             'the resulting scripts should be identical to the output of the require.js optimizer': function (assetGraph) {
@@ -72,7 +72,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading test case with a text dependency': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/textDependency/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/textDependency/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -84,9 +84,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 1 non-inline Text asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Text', isInline: false}).length, 1);
         },
-        'then running the bundleRequireJs transform': {
+        'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
             },
             'the graph should contain GETTEXT relation pointing at myTextFile.txt': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'JavaScriptGetText', to: {url: /\/myTextFile\.txt$/}}).length, 1);
@@ -128,7 +128,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading test case with a module that has multiple incoming JavaScriptAmd* relations': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/multipleIncoming/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/multipleIncoming/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -137,9 +137,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
         },
-        'then running the bundleRequireJs transform': {
+        'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
             },
             'the resulting main.js should have the expected parse tree': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -172,7 +172,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading a slightly different test case with a module that has multiple incoming JavaScriptAmd* relations': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/multipleIncoming2/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/multipleIncoming2/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -181,9 +181,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
         },
-        'then running the bundleRequireJs transform': {
+        'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -210,7 +210,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading test case with a module that is included via a script tag and a JavaScriptAmdRequire relation': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/nonOrphanedJavaScript/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/nonOrphanedJavaScript/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -222,9 +222,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 2 HtmlScript relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
         },
-        'then running the bundleRequireJs transform': {
+        'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -246,7 +246,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading test case that uses require(...) in a regular <script>': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/withoutHtmlRequireJsMain/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/withoutHtmlRequireJsMain/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -255,9 +255,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
         },
-        'then running the bundleRequireJs transform': {
+        'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
             },
             'the resulting inline script should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -289,7 +289,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading test case that uses require(...) to fetch a css file': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/cssRequire/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/cssRequire/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -310,9 +310,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 1 Png asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
         },
-        'then running the bundleRequireJs transform': {
+        'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
             },
             'the graph should contain 1 HtmlStyle relation': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 1);
@@ -330,7 +330,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading test case that includes a GETSTATICURL relation': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/withOneGetStaticUrl/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/withOneGetStaticUrl/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -348,9 +348,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 1 Png asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
         },
-        'then running the bundleRequireJs transform': {
+        'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
             },
             'the graph should contain 1 Png asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
@@ -384,13 +384,13 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             }
         }
     },
-    'After loading the umd test case and running the bundleRequireJs transform': {
+    'After loading the umd test case and running the flattenRequireJs transform': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/umd/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/umd/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .bundleRequireJs({type: 'Html'})
+                .flattenRequireJs({type: 'Html'})
                 .run(this.callback);
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
@@ -412,13 +412,13 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             });
         }
     },
-    'After loading the umd test case where the wrapper has a dependency in the define call, then running the bundleRequireJs transform': {
+    'After loading the umd test case where the wrapper has a dependency in the define call, then running the flattenRequireJs transform': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/umdWithDependency/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/umdWithDependency/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .bundleRequireJs({type: 'Html'})
+                .flattenRequireJs({type: 'Html'})
                 .run(this.callback);
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
@@ -443,13 +443,13 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             });
         }
     },
-    'After loading the non-umd test case and running the bundleRequireJs transform': {
+    'After loading the non-umd test case and running the flattenRequireJs transform': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/nonUmd/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/nonUmd/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .bundleRequireJs({type: 'Html'})
+                .flattenRequireJs({type: 'Html'})
                 .run(this.callback);
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
@@ -477,13 +477,13 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             });
         }
     },
-    'After loading a test case with multiple Html files depending on the same modules, then running the bundleRequireJs transform': {
+    'After loading a test case with multiple Html files depending on the same modules, then running the flattenRequireJs transform': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/multipleHtmls/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/multipleHtmls/'})
                 .registerRequireJsConfig()
                 .loadAssets('*.html')
                 .populate()
-                .bundleRequireJs({type: 'Html'})
+                .flattenRequireJs({type: 'Html'})
                 .run(this.callback);
         },
         'index1.html should have the expected HtmlScript relations': function (assetGraph) {
@@ -527,13 +527,13 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             });
         }
     },
-    'After loading a test case using the less! plugin, then running the bundleRequireJs transform': {
+    'After loading a test case using the less! plugin, then running the flattenRequireJs transform': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/lessPlugin/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/lessPlugin/'})
                 .registerRequireJsConfig()
                 .loadAssets('index*.html')
                 .populate()
-                .bundleRequireJs({type: 'Html'})
+                .flattenRequireJs({type: 'Html'})
                 .run(this.callback);
         },
         'index.html should have a HtmlStyle relations pointing at the Less assets': function (assetGraph) {
@@ -553,7 +553,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After running the registerRequireJsConfig transform, then loading a test case with shims config': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/shim/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/shim/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .run(this.callback);
@@ -571,9 +571,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
             'the graph should contain 2 JavaScriptShimRequire relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'JavaScriptShimRequire'}).length, 2);
             },
-            'then run the bundleRequireJs transform': {
+            'then run the flattenRequireJs transform': {
                 topic: function (assetGraph) {
-                    assetGraph.bundleRequireJs().run(this.callback);
+                    assetGraph.flattenRequireJs().run(this.callback);
                 },
                 'the resulting scripts should have the expected contents': function (assetGraph) {
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -610,7 +610,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading a test case with a non-string items in the require array': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/nonString/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/nonString/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -623,10 +623,10 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 assetGraph.root + 'something.js'
             ]);
         },
-        'then run the bundleRequireJs transform': {
+        'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
                 assetGraph
-                    .bundleRequireJs({type: 'Html'})
+                    .flattenRequireJs({type: 'Html'})
                     .run(this.callback);
             },
             'the graph should contain 5 JavaScript assets': function (assetGraph) {
@@ -636,7 +636,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading a test case with relative dependencies': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/relativeDependencies/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/relativeDependencies/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -651,10 +651,10 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 assetGraph.root + 'subdir/subsubdir/quux.js'
             ]);
         },
-        'then run the bundleRequireJs transform': {
+        'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
                 assetGraph
-                    .bundleRequireJs({type: 'Html'})
+                    .flattenRequireJs({type: 'Html'})
                     .run(this.callback);
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
@@ -691,7 +691,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading a test case with a relative dependencies once again': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/relativeDependencies/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/relativeDependencies/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -706,12 +706,12 @@ vows.describe('transforms.bundleRequireJs').addBatch({
                 assetGraph.root + 'subdir/subsubdir/quux.js'
             ]);
         },
-        'then move quux.js and run the bundleRequireJs transform': {
+        'then move quux.js and run the flattenRequireJs transform': {
             topic: function (assetGraph) {
                 var quuxJs = assetGraph.findAssets({url: /\/quux\.js/})[0];
                 quuxJs.url = quuxJs.url.replace(/subsubdir/, 'othersubdir');
                 assetGraph
-                    .bundleRequireJs({type: 'Html'})
+                    .flattenRequireJs({type: 'Html'})
                     .run(this.callback);
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
@@ -744,7 +744,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading a test case with a paths config that points jquery at a CDN': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/httpPath/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/httpPath/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -760,7 +760,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading a test case with a root-relative require alongside a non-root-relative require to the same file': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/rootRelative/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/rootRelative/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -769,9 +769,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 1 Text asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
         },
-        'then run the bundleRequireJs transform': {
+        'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRequireJs().run(this.callback);
+                assetGraph.flattenRequireJs().run(this.callback);
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -791,7 +791,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading a test case with a paths config that maps theLibrary to 3rdparty/theLibrary': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/paths/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/paths/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -800,9 +800,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
         },
-        'then run the bundleRequireJs transform': {
+        'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRequireJs().run(this.callback);
+                assetGraph.flattenRequireJs().run(this.callback);
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -841,7 +841,7 @@ vows.describe('transforms.bundleRequireJs').addBatch({
     },
     'After loading a test case with some document-relative dependencies': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/bundleRequireJs/documentRelativeDependencies/'})
+            new AssetGraph({root: __dirname + '/flattenRequireJs/documentRelativeDependencies/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -850,9 +850,9 @@ vows.describe('transforms.bundleRequireJs').addBatch({
         'the graph should contain 5 JavaScript loaded assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript', isLoaded: true}).length, 5);
         },
-        'then run the bundleRequireJs transform': {
+        'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRequireJs().run(this.callback);
+                assetGraph.flattenRequireJs().run(this.callback);
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});

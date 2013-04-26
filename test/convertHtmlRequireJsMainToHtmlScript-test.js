@@ -5,7 +5,7 @@ var vows = require('vows'),
     path = require('path'),
     AssetGraph = require('../lib/AssetGraph');
 
-vows.describe('transforms.bundleRequireJs').addBatch({
+vows.describe('transforms.flattenRequireJs').addBatch({
     'After loading the jquery-require-sample test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/convertHtmlRequireJsMainToHtmlScript/'})
