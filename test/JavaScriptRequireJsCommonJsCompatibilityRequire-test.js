@@ -23,6 +23,16 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
         },
         'the graph should contain over/the/rainbow/foo.js, and it should be loaded': function (assetGraph) {
             assert.equal(assetGraph.findAssets({url: /\/over\/the\/rainbow\/foo\.js$/, isLoaded: true}).length, 1);
+        },
+        'then run the flattenRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .flattenRequireJs({type: 'Html'})
+                    .run(this.callback);
+            },
+            'the Html asset should have an HtmlScript relation to an asset with the contents of over/the/rainbow/foo.js': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlScript', from: {type: 'Html'}, to: {text: /return 42/}}).length, 1);
+            }
         }
     }
 })['export'](module);
