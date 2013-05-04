@@ -1,0 +1,51 @@
+[[
+   "start",
+  ["meta.tag","<"],
+  ["meta.tag.tag-name","html"],
+  ["meta.tag.r",">"]
+],[
+   "start",
+  ["meta.tag","<"],
+  ["meta.tag.tag-name.script","script"],
+  ["text"," "],
+  ["entity.other.attribute-name","a"],
+  ["keyword.operator","="],
+  ["string","'a'"],
+  ["meta.tag.r",">"],
+  ["storage.type","var"],
+  ["meta.tag","</"],
+  ["meta.tag.tag-name.script","script"],
+  ["meta.tag.r",">"],
+  ["text","'123'"]
+],[
+   "tag_qqstring",
+  ["meta.tag","<"],
+  ["meta.tag.tag-name.anchor","a"],
+  ["text"," "],
+  ["entity.other.attribute-name","href"],
+  ["keyword.operator","="],
+  ["string","\"abc"]
+],[
+   "start",
+  ["string","  def\""],
+  ["meta.tag.r",">"]
+],[
+   "tag_qstring",
+  ["meta.tag","<"],
+  ["meta.tag.tag-name.anchor","a"],
+  ["text"," "],
+  ["entity.other.attribute-name","href"],
+  ["keyword.operator","="],
+  ["string","'abc"]
+],[
+   "start",
+  ["string","def\\'"],
+  ["meta.tag.r",">"]
+],[
+   "start"
+],[
+   "start",
+  ["meta.tag","</"],
+  ["meta.tag.tag-name","html"],
+  ["meta.tag.r",">"]
+]]

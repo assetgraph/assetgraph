@@ -50,5 +50,37 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                 }
             }
         }
+    },
+    'After loading a test case with the ACE editor': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptRequireJsCommonJsCompatibilityRequire/ace/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 76 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 76);
+        },
+        'the graph should contain 168 JavaScriptRequireJsCommonJsCompatibilityRequire relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptRequireJsCommonJsCompatibilityRequire'}).length, 168);
+        },
+        'the graph should contain 0 JavaScriptAmdDefine relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 0);
+        },
+        'then run the convertJavaScriptRequireJsCommonJsCompatibilityRequireToJavaScriptAmdDefine transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .convertJavaScriptRequireJsCommonJsCompatibilityRequireToJavaScriptAmdDefine()
+                    .run(this.callback);
+            },
+            'the graph should contain 168 JavaScriptAmdDefine relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 168);
+            },
+            'the graph should contain 0 JavaScriptRequireJsCommonJsCompatibilityRequire relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptRequireJsCommonJsCompatibilityRequire'}).length, 0);
+            }
+
+        }
     }
 })['export'](module);
