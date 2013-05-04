@@ -36,8 +36,8 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
             'the graph should contain one JavaScriptAmdDefine relation': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 1);
             },
-            'commonJsIsh should have "somewhere/foo" in its dependency array': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({text: /\[\"somewhere\/foo\"\]/}).length, 1);
+            'commonJsIsh should have "require", "exports", "module", and "somewhere/foo" in its dependency array': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({text: /\["require","exports","module","somewhere\/foo"\]/}).length, 1);
             },
             'then run flattenRequireJs': {
                 topic: function (assetGraph) {
