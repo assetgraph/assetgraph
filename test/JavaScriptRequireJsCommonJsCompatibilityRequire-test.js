@@ -4,9 +4,9 @@ var vows = require('vows'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
-    'After loading a test case': {
+    'After loading a test case that also has some common.js requires': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/JavaScriptRequireJsCommonJsCompatibilityRequire/'})
+            new AssetGraph({root: __dirname + '/JavaScriptRequireJsCommonJsCompatibilityRequire/withCommonJs/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -34,7 +34,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                     .run(this.callback);
             },
             'the graph should contain one JavaScriptAmdDefine relation': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, );
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 1);
             },
             'commonJsIsh should have "somewhere/foo" in its dependency array': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({text: /\[\"somewhere\/foo\"\]/}).length, 1);
