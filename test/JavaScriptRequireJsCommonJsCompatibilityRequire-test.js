@@ -27,10 +27,10 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
         'the graph should contain over/the/rainbow/foo.js, and it should be loaded': function (assetGraph) {
             assert.equal(assetGraph.findAssets({url: /\/over\/the\/rainbow\/foo\.js$/, isLoaded: true}).length, 1);
         },
-        'then run the convertJavaScriptRequireJsCommonJsCompatibilityRequireToJavaScriptAmdDefine transform': {
+        'then run the liftUpJavaScriptRequireJsCommonJsCompatibilityRequire transform': {
             topic: function (assetGraph) {
                 assetGraph
-                    .convertJavaScriptRequireJsCommonJsCompatibilityRequireToJavaScriptAmdDefine()
+                    .liftUpJavaScriptRequireJsCommonJsCompatibilityRequire()
                     .run(this.callback);
             },
             'the graph should contain one JavaScriptAmdDefine relation': function (assetGraph) {
@@ -68,19 +68,37 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
         'the graph should contain 0 JavaScriptAmdDefine relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 0);
         },
-        'then run the convertJavaScriptRequireJsCommonJsCompatibilityRequireToJavaScriptAmdDefine transform': {
+        'then run the liftUpJavaScriptRequireJsCommonJsCompatibilityRequire transform': {
             topic: function (assetGraph) {
                 assetGraph
-                    .convertJavaScriptRequireJsCommonJsCompatibilityRequireToJavaScriptAmdDefine()
+                    .liftUpJavaScriptRequireJsCommonJsCompatibilityRequire()
                     .run(this.callback);
             },
             'the graph should contain 168 JavaScriptAmdDefine relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 168);
             },
-            'the graph should contain 0 JavaScriptRequireJsCommonJsCompatibilityRequire relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptRequireJsCommonJsCompatibilityRequire'}).length, 0);
+            'the graph should still contain 168 JavaScriptRequireJsCommonJsCompatibilityRequire relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'JavaScriptRequireJsCommonJsCompatibilityRequire'}).length, 168);
+            },
+            'then run the flattenRequireJs transform and inline the JavaScriptGetText relations': {
+                topic: function (assetGraph) {
+                    assetGraph
+                        .flattenRequireJs()
+                        .inlineRelations({type: 'JavaScriptGetText'})
+                        .run(this.callback);
+                },
+                'executing all the scripts except the last one should result in no errors': function (assetGraph) {
+                    var vm = require('vm'),
+                        context = vm.createContext();
+                    assetGraph.findRelations({type: 'HtmlScript'}).forEach(function (relation) {
+                        var src = relation.to.text;
+                        if (/define\((["'])main\1/.test(src)) {
+                            return;
+                        }
+                        vm.runInContext(src, context, relation.to.url);
+                    });
+                }
             }
-
         }
     }
 })['export'](module);
