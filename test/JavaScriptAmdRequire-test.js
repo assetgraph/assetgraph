@@ -44,8 +44,8 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
         'the graph should contain 4 JavaScriptAmdRequire relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 4);
         },
-        'the graph should contain 2 JavaScriptAmdDefine relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 2);
+        'the graph should contain one JavaScriptAmdDefine relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 1);
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
@@ -163,6 +163,36 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                     assert.equal(assetGraph.findRelations({to: {url: /\/my\/renamedModule\.js$/}})[0].href, 'scripts/my/renamedModule.js');
                 }
             }
+        }
+    },
+    'After loading test case with a require() statement followed by a define(<string>, function () {})': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/alreadyFlattened/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+        },
+        'the graph should contain no JavaScriptAmdRequire relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 0);
+        }
+    },
+    'After loading test case with a require() statement followed by a define(<string>, function () {}) in a comma sequence': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/alreadyFlattenedSeq/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+        },
+        'the graph should contain no JavaScriptAmdRequire relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 0);
         }
     }
 })['export'](module);
