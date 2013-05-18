@@ -1,6 +1,7 @@
 .foo {
     background-image: url(foo.png);
     _background-image: url(foo.png);
+    content: url(foo.png);
 }
 
 .bar {
