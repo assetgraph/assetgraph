@@ -15,11 +15,11 @@ vows.describe('HtmlPictureSourceSrcSet test').addBatch({
         'the graph should contain 3 HtmlPictureSourceSrcSet relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlPictureSourceSrcSet'}, true).length, 3);
         },
-        'the graph should contain 3 ImageSrcSet asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'ImageSrcSet'}, true).length, 3);
+        'the graph should contain 3 SrcSet asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'SrcSet'}, true).length, 3);
         },
-        'the graph should contain 6 ImageSrcSetEntry relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'ImageSrcSetEntry'}, true).length, 6);
+        'the graph should contain 6 SrcSetEntry relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'SrcSetEntry'}, true).length, 6);
         },
         'the graph should contain 6 Jpeg assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Jpeg'}, true).length, 6);

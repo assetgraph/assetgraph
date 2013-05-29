@@ -2,7 +2,7 @@ var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph');
 
-vows.describe('HtmlImageSrcSet, ImageSrcSet, ImageSrcSetEntry').addBatch({
+vows.describe('HtmlImageSrcSet, SrcSet, SrcSetEntry').addBatch({
     'After loading test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/HtmlImageSrcSet/'})
@@ -19,11 +19,11 @@ vows.describe('HtmlImageSrcSet, ImageSrcSet, ImageSrcSetEntry').addBatch({
         'the graph should contain 1 HtmlImageSrcSet relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlImageSrcSet'}).length, 1);
         },
-        'the graph should contain 1 ImageSrcSet asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'ImageSrcSet'}).length, 1);
+        'the graph should contain 1 SrcSet asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'SrcSet'}).length, 1);
         },
-        'the graph should contain 3 ImageSrcSetEntry relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'ImageSrcSetEntry'}).length, 3);
+        'the graph should contain 3 SrcSetEntry relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'SrcSetEntry'}).length, 3);
         },
         'then update the url of banner-phone.jpeg': {
             topic: function (assetGraph) {
