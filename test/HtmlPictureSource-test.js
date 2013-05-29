@@ -14,7 +14,7 @@ vows.describe('HtmlPictureSource test').addBatch({
                 })
                 .run(this.callback);
         },
-        'the graph should contain 2 HtmlPictoureSource relations': function (assetGraph) {
+        'the graph should contain 2 HtmlPictureSource relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlPictureSource'}, true).length, 2);
         },
         'then change the url of the main Html document and set the hrefType of the relations to "relative"': {
