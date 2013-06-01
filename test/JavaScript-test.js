@@ -120,5 +120,31 @@ vows.describe('JavaScript').addBatch({
                 assert.isFalse(/Initial comment/.test(javaScripts[1].text));
             }
         }
+    },
+    'After loading a test case with conditional compilation (@cc_on)': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScript/'})
+                .loadAssets('conditionalCompilation.js')
+                .run(this.callback);
+        },
+        'then mark the JavaScript asset dirty': {
+            topic: function (assetGraph) {
+                assetGraph.findAssets({type: 'JavaScript'}).forEach(function (javaScript) {
+                    javaScript.markDirty();
+                });
+                return assetGraph;
+            },
+            'the @cc_on comment should still be in the serialization of the asset': function (assetGraph) {
+                assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /@cc_on/);
+            },
+            'then run the compressJavaScript transform': {
+                topic: function (assetGraph) {
+                    assetGraph.compressJavaScript().run(this.callback);
+                },
+                'the @cc_on comment should still be in the serialization of the asset': function (assetGraph) {
+                    assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /@cc_on/);
+                }
+            }
+        }
     }
 })['export'](module);
