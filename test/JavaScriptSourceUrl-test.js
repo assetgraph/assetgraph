@@ -38,5 +38,21 @@ vows.describe('JavaScriptSourceUrl').addBatch({
                 }
             }
         }
+    },
+    'After loading a test case with two JavaScript assets, then running the addJavaScriptSourceUrl transform': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptSourceUrl/bundleRelations/'})
+                .loadAssets('index.html')
+                .populate()
+                .addJavaScriptSourceUrl()
+                .run(this.callback);
+        },
+        'the graph should contain 2 JavaScriptSourceUrl relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptSourceUrl'}).length, 2);
+        },
+        'the serialized JavaScript assets should contain the @sourceURL directive': function (assetGraph) {
+            assert.matches(assetGraph.findAssets({url: /\/foo\.js$/})[0].text, /@\s*sourceURL=foo\.js/);
+            assert.matches(assetGraph.findAssets({url: /\/bar\.js$/})[0].text, /@\s*sourceURL=bar\.js/);
+        }
     }
 })['export'](module);
