@@ -121,6 +121,28 @@ vows.describe('JavaScript').addBatch({
             }
         }
     },
+    'After loading test case with a JavaScript asset that has comments right before EOF, then marking it as dirty': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScript/'})
+                .loadAssets('commentsBeforeEof.js')
+                .populate()
+                .queue(function (assetGraph) {
+                    assetGraph.findAssets({type: 'JavaScript'})[0].markDirty();
+                })
+                .run(this.callback);
+        },
+        'the reserialized JavaScript asset should still contain @preserve comment before eof, but not the quux one': function (assetGraph) {
+            var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
+            assert.matches(javaScript.text, /@preserve/);
+            assert.isFalse(/quux/.test(javaScript.text));
+        },
+        'the reserialized JavaScript asset should contain both the @preserve and the quux comment when pretty printed': function (assetGraph) {
+            var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
+            javaScript.prettyPrint();
+            assert.matches(javaScript.text, /@preserve/);
+            assert.matches(javaScript.text, /quux/);
+        }
+    },
     'After loading a test case with conditional compilation (@cc_on)': {
         topic: function () {
             new AssetGraph({root: __dirname + '/JavaScript/'})
