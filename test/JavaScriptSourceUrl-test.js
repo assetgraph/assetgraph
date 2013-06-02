@@ -53,6 +53,20 @@ vows.describe('JavaScriptSourceUrl').addBatch({
         'the serialized JavaScript assets should contain the @sourceURL directive': function (assetGraph) {
             assert.matches(assetGraph.findAssets({url: /\/foo\.js$/})[0].text, /@\s*sourceURL=foo\.js/);
             assert.matches(assetGraph.findAssets({url: /\/bar\.js$/})[0].text, /@\s*sourceURL=bar\.js/);
+        },
+        'then run the bundleRelations transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .bundleRelations({type: 'HtmlScript'})
+                    .run(this.callback);
+            },
+            'the graph should contain 3 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+            },
+            'the serialized bundle should contain both @sourceURL directives': function (assetGraph) {
+                assert.matches(assetGraph.findAssets({type: 'JavaScript'}).pop().text,
+                               /\/\/\s*@\ssourceURL=foo\.js[\s\S]*\/\/\s*@\s*sourceURL=bar\.js/);
+            }
         }
     }
 })['export'](module);
