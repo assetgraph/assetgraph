@@ -51,8 +51,8 @@ vows.describe('JavaScriptSourceUrl').addBatch({
             assert.equal(assetGraph.findRelations({type: 'JavaScriptSourceUrl'}).length, 2);
         },
         'the serialized JavaScript assets should contain the @sourceURL directive': function (assetGraph) {
-            assert.matches(assetGraph.findAssets({url: /\/foo\.js$/})[0].text, /@\s*sourceURL=foo\.js/);
-            assert.matches(assetGraph.findAssets({url: /\/bar\.js$/})[0].text, /@\s*sourceURL=bar\.js/);
+            assert.matches(assetGraph.findAssets({url: /\/foo\.js$/})[0].text, /@\s*sourceURL=\/foo\.js/);
+            assert.matches(assetGraph.findAssets({url: /\/bar\.js$/})[0].text, /@\s*sourceURL=\/bar\.js/);
         },
         'then run the bundleRelations transform': {
             topic: function (assetGraph) {
@@ -65,7 +65,7 @@ vows.describe('JavaScriptSourceUrl').addBatch({
             },
             'the serialized bundle should contain both @sourceURL directives': function (assetGraph) {
                 assert.matches(assetGraph.findAssets({type: 'JavaScript'}).pop().text,
-                               /\/\/\s*@\ssourceURL=foo\.js[\s\S]*\/\/\s*@\s*sourceURL=bar\.js/);
+                               /\/\/\s*@\ssourceURL=\/foo\.js[\s\S]*\/\/\s*@\s*sourceURL=\/bar\.js/);
             }
         }
     }
