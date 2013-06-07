@@ -31,7 +31,7 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
         'then bundling the HtmlStyles': {
             topic: function (assetGraph) {
                 assetGraph
-                    .bundleRelations({type: 'HtmlStyle'}, 'sharedBundles')
+                    .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'sharedBundles'})
                     .run(this.callback);
             },
             'the number of HtmlStyles should be down to one': function (assetGraph) {
@@ -65,7 +65,7 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
         },
         'then bundling the Css assets': {
             topic: function (assetGraph) {
-                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'sharedBundles').run(this.callback);
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'sharedBundles'}).run(this.callback);
             },
             'the graph should contain 4 Css assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 4);
@@ -104,7 +104,7 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
         },
         'then bundling the HtmlStyles': {
             topic: function (assetGraph) {
-                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'sharedBundles').run(this.callback);
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'sharedBundles'}).run(this.callback);
             },
             'the graph should contain 3 HtmlStyle relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 3);
@@ -149,7 +149,7 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
         },
         'then run the bundleRelations transform': {
             topic: function (assetGraph) {
-                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'sharedBundles').run(this.callback);
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'sharedBundles'}).run(this.callback);
             },
             'the graph should contain 5 Css assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 5);
@@ -194,7 +194,7 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
             new AssetGraph({root: __dirname + '/bundleRelations/externalHtmlStyleFollowedByInlineStyle/'})
                 .loadAssets('*.html')
                 .populate()
-                .bundleRelations({type: ['HtmlStyle']}, 'sharedBundles')
+                .bundleRelations({type: ['HtmlStyle']}, {strategyName: 'sharedBundles'})
                 .run(this.callback);
         },
         'the graph should contain 3 Css assets': function (assetGraph) {
@@ -213,7 +213,7 @@ vows.describe('Bundle stylesheets, sharedBundles strategy').addBatch({
             new AssetGraph({root: __dirname + '/bundleRelations/duplicateScript/'})
                 .loadAssets('index.html')
                 .populate()
-                .bundleRelations({type: ['HtmlScript'], to: {isLoaded: true}}, 'sharedBundles')
+                .bundleRelations({type: ['HtmlScript'], to: {isLoaded: true}}, {strategyName: 'sharedBundles'})
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {

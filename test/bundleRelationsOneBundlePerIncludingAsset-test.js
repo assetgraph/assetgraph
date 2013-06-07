@@ -30,7 +30,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'then bundling the HtmlStyles': {
             topic: function (assetGraph) {
-                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'}).run(this.callback);
             },
             'the number of HtmlStyles should be down to one': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 1);
@@ -63,7 +63,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'then bundling the HtmlStyle relations': {
             topic: function (assetGraph) {
-                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'}).run(this.callback);
             },
             'the graph should contain 2 Css assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
@@ -101,7 +101,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'then bundling the HtmlStyle relations': {
             topic: function (assetGraph) {
-                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'}).run(this.callback);
             },
             'the graph should contain 3 HtmlStyle relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 3);
@@ -146,7 +146,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'then bundling the HtmlStyle relations': {
             topic: function (assetGraph) {
-                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'}).run(this.callback);
             },
             'the graph should contain 3 HtmlStyle relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 3);
@@ -189,7 +189,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'then bundle the HtmlStyle relations': {
             topic: function (assetGraph) {
-                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'}).run(this.callback);
             },
             'the graph should contain 5 Css assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 5);
@@ -247,7 +247,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'then bundle the HtmlScript relations that do not have a nobundle attribute': {
             topic: function (assetGraph) {
-                assetGraph.bundleRelations({type: 'HtmlScript', node: function (node) {return !node.hasAttribute('nobundle');}}, 'oneBundlePerIncludingAsset').run(this.callback);
+                assetGraph.bundleRelations({type: 'HtmlScript', node: function (node) {return !node.hasAttribute('nobundle');}}, {strategyName: 'oneBundlePerIncludingAsset'}).run(this.callback);
             },
             'the graph contains 4 JavaScript assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
@@ -269,7 +269,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
             new AssetGraph({root: __dirname + '/bundleRelations/copyrightNotices/'})
                 .loadAssets('index.html')
                 .populate()
-                .bundleRelations({type: 'HtmlScript'}, 'oneBundlePerIncludingAsset')
+                .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
                 .run(this.callback);
         },
         'the bundled JavaScript should contain the copyright notices from both a.js and c.js at the top': function (assetGraph) {
@@ -291,7 +291,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         },
         'then bundling the HtmlStyle relations': {
             topic: function (assetGraph) {
-                assetGraph.bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset').run(this.callback);
+                assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'}).run(this.callback);
             },
             'the graph should contain 3 HtmlStyle relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 3);
@@ -326,7 +326,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
             new AssetGraph({root: __dirname + '/bundleRelations/importRules/'})
                 .loadAssets('index.html')
                 .populate()
-                .bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset')
+                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'})
                 .run(this.callback);
         },
         'the bundled Css should have the @import rules at the top': function (assetGraph) {
@@ -350,7 +350,7 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
             new AssetGraph({root: __dirname + '/bundleRelations/rootRelative/'})
                 .loadAssets('index.html')
                 .populate()
-                .bundleRelations({type: 'HtmlStyle'}, 'oneBundlePerIncludingAsset')
+                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'})
                 .run(this.callback);
         },
         'the relation pointing at the bundled asset should have an hrefType of "rootRelative"': function (assetGraph) {
