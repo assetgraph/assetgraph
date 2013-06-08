@@ -10,11 +10,11 @@ vows.describe('JavaScriptSourceUrl').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 3);
+        'the graph should contain 4 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 4);
         },
-        'the graph should contain 1 JavaScript asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
+        'the graph should contain 2 JavaScript asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
@@ -24,6 +24,12 @@ vows.describe('JavaScriptSourceUrl').addBatch({
         },
         'the graph should contain 1 JavaScriptSourceMappingUrl relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptSourceMappingUrl'}).length, 1);
+        },
+        'the graph should contain 1 SourceMapFile relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'SourceMapFile'}).length, 1);
+        },
+        'the graph should contain 1 SourceMapSource relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'SourceMapSource'}).length, 1);
         },
         'then change the url of the JavaScript asset': {
             topic: function (assetGraph) {
