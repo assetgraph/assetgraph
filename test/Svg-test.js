@@ -10,8 +10,8 @@ vows.describe('Svg').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 9 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 9);
+        'the graph should contain 10 loaded assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 10);
         },
         'the graph should contain one Html asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
@@ -24,6 +24,9 @@ vows.describe('Svg').addBatch({
         },
         'the graph should contain 2 Png assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 2);
+        },
+        'the graph should contain one Xslt asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Xslt'}).length, 1);
         },
         'the graph should contain one SvgImage relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'SvgImage'}).length, 1);
@@ -42,6 +45,9 @@ vows.describe('Svg').addBatch({
         },
         'the graph should contain one SvgFontFaceUri relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'SvgFontFaceUri'}).length, 1);
+        },
+        'the graph should contain one XmlStylesheet relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'XmlStylesheet'}).length, 1);
         }
     }
 })['export'](module);
