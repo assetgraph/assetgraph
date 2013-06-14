@@ -11,6 +11,6 @@
     </font-face>
     <style xlink:href="external.css" />
     <script type="text/javascript" xlink:href="script.js" />
-    <image x="2cm" y="2cm" width="5cm" height="5cm" id="img" xlink:href="foo.png"></image>
+    <image onclick="alert('hey')" x="2cm" y="2cm" width="5cm" height="5cm" id="img" xlink:href="foo.png"></image>
     <rect x="200" y="100" width="600" height="300" fill="red" stroke="blue" stroke-width="3" style="background-image: url(bar.png);"/>
 </svg>

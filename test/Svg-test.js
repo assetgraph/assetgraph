@@ -10,8 +10,8 @@ vows.describe('Svg').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 10 loaded assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 10);
+        'the graph should contain 11 loaded assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 11);
         },
         'the graph should contain one Html asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
@@ -19,8 +19,8 @@ vows.describe('Svg').addBatch({
         'the graph should contain one Svg asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Svg'}).length, 1);
         },
-        'the graph should contain one JavaScript asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
+        'the graph should contain 2 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
         },
         'the graph should contain 2 Png assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Png'}).length, 2);
@@ -48,6 +48,9 @@ vows.describe('Svg').addBatch({
         },
         'the graph should contain one XmlStylesheet relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'XmlStylesheet'}).length, 1);
+        },
+        'the graph should contain one SvgInlineEventHandler relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'SvgInlineEventHandler'}).length, 1);
         }
     }
 })['export'](module);
