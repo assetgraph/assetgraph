@@ -10,8 +10,8 @@ vows.describe('Svg').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 6 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 6);
+        'the graph should contain 8 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 8);
         },
         'the graph should contain one Html asset': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
@@ -36,6 +36,9 @@ vows.describe('Svg').addBatch({
         },
         'the graph should contain one CssImage relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 1);
+        },
+        'the graph should contain 2 SvgStyle relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'SvgStyle'}).length, 2);
         }
     }
 })['export'](module);
