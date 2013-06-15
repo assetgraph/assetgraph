@@ -51,6 +51,9 @@ vows.describe('Svg').addBatch({
         },
         'the graph should contain one SvgInlineEventHandler relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'SvgInlineEventHandler'}).length, 1);
+        },
+        'the graph should contain one SvgAnchor relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'SvgAnchor'}).length, 1);
         }
     }
 })['export'](module);
