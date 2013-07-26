@@ -25,6 +25,14 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
             'the graph should contain 7 Css assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 7);
             },
+            'the ?inline=false parameter should be removed from smallImagesWithInlineFalse.css': function (assetGraph) {
+                var inlineOccurrences = assetGraph.findAssets({url: /\/smallImagesWithInlineFalse\.css$/})[0].text.match(/inline=false/g);
+                assert.equal(inlineOccurrences.length, 0);
+            },
+            'the ?inline parameter should be removed from imageGreaterThan32KBWithInlineParameter.css': function (assetGraph) {
+                var inlineOccurrences = assetGraph.findAssets({url: /\/imageGreaterThan32KBWithInlineParameter\.css$/})[0].text.match(/inline/g);
+                assert.equal(inlineOccurrences.length, 0);
+            },
             'the graph should contain 7 HtmlConditionalComment relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlConditionalComment'}).length, 7);
             },
