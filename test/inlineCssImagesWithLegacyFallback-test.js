@@ -27,11 +27,11 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
             },
             'the ?inline=false parameter should be removed from smallImagesWithInlineFalse.css': function (assetGraph) {
                 var inlineOccurrences = assetGraph.findAssets({url: /\/smallImagesWithInlineFalse\.css$/})[0].text.match(/inline=false/g);
-                assert.equal(inlineOccurrences.length, 0);
+                assert.isNull(inlineOccurrences);
             },
             'the ?inline parameter should be removed from imageGreaterThan32KBWithInlineParameter.css': function (assetGraph) {
                 var inlineOccurrences = assetGraph.findAssets({url: /\/imageGreaterThan32KBWithInlineParameter\.css$/})[0].text.match(/inline/g);
-                assert.equal(inlineOccurrences.length, 0);
+                assert.isNull(inlineOccurrences);
             },
             'the graph should contain 7 HtmlConditionalComment relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlConditionalComment'}).length, 7);
