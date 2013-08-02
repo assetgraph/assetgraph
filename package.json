@@ -50,7 +50,6 @@
     },
     "main": "lib/index.js",
     "scripts": {
-        "pretest": "npm install",
         "test": "vows",
         "prepublish": "npm test"
     }
