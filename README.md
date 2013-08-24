@@ -1,3 +1,7 @@
+[![NPM version](https://badge.fury.io/js/assetgraph.png)](http://badge.fury.io/js/assetgraph)
+[![Build Status](https://travis-ci.org/Munter/assetgraph.png?branch=master)](https://travis-ci.org/Munter/assetgraph)
+[![Dependency Status](https://david-dm.org/Munter/assetgraph.png)](https://david-dm.org/Munter/assetgraph)
+
 AssetGraph
 ==========
 
