@@ -787,7 +787,7 @@ Example:
 
 ```javascript
 new AssetGraph()
-    .addAssets('a.html')
+    .loadAssets('a.html')
     .populate({
         followRelations: {type: 'HtmlAnchor', to: {url: /\/[bc]\.html$/}}
     })
