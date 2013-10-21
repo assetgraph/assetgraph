@@ -9,7 +9,7 @@ var vows = require('vows'),
 
 function toAst(functionOrAst) {
     if (typeof functionOrAst === 'function') {
-        return uglifyJs.parse(functionOrAst.toString().replace(/^function[^\(]*?\(\)\s*\{|}$/g, ''));
+        return uglifyJs.parse(functionOrAst.toString().replace(/^function[^\(]*?\(\)\s*\{|\}$/g, ''));
     } else {
         return functionOrAst;
     }
@@ -847,7 +847,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 5 JavaScript loaded assets': function (assetGraph) {
+        'the graph should contain 5 loaded JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript', isLoaded: true}).length, 5);
         },
         'then run the flattenRequireJs transform': {
@@ -878,6 +878,34 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                         alert('got ' + thingAtTheRoot + ', ' + anotherThingAtTheRoot + ', and ' + thingInScripts);
                     });
                     define('main', function () {});
+                });
+            }
+        }
+    },
+    'After loading a test case with a data-main that only contains a define (#127)': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/flattenRequireJs/issue127/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+        },
+        'then run the flattenRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph.flattenRequireJs().run(this.callback);
+            },
+            'the JavaScript should have the expected contents': function (assetGraph) {
+                var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
+                assert.equal(htmlScripts.length, 2);
+                assert.equal(htmlScripts[0].href, 'require.js');
+                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                    define('main', function () {
+                        alert('It gets lonely in here if nobody runs me');
+                    });
+                    require('main');
                 });
             }
         }
