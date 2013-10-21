@@ -29,13 +29,13 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                 assetGraph.__warnings = [];
 
                 assetGraph
-                    .on('warn', function (err) {
+                    .on('info', function (err) {
                         assetGraph.__warnings.push(err);
                     })
                     .splitCssIfIeLimitIsReached()
                     .run(this.callback);
             },
-            'the graph should have 1 emitted warning': function (assetGraph) {
+            'the graph should have 1 emitted info': function (assetGraph) {
                 assert.equal(assetGraph.__warnings.length, 1);
             },
             'the graph should contain 2 Css asset': function (assetGraph) {
