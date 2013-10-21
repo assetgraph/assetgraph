@@ -46,6 +46,7 @@
         "registry": "http://registry.npmjs.org/"
     },
     "main": "lib/AssetGraph.js",
+    "tag": "v1.5",
     "scripts": {
         "test": "vows",
         "prepublish": "npm test"
