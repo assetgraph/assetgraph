@@ -75,5 +75,32 @@ vows.describe('flattenStaticIncludes transform').addBatch({
                                 ]);
             }
         }
+    },
+    'After loading a test case with .less and .css assets being INCLUDEd': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/flattenStaticIncludes/lessAndCss/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 Css assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
+        },
+        'the graph should contain one Less assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Less'}).length, 1);
+        },
+        'then run the flattenStaticIncludes transform on the Html asset': {
+            topic: function (assetGraph) {
+                assetGraph.flattenStaticIncludes({type: 'Html'}).run(this.callback);
+            },
+            'the injected <link> tags should be in the right order': function (assetGraph) {
+                assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'),
+                                [
+                                    'a.css',
+                                    'b.less',
+                                    'c.css'
+                                ]);
+            }
+        }
     }
 })['export'](module);
