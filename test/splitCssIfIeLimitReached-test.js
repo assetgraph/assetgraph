@@ -72,7 +72,9 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
             }).join('');
         },
         'the Css asset should contain 6290 rules': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({ type: 'Css' })[0].parseTree.cssRules.length, 6290);
+            var rules = assetGraph.findAssets({ type: 'Css' })[0].parseTree.cssRules.length;
+            assetGraph.__rules = rules;
+            assert.equal(rules, 6290);
         },
         'then running the splitCssIfIeLimitIsReached transform': {
             topic: function (assetGraph) {
@@ -92,9 +94,18 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 3);
             },
             'each Css asset should be smaller than the original': function (assetGraph) {
-                assetGraph.findAssets({type: 'Css'}).forEach(function (cssAsset) {
+                var cssAssets = assetGraph.findAssets({type: 'Css'}),
+                    rules = [2806, 2398, 1086],
+                    sum = 0;
+
+                cssAssets.forEach(function (cssAsset, idx) {
+                    var assetRules = cssAsset.parseTree.cssRules.length;
                     assert(cssAsset.text.length < cssText.length);
+                    assert.equal(assetRules, rules[idx]);
+                    sum += assetRules;
                 });
+
+                assert.equal(sum, assetGraph.__rules);
             },
             'the concatenated css text content should be unchanged from before': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).map(function (cssAsset) {
