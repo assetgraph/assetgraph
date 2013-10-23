@@ -60,7 +60,7 @@ vows.describe('Asset test').addBatch({
     'Instantiate an Html asset with an extensionless url': {
         topic: function () {
             return new AssetGraph.Html({
-                text: 'foo',
+                text: 'æøå',
                 url: 'http://example.com/index'
             });
         },
@@ -69,6 +69,9 @@ vows.describe('Asset test').addBatch({
         },
         'the file name should be "index"': function (htmlAsset) {
             assert.equal(htmlAsset.fileName, 'index');
+        },
+        'the asset should have a lastKnownByteLength of 6': function (htmlAsset) {
+            assert.equal(htmlAsset.lastKnownByteLength, 6);
         },
         'then set the fileName property to "thething.foo"': {
             topic: function (htmlAsset) {
@@ -83,15 +86,27 @@ vows.describe('Asset test').addBatch({
             },
             'the url property should be updated': function (htmlAsset) {
                 assert.equal(htmlAsset.url, 'http://example.com/thething.foo');
+            },
+            'then unload the asset': {
+                topic: function (htmlAsset) {
+                    htmlAsset.unload();
+                    return htmlAsset;
+                },
+                'the asset should still have a lastKnownByteLength of 6': function (htmlAsset) {
+                    assert.equal(htmlAsset.lastKnownByteLength, 6);
+                }
             }
         }
     },
     'Instantiate an Html asset with an url that has an extension': {
         topic: function () {
             return new AssetGraph.Html({
-                text: 'foo',
+                rawSrc: new Buffer([0xc3, 0xa6, 0xc3, 0xb8, 0xc3, 0xa5]),
                 url: 'http://example.com/index.blah'
             });
+        },
+        'the asset should have a lastKnownByteLength of 6': function (htmlAsset) {
+            assert.equal(htmlAsset.lastKnownByteLength, 6);
         },
         'the extension property should return the right value': function (htmlAsset) {
             assert.equal(htmlAsset.extension, '.blah');
@@ -112,6 +127,15 @@ vows.describe('Asset test').addBatch({
             },
             'the url property should be updated': function (htmlAsset) {
                 assert.equal(htmlAsset.url, 'http://example.com/index.blerg');
+            },
+            'then update the rawSrc of the asset': {
+                topic: function (htmlAsset) {
+                    htmlAsset.rawSrc = new Buffer('foo', 'utf-8');
+                    return htmlAsset;
+                },
+                'the asset should have a lastKnownByteLength of 3': function (htmlAsset) {
+                    assert.equal(htmlAsset.lastKnownByteLength, 3);
+                }
             }
         }
     },
