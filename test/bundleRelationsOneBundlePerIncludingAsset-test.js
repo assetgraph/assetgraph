@@ -38,6 +38,9 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
             'there should be a single Css': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
             },
+            'the bundle should have a _lastKnownByteLength property': function (assetGraph) {
+                assert.isNumber(assetGraph.findAssets({type: 'Css'})[0]._lastKnownByteLength);
+            },
             'all CssImage relations should be attached to the bundle': function (assetGraph) {
                 var cssBackgroundImages = assetGraph.findRelations({type: 'CssImage'}),
                     bundle = assetGraph.findAssets({type: 'Css'})[0];
