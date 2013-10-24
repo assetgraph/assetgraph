@@ -69,6 +69,18 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
             assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
         }
     },
+    'After loading test case with the require.js config in an IIFE in a script': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/iife/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 3 loaded JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript', isLoaded: true}).length, 3);
+        }
+    },
     'After loading test case with require.js, a baseUrl and a paths setting': {
         topic: function () {
             new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withPathsAndBaseUrl/'})

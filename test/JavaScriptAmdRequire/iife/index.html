@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+    <!-- One of the examples from http://requirejs.org/docs/api.html#packages -->
+    <script type="text/javascript" src="require.js"></script>
+    <script type="text/javascript">
+        (function () {
+            require.config({
+                paths: {
+                    "some/more/specific": "someMoreSpecificMapping"
+                }
+            });
+        }());
+        require(["some/more/specific/thing"],
+            function(thing) {
+                alert("got it!");
+            }
+        );
+    </script>
+</body>
+</html>
