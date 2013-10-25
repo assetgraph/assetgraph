@@ -60,6 +60,9 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                 .loadAssets('falcon.html')
                 .populate()
                 .minifyAssets({ type: 'Css', isLoaded: true})
+                .mergeIdenticalAssets({
+                    isLoaded: true
+                })
                 .run(this.callback);
         },
         'the graph should contain 1 Css asset': function (assetGraph) {
@@ -75,6 +78,18 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
             var rules = assetGraph.findAssets({ type: 'Css' })[0].parseTree.cssRules.length;
             assetGraph.__rules = rules;
             assert.equal(rules, 6290);
+        },
+        'the graph should have 1 of each of asset types "png", "gif", "svg", "ttf", "eot", "woff"': function (assetGraph) {
+            ['png', 'gif', 'svg', 'ttf', 'eot', 'woff'].forEach(function (extension) {
+                assert.equal(assetGraph.findAssets({
+                    url: new RegExp('\\.' + extension + '(?:$|#)')
+                }).length, 1);
+            });
+        },
+        'the graph should contain 6 files named fake.*': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({
+                url: /fake\./
+            }).length, 6);
         },
         'then running the splitCssIfIeLimitIsReached transform': {
             topic: function (assetGraph) {
@@ -111,6 +126,18 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                 assert.equal(assetGraph.findAssets({type: 'Css'}).map(function (cssAsset) {
                         return cssAsset.text;
                     }).join(''), cssText);
+            },
+            'the graph should have 1 of each of asset types "png", "gif", "svg", "ttf", "eot", "woff"': function (assetGraph) {
+                ['png', 'gif', 'svg', 'ttf', 'eot', 'woff'].forEach(function (extension) {
+                    assert.equal(assetGraph.findAssets({
+                        url: new RegExp('\\.' + extension + '(?:$|#)')
+                    }).length, 1);
+                });
+            },
+            'the graph should no longer contain any files named fake.*': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({
+                    url: /fake\./
+                }).length, 0);
             }
         }
     }
