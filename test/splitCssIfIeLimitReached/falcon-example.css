@@ -6525,7 +6525,7 @@ body .container-fluid>article h2 {
 .maxus-label .falcon-blocker-logo {
     width: 176px;
     height: 35px;
-    background: url('http: //s3.amazonaws.com/mingler.falcon.whitelabel_logos/maxuslogo.png') no-repeat
+    background: url('fake.png') no-repeat
 }
 
 .component-autosuggest {
