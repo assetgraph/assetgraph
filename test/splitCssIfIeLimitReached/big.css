@@ -4093,4 +4093,4 @@
 .class-4092 { background: red; -moz4092-fake-property: "foo"; }
 .class-4093 { background: red; -moz4093-fake-property: "foo"; }
 .class-4094 { background: red; -moz4094-fake-property: "foo"; }
-body { background: green; }
+body { background: url(fake.png); }
