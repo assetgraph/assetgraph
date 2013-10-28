@@ -157,7 +157,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
             },
             'each Css asset should be smaller than the original': function (assetGraph) {
                 var cssAssets = assetGraph.findAssets({type: 'Css'}),
-                    rules = [2806, 2398, 1086],
+                    rules = [2806, 2399, 1085],
                     sum = 0;
 
                 cssAssets.forEach(function (cssAsset, idx) {
