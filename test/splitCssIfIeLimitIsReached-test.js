@@ -1,6 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib/AssetGraph'),
+    _ = require('underscore'),
     cssText = '';
 
 vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
@@ -183,6 +184,51 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                         url: new RegExp('\\.' + extension + '(?:$|#)')
                     }).length, 1);
                 });
+            }
+        }
+    },
+    'After loading a test case with an inline stylesheet': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
+                .loadAssets('inline.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 2);
+        },
+        'the graph should contain one Html asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+        },
+        'the graph should contain one Css asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+        },
+        'then running the splitCssIfIeLimitIsReached transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .splitCssIfIeLimitIsReached({}, {rulesPerStylesheetLimit: 2})
+                    .run(this.callback);
+            },
+            'the graph should contain 3 inline Css assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Css', isInline: true}).length, 3);
+            },
+            'the graph should contain 3 HtmlStyle relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 3);
+            },
+            'the Css assets should have the expected contents': function (assetGraph) {
+                assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'Css'}), 'text'),
+                    [
+                        '.a {color: #aaa;}.b {color: #bbb;}',
+                        '.c {color: #ccc;}.d {color: #ddd;}',
+                        '.e {color: #eee;}'
+                    ]
+                );
+            },
+            'the Html asset should contain 3 inline stylesheets': function (assetGraph) {
+                var htmlAsset = assetGraph.findAssets({type: 'Html'})[0],
+                    matchInlineStylesheets = htmlAsset.text.match(/<style type="text\/css">/g);
+                assert.ok(matchInlineStylesheets);
+                assert.equal(matchInlineStylesheets.length, 3);
             }
         }
     }
