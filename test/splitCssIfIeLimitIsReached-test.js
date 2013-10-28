@@ -6,7 +6,7 @@ var vows = require('vows'),
 vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
     'After loading a simple Css test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/splitCssIfIeLimitReached/'})
+            new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
 /*
                 // debug
                 .on('addAsset', function (asset) {
@@ -95,7 +95,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
 
     'After loading a real life huge Css test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/splitCssIfIeLimitReached/'})
+            new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
                 .loadAssets('falcon.html')
                 .populate()
                 .minifyAssets({ type: 'Css', isLoaded: true})
