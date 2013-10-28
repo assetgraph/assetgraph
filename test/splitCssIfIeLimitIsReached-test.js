@@ -231,5 +231,51 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                 assert.equal(matchInlineStylesheets.length, 3);
             }
         }
+    },
+    'After loading a test case with an inline that has rules in media queries': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
+                .loadAssets('inlineWithMedia.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 2);
+        },
+        'the graph should contain one Html asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+        },
+        'the graph should contain one Css asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+        },
+        'then running the splitCssIfIeLimitIsReached transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .splitCssIfIeLimitIsReached({}, {rulesPerStylesheetLimit: 3})
+                    .run(this.callback);
+            },
+            'the graph should contain 4 inline Css assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'Css', isInline: true}).length, 4);
+            },
+            'the graph should contain 4 HtmlStyle relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 4);
+            },
+            'the Css assets should have the expected contents': function (assetGraph) {
+                assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'Css'}), 'text'),
+                    [
+                        '@media screen {.a, .quux, .baz {color: #aaa;}}',
+                        '.b {color: #bbb;}.c {color: #ccc;}',
+                        '@media print {.d {color: #ddd;}.e {color: #eee;}.f {color: #fff;}}',
+                        '.hey {color: #000;}.there {color: #fff;}'
+                    ]
+                );
+            },
+            'the Html asset should contain 4 inline stylesheets': function (assetGraph) {
+                var htmlAsset = assetGraph.findAssets({type: 'Html'})[0],
+                    matchInlineStylesheets = htmlAsset.text.match(/<style type="text\/css">/g);
+                assert.ok(matchInlineStylesheets);
+                assert.equal(matchInlineStylesheets.length, 4);
+            }
+        }
     }
 })['export'](module);
