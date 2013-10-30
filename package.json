@@ -19,7 +19,7 @@
     "httperrors": "=0.2.0",
     "jsdom": "=0.8.8",
     "optimist": "=0.3.1",
-    "passerror": "=0.0.1",
+    "passerror": "=1.0.0",
     "request": "=2.9.153",
     "seq": "=0.3.5",
     "source-map": "=0.1.19",
