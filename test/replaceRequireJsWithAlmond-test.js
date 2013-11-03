@@ -126,11 +126,17 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 .loadAssets('require-almond-external.html')
                 .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
                 .assumeRequireJsConfigHasBeenFound()
-                .populate()
+                .populate({
+                    followRelations: {
+                        to: {
+                            url: /^file:/
+                        }
+                    }
+                })
                 .run(this.callback);
         },
-        'the graph should contain 6 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 6);
+        'the graph should contain 4 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
         },
         'the graph should contain 2 HtmlScript relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
@@ -152,8 +158,8 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                     .run(this.callback);
             },
 
-            'the graph should contain 5 JavaScript assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+            'the graph should contain 3 JavaScript assets': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
             },
             'the graph should contain 2 HtmlScript relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
@@ -169,8 +175,8 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
             },
             'the graph should have emitted 1 warning from the replaceRequireJsWithAlmond transform': function (assetGraph) {
                 assert.equal(assetGraph._vowsEmitedEvents.warn.filter(function (warn) {
-                    return warn.transform === 'replaceRequireJsWithAlmond';
-                }), 4);
+                    return warn[0].transform === 'replaceRequireJsWithAlmond';
+                }).length, 1);
             }
         }
     }
