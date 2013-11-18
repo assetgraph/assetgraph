@@ -50,6 +50,7 @@
   "main": "lib/AssetGraph.js",
   "scripts": {
     "test": "vows",
+    "travis": "vows --spec",
     "prepublish": "npm test"
   }
 }
