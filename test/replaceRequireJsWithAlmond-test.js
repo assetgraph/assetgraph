@@ -97,14 +97,14 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 0);
             },
             'the first JavaScript assets text should be equal to almond.js': function (assetGraph) {
-                var relation = assetGraph.findRelations({type: 'HtmlScript'})[0],
-                    text = relation && relation.to.text;
+                var asset = assetGraph.findAssets({url: /almond.js$/})[0],
+                    text = asset && asset.text;
 
                 assert.equal(text, almond);
             },
             'the second JavaScripts asset text should not have been replaced with almond': function (assetGraph) {
-                var relation = assetGraph.findRelations({type: 'HtmlScript'})[2],
-                    text = relation && relation.to.text;
+                var asset = assetGraph.findAssets({url: /app.js$/})[0],
+                    text = asset && asset.text;
 
                 assert.equal(text, 'alert(\'APP\');\n');
             }
