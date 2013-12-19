@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+<script>
+var tzFragments = ['Europe', 'Copenhagen'],
+    lastTzFragment = tzFragments.pop(),
+    timeZoneUrl = GETSTATICURL('timezones/**/*.ics', tzFragments.join('/'), lastTzFragment);
+</script>
+</body>
+<html>

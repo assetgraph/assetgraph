@@ -6,7 +6,7 @@ var vows = require('vows'),
 vows.describe('StaticUrlMap test').addBatch({
     'After loading test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/StaticUrlMap/'})
+            new AssetGraph({root: __dirname + '/StaticUrlMap/combo/'})
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
@@ -32,5 +32,33 @@ vows.describe('StaticUrlMap test').addBatch({
             }
         }
 
+    },
+    'After loading a complex test case with a multi-level GETSTATICURL construct': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/StaticUrlMap/multiLevel'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain one JavaScriptGetStaticUrl relation': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 1);
+        },
+        'the graph should contain one StaticUrlMap asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'StaticUrlMap'}).length, 1);
+        },
+        'the graph should contain 502 StaticUrlMapEntry relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}, true).length, 502);
+        },
+        'then reparse the JavaScript asset and populate again': {
+            topic: function (assetGraph) {
+                var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
+                javaScript.text = javaScript.text;
+                return assetGraph;
+            },
+            'the graph should contain 502 StaticUrlMapEntry relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}, true).length, 502);
+            }
+        }
     }
+
 })['export'](module);
