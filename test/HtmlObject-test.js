@@ -1,7 +1,7 @@
 var _ = require('underscore'),
     vows = require('vows'),
     assert = require('assert'),
-    urlTools = require('../lib/util/urlTools'),
+    urlTools = require('url-tools'),
     AssetGraph = require('../lib/AssetGraph'),
     query = AssetGraph.query;
 

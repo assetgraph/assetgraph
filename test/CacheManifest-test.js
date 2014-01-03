@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    urlTools = require('../lib/util/urlTools'),
+    urlTools = require('url-tools'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('Cache manifest').addBatch({

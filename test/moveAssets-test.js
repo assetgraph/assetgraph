@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    urlTools = require('../lib/util/urlTools'),
+    urlTools = require('url-tools'),
     AssetGraph = require('../lib/AssetGraph');
 
 vows.describe('transforms.moveAssets').addBatch({
