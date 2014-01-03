@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var fs = require('fs'),
-    AssetGraph = require('../lib/AssetGraph'),
+    AssetGraph = require('../lib'),
     urlTools = require('url-tools'),
     commandLineOptions = require('optimist')
         .usage("$0 [--root <urlOrDirectory>] [--updatehtml] <inputHtmlFileName>\n\n" +

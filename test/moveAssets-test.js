@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('url-tools'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('transforms.moveAssets').addBatch({
     'After loading test case with a non-inline asset that is moved to another absolute url': {

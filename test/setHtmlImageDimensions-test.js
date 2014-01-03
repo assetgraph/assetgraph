@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('url-tools'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('transforms.setHtmlImageDimensions').addBatch({
     'After loading a test case and running the setHtmlImageDimensions transform': {

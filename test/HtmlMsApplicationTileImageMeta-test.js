@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('Html with <link rel="fluid-icon">').addBatch({
     'After loading test case': {

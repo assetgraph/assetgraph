@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('url-tools'),
-    AssetGraph = require('../lib/AssetGraph'),
+    AssetGraph = require('../lib'),
     query = AssetGraph.query;
 
 vows.describe('<embed src="..."> test').addBatch({

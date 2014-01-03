@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('CssAlphaImageLoader').addBatch({
     'After loading test case': {

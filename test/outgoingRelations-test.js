@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('url-tools'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('asset.outgoingRelations').addBatch({
     'After creating a standalone Html asset': {

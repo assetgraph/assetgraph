@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
+    AssetGraph = require('../lib'),
     query = AssetGraph.query;
 
 vows.describe('Compiling LESS to CSS').addBatch({

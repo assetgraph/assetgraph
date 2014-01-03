@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     urlTools = require('url-tools'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('Changing the url of assets').addBatch({
     'After loading a test case with three assets': {

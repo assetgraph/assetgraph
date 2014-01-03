@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('CssImage').addBatch({
     'After loading a test case with a bunch of different CssImage relations': {

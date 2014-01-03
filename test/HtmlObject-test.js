@@ -2,7 +2,7 @@ var _ = require('underscore'),
     vows = require('vows'),
     assert = require('assert'),
     urlTools = require('url-tools'),
-    AssetGraph = require('../lib/AssetGraph'),
+    AssetGraph = require('../lib'),
     query = AssetGraph.query;
 
 vows.describe('<object><param name="src" value="..."></object> test').addBatch({

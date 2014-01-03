@@ -3,7 +3,7 @@
 // Clone of http://www.nczonline.net/blog/2009/11/03/automatic-data-uri-embedding-in-css-files/
 
 var fs = require('fs'),
-    AssetGraph = require('../lib/AssetGraph'),
+    AssetGraph = require('../lib'),
     urlTools = require('url-tools'),
     commandLineOptions = require('optimist')
         .usage('$0 [--root <urlOrDirectory>] [-o <outputCssFileName>] <inputCssFileName>')
