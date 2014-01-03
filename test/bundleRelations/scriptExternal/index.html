@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        window.foo = 'Hello world';
+    </script>
+    <script src="http://code.jquery.com/jquery-2.0.3.js"></script>
+    <script>
+        $('body').append('<h1>' + window.foo + '</h1>');
+    </script>
+</body>
+</html>
