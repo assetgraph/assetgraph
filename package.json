@@ -3,6 +3,7 @@
   "description": "Optimization framework for web pages and applications",
   "repository": "git://github.com/One-com/assetgraph.git",
   "version": "1.6.0",
+  "license": "BSD",
   "maintainers": [
     {
       "name": "Andreas Lind Petersen",
