@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "onedox": "~0.0.1",
-    "closure-compiler": "=0.1.1",
+    "closure-compiler": "=0.2.3",
     "coffee-script": "=1.2.0",
     "less": "=1.4.2",
     "iconv": "=2.0.3",
