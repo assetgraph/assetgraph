@@ -1,6 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib/AssetGraph'),
+    query = AssetGraph.query;
 
 vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatch({
     'After loading a test case with 1 Html, 2 stylesheets, and 3 images': {
@@ -360,6 +361,44 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
             var htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'});
             assert.equal(htmlStyles.length, 1);
             assert.equal(htmlStyles[0].hrefType, 'rootRelative');
+        }
+    },
+    'After loading a test case with script tags interrupted by an external script inclusion': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRelations/scriptExternal/'})
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {href: query.not(/^https?:/)}
+                })
+                .bundleRelations(
+                    {
+                        type: 'HtmlScript',
+                        to: {
+                            type: 'JavaScript',
+                            isLoaded: true
+                        }
+                    }, {
+                        strategyName: 'oneBundlePerIncludingAsset'
+                    }
+                )
+                .run(this.callback);
+        },
+        'There should be 3 HtmlScript relations in the graph': function (assetGraph) {
+            var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            assert.equal(htmlScripts.length, 3);
+        },
+        'The first HtmlScript Relation should be local': function (assetGraph) {
+            var htmlScript = assetGraph.findRelations({type: 'HtmlScript'}, true)[0];
+            assert.notEqual((htmlScript.href || '').substr(0, 4), 'http');
+        },
+        'The second HtmlScript Relation should be external': function (assetGraph) {
+            var htmlScript = assetGraph.findRelations({type: 'HtmlScript'}, true)[1];
+            assert.equal(htmlScript.href.substr(0, 4), 'http');
+        },
+        'The third HtmlScript Relation should be local': function (assetGraph) {
+            var htmlScript = assetGraph.findRelations({type: 'HtmlScript'}, true)[2];
+            assert.notEqual((htmlScript.href || '').substr(0, 4), 'http');
+
         }
     }
 })['export'](module);
