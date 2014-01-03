@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var AssetGraph = require('../lib/AssetGraph');
+var AssetGraph = require('../lib');
 
 AssetGraph({root: './'})
     .loadAssets('*.html')

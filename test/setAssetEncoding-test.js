@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 // Really naive implementation, don't use for anything important:
 function bufferIndexOf(haystack, needle) {

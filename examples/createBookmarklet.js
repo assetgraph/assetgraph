@@ -2,7 +2,7 @@
 
 // Try running ./createBookmarklet.js createBookmarklet/index.js
 
-var AssetGraph = require('../lib/AssetGraph'),
+var AssetGraph = require('../lib'),
     seq = require('seq'),
     commandLineOptions = require('optimist')
         .usage('$0 <javaScriptFile>')

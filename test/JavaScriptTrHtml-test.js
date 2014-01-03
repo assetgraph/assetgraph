@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('JavaScriptTrHtml').addBatch({
     'After loading a test case with a simple JavaScriptTrHtml relation': {

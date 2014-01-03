@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 function createTestCase(inputHtml, expectedOutputHtml, manipulator) {
     return {

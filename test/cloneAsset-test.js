@@ -2,7 +2,7 @@ var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
     seq = require('seq'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('Cloning assets').addBatch({
     'After loading a test case with multiple Html assets': {

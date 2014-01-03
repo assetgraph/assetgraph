@@ -3,6 +3,7 @@
   "description": "Optimization framework for web pages and applications",
   "repository": "git://github.com/One-com/assetgraph.git",
   "version": "1.6.0",
+  "license": "BSD",
   "maintainers": [
     {
       "name": "Andreas Lind Petersen",
@@ -25,7 +26,10 @@
     "uglifyast": "=0.3.1",
     "uglify-js-papandreou": "=2.4.1-patch1",
     "underscore": "=1.3.1",
-    "xmldom": "=0.1.16"
+    "url-tools": "git://github.com/slang800/url-tools.git",
+    "xmldom": "=0.1.16",
+    "mkdirp": "~0.3.5",
+    "imageinfo": "~1.0.4"
   },
   "devDependencies": {
     "onedox": "~0.0.1",
@@ -40,13 +44,10 @@
   "engines": {
     "node": ">=0.8.0"
   },
-  "directories": {
-    "lib": "./lib"
-  },
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
   },
-  "main": "lib/AssetGraph.js",
+  "main": "lib",
   "scripts": {
     "test": "vows",
     "travis": "vows --spec",

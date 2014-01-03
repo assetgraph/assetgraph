@@ -1,8 +1,8 @@
 var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph');
+    urlTools = require('url-tools'),
+    AssetGraph = require('../lib');
 
 vows.describe('INCLUDE test').addBatch({
     'After loading test case': {

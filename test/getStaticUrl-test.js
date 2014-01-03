@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
-    urlTools = require('../lib/util/urlTools'),
-    AssetGraph = require('../lib/AssetGraph');
+    urlTools = require('url-tools'),
+    AssetGraph = require('../lib');
 
 vows.describe('getStaticUrl in JavaScript asset').addBatch({
     'After loading test case with a wildcard getStaticUrl': {

@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    AssetGraph = require('../lib/AssetGraph'),
+    AssetGraph = require('../lib'),
     query = AssetGraph.query;
 
 vows.describe('HtmlPictureSourceSrcSet test').addBatch({

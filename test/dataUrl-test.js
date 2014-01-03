@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('data: url').addBatch({
     'After loading Html with data: url anchors': {
