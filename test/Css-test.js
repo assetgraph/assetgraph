@@ -8,7 +8,7 @@ vows.describe('Css').addBatch({
             var err,
                 callback = this.callback;
             new AssetGraph({root: __dirname + '/Css/'})
-                .on('error', function (_err) {
+                .on('warn', function (_err) {
                     err = _err;
                 })
                 .loadAssets('parseErrorInInlineCss.html')
@@ -28,7 +28,7 @@ vows.describe('Css').addBatch({
             var err,
                 callback = this.callback;
             new AssetGraph({root: __dirname + '/Css/'})
-                .on('error', function (_err) {
+                .on('warn', function (_err) {
                     err = _err;
                 })
                 .loadAssets('parseErrorInExternalCss.html')
