@@ -905,7 +905,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                     define('main', function () {
                         alert('It gets lonely in here if nobody runs me');
                     });
-                    require('main');
+                    require(['main']);
                 });
             }
         }
