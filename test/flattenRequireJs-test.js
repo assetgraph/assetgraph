@@ -412,6 +412,36 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             });
         }
     },
+    'After loading the umd test case without requirejs and running the flattenRequireJs transform': {
+        topic: function () {
+            var cb = this.callback;
+            new AssetGraph({root: __dirname + '/flattenRequireJs/umdWithoutRequire/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(function (err, assetGraph) {
+                    assetGraph._localstorageText = assetGraph.findAssets({
+                        url: /backbone.localStorage.js$/
+                    })[0].text;
+
+                    assetGraph
+                        .flattenRequireJs({type: 'Html', isFragment: false})
+                        .run(cb);
+                });
+        },
+        'the number of script relations should be 3': function (assetGraph) {
+            var scriptRelations = assetGraph.findRelations({
+                to: {
+                    type: 'JavaScript'
+                }
+            });
+            assert.equal(scriptRelations.length, 3);
+        },
+        'there should be no JavaScriptAmdDefine relations': function (assetGraph) {
+            var relations = assetGraph.findRelations({type: 'JavaScriptAmdDefine'});
+            assert.equal(relations.length, 0);
+        }
+    },
     'After loading the umd test case where the wrapper has a dependency in the define call, then running the flattenRequireJs transform': {
         topic: function () {
             new AssetGraph({root: __dirname + '/flattenRequireJs/umdWithDependency/'})
