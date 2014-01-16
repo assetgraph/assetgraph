@@ -8,6 +8,10 @@
     {
       "name": "Andreas Lind Petersen",
       "email": "andreas@one.com"
+    },
+    {
+      "name": "Peter Müller",
+      "email": "munter@fumle.dk"
     }
   ],
   "dependencies": {
