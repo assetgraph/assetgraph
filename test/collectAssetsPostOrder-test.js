@@ -2,7 +2,7 @@ var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('AssetGraph.collectAssetsPostOrder').addBatch({
     'After loading test case': {

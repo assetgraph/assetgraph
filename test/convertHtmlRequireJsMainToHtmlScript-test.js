@@ -3,7 +3,7 @@ var vows = require('vows'),
     _ = require('underscore'),
     fs = require('fs'),
     path = require('path'),
-    AssetGraph = require('../lib/AssetGraph');
+    AssetGraph = require('../lib');
 
 vows.describe('transforms.flattenRequireJs').addBatch({
     'After loading the jquery-require-sample test case': {

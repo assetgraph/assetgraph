@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
+    AssetGraph = require('../lib'),
     fs = require('fs'),
     requirejs = fs.readFileSync(__dirname + '/replaceRequireJsWithAlmond/require.js', 'utf8'),
     almond = fs.readFileSync(__dirname + '/replaceRequireJsWithAlmond/almond.js', 'utf8');

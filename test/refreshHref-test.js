@@ -1,4 +1,4 @@
-var AssetGraph = require('../lib/AssetGraph'),
+var AssetGraph = require('../lib'),
     vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore');

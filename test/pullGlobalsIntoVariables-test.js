@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    AssetGraph = require('../lib/AssetGraph'),
+    AssetGraph = require('../lib'),
     uglifyAst = AssetGraph.JavaScript.uglifyAst,
     uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
