@@ -1,54 +1,54 @@
 {
-    "name": "assetgraph",
-    "description": "Optimization framework for web pages and applications",
-    "repository": "git://github.com/One-com/assetgraph.git",
-    "version": "1.5.11",
-    "maintainers": [
-        {
-            "name": "Andreas Lind Petersen",
-            "email": "andreas@one.com"
-        }
-    ],
-    "dependencies": {
-        "async": "=0.2.6",
-        "bufferjs": "=1.1.0",
-        "createerror": "=0.0.1",
-        "cssmin": "=0.3.1",
-        "cssom-papandreou": "=0.2.4-patch1",
-        "glob": "=3.1.9",
-        "httperrors": "=0.2.0",
-        "jsdom-papandreou": "=0.5.1-patch1",
-        "optimist": "=0.3.1",
-        "passerror": "=0.0.1",
-        "request": "=2.9.153",
-        "seq": "=0.3.5",
-        "uglifyast": "=0.1.0",
-        "uglify-js-papandreou": "=1.3.3-patch1",
-        "underscore": "=1.3.1"
-    },
-    "devDependencies": {
-        "onedox": "~0.0.1",
-        "closure-compiler": "=0.1.1",
-        "coffee-script": "=1.2.0",
-        "less": "=1.3.3",
-        "iconv": "=2.0.3",
-        "stylus": "=0.23.0",
-        "yui-compressor": "=0.1.3",
-        "vows": "=0.7.0"
-    },
-    "engines": {
-        "node": ">=0.4.8"
-    },
-    "directories": {
-        "lib": "./lib"
-    },
-    "publishConfig": {
-        "registry": "http://registry.npmjs.org/"
-    },
-    "main": "lib/AssetGraph.js",
-    "tag": "v1.5",
-    "scripts": {
-        "test": "vows",
-        "prepublish": "npm test"
+  "name": "assetgraph",
+  "description": "Optimization framework for web pages and applications",
+  "repository": "git://github.com/One-com/assetgraph.git",
+  "version": "1.5.12",
+  "maintainers": [
+    {
+      "name": "Andreas Lind Petersen",
+      "email": "andreas@one.com"
     }
+  ],
+  "dependencies": {
+    "async": "=0.2.6",
+    "bufferjs": "=1.1.0",
+    "createerror": "=0.0.1",
+    "cssmin": "=0.3.1",
+    "cssom-papandreou": "=0.2.4-patch1",
+    "glob": "=3.1.9",
+    "httperrors": "=0.2.0",
+    "jsdom-papandreou": "=0.5.1-patch1",
+    "optimist": "=0.3.1",
+    "passerror": "=0.0.1",
+    "request": "=2.9.153",
+    "seq": "=0.3.5",
+    "uglifyast": "=0.1.0",
+    "uglify-js-papandreou": "=1.3.3-patch1",
+    "underscore": "=1.3.1"
+  },
+  "devDependencies": {
+    "onedox": "~0.0.1",
+    "closure-compiler": "=0.1.1",
+    "coffee-script": "=1.2.0",
+    "less": "=1.3.3",
+    "iconv": "=2.0.3",
+    "stylus": "=0.23.0",
+    "yui-compressor": "=0.1.3",
+    "vows": "=0.7.0"
+  },
+  "engines": {
+    "node": ">=0.4.8"
+  },
+  "directories": {
+    "lib": "./lib"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
+  "main": "lib/AssetGraph.js",
+  "tag": "v1.5",
+  "scripts": {
+    "test": "vows",
+    "prepublish": "npm test"
+  }
 }
