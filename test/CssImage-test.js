@@ -41,7 +41,7 @@ vows.describe('CssImage').addBatch({
                 ]);
             },
             'the !important marker on the .baz background-image should still be there': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({url: /\/index\.css$/})[0].text, /\.baz{background-image:url\(dir\/foo2\.png\)!important/);
+                assert.matches(assetGraph.findAssets({url: /\/index\.css$/})[0].text, /\.baz{background-image:url\(dir\/foo2\.png\) *!important/);
             }
         }
     },
