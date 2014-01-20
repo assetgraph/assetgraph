@@ -41,7 +41,7 @@ vows.describe('transforms.convertStylesheetsToInlineStyles').addBatch({
                 var document = assetGraph.findAssets({type: 'Html'})[0].parseTree;
                 assert.equal(document.documentElement.getAttribute('style'), 'padding:0');
                 assert.equal(document.body.getAttribute('style'), 'padding:0');
-                assert.equal(document.querySelectorAll('.a')[0].getAttribute('style'), 'padding:0;color:red;background-image:url(foo.png);background-color:blue');
+                assert.equal(document.querySelectorAll('.a')[0].getAttribute('style'), 'padding:0;color:red;background-image:url(foo.png);background-color:#00f');
                 assert.equal(document.querySelectorAll('.b')[0].getAttribute('style'), 'padding:0;color:red;background-image:url(foo.png)');
                 assert.equal(document.querySelectorAll('.c')[0].getAttribute('style'), 'font-weight:bold;padding:0');
             }
