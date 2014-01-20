@@ -4696,7 +4696,7 @@ button, input {
     line-height: normal
 }
 
-button:: -moz-focus-inner, input: : -moz-focus-inner {
+button::-moz-focus-inner, input::-moz-focus-inner {
     padding: 0;
     border: 0
 }
@@ -4713,7 +4713,7 @@ input[type="search"] {
     -webkit-appearance: textfield
 }
 
-input[type="search"]:: -webkit-search-decoration, input[type="search"]: : -webkit-search-cancel-button {
+input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button {
     -webkit-appearance: none
 }
 
@@ -8028,7 +8028,7 @@ body .container-fluid>article h2 {
     line-height: 0
 }
 
-.rLabel .keyMetrics .metric p.metricHeader i[class^="icon-"]: first-child,
+.rLabel .keyMetrics .metric p.metricHeader i[class^="icon-"]:first-child,
 .rLabel .keyMetrics .metric p.metricHeader [class*=" icon-"]:first-child {
     margin-left: 0
 }
@@ -8497,8 +8497,8 @@ body .container-fluid>article h2 {
     color: #a85656
 }
 
-.reach-performance .falcon-list td: nth-child(4),
-.reach-performance .falcon-list td: nth-child(5),
+.reach-performance .falcon-list td:nth-child(4),
+.reach-performance .falcon-list td:nth-child(5),
 .reach-performance .falcon-list td:nth-child(6) {
     text-align: center
 }
@@ -9067,8 +9067,8 @@ body .container-fluid>article h2 {
     color: #a85656
 }
 
-.reach-performance .falcon-list td: nth-child(4),
-.reach-performance .falcon-list td: nth-child(5),
+.reach-performance .falcon-list td:nth-child(4),
+.reach-performance .falcon-list td:nth-child(5),
 .reach-performance .falcon-list td:nth-child(6) {
     text-align: center
 }
@@ -10267,7 +10267,7 @@ body .container-fluid>article h2 {
     background-color: #f2f2f2
 }
 
-.publishing-weekly table.weekly-view td: nth-child(even),
+.publishing-weekly table.weekly-view td:nth-child(even),
 .publishing-weekly table.weekly-view th:nth-child(even) {
     background-color: #f5f5f5
 }
@@ -11674,12 +11674,12 @@ body .container-fluid>article h2 {
     table-layout: fixed
 }
 
-.publishing-list thead th: nth-child(3),
+.publishing-list thead th:nth-child(3),
 .publishing-list thead th:nth-child(5) {
     text-align: center
 }
 
-.publishing-list thead th: nth-child(3) .table-sort,
+.publishing-list thead th:nth-child(3) .table-sort,
 .publishing-list thead th:nth-child(5) .table-sort {
     padding-left: 0
 }
@@ -11896,7 +11896,7 @@ body .container-fluid>article h2 {
     background-color: #fe8d07
 }
 
-.publishing-list tbody td: nth-child(8),
+.publishing-list tbody td:nth-child(8),
 .publishing-list tbody td:nth-child(9) {
     text-align: center
 }
@@ -13704,27 +13704,27 @@ select:focus, input[type="file"]:focus, input[type="radio"]:focus, input[type="c
     height: auto
 }
 
-input:-moz-placeholder, textarea: -moz-placeholder {
+input:-moz-placeholder, textarea:-moz-placeholder {
     color: #999
 }
 
-input:-ms-input-placeholder, textarea: -ms-input-placeholder {
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     color: #999
 }
 
-input:: -webkit-input-placeholder, textarea: : -webkit-input-placeholder {
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     color: #999
 }
 
-input:-moz-placeholder, textarea: -moz-placeholder {
+input:-moz-placeholder, textarea:-moz-placeholder {
     color: #999
 }
 
-input:-ms-input-placeholder, textarea: -ms-input-placeholder {
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     color: #999
 }
 
-input:: -webkit-input-placeholder, textarea: : -webkit-input-placeholder {
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     color: #999
 }
 
@@ -13740,7 +13740,7 @@ input:: -webkit-input-placeholder, textarea: : -webkit-input-placeholder {
     margin-left: -18px
 }
 
-.controls>.radio: first-child,
+.controls>.radio:first-child,
 .controls>.checkbox:first-child {
     padding-top: 5px
 }
@@ -14294,12 +14294,12 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     border-color: #50729e
 }
 
-input:focus:required: invalid, textarea:focus: required: invalid, select:focus: required: invalid {
+input:focus:required:invalid, textarea:focus:required:invalid, select:focus:required:invalid {
     color: #b94a48;
     border-color: #ee5f5b
 }
 
-input:focus:required: invalid:focus, textarea:focus: required: invalid:focus, select:focus: required: invalid:focus {
+input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, select:focus:required:invalid:focus {
     border-color: #e9322d;
     -webkit-box-shadow: 0 0 6px #f8b9b7;
     -moz-box-shadow: 0 0 6px #f8b9b7;
@@ -14424,7 +14424,7 @@ input:focus:required: invalid:focus, textarea:focus: required: invalid:focus, se
     margin-right: -1px
 }
 
-.input-prepend .add-on: first-child,
+.input-prepend .add-on:first-child,
 .input-prepend .btn:first-child {
     -webkit-border-radius: 2px 0 0 2px;
     -moz-border-radius: 2px 0 0 2px;
@@ -14444,7 +14444,7 @@ input:focus:required: invalid:focus, textarea:focus: required: invalid:focus, se
     margin-left: -1px
 }
 
-.input-append .add-on: last-child,
+.input-append .add-on:last-child,
 .input-append .btn:last-child {
     -webkit-border-radius: 0 2px 2px 0;
     -moz-border-radius: 0 2px 2px 0;
@@ -14459,7 +14459,7 @@ input:focus:required: invalid:focus, textarea:focus: required: invalid:focus, se
     border-radius: 0
 }
 
-.input-prepend.input-append .add-on: first-child,
+.input-prepend.input-append .add-on:first-child,
 .input-prepend.input-append .btn:first-child {
     margin-right: -1px;
     -webkit-border-radius: 2px 0 0 2px;
@@ -14467,7 +14467,7 @@ input:focus:required: invalid:focus, textarea:focus: required: invalid:focus, se
     border-radius: 2px 0 0 2px
 }
 
-.input-prepend.input-append .add-on: last-child,
+.input-prepend.input-append .add-on:last-child,
 .input-prepend.input-append .btn:last-child {
     margin-left: -1px;
     -webkit-border-radius: 0 2px 2px 0;
@@ -14725,12 +14725,12 @@ table {
     vertical-align: bottom
 }
 
-.table caption+thead tr: first-child th,
-.table caption+thead tr: first-child td,
-.table colgroup+thead tr: first-child th,
-.table colgroup+thead tr: first-child td,
-.table thead: first-child tr: first-child th,
-.table thead:first-child tr: first-child td {
+.table caption+thead tr:first-child th,
+.table caption+thead tr:first-child td,
+.table colgroup+thead tr:first-child th,
+.table colgroup+thead tr:first-child td,
+.table thead:first-child tr:first-child th,
+.table thead:first-child tr:first-child td {
     border-top: 0
 }
 
@@ -14758,35 +14758,35 @@ table {
     border-left: 1px solid #e5e5e5
 }
 
-.table-bordered caption+thead tr: first-child th,
-.table-bordered caption+tbody tr: first-child th,
-.table-bordered caption+tbody tr: first-child td,
-.table-bordered colgroup+thead tr: first-child th,
-.table-bordered colgroup+tbody tr: first-child th,
-.table-bordered colgroup+tbody tr: first-child td,
-.table-bordered thead: first-child tr: first-child th,
-.table-bordered tbody: first-child tr: first-child th,
-.table-bordered tbody:first-child tr: first-child td {
+.table-bordered caption+thead tr:first-child th,
+.table-bordered caption+tbody tr:first-child th,
+.table-bordered caption+tbody tr:first-child td,
+.table-bordered colgroup+thead tr:first-child th,
+.table-bordered colgroup+tbody tr:first-child th,
+.table-bordered colgroup+tbody tr:first-child td,
+.table-bordered thead:first-child tr:first-child th,
+.table-bordered tbody:first-child tr:first-child th,
+.table-bordered tbody:first-child tr:first-child td {
     border-top: 0
 }
 
-.table-bordered thead: first-child tr: first-child th: first-child,
-.table-bordered tbody:first-child tr: first-child td: first-child {
+.table-bordered thead:first-child tr:first-child th:first-child,
+.table-bordered tbody:first-child tr:first-child td:first-child {
     -webkit-border-top-left-radius: 4px;
     border-top-left-radius: 4px;
     -moz-border-radius-topleft: 4px
 }
 
-.table-bordered thead: first-child tr: first-child th: last-child,
-.table-bordered tbody:first-child tr: first-child td: last-child {
+.table-bordered thead:first-child tr:first-child th:last-child,
+.table-bordered tbody:first-child tr:first-child td:last-child {
     -webkit-border-top-right-radius: 4px;
     border-top-right-radius: 4px;
     -moz-border-radius-topright: 4px
 }
 
-.table-bordered thead: last-child tr: last-child th: first-child,
-.table-bordered tbody: last-child tr: last-child td: first-child,
-.table-bordered tfoot:last-child tr: last-child td: first-child {
+.table-bordered thead:last-child tr:last-child th:first-child,
+.table-bordered tbody:last-child tr:last-child td:first-child,
+.table-bordered tfoot:last-child tr:last-child td:first-child {
     -webkit-border-radius: 0 0 0 4px;
     -moz-border-radius: 0 0 0 4px;
     border-radius: 0 0 0 4px;
@@ -14795,33 +14795,33 @@ table {
     -moz-border-radius-bottomleft: 4px
 }
 
-.table-bordered thead: last-child tr: last-child th: last-child,
-.table-bordered tbody: last-child tr: last-child td: last-child,
-.table-bordered tfoot:last-child tr: last-child td: last-child {
+.table-bordered thead:last-child tr:last-child th:last-child,
+.table-bordered tbody:last-child tr:last-child td:last-child,
+.table-bordered tfoot:last-child tr:last-child td:last-child {
     -webkit-border-bottom-right-radius: 4px;
     border-bottom-right-radius: 4px;
     -moz-border-radius-bottomright: 4px
 }
 
-.table-bordered caption+thead tr: first-child th: first-child,
-.table-bordered caption+tbody tr: first-child td: first-child,
-.table-bordered colgroup+thead tr: first-child th: first-child,
-.table-bordered colgroup+tbody tr:first-child td: first-child {
+.table-bordered caption+thead tr:first-child th:first-child,
+.table-bordered caption+tbody tr:first-child td:first-child,
+.table-bordered colgroup+thead tr:first-child th:first-child,
+.table-bordered colgroup+tbody tr:first-child td:first-child {
     -webkit-border-top-left-radius: 4px;
     border-top-left-radius: 4px;
     -moz-border-radius-topleft: 4px
 }
 
-.table-bordered caption+thead tr: first-child th: last-child,
-.table-bordered caption+tbody tr: first-child td: last-child,
-.table-bordered colgroup+thead tr: first-child th: last-child,
-.table-bordered colgroup+tbody tr:first-child td: last-child {
+.table-bordered caption+thead tr:first-child th:last-child,
+.table-bordered caption+tbody tr:first-child td:last-child,
+.table-bordered colgroup+thead tr:first-child th:last-child,
+.table-bordered colgroup+tbody tr:first-child td:last-child {
     -webkit-border-top-right-radius: 4px;
     border-top-right-radius: 4px;
     -moz-border-radius-topleft: 4px
 }
 
-.table-striped tbody tr: nth-child(odd) td,
+.table-striped tbody tr:nth-child(odd) td,
 .table-striped tbody tr:nth-child(odd) th {
     background-color: #f9f9f9
 }
@@ -15879,7 +15879,7 @@ button.btn, input[type="submit"].btn {
     *padding-bottom: 3px
 }
 
-button.btn:: -moz-focus-inner, input[type="submit"].btn: : -moz-focus-inner {
+button.btn::-moz-focus-inner, input[type="submit"].btn::-moz-focus-inner {
     padding: 0;
     border: 0
 }
@@ -16258,7 +16258,7 @@ button {
     border-bottom-left-radius: 4px
 }
 
-.btn-group>.btn: last-child,
+.btn-group>.btn:last-child,
 .btn-group>.dropdown-toggle {
     -webkit-border-top-right-radius: 4px;
     -moz-border-radius-topright: 4px;
@@ -16278,7 +16278,7 @@ button {
     border-bottom-left-radius: 6px
 }
 
-.btn-group>.btn.large: last-child,
+.btn-group>.btn.large:last-child,
 .btn-group>.large.dropdown-toggle {
     -webkit-border-top-right-radius: 6px;
     -moz-border-radius-topright: 6px;
@@ -16653,7 +16653,7 @@ body .sidebar .nav.nav-list li.active .publishing-new:active, body .sidebar .nav
     box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.25)
 }
 
-body .sidebar .nav.nav-list li.active .publishing-new::after, body .sidebar .nav.nav-list li .publishing-new: :after, body .sidebar .nav.nav-list li.active .publishing-new: :before, body .sidebar .nav.nav-list li .publishing-new: :before {
+body .sidebar .nav.nav-list li.active .publishing-new::after, body .sidebar .nav.nav-list li .publishing-new::after, body .sidebar .nav.nav-list li.active .publishing-new::before, body .sidebar .nav.nav-list li .publishing-new::before {
     display: none
 }
 
@@ -17715,7 +17715,7 @@ body .nav.nav-tabs>li>a {
     color: #ccc
 }
 
-.navbar-inverse .navbar-search .search-query:: -webkit-input-placeholder {
+.navbar-inverse .navbar-search .search-query::-webkit-input-placeholder {
     color: #ccc
 }
 
@@ -17727,7 +17727,7 @@ body .nav.nav-tabs>li>a {
     color: #ccc
 }
 
-.navbar-inverse .navbar-search .search-query:: -webkit-input-placeholder {
+.navbar-inverse .navbar-search .search-query::-webkit-input-placeholder {
     color: #ccc
 }
 
@@ -17971,7 +17971,7 @@ body .navbar.navbar-inverse #nav-user .badge {
     cursor: default
 }
 
-.pagination ul>li: first-child>a,
+.pagination ul>li:first-child>a,
 .pagination ul>li:first-child>span {
     border-left-width: 1px;
     -webkit-border-top-left-radius: 3px;
@@ -17982,7 +17982,7 @@ body .navbar.navbar-inverse #nav-user .badge {
     border-bottom-left-radius: 3px
 }
 
-.pagination ul>li: last-child>a,
+.pagination ul>li:last-child>a,
 .pagination ul>li:last-child>span {
     -webkit-border-top-right-radius: 3px;
     -moz-border-radius-topright: 3px;
@@ -18007,7 +18007,7 @@ body .navbar.navbar-inverse #nav-user .badge {
     font-size: 13.75px
 }
 
-.pagination-large ul>li: first-child>a,
+.pagination-large ul>li:first-child>a,
 .pagination-large ul>li:first-child>span {
     -webkit-border-top-left-radius: 5px;
     -moz-border-radius-topleft: 5px;
@@ -18017,7 +18017,7 @@ body .navbar.navbar-inverse #nav-user .badge {
     border-bottom-left-radius: 5px
 }
 
-.pagination-large ul>li: last-child>a,
+.pagination-large ul>li:last-child>a,
 .pagination-large ul>li:last-child>span {
     -webkit-border-top-right-radius: 5px;
     -moz-border-radius-topright: 5px;
@@ -18027,9 +18027,9 @@ body .navbar.navbar-inverse #nav-user .badge {
     border-bottom-right-radius: 5px
 }
 
-.pagination-mini ul>li: first-child>a,
-.pagination-small ul>li: first-child>a,
-.pagination-mini ul>li: first-child>span,
+.pagination-mini ul>li:first-child>a,
+.pagination-small ul>li:first-child>a,
+.pagination-mini ul>li:first-child>span,
 .pagination-small ul>li:first-child>span {
     -webkit-border-top-left-radius: 2px;
     -moz-border-radius-topleft: 2px;
@@ -18039,9 +18039,9 @@ body .navbar.navbar-inverse #nav-user .badge {
     border-bottom-left-radius: 2px
 }
 
-.pagination-mini ul>li: last-child>a,
-.pagination-small ul>li: last-child>a,
-.pagination-mini ul>li: last-child>span,
+.pagination-mini ul>li:last-child>a,
+.pagination-small ul>li:last-child>a,
+.pagination-mini ul>li:last-child>span,
 .pagination-small ul>li:last-child>span {
     -webkit-border-top-right-radius: 2px;
     -moz-border-radius-topright: 2px;
@@ -18344,7 +18344,7 @@ body .navbar.navbar-inverse #nav-user .badge {
 }
 
 .publishing-editor .editor-compose .media .nav-tabs a {
-    border: 0!Important;
+    border: 0!important;
     margin-right: 0;
     margin-top: 0;
     font-size: 12px;
@@ -20059,7 +20059,7 @@ body .navbar.navbar-inverse #nav-user .badge {
     color: #999
 }
 
-.preview-hyves .buttons-bar .date: visited,
+.preview-hyves .buttons-bar .date:visited,
 .preview-hyves .buttons-bar .date:link {
     color: #999
 }
@@ -23505,12 +23505,12 @@ body .trending-topics-wrapper {
     width: 145px
 }
 
-.datepicker thead tr: first-child th,
+.datepicker thead tr:first-child th,
 .datepicker tfoot tr th {
     cursor: pointer
 }
 
-.datepicker thead tr: first-child th:hover,
+.datepicker thead tr:first-child th:hover,
 .datepicker tfoot tr th:hover {
     background: #eee
 }
@@ -31882,7 +31882,7 @@ before {
     border: solid 1px #ff2e00
 }
 
-.eyas-form .eyas-input:: -webkit-input-placeholder {
+.eyas-form .eyas-input::-webkit-input-placeholder {
     font-style: italic
 }
 
@@ -31890,7 +31890,7 @@ before {
     font-style: italic
 }
 
-.eyas-form .eyas-input:: -moz-placeholder {
+.eyas-form .eyas-input::-moz-placeholder {
     font-style: italic
 }
 
@@ -31911,7 +31911,7 @@ before {
     border: solid 1px #009dff
 }
 
-.eyas-form .eyas-input--default:: -webkit-input-placeholder {
+.eyas-form .eyas-input--default::-webkit-input-placeholder {
     color: #b2b2b2;
     font-weight: normal
 }
@@ -31921,7 +31921,7 @@ before {
     font-weight: normal
 }
 
-.eyas-form .eyas-input--default:: -moz-placeholder {
+.eyas-form .eyas-input--default::-moz-placeholder {
     color: #b2b2b2;
     font-weight: normal
 }
@@ -31943,7 +31943,7 @@ before {
     border: solid 1px #ff2e00
 }
 
-.eyas-form .eyas-textarea:: -webkit-input-placeholder {
+.eyas-form .eyas-textarea::-webkit-input-placeholder {
     font-style: italic
 }
 
@@ -31951,7 +31951,7 @@ before {
     font-style: italic
 }
 
-.eyas-form .eyas-textarea:: -moz-placeholder {
+.eyas-form .eyas-textarea::-moz-placeholder {
     font-style: italic
 }
 
@@ -31976,7 +31976,7 @@ before {
     border: solid 1px #ff2e00
 }
 
-.eyas-form .eyas-textarea--default:: -webkit-input-placeholder {
+.eyas-form .eyas-textarea--default::-webkit-input-placeholder {
     color: #b2b2b2
 }
 
@@ -31984,7 +31984,7 @@ before {
     color: #b2b2b2
 }
 
-.eyas-form .eyas-textarea--default:: -moz-placeholder {
+.eyas-form .eyas-textarea--default::-moz-placeholder {
     color: #b2b2b2
 }
 
