@@ -49,7 +49,7 @@
     "lastsemic"     : false,     // true: Tolerate omitting a semicolon for the last statement of a 1-line block
     "laxbreak"      : false,     // true: Tolerate possibly unsafe line breakings
     "laxcomma"      : false,     // true: Tolerate comma-first style coding
-    "loopfunc"      : false,     // true: Tolerate functions being defined in loops
+    "loopfunc"      : true,     // true: Tolerate functions being defined in loops
     "multistr"      : false,     // true: Tolerate multi-line strings
     "proto"         : false,     // true: Tolerate using the `__proto__` property
     "scripturl"     : false,     // true: Tolerate script-targeted URLs
