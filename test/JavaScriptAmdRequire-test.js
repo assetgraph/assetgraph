@@ -206,5 +206,29 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
         'the graph should contain no JavaScriptAmdRequire relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 0);
         }
+    },
+    'After loading test case with require.config.baseUrl set before loading data-main': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withBaseUrlAndDataMain'})
+                .on('warn', function (err) {
+                    if (!this._warnings) {
+                        this._warnings = [];
+                    }
+                    this._warnings.push(err);
+                })
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the population should emit no warnings': function (assetGraph) {
+            assert.equal((assetGraph._warnings || []).length, 0);
+        },
+        'the graph should contain 3 loaded JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({
+                type: 'JavaScript',
+                isLoaded: true
+            }).length, 3);
+        }
     }
 })['export'](module);
