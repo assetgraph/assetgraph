@@ -222,7 +222,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the population should emit no warnings': function (assetGraph) {
-            assert.equal(assetGraph._warnings.length, 0);
+            assert.equal((assetGraph._warnings || []).length, 0);
         },
         'the graph should contain 3 loaded JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({
