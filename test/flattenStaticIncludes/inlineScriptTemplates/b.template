@@ -1,0 +1,6 @@
+<script type="text/html" id="bTpl">
+    <div>
+        <p>Para 1</p>
+        <p>Para 2</p>
+    </div>
+</script>

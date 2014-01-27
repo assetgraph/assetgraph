@@ -76,6 +76,22 @@ vows.describe('flattenStaticIncludes transform').addBatch({
             }
         }
     },
+    'After loading a test case with .template and .html assets being INCLUDEd': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/flattenStaticIncludes/inlineScriptTemplates/'})
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'then run the flattenStaticIncludes transform on the Html asset': {
+            topic: function (assetGraph) {
+                assetGraph.flattenStaticIncludes({type: 'Html'}).run(this.callback);
+            },
+            'there should be 3 inline <script type="text/html"> tags': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'}).length, 3);
+            }
+        }
+    },
     'After loading a test case with .less and .css assets being INCLUDEd': {
         topic: function () {
             new AssetGraph({root: __dirname + '/flattenStaticIncludes/lessAndCss/'})

@@ -1,0 +1,3 @@
+<script type="text/html" id="aTpl">
+    <button style="background-color:grey;">Button</button>
+</script>
