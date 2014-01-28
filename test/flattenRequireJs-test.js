@@ -966,35 +966,6 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 assert.ok(assetGraph._emittedErrors);
                 assert.equal(assetGraph._emittedErrors.length, 1);
                 assert.matches(assetGraph._emittedErrors[0].message, /\/popular\.js is referred to as both popular and popular\.js, please omit the \.js extension in define\/require$/);
-            },
-            'the JavaScript should have the expected contents': function (assetGraph) {
-                var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 5);
-                assert.equal(htmlScripts[0].href, 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
-                    define('popular', function () {
-                        alert("I'm a popular helper module");
-                        return "foo";
-                    });
-                });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
-                    define('module1', ['popular'], function () {
-                        return 'module1';
-                    });
-                });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
-                    // This would work if 'popular.js' was changed to 'popular' automatically, but I can't think of a good way to automatically fix this
-                    // mistake, so it's better to just make the build fail.
-                    define('module2', ['popular.js'], function () {
-                        return 'module2';
-                    });
-                });
-                assertAstsEqual(htmlScripts[4].to.parseTree, function () {
-                    require(['module1', 'module2'], function (module1, module2) {
-                        alert("Got it all!");
-                    });
-                    define("main",function() {});
-                });
             }
         }
     }
