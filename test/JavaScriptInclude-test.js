@@ -1,7 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
     _ = require('underscore'),
-    urlTools = require('url-tools'),
+    urlTools = require('urltools'),
     AssetGraph = require('../lib');
 
 vows.describe('INCLUDE test').addBatch({

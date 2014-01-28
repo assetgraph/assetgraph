@@ -1,6 +1,6 @@
 var vows = require('vows'),
     assert = require('assert'),
-    urlTools = require('url-tools'),
+    urlTools = require('urltools'),
     AssetGraph = require('../lib');
 
 vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatch({

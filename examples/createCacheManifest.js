@@ -2,7 +2,7 @@
 
 var fs = require('fs'),
     AssetGraph = require('../lib'),
-    urlTools = require('url-tools'),
+    urlTools = require('urltools'),
     commandLineOptions = require('optimist')
         .usage("$0 [--root <urlOrDirectory>] [--updatehtml] <inputHtmlFileName>\n\n" +
                "Load one or more HTML files, create cache manifests for them, then write the cache manifests to discs.\n" +

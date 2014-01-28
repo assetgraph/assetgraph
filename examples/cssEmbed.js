@@ -4,7 +4,7 @@
 
 var fs = require('fs'),
     AssetGraph = require('../lib'),
-    urlTools = require('url-tools'),
+    urlTools = require('urltools'),
     commandLineOptions = require('optimist')
         .usage('$0 [--root <urlOrDirectory>] [-o <outputCssFileName>] <inputCssFileName>')
         .demand(1)
