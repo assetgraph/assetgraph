@@ -26,6 +26,12 @@ vows.describe('Html with <link rel="import">').addBatch({
                 type: 'Html',
                 isPopulated: true
             }).length, 4);
+        },
+        'the graph should contain 1 populated Css asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({
+                type: 'Css',
+                isPopulated: true
+            }).length, 1);
         }
     }
 })['export'](module);
