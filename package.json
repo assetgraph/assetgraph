@@ -21,7 +21,7 @@
     "cssom-papandreou": "=0.2.4-patch2",
     "glob": "=3.1.9",
     "httperrors": "=0.2.0",
-    "jsdom": "=0.8.11",
+    "jsdom": "=0.10.0",
     "optimist": "=0.3.1",
     "passerror": "=1.0.0",
     "request": "=2.9.153",
