@@ -168,5 +168,32 @@ vows.describe('JavaScript').addBatch({
                 }
             }
         }
+    },
+    'After loading a test case with global strict mode': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScript/'})
+                .loadAssets('globalstrict.html')
+                .populate()
+                .run(this.callback);
+        },
+        'the globalstrict.js JavaScript asset should have a "strict" property': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({fileName: 'globalstrict.js'})[0].strict, true);
+        },
+        'the nonstrict.js JavaScript asset should not have a "strict" property': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({fileName: 'nonstrict.js'})[0].strict, false);
+        },
+        'then running the bundleRelations transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .bundleRelations()
+                    .run(this.callback);
+            },
+            'the bundled script file should not have a "strict" property': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].strict, false);
+            },
+            'the file in the bundle that had a global strict mode setting should be wrapped in an IIFE': function (assetGraph) {
+                assert.equal('!function(){"use strict";module.exports="strict";}();alert("nonstrict");', assetGraph.findAssets({type: 'JavaScript'})[0].text);
+            }
+        }
     }
 })['export'](module);
