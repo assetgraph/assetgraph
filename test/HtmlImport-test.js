@@ -6,14 +6,6 @@ vows.describe('Html with <link rel="import">').addBatch({
     'After loading test case': {
         topic: function () {
             new AssetGraph({root: __dirname + '/HtmlImport/'})
-            /*
-                .on('addAsset', function (rel) {
-                    console.log(rel.toString());
-                })
-                .on('warn', function (e) {
-                    console.log(e);
-                })
-*/
                 .loadAssets('index.html')
                 .populate()
                 .run(this.callback);
