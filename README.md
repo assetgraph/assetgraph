@@ -848,7 +848,7 @@ new AssetGraph()
         text: '<html><head><style type="text/css">body {color: red;}</style></head></html>'
     }))
     // Remove the inline Css asset and detach the incoming HtmlStyle relation:
-    .removeAssets({type: 'Css'}, true),
+    .removeAssets({type: 'Css'}, true)
     // Now the graph only contains the Html asset (without the <style> element):
     .writeAssetsToStdout({type: 'Html'})
     // '<html><head></head></html>'
