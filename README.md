@@ -1,6 +1,6 @@
 [![NPM version](https://badge.fury.io/js/assetgraph.png)](http://badge.fury.io/js/assetgraph)
-[![Build Status](https://travis-ci.org/One-com/assetgraph.png?branch=master)](https://travis-ci.org/One-com/assetgraph)
-[![Dependency Status](https://david-dm.org/One-com/assetgraph.png)](https://david-dm.org/One-com/assetgraph)
+[![Build Status](https://travis-ci.org/assetgraph/assetgraph.png?branch=master)](https://travis-ci.org/One-com/assetgraph)
+[![Dependency Status](https://david-dm.org/assetgraph/assetgraph.png)](https://david-dm.org/One-com/assetgraph)
 
 AssetGraph
 ==========
