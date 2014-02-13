@@ -19,7 +19,7 @@
     "createerror": "=0.4.1",
     "cssmin": "=0.3.1",
     "cssom-papandreou": "=0.2.4-patch3",
-    "glob": "=3.1.9",
+    "glob": "=3.2.8",
     "httperrors": "=0.2.0",
     "jsdom": "=0.10.0",
     "optimist": "=0.3.1",
