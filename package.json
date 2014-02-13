@@ -15,7 +15,7 @@
     }
   ],
   "dependencies": {
-    "async": "=0.2.9",
+    "async": "=0.2.10",
     "createerror": "=0.0.1",
     "cssmin": "=0.3.1",
     "cssom-papandreou": "=0.2.4-patch3",
