@@ -400,5 +400,34 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
             assert.notEqual((htmlScript.href || '').substr(0, 4), 'http');
 
         }
+    },
+    'After loading a test case with script tags in both <head> and <body>': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/bundleRelations/scriptsInHead/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRelations({
+                    type: 'HtmlScript',
+                    to: {
+                        type: 'JavaScript',
+                        isLoaded: true
+                    }
+                }, {
+                    strategyName: 'oneBundlePerIncludingAsset'
+                })
+                .run(this.callback);
+        },
+        'There should be 2 HtmlScript relations in the graph': function (assetGraph) {
+            var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            assert.equal(htmlScripts.length, 2);
+        },
+        'The first script bundle should be in <head>': function (assetGraph) {
+            var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            assert.equal(htmlScripts[0].node.parentNode.tagName, 'HEAD');
+        },
+        'The second script bundle should be in <body>': function (assetGraph) {
+            var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            assert.equal(htmlScripts[1].node.parentNode.tagName, 'BODY');
+        }
     }
 })['export'](module);
