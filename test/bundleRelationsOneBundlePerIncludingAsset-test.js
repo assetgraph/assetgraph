@@ -433,6 +433,12 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
     'After loading a test case with script tags in alternating strict mode': {
         topic: function () {
             new AssetGraph({root: __dirname + '/bundleRelations/strictScripts/'})
+                .on('info', function (e) {
+                    if (!this._infos) {
+                        this._infos = [];
+                    }
+                    this._infos.push(e);
+                })
                 .loadAssets('index.html')
                 .populate()
                 .bundleRelations({
@@ -449,6 +455,9 @@ vows.describe('Bundle stylesheets, oneBundlePerIncludingAsset strategy').addBatc
         'There should be 4 HtmlScript relations in the graph': function (assetGraph) {
             var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
             assert.equal(htmlScripts.length, 4);
+        },
+        'The graph should have 2 emitted infos': function (assetGraph) {
+            assert.equal(assetGraph._infos.length, 2);
         }
     }
 })['export'](module);
