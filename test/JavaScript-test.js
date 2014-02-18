@@ -187,23 +187,6 @@ vows.describe('JavaScript').addBatch({
         },
         'the nonstrict.js JavaScript asset should not have a "strict" property': function (assetGraph) {
             assert.equal(assetGraph.findAssets({fileName: 'nonstrict.js'})[0].strict, false);
-        },
-        'then running the bundleRelations transform': {
-            topic: function (assetGraph) {
-                assetGraph
-                    .bundleRelations()
-                    .run(this.callback);
-            },
-            'the bundled script file should not have a "strict" property': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].strict, false);
-            },
-            'there should be one emitted warning': function (assetGraph) {
-                assert.equal(assetGraph._warnings.length, 1);
-            }/*,
-            // Future: encapsulate the leaky assets
-            'the file in the bundle that had a global strict mode setting should be wrapped in an IIFE': function (assetGraph) {
-                assert.equal('(function(root){"use strict";root.strict=true})(this);alert("nonstrict");', assetGraph.findAssets({type: 'JavaScript'})[0].text);
-            }*/
         }
     }
 })['export'](module);
