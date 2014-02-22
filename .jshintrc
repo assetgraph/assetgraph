@@ -86,6 +86,8 @@
         "TRPAT",
         "GETTEXT",
         "GETSTATICURL",
-        "INCLUDE"
+        "INCLUDE",
+        "define",
+        "require"
     ]
 }
