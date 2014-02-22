@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <script>
+            var require = {
+                paths: {
+                    foo: 'bar/quux'
+                }
+            };
+        </script>
+        <script src="require.js"></script>
+        <script src="additionalRequireJsConfig.js"></script>
+        <script>
+            require(['foo/baz', 'hey/there'], function (baz) {
+                alert(baz);
+            });
+        </script>
+    </body>
+</html>
