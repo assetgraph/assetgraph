@@ -968,5 +968,30 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 assert.matches(assetGraph._emittedErrors[0].message, /\/popular\.js is referred to as both popular and popular\.js, please omit the \.js extension in define\/require$/);
             }
         }
+    },
+    'After loading a test case with a umdish factory pattern': {
+        topic: function () {
+            var cb = this.callback,
+                fileName = 'backbone-localstorage.js';
+            new AssetGraph({root: __dirname + '/flattenRequireJs/umdishBackboneLocalstorage/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(function (err, assetGraph) {
+                    assetGraph._umdish = assetGraph.findAssets({ fileName: fileName })[0];
+
+                    cb(err, assetGraph);
+                });
+        },
+        'then run the flattenRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .flattenRequireJs()
+                    .run(this.callback);
+            },
+            'the file with the umdish pattern should be unchanged': function (assetGraph) {
+                assertAstsEqual(assetGraph._umdish.parseTree, assetGraph.findAssets({ fileName: /backbone-localstorage-\d+.js/ })[0].parseTree);
+            }
+        }
     }
 })['export'](module);
