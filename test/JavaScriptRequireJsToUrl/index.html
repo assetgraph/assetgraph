@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <script src="require.js"></script>
+        <script>
+            alert("From the HTML: " + require.toUrl('foobar.txt'));
+
+            require(["require", "some/thing"], function (require) {
+                alert("From a require in an inline script: " + require.toUrl("./quux.txt"));
+            });
+        </script>
+    </body>
+</html>
