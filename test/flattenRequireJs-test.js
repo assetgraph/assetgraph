@@ -968,5 +968,41 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 assert.matches(assetGraph._emittedErrors[0].message, /\/popular\.js is referred to as both popular and popular\.js, please omit the \.js extension in define\/require$/);
             }
         }
+    },
+    'After loading a test case with a umdish factory pattern': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/flattenRequireJs/umdishBackboneLocalstorage/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .run(this.callback);
+        },
+        'then run the flattenRequireJs transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .flattenRequireJs()
+                    .run(this.callback);
+            },
+            'the file with the umdish pattern should be unchanged, except the canonical module name should be added as the first define argument': function (assetGraph) {
+                assertAstsEqual(assetGraph.findAssets({fileName: /backbone-localstorage/}).pop().parseTree, function () {
+                    (function (root, factory) {
+                        if (typeof exports === 'object' && typeof require === 'function') {
+                            module.exports = factory(require('underscore'), require('backbone'));
+                        } else if (typeof define === 'function' && define.amd) {
+                            // AMD. Register as an anonymous module.
+                            define('backbone-localstorage', ['underscore', 'backbone'], function (_, Backbone) {
+                                // Use global variables if the locals are undefined.
+                                return factory(_ || root._, Backbone || root.Backbone);
+                            });
+                        } else {
+                            // RequireJS isn't being used. Assume underscore and backbone are loaded in <script> tags
+                            factory(root._, root.Backbone);
+                        }
+                    }(this, function (_, Backbone) {
+                        return 'LOCALSTORAGE';
+                    }));
+                });
+            }
+        }
     }
 })['export'](module);

@@ -59,8 +59,8 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                 .populate()
                 .run(this.callback);
         },
-        'the graph should contain 7 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 7);
+        'the graph should contain 5 assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets().length, 5);
         },
         'the graph should contain 0 JavaScriptAmdDefine relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 0);
@@ -68,8 +68,8 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
         'the graph should contain one JavaScriptRequireJsCommonJsCompatibilityRequire relation': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptRequireJsCommonJsCompatibilityRequire'}).length, 1);
         },
-        'the graph should contain 2 JavaScriptCommonJsRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptCommonJsRequire'}).length, 2);
+        'the graph should contain 0 JavaScriptCommonJsRequire relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptCommonJsRequire'}).length, 0);
         },
         'the graph should contain over/the/rainbow/foo.js, and it should be loaded': function (assetGraph) {
             assert.equal(assetGraph.findAssets({url: /\/over\/the\/rainbow\/foo\.js$/, isLoaded: true}).length, 1);
