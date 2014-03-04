@@ -965,7 +965,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             'the correct error should be emitted': function (assetGraph) {
                 assert.ok(assetGraph._emittedErrors);
                 assert.equal(assetGraph._emittedErrors.length, 1);
-                assert.matches(assetGraph._emittedErrors[0].message, /\/popular\.js is referred to as both popular and popular\.js, please omit the \.js extension in define\/require$/);
+                assert.equal(assetGraph._emittedErrors[0].message.replace(/^file:\/\/[^\s]* /, ''), 'is referred to as both popular and popular.js, please omit the .js extension in define/require');
             }
         }
     },
