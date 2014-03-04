@@ -56,7 +56,6 @@
   "scripts": {
     "lint": "jshint .",
     "test": "npm run lint && vows",
-    "travis": "npm run lint && vows --spec",
-    "prepublish": "npm test"
+    "travis": "npm run lint && vows --spec"
   }
 }
