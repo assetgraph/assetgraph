@@ -43,5 +43,30 @@ vows.describe('Css').addBatch({
         'the error message should specify the url of the external Css asset': function (err, assetGraph) {
             assert.matches(err.message, /parseError\.css/);
         }
+    },
+    'After loading a test that has multiple neighbour @font-face rules': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/Css/multipleFontFaceRules/'})
+                .loadAssets('index.css')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain one Css asset': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+        },
+        'the text of the Css asset should contain three occurrences @font-face': function (assetGraph) {
+            var matches = assetGraph.findAssets({type: 'Css'})[0].text.match(/@font-face/g);
+            assert.equal(matches.length, 3);
+        },
+        'then mark the Css asset dirty': {
+            topic: function (assetGraph) {
+                assetGraph.findAssets({type: 'Css'})[0].markDirty();
+                return assetGraph;
+            },
+            'the text of the Css asset should still contain 3 occurrences of @font-face': function (assetGraph) {
+                var matches = assetGraph.findAssets({type: 'Css'})[0].text.match(/@font-face/g);
+                assert.equal(matches.length, 3);
+            }
+        }
     }
 })['export'](module);
