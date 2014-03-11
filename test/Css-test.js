@@ -7,7 +7,7 @@ vows.describe('Css').addBatch({
         topic: function () {
             var err,
                 callback = this.callback;
-            new AssetGraph({root: __dirname + '/Css/'})
+            new AssetGraph({root: __dirname + '/Css/parseErrors/'})
                 .on('warn', function (_err) {
                     err = _err;
                 })
@@ -27,7 +27,7 @@ vows.describe('Css').addBatch({
         topic: function () {
             var err,
                 callback = this.callback;
-            new AssetGraph({root: __dirname + '/Css/'})
+            new AssetGraph({root: __dirname + '/Css/parseErrors/'})
                 .on('warn', function (_err) {
                     err = _err;
                 })
