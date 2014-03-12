@@ -206,5 +206,43 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
         'the graph should contain no JavaScriptAmdRequire relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 0);
         }
+    },
+    'After loading test case where the require main module doesn\'t have an incoming relation from a html file': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/noHtml/'})
+                .registerRequireJsConfig()
+                .loadAssets('main.js')
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({
+                type: 'JavaScript',
+                isLoaded: true
+            }).length, 2);
+        },
+        'the graph should contain 1 JavaScriptAmdRequire relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 1);
+        }
+    },
+    'After loading test case where the require main module doesn\'t have an incoming relation from a html file, but has a requirejs.baseUrl configuration': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/noHtmlWithConfig/'})
+                .registerRequireJsConfig()
+                .loadAssets('main.js')
+                .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
+                .assumeRequireJsConfigHasBeenFound()
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({
+                type: 'JavaScript',
+                isLoaded: true
+            }).length, 2);
+        },
+        'the graph should contain 1 JavaScriptAmdRequire relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 1);
+        }
     }
 })['export'](module);
