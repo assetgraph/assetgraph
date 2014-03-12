@@ -244,5 +244,22 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
         'the graph should contain 1 JavaScriptAmdRequire relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 1);
         }
+    },
+    'After loading test case with a lazy loaded require statement': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/lazyRequire/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
+                .assumeRequireJsConfigHasBeenFound()
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 4 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({
+                type: 'JavaScript',
+                isLoaded: true
+            }).length, 4);
+        }
     }
 })['export'](module);
