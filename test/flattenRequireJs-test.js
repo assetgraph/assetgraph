@@ -963,7 +963,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                     .run(this.callback);
             },
             'the correct error should be emitted': function (assetGraph) {
-                assert.ok(assetGraph._emittedErrors);
+                assert.ok(assetGraph._emittedErrors, 'This test has failed once in a random manner. If you see this again expect it to be a race condition');
                 assert.equal(assetGraph._emittedErrors.length, 1);
                 assert.equal(assetGraph._emittedErrors[0].message.replace(/^file:\/\/[^\s]* /, ''), 'is referred to as both popular and popular.js, please omit the .js extension in define/require');
             }
