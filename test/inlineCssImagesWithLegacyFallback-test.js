@@ -141,5 +141,18 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
         'the graph should contain 2 HtmlStyle relations with an hrefType of "rootRelative"': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlStyle', hrefType: 'rootRelative'}).length, 2);
         }
+    },
+    'After loading test case with a small background-image inside a @media query, then running the inlineCssImagesWithLegacyFallback transform': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/mediaQuery/'})
+                .loadAssets('index.html')
+                .populate()
+                .inlineCssImagesWithLegacyFallback({isInitial: true}, 10000)
+                .run(this.callback);
+        },
+        'the background-image should not be inlined': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'CssImage', to: {isInline: false}}).length, 1);
+            assert.equal(assetGraph.findRelations({type: 'CssImage', to: {isInline: true}}).length, 0);
+        }
     }
 })['export'](module);
