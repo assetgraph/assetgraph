@@ -30,7 +30,7 @@ vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
                              /\/otherSubdir\/otherModule\.js$/);
             },
             'the text of the including asset should be updated correctly': function (assetGraph) {
-                assert.notEqual(assetGraph.findAssets({url: /\/index\.js$/})[0].text.indexOf('require("' + __dirname + '/JavaScriptCommonJsRequire/otherSubdir/otherModule.js")'), -1);
+                assert.notEqual(assetGraph.findAssets({url: /\/index\.js$/})[0].text.indexOf('require("./otherSubdir/otherModule.js")'), -1);
             }
         }
    }
