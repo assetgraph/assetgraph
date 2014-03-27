@@ -157,7 +157,6 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                     //.drawGraph('2-after.svg')
                     .run(this.callback);
             },
-
             'the graph should contain 3 JavaScript assets': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
             },
@@ -208,7 +207,6 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                     .replaceRequireJsWithAlmond()
                     .run(this.callback);
             },
-
             'the graph should contain 1 JavaScript asset': function (assetGraph) {
                 assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
             },
@@ -217,6 +215,11 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
             },
             'the graph should contain 0 HtmlRequireJsAlmondReplacement relations': function (assetGraph) {
                 assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 0);
+            },
+            'both Html assets should contain one <script> tag': function (assetGraph) {
+                assetGraph.findAssets({type: 'Html'}).forEach(function (htmlAsset) {
+                    assert.equal(htmlAsset.text.match(/<script/g).length, 1);
+                });
             }
         }
     }
