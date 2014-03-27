@@ -2,13 +2,13 @@ var vows = require('vows'),
     assert = require('assert'),
     AssetGraph = require('../lib'),
     fs = require('fs'),
-    requirejs = fs.readFileSync(__dirname + '/replaceRequireJsWithAlmond/require.js', 'utf8'),
-    almond = fs.readFileSync(__dirname + '/replaceRequireJsWithAlmond/almond.js', 'utf8');
+    requirejs = fs.readFileSync(__dirname + '/replaceRequireJsWithAlmond/mixed/require.js', 'utf8'),
+    almond = fs.readFileSync(__dirname + '/replaceRequireJsWithAlmond/mixed/almond.js', 'utf8');
 
 vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
     'After loading a non-almond test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/'})
+            new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/mixed/'})
                 .registerRequireJsConfig({preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true})
                 .loadAssets('require-pure.html')
                 .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
@@ -46,7 +46,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
     },
     'After loading an almond test case': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/'})
+            new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/mixed/'})
                 /*
                 // Debugging
                 .on('addAsset', function (asset) {
@@ -67,10 +67,10 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
         },
-        'the graph should contain 3 HtmlScript relation': function (assetGraph) {
+        'the graph should contain 3 HtmlScript relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 3);
         },
-        'the graph should contain 2 HtmlRequireJsAlmondReplacement relation': function (assetGraph) {
+        'the graph should contain 2 HtmlRequireJsAlmondReplacement relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 2);
         },
         'the JavaScript asset text should be equal to require.js': function (assetGraph) {
@@ -112,7 +112,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
     },
     'After loading an almond test case that uses requirejs as script loader': {
         topic: function () {
-            new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/'})
+            new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/mixed/'})
                 /*
                 // Debugging
                 .on('addAsset', function (asset) {
@@ -138,7 +138,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
             assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
         },
-        'the graph should contain 2 HtmlScript relation': function (assetGraph) {
+        'the graph should contain 2 HtmlScript relations': function (assetGraph) {
             assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
         },
         'the graph should contain 1 HtmlRequireJsAlmondReplacement relation': function (assetGraph) {
@@ -177,6 +177,46 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 assert.equal(assetGraph._vowsEmitedEvents.warn.filter(function (warn) {
                     return warn[0].transform === 'replaceRequireJsWithAlmond';
                 }).length, 1);
+            }
+        }
+    },
+    'After loading a test where multiple Html assets use the same require.js and have a data-almond attribute': {
+        topic: function () {
+            new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/multipleHtml/'})
+                .registerRequireJsConfig({preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true})
+                .loadAssets('*.html')
+                .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
+                .assumeRequireJsConfigHasBeenFound()
+                .populate()
+                .run(this.callback);
+        },
+        'the graph should contain 2 Html assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+        },
+        'the graph should contain 2 JavaScript assets': function (assetGraph) {
+            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+        },
+        'the graph should contain 2 HtmlScript relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
+        },
+        'the graph should contain 2 HtmlRequireJsAlmondReplacement relations': function (assetGraph) {
+            assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 2);
+        },
+        'then running the replaceRequireJsWithAlmond transform': {
+            topic: function (assetGraph) {
+                assetGraph
+                    .replaceRequireJsWithAlmond()
+                    .run(this.callback);
+            },
+
+            'the graph should contain 1 JavaScript asset': function (assetGraph) {
+                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
+            },
+            'the graph should contain 2 HtmlScript relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
+            },
+            'the graph should contain 0 HtmlRequireJsAlmondReplacement relations': function (assetGraph) {
+                assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 0);
             }
         }
     }
