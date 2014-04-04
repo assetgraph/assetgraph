@@ -35,9 +35,9 @@ vows.describe('HtmlPictureSourceSrcSet test').addBatch({
                 assert.deepEqual(assetGraph.findRelations({type: 'HtmlPictureSourceSrcSet'}).map(function (htmlPictureSourceSrcSet) {
                     return htmlPictureSourceSrcSet.node.outerHTML;
                 }), [
-                    '<source media="(min-width: 45em)" srcset="large-1.jpg 1x, reallyLarge.jpg 2x"></source>',
-                    '<source media="(min-width: 18em)" srcset="med-1.jpg 1x, reallyMed.jpg 2x"></source>',
-                    '<source srcset="small-1.jpg 1x, reallySmall.jpg 2x"></source>'
+                    '<source media="(min-width: 45em)" srcset="large-1.jpg 1x, reallyLarge.jpg 2x">',
+                    '<source media="(min-width: 18em)" srcset="med-1.jpg 1x, reallyMed.jpg 2x">',
+                    '<source srcset="small-1.jpg 1x, reallySmall.jpg 2x">'
                 ]);
             }
         }
