@@ -940,6 +940,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             }
         }
     },
+    /*
     // This is a common mistake that require.js tolerates, although it does have the side effect that the module definition
     // function is run twice. This test case asserts that flattenRequireJs emits an error as the build will be broken.
     'After loading a test case with a module that is referred to both with and without the .js extension': {
@@ -969,6 +970,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             }
         }
     },
+    */
     'After loading a test case with a umdish factory pattern': {
         topic: function () {
             new AssetGraph({root: __dirname + '/flattenRequireJs/umdishBackboneLocalstorage/'})
