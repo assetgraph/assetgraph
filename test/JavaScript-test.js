@@ -11,7 +11,7 @@ vows.describe('JavaScript').addBatch({
             var err,
                 callback = this.callback;
             new AssetGraph({root: __dirname + '/JavaScript/'})
-                .on('error', function (_err) {
+                .on('warn', function (_err) {
                     err = _err;
                 })
                 .loadAssets('parseErrorInInlineJavaScript.html')
@@ -30,16 +30,16 @@ vows.describe('JavaScript').addBatch({
     },
     'After loading test case that has a parse error in an external JavaScript asset': {
         topic: function () {
-            var err,
+            var firstWarning,
                 callback = this.callback;
             var assetGraph = new AssetGraph({root: __dirname + '/JavaScript/'})
-                .on('error', function (_err) {
-                    err = _err;
+                .on('warn', function (err) {
+                    firstWarning = firstWarning || err;
                 })
                 .loadAssets('parseErrorInExternalJavaScript.html')
                 .populate()
                 .run(function () {
-                    callback(err);
+                    callback(firstWarning);
                 });
         },
         'it should result in an Error object': function (err, assetGraph) {
