@@ -41,11 +41,11 @@
     "iconv": "=2.0.3",
     "jshint": "=2.5.0",
     "less": "=1.4.2",
-    "mocha": "^1.18.2",
+    "mocha": "=1.18.2",
     "onedox": "~0.0.1",
     "stylus": "=0.23.0",
     "svgo": "=0.4.4",
-    "unexpected": "^3.1.5",
+    "unexpected": "=3.1.5",
     "vows": "=0.7.0",
     "yui-compressor": "=0.1.3"
   },
