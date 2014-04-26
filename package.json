@@ -39,7 +39,7 @@
     "closure-compiler": "=0.2.3",
     "coffee-script": "=1.2.0",
     "iconv": "=2.0.3",
-    "jshint": "~2.4.2",
+    "jshint": "=2.5.0",
     "less": "=1.4.2",
     "mocha": "^1.18.2",
     "onedox": "~0.0.1",
