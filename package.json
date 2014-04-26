@@ -41,9 +41,11 @@
     "iconv": "=2.0.3",
     "jshint": "~2.4.2",
     "less": "=1.4.2",
+    "mocha": "^1.18.2",
     "onedox": "~0.0.1",
     "stylus": "=0.23.0",
     "svgo": "=0.4.4",
+    "unexpected": "^3.1.5",
     "vows": "=0.7.0",
     "yui-compressor": "=0.1.3"
   },
@@ -56,7 +58,7 @@
   "main": "lib",
   "scripts": {
     "lint": "jshint .",
-    "test": "npm run lint && vows",
-    "travis": "npm run lint && vows --spec"
+    "test": "npm run lint && vows && mocha",
+    "travis": "npm run lint && vows --spec && mocha -R spec"
   }
 }
