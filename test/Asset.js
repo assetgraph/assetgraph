@@ -1,4 +1,5 @@
 var expect = require('./unexpected-with-plugins'),
+    _ = require('underscore'),
     urlTools = require('urltools'),
     AssetGraph = require('../lib');
 
@@ -294,5 +295,82 @@ describe('Asset', function () {
         assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].hrefType = 'relative';
         expect(assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].href, 'to equal', 'subdir/quux.html');
         expect(assetGraph.findAssets({type: 'Html', url: /\/subdir\/quux\.html$/})[0].isLoaded, 'to be false');
+    });
+
+    describe('#clone()', function () {
+        it('should handle a test case with multiple Html assets', function (done) {
+            new AssetGraph({root: __dirname + '/Asset/clone/multipleHtmls/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'Html', 3);
+                    expect(assetGraph, 'to contain asset', 'Png');
+                    expect(assetGraph, 'to contain asset', {type: 'Css', isInline: true});
+
+                    var indexHtml = assetGraph.findAssets({type: 'Html'})[0],
+                        assetClone = indexHtml.clone();
+                    assetClone.url = indexHtml.url.replace(/\.html$/, ".clone.html");
+
+                    expect(assetGraph, 'to contain asset', {url: /\/index\.clone\.html$/});
+                    expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {url: /\/anotherpage\.html$/}});
+                    expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {url: /\/yetanotherpage\.html$/}});
+                    expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {type: 'Css'}});
+                    expect(assetGraph, 'to contain asset', 'Png');
+                    expect(assetGraph, 'to contain assets', {type: 'Css', isInline: true}, 2);
+
+                    var originalAndCloned = assetGraph.findAssets({url: /\/index(?:\.clone)?.html/});
+                    expect(originalAndCloned[0].text, 'to equal', originalAndCloned[1].text);
+                })
+                .run(done);
+        });
+
+        it('should handle a test case with an advanced require.js construct', function (done) {
+            new AssetGraph({root: __dirname + '/Asset/clone/requireJs/'})
+                .registerRequireJsConfig()
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 7);
+                    var clone = assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.clone();
+
+                    expect(assetGraph.findRelations({}, true).filter(function (relation) {
+                        return !relation.to.isAsset;
+                    }), 'to equal', 0);
+
+                    expect(assetGraph.findRelations({from: assetGraph.findAssets().pop()}), 'to have length',
+                             assetGraph.findRelations({from: {url: /\/main\.js$/}}).length);
+
+
+                    assetGraph.findAssets({url: /\/thelib\.js/})[0].clone();
+
+                    expect(assetGraph.findAssets().pop().text, 'to equal', assetGraph.findAssets({url: /\/thelib\.js$/})[0].text);
+
+                    expect(
+                        _.pluck(assetGraph.findRelations({from: assetGraph.findAssets().pop()}), 'type'),
+                        'to equal',
+                        _.pluck(assetGraph.findRelations({from: {url: /\/thelib\.js$/}}), 'type')
+                    );
+                })
+                .run(done);
+        });
+
+        it('should handle a test case with a Css asset with an inline image', function (done) {
+            new AssetGraph({root: __dirname + '/Asset/clone/cssWithInlineImage/'})
+                .loadAssets('index.css')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 2);
+
+                    assetGraph.findAssets({type: 'Css'})[0].clone();
+
+                    expect(assetGraph, 'to contain assets', 'Css', 2);
+
+                    expect(assetGraph, 'to contain assets', 'Png', 2);
+                    assetGraph.findAssets({type: 'Css'}).forEach(function (cssAsset) {
+                        expect(assetGraph, 'to contain relations', {from: cssAsset, to: {isInline: true, isImage: true}}, 1);
+                    });
+                })
+                .run(done);
+        });
     });
 });
