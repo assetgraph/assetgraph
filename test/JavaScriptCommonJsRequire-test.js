@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
@@ -11,13 +11,13 @@ vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScriptCommonJsRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptCommonJsRequire'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'JavaScriptCommonJsRequire', 2);
         },
         'the graph should contain 3 JavaScript assets with the correct urls': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
-            assert.equal(assetGraph.findAssets({url: assetGraph.root + 'index.js'}).length, 1);
-            assert.equal(assetGraph.findAssets({url: /\/otherModule\.js$/}).length, 1);
-            assert.equal(assetGraph.findAssets({url: /\/subdir\/index\.js$/}).length, 1);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+            expect(assetGraph, 'to contain asset', {url: assetGraph.root + 'index.js'});
+            expect(assetGraph, 'to contain asset', {url: /\/otherModule\.js$/});
+            expect(assetGraph, 'to contain asset', {url: /\/subdir\/index\.js$/});
         },
         'then move otherModule.js': {
             topic: function (assetGraph) {
@@ -26,11 +26,11 @@ vows.describe('relations.JavaScriptCommonJsRequire').addBatch({
                 return assetGraph;
             },
             'the href of the incoming relation should be updated correctly': function (assetGraph) {
-                assert.match(assetGraph.findRelations({to: {url: /\/otherSubdir\/otherModule\.js$/}})[0].href,
+                expect(assetGraph.findRelations({to: {url: /\/otherSubdir\/otherModule\.js$/}})[0].href, 'to match',
                              /\/otherSubdir\/otherModule\.js$/);
             },
             'the text of the including asset should be updated correctly': function (assetGraph) {
-                assert.notEqual(assetGraph.findAssets({url: /\/index\.js$/})[0].text.indexOf('require("./otherSubdir/otherModule.js")'), -1);
+                expect(assetGraph.findAssets({url: /\/index\.js$/})[0].text, 'to contain', 'require("./otherSubdir/otherModule.js")');
             }
         }
    }

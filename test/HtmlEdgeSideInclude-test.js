@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     urlTools = require('urltools'),
     AssetGraph = require('../lib'),
     query = AssetGraph.query;
@@ -15,13 +15,13 @@ vows.describe('Edge side include test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain two Html assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Html', 2);
         },
         'the graph should contain one populated HtmlEdgeSideInclude relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlEdgeSideInclude'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlEdgeSideInclude');
         },
         'the graph should contain two HtmlEdgeSideInclude relations in total': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlEdgeSideInclude'}, true).length, 2);
+            expect(assetGraph, 'to contain relations including unresolved', 'HtmlEdgeSideInclude', 2);
         },
         'then move the index.html one subdir down': {
             topic: function (assetGraph) {
@@ -29,7 +29,7 @@ vows.describe('Edge side include test').addBatch({
                 return assetGraph;
             },
             'the url of the unpopulated HtmlEdgeSideInclude relation should be updated': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({to: {url: /\.php$/}, type: 'HtmlEdgeSideInclude'}, true)[0].href,
+                expect(assetGraph.findRelations({to: {url: /\.php$/}, type: 'HtmlEdgeSideInclude'}, true)[0].href, 'to equal',
                              '../dynamicStuff/getTitleForReferringPage.php');
             }
         }

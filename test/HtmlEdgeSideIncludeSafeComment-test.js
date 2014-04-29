@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     urlTools = require('urltools'),
     AssetGraph = require('../lib');
 
@@ -12,19 +12,19 @@ vows.describe('HtmlEdgeSideIncludeSafeComment').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 3);
+            expect(assetGraph, 'to contain assets', 3);
         },
         'the graph should contain 1 inline Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html', isInline: true}).length, 1);
+            expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});
         },
         'the graph should contain 1 non-inline Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html', isInline: false}).length, 1);
+            expect(assetGraph, 'to contain asset', {type: 'Html', isInline: false});
         },
         'the graph should contain 1 Png asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Png');
         },
         'the graph should contain 1 HtmlEdgeSideIncludeSafeComment relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlEdgeSideIncludeSafeComment'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlEdgeSideIncludeSafeComment');
         },
         'then minify the main Html asset': {
             topic: function (assetGraph) {
@@ -32,7 +32,7 @@ vows.describe('HtmlEdgeSideIncludeSafeComment').addBatch({
                 return assetGraph;
             },
             'the <!--esi ...--> should still be there': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'Html', isInline: false})[0].text, /<!--esi.*-->/);
+                expect(assetGraph.findAssets({type: 'Html', isInline: false})[0].text, 'to match', /<!--esi.*-->/);
             }
         }
     }

@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../lib'),
     query = AssetGraph.query;
@@ -13,10 +13,10 @@ vows.describe('relations.HtmlScript').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 6 HtmlScript relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlScript'}, true).length, 6);
+            expect(assetGraph, 'to contain relations including unresolved', 'HtmlScript', 6);
         },
         'the hrefs of the relations should be correct': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findRelations(), 'href'),
+            expect(_.pluck(assetGraph.findRelations(), 'href'), 'to equal',
                              [
                                  'externalNoType.js',
                                  undefined,

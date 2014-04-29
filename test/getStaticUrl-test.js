@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     urlTools = require('urltools'),
     AssetGraph = require('../lib');
 
@@ -12,25 +12,25 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 .run(this.callback);
         },
         'the graph should contain a single JavaScript asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'JavaScript');
         },
         'the graph should contain 3 JavaScriptGetStaticUrl relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 3);
+            expect(assetGraph, 'to contain relations', 'JavaScriptGetStaticUrl', 3);
         },
         'the graph should contain 3 StaticUrlMap assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'StaticUrlMap'}).length, 3);
+            expect(assetGraph, 'to contain assets', 'StaticUrlMap', 3);
         },
         'the graph should contain 9 StaticUrlMapEntry relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 9);
+            expect(assetGraph, 'to contain relations', 'StaticUrlMapEntry', 9);
         },
         'the graph should contain 4 Json assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Json'}).length, 4);
+            expect(assetGraph, 'to contain assets', 'Json', 4);
         },
         'the StaticUrlMapEntry relations should have the right hrefs': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({href: 'json/a.json'}).length, 2);
-            assert.equal(assetGraph.findRelations({href: 'json/b.json'}).length, 3);
-            assert.equal(assetGraph.findRelations({href: 'json/c.json'}).length, 3);
-            assert.equal(assetGraph.findRelations({href: 'json/subsubdir/d.json'}).length, 1);
+            expect(assetGraph, 'to contain relations', {href: 'json/a.json'}, 2);
+            expect(assetGraph, 'to contain relations', {href: 'json/b.json'}, 3);
+            expect(assetGraph, 'to contain relations', {href: 'json/c.json'}, 3);
+            expect(assetGraph, 'to contain relation', {href: 'json/subsubdir/d.json'});
         },
         'then move one of the assets pointed to by a StaticUrlMapEntry relation': {
             topic: function (assetGraph) {
@@ -39,9 +39,9 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             },
             'the resulting JavaScript should map the url correctly': function (assetGraph) {
                 var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
-                assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');
-                assert.equal(new Function(src + ';return theDoubleStarThing;')(), 'json/subsubdir/d.json');
-                assert.equal(new Function(src + ';return theBracketThing;')(), 'json/c.json');
+                expect(new Function(src + ';return theThing;')(), 'to equal', 'static/a76a76a7a.json');
+                expect(new Function(src + ';return theDoubleStarThing;')(), 'to equal', 'json/subsubdir/d.json');
+                expect(new Function(src + ';return theBracketThing;')(), 'to equal', 'json/c.json');
             },
             'then omit the GETSTATICURL function calls': {
                 topic: function (assetGraph) {
@@ -53,9 +53,9 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 },
                 'the JavaScript should still map the url correctly': function (assetGraph) {
                     var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
-                    assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');
-                    assert.equal(new Function(src + ';return theDoubleStarThing;')(), 'json/subsubdir/d.json');
-                    assert.equal(new Function(src + ';return theBracketThing;')(), 'json/c.json');
+                    expect(new Function(src + ';return theThing;')(), 'to equal', 'static/a76a76a7a.json');
+                    expect(new Function(src + ';return theDoubleStarThing;')(), 'to equal', 'json/subsubdir/d.json');
+                    expect(new Function(src + ';return theBracketThing;')(), 'to equal', 'json/c.json');
                }
             }
         }
@@ -79,25 +79,25 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                     .run(this.callback);
             },
             'the graph should contain a single JavaScript asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
+                expect(assetGraph, 'to contain asset', 'JavaScript');
             },
             'the graph should contain 3 JavaScriptGetStaticUrl relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 3);
+                expect(assetGraph, 'to contain relations', 'JavaScriptGetStaticUrl', 3);
             },
             'the graph should contain 3 StaticUrlMap assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'StaticUrlMap'}).length, 3);
+                expect(assetGraph, 'to contain assets', 'StaticUrlMap', 3);
             },
             'the graph should contain 9 StaticUrlMapEntry relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 9);
+                expect(assetGraph, 'to contain relations', 'StaticUrlMapEntry', 9);
             },
             'the graph should contain 4 Json assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Json'}).length, 4);
+                expect(assetGraph, 'to contain assets', 'Json', 4);
             },
             'the StaticUrlMapEntry relations should have the right hrefs': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({href: 'json/a.json'}).length, 2);
-                assert.equal(assetGraph.findRelations({href: 'json/b.json'}).length, 3);
-                assert.equal(assetGraph.findRelations({href: 'json/c.json'}).length, 3);
-                assert.equal(assetGraph.findRelations({href: 'json/subsubdir/d.json'}).length, 1);
+                expect(assetGraph, 'to contain relations', {href: 'json/a.json'}, 2);
+                expect(assetGraph, 'to contain relations', {href: 'json/b.json'}, 3);
+                expect(assetGraph, 'to contain relations', {href: 'json/c.json'}, 3);
+                expect(assetGraph, 'to contain relation', {href: 'json/subsubdir/d.json'});
             },
             'then move one of the assets pointed to by a JavaScriptGetStaticUrl relation': {
                 topic: function (assetGraph) {
@@ -106,9 +106,9 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                 },
                 'the resulting JavaScript should map the url correctly': function (assetGraph) {
                     var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
-                    assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');
-                    assert.equal(new Function(src + ';return theDoubleStarThing;')(), 'json/subsubdir/d.json');
-                    assert.equal(new Function(src + ';return theBracketThing;')(), 'json/c.json');
+                    expect(new Function(src + ';return theThing;')(), 'to equal', 'static/a76a76a7a.json');
+                    expect(new Function(src + ';return theDoubleStarThing;')(), 'to equal', 'json/subsubdir/d.json');
+                    expect(new Function(src + ';return theBracketThing;')(), 'to equal', 'json/c.json');
                 },
                 'then omit the GETSTATICURL function calls': {
                     topic: function (assetGraph) {
@@ -120,9 +120,9 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                     },
                     'the JavaScript should still map the url correctly': function (assetGraph) {
                         var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
-                        assert.equal(new Function(src + ';return theThing;')(), 'static/a76a76a7a.json');
-                        assert.equal(new Function(src + ';return theDoubleStarThing;')(), 'json/subsubdir/d.json');
-                        assert.equal(new Function(src + ';return theBracketThing;')(), 'json/c.json');
+                        expect(new Function(src + ';return theThing;')(), 'to equal', 'static/a76a76a7a.json');
+                        expect(new Function(src + ';return theDoubleStarThing;')(), 'to equal', 'json/subsubdir/d.json');
+                        expect(new Function(src + ';return theBracketThing;')(), 'to equal', 'json/c.json');
                     }
                 }
             }

@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('HtmlInlineEventHandler test').addBatch({
@@ -11,16 +11,16 @@ vows.describe('HtmlInlineEventHandler test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 4);
+            expect(assetGraph, 'to contain assets', 4);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
         },
         'the graph should contain 3 HtmlInlineEventHandler relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlInlineEventHandler'}).length, 3);
+            expect(assetGraph, 'to contain relations', 'HtmlInlineEventHandler', 3);
         },
         'then update the text of each JavaScript asset': {
             topic: function (assetGraph) {
@@ -30,7 +30,7 @@ vows.describe('HtmlInlineEventHandler test').addBatch({
                 return assetGraph;
             },
             'the Html should be updated': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /that\.focused.*that\.focused/);
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /that\.focused.*that\.focused/);
             }
         }
     }

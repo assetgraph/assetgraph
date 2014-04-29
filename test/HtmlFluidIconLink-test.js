@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('Html with <link rel="fluid-icon">').addBatch({
@@ -11,10 +11,10 @@ vows.describe('Html with <link rel="fluid-icon">').addBatch({
                 .run(this.callback);
         },
         'the graph should contain an HtmlFluidIconLink relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlFluidIconLink'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlFluidIconLink');
         },
         'the graph should contain a single Png asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Png');
         }
     }
 })['export'](module);

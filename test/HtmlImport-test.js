@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('Html with <link rel="import">').addBatch({
@@ -11,19 +11,19 @@ vows.describe('Html with <link rel="import">').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 HtmlImport relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlImport'}).length, 3);
+            expect(assetGraph, 'to contain relations', 'HtmlImport', 3);
         },
         'the graph should contain 4 populated Html assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({
+            expect(assetGraph, 'to contain assets', {
                 type: 'Html',
                 isPopulated: true
-            }).length, 4);
+            }, 4);
         },
         'the graph should contain 1 populated Css asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({
+            expect(assetGraph, 'to contain assets', {
                 type: 'Css',
                 isPopulated: true
-            }).length, 1);
+            }, 1);
         }
     }
 })['export'](module);

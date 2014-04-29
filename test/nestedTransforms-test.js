@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 AssetGraph.registerTransform(function pushItemToArraySync(item, array) {
@@ -60,7 +60,7 @@ vows.describe('Nested transforms').addBatch({
                 });
         },
         'the items should be pushed in the right order': function (array) {
-            assert.deepEqual(array, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't']);
+            expect(array, 'to equal', ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't']);
         }
     }
 })['export'](module);

@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('JavaScriptGetText').addBatch({
@@ -11,10 +11,10 @@ vows.describe('JavaScriptGetText').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 3);
+            expect(assetGraph, 'to contain assets', 3);
         },
         'the graph should contain 2 Html assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Html', 2);
         },
         'then inlining the JavaScriptGetText relation': {
             topic: function (assetGraph) {
@@ -23,7 +23,7 @@ vows.describe('JavaScriptGetText').addBatch({
                     .run(this.callback);
             },
             'the GETTEXT expression should be replaced with a string with the contents of the Html asset': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /var myHtmlString\s*=\s*(['"])<html><body>Boo!<\/body><\/html>\\n\1/);
+                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<\/body><\/html>\\n\1/);
             },
             'then manipulate the Html asset': {
                 topic: function (assetGraph) {
@@ -34,7 +34,7 @@ vows.describe('JavaScriptGetText').addBatch({
                     return assetGraph;
                 },
                 'the string literal in the JavaScript should be updated': function (assetGraph) {
-                    assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /var myHtmlString\s*=\s*(['"])<html><body>Boo!<div>foo<\/div><\/body><\/html>\\n\1/);
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<div>foo<\/div><\/body><\/html>\\n\1/);
                 },
                 'then externalize the Html asset pointed to by the JavaScriptGetText relation': {
                     topic: function (assetGraph) {
@@ -42,7 +42,7 @@ vows.describe('JavaScriptGetText').addBatch({
                         return assetGraph;
                     },
                     'the GETTEXT expression should be back and point at the new url': function (assetGraph) {
-                        assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /var myHtmlString\s*=\s*GETTEXT\((['"])http:\/\/example\.com\/template\.html\1\)/);
+                        expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*GETTEXT\((['"])http:\/\/example\.com\/template\.html\1\)/);
                     }
                 }
             }

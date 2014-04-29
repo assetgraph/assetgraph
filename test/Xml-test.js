@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('Xml').addBatch({
@@ -11,14 +11,14 @@ vows.describe('Xml').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 2);
+            expect(assetGraph, 'to contain assets', 2);
         },
         'the graph should contain one Xml asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Xml'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Xml');
         },
         'the parseTree of the Xml asset should contain a Description tag': function (assetGraph) {
             var xml = assetGraph.findAssets({type: 'Xml'})[0];
-            assert.equal(xml.parseTree.getElementsByTagName('Description').length, 1);
+            expect(xml.parseTree.getElementsByTagName('Description'), 'to have length', 1);
         },
         'then manipulate the Description tag and mark the Xml asset dirty': {
             topic: function (assetGraph) {
@@ -29,7 +29,7 @@ vows.describe('Xml').addBatch({
             },
             'the text of the Xml asset should contain "foobarquux"': function (assetGraph) {
                 var xml = assetGraph.findAssets({type: 'Xml'})[0];
-                assert.matches(xml.text, /foobarquux/);
+                expect(xml.text, 'to match', /foobarquux/);
             }
         }
     }

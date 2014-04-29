@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 // Really naive implementation, don't use for anything important:
@@ -26,23 +26,23 @@ vows.describe('Changing the encoding of assets').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the body of the asset should be decoded correctly': function (assetGraph) {
-            assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /æøå/);
+            expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /æøå/);
         },
         'then change the encoding to utf-8': {
             topic: function (assetGraph) {
                 assetGraph.setAssetEncoding({type: 'Html'}, 'utf-8').run(this.callback);
             },
             'the contents should be recoded to utf-8': function (assetGraph) {
-                assert.notEqual(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer("æøå", 'utf-8')), -1);
+                expect(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer("æøå", 'utf-8')), 'not to equal', -1);
             },
             'there should be a single meta tag': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Html'})[0].text.match(/<meta/g).length, 1);
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /<meta/g);
             },
             'the meta tag should specify utf-8 as the charset': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match',
                                /<meta http-equiv=(['"]|)Content-Type\1 content=(['"]|)text\/html; charset=utf-8\2/i);
             }
         }
@@ -55,23 +55,23 @@ vows.describe('Changing the encoding of assets').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the body of the asset should be decoded correctly': function (assetGraph) {
-            assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /æøå/);
+            expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /æøå/);
         },
         'then change the encoding to utf-8': {
             topic: function (assetGraph) {
                 assetGraph.setAssetEncoding({type: 'Html'}, 'utf-8').run(this.callback);
             },
             'the contents should be recoded to utf-8': function (assetGraph) {
-                assert.notEqual(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer("æøå", 'utf-8')), -1);
+                expect(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer("æøå", 'utf-8')), 'not to equal', -1);
             },
             'there should be a single meta tag': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Html'})[0].text.match(/<meta/g).length, 1);
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /<meta/g);
             },
             'the meta tag should specify utf-8 as the charset': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match',
                                /<meta charset=(["']|)utf-8\1/i);
             }
         }
@@ -84,23 +84,23 @@ vows.describe('Changing the encoding of assets').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the body of the asset should be decoded correctly': function (assetGraph) {
-            assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /æøå/);
+            expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /æøå/);
         },
         'then change the encoding to iso-8859-1': {
             topic: function (assetGraph) {
                 assetGraph.setAssetEncoding({type: 'Html'}, 'iso-8859-1').run(this.callback);
             },
             'the contents should be recoded to iso-8859-1': function (assetGraph) {
-                assert.notEqual(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer([0xe6, 0xf8, 0xe5])), -1);
+                expect(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer([0xe6, 0xf8, 0xe5])), 'not to equal', -1);
             },
             'there should be a single meta tag': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Html'})[0].text.match(/<meta/g).length, 1);
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /<meta/g);
             },
             'the meta tag should specify iso-8859-1 as the charset': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match',
                                /<meta charset=(['"]|)iso-8859-1\1/i);
             }
         }

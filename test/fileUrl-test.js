@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('file: urls').addBatch({
@@ -11,7 +11,7 @@ vows.describe('file: urls').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 1 asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 1);
+            expect(assetGraph, 'to contain asset');
         }
     }
 })['export'](module);

@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('Html with <link rel="author">').addBatch({
@@ -12,10 +12,10 @@ vows.describe('Html with <link rel="author">').addBatch({
         },
 
         'the graph should contain HtmlAuthorLink relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlAuthorLink'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'HtmlAuthorLink', 2);
         },
         'the graph should contain two Text assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Text'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Text', 2);
         }
     }
 })['export'](module);

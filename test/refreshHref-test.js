@@ -1,6 +1,6 @@
 var AssetGraph = require('../lib'),
     vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore');
 
 vows.describe('Changing the url of assets').addBatch({
@@ -11,10 +11,10 @@ vows.describe('Changing the url of assets').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 1 Html assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the href property of the urls should come out correctly': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), [
+            expect(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), 'to equal', [
                 'relative.html',
                 '/rootRelative.html',
                 '//example.com/protocolRelative.html',
@@ -22,7 +22,7 @@ vows.describe('Changing the url of assets').addBatch({
             ]);
         },
         'the hrefType property of the urls should come out correctly': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), [
+            expect(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), 'to equal', [
                 'relative',
                 'rootRelative',
                 'protocolRelative',
@@ -38,7 +38,7 @@ vows.describe('Changing the url of assets').addBatch({
                 return assetGraph;
             },
             'the href property of the urls should still honor the original hrefType': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), [
+                expect(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), 'to equal', [
                     'relative2.html',
                     '/rootRelative2.html',
                     '//example.com/protocolRelative2.html',

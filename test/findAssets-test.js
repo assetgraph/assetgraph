@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('AssetGraph.findAssets').addBatch({
@@ -17,38 +17,38 @@ vows.describe('AssetGraph.findAssets').addBatch({
                 .run(this.callback);
         },
         'then lookup single value of unindexed property': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({foo: 'bar'}).length, 2);
-            assert.equal(assetGraph.findAssets({foo: 'baz'}).length, 2);
-            assert.equal(assetGraph.findAssets({foo: 'quux'}).length, 1);
-            assert.equal(assetGraph.findAssets({foo: ['quux']}).length, 1);
-            assert.equal(assetGraph.findAssets({foo: function (val) {return typeof val === 'undefined';}}).length, 1);
+            expect(assetGraph, 'to contain assets', {foo: 'bar'}, 2);
+            expect(assetGraph, 'to contain assets', {foo: 'baz'}, 2);
+            expect(assetGraph, 'to contain asset', {foo: 'quux'});
+            expect(assetGraph, 'to contain asset', {foo: ['quux']});
+            expect(assetGraph, 'to contain asset', {foo: function (val) {return typeof val === 'undefined';}});
         },
         'then lookup multiple values of unindexed property': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({foo: ['bar', 'quux']}).length, 3);
-            assert.equal(assetGraph.findAssets({foo: ['bar', 'baz']}).length, 4);
-            assert.equal(assetGraph.findAssets({foo: AssetGraph.query.or('quux', function (val) {return typeof val === 'undefined';})}).length, 2);
+            expect(assetGraph, 'to contain assets', {foo: ['bar', 'quux']}, 3);
+            expect(assetGraph, 'to contain assets', {foo: ['bar', 'baz']}, 4);
+            expect(assetGraph, 'to contain assets', {foo: AssetGraph.query.or('quux', function (val) {return typeof val === 'undefined';})}, 2);
         },
         'then lookup single value of indexed property': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 3);
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
-            assert.equal(assetGraph.findAssets({type: 'Htc'}).length, 1);
+            expect(assetGraph, 'to contain assets', 'Html', 3);
+            expect(assetGraph, 'to contain assets', 'Css', 2);
+            expect(assetGraph, 'to contain asset', 'Htc');
         },
         'then lookup multiple values of indexed property': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: ['Css', 'Html']}).length, 5);
-            assert.equal(assetGraph.findAssets({type: ['Htc', 'Css', 'Html']}).length, 6);
-            assert.equal(assetGraph.findAssets({type: ['Htc', 'Html']}).length, 4);
-            assert.equal(assetGraph.findAssets({type: ['Css', 'Htc']}).length, 3);
+            expect(assetGraph, 'to contain assets', {type: ['Css', 'Html']}, 5);
+            expect(assetGraph, 'to contain assets', {type: ['Htc', 'Css', 'Html']}, 6);
+            expect(assetGraph, 'to contain assets', {type: ['Htc', 'Html']}, 4);
+            expect(assetGraph, 'to contain assets', {type: ['Css', 'Htc']}, 3);
         },
         'then lookup multiple properties': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({foo: 'baz', type: 'Css'}).length, 1);
-            assert.equal(assetGraph.findAssets({foo: 'bar', type: 'Html'}).length, 2);
-            assert.equal(assetGraph.findAssets({foo: 'quux', type: 'Htc'}).length, 0);
+            expect(assetGraph, 'to contain asset', {foo: 'baz', type: 'Css'});
+            expect(assetGraph, 'to contain assets', {foo: 'bar', type: 'Html'}, 2);
+            expect(assetGraph, 'to contain no assets', {foo: 'quux', type: 'Htc'});
         },
         'then lookup based on incoming relations': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html', incoming: {type: 'HtmlAnchor'}}).length, 0);
+            expect(assetGraph, 'to contain no assets', {type: 'Html', incoming: {type: 'HtmlAnchor'}});
         },
         'then lookup based on outgoing relations': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({outgoing: {type: 'HtmlAnchor'}}).length, 0);
+            expect(assetGraph, 'to contain no assets', {outgoing: {type: 'HtmlAnchor'}});
         },
         'then add some relations to the graph': {
             topic: function (assetGraph) {
@@ -71,12 +71,12 @@ vows.describe('AssetGraph.findAssets').addBatch({
                 return assetGraph;
             },
             'then lookup based on incoming relations': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Html', incoming: {type: 'HtmlAnchor'}}).length, 2);
-                assert.equal(assetGraph.findAssets({incoming: {type: 'HtmlAnchor'}}).length, 2);
+                expect(assetGraph, 'to contain assets', {type: 'Html', incoming: {type: 'HtmlAnchor'}}, 2);
+                expect(assetGraph, 'to contain assets', {incoming: {type: 'HtmlAnchor'}}, 2);
             },
             'then lookup based on outgoing relations': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({outgoing: {type: 'HtmlAnchor'}}).length, 1);
-                assert.equal(assetGraph.findAssets({outgoing: {to: {text: 'f'}}}).length, 1);
+                expect(assetGraph, 'to contain asset', {outgoing: {type: 'HtmlAnchor'}});
+                expect(assetGraph, 'to contain asset', {outgoing: {to: {text: 'f'}}});
             }
         }
     }

@@ -31,7 +31,7 @@ expect.addAssertion('to contain (url|urls)', function (expect, subject, urls) {
     });
 });
 
-expect.addAssertion('to contain [no] (relation|relations)', function (expect, subject, queryObj, number) {
+expect.addAssertion('to contain [no] (relation|relations) [including unresolved]', function (expect, subject, queryObj, number) {
     if (typeof queryObj === 'string') {
         queryObj = {type: queryObj};
     } else if (typeof queryObj === 'number') {
@@ -44,7 +44,7 @@ expect.addAssertion('to contain [no] (relation|relations)', function (expect, su
         number = 1;
     }
     this.errorMode = 'nested';
-    expect(subject.findRelations(queryObj).length, 'to equal', number);
+    expect(subject.findRelations(queryObj, this.flags['including unresolved']).length, 'to equal', number);
 });
 
 expect.addType({

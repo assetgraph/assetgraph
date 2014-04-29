@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib/');
 
 vows.describe('relations.HtmlDart').addBatch({
@@ -11,13 +11,13 @@ vows.describe('relations.HtmlDart').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 1 HtmlDart relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations().length, 1);
+            expect(assetGraph, 'to contain relation');
         },
         'the hrefs of the relation should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findRelations()[0].href, 'app.dart');
+            expect(assetGraph.findRelations()[0].href, 'to equal', 'app.dart');
         },
         'the content of the asset should be correct': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Dart'})[0].text, "'I am Dart'\n");
+            expect(assetGraph.findAssets({type: 'Dart'})[0].text, 'to equal', "'I am Dart'\n");
         }
     }
 })['export'](module);

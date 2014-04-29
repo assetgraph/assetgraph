@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('css @media rule').addBatch({
@@ -11,7 +11,7 @@ vows.describe('css @media rule').addBatch({
                 .run(this.callback);
         },
         'the graph should contain two CssImage relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'CssImage', 2);
         }
     }
 })['export'](module);

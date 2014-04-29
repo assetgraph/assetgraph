@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('JavaScriptTrHtml').addBatch({
@@ -11,16 +11,16 @@ vows.describe('JavaScriptTrHtml').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 3);
+            expect(assetGraph, 'to contain assets', 3);
         },
         'the graph should contain 2 Html assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Html', 2);
         },
         'the graph should contain 1 JavaScriptTrHtml relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptTrHtml'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'JavaScriptTrHtml');
         },
         'the href getter of the JavaScriptTrHtml relation should return undefined': function (assetGraph) {
-            assert.isUndefined(assetGraph.findRelations({type: 'JavaScriptTrHtml'})[0].href);
+            expect(assetGraph.findRelations({type: 'JavaScriptTrHtml'})[0].href, 'to be undefined');
         },
         'then set the omitFunctionCall property of the JavaScriptTrHtml relation to true and inline the JavaScriptTrHtml relation': {
             topic: function (assetGraph) {
@@ -30,7 +30,7 @@ vows.describe('JavaScriptTrHtml').addBatch({
                     .run(this.callback);
             },
             'the TRHTML expression should be replaced with a string with the contents of the Html asset': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /var myHtmlString\s*=\s*(['"])<html><body>Boo!<\/body><\/html>\\n\1/);
+                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<\/body><\/html>\\n\1/);
             },
             'then manipulate the Html asset': {
                 topic: function (assetGraph) {
@@ -41,10 +41,10 @@ vows.describe('JavaScriptTrHtml').addBatch({
                     return assetGraph;
                 },
                 'the href getter of the JavaScriptTrHtml relation should still return undefined': function (assetGraph) {
-                    assert.isUndefined(assetGraph.findRelations({type: 'JavaScriptTrHtml'})[0].href);
+                    expect(assetGraph.findRelations({type: 'JavaScriptTrHtml'})[0].href, 'to be undefined');
                 },
                 'the string literal in the JavaScript should be updated': function (assetGraph) {
-                    assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /var myHtmlString\s*=\s*(['"])<html><body>Boo!<div>foo<\/div><\/body><\/html>\\n\1/);
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<div>foo<\/div><\/body><\/html>\\n\1/);
                 },
                 'then externalize the Html asset pointed to by the JavaScriptTrHtml relation': {
                     topic: function (assetGraph) {
@@ -52,7 +52,7 @@ vows.describe('JavaScriptTrHtml').addBatch({
                         return assetGraph;
                     },
                     'the string literal should be replaced by a TRHTML(GETTEXT(...)) expression pointing at the new url': function (assetGraph) {
-                        assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /var myHtmlString\s*=\s*TRHTML\(GETTEXT\((['"])http:\/\/example\.com\/template\.html\1\)\)/);
+                        expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*TRHTML\(GETTEXT\((['"])http:\/\/example\.com\/template\.html\1\)\)/);
                     },
                     'then update the href of the JavaScriptTrHtml relation': {
                         topic: function (assetGraph) {
@@ -62,10 +62,10 @@ vows.describe('JavaScriptTrHtml').addBatch({
                             return assetGraph;
                         },
                         'the href getter of the JavaScriptTrHtml relation should return the new value': function (assetGraph) {
-                            assert.equal(assetGraph.findRelations({type: 'JavaScriptTrHtml'})[0].href, 'blah');
+                            expect(assetGraph.findRelations({type: 'JavaScriptTrHtml'})[0].href, 'to equal', 'blah');
                         },
                         'TRHTML(GETTEXT(...)) expression should be updated': function (assetGraph) {
-                            assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /var myHtmlString\s*=\s*TRHTML\(GETTEXT\((['"])blah\1\)\)/);
+                            expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*TRHTML\(GETTEXT\((['"])blah\1\)\)/);
                         }
                     }
                 }
@@ -80,16 +80,16 @@ vows.describe('JavaScriptTrHtml').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 3);
+            expect(assetGraph, 'to contain assets', 3);
         },
         'the graph should contain 2 Html assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Html', 2);
         },
         'the graph should contain 1 JavaScriptTrHtml relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptTrHtml'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'JavaScriptTrHtml');
         },
         'the graph should contain no JavaScriptGetText relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptGetText'}).length, 0);
+            expect(assetGraph, 'to contain no relations', {type: 'JavaScriptGetText'});
         },
         'then set the omitFunctionCall property of the JavaScriptTrHtml relation to true and inline the JavaScriptTrHtml relation': {
             topic: function (assetGraph) {
@@ -99,7 +99,7 @@ vows.describe('JavaScriptTrHtml').addBatch({
                     .run(this.callback);
             },
             'the TRHTML expression should be replaced with a string with the contents of the Html asset': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /var myHtmlString\s*=\s*(['"])<html><body>Boo!<\/body><\/html>\\n\1/);
+                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<\/body><\/html>\\n\1/);
             },
             'then manipulate the Html asset': {
                 topic: function (assetGraph) {
@@ -110,7 +110,7 @@ vows.describe('JavaScriptTrHtml').addBatch({
                     return assetGraph;
                 },
                 'the string literal in the JavaScript should be updated': function (assetGraph) {
-                    assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /var myHtmlString\s*=\s*(['"])<html><body>Boo!<div>foo<\/div><\/body><\/html>\\n\1/);
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<div>foo<\/div><\/body><\/html>\\n\1/);
                 },
                 'then externalize the Html asset pointed to by the JavaScriptTrHtml relation': {
                     topic: function (assetGraph) {
@@ -118,7 +118,7 @@ vows.describe('JavaScriptTrHtml').addBatch({
                         return assetGraph;
                     },
                     'the string literal should be replaced by a TRHTML(GETTEXT(...)) expression pointing at the new url': function (assetGraph) {
-                        assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /var myHtmlString\s*=\s*TRHTML\(GETTEXT\((['"])http:\/\/example\.com\/template\.html\1\)\)/);
+                        expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*TRHTML\(GETTEXT\((['"])http:\/\/example\.com\/template\.html\1\)\)/);
                     }
                 }
             }

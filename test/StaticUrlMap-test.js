@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     urlTools = require('urltools'),
     AssetGraph = require('../lib');
 
@@ -12,13 +12,13 @@ vows.describe('StaticUrlMap test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScriptGetStaticUrl relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'JavaScriptGetStaticUrl', 2);
         },
         'the graph should contain 2 StaticUrlMap assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'StaticUrlMap'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'StaticUrlMap', 2);
         },
         'the graph should contain 4 StaticUrlMapEntry relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 4);
+            expect(assetGraph, 'to contain relations', 'StaticUrlMapEntry', 4);
         },
         'then move some of the target assets': {
             topic: function (assetGraph) {
@@ -27,8 +27,8 @@ vows.describe('StaticUrlMap test').addBatch({
                 return assetGraph;
             },
             'the text of the inline JavaScript should be updated accordingly': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text, /google\.com/);
-                assert.matches(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text, /anotherquux.json/);
+                expect(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text, 'to match', /google\.com/);
+                expect(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text, 'to match', /anotherquux.json/);
             }
         }
 
@@ -41,13 +41,13 @@ vows.describe('StaticUrlMap test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain one JavaScriptGetStaticUrl relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'JavaScriptGetStaticUrl');
         },
         'the graph should contain one StaticUrlMap asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'StaticUrlMap'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'StaticUrlMap');
         },
         'the graph should contain 502 StaticUrlMapEntry relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}, true).length, 502);
+            expect(assetGraph, 'to contain relations including unresolved', 'StaticUrlMapEntry', 502);
         },
         'then reparse the JavaScript asset and populate again': {
             topic: function (assetGraph) {
@@ -56,7 +56,7 @@ vows.describe('StaticUrlMap test').addBatch({
                 return assetGraph;
             },
             'the graph should contain 502 StaticUrlMapEntry relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}, true).length, 502);
+                expect(assetGraph, 'to contain relations including unresolved', 'StaticUrlMapEntry', 502);
             }
         }
     }

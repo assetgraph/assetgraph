@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('HtmlInlineScriptTemplate test').addBatch({
@@ -11,16 +11,16 @@ vows.describe('HtmlInlineScriptTemplate test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 2);
+            expect(assetGraph, 'to contain assets', 2);
         },
         'the graph should contain 2 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Html', 2);
         },
         'the graph should contain 1 HtmlInlineScriptTemplate relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlInlineScriptTemplate');
         },
         'the HtmlInlineScriptTemplate relation should contain the right text': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'})[0].to.text, '<div></div>');
+            expect(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'})[0].to.text, 'to equal', '<div></div>');
         },
         'then manipulating the inline Html': {
             topic: function (assetGraph) {
@@ -31,7 +31,7 @@ vows.describe('HtmlInlineScriptTemplate test').addBatch({
                 return assetGraph;
             },
             'the text of the outer Html asset should contain the template': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'Html', isInline: false})[0].text, /<div>hello!<\/div>/);
+                expect(assetGraph.findAssets({type: 'Html', isInline: false})[0].text, 'to match', /<div>hello!<\/div>/);
             }
         }
     },
@@ -43,13 +43,13 @@ vows.describe('HtmlInlineScriptTemplate test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Html', 2);
         },
         'the graph should contain 1 HtmlInlineScriptTemplate relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlInlineScriptTemplate');
         },
         'the HtmlInlineScriptTemplate relation should contain the right text': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'})[0].to.text, "\n<div>foo<!--ko 'if':true-->bar<!--/ko-->quux</div>\n");
+            expect(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'})[0].to.text, 'to equal', "\n<div>foo<!--ko 'if':true-->bar<!--/ko-->quux</div>\n");
         },
         'then manipulating the inline Html': {
             topic: function (assetGraph) {
@@ -60,7 +60,7 @@ vows.describe('HtmlInlineScriptTemplate test').addBatch({
                 return assetGraph;
             },
             'the text of the outer Html asset should contain the template': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'Html', isInline: false})[0].text, /hello!/);
+                expect(assetGraph.findAssets({type: 'Html', isInline: false})[0].text, 'to match', /hello!/);
             }
         }
     }

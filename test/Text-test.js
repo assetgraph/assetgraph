@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('Text').addBatch({
@@ -10,7 +10,7 @@ vows.describe('Text').addBatch({
             }).text;
         },
         'should return the right value': function (text) {
-            assert.equal(text, 'Hello, world!\u263a');
+            expect(text, 'to equal', 'Hello, world!\u263a');
         }
     },
 
@@ -29,7 +29,7 @@ vows.describe('Text').addBatch({
             });
         },
         'should return the right value': function (text) {
-            assert.equal(text, 'Hello, world!\u263a');
+            expect(text, 'to equal', 'Hello, world!\u263a');
         }
     },
 
@@ -40,7 +40,7 @@ vows.describe('Text').addBatch({
             }).text;
         },
         'should return the right value': function (text) {
-            assert.equal(text, 'Hello, world!\u263a');
+            expect(text, 'to equal', 'Hello, world!\u263a');
         }
     },
 
@@ -51,7 +51,7 @@ vows.describe('Text').addBatch({
             }).rawSrc;
         },
         'should return the right value': function (rawSrc) {
-            assert.equal(rawSrc.toString('utf-8'), 'Hello, world!\u263a');
+            expect(rawSrc.toString('utf-8'), 'to equal', 'Hello, world!\u263a');
         }
     },
 
@@ -70,7 +70,7 @@ vows.describe('Text').addBatch({
             });
         },
         'should return the right value': function (rawSrc) {
-            assert.equal(rawSrc.toString('utf-8'), 'Hello, world!\u263a');
+            expect(rawSrc.toString('utf-8'), 'to equal', 'Hello, world!\u263a');
         }
     },
 
@@ -81,7 +81,7 @@ vows.describe('Text').addBatch({
             }).rawSrc;
         },
         'should return the right value': function (rawSrc) {
-            assert.equal(rawSrc.toString('utf-8'), 'Hello, world!\u263a');
+            expect(rawSrc.toString('utf-8'), 'to equal', 'Hello, world!\u263a');
         }
     },
 
@@ -92,7 +92,7 @@ vows.describe('Text').addBatch({
             }).text;
         },
         'should return the right value': function (text) {
-            assert.equal(text, '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
+            expect(text, 'to equal', '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
@@ -111,7 +111,7 @@ vows.describe('Text').addBatch({
             });
         },
         'should return the right value': function (text) {
-            assert.equal(text, '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
+            expect(text, 'to equal', '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
@@ -122,7 +122,7 @@ vows.describe('Text').addBatch({
             }).text;
         },
         'should return the right value': function (text) {
-            assert.equal(text, '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
+            expect(text, 'to equal', '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
@@ -133,7 +133,7 @@ vows.describe('Text').addBatch({
             }).rawSrc;
         },
         'should return the right value': function (rawSrc) {
-            assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
+            expect(rawSrc.toString('utf-8'), 'to equal', '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
@@ -152,7 +152,7 @@ vows.describe('Text').addBatch({
             });
         },
         'should return the right value': function (rawSrc) {
-            assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
+            expect(rawSrc.toString('utf-8'), 'to equal', '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
@@ -163,7 +163,7 @@ vows.describe('Text').addBatch({
             }).rawSrc;
         },
         'should return the right value': function (rawSrc) {
-            assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
+            expect(rawSrc.toString('utf-8'), 'to equal', '<!DOCTYPE html>\n<html><body>Hello, world!\u263a</body></html>');
         }
     },
 
@@ -177,7 +177,7 @@ vows.describe('Text').addBatch({
             return htmlAsset.text;
         },
         'should return the right value': function (text) {
-            assert.equal(text, '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
+            expect(text, 'to equal', '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
         }
     },
 
@@ -201,7 +201,7 @@ vows.describe('Text').addBatch({
             });
         },
         'should return the right value': function (text) {
-            assert.equal(text, '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
+            expect(text, 'to equal', '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
         }
     },
 
@@ -215,7 +215,7 @@ vows.describe('Text').addBatch({
             return htmlAsset.text;
         },
         'should return the right value': function (text) {
-            assert.equal(text, '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
+            expect(text, 'to equal', '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
         }
     },
 
@@ -229,7 +229,7 @@ vows.describe('Text').addBatch({
             return htmlAsset.rawSrc;
         },
         'should return the right value': function (rawSrc) {
-            assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
+            expect(rawSrc.toString('utf-8'), 'to equal', '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
         }
     },
 
@@ -253,7 +253,7 @@ vows.describe('Text').addBatch({
             });
         },
         'should return the right value': function (rawSrc) {
-            assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
+            expect(rawSrc.toString('utf-8'), 'to equal', '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
         }
     },
 
@@ -267,7 +267,7 @@ vows.describe('Text').addBatch({
             return htmlAsset.rawSrc;
         },
         'should return the right value': function (rawSrc) {
-            assert.equal(rawSrc.toString('utf-8'), '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
+            expect(rawSrc.toString('utf-8'), 'to equal', '<!DOCTYPE html>\n<html><body>Not so much!</body></html>');
         }
     }
 })['export'](module);

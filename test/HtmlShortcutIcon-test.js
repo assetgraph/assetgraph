@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('HtmlShortcutIcon').addBatch({
@@ -11,10 +11,10 @@ vows.describe('HtmlShortcutIcon').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 2);
+            expect(assetGraph, 'to contain assets', 2);
         },
         'the graph should contain 7 HtmlShortcutIcon relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlShortcutIcon'}).length, 7);
+            expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 7);
         },
         'then attach two more HtmlShortcutIcon relation before and after the first one': {
             topic: function (assetGraph) {
@@ -32,12 +32,12 @@ vows.describe('HtmlShortcutIcon').addBatch({
                 return assetGraph;
             },
             'the graph should contain 9 HtmlShortcutIcon relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlShortcutIcon'}).length, 9);
+                expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 9);
             },
             'the Html should contain three properly formatted <link> tags': function (assetGraph) {
                 var matches = assetGraph.findAssets({type: 'Html'})[0].text.match(/<link rel="shortcut icon" href="foo.png">/g);
-                assert.isNotNull(matches);
-                assert.equal(matches.length, 3);
+                expect(matches, 'not to be null');
+                expect(matches, 'to have length', 3);
             }
         }
     }

@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     urlTools = require('urltools'),
     AssetGraph = require('../lib');
@@ -13,10 +13,10 @@ vows.describe('INCLUDE test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
         },
         'the graph should contain 2 JavaScriptInclude relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptInclude'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'JavaScriptInclude', 2);
         },
         'then detach and remove the first JavaScriptInclude relation': {
             topic: function (assetGraph) {
@@ -24,7 +24,7 @@ vows.describe('INCLUDE test').addBatch({
                 return assetGraph;
             },
             'the INCLUDE(\'foo.js\') statement should be removed from the text of index.js': function (assetGraph) {
-                assert.isFalse(/one\.include\([\'\"]one\.js\1\)/.test(assetGraph.findAssets({url: /\/index\.js$/})[0].text));
+                expect(/one\.include\([\'\"]one\.js\1\)/.test(assetGraph.findAssets({url: /\/index\.js$/})[0].text), 'to be false');
             }
         },
         'then attach a new JavaScriptInclude relation before the other ones': {
@@ -40,7 +40,7 @@ vows.describe('INCLUDE test').addBatch({
                 return assetGraph;
             },
             'the INCLUDE statements should be in the correct order': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'),
+                expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                  ['quux.js', 'bar.js']);
             },
             'then attach a new JavaScriptInclude relation after the quux.js one': {
@@ -56,7 +56,7 @@ vows.describe('INCLUDE test').addBatch({
                     return assetGraph;
                 },
                 'the INCLUDE statements should be in the correct order': function (assetGraph) {
-                    assert.deepEqual(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'),
+                    expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                      ['quux.js', 'baz.js', 'bar.js']);
                 },
                 'then attach a new JavaScriptInclude relation before the bar.js one': {
@@ -72,7 +72,7 @@ vows.describe('INCLUDE test').addBatch({
                         return assetGraph;
                     },
                     'the INCLUDE statements should be in the correct order': function (assetGraph) {
-                        assert.deepEqual(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'),
+                        expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                          ['quux.js', 'baz.js', 'bazze.js', 'bar.js']);
                     },
                     'then attach a new JavaScriptInclude relation in the last position': {
@@ -88,7 +88,7 @@ vows.describe('INCLUDE test').addBatch({
                             return assetGraph;
                         },
                         'the INCLUDE statements should be in the correct order': function (assetGraph) {
-                            assert.deepEqual(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'),
+                            expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                              ['quux.js', 'baz.js', 'bazze.js', 'bar.js', 'prinzenrolle.js']);
                         }
                     }
@@ -104,10 +104,10 @@ vows.describe('INCLUDE test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
         },
         'the graph should contain 2 JavaScriptInclude relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptInclude'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'JavaScriptInclude', 2);
         },
         'then detach the first JavaScriptInclude relation': {
             topic: function (assetGraph) {
@@ -115,7 +115,7 @@ vows.describe('INCLUDE test').addBatch({
                 return assetGraph;
             },
             'the INCLUDE(\'foo.js\') statement should be removed from the text of index.js': function (assetGraph) {
-                assert.isFalse(/one\.include\([\'\"]one\.js\1\)/.test(assetGraph.findAssets({url: /\/index\.js$/})[0].text));
+                expect(/one\.include\([\'\"]one\.js\1\)/.test(assetGraph.findAssets({url: /\/index\.js$/})[0].text), 'to be false');
             }
         },
         'then attach a new JavaScriptInclude relation before the other ones': {
@@ -131,7 +131,7 @@ vows.describe('INCLUDE test').addBatch({
                 return assetGraph;
             },
             'the INCLUDE statements should be in the correct order': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'),
+                expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                  ['quux.js', 'bar.js']);
             },
             'then attach a new JavaScriptInclude relation after the quux.js one': {
@@ -147,7 +147,7 @@ vows.describe('INCLUDE test').addBatch({
                     return assetGraph;
                 },
                 'the INCLUDE statements should be in the correct order': function (assetGraph) {
-                    assert.deepEqual(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'),
+                    expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                      ['quux.js', 'baz.js', 'bar.js']);
                 },
                 'then attach a new JavaScriptInclude relation before the bar.js one': {
@@ -163,7 +163,7 @@ vows.describe('INCLUDE test').addBatch({
                         return assetGraph;
                     },
                     'the INCLUDE statements should be in the correct order': function (assetGraph) {
-                        assert.deepEqual(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'),
+                        expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                          ['quux.js', 'baz.js', 'bazze.js', 'bar.js']);
                     },
                     'then attach a new JavaScriptInclude relation in the last position': {
@@ -179,7 +179,7 @@ vows.describe('INCLUDE test').addBatch({
                             return assetGraph;
                         },
                         'the INCLUDE statements should be in the correct order': function (assetGraph) {
-                            assert.deepEqual(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'),
+                            expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                              ['quux.js', 'baz.js', 'bazze.js', 'bar.js', 'prinzenrolle.js']);
                         }
                     }

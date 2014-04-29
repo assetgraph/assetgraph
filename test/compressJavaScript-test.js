@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('transforms.compressJavaScript').addBatch(function () {
@@ -14,8 +14,8 @@ vows.describe('transforms.compressJavaScript').addBatch(function () {
             },
             'should yield a compressed JavaScript': function (assetGraph) {
                 var javaScripts = assetGraph.findAssets({type: 'JavaScript'});
-                assert.equal(javaScripts.length, 1);
-                assert.matches(javaScripts[0].text, /^var foo=123;?\n?$/);
+                expect(javaScripts, 'to have length', 1);
+                expect(javaScripts[0].text, 'to match', /^var foo=123;?\n?$/);
             }
         };
     });

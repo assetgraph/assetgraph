@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('relations.HtmlAppleTouchStartupImage').addBatch({
@@ -11,10 +11,10 @@ vows.describe('relations.HtmlAppleTouchStartupImage').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 2);
+            expect(assetGraph, 'to contain assets', 2);
         },
         'the graph should contain one HtmlAppleTouchStartupImage relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlAppleTouchStartupImage'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlAppleTouchStartupImage');
         },
         'then attach two more HtmlAppleTouchStartupImage relation before and after the existing one': {
             topic: function (assetGraph) {
@@ -32,12 +32,12 @@ vows.describe('relations.HtmlAppleTouchStartupImage').addBatch({
                 return assetGraph;
             },
             'the graph should contain 3 HtmlAppleTouchStartupImage relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlAppleTouchStartupImage'}).length, 3);
+                expect(assetGraph, 'to contain relations', 'HtmlAppleTouchStartupImage', 3);
             },
             'the Html should contain three properly formatted <link> tags': function (assetGraph) {
                 var matches = assetGraph.findAssets({type: 'Html'})[0].text.match(/<link rel="apple-touch-startup-image" href="foo.png">/g);
-                assert.isNotNull(matches);
-                assert.equal(matches.length, 3);
+                expect(matches, 'not to be null');
+                expect(matches, 'to have length', 3);
             }
         }
     }

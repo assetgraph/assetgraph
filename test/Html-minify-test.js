@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 function createTestCase(inputHtml, expectedOutputHtml, manipulator) {
@@ -14,7 +14,7 @@ function createTestCase(inputHtml, expectedOutputHtml, manipulator) {
             return htmlAsset.text;
         },
         'should return the expected output when minified': function (text) {
-            assert.equal(text, expectedOutputHtml);
+            expect(text, 'to equal', expectedOutputHtml);
         }
     };
 }

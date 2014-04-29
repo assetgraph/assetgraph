@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../lib'),
     query = AssetGraph.query;
@@ -19,19 +19,19 @@ vows.describe('relation.updateTarget').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 4);
         },
         'the relations should be in the correct global order': function (assetGraph) {
-            assert.deepEqual(getTargetFileNames(assetGraph.findRelations()),
+            expect(getTargetFileNames(assetGraph.findRelations()), 'to equal',
                              ['a.js', 'b.js', 'c.js']);
         },
         'the relations should be in the correct order in the "type" index': function (assetGraph) {
-            assert.deepEqual(getTargetFileNames(assetGraph.findRelations({type: 'HtmlScript'})),
+            expect(getTargetFileNames(assetGraph.findRelations({type: 'HtmlScript'})), 'to equal',
                              ['a.js', 'b.js', 'c.js']);
         },
         'the relations from the Html asset should be in the correct order': function (assetGraph) {
             var htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
-            assert.deepEqual(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})),
+            expect(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})), 'to equal',
                              ['a.js', 'b.js', 'c.js']);
         },
         'then update the target of the relation pointing at b.js': {
@@ -42,16 +42,16 @@ vows.describe('relation.updateTarget').addBatch({
                 return assetGraph;
             },
             'the relations should be in the correct global order': function (assetGraph) {
-                assert.deepEqual(getTargetFileNames(assetGraph.findRelations()),
+                expect(getTargetFileNames(assetGraph.findRelations()), 'to equal',
                                  ['a.js', 'd.js', 'c.js']);
             },
             'the relations should be in the correct order in the "type" index': function (assetGraph) {
-                assert.deepEqual(getTargetFileNames(assetGraph.findRelations({type: 'HtmlScript'})),
+                expect(getTargetFileNames(assetGraph.findRelations({type: 'HtmlScript'})), 'to equal',
                                  ['a.js', 'd.js', 'c.js']);
             },
             'the relations from the Html asset should be in the correct order': function (assetGraph) {
                 var htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
-                assert.deepEqual(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})),
+                expect(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})), 'to equal',
                                  ['a.js', 'd.js', 'c.js']);
             }
         }

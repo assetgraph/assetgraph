@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../lib'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs,
@@ -20,12 +20,12 @@ vows.describe('JavaScript').addBatch({
                 });
         },
         'it should result in an Error object': function (err, assetGraph) {
-            assert.instanceOf(err, Error);
+            expect(err, 'to be an', Error);
         },
         'the error message should specify the url of the Html asset and the line number of the error': function (err, assetGraph) {
-            assert.matches(err.message, /parseErrorInInlineJavaScript\.html/);
-            assert.matches(err.message, /line 2\b/);
-            assert.matches(err.message, /column 9\b/);
+            expect(err.message, 'to match', /parseErrorInInlineJavaScript\.html/);
+            expect(err.message, 'to match', /line 2\b/);
+            expect(err.message, 'to match', /column 9\b/);
         }
     },
     'After loading test case that has a parse error in an external JavaScript asset': {
@@ -43,12 +43,12 @@ vows.describe('JavaScript').addBatch({
                 });
         },
         'it should result in an Error object': function (err, assetGraph) {
-            assert.instanceOf(err, Error);
+            expect(err, 'to be an', Error);
         },
         'the error message should specify the url of the external JavaScript asset and the line number of the error': function (err, assetGraph) {
-            assert.matches(err.message, /parseError\.js/);
-            assert.matches(err.message, /line 6\b/);
-            assert.matches(err.message, /column 14\b/);
+            expect(err.message, 'to match', /parseError\.js/);
+            expect(err.message, 'to match', /line 6\b/);
+            expect(err.message, 'to match', /column 14\b/);
         }
     },
     'after loading test case with relations located at multiple levels in the parse tree': {
@@ -59,7 +59,7 @@ vows.describe('JavaScript').addBatch({
                 .run(this.callback);
         },
         'the relations should be in depth-first order in the graph': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findRelations({from: {type: 'JavaScript'}}), 'href'),
+            expect(_.pluck(assetGraph.findRelations({from: {type: 'JavaScript'}}), 'href'), 'to equal',
                              [
                                  './foo',
                                  './data.json',
@@ -89,7 +89,7 @@ vows.describe('JavaScript').addBatch({
             },
             'the copyright notice should be preserved in the serialized asset': function (assetGraph) {
                 var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
-                assert.matches(javaScript.text, /Copyright blablabla/);
+                expect(javaScript.text, 'to match', /Copyright blablabla/);
             }
         }
     },
@@ -116,8 +116,8 @@ vows.describe('JavaScript').addBatch({
             },
             'the comments should be gone from the serialized asset': function (assetGraph) {
                 var javaScripts = assetGraph.findAssets({type: 'JavaScript'});
-                assert.isFalse(/Initial comment/.test(javaScripts[0].text));
-                assert.isFalse(/Initial comment/.test(javaScripts[1].text));
+                expect(/Initial comment/.test(javaScripts[0].text), 'to be false');
+                expect(/Initial comment/.test(javaScripts[1].text), 'to be false');
             }
         }
     },
@@ -133,14 +133,14 @@ vows.describe('JavaScript').addBatch({
         },
         'the reserialized JavaScript asset should still contain @preserve comment before eof, but not the quux one': function (assetGraph) {
             var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
-            assert.matches(javaScript.text, /@preserve/);
-            assert.isFalse(/quux/.test(javaScript.text));
+            expect(javaScript.text, 'to match', /@preserve/);
+            expect(/quux/.test(javaScript.text), 'to be false');
         },
         'the reserialized JavaScript asset should contain both the @preserve and the quux comment when pretty printed': function (assetGraph) {
             var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
             javaScript.prettyPrint();
-            assert.matches(javaScript.text, /@preserve/);
-            assert.matches(javaScript.text, /quux/);
+            expect(javaScript.text, 'to match', /@preserve/);
+            expect(javaScript.text, 'to match', /quux/);
         }
     },
     'After loading a test case with conditional compilation (@cc_on)': {
@@ -157,14 +157,14 @@ vows.describe('JavaScript').addBatch({
                 return assetGraph;
             },
             'the @cc_on comment should still be in the serialization of the asset': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /@cc_on/);
+                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /@cc_on/);
             },
             'then run the compressJavaScript transform': {
                 topic: function (assetGraph) {
                     assetGraph.compressJavaScript().run(this.callback);
                 },
                 'the @cc_on comment should still be in the serialization of the asset': function (assetGraph) {
-                    assert.matches(assetGraph.findAssets({type: 'JavaScript'})[0].text, /@cc_on/);
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /@cc_on/);
                 }
             }
         }
@@ -183,10 +183,10 @@ vows.describe('JavaScript').addBatch({
                 .run(this.callback);
         },
         'the globalstrict.js JavaScript asset should have a "strict" property': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({fileName: 'globalstrict.js'})[0].strict, true);
+            expect(assetGraph.findAssets({fileName: 'globalstrict.js'})[0].strict, 'to equal', true);
         },
         'the nonstrict.js JavaScript asset should not have a "strict" property': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({fileName: 'nonstrict.js'})[0].strict, false);
+            expect(assetGraph.findAssets({fileName: 'nonstrict.js'})[0].strict, 'to equal', false);
         }
     }
 })['export'](module);

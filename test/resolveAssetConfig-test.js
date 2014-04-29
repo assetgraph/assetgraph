@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     passError = require('passerror'),
     AssetGraph = require('../lib'),
     assetGraphRoot = __dirname + '/resolveAssetConfig/';
@@ -27,47 +27,47 @@ vows.describe('resolveAssetConfig').addBatch({
     'relative path': {
         topic: resolveAssetConfig('foo.png'),
         'should return assetConfig with expanded url': function (resolvedAssetConfig) {
-            assert.equal(resolvedAssetConfig.type, 'Png');
+            expect(resolvedAssetConfig.type, 'to equal', 'Png');
         }
     },
     'wildcard: *.png': {
         topic: resolveAssetConfig('*.png'),
         'should return assetConfig array with foo.png and bar.png': function (resolvedAssetConfigs) {
-            assert.isArray(resolvedAssetConfigs);
-            assert.equal(resolvedAssetConfigs.length, 2);
-            assert.isObject(resolvedAssetConfigs[0]);
-            assert.equal(resolvedAssetConfigs[0].type, 'Png');
-            assert.isObject(resolvedAssetConfigs[1]);
-            assert.equal(resolvedAssetConfigs[1].type, 'Png');
+            expect(resolvedAssetConfigs, 'to be an array');
+            expect(resolvedAssetConfigs, 'to have length', 2);
+            expect(resolvedAssetConfigs[0], 'to be an object');
+            expect(resolvedAssetConfigs[0].type, 'to equal', 'Png');
+            expect(resolvedAssetConfigs[1], 'to be an object');
+            expect(resolvedAssetConfigs[1].type, 'to equal', 'Png');
         }
     },
     'http: url': {
         topic: resolveAssetConfig('http://www.example.com/foo.gif'),
         'should return assetConfig with a single entry': function (resolvedAssetConfig) {
-            assert.isObject(resolvedAssetConfig);
-            assert.equal(resolvedAssetConfig.url, 'http://www.example.com/foo.gif');
-            assert.equal(resolvedAssetConfig.type, 'Gif');
+            expect(resolvedAssetConfig, 'to be an object');
+            expect(resolvedAssetConfig.url, 'to equal', 'http://www.example.com/foo.gif');
+            expect(resolvedAssetConfig.type, 'to equal', 'Gif');
         }
     },
     'data: url': {
         topic: resolveAssetConfig('data:text/html;base64,SGVsbG8sIHdvcmxkIQo='),
         'should decode correctly': function (resolvedAssetConfig) {
-            assert.isObject(resolvedAssetConfig);
-            assert.equal(resolvedAssetConfig.rawSrc, "Hello, world!\n");
+            expect(resolvedAssetConfig, 'to be an object');
+            expect(resolvedAssetConfig.rawSrc, 'to equal', new Buffer('Hello, world!\n', 'utf-8'));
         }
     },
     'expand dir without trailing slash': {
         topic: resolveAssetConfigAndEnsureType('subdir'),
         'should resolve to dir/index.html': function (resolvedAssetConfig) {
-            assert.equal(resolvedAssetConfig.type, 'Html');
-            assert.equal(resolvedAssetConfig.url, 'file://' + assetGraphRoot + 'subdir/index.html');
+            expect(resolvedAssetConfig.type, 'to equal', 'Html');
+            expect(resolvedAssetConfig.url, 'to equal', 'file://' + assetGraphRoot + 'subdir/index.html');
         }
     },
     'expand dir with trailing slash': {
         topic: resolveAssetConfigAndEnsureType('subdir'),
         'should resolve to dir/index.html': function (resolvedAssetConfig) {
-            assert.equal(resolvedAssetConfig.type, 'Html');
-            assert.equal(resolvedAssetConfig.url, 'file://' + assetGraphRoot + 'subdir/index.html');
+            expect(resolvedAssetConfig.type, 'to equal', 'Html');
+            expect(resolvedAssetConfig.url, 'to equal', 'file://' + assetGraphRoot + 'subdir/index.html');
         }
     }
 })['export'](module);

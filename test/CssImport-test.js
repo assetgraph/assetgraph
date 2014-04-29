@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('css @import').addBatch({
@@ -11,10 +11,10 @@ vows.describe('css @import').addBatch({
                 .run(this.callback);
         },
         'the graph should contain two Css assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Css', 2);
         },
         'the graph should contain one CssImport relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CssImport'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'CssImport');
         },
         'then detaching the CssImport relation': {
             topic: function (assetGraph) {
@@ -22,7 +22,7 @@ vows.describe('css @import').addBatch({
                 return assetGraph;
             },
             'there should only be a single rule left in index.css': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({url: /\/index.css$/})[0].parseTree.cssRules.length, 1);
+                expect(assetGraph.findAssets({url: /\/index.css$/})[0].parseTree.cssRules, 'to have length', 1);
             }
         }
     }

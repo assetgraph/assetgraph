@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('relations.CssBehavior').addBatch({
@@ -11,10 +11,10 @@ vows.describe('relations.CssBehavior').addBatch({
                 .run(this.callback);
         },
         'the graph should contain a single Htc asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Htc'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Htc');
         },
         'the graph should contain a single JavaScript asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'JavaScript');
         },
         'then move the Html asset': {
             topic: function (assetGraph) {
@@ -22,16 +22,16 @@ vows.describe('relations.CssBehavior').addBatch({
                 return assetGraph;
             },
             'the HtmlStyle href should be updated': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}})[0].node.getAttribute('href'), '../../css/style.css');
-                assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /href=['"]\.\.\/\.\.\/css\/style\.css/);
+                expect(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}})[0].node.getAttribute('href'), 'to equal', '../../css/style.css');
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /href=['"]\.\.\/\.\.\/css\/style\.css/);
             },
             'the CssBehavior href should be updated': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'CssBehavior'})[0].href, '../../htc/theBehavior.htc');
-                assert.matches(assetGraph.findAssets({type: 'Css'})[0].text, /url\(\.\.\/\.\.\/htc\/theBehavior\.htc\)/);
+                expect(assetGraph.findRelations({type: 'CssBehavior'})[0].href, 'to equal', '../../htc/theBehavior.htc');
+                expect(assetGraph.findAssets({type: 'Css'})[0].text, 'to match', /url\(\.\.\/\.\.\/htc\/theBehavior\.htc\)/);
             },
             'the HtmlScript href should be updated': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlScript'})[0].href, '../../js/theScript.js');
-                assert.matches(assetGraph.findAssets({type: 'Htc'})[0].text, /src=['"]\.\.\/\.\.\/js\/theScript\.js/);
+                expect(assetGraph.findRelations({type: 'HtmlScript'})[0].href, 'to equal', '../../js/theScript.js');
+                expect(assetGraph.findAssets({type: 'Htc'})[0].text, 'to match', /src=['"]\.\.\/\.\.\/js\/theScript\.js/);
             }
         }
     }

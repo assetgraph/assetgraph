@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../lib');
 
@@ -12,10 +12,10 @@ vows.describe('relations.HtmlJsx').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 HtmlJsx relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlJsx'}, true).length, 2);
+            expect(assetGraph, 'to contain relations including unresolved', 'HtmlJsx', 2);
         },
         'the hrefs of the relations should be correct': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findRelations(), 'href'),
+            expect(_.pluck(assetGraph.findRelations(), 'href'), 'to equal',
                              [
                                  'externalWithTypeTextJsx.js',
                                  undefined
@@ -24,8 +24,8 @@ vows.describe('relations.HtmlJsx').addBatch({
         'the content of the assets should be correct': function (assetGraph) {
             var assets = _.pluck(assetGraph.findRelations(), 'to');
 
-            assert.equal(assets[0].text, "'external'\n");
-            assert.equal(assets[1].text, "'inline'");
+            expect(assets[0].text, 'to equal', "'external'\n");
+            expect(assets[1].text, 'to equal', "'inline'");
         }
     }
 })['export'](module);

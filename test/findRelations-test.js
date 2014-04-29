@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib'),
     query = AssetGraph.query;
 
@@ -50,25 +50,25 @@ vows.describe('AssetGraph.findAssets').addBatch({
                 .run(this.callback);
         },
         'and lookup relations by a single indexed property': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'CssImage', 2);
         },
         'and lookup relations by multiple indexed properties': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({
+            expect(assetGraph, 'to contain relations', {
                 type: 'HtmlAnchor',
                 from: assetGraph.findAssets({text: 'a'})[0]
-            }).length, 2);
+            }, 2);
         },
         'and lookup relations by structured query': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({
+            expect(assetGraph, 'to contain relations', {
                 type: 'HtmlAnchor',
                 to: {
                     text: 'c',
                     foo: 'quux'
                 }
-            }).length, 2);
+            }, 2);
         },
         'and lookup relations by structured query with arrays': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({
+            expect(assetGraph, 'to contain relations', {
                 type: ['HtmlAnchor', 'HtmlStyle'],
                 from: {
                     text: ['a', 'b']
@@ -76,41 +76,41 @@ vows.describe('AssetGraph.findAssets').addBatch({
                 to: {
                     type: ['Html', 'Css']
                 }
-            }).length, 5);
+            }, 5);
         },
         'and lookup relations by structured query with regexps': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({
+            expect(assetGraph, 'to contain relations', {
                 type: /CssIm|HtmlAn/,
                 from: {
                     text: /^[ad]$/
                 }
-            }).length, 3);
-            assert.equal(assetGraph.findRelations({
+            }, 3);
+            expect(assetGraph, 'to contain relations', {
                 type: /Style/,
                 from: {
                     text: /^a$/
                 }
-            }).length, 1);
+            }, 1);
         },
         'and lookup relations by negative match': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({
+            expect(assetGraph, 'to contain relations', {
                 type: query.not('CssImage'),
                 from: {
                     text: query.not('a')
                 }
-            }).length, 2);
+            }, 2);
         },
         'and lookup relations by definedness': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({
+            expect(assetGraph, 'to contain relations', {
                 from: {
                     foo: function (val) {return typeof val !== 'undefined';}
                 }
-            }).length, 6);
-            assert.equal(assetGraph.findRelations({
+            }, 6);
+            expect(assetGraph, 'to contain relations', {
                 from: {
                     foo: function (val) {return typeof val === 'undefined';}
                 }
-            }).length, 1);
+            }, 1);
         }
     }
 })['export'](module);

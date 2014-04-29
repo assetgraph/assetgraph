@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('data: url').addBatch({
@@ -11,35 +11,28 @@ vows.describe('data: url').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 8 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 8);
+            expect(assetGraph, 'to contain assets', 8);
         },
         'the first data: url Html should contain a smiley character': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'})[1].parseTree.body.firstChild.nodeValue,
-                         "\u263a");
+            expect(assetGraph.findAssets({type: 'Html'})[1].parseTree.body.firstChild.nodeValue, 'to equal', '\u263a');
         },
         'the second data: url Html should contain some Danish characters': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'})[2].parseTree.body.firstChild.nodeValue,
-                         "æøå");
+            expect(assetGraph.findAssets({type: 'Html'})[2].parseTree.body.firstChild.nodeValue, 'to equal', 'æøå');
         },
         'the third data: url Html should contain something that looks like Html': function (assetGraph) {
-            assert.matches(assetGraph.findAssets({type: 'Html'})[3].text,
-                           /^<!DOCTYPE html>/);
+            expect(assetGraph.findAssets({type: 'Html'})[3].text, 'to match', /^<!DOCTYPE html>/);
         },
         'the first data: url Text should be decoded correctly': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Text'})[0].text,
-                         "ΩδΦ");
+            expect(assetGraph.findAssets({type: 'Text'})[0].text, 'to equal', 'ΩδΦ');
         },
         'the second data: url Text should be decoded correctly': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Text'})[1].text,
-                         "Hellö");
+            expect(assetGraph.findAssets({type: 'Text'})[1].text, 'to equal', 'Hellö');
         },
         'the third data: url Text should be decoded correctly': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Text'})[2].text,
-                         "A brief note");
+            expect(assetGraph.findAssets({type: 'Text'})[2].text, 'to equal', 'A brief note');
         },
         'the fourth data: url Text should be decoded correctly': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Text'})[3].text,
-                         "ΩδΦ");
+            expect(assetGraph.findAssets({type: 'Text'})[3].text, 'to equal', 'ΩδΦ');
         }
     },
     'After loading Html with an unparsable data: url': {
@@ -50,7 +43,7 @@ vows.describe('data: url').addBatch({
                 .run(this.callback);
         },
         'the graph should contain no relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations().length, 0);
+            expect(assetGraph, 'to contain no relations');
         }
     }
 })['export'](module);

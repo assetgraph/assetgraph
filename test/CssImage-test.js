@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../lib');
 
@@ -12,7 +12,7 @@ vows.describe('CssImage').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 17 CssImage relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 17);
+            expect(assetGraph, 'to contain relations', 'CssImage', 17);
         },
         'then move foo.png to a different url': {
             topic: function (assetGraph) {
@@ -20,7 +20,7 @@ vows.describe('CssImage').addBatch({
                 return assetGraph;
             },
             'the references to it should be updated': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findRelations({to: assetGraph.findAssets({url: /\/foo2\.png$/})}), 'href'), [
+                expect(_.pluck(assetGraph.findRelations({to: assetGraph.findAssets({url: /\/foo2\.png$/})}), 'href'), 'to equal', [
                     'dir/foo2.png',
                     'dir/foo2.png',
                     'dir/foo2.png',
@@ -41,7 +41,7 @@ vows.describe('CssImage').addBatch({
                 ]);
             },
             'the !important marker on the .baz background-image should still be there': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({url: /\/index\.css$/})[0].text, /\.baz{background-image:url\(dir\/foo2\.png\)!important/);
+                expect(assetGraph.findAssets({url: /\/index\.css$/})[0].text, 'to match', /\.baz{background-image:url\(dir\/foo2\.png\)!important/);
             }
         }
     },
@@ -53,19 +53,19 @@ vows.describe('CssImage').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 5 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 5);
+            expect(assetGraph, 'to contain assets', 5);
         },
         'the graph should contain one Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the graph should contain one Css asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Css');
         },
         'the graph should contain 3 Png assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 3);
+            expect(assetGraph, 'to contain assets', 'Png', 3);
         },
         'the graph should contain 3 CssImage relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 3);
+            expect(assetGraph, 'to contain relations', 'CssImage', 3);
         }
     }
 })['export'](module);

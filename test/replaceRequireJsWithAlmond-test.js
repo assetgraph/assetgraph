@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib'),
     fs = require('fs'),
     requirejs = fs.readFileSync(__dirname + '/replaceRequireJsWithAlmond/mixed/require.js', 'utf8'),
@@ -18,13 +18,13 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 1 JavaScript asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'JavaScript');
         },
         'the JavaScript asset text should be equal to require.js': function (assetGraph) {
             var asset = assetGraph.findAssets({type: 'JavaScript'}).pop(),
                 text = asset && asset.text;
 
-            assert.equal(text, requirejs);
+            expect(text, 'to equal', requirejs);
         },
         'then running the replaceRequireJsWithAlmond transform': {
             topic: function (assetGraph) {
@@ -34,13 +34,13 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                     .run(this.callback);
             },
             'the graph should contain 1 JavaScript asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
+                expect(assetGraph, 'to contain asset', 'JavaScript');
             },
             'the JavaScript asset text should be equal to require.js': function (assetGraph) {
                 var asset = assetGraph.findAssets({type: 'JavaScript'}).pop(),
                     text = asset && asset.text;
 
-                assert.equal(text, requirejs);
+                expect(text, 'to equal', requirejs);
             }
         }
     },
@@ -65,19 +65,19 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
         },
         'the graph should contain 3 HtmlScript relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 3);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
         },
         'the graph should contain 2 HtmlRequireJsAlmondReplacement relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'HtmlRequireJsAlmondReplacement', 2);
         },
         'the JavaScript asset text should be equal to require.js': function (assetGraph) {
             var relation = assetGraph.findRelations({type: 'HtmlScript'})[0],
                 text = relation && relation.to.text;
 
-            assert.equal(text, requirejs);
+            expect(text, 'to equal', requirejs);
         },
         'then running the replaceRequireJsWithAlmond transform': {
             topic: function (assetGraph) {
@@ -88,25 +88,25 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
             },
 
             'the graph should contain 2 JavaScript assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
             },
             'the graph should contain 3 HtmlScript relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 3);
+                expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
             },
             'the graph should contain 0 HtmlRequireJsAlmondReplacement relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 0);
+                expect(assetGraph, 'to contain no relations', {type: 'HtmlRequireJsAlmondReplacement'});
             },
             'the first JavaScript assets text should be equal to almond.js': function (assetGraph) {
                 var asset = assetGraph.findAssets({url: /almond.js$/})[0],
                     text = asset && asset.text;
 
-                assert.equal(text, almond);
+                expect(text, 'to equal', almond);
             },
             'the second JavaScripts asset text should not have been replaced with almond': function (assetGraph) {
                 var asset = assetGraph.findAssets({url: /app.js$/})[0],
                     text = asset && asset.text;
 
-                assert.equal(text, 'alert(\'APP\');\n');
+                expect(text, 'to equal', 'alert(\'APP\');\n');
             }
         }
     },
@@ -136,19 +136,19 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 4);
         },
         'the graph should contain 2 HtmlScript relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
         },
         'the graph should contain 1 HtmlRequireJsAlmondReplacement relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlRequireJsAlmondReplacement');
         },
         'the JavaScript asset text should be equal to require.js': function (assetGraph) {
             var relation = assetGraph.findRelations({type: 'HtmlScript'})[0],
                 text = relation && relation.to.text;
 
-            assert.equal(text, requirejs);
+            expect(text, 'to equal', requirejs);
         },
         'then running the replaceRequireJsWithAlmond transform': {
             topic: function (assetGraph) {
@@ -158,24 +158,24 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                     .run(this.callback);
             },
             'the graph should contain 3 JavaScript assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 3);
             },
             'the graph should contain 2 HtmlScript relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
+                expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
             },
             'the graph should contain 0 HtmlRequireJsAlmondReplacement relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 0);
+                expect(assetGraph, 'to contain no relations', {type: 'HtmlRequireJsAlmondReplacement'});
             },
             'the first JavaScript assets text should be equal to require.js': function (assetGraph) {
                 var relation = assetGraph.findRelations({type: 'HtmlScript'})[0],
                     text = relation && relation.to.text;
 
-                assert.equal(text, requirejs);
+                expect(text, 'to equal', requirejs);
             },
             'the graph should have emitted 1 warning from the replaceRequireJsWithAlmond transform': function (assetGraph) {
-                assert.equal(assetGraph._vowsEmitedEvents.warn.filter(function (warn) {
+                expect(assetGraph._vowsEmitedEvents.warn.filter(function (warn) {
                     return warn[0].transform === 'replaceRequireJsWithAlmond';
-                }).length, 1);
+                }), 'to have length', 1);
             }
         }
     },
@@ -190,16 +190,16 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 Html assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Html', 2);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         },
         'the graph should contain 2 HtmlScript relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
         },
         'the graph should contain 2 HtmlRequireJsAlmondReplacement relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'HtmlRequireJsAlmondReplacement', 2);
         },
         'then running the replaceRequireJsWithAlmond transform': {
             topic: function (assetGraph) {
@@ -208,17 +208,17 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                     .run(this.callback);
             },
             'the graph should contain 1 JavaScript asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
+                expect(assetGraph, 'to contain asset', 'JavaScript');
             },
             'the graph should contain 2 HtmlScript relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
+                expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
             },
             'the graph should contain 0 HtmlRequireJsAlmondReplacement relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsAlmondReplacement'}).length, 0);
+                expect(assetGraph, 'to contain no relations', {type: 'HtmlRequireJsAlmondReplacement'});
             },
             'both Html assets should contain one <script> tag': function (assetGraph) {
                 assetGraph.findAssets({type: 'Html'}).forEach(function (htmlAsset) {
-                    assert.equal(htmlAsset.text.match(/<script/g).length, 1);
+                    expect(htmlAsset.text.match(/<script/g), 'to have length', 1);
                 });
             }
         }

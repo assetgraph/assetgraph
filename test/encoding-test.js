@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('Charset test').addBatch({
@@ -12,18 +12,18 @@ vows.describe('Charset test').addBatch({
         },
         'the body should be decoded correctly': function (assetGraph) {
             assetGraph.findAssets().forEach(function (asset) {
-                assert.notEqual(asset.text.indexOf('æøåÆØÅ'), -1);
+                expect(asset.text, 'to contain', 'æøåÆØÅ');
             });
         },
         'the parseTree should be decoded correctly': function (assetGraph) {
-            assert.equal(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'æøåÆØÅ');
+            expect(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'to equal', 'æøåÆØÅ');
         },
         'then reserializing the Html asset': {
             topic: function (assetGraph) {
                 return assetGraph.findAssets()[0].rawSrc;
             },
             'the src should be encoded as iso-8859-1 again': function (rawSrc) {
-                assert.notEqual(rawSrc.toString('binary').indexOf("\u00e6\u00f8\u00e5\u00c6\u00d8\u00c5"), -1);
+                expect(rawSrc.toString('binary'), 'to contain', "\u00e6\u00f8\u00e5\u00c6\u00d8\u00c5");
             }
         }
     },
@@ -35,10 +35,10 @@ vows.describe('Charset test').addBatch({
                 .run(this.callback);
         },
         'the body should be decoded correctly': function (assetGraph) {
-             assert.notEqual(assetGraph.findAssets()[0].text.indexOf('æøå'), -1);
+             expect(assetGraph.findAssets()[0].text, 'to contain', 'æøå');
         },
         'the parseTree should be decoded correctly': function (assetGraph) {
-            assert.equal(assetGraph.findAssets()[0].parseTree.cssRules[0].style.foo, 'æøå');
+            expect(assetGraph.findAssets({})[0].parseTree.cssRules[0].style.foo, 'to equal', 'æøå');
         }
     }
 })['export'](module);

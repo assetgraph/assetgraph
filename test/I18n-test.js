@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('I18n').addBatch({
@@ -8,7 +8,7 @@ vows.describe('I18n').addBatch({
             return new AssetGraph.I18n({text: '{"c": {"b": {"e": false, "d": true}, "a": 3}, "b": 2}'});
         },
         'the parse tree of the object should have the keys in the original order': function (i18n) {
-            assert.deepEqual(Object.keys(i18n.parseTree), ['c', 'b']);
+            expect(Object.keys(i18n.parseTree), 'to equal', ['c', 'b']);
         },
         'then pretty-print the asset': {
             topic: function (i18n) {
@@ -16,13 +16,13 @@ vows.describe('I18n').addBatch({
                 return i18n;
             },
             'the parse tree of the object should have the keys in alphabetically sorted order': function (i18n) {
-                assert.deepEqual(Object.keys(i18n.parseTree), ['b', 'c']);
+                expect(Object.keys(i18n.parseTree), 'to equal', ['b', 'c']);
             },
             'the second level keys should also be in alphabetically sorted order': function (i18n) {
-                assert.deepEqual(Object.keys(i18n.parseTree.c), ['a', 'b']);
+                expect(Object.keys(i18n.parseTree.c), 'to equal', ['a', 'b']);
             },
             'the third level keys should not be sorted': function (i18n) {
-                assert.deepEqual(Object.keys(i18n.parseTree.c.b), ['e', 'd']);
+                expect(Object.keys(i18n.parseTree.c.b), 'to equal', ['e', 'd']);
             },
             'then add a new key and pretty print the asset again': {
                 topic: function (i18n) {
@@ -31,7 +31,7 @@ vows.describe('I18n').addBatch({
                     return i18n;
                 },
                 'the parse tree of the object should have the keys in alphabetically sorted order': function (i18n) {
-                    assert.deepEqual(Object.keys(i18n.parseTree), ['a', 'b', 'c']);
+                    expect(Object.keys(i18n.parseTree), 'to equal', ['a', 'b', 'c']);
                 }
             }
         }

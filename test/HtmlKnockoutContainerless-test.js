@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs,
     uglifyAst = AssetGraph.JavaScript.uglifyAst;
@@ -13,13 +13,13 @@ vows.describe('HtmlKnockoutContainerless test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 2);
+            expect(assetGraph, 'to contain assets', 2);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the graph should contain 1 HtmlKnockoutContainerless relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlKnockoutContainerless'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlKnockoutContainerless');
         },
         'then manipulating the inline JavaScript': {
             topic: function (assetGraph) {
@@ -32,7 +32,7 @@ vows.describe('HtmlKnockoutContainerless test').addBatch({
                 return assetGraph;
             },
             'the text of the Html asset should contain the updated <!-- ko --> comment': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /yup/);
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /yup/);
             }
         }
     }

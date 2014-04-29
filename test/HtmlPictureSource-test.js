@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../lib'),
     query = AssetGraph.query;
@@ -15,7 +15,7 @@ vows.describe('HtmlPictureSource test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 HtmlPictureSource relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlPictureSource'}, true).length, 2);
+            expect(assetGraph, 'to contain relations including unresolved', 'HtmlPictureSource', 2);
         },
         'then change the url of the main Html document and set the hrefType of the relations to "relative"': {
             topic: function (assetGraph) {
@@ -26,7 +26,7 @@ vows.describe('HtmlPictureSource test').addBatch({
                 return assetGraph;
             },
             'the relative urls of the relations should begin with ../': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findRelations({}, true), 'href'),
+                expect(_.pluck(assetGraph.findRelations({}, true), 'href'), 'to equal',
                                  [
                                      '../image.png',
                                      '../otherImage.jpg'

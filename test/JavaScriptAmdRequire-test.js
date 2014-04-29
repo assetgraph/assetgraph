@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../lib');
 
@@ -12,10 +12,10 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 JavaScriptAmdRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 3);
+            expect(assetGraph, 'to contain relations', 'JavaScriptAmdRequire', 3);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         },
         'then detach the JavaScriptAmdRequire relation pointing at a.js': {
             topic: function (assetGraph) {
@@ -23,11 +23,14 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 return assetGraph;
             },
             'the graph should contain 2 JavaScriptAmdRequire relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 2);
+                expect(assetGraph, 'to contain relations', 'JavaScriptAmdRequire', 2);
             },
             'a.js and the corresponding function parameter should be removed from the including asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text,
-                             'require(["some/module","b.js"],function(someModule,b){});');
+                expect(
+                    assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text,
+                    'to equal',
+                    'require(["some/module","b.js"],function(someModule,b){});'
+                );
             }
         }
     },
@@ -39,19 +42,19 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain a HtmlRequireJsMain relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlRequireJsMain');
         },
         'the graph should contain 4 JavaScriptAmdRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 4);
+            expect(assetGraph, 'to contain relations', 'JavaScriptAmdRequire', 4);
         },
         'the graph should contain one JavaScriptAmdDefine relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'JavaScriptAmdDefine');
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 4);
         },
         'the graph should contain a Text asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Text');
         }
     },
     'After loading test case with require.js and a paths setting': {
@@ -63,10 +66,10 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 7 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 7);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 7);
         },
         'the graph should contain 1 Text asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Text');
         }
     },
     'After loading test case with the require.js config in an IIFE in a script': {
@@ -78,7 +81,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 loaded JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript', isLoaded: true}).length, 3);
+            expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 3);
         }
     },
     'After loading test case with require.js, a baseUrl and a paths setting': {
@@ -90,7 +93,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 7 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 7);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 7);
         }
     },
     'After loading test case with require.js, data-main and a paths setting': {
@@ -102,7 +105,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 8 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 8);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 8);
         },
         'then rename the module referenced as some/module': {
             topic: function (assetGraph) {
@@ -111,7 +114,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
             },
             'the incoming relation should still utilize the paths setting': function (assetGraph) {
                 var relation = assetGraph.findRelations({to: {url: /\/some\/v1\.0\/moduleRenamed\.js$/}})[0];
-                assert.equal(relation.href, 'some/moduleRenamed');
+                expect(relation.href, 'to equal', 'some/moduleRenamed');
             },
             'then move the module outside some/v1.0/': {
                 topic: function (assetGraph) {
@@ -121,7 +124,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 },
                 'the incoming relation should no longer utilize the paths setting': function (assetGraph) {
                     var relation = assetGraph.findRelations({to: {url: /\/foo\/bar\/moduleRenamed\.js$/}})[0];
-                    assert.equal(relation.href, 'foo/bar/moduleRenamed');
+                    expect(relation.href, 'to equal', 'foo/bar/moduleRenamed');
                 }
             }
         },
@@ -132,7 +135,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
             },
             'the incoming relation should still utilize the paths setting': function (assetGraph) {
                 var relation = assetGraph.findRelations({to: {url: /\/this\/is\/an\/exactMatch\.js$/}})[0];
-                assert.equal(relation.href, 'exactMatchFoo');
+                expect(relation.href, 'to equal', 'exactMatchFoo');
             },
             'then rename the module referenced as exactMatch': {
                 topic: function (assetGraph) {
@@ -142,7 +145,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 },
                 'the incoming relation should no longer utilize the paths setting': function (assetGraph) {
                     var relation = assetGraph.findRelations({to: {url: /\/this\/is\/an\/exactMatchNoLonger\.js$/}})[0];
-                    assert.equal(relation.href, 'this/is/an/exactMatchNoLonger');
+                    expect(relation.href, 'to equal', 'this/is/an/exactMatchNoLonger');
                 }
             }
         }
@@ -156,7 +159,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 6 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 6);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 6);
         },
         'then move my/module': {
             topic: function (assetGraph) {
@@ -164,7 +167,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 return assetGraph;
             },
             'the href of its incoming JavaScriptAmdRequre relation should be updated': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({to: {url: /\/my\/renamedModule\.js$/}})[0].href, 'my/renamedModule');
+                expect(assetGraph.findRelations({to: {url: /\/my\/renamedModule\.js$/}})[0].href, 'to equal', 'my/renamedModule');
             },
             'then change the hrefType of the relation pointing at my/renamedModule': {
                 topic: function (assetGraph) {
@@ -172,7 +175,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                     return assetGraph;
                 },
                 'the href should be updated again': function (assetGraph) {
-                    assert.equal(assetGraph.findRelations({to: {url: /\/my\/renamedModule\.js$/}})[0].href, 'scripts/my/renamedModule.js');
+                    expect(assetGraph.findRelations({to: {url: /\/my\/renamedModule\.js$/}})[0].href, 'to equal', 'scripts/my/renamedModule.js');
                 }
             }
         }
@@ -186,10 +189,10 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         },
         'the graph should contain no JavaScriptAmdRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 0);
+            expect(assetGraph, 'to contain no relations including unresolved', 'JavaScriptAmdRequire');
         }
     },
     'After loading test case with a require() statement followed by a define(<string>, function () {}) in a comma sequence': {
@@ -201,10 +204,10 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         },
         'the graph should contain no JavaScriptAmdRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 0);
+            expect(assetGraph, 'to contain no relations including unresolved', 'JavaScriptAmdRequire');
         }
     },
     'After loading test case where the require main module doesn\'t have an incoming relation from a html file': {
@@ -216,13 +219,10 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({
-                type: 'JavaScript',
-                isLoaded: true
-            }).length, 2);
+            expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 2);
         },
         'the graph should contain 1 JavaScriptAmdRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 1);
+            expect(assetGraph, 'to contain relation including unresolved', 'JavaScriptAmdRequire');
         }
     },
     'After loading test case where the require main module doesn\'t have an incoming relation from a html file, but has a requirejs.baseUrl configuration': {
@@ -236,13 +236,10 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({
-                type: 'JavaScript',
-                isLoaded: true
-            }).length, 2);
+            expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 2);
         },
         'the graph should contain 1 JavaScriptAmdRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}, true).length, 1);
+            expect(assetGraph, 'to contain relation including unresolved', 'JavaScriptAmdRequire');
         }
     }
 })['export'](module);

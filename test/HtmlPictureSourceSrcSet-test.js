@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../lib'),
     query = AssetGraph.query;
@@ -13,16 +13,16 @@ vows.describe('HtmlPictureSourceSrcSet test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 HtmlPictureSourceSrcSet relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlPictureSourceSrcSet'}, true).length, 3);
+            expect(assetGraph, 'to contain relations including unresolved', 'HtmlPictureSourceSrcSet', 3);
         },
         'the graph should contain 3 SrcSet asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'SrcSet'}, true).length, 3);
+            expect(assetGraph, 'to contain assets', 'SrcSet', 3);
         },
         'the graph should contain 6 SrcSetEntry relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'SrcSetEntry'}, true).length, 6);
+            expect(assetGraph, 'to contain relations including unresolved', 'SrcSetEntry', 6);
         },
         'the graph should contain 6 Jpeg assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Jpeg'}, true).length, 6);
+            expect(assetGraph, 'to contain assets', 'Jpeg', 6);
         },
         'then change the file names of *-2.jpg': {
             topic: function (assetGraph) {
@@ -32,9 +32,9 @@ vows.describe('HtmlPictureSourceSrcSet test').addBatch({
                 return assetGraph;
             },
             'the outerHTML of the nodes with the srcset attributes should be updated': function (assetGraph) {
-                assert.deepEqual(assetGraph.findRelations({type: 'HtmlPictureSourceSrcSet'}).map(function (htmlPictureSourceSrcSet) {
+                expect(assetGraph.findRelations({type: 'HtmlPictureSourceSrcSet'}).map(function (htmlPictureSourceSrcSet) {
                     return htmlPictureSourceSrcSet.node.outerHTML;
-                }), [
+                }), 'to equal', [
                     '<source media="(min-width: 45em)" srcset="large-1.jpg 1x, reallyLarge.jpg 2x">',
                     '<source media="(min-width: 18em)" srcset="med-1.jpg 1x, reallyMed.jpg 2x">',
                     '<source srcset="small-1.jpg 1x, reallySmall.jpg 2x">'

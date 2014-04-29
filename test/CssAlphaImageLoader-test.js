@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../lib');
 
@@ -12,7 +12,7 @@ vows.describe('CssAlphaImageLoader').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 CssAlphaImageLoader relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CssAlphaImageLoader'}).length, 3);
+            expect(assetGraph, 'to contain relations', 'CssAlphaImageLoader', 3);
         },
         'then move foo.png': {
             topic: function (assetGraph) {
@@ -20,7 +20,7 @@ vows.describe('CssAlphaImageLoader').addBatch({
                 return assetGraph;
             },
             'the href properties of the relations should be updated': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'CssAlphaImageLoader'}), 'href'),
+                expect(_.pluck(assetGraph.findRelations({type: 'CssAlphaImageLoader'}), 'href'), 'to equal',
                                  [
                                      'images/quux.png',
                                      'bar.png',
@@ -29,8 +29,8 @@ vows.describe('CssAlphaImageLoader').addBatch({
             },
             'the CSS values should be updated accordingly': function (assetGraph) {
                 var cssRules = assetGraph.findAssets({type: 'Css'})[0].parseTree.cssRules;
-                assert.matches(cssRules[0].style.getPropertyValue('filter'), /src='images\/quux\.png'.*src='bar\.png'/);
-                assert.matches(cssRules[1].style.getPropertyValue('filter'), /src='\/images\/quux\.png'/);
+                expect(cssRules[0].style.getPropertyValue('filter'), 'to match', /src='images\/quux\.png'.*src='bar\.png'/);
+                expect(cssRules[1].style.getPropertyValue('filter'), 'to match', /src='\/images\/quux\.png'/);
             }
         }
     }

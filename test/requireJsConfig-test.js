@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('transforms.requireJsConfig test').addBatch({
@@ -12,7 +12,7 @@ vows.describe('transforms.requireJsConfig test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 4);
         }
     },
 })['export'](module);

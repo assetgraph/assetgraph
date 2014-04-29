@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib'),
     _ = require('underscore');
 
@@ -29,12 +29,12 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
         'the graph should contain 1 Css asset': function (assetGraph) {
             var cssAssets = assetGraph.findAssets({type: 'Css'});
 
-            assert.equal(cssAssets.length, 1);
+            expect(cssAssets, 'to have length', 1);
 
             assetGraph._parseTreeBefore = cssAssets[0].parseTree;
         },
         'the Css asset should contain 4096 rules': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({ type: 'Css' })[0].parseTree.cssRules.length, 4096);
+            expect(assetGraph.findAssets({type: 'Css'})[0].parseTree.cssRules, 'to have length', 4096);
         },
         'then running the splitCssIfIeLimitIsReached transform': {
             topic: function (assetGraph) {
@@ -48,21 +48,21 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                     .run(this.callback);
             },
             'the graph should have 1 emitted info': function (assetGraph) {
-                assert.equal(assetGraph.__infos.length, 1);
+                expect(assetGraph.__infos, 'to have length', 1);
             },
             'the graph should contain 2 Css asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
+                expect(assetGraph, 'to contain assets', 'Css', 2);
             },
             'the Css assets should contain 4096 rules': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({ type: 'Css' }).map(function (cssAsset) {
+                expect(assetGraph.findAssets({ type: 'Css' }).map(function (cssAsset) {
                     return cssAsset.parseTree.cssRules.length;
                 }).reduce(function (prev, current) {
                     return prev + current;
-                }, 0), 4096);
+                }, 0), 'to equal', 4096);
             },
             'each Css asset should be smaller than the original': function (assetGraph) {
                 assetGraph.findAssets({type: 'Css'}).forEach(function (cssAsset) {
-                    assert(cssAsset.parseTree.cssRules.length < assetGraph._parseTreeBefore.cssRules.length, cssAsset.url);
+                    expect(cssAsset.parseTree.cssRules.length, 'to be less than', assetGraph._parseTreeBefore.cssRules.length);
                 });
             },
             'the concatenated css text content should be unchanged from before': function (assetGraph) {
@@ -72,7 +72,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                     }).join('')
                 }).parseTree.toString();
 
-                assert(assetGraph._parseTreeBefore.toString() === cssAfter, 'Concatenation of text of split up css assets differ from original');
+                expect(assetGraph._parseTreeBefore.toString(), 'to equal', cssAfter);
             },
             'the background image should have an incoming relation from the second new css asset': function (assetGraph) {
                 var cssAssets = assetGraph.findAssets({
@@ -84,8 +84,8 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                         }
                     });
 
-                assert.equal(pngRelations.length, 1);
-                assert.equal(pngRelations[0].from, cssAssets[1]);
+                expect(pngRelations, 'to have length', 1);
+                expect(pngRelations[0].from, 'to be', cssAssets[1]);
             }
         }
     },
@@ -99,26 +99,24 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
         'the graph should contain 1 Css asset': function (assetGraph) {
             var cssAssets = assetGraph.findAssets({type: 'Css'});
 
-            assert.equal(cssAssets.length, 1);
+            expect(cssAssets, 'to have length', 1);
 
             assetGraph._parseTreeBefore = cssAssets[0].parseTree;
         },
         'the Css asset should contain 6290 rules': function (assetGraph) {
             var rules = assetGraph.findAssets({ type: 'Css' })[0].parseTree.cssRules.length;
             assetGraph.__rules = rules;
-            assert.equal(rules, 6290);
+            expect(rules, 'to equal', 6290);
         },
         'the graph should have 1 of each of asset types "png", "gif", "svg", "ttf", "eot", "woff"': function (assetGraph) {
             ['png', 'gif', 'svg', 'ttf', 'eot', 'woff'].forEach(function (extension) {
-                assert.equal(assetGraph.findAssets({
+                expect(assetGraph, 'to contain asset', {
                     url: new RegExp('\\.' + extension + '(?:$|#)')
-                }).length, 1);
+                }, 1);
             });
         },
         'the graph should contain 7 files named fake.*': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({
-                url: /fake\./
-            }).length, 7);
+            expect(assetGraph, 'to contain assets', {url: /fake\./}, 7);
         },
         'then running the splitCssIfIeLimitIsReached transform': {
             topic: function (assetGraph) {
@@ -132,17 +130,17 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                     .run(this.callback);
             },
             'the graph should have 1 emitted info': function (assetGraph) {
-                assert.equal(assetGraph.__infos.length, 1);
+                expect(assetGraph.__infos, 'to have length', 1);
             },
             'the graph should contain 3 Css asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 3);
+                expect(assetGraph, 'to contain assets', 'Css', 3);
             },
             'the Css assets should contain 6290 rules': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({ type: 'Css' }).map(function (cssAsset) {
+                expect(assetGraph.findAssets({type: 'Css'}).map(function (cssAsset) {
                     return cssAsset.parseTree.cssRules.length;
                 }).reduce(function (prev, current) {
                     return prev + current;
-                }, 0), 6290);
+                }, 0), 'to equal', 6290);
             },
             'each Css asset should be smaller than the original': function (assetGraph) {
                 var cssAssets = assetGraph.findAssets({type: 'Css'}),
@@ -151,13 +149,13 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                     sum = 0;
 
                 cssAssets.forEach(function (cssAsset, idx) {
-                    var assetRules = cssAsset.parseTree.cssRules.length;
-                    assert(assetRules < parseTreeBefore.cssRules.length);
-                    assert.equal(assetRules, rules[idx]);
-                    sum += assetRules;
+                    var assetRules = cssAsset.parseTree.cssRules;
+                    expect(assetRules.length, 'to be less than', parseTreeBefore.cssRules.length);
+                    expect(assetRules.length, 'to equal', rules[idx]);
+                    sum += assetRules.length;
                 });
 
-                assert.equal(sum, assetGraph.__rules);
+                expect(sum, 'to equal', assetGraph.__rules);
             },
             'the concatenated css text content should be unchanged from before': function (assetGraph) {
                 var text = assetGraph.findAssets({type: 'Css'}).map(function (cssAsset) {
@@ -167,13 +165,13 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                         text: text
                     }).parseTree;
 
-                assert(assetGraph._parseTreeBefore.toString() === parseTreeAfter.toString(), 'Concatenation of text of split up css assets differ from original');
+                expect(assetGraph._parseTreeBefore.toString(), 'to equal', parseTreeAfter.toString());
             },
             'the graph should have 1 of each of asset types "png", "gif", "svg", "ttf", "eot", "woff"': function (assetGraph) {
                 ['png', 'gif', 'svg', 'ttf', 'eot', 'woff'].forEach(function (extension) {
-                    assert.equal(assetGraph.findAssets({
+                    expect(assetGraph, 'to contain asset', {
                         url: new RegExp('\\.' + extension + '(?:$|#)')
-                    }).length, 1);
+                    });
                 });
             }
         }
@@ -186,13 +184,13 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 2);
+            expect(assetGraph, 'to contain assets', 2);
         },
         'the graph should contain one Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the graph should contain one Css asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Css');
         },
         'then running the splitCssIfIeLimitIsReached transform': {
             topic: function (assetGraph) {
@@ -201,13 +199,13 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                     .run(this.callback);
             },
             'the graph should contain 3 inline Css assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Css', isInline: true}).length, 3);
+                expect(assetGraph, 'to contain assets', {type: 'Css', isInline: true}, 3);
             },
             'the graph should contain 3 HtmlStyle relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 3);
+                expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
             },
             'the Css assets should have the expected contents': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'Css'}), 'text'),
+                expect(_.pluck(assetGraph.findAssets({type: 'Css'}), 'text'), 'to equal',
                     [
                         '.a {color: #aaa;}.b {color: #bbb;}',
                         '.c {color: #ccc;}.d {color: #ddd;}',
@@ -218,8 +216,8 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
             'the Html asset should contain 3 inline stylesheets': function (assetGraph) {
                 var htmlAsset = assetGraph.findAssets({type: 'Html'})[0],
                     matchInlineStylesheets = htmlAsset.text.match(/<style type="text\/css">/g);
-                assert.ok(matchInlineStylesheets);
-                assert.equal(matchInlineStylesheets.length, 3);
+                expect(matchInlineStylesheets, 'to be ok');
+                expect(matchInlineStylesheets, 'to have length', 3);
             }
         }
     },
@@ -231,13 +229,13 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 2);
+            expect(assetGraph, 'to contain assets', 2);
         },
         'the graph should contain one Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the graph should contain one Css asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Css');
         },
         'then running the splitCssIfIeLimitIsReached transform': {
             topic: function (assetGraph) {
@@ -246,13 +244,13 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                     .run(this.callback);
             },
             'the graph should contain 4 inline Css assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Css', isInline: true}).length, 4);
+                expect(assetGraph, 'to contain assets', {type: 'Css', isInline: true}, 4);
             },
             'the graph should contain 4 HtmlStyle relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 4);
+                expect(assetGraph, 'to contain relations', 'HtmlStyle', 4);
             },
             'the Css assets should have the expected contents': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'Css'}), 'text'),
+                expect(_.pluck(assetGraph.findAssets({type: 'Css'}), 'text'), 'to equal',
                     [
                         '@media screen {.a, .quux, .baz {color: #aaa;}}',
                         '.b {color: #bbb;}.c {color: #ccc;}',
@@ -264,8 +262,8 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
             'the Html asset should contain 4 inline stylesheets': function (assetGraph) {
                 var htmlAsset = assetGraph.findAssets({type: 'Html'})[0],
                     matchInlineStylesheets = htmlAsset.text.match(/<style type="text\/css">/g);
-                assert.ok(matchInlineStylesheets);
-                assert.equal(matchInlineStylesheets.length, 4);
+                expect(matchInlineStylesheets, 'to be ok');
+                expect(matchInlineStylesheets, 'to have length', 4);
             }
         }
     }

@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../lib'),
     query = AssetGraph.query;
@@ -15,13 +15,13 @@ vows.describe('<video> and <audio> test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 HtmlVideo relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlVideo'}, true).length, 4);
+            expect(assetGraph, 'to contain relations including unresolved', 'HtmlVideo', 4);
         },
         'the graph should contain 2 HtmlVideoPoster relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlVideoPoster'}, true).length, 2);
+            expect(assetGraph, 'to contain relations including unresolved', 'HtmlVideoPoster', 2);
         },
         'the graph should contain 4 HtmlAudio relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlAudio'}, true).length, 4);
+            expect(assetGraph, 'to contain relations including unresolved', 'HtmlAudio', 4);
         },
         'then change the url of the main Html document and set the hrefType of the relations to "relative"': {
             topic: function (assetGraph) {
@@ -32,7 +32,7 @@ vows.describe('<video> and <audio> test').addBatch({
                 return assetGraph;
             },
             'the relative urls of the relations should begin with ../': function (assetGraph) {
-                assert.deepEqual(_.pluck(assetGraph.findRelations({}, true), 'href'),
+                expect(_.pluck(assetGraph.findRelations({}, true), 'href'), 'to equal',
                                  [
                                      '../movie1.mp4',
                                      '../movie1.jpg',

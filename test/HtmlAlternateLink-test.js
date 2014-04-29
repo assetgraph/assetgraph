@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('Html with <link rel="alternate">').addBatch({
@@ -11,16 +11,16 @@ vows.describe('Html with <link rel="alternate">').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 HtmlAlternateLink relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlAlternateLink'}).length, 4);
+            expect(assetGraph, 'to contain relations', 'HtmlAlternateLink', 4);
         },
         'the graph should contain two Rss assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Rss'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Rss', 2);
         },
         'the graph should contain a single Atom asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Atom'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Atom');
         },
         'the graph should contain a single Xml asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Xml'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Xml');
         }
     }
 })['export'](module);

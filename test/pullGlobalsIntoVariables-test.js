@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib'),
     uglifyAst = AssetGraph.JavaScript.uglifyAst,
     uglifyJs = AssetGraph.JavaScript.uglifyJs;
@@ -39,27 +39,27 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                 .run(this.callback);
         },
         'the globals in the JavaScript should be hoisted': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].text,
-                         getFunctionBodySource(function () {
-                             var SETTIMEOUT = setTimeout,
-                                 MATH = Math,
-                                 MATHMIN_ = MATH.min,
-                                 FOOBARQUUX = foo.bar.quux;
-                             var MATHMIN = 2;
-                             var parseInt = function () {
-                                 return 99;
-                             };
-                             function parseFloat () {
-                                 return 99.0;
-                             }
-                             var quux = function isFinite() {
-                                 return false;
-                             };
-                             var id = SETTIMEOUT(function foo() {
-                                 var bar = MATHMIN_(MATHMIN_(4, 6), MATH.max(4, 6) + MATH.floor(8.2) + FOOBARQUUX.baz + FOOBARQUUX.w00p + parseInt('123') + parseInt('456'), parseFloat('99.5') + parseFloat('99.5') + isFinite(1) + isFinite(1));
-                                 SETTIMEOUT(foo, 100);
-                             }, 100);
-                         })
+            expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal',
+                getFunctionBodySource(function () {
+                    var SETTIMEOUT = setTimeout,
+                        MATH = Math,
+                        MATHMIN_ = MATH.min,
+                        FOOBARQUUX = foo.bar.quux;
+                    var MATHMIN = 2;
+                    var parseInt = function () {
+                        return 99;
+                    };
+                    function parseFloat () {
+                        return 99.0;
+                    }
+                    var quux = function isFinite() {
+                       return false;
+                    };
+                    var id = SETTIMEOUT(function foo() {
+                        var bar = MATHMIN_(MATHMIN_(4, 6), MATH.max(4, 6) + MATH.floor(8.2) + FOOBARQUUX.baz + FOOBARQUUX.w00p + parseInt('123') + parseInt('456'), parseFloat('99.5') + parseFloat('99.5') + isFinite(1) + isFinite(1));
+                        SETTIMEOUT(foo, 100);
+                    }, 100);
+                })
             );
         }
     },
@@ -78,12 +78,12 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                 .run(this.callback);
         },
         'the globals in the JavaScript should be provided as args to an immediately invoked function': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].text,
-                         getFunctionBodySource(function () {
-                             (function (MATH, MATHFLOOR) {
-                                 alert(MATHFLOOR(10.8) + MATHFLOOR(20.4) + MATH.min(3, 5));
-                             }(Math, Math.floor));
-                         })
+            expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal',
+                getFunctionBodySource(function () {
+                    (function (MATH, MATHFLOOR) {
+                        alert(MATHFLOOR(10.8) + MATHFLOOR(20.4) + MATH.min(3, 5));
+                    }(Math, Math.floor));
+                })
             );
         }
     },
@@ -104,13 +104,14 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                 .run(this.callback);
         },
         'the string literals should be pulled into a variable': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'})[0].text,
-                         getFunctionBodySource(function () {
-                 var FOOBARQUUX = "foobarquux";
-                 var a = FOOBARQUUX,
-                     b = FOOBARQUUX;
-                 f[FOOBARQUUX]();
-            }));
+            expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal',
+                getFunctionBodySource(function () {
+                    var FOOBARQUUX = "foobarquux";
+                    var a = FOOBARQUUX,
+                        b = FOOBARQUUX;
+                    f[FOOBARQUUX]();
+                })
+            );
         }
     }
 })['export'](module);

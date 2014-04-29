@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib'),
     query = AssetGraph.query;
 
@@ -12,17 +12,17 @@ vows.describe('Remove empty assets').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 3);
+            expect(assetGraph, 'to contain assets', 3);
         },
         'then running the removeEmptyAssets transform on Css and JavaScript assets': {
             topic: function (assetGraph) {
                 assetGraph.removeAssets({isEmpty: true, type: query.or('Css', 'JavaScript')}).run(this.callback);
             },
             'the graph should contain 1 asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets().length, 1);
+                expect(assetGraph, 'to contain asset');
             },
             'the graph should contain no relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations().length, 0);
+                expect(assetGraph, 'to contain no relations');
             }
         }
     }

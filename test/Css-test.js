@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('Css').addBatch({
@@ -17,10 +17,10 @@ vows.describe('Css').addBatch({
                 });
         },
         'it should result in an Error object': function (err, assetGraph) {
-            assert.instanceOf(err, Error);
+            expect(err, 'to be an', Error);
         },
         'the error message should specify the url of the Html asset': function (err, assetGraph) {
-            assert.matches(err.message, /parseErrorInInlineCss\.html/);
+            expect(err.message, 'to match', /parseErrorInInlineCss\.html/);
         }
     },
     'After loading test case that has a parse error in an external Css asset': {
@@ -38,10 +38,10 @@ vows.describe('Css').addBatch({
                 });
         },
         'it should result in an Error object': function (err, assetGraph) {
-            assert.instanceOf(err, Error);
+            expect(err, 'to be an', Error);
         },
         'the error message should specify the url of the external Css asset': function (err, assetGraph) {
-            assert.matches(err.message, /parseError\.css/);
+            expect(err.message, 'to match', /parseError\.css/);
         }
     },
     'After loading a test that has multiple neighbour @font-face rules': {
@@ -52,11 +52,11 @@ vows.describe('Css').addBatch({
                 .run(this.callback);
         },
         'the graph should contain one Css asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Css');
         },
         'the text of the Css asset should contain three occurrences @font-face': function (assetGraph) {
             var matches = assetGraph.findAssets({type: 'Css'})[0].text.match(/@font-face/g);
-            assert.equal(matches.length, 3);
+            expect(matches, 'to have length', 3);
         },
         'then mark the Css asset dirty': {
             topic: function (assetGraph) {
@@ -65,7 +65,7 @@ vows.describe('Css').addBatch({
             },
             'the text of the Css asset should still contain 3 occurrences of @font-face': function (assetGraph) {
                 var matches = assetGraph.findAssets({type: 'Css'})[0].text.match(/@font-face/g);
-                assert.equal(matches.length, 3);
+                expect(matches, 'to have length', 3);
             }
         }
     }

@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     urlTools = require('urltools'),
     AssetGraph = require('../lib');
 
@@ -12,13 +12,13 @@ vows.describe('Changing the url of assets').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 3);
+            expect(assetGraph, 'to contain assets', 3);
         },
         'the graph should contain 2 Html assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Html', 2);
         },
         'the graph should contain one Png asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Png');
         },
         'then moving the first Html asset one level down': {
             topic: function (assetGraph) {
@@ -28,7 +28,7 @@ vows.describe('Changing the url of assets').addBatch({
             },
             'the relative url of the anchor relation should have changed': function (assetGraph) {
                 var relativeUrl = assetGraph.findRelations({type: 'HtmlAnchor'})[0].node.getAttribute('href');
-                assert.equal(relativeUrl, '../otherpage.html');
+                expect(relativeUrl, 'to equal', '../otherpage.html');
             },
             'then moving the other page one level down': {
                 topic: function (assetGraph) {
@@ -38,11 +38,11 @@ vows.describe('Changing the url of assets').addBatch({
                 },
                 'the relative url of the anchor relation should be updated': function (assetGraph) {
                     var relativeUrl = assetGraph.findRelations({type: 'HtmlAnchor'})[0].node.getAttribute('href');
-                    assert.equal(relativeUrl, '../fluff/otherpage.html');
+                    expect(relativeUrl, 'to equal', '../fluff/otherpage.html');
                 },
                 'the relative url of the image relation should be updated': function (assetGraph) {
                     var relativeUrl = assetGraph.findRelations({type: 'HtmlImage'})[0].node.getAttribute('src');
-                    assert.equal(relativeUrl, '../foo.png');
+                    expect(relativeUrl, 'to equal', '../foo.png');
                 }
             }
         }
@@ -55,13 +55,13 @@ vows.describe('Changing the url of assets').addBatch({
                 .run(this.callback);
         },
         'the graph should a single Css asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Css');
         },
         'the graph should a single inline Html asset (conditional comment)': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html', isInline: true}).length, 1);
+            expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});
         },
         'the graph should a single non-inline Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html', isInline: false}).length, 1);
+            expect(assetGraph, 'to contain asset', {type: 'Html', isInline: false});
         },
         'then moving the Html asset one level down': {
             topic: function (assetGraph) {
@@ -70,7 +70,7 @@ vows.describe('Changing the url of assets').addBatch({
                 }).run(this.callback);
             },
             'the CssImage url should be relative to /subdir': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'CssImage'})[0].cssRule.style['background-image'], 'url(../foo.png)');
+                expect(assetGraph.findRelations({type: 'CssImage'})[0].cssRule.style['background-image'], 'to equal', 'url(../foo.png)');
             }
         }
     },
@@ -82,13 +82,13 @@ vows.describe('Changing the url of assets').addBatch({
                 .run(this.callback);
         },
         'the graph should contain three Css assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 3);
+            expect(assetGraph, 'to contain assets', 'Css', 3);
         },
         'the graph should contain a single Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the graph should contain a single Htc asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Htc'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Htc');
         },
         'then moving the Html asset one level down': {
             topic: function (assetGraph) {
@@ -96,7 +96,7 @@ vows.describe('Changing the url of assets').addBatch({
                 return assetGraph;
             },
             'the CssBehavior url should be relative to /subdir': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'CssBehavior'})[0].cssRule.style.behavior, 'url(theBehavior.htc)');
+                expect(assetGraph.findRelations({type: 'CssBehavior'})[0].cssRule.style.behavior, 'to equal', 'url(theBehavior.htc)');
             }
         }
     },
@@ -115,7 +115,7 @@ vows.describe('Changing the url of assets').addBatch({
                 return assetGraph;
             },
             'the asset url should be updated correctly': function (assetGraph) {
-                assert.equal(assetGraph.findAssets()[0].url, 'file:///foo/bar/quux/baz/otherdir/index.html');
+                expect(assetGraph.findAssets()[0].url, 'to equal', 'file:///foo/bar/quux/baz/otherdir/index.html');
             },
             'then update the asset url to a root-relative url': {
                 topic: function (assetGraph) {
@@ -123,7 +123,7 @@ vows.describe('Changing the url of assets').addBatch({
                     return assetGraph;
                 },
                 'the asset url should be updated correctly': function (assetGraph) {
-                    assert.equal(assetGraph.findAssets()[0].url, 'file:///foo/bar/quux/hey/index.html');
+                    expect(assetGraph.findAssets()[0].url, 'to equal', 'file:///foo/bar/quux/hey/index.html');
                 },
                 'then update the asset url to a protocol-relative url': {
                     topic: function (assetGraph) {
@@ -131,7 +131,7 @@ vows.describe('Changing the url of assets').addBatch({
                         return assetGraph;
                     },
                     'the asset url should be updated correctly': function (assetGraph) {
-                        assert.equal(assetGraph.findAssets()[0].url, 'http://hey.com/there/index.html');
+                        expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/there/index.html');
                     },
                     'then update the asset url to a relative url': {
                         topic: function (assetGraph) {
@@ -139,7 +139,7 @@ vows.describe('Changing the url of assets').addBatch({
                             return assetGraph;
                         },
                         'the asset url should be updated correctly': function (assetGraph) {
-                            assert.equal(assetGraph.findAssets()[0].url, 'http://hey.com/there/you/go/index.html');
+                            expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/there/you/go/index.html');
                         },
                         'then update the asset url to a root-relative url': {
                             topic: function (assetGraph) {
@@ -147,7 +147,7 @@ vows.describe('Changing the url of assets').addBatch({
                                 return assetGraph;
                             },
                             'the asset url should be updated correctly': function (assetGraph) {
-                                assert.equal(assetGraph.findAssets()[0].url, 'http://hey.com/and/then/here.html');
+                                expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/and/then/here.html');
                             },
                             'then update the asset url to a protocol-relative url': {
                                 topic: function (assetGraph) {
@@ -155,7 +155,7 @@ vows.describe('Changing the url of assets').addBatch({
                                     return assetGraph;
                                 },
                                 'the asset url should be updated correctly': function (assetGraph) {
-                                    assert.equal(assetGraph.findAssets()[0].url, 'http://example.com/then/here.html');
+                                    expect(assetGraph.findAssets()[0].url, 'to equal', 'http://example.com/then/here.html');
                                 },
                                 'then update the asset url to an absolute https url, then to a protocol-relative url': {
                                     topic: function (assetGraph) {
@@ -164,7 +164,7 @@ vows.describe('Changing the url of assets').addBatch({
                                         return assetGraph;
                                     },
                                     'the asset url should be updated correctly': function (assetGraph) {
-                                        assert.equal(assetGraph.findAssets()[0].url, 'https://example.com/then/here.html');
+                                        expect(assetGraph.findAssets()[0].url, 'to equal', 'https://example.com/then/here.html');
                                     }
                                 }
                             }

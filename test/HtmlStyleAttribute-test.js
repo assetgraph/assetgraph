@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('HtmlStyleAttribute test').addBatch({
@@ -11,26 +11,26 @@ vows.describe('HtmlStyleAttribute test').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 4);
+            expect(assetGraph, 'to contain assets', 4);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the graph should contain 2 HtmlStyleAttribute relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlStyleAttribute'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'HtmlStyleAttribute', 2);
         },
         'the graph should contain 1 CssImage relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'CssImage');
         },
         'the graph should contain 1 Png asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Png');
         },
         'then inlining the image': {
             topic: function (assetGraph) {
                 assetGraph.inlineRelations({type: 'CssImage'}).run(this.callback);
             },
             'the text of the Html asset should contain a data: url': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match',
                                /data:/);
             },
             'then add a property to the first Css and mark it dirty': {
@@ -41,7 +41,7 @@ vows.describe('HtmlStyleAttribute test').addBatch({
                     return assetGraph;
                 },
                 'the new property should be in the text of the Html asset': function (assetGraph) {
-                    assert.matches(assetGraph.findAssets({type: 'Html'})[0].text,
+                    expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match',
                                    /line-height:/);
                 }
             },
@@ -53,7 +53,7 @@ vows.describe('HtmlStyleAttribute test').addBatch({
                     return assetGraph;
                 },
                 'the Html should still contain both "foo" declarations': function (assetGraph) {
-                    assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /foo:\s*bar;.*foo:\s*quux/);
+                    expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /foo:\s*bar;.*foo:\s*quux/);
                 }
             }
         }

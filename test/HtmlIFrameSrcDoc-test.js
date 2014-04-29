@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('HtmlIFrameSrcDoc').addBatch({
@@ -13,19 +13,19 @@ vows.describe('HtmlIFrameSrcDoc').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 Html assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 3);
+            expect(assetGraph, 'to contain assets', 'Html', 3);
         },
         'the graph should contain one inline Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html', isInline: true}).length, 1);
+            expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});
         },
         'the graph should contain one HtmlIFrame relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlIFrame'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlIFrame');
         },
         'the graph should contain one HtmlIFrameSrcDoc relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlIFrameSrcDoc'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlIFrameSrcDoc');
         },
         'the graph should contain one HtmlAnchor relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlAnchor'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlAnchor');
         },
         'then updating the inline Html asset pointed to by the HtmlIFrameSrcDoc relation': {
             topic: function (assetGraph) {
@@ -36,7 +36,7 @@ vows.describe('HtmlIFrameSrcDoc').addBatch({
                 return assetGraph;
             },
             'the serialization of the containing document should contain the inserted text': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({url: /\/index\.html$/})[0].text, /Hello from the outside!/);
+                expect(assetGraph.findAssets({url: /\/index\.html$/})[0].text, 'to match', /Hello from the outside!/);
             }
         }
     }

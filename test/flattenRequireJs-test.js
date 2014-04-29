@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     _ = require('underscore'),
     fs = require('fs'),
     path = require('path'),
@@ -16,7 +16,7 @@ function toAst(functionOrAst) {
 }
 
 function assertAstsEqual(topic, expected) {
-    assert.equal(toAst(topic).print_to_string(), toAst(expected).print_to_string());
+    expect(toAst(topic).print_to_string(), 'to equal', toAst(expected).print_to_string());
 }
 
 vows.describe('transforms.flattenRequireJs').addBatch({
@@ -29,13 +29,13 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 6 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 6);
+            expect(assetGraph, 'to contain assets', 6);
         },
         'the graph should contain 1 HtmlRequireJsMain relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlRequireJsMain'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlRequireJsMain');
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
@@ -45,8 +45,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the resulting scripts should be identical to the output of the require.js optimizer': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 4);
-                assert.equal(htmlScripts[0].href, 'scripts/require-jquery.js');
+                expect(htmlScripts, 'to have length', 4);
+                expect(htmlScripts[0].href, 'to equal', 'scripts/require-jquery.js');
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     $.fn.alpha = function() {
                         return this.append("<p>Alpha is Go!</p>");
@@ -79,22 +79,22 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         },
         'the graph should contain 1 non-inline Text asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Text', isInline: false}).length, 1);
+            expect(assetGraph, 'to contain asset', {type: 'Text', isInline: false});
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
                 assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
             },
             'the graph should contain GETTEXT relation pointing at myTextFile.txt': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptGetText', to: {url: /\/myTextFile\.txt$/}}).length, 1);
+                expect(assetGraph, 'to contain relation', {type: 'JavaScriptGetText', to: {url: /\/myTextFile\.txt$/}});
             },
             'the resulting main.js should have a define("myTextFile.txt") and the "text!" prefix should be stripped from the require list': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 3);
-                assert.equal(htmlScripts[0].href, 'require.js');
+                expect(htmlScripts, 'to have length', 3);
+                expect(htmlScripts[0].href, 'to equal', 'require.js');
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define("myTextFile.txt",GETTEXT("myTextFile.txt"));
                 });
@@ -111,8 +111,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 },
                 'main.js should should contain the contents of myTextFile.txt': function (assetGraph) {
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                    assert.equal(htmlScripts.length, 3);
-                    assert.equal(htmlScripts[0].href, 'require.js');
+                    expect(htmlScripts, 'to have length', 3);
+                    expect(htmlScripts[0].href, 'to equal', 'require.js');
                     assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                         define("myTextFile.txt", "THE TEXT!\n");
                     });
@@ -135,7 +135,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
@@ -143,8 +143,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the resulting main.js should have the expected parse tree': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 5);
-                assert.equal(htmlScripts[0].href, 'require.js');
+                expect(htmlScripts, 'to have length', 5);
+                expect(htmlScripts[0].href, 'to equal', 'require.js');
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define("popular", function(){
                         alert("I\'m a popular helper module");
@@ -179,7 +179,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 4);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 4);
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
@@ -187,8 +187,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 4);
-                assert.equal(htmlScripts[0].href, 'require.js');
+                expect(htmlScripts, 'to have length', 4);
+                expect(htmlScripts[0].href, 'to equal', 'require.js');
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define("module2", [], function () {
                         return "module2";
@@ -217,10 +217,10 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
         },
         'the graph should contain 2 HtmlScript relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlScript'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
@@ -228,9 +228,9 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 4);
-                assert.equal(htmlScripts[0].href, 'includedInHtmlAndViaRequire.js');
-                assert.equal(htmlScripts[1].href, 'require.js');
+                expect(htmlScripts, 'to have length', 4);
+                expect(htmlScripts[0].href, 'to equal', 'includedInHtmlAndViaRequire.js');
+                expect(htmlScripts[1].href, 'to equal', 'require.js');
                 assertAstsEqual(htmlScripts[2].to.parseTree, function () {
                     alert("includedInHtmlAndViaRequire.js");
                     define("includedInHtmlAndViaRequire", function (){});
@@ -253,7 +253,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
@@ -261,8 +261,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the resulting inline script should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 5);
-                assert.equal(htmlScripts[0].href, 'require.js');
+                expect(htmlScripts, 'to have length', 5);
+                expect(htmlScripts[0].href, 'to equal', 'require.js');
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define("popular", function () {
                         alert("I'm a popular helper module");
@@ -296,35 +296,35 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         },
         'the graph should contain 1 JavaScriptAmdRequire relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdRequire'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'JavaScriptAmdRequire');
         },
         'the graph should contain 1 Css asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Css');
         },
         'the graph should contain 1 CssImage relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'CssImage');
         },
         'the graph should contain 1 Png asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Png');
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
                 assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
             },
             'the graph should contain 1 HtmlStyle relation': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'HtmlStyle'}).length, 1);
+                expect(assetGraph, 'to contain relation', 'HtmlStyle');
             },
             'the graph should contain 1 Css asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+                expect(assetGraph, 'to contain asset', 'Css');
             },
             'the graph should contain 1 CssImage relation': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'CssImage'}).length, 1);
+                expect(assetGraph, 'to contain relation', 'CssImage');
             },
             'the graph should contain 1 Png asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+                expect(assetGraph, 'to contain asset', 'Png');
             }
         }
     },
@@ -337,28 +337,28 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         },
         'the graph should contain 1 JavaScriptGetStaticUrl relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptGetStaticUrl'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'JavaScriptGetStaticUrl');
         },
         'the graph should contain 1 StaticUrlMapEntry relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'StaticUrlMapEntry'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'StaticUrlMapEntry');
         },
         'the graph should contain 1 Png asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Png');
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
                 assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
             },
             'the graph should contain 1 Png asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+                expect(assetGraph, 'to contain asset', 'Png');
             },
             'the resulting main script should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 5);
-                assert.matches(htmlScripts[0].to.url, /\/require\.js$/);
+                expect(htmlScripts, 'to have length', 5);
+                expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
 
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define("module2", function() {
@@ -395,8 +395,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
             var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-            assert.equal(htmlScripts.length, 3);
-            assert.matches(htmlScripts[0].to.url, /\/require\.js$/);
+            expect(htmlScripts, 'to have length', 3);
+            expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
 
             assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                 define("myumdmodule", function () {
@@ -435,11 +435,11 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                     type: 'JavaScript'
                 }
             });
-            assert.equal(scriptRelations.length, 3);
+            expect(scriptRelations, 'to have length', 3);
         },
         'there should be no JavaScriptAmdDefine relations': function (assetGraph) {
             var relations = assetGraph.findRelations({type: 'JavaScriptAmdDefine'});
-            assert.equal(relations.length, 0);
+            expect(relations, 'to have length', 0);
         }
     },
     'After loading the umd test case where the wrapper has a dependency in the define call, then running the flattenRequireJs transform': {
@@ -453,8 +453,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
             var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-            assert.equal(htmlScripts.length, 4);
-            assert.equal(htmlScripts[0].href, 'require.js');
+            expect(htmlScripts, 'to have length', 4);
+            expect(htmlScripts[0].href, 'to equal', 'require.js');
             assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                 define("someDependency", function (){
                     alert("got the dependency!");
@@ -484,8 +484,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
             var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-            assert.equal(htmlScripts.length, 3);
-            assert.equal(htmlScripts[0].href, 'require.js');
+            expect(htmlScripts, 'to have length', 3);
+            expect(htmlScripts[0].href, 'to equal', 'require.js');
             assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                 (function (global){
                     var signals = function () {return true;};
@@ -518,7 +518,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'index1.html should have the expected HtmlScript relations': function (assetGraph) {
             var htmlScripts = assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index1\.html$/}});
-            assert.equal(htmlScripts.length, 4);
+            expect(htmlScripts, 'to have length', 4);
             assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                 define("someDependency", function () {
                     alert("here is the dependency of the common module");
@@ -538,7 +538,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'index2.html should have the expected HtmlScript relations': function (assetGraph) {
             var htmlScripts = assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index2\.html$/}});
-            assert.equal(htmlScripts.length, 4);
+            expect(htmlScripts, 'to have length', 4);
             assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                 define("someDependency", function () {
                     alert("here is the dependency of the common module");
@@ -567,14 +567,14 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'index.html should have a HtmlStyle relations pointing at the Less assets': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}}), 'href'), [
+            expect(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}}), 'href'), 'to equal', [
                 'b.less',
                 'a.less',
                 'c.less'
             ]);
         },
         'index2.html should have a HtmlStyle relations pointing at the Less assets': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index2\.html$/}}), 'href'), [
+            expect(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index2\.html$/}}), 'href'), 'to equal', [
                 'b.less',
                 'a.less',
                 'c.less'
@@ -589,7 +589,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'asset.requireJsConfig.shim should have the expected value': function (assetGraph) {
-            assert.deepEqual(assetGraph.requireJsConfig.shim, {
+            expect(assetGraph.requireJsConfig.shim, 'to equal', {
                 nonAmdModule1: {deps: ['someDependency']},
                 nonAmdModule2: {exports: 'foo.bar', deps: ['someOtherDependency']}
             });
@@ -599,7 +599,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 assetGraph.populate().run(this.callback);
             },
             'the graph should contain 2 JavaScriptShimRequire relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptShimRequire'}).length, 2);
+                expect(assetGraph, 'to contain relations', 'JavaScriptShimRequire', 2);
             },
             'then run the flattenRequireJs transform': {
                 topic: function (assetGraph) {
@@ -607,9 +607,9 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 },
                 'the resulting scripts should have the expected contents': function (assetGraph) {
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                    assert.equal(htmlScripts.length, 7);
-                    assert.matches(htmlScripts[0].to.text, /var require\s*=/);
-                    assert.matches(htmlScripts[1].to.url, /\/require\.js$/);
+                    expect(htmlScripts, 'to have length', 7);
+                    expect(htmlScripts[0].to.text, 'to match', /var require\s*=/);
+                    expect(htmlScripts[1].to.url, 'to match', /\/require\.js$/);
 
                     assertAstsEqual(htmlScripts[2].to.parseTree, function () {
                         alert('someDependency');
@@ -647,7 +647,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 JavaScript assets with the expected urls': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), [
+            expect(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
                 assetGraph.root + 'main.js',
                 assetGraph.root + 'require.js',
                 assetGraph.root + 'something.js'
@@ -660,7 +660,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                     .run(this.callback);
             },
             'the graph should contain 5 JavaScript assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 5);
             }
         }
     },
@@ -673,7 +673,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 JavaScript assets with the expected urls': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), [
+            expect(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
                 assetGraph.root + 'main.js',
                 assetGraph.root + 'require.js',
                 assetGraph.root + 'subdir/bar.js',
@@ -689,9 +689,9 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 5);
+                expect(htmlScripts, 'to have length', 5);
 
-                assert.matches(htmlScripts[0].to.url, /\/require\.js$/);
+                expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define("subdir/subsubdir/quux", function () {
                         alert("quux!");
@@ -728,7 +728,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 JavaScript assets with the expected urls': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), [
+            expect(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
                 assetGraph.root + 'main.js',
                 assetGraph.root + 'require.js',
                 assetGraph.root + 'subdir/bar.js',
@@ -746,8 +746,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 5);
-                assert.equal(htmlScripts[0].href, 'require.js');
+                expect(htmlScripts, 'to have length', 5);
+                expect(htmlScripts[0].href, 'to equal', 'require.js');
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define("subdir/othersubdir/quux", function () {
                         alert("quux!");
@@ -781,7 +781,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 3 JavaScript assets with the expected urls': function (assetGraph) {
-            assert.deepEqual(_.pluck(assetGraph.findAssets({type: 'JavaScript', isInline: false}), 'url').sort(), [
+            expect(_.pluck(assetGraph.findAssets({type: 'JavaScript', isInline: false}), 'url').sort(), 'to equal', [
                 assetGraph.root + 'main.js',
                 assetGraph.root + 'require.js',
                 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'
@@ -797,7 +797,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 1 Text asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Text'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Text');
         },
         'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
@@ -805,8 +805,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 3);
-                assert.equal(htmlScripts[0].href, 'require.js');
+                expect(htmlScripts, 'to have length', 3);
+                expect(htmlScripts[0].href, 'to equal', 'require.js');
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define("foo.txt", GETTEXT("foo.txt"));
                 });
@@ -828,7 +828,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         },
         'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
@@ -836,8 +836,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 5);
-                assert.matches(htmlScripts[0].to.url, /\/require\.js$/);
+                expect(htmlScripts, 'to have length', 5);
+                expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
 
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define('theLibrary', function () {
@@ -878,7 +878,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 5 loaded JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript', isLoaded: true}).length, 5);
+            expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 5);
         },
         'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
@@ -886,8 +886,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 5);
-                assert.equal(htmlScripts[0].href, 'require.js');
+                expect(htmlScripts, 'to have length', 5);
+                expect(htmlScripts[0].href, 'to equal', 'require.js');
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define('/thingAtTheRoot.js', function () {
                         return 'thing at the root';
@@ -921,7 +921,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         },
         'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
@@ -929,8 +929,8 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                assert.equal(htmlScripts.length, 2);
-                assert.equal(htmlScripts[0].href, 'require.js');
+                expect(htmlScripts, 'to have length', 2);
+                expect(htmlScripts[0].href, 'to equal', 'require.js');
                 assertAstsEqual(htmlScripts[1].to.parseTree, function () {
                     define('main', function () {
                         alert('It gets lonely in here if nobody runs me');
@@ -952,7 +952,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 5);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         },
         'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
@@ -964,9 +964,9 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                     .run(this.callback);
             },
             'the correct error should be emitted': function (assetGraph) {
-                assert.ok(assetGraph._emittedWarnings, 'This test has failed once in a random manner. If you see this again expect it to be a race condition');
-                assert.equal(assetGraph._emittedWarnings.length, 1);
-                assert.equal(assetGraph._emittedWarnings[0].message.replace(/^file:\/\/[^\s]* /, ''), 'is referred to as both popular and popular.js, please omit the .js extension in define/require');
+                expect(assetGraph._emittedWarnings, 'This test has failed once in a random manner. If you see this again expect it to be a race condition', 'to be ok');
+                expect(assetGraph._emittedWarnings, 'to have length', 1);
+                expect(assetGraph._emittedWarnings[0].message.replace(/^file:\/\/[^\s]* /, ''), 'is referred to as both popular and popular.js, 'to equal', please omit the .js extension in define/require');
             }
         }
     },

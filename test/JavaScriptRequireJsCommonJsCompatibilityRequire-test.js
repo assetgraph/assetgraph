@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     urlTools = require('urltools'),
     AssetGraph = require('../lib');
 
@@ -13,19 +13,19 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 7 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 7);
+            expect(assetGraph, 'to contain assets', 7);
         },
         'the graph should contain 0 JavaScriptAmdDefine relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 0);
+            expect(assetGraph, 'to contain no relations', {type: 'JavaScriptAmdDefine'});
         },
         'the graph should contain one JavaScriptRequireJsCommonJsCompatibilityRequire relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptRequireJsCommonJsCompatibilityRequire'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'JavaScriptRequireJsCommonJsCompatibilityRequire');
         },
         'the graph should contain 2 JavaScriptCommonJsRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptCommonJsRequire'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'JavaScriptCommonJsRequire', 2);
         },
         'the graph should contain over/the/rainbow/foo.js, and it should be loaded': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({url: /\/over\/the\/rainbow\/foo\.js$/, isLoaded: true}).length, 1);
+            expect(assetGraph, 'to contain asset', {url: /\/over\/the\/rainbow\/foo\.js$/, isLoaded: true});
         },
         'then run the liftUpJavaScriptRequireJsCommonJsCompatibilityRequire transform': {
             topic: function (assetGraph) {
@@ -34,10 +34,10 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                     .run(this.callback);
             },
             'the graph should contain one JavaScriptAmdDefine relation': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 1);
+                expect(assetGraph, 'to contain relation', 'JavaScriptAmdDefine');
             },
             'commonJsIsh should have "require", "exports", "module", and "somewhere/foo" in its dependency array': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({text: /\["require","exports","module","somewhere\/foo"\]/}).length, 1);
+                expect(assetGraph, 'to contain asset', {text: /\["require","exports","module","somewhere\/foo"\]/});
             },
             'then run flattenRequireJs': {
                 topic: function (assetGraph) {
@@ -46,7 +46,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                         .run(this.callback);
                 },
                 'the Html asset should have an HtmlScript relation to an asset with the contents of over/the/rainbow/foo.js': function (assetGraph) {
-                    assert.equal(assetGraph.findRelations({type: 'HtmlScript', from: {type: 'Html'}, to: {text: /return 42/}}).length, 1);
+                    expect(assetGraph, 'to contain relation', {type: 'HtmlScript', from: {type: 'Html'}, to: {text: /return 42/}});
                 }
             }
         }
@@ -60,19 +60,19 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 5 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 5);
+            expect(assetGraph, 'to contain assets', 5);
         },
         'the graph should contain 0 JavaScriptAmdDefine relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 0);
+            expect(assetGraph, 'to contain no relations', {type: 'JavaScriptAmdDefine'});
         },
         'the graph should contain one JavaScriptRequireJsCommonJsCompatibilityRequire relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptRequireJsCommonJsCompatibilityRequire'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'JavaScriptRequireJsCommonJsCompatibilityRequire');
         },
         'the graph should contain 0 JavaScriptCommonJsRequire relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptCommonJsRequire'}).length, 0);
+            expect(assetGraph, 'to contain no relations', {type: 'JavaScriptCommonJsRequire'});
         },
         'the graph should contain over/the/rainbow/foo.js, and it should be loaded': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({url: /\/over\/the\/rainbow\/foo\.js$/, isLoaded: true}).length, 1);
+            expect(assetGraph, 'to contain asset', {url: /\/over\/the\/rainbow\/foo\.js$/, isLoaded: true});
         },
         'then run the liftUpJavaScriptRequireJsCommonJsCompatibilityRequire transform': {
             topic: function (assetGraph) {
@@ -81,10 +81,10 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                     .run(this.callback);
             },
             'the graph should contain one JavaScriptAmdDefine relation': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 1);
+                expect(assetGraph, 'to contain relation', 'JavaScriptAmdDefine');
             },
             'commonJsIsh should have "require" and "somewhere/foo" in its dependency array': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({text: /\["require","somewhere\/foo"\]/}).length, 1);
+                expect(assetGraph, 'to contain asset', {text: /\["require","somewhere\/foo"\]/});
             },
             'then run flattenRequireJs': {
                 topic: function (assetGraph) {
@@ -93,7 +93,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                         .run(this.callback);
                 },
                 'the Html asset should have an HtmlScript relation to an asset with the contents of over/the/rainbow/foo.js': function (assetGraph) {
-                    assert.equal(assetGraph.findRelations({type: 'HtmlScript', from: {type: 'Html'}, to: {text: /return 42/}}).length, 1);
+                    expect(assetGraph, 'to contain relation', {type: 'HtmlScript', from: {type: 'Html'}, to: {text: /return 42/}});
                 }
             }
         }
@@ -107,13 +107,13 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 76 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 76);
+            expect(assetGraph, 'to contain assets', 76);
         },
         'the graph should contain 168 JavaScriptRequireJsCommonJsCompatibilityRequire relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptRequireJsCommonJsCompatibilityRequire'}).length, 168);
+            expect(assetGraph, 'to contain relations', 'JavaScriptRequireJsCommonJsCompatibilityRequire', 168);
         },
         'the graph should contain 0 JavaScriptAmdDefine relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 0);
+            expect(assetGraph, 'to contain no relations', {type: 'JavaScriptAmdDefine'});
         },
         'then run the liftUpJavaScriptRequireJsCommonJsCompatibilityRequire transform': {
             topic: function (assetGraph) {
@@ -122,10 +122,10 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                     .run(this.callback);
             },
             'the graph should contain 168 JavaScriptAmdDefine relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptAmdDefine'}).length, 168);
+                expect(assetGraph, 'to contain relations', 'JavaScriptAmdDefine', 168);
             },
             'the graph should still contain 168 JavaScriptRequireJsCommonJsCompatibilityRequire relations': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({type: 'JavaScriptRequireJsCommonJsCompatibilityRequire'}).length, 168);
+                expect(assetGraph, 'to contain relations', 'JavaScriptRequireJsCommonJsCompatibilityRequire', 168);
             },
             'then run the flattenRequireJs transform and inline the JavaScriptGetText relations': {
                 topic: function (assetGraph) {

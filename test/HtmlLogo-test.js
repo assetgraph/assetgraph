@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('HtmlLogo').addBatch({
@@ -11,10 +11,10 @@ vows.describe('HtmlLogo').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 1 HtmlLogo relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlLogo'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlLogo');
         },
         'the graph should contain 1 Svg asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Svg'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Svg');
         },
         'then update the url of the logo': {
             topic: function (assetGraph) {
@@ -22,7 +22,7 @@ vows.describe('HtmlLogo').addBatch({
                 return assetGraph;
             },
             'the text of the Html asset should be updated': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'Html'})[0].text, /otherLogo\.png/)
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /otherLogo\.png/);
             }
         }
     }

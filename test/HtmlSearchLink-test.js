@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('Html with <link rel="search">').addBatch({
@@ -11,10 +11,10 @@ vows.describe('Html with <link rel="search">').addBatch({
                 .run(this.callback);
         },
         'the graph should contain an HtmlSearchLink relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlSearchLink'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'HtmlSearchLink');
         },
         'the graph should contain a single Xml asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Xml'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Xml');
         }
     }
 })['export'](module);

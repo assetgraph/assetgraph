@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 function asset(inputHtml) {
@@ -14,7 +14,7 @@ vows.describe('Html template escaping').addBatch({
             return asset('<div></div>');
         },
         'The internal represenation should be the same as the external': function (asset) {
-            assert.equal(asset.internalText, asset.text);
+            expect(asset.internalText, 'to equal', asset.text);
         }
     },
     'In an underscore template HTML asset': {
@@ -22,16 +22,16 @@ vows.describe('Html template escaping').addBatch({
             return asset('<div><% foo %></div>');
         },
         'The internal representation should not be the same as the external': function (asset) {
-            assert.notEqual(asset.internalText, asset.text);
+            expect(asset.internalText, 'not to equal', asset.text);
         },
         'The internal representation should be correct': function (asset) {
-            assert.equal(asset.internalText, '<div>⋖5⋗</div>');
+            expect(asset.internalText, 'to equal', '<div>⋖5⋗</div>');
         },
         'The template replacement should contain the correct value': function (asset) {
-            assert.equal(asset._templateReplacements['⋖5⋗'], '<% foo %>');
+            expect(asset._templateReplacements['⋖5⋗'], 'to equal', '<% foo %>');
         },
         'The text getter should return the same as the text input': function (asset) {
-            assert.equal(asset.text, '<div><% foo %></div>');
+            expect(asset.text, 'to equal', '<div><% foo %></div>');
         },
         'after using the text setter': {
             topic: function (asset) {
@@ -39,10 +39,10 @@ vows.describe('Html template escaping').addBatch({
                 return asset;
             },
             'The internal representation should be correct': function (asset) {
-                assert.equal(asset.internalText, '<div>⋖5⋗</div>');
+                expect(asset.internalText, 'to equal', '<div>⋖5⋗</div>');
             },
             'The text getter should return the same as the setter input': function (asset) {
-                assert.equal(asset.text, '<div><% bar %></div>');
+                expect(asset.text, 'to equal', '<div><% bar %></div>');
             }
         }
     },
@@ -51,16 +51,16 @@ vows.describe('Html template escaping').addBatch({
             return asset('<div><? foo ?></div>');
         },
         'The internal representation should not be the same as the external': function (asset) {
-            assert.notEqual(asset.internalText, asset.text);
+            expect(asset.internalText, 'not to equal', asset.text);
         },
         'The internal representation should be correct': function (asset) {
-            assert.equal(asset.internalText, '<div>⋖5⋗</div>');
+            expect(asset.internalText, 'to equal', '<div>⋖5⋗</div>');
         },
         'The template replacement should contain the correct value': function (asset) {
-            assert.equal(asset._templateReplacements['⋖5⋗'], '<? foo ?>');
+            expect(asset._templateReplacements['⋖5⋗'], 'to equal', '<? foo ?>');
         },
         'The text getter should return the same as the text input': function (asset) {
-            assert.equal(asset.text, '<div><? foo ?></div>');
+            expect(asset.text, 'to equal', '<div><? foo ?></div>');
         },
         'after using the text setter': {
             topic: function (asset) {
@@ -68,10 +68,10 @@ vows.describe('Html template escaping').addBatch({
                 return asset;
             },
             'The internal representation should be correct': function (asset) {
-                assert.equal(asset.internalText, '<div>⋖5⋗</div>');
+                expect(asset.internalText, 'to equal', '<div>⋖5⋗</div>');
             },
             'The text getter should return the same as the setter input': function (asset) {
-                assert.equal(asset.text, '<div><? bar ?></div>');
+                expect(asset.text, 'to equal', '<div><? bar ?></div>');
             }
         }
     },
@@ -80,10 +80,10 @@ vows.describe('Html template escaping').addBatch({
             return asset('<div><% foo ?> %></div>');
         },
         'The internal representation should be correct': function (asset) {
-            assert.equal(asset.internalText, '<div>⋖5⋗</div>');
+            expect(asset.internalText, 'to equal', '<div>⋖5⋗</div>');
         },
         'The text getter should return the same as the text input': function (asset) {
-            assert.equal(asset.text, '<div><% foo ?> %></div>');
+            expect(asset.text, 'to equal', '<div><% foo ?> %></div>');
         },
     },
     'With a HTML asset with an underscore template': {
@@ -91,7 +91,7 @@ vows.describe('Html template escaping').addBatch({
             return asset('<div><% foo %></div>');
         },
         'the text getter should return the same as the text input': function (asset) {
-            assert.equal(asset.text, '<div><% foo %></div>');
+            expect(asset.text, 'to equal', '<div><% foo %></div>');
         },
         'then removing the divs childNode using DOM': {
             topic: function (asset) {
@@ -100,7 +100,7 @@ vows.describe('Html template escaping').addBatch({
                 return asset;
             },
             'the text getter should return the correct output': function (asset) {
-                assert.equal(asset.text, '<div></div>');
+                expect(asset.text, 'to equal', '<div></div>');
             }
         }
     }

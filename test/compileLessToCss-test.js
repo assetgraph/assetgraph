@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib'),
     query = AssetGraph.query;
 
@@ -12,30 +12,30 @@ vows.describe('Compiling LESS to CSS').addBatch({
                 .run(this.callback);
         },
         'the graph should contain one Less asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Less'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Less');
         },
         'then run the compileLessToCss transform': {
             topic: function (assetGraph) {
                 assetGraph.compileLessToCss({type: 'Less'}).run(this.callback);
             },
             'the graph should contain no Less assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Less'}).length, 0);
+                expect(assetGraph, 'to contain no assets', 'Less');
             },
             'the graph should contain one Css asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+                expect(assetGraph, 'to contain asset', 'Css');
             },
             'then get the Html asset as text': {
                 topic: function (assetGraph) {
                     return assetGraph.findAssets({type: 'Html'})[0].text;
                 },
                 'there should be no occurrences of "stylesheet/less"': function (text) {
-                    assert.equal(text.indexOf('stylesheet/less'), -1);
+                    expect(text, 'not to contain', 'stylesheet/less');
                 },
                 'there should be no occurrences of "styles.less"': function (text) {
-                    assert.equal(text.indexOf('styles.less'), -1);
+                    expect(text, 'not to contain', 'styles.less');
                 },
                 'there should be a <link rel="stylesheet" href="styles.css">': function (text) {
-                    assert.notEqual(text.indexOf('<link rel="stylesheet" href="styles.css">'), -1);
+                    expect(text, 'to contain', '<link rel="stylesheet" href="styles.css">');
                 }
             },
             'then get the Css as text': {
@@ -43,7 +43,7 @@ vows.describe('Compiling LESS to CSS').addBatch({
                     return assetGraph.findAssets({type: 'Css'})[0].text;
                 },
                 'the Css should be the output of the less compiler': function (cssText) {
-                    assert.equal(cssText,
+                    expect(cssText, 'to equal',
                         '#header {\n' +
                         '  color: #333333;\n' +
                         '  border-left: 1px;\n' +

@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('JavaScriptSourceUrl').addBatch({
@@ -11,10 +11,10 @@ vows.describe('JavaScriptSourceUrl').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 4);
+            expect(assetGraph, 'to contain assets', 4);
         },
         'the graph should contain 2 JavaScriptSourceUrl relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptSourceUrl'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'JavaScriptSourceUrl', 2);
         },
         'then mark bundle.js dirty': {
             topic: function (assetGraph) {
@@ -23,8 +23,8 @@ vows.describe('JavaScriptSourceUrl').addBatch({
             },
             'the reserialized bundle.js should contain both @sourceUrl directives': function (assetGraph) {
                 var javaScript = assetGraph.findAssets({url: /\/bundle\.js$/})[0];
-                assert.matches(javaScript.text, /@\s*sourceURL=bar\.js/);
-                assert.matches(javaScript.text, /@\s*sourceURL=foo\.js/);
+                expect(javaScript.text, 'to match', /@\s*sourceURL=bar\.js/);
+                expect(javaScript.text, 'to match', /@\s*sourceURL=foo\.js/);
             },
             'then change the url of the bundle': {
                 topic: function (assetGraph) {
@@ -33,8 +33,8 @@ vows.describe('JavaScriptSourceUrl').addBatch({
                 },
                 'the JavaScriptSourceUrl relations should be updated': function (assetGraph) {
                     var javaScript = assetGraph.findAssets({url: /\/bundle\.js$/})[0];
-                    assert.matches(javaScript.text, /@\s*sourceURL=..\/bar\.js/);
-                    assert.matches(javaScript.text, /@\s*sourceURL=..\/foo\.js/);
+                    expect(javaScript.text, 'to match', /@\s*sourceURL=..\/bar\.js/);
+                    expect(javaScript.text, 'to match', /@\s*sourceURL=..\/foo\.js/);
                 }
             }
         }
@@ -48,11 +48,11 @@ vows.describe('JavaScriptSourceUrl').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScriptSourceUrl relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptSourceUrl'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'JavaScriptSourceUrl', 2);
         },
         'the serialized JavaScript assets should contain the @sourceURL directive': function (assetGraph) {
-            assert.matches(assetGraph.findAssets({url: /\/foo\.js$/})[0].text, /@\s*sourceURL=\/foo\.js/);
-            assert.matches(assetGraph.findAssets({url: /\/bar\.js$/})[0].text, /@\s*sourceURL=\/bar\.js/);
+            expect(assetGraph.findAssets({url: /\/foo\.js$/})[0].text, 'to match', /@\s*sourceURL=\/foo\.js/);
+            expect(assetGraph.findAssets({url: /\/bar\.js$/})[0].text, 'to match', /@\s*sourceURL=\/bar\.js/);
         },
         'then run the bundleRelations transform': {
             topic: function (assetGraph) {
@@ -61,10 +61,10 @@ vows.describe('JavaScriptSourceUrl').addBatch({
                     .run(this.callback);
             },
             'the graph should contain 3 JavaScript assets': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 3);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 3);
             },
             'the serialized bundle should contain both @sourceURL directives': function (assetGraph) {
-                assert.matches(assetGraph.findAssets({type: 'JavaScript'}).pop().text,
+                expect(assetGraph.findAssets({type: 'JavaScript'}).pop().text, 'to match',
                                /\/\/\s*@\ssourceURL=\/foo\.js[\s\S]*\/\/\s*@\s*sourceURL=\/bar\.js/);
             }
         }

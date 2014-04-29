@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('JavaScriptSourceUrl').addBatch({
@@ -11,25 +11,25 @@ vows.describe('JavaScriptSourceUrl').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 4);
+            expect(assetGraph, 'to contain assets', 4);
         },
         'the graph should contain 2 JavaScript asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the graph should contain 1 SourceMap asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'SourceMap'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'SourceMap');
         },
         'the graph should contain 1 JavaScriptSourceMappingUrl relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'JavaScriptSourceMappingUrl'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'JavaScriptSourceMappingUrl');
         },
         'the graph should contain 1 SourceMapFile relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'SourceMapFile'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'SourceMapFile');
         },
         'the graph should contain 1 SourceMapSource relation': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'SourceMapSource'}).length, 1);
+            expect(assetGraph, 'to contain relation', 'SourceMapSource');
         },
         'then change the url of the JavaScript asset': {
             topic: function (assetGraph) {
@@ -38,7 +38,7 @@ vows.describe('JavaScriptSourceUrl').addBatch({
             },
             'the JavaScriptSourceMappingUrl relations should be updated': function (assetGraph) {
                 var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
-                assert.matches(javaScript.text, /@\s*sourceMappingURL=..\/jquery-1.10.1.min.map/);
+                expect(javaScript.text, 'to match', /@\s*sourceMappingURL=..\/jquery-1.10.1.min.map/);
             }
         }
     }

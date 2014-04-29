@@ -1,5 +1,5 @@
 var vows = require('vows'),
-    assert = require('assert'),
+    expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib');
 
 vows.describe('mergeIdenticalAssets').addBatch({
@@ -11,34 +11,34 @@ vows.describe('mergeIdenticalAssets').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 4 assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets().length, 4);
+            expect(assetGraph, 'to contain assets', 4);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Html'}).length, 1);
+            expect(assetGraph, 'to contain asset', 'Html');
         },
         'the graph should contain 2 Png assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Png'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Png', 2);
         },
         'the graph should contain 2 HtmlImage relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({type: 'HtmlImage'}).length, 2);
+            expect(assetGraph, 'to contain relations', 'HtmlImage', 2);
         },
         'the cache manifest should have 2 outgoing relations': function (assetGraph) {
-            assert.equal(assetGraph.findRelations({from: {type: 'CacheManifest'}}).length, 2);
+            expect(assetGraph, 'to contain relations', {from: {type: 'CacheManifest'}}, 2);
         },
         'then running the mergeIdenticalAssets transform': {
             topic: function (assetGraph) {
                 assetGraph.mergeIdenticalAssets().run(this.callback);
             },
             'the graph should contain 1 Png asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Png'}).length, 1);
+                expect(assetGraph, 'to contain asset', 'Png');
             },
             'the cache manifest should contain 1 outgoing relation': function (assetGraph) {
-                assert.equal(assetGraph.findRelations({from: {type: 'CacheManifest'}}).length, 1);
+                expect(assetGraph, 'to contain relation', {from: {type: 'CacheManifest'}});
             },
             'both HtmlImage relations should point at the same image': function (assetGraph) {
                 var htmlImages = assetGraph.findRelations({type: 'HtmlImage'});
-                assert.equal(htmlImages.length, 2);
-                assert.equal(htmlImages[0].to, htmlImages[1].to);
+                expect(htmlImages, 'to have length', 2);
+                expect(htmlImages[0].to, 'to equal', htmlImages[1].to);
             }
         }
     },
@@ -50,20 +50,20 @@ vows.describe('mergeIdenticalAssets').addBatch({
                 .run(this.callback);
         },
         'the graph should contain 2 JavaScript asset': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         },
         'the graph should contain 2 Css assets': function (assetGraph) {
-            assert.equal(assetGraph.findAssets({type: 'Css'}).length, 2);
+            expect(assetGraph, 'to contain assets', 'Css', 2);
         },
         'then running the mergeIdenticalAssets transform': {
             topic: function (assetGraph) {
                 assetGraph.mergeIdenticalAssets().run(this.callback);
             },
             'the graph should contain 1 JavaScript asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'JavaScript'}).length, 1);
+                expect(assetGraph, 'to contain asset', 'JavaScript');
             },
             'the graph should contain 1 Css asset': function (assetGraph) {
-                assert.equal(assetGraph.findAssets({type: 'Css'}).length, 1);
+                expect(assetGraph, 'to contain asset', 'Css');
             }
         }
     }
