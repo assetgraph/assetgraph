@@ -8,8 +8,10 @@ describe('Rss', function () {
           .loadAssets('feed.rss')
           .populate()
           .queue(function (assetGraph) {
-              expect(assetGraph, 'to contain assets', 'Rss', 1);
-              expect(assetGraph, 'to contain assets', 'Html', 2);
+              expect(assetGraph, 'to contain asset', 'Rss');
+              expect(assetGraph, 'to contain asset', 'Png');
+              expect(assetGraph, 'to contain assets', {type: 'Html', isInline: true}, 2);
+              expect(assetGraph, 'to contain assets', {type: 'Html', isInline: false}, 1);
           })
           .run(done);
     });
