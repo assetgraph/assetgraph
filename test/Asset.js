@@ -373,4 +373,30 @@ describe('Asset', function () {
                 .run(done);
         });
     });
+
+    it('should handle a test case with Html assets with meta tags specifying iso-8859-1', function (done) {
+        new AssetGraph({root: __dirname + '/encoding/'})
+            .loadAssets('iso-8859-1.html', 'iso-8859-1-simple-meta.html')
+            .populate()
+            .queue(function (assetGraph) {
+                assetGraph.findAssets().forEach(function (asset) {
+                    expect(asset.text, 'to contain', 'æøåÆØÅ');
+                });
+
+                expect(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'to equal', 'æøåÆØÅ');
+                expect(assetGraph.findAssets()[0].rawSrc.toString('binary'), 'to contain', "\u00e6\u00f8\u00e5\u00c6\u00d8\u00c5");
+            })
+            .run(done);
+    });
+
+    it('should handle a Css asset with @charset declaration of iso-8859-1', function (done) {
+        new AssetGraph({root: __dirname + '/encoding/'})
+            .loadAssets('iso-8859-1.css')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph.findAssets()[0].text, 'to contain', 'æøå');
+                expect(assetGraph.findAssets({})[0].parseTree.cssRules[0].style.foo, 'to equal', 'æøå');
+            })
+            .run(done);
+    });
 });
