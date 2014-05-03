@@ -8,7 +8,7 @@ vows.describe('HtmlImageSrcSet, SrcSet, SrcSetEntry').addBatch({
             new AssetGraph({root: __dirname + '/HtmlImageSrcSet/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 6 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 6);

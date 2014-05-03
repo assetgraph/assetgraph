@@ -10,7 +10,7 @@ vows.describe('<embed src="..."> test').addBatch({
             new AssetGraph({root: __dirname + '/HtmlEmbed/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain one HtmlEmbed relation': function (assetGraph) {
             expect(assetGraph, 'to contain relation', 'HtmlEmbed');

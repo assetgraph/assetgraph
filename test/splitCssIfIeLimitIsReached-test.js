@@ -24,7 +24,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
 */
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 Css asset': function (assetGraph) {
             var cssAssets = assetGraph.findAssets({type: 'Css'});
@@ -45,7 +45,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                         assetGraph.__infos.push(err);
                     })
                     .splitCssIfIeLimitIsReached()
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should have 1 emitted info': function (assetGraph) {
                 expect(assetGraph.__infos, 'to have length', 1);
@@ -94,7 +94,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
             new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
                 .loadAssets('falcon.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 Css asset': function (assetGraph) {
             var cssAssets = assetGraph.findAssets({type: 'Css'});
@@ -127,7 +127,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
                         assetGraph.__infos.push(err);
                     })
                     .splitCssIfIeLimitIsReached()
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should have 1 emitted info': function (assetGraph) {
                 expect(assetGraph.__infos, 'to have length', 1);
@@ -181,7 +181,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
             new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
                 .loadAssets('inline.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 2);
@@ -196,7 +196,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .splitCssIfIeLimitIsReached({}, {rulesPerStylesheetLimit: 2})
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 3 inline Css assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', {type: 'Css', isInline: true}, 3);
@@ -226,7 +226,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
             new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
                 .loadAssets('inlineWithMedia.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 2);
@@ -241,7 +241,7 @@ vows.describe('transforms.splitCssIfIeLimitIsReached').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .splitCssIfIeLimitIsReached({}, {rulesPerStylesheetLimit: 3})
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 4 inline Css assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', {type: 'Css', isInline: true}, 4);

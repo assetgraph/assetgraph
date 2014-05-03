@@ -8,7 +8,7 @@ vows.describe('data: url').addBatch({
             new AssetGraph({root: __dirname + '/dataUrl/'})
                 .loadAssets('dataUrl.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 8 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 8);
@@ -40,7 +40,7 @@ vows.describe('data: url').addBatch({
             new AssetGraph({root: __dirname + '/dataUrl/'})
                 .loadAssets('unparsableDataUrl.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain no relations': function (assetGraph) {
             expect(assetGraph, 'to contain no relations');

@@ -8,7 +8,7 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
             new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/combo/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 5 Css assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'Css', 5);
@@ -20,7 +20,7 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4)
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 7 Css assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Css', 7);
@@ -80,7 +80,7 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
             new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/multipleHtmls/'})
                 .loadAssets('*.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 Html assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'Html', 2);
@@ -95,7 +95,7 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4)
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 3 Css assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Css', 3);
@@ -133,7 +133,7 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
                 .loadAssets('index.html')
                 .populate()
                 .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4)
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 HtmlStyle relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
@@ -148,7 +148,7 @@ vows.describe('transforms.inlineCssImagesWithLegacyFallback').addBatch({
                 .loadAssets('index.html')
                 .populate()
                 .inlineCssImagesWithLegacyFallback({isInitial: true}, 10000)
-                .run(this.callback);
+                .run(done);
         },
         'the background-image should not be inlined': function (assetGraph) {
             expect(assetGraph, 'to contain relation', {type: 'CssImage', to: {isInline: false}});

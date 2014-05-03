@@ -10,7 +10,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 7 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 7);
@@ -31,7 +31,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .liftUpJavaScriptRequireJsCommonJsCompatibilityRequire()
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain one JavaScriptAmdDefine relation': function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'JavaScriptAmdDefine');
@@ -43,7 +43,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                 topic: function (assetGraph) {
                     assetGraph
                         .flattenRequireJs({type: 'Html'})
-                        .run(this.callback);
+                        .run(done);
                 },
                 'the Html asset should have an HtmlScript relation to an asset with the contents of over/the/rainbow/foo.js': function (assetGraph) {
                     expect(assetGraph, 'to contain relation', {type: 'HtmlScript', from: {type: 'Html'}, to: {text: /return 42/}});
@@ -57,7 +57,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 5 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 5);
@@ -78,7 +78,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .liftUpJavaScriptRequireJsCommonJsCompatibilityRequire()
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain one JavaScriptAmdDefine relation': function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'JavaScriptAmdDefine');
@@ -90,7 +90,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                 topic: function (assetGraph) {
                     assetGraph
                         .flattenRequireJs({type: 'Html'})
-                        .run(this.callback);
+                        .run(done);
                 },
                 'the Html asset should have an HtmlScript relation to an asset with the contents of over/the/rainbow/foo.js': function (assetGraph) {
                     expect(assetGraph, 'to contain relation', {type: 'HtmlScript', from: {type: 'Html'}, to: {text: /return 42/}});
@@ -104,7 +104,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 76 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 76);
@@ -119,7 +119,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .liftUpJavaScriptRequireJsCommonJsCompatibilityRequire()
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 168 JavaScriptAmdDefine relations': function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptAmdDefine', 168);
@@ -132,7 +132,7 @@ vows.describe('JavaScriptRequireJsCommonJsCompatibilityRequire').addBatch({
                     assetGraph
                         .flattenRequireJs()
                         .inlineRelations({type: 'JavaScriptGetText'})
-                        .run(this.callback);
+                        .run(done);
                 },
                 'executing all the scripts except the last one should result in no errors': function (assetGraph) {
                     var vm = require('vm'),

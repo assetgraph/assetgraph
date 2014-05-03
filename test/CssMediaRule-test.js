@@ -8,7 +8,7 @@ vows.describe('css @media rule').addBatch({
             new AssetGraph({root: __dirname + '/CssMediaRule/'})
                 .loadAssets('relationInMediaRule.css')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain two CssImage relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations', 'CssImage', 2);

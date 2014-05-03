@@ -36,7 +36,7 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                 })
                 .pullGlobalsIntoVariables({type: 'JavaScript'}, {globalNames: ['foo.bar.quux', 'setTimeout', 'Math', 'Math.max', 'Math.floor', 'Math.min', 'isFinite', 'parseFloat', 'parseInt']})
                 .prettyPrintAssets()
-                .run(this.callback);
+                .run(done);
         },
         'the globals in the JavaScript should be hoisted': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal',
@@ -75,7 +75,7 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                 })
                 .pullGlobalsIntoVariables({type: 'JavaScript'}, {wrapInFunction: true})
                 .prettyPrintAssets()
-                .run(this.callback);
+                .run(done);
         },
         'the globals in the JavaScript should be provided as args to an immediately invoked function': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal',
@@ -101,7 +101,7 @@ vows.describe('transforms.pullGlobalsIntoVariables').addBatch({
                 })
                 .pullGlobalsIntoVariables({type: 'JavaScript'}, {stringLiterals: true})
                 .prettyPrintAssets()
-                .run(this.callback);
+                .run(done);
         },
         'the string literals should be pulled into a variable': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal',

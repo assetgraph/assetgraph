@@ -16,7 +16,7 @@ vows.describe('relation.updateTarget').addBatch({
             new AssetGraph({root: __dirname + '/updateRelationTarget/'})
                 .loadAssets('index.html', 'd.js')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 4);

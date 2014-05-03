@@ -8,7 +8,7 @@ vows.describe('JavaScriptTrHtml').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptTrHtml/simple/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 3);
@@ -27,7 +27,7 @@ vows.describe('JavaScriptTrHtml').addBatch({
                 assetGraph.findRelations({type: 'JavaScriptTrHtml'})[0].omitFunctionCall = true;
                 assetGraph
                     .inlineRelations({type: 'JavaScriptTrHtml'})
-                    .run(this.callback);
+                    .run(done);
             },
             'the TRHTML expression should be replaced with a string with the contents of the Html asset': function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<\/body><\/html>\\n\1/);
@@ -77,7 +77,7 @@ vows.describe('JavaScriptTrHtml').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptTrHtml/TrHtmlGetText/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 3);
@@ -96,7 +96,7 @@ vows.describe('JavaScriptTrHtml').addBatch({
                 assetGraph.findRelations({type: 'JavaScriptTrHtml'})[0].omitFunctionCall = true;
                 assetGraph
                     .inlineRelations({type: 'JavaScriptTrHtml'})
-                    .run(this.callback);
+                    .run(done);
             },
             'the TRHTML expression should be replaced with a string with the contents of the Html asset': function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<\/body><\/html>\\n\1/);

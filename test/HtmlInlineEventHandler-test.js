@@ -8,7 +8,7 @@ vows.describe('HtmlInlineEventHandler test').addBatch({
             new AssetGraph({root: __dirname + '/HtmlInlineEventHandler/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 4 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 4);

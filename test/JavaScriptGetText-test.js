@@ -8,7 +8,7 @@ vows.describe('JavaScriptGetText').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptGetText/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 3);
@@ -20,7 +20,7 @@ vows.describe('JavaScriptGetText').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .inlineRelations({type: 'JavaScriptGetText'})
-                    .run(this.callback);
+                    .run(done);
             },
             'the GETTEXT expression should be replaced with a string with the contents of the Html asset': function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<\/body><\/html>\\n\1/);

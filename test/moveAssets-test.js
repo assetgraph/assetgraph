@@ -9,7 +9,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'http://www.example.com/blah/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return 'http://www.example.com/blah/someotherplace.html';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'http://www.example.com/blah/someotherplace.html');
@@ -20,7 +20,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'http://www.example.com/blah/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return 'http://www.example.com/w00p/';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'http://www.example.com/w00p/quux.html');
@@ -31,7 +31,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'http://www.example.com/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/hey/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return 'otherdir/someotherplace.html';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'http://www.example.com/blah/hey/otherdir/someotherplace.html');
@@ -42,7 +42,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'http://www.example.com/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/yay/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return 'otherdir/';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'http://www.example.com/blah/yay/otherdir/quux.html');
@@ -53,7 +53,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'http://www.example.com/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/hey/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return '../someotherplace.html';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'http://www.example.com/blah/someotherplace.html');
@@ -64,7 +64,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'file:///foo/bar/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'file:///foo/bar/hey/blah/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return '../';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'file:///foo/bar/hey/quux.html');
@@ -75,7 +75,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'file:///foo/bar/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'file:///foo/bar/hello.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return '/yay.html';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'file:///foo/bar/yay.html');
@@ -86,7 +86,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'file:///foo/bar/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'file:///foo/bar/blah/foo/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return '/';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'file:///foo/bar/quux.html');
@@ -97,7 +97,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'http://www.example.com/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'http://www.example.com/blah/hey/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return '/';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'http://www.example.com/quux.html');
@@ -108,7 +108,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'file:///foo/bar/'})
                 .loadAssets({type: 'Html', text: "foo", url: 'file:///foo/bar/baz/quux.html'})
                 .moveAssets({type: 'Html'}, function (asset) {return '/';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'file:///foo/bar/quux.html');
@@ -119,7 +119,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'http://www.example.com/blah/'})
                 .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return 'http://www.example.com/foo/someotherplace.html';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'http://www.example.com/foo/someotherplace.html');
@@ -130,7 +130,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'http://www.example.com/blah/'})
                 .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return 'http://www.example.com/foo/';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'http://www.example.com/foo/');
@@ -141,7 +141,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'http://www.example.com/blah/'})
                 .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return 'here/there.html';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'http://www.example.com/blah/here/there.html');
@@ -152,7 +152,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'http://www.example.com/blah/'})
                 .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return 'here/';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'http://www.example.com/blah/here/');
@@ -163,7 +163,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'file:///foo/bar/'})
                 .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return '/there.html';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'file:///foo/bar/there.html');
@@ -174,7 +174,7 @@ vows.describe('transforms.moveAssets').addBatch({
             new AssetGraph({root: 'file:///foo/bar/'})
                 .loadAssets(new AssetGraph.Html({text: "foo"}))
                 .moveAssets({type: 'Html'}, function (asset) {return '/';})
-                .run(this.callback);
+                .run(done);
         },
         'the url should be correct': function (assetGraph) {
             expect(assetGraph.findAssets({type: 'Html'})[0].url, 'to equal', 'file:///foo/bar/');

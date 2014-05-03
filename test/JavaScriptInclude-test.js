@@ -10,7 +10,7 @@ vows.describe('INCLUDE test').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptInclude/topLevelStatements/'})
                 .loadAssets('index.js')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 3);
@@ -101,7 +101,7 @@ vows.describe('INCLUDE test').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptInclude/sequencedStatements/'})
                 .loadAssets('index.js')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 3);

@@ -8,7 +8,7 @@ vows.describe('relations.HtmlDart').addBatch({
             new AssetGraph({root: __dirname + '/HtmlDart/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 HtmlDart relations': function (assetGraph) {
             expect(assetGraph, 'to contain relation');

@@ -9,14 +9,14 @@ vows.describe('Remove empty assets').addBatch({
             new AssetGraph({root: __dirname + '/removeEmptyAssets/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 3);
         },
         'then running the removeEmptyAssets transform on Css and JavaScript assets': {
             topic: function (assetGraph) {
-                assetGraph.removeAssets({isEmpty: true, type: query.or('Css', 'JavaScript')}).run(this.callback);
+                assetGraph.removeAssets({isEmpty: true, type: query.or('Css', 'JavaScript')}).run(done);
             },
             'the graph should contain 1 asset': function (assetGraph) {
                 expect(assetGraph, 'to contain asset');

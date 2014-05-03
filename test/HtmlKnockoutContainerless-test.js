@@ -10,7 +10,7 @@ vows.describe('HtmlKnockoutContainerless test').addBatch({
             new AssetGraph({root: __dirname + '/HtmlKnockoutContainerless/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 2);

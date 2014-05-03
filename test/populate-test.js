@@ -11,7 +11,7 @@ vows.describe('transforms.populate test').addBatch({
             new AssetGraph({root: __dirname + '/populate/'})
                 .loadAssets('index.html')
                 .populate({followRelations: {to: {type: query.not('Css')}}})
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain no Css assets': function (assetGraph) {
             expect(assetGraph, 'to contain no assets', 'Css');
@@ -33,7 +33,7 @@ vows.describe('transforms.populate test').addBatch({
             new AssetGraph({root: __dirname + '/populate/'})
                 .loadAssets('customProtocols.html')
                 .populate({followRelations: {to: {type: query.not('Css')}}})
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain a single asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset');
@@ -52,7 +52,7 @@ vows.describe('transforms.populate test').addBatch({
             new AssetGraph({root: __dirname + '/populate/'})
                 .loadAssets('protocolRelativeUrls.html')
                 .populate({from: {url: /^file:/}})
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 3);

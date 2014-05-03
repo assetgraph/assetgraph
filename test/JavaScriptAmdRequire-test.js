@@ -9,7 +9,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/simple/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 JavaScriptAmdRequire relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations', 'JavaScriptAmdRequire', 3);
@@ -39,7 +39,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withDataMain/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain a HtmlRequireJsMain relation': function (assetGraph) {
             expect(assetGraph, 'to contain relation', 'HtmlRequireJsMain');
@@ -63,7 +63,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 7 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 7);
@@ -78,7 +78,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 loaded JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 3);
@@ -90,7 +90,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 7 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 7);
@@ -102,7 +102,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 8 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 8);
@@ -156,7 +156,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 6 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 6);
@@ -186,7 +186,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 2);
@@ -201,7 +201,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 2);
@@ -216,7 +216,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('main.js')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 2);
@@ -233,7 +233,7 @@ vows.describe('relations.JavaScriptAmdRequire').addBatch({
                 .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
                 .assumeRequireJsConfigHasBeenFound()
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 2);

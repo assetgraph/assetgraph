@@ -9,7 +9,7 @@ vows.describe('transforms.requireJsConfig test').addBatch({
                 .loadAssets('index.html')
                 .registerRequireJsConfig()
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 4);

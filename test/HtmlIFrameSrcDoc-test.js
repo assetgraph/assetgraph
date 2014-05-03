@@ -10,7 +10,7 @@ vows.describe('HtmlIFrameSrcDoc').addBatch({
                 .populate({
                     followRelations: {to: {url: /^file:/}}
                 })
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 Html assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'Html', 3);

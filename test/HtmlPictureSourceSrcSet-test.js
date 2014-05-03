@@ -10,7 +10,7 @@ vows.describe('HtmlPictureSourceSrcSet test').addBatch({
             new AssetGraph({root: __dirname + '/HtmlPictureSourceSrcSet/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 HtmlPictureSourceSrcSet relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations including unresolved', 'HtmlPictureSourceSrcSet', 3);

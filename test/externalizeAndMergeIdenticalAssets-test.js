@@ -10,14 +10,14 @@ vows.describe('Externalizing and merging identical assets').addBatch({
                 .loadAssets('first.html', 'second.html')
                 .populate()
                 .externalizeRelations({type: 'HtmlScript'})
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 7 non-inline JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', {type: 'JavaScript', isInline: false}, 7);
         },
         'then run the mergeIdenticalAssets transform': {
             topic: function (assetGraph) {
-                assetGraph.mergeIdenticalAssets({type: 'JavaScript'}).run(this.callback);
+                assetGraph.mergeIdenticalAssets({type: 'JavaScript'}).run(done);
             },
             'the graph should contain 3 JavaScript assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 3);

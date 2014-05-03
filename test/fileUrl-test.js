@@ -8,7 +8,7 @@ vows.describe('file: urls').addBatch({
             new AssetGraph({root: __dirname + '/fileUrl/'})
                 .loadAssets('spaces, unsafe chars & ñøń-ÃßÇ¡¡.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset');

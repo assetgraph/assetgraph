@@ -9,7 +9,7 @@ vows.describe('HtmlEdgeSideIncludeSafeComment').addBatch({
             new AssetGraph({root: __dirname + '/HtmlEdgeSideIncludeSafeComment/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 3);

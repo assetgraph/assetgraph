@@ -8,7 +8,7 @@ vows.describe('Html with <link rel="author">').addBatch({
             new AssetGraph({root: __dirname + '/HtmlAuthorLink/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
 
         'the graph should contain HtmlAuthorLink relations': function (assetGraph) {

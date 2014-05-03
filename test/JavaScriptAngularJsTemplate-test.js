@@ -8,7 +8,7 @@ vows.describe('relations.JavaScriptAngularJsTemplate').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptAngularJsTemplate/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 8 Html assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'Html', 8);
@@ -42,7 +42,7 @@ vows.describe('relations.JavaScriptAngularJsTemplate').addBatch({
         },
         'then run the inlineAngularJsTemplates transform': {
             topic: function (assetGraph) {
-                assetGraph.inlineAngularJsTemplates().run(this.callback);
+                assetGraph.inlineAngularJsTemplates().run(done);
             },
             'the graph should contain no JavaScriptAngularJsTemplateCacheAssignment relations': function (assetGraph) {
                 expect(assetGraph, 'to contain no relations', 'JavaScriptAngularJsTemplateCacheAssignment');

@@ -9,7 +9,7 @@ vows.describe('relations.HtmlJsx').addBatch({
             new AssetGraph({root: __dirname + '/HtmlJsx/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 HtmlJsx relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations including unresolved', 'HtmlJsx', 2);

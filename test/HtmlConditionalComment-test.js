@@ -9,7 +9,7 @@ vows.describe('Parsing conditional comments in Html').addBatch({
             new AssetGraph({root: __dirname + '/HtmlConditionalComment/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 9 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 9);
@@ -31,7 +31,7 @@ vows.describe('Parsing conditional comments in Html').addBatch({
                     assetGraph
                         .externalizeRelations({type: ['HtmlStyle', 'HtmlScript']})
                         .minifyAssets({type: 'Html'})
-                        .run(this.callback);
+                        .run(done);
                 },
                 'and get the Html as text again': {
                     topic: function (assetGraph) {
@@ -52,7 +52,7 @@ vows.describe('Parsing conditional comments in Html').addBatch({
             new AssetGraph({root: __dirname + '/HtmlConditionalComment/'})
                 .loadAssets('html5Boilerplate.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 HtmlConditionalComment relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations', 'HtmlConditionalComment', 3);

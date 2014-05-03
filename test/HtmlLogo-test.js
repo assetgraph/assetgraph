@@ -8,7 +8,7 @@ vows.describe('HtmlLogo').addBatch({
             new AssetGraph({root: __dirname + '/HtmlLogo/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 HtmlLogo relation': function (assetGraph) {
             expect(assetGraph, 'to contain relation', 'HtmlLogo');

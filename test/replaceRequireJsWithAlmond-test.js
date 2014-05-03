@@ -15,7 +15,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 .assumeRequireJsConfigHasBeenFound()
                 .populate()
                 //.drawGraph('1-before.svg')
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 JavaScript asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'JavaScript');
@@ -31,7 +31,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 assetGraph
                     .replaceRequireJsWithAlmond()
                     //.drawGraph('1-after.svg')
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 1 JavaScript asset': function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'JavaScript');
@@ -62,7 +62,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 .assumeRequireJsConfigHasBeenFound()
                 .populate()
                 //.drawGraph('2-before.svg')
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 3);
@@ -84,7 +84,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 assetGraph
                     .replaceRequireJsWithAlmond()
                     //.drawGraph('2-after.svg')
-                    .run(this.callback);
+                    .run(done);
             },
 
             'the graph should contain 2 JavaScript assets': function (assetGraph) {
@@ -133,7 +133,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                         }
                     }
                 })
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 4);
@@ -155,7 +155,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 assetGraph
                     .replaceRequireJsWithAlmond()
                     //.drawGraph('2-after.svg')
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 3 JavaScript assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 3);
@@ -187,7 +187,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
                 .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
                 .assumeRequireJsConfigHasBeenFound()
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 Html assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'Html', 2);
@@ -205,7 +205,7 @@ vows.describe('transforms.replaceRequireJsWithAlmond').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .replaceRequireJsWithAlmond()
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 1 JavaScript asset': function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'JavaScript');

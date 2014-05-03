@@ -12,7 +12,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 3);
@@ -28,7 +28,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'then running the convertHtmlRequireJsMainToHtmlScript transform': {
             topic: function (assetGraph) {
-                assetGraph.convertHtmlRequireJsMainToHtmlScript().run(this.callback);
+                assetGraph.convertHtmlRequireJsMainToHtmlScript().run(done);
             },
             'the graph should contain 2 JavaScript assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 2);

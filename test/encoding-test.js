@@ -8,7 +8,7 @@ vows.describe('Charset test').addBatch({
             new AssetGraph({root: __dirname + '/encoding/'})
                 .loadAssets('iso-8859-1.html', 'iso-8859-1-simple-meta.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the body should be decoded correctly': function (assetGraph) {
             assetGraph.findAssets().forEach(function (asset) {
@@ -32,7 +32,7 @@ vows.describe('Charset test').addBatch({
             new AssetGraph({root: __dirname + '/encoding/'})
                 .loadAssets('iso-8859-1.css')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the body should be decoded correctly': function (assetGraph) {
              expect(assetGraph.findAssets()[0].text, 'to contain', 'æøå');

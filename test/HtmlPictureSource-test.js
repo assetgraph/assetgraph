@@ -12,7 +12,7 @@ vows.describe('HtmlPictureSource test').addBatch({
                 .populate({
                     followRelations: function () {return false;}
                 })
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 HtmlPictureSource relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations including unresolved', 'HtmlPictureSource', 2);

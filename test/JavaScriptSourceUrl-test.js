@@ -8,7 +8,7 @@ vows.describe('JavaScriptSourceUrl').addBatch({
             new AssetGraph({root: __dirname + '/JavaScriptSourceUrl/existingBundle/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 4 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 4);
@@ -45,7 +45,7 @@ vows.describe('JavaScriptSourceUrl').addBatch({
                 .loadAssets('index.html')
                 .populate()
                 .addJavaScriptSourceUrl()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 JavaScriptSourceUrl relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations', 'JavaScriptSourceUrl', 2);
@@ -58,7 +58,7 @@ vows.describe('JavaScriptSourceUrl').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .bundleRelations({type: 'HtmlScript'})
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 3 JavaScript assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 3);

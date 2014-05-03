@@ -8,7 +8,7 @@ vows.describe('inlineKnockoutJsTemplates').addBatch({
             new AssetGraph({root: __dirname + '/inlineKnockoutJsTemplates/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 5 Html assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'Html', 5);
@@ -30,7 +30,7 @@ vows.describe('inlineKnockoutJsTemplates').addBatch({
         },
         'then run the inlineKnockoutJsTemplates transform': {
             topic: function (assetGraph) {
-                assetGraph.inlineKnockoutJsTemplates().run(this.callback);
+                assetGraph.inlineKnockoutJsTemplates().run(done);
             },
             'the graph should contain no JavaScriptAmdRequire/JavaScriptAmdDefine relations pointing at Knockout.js templates': function (assetGraph) {
                 expect(assetGraph, 'to contain no relations', {type: ['JavaScriptAmdRequire', 'JavaScriptAmdDefine'], to: {type: 'KnockoutJsTemplate'}});

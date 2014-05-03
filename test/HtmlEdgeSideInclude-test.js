@@ -12,7 +12,7 @@ vows.describe('Edge side include test').addBatch({
                 .populate({
                     followRelations: {to: {url: /\.html$/}}
                 })
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain two Html assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'Html', 2);

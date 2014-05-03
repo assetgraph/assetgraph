@@ -9,7 +9,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             new AssetGraph({root: __dirname + '/getStaticUrl/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain a single JavaScript asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'JavaScript');
@@ -65,7 +65,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
             new AssetGraph({root: __dirname + '/getStaticUrl/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'then get the JavaScript asset as text and populate a new graph from it': {
             topic: function (assetGraph) {
@@ -76,7 +76,7 @@ vows.describe('getStaticUrl in JavaScript asset').addBatch({
                         text: "<html><body><script>" + assetGraph.findAssets({type: 'JavaScript'})[0].text + "</script></body></html>"
                     })
                     .populate()
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain a single JavaScript asset': function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'JavaScript');

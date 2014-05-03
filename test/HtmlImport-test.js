@@ -8,7 +8,7 @@ vows.describe('Html with <link rel="import">').addBatch({
             new AssetGraph({root: __dirname + '/HtmlImport/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 HtmlImport relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations', 'HtmlImport', 3);

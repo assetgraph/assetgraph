@@ -8,7 +8,7 @@ vows.describe('transforms.convertStylesheetsToInlineStyles').addBatch({
             new AssetGraph({root: __dirname + '/convertStylesheetsToInlineStyles/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 6 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 6);
@@ -26,7 +26,7 @@ vows.describe('transforms.convertStylesheetsToInlineStyles').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .convertStylesheetsToInlineStyles({type: 'Html'}, 'screen')
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 7 assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 7);

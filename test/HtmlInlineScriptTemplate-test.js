@@ -8,7 +8,7 @@ vows.describe('HtmlInlineScriptTemplate test').addBatch({
             new AssetGraph({root: __dirname + '/HtmlInlineScriptTemplate/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 2);
@@ -40,7 +40,7 @@ vows.describe('HtmlInlineScriptTemplate test').addBatch({
             new AssetGraph({root: __dirname + '/HtmlInlineScriptTemplate/'})
                 .loadAssets('advancedMarkup.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 Html asset': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'Html', 2);

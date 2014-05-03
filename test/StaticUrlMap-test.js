@@ -9,7 +9,7 @@ vows.describe('StaticUrlMap test').addBatch({
             new AssetGraph({root: __dirname + '/StaticUrlMap/combo/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 JavaScriptGetStaticUrl relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations', 'JavaScriptGetStaticUrl', 2);
@@ -38,7 +38,7 @@ vows.describe('StaticUrlMap test').addBatch({
             new AssetGraph({root: __dirname + '/StaticUrlMap/multiLevel'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain one JavaScriptGetStaticUrl relation': function (assetGraph) {
             expect(assetGraph, 'to contain relation', 'JavaScriptGetStaticUrl');

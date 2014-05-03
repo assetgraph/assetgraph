@@ -8,7 +8,7 @@ vows.describe('relations.CssBehavior').addBatch({
             new AssetGraph({root: __dirname + '/CssBehavior/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain a single Htc asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Htc');

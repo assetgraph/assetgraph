@@ -56,7 +56,7 @@ vows.describe('JavaScript').addBatch({
             new AssetGraph({root: __dirname + '/JavaScript/relationsDepthFirst/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the relations should be in depth-first order in the graph': function (assetGraph) {
             expect(_.pluck(assetGraph.findRelations({from: {type: 'JavaScript'}}), 'href'), 'to equal',
@@ -71,7 +71,7 @@ vows.describe('JavaScript').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/JavaScript/'})
                 .loadAssets('copyrightNotice.js')
-                .run(this.callback);
+                .run(done);
         },
         'then manipulating the parseTree of the JavaScript asset and marking it dirty': {
             topic: function (assetGraph) {
@@ -97,7 +97,7 @@ vows.describe('JavaScript').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/JavaScript/'})
                 .loadAssets('initialComment*.js')
-                .run(this.callback);
+                .run(done);
         },
         'then manipulating the parseTree of the JavaScript asset and marking it dirty': {
             topic: function (assetGraph) {
@@ -129,7 +129,7 @@ vows.describe('JavaScript').addBatch({
                 .queue(function (assetGraph) {
                     assetGraph.findAssets({type: 'JavaScript'})[0].markDirty();
                 })
-                .run(this.callback);
+                .run(done);
         },
         'the reserialized JavaScript asset should still contain @preserve comment before eof, but not the quux one': function (assetGraph) {
             var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
@@ -147,7 +147,7 @@ vows.describe('JavaScript').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/JavaScript/'})
                 .loadAssets('conditionalCompilation.js')
-                .run(this.callback);
+                .run(done);
         },
         'then mark the JavaScript asset dirty': {
             topic: function (assetGraph) {
@@ -161,7 +161,7 @@ vows.describe('JavaScript').addBatch({
             },
             'then run the compressJavaScript transform': {
                 topic: function (assetGraph) {
-                    assetGraph.compressJavaScript().run(this.callback);
+                    assetGraph.compressJavaScript().run(done);
                 },
                 'the @cc_on comment should still be in the serialization of the asset': function (assetGraph) {
                     expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /@cc_on/);
@@ -180,7 +180,7 @@ vows.describe('JavaScript').addBatch({
                 })
                 .loadAssets('globalstrict.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the globalstrict.js JavaScript asset should have a "strict" property': function (assetGraph) {
             expect(assetGraph.findAssets({fileName: 'globalstrict.js'})[0].strict, 'to equal', true);

@@ -8,7 +8,7 @@ vows.describe('Html with <template>').addBatch({
             new AssetGraph({root: __dirname + '/HtmlTemplate/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 HtmlImage relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations', 'HtmlImage', 3);

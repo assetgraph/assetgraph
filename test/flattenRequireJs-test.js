@@ -26,7 +26,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('app.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 6 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 6);
@@ -41,7 +41,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .flattenRequireJs({type: 'Html'})
-                    .run(this.callback);
+                    .run(done);
             },
             'the resulting scripts should be identical to the output of the require.js optimizer': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -76,7 +76,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 2);
@@ -86,7 +86,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(done);
             },
             'the graph should contain GETTEXT relation pointing at myTextFile.txt': function (assetGraph) {
                 expect(assetGraph, 'to contain relation', {type: 'JavaScriptGetText', to: {url: /\/myTextFile\.txt$/}});
@@ -107,7 +107,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             },
             'then inline the JavaScriptGetText relations': {
                 topic: function (assetGraph) {
-                    assetGraph.inlineRelations({type: 'JavaScriptGetText'}).run(this.callback);
+                    assetGraph.inlineRelations({type: 'JavaScriptGetText'}).run(done);
                 },
                 'main.js should should contain the contents of myTextFile.txt': function (assetGraph) {
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -132,14 +132,14 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(done);
             },
             'the resulting main.js should have the expected parse tree': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -176,14 +176,14 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 4 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 4);
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(done);
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -214,7 +214,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 3);
@@ -224,7 +224,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(done);
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -250,14 +250,14 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(done);
             },
             'the resulting inline script should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -293,7 +293,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 2);
@@ -312,7 +312,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(done);
             },
             'the graph should contain 1 HtmlStyle relation': function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'HtmlStyle');
@@ -334,7 +334,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 5);
@@ -350,7 +350,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'then running the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs({type: 'Html'}).run(this.callback);
+                assetGraph.flattenRequireJs({type: 'Html'}).run(done);
             },
             'the graph should contain 1 Png asset': function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Png');
@@ -391,7 +391,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .loadAssets('index.html')
                 .populate()
                 .flattenRequireJs({type: 'Html'})
-                .run(this.callback);
+                .run(done);
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
             var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -449,7 +449,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .loadAssets('index.html')
                 .populate()
                 .flattenRequireJs({type: 'Html'})
-                .run(this.callback);
+                .run(done);
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
             var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -480,7 +480,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .loadAssets('index.html')
                 .populate()
                 .flattenRequireJs({type: 'Html'})
-                .run(this.callback);
+                .run(done);
         },
         'the bundled main script should have the expected contents': function (assetGraph) {
             var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -514,7 +514,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .loadAssets('*.html')
                 .populate()
                 .flattenRequireJs({type: 'Html'})
-                .run(this.callback);
+                .run(done);
         },
         'index1.html should have the expected HtmlScript relations': function (assetGraph) {
             var htmlScripts = assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index1\.html$/}});
@@ -564,7 +564,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .loadAssets('index*.html')
                 .populate()
                 .flattenRequireJs({type: 'Html'})
-                .run(this.callback);
+                .run(done);
         },
         'index.html should have a HtmlStyle relations pointing at the Less assets': function (assetGraph) {
             expect(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}}), 'href'), 'to equal', [
@@ -586,7 +586,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             new AssetGraph({root: __dirname + '/flattenRequireJs/shim/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
-                .run(this.callback);
+                .run(done);
         },
         'asset.requireJsConfig.shim should have the expected value': function (assetGraph) {
             expect(assetGraph.requireJsConfig.shim, 'to equal', {
@@ -596,14 +596,14 @@ vows.describe('transforms.flattenRequireJs').addBatch({
         },
         'then populate the graph': {
             topic: function (assetGraph) {
-                assetGraph.populate().run(this.callback);
+                assetGraph.populate().run(done);
             },
             'the graph should contain 2 JavaScriptShimRequire relations': function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptShimRequire', 2);
             },
             'then run the flattenRequireJs transform': {
                 topic: function (assetGraph) {
-                    assetGraph.flattenRequireJs().run(this.callback);
+                    assetGraph.flattenRequireJs().run(done);
                 },
                 'the resulting scripts should have the expected contents': function (assetGraph) {
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -644,7 +644,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 JavaScript assets with the expected urls': function (assetGraph) {
             expect(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
@@ -657,7 +657,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .flattenRequireJs({type: 'Html'})
-                    .run(this.callback);
+                    .run(done);
             },
             'the graph should contain 5 JavaScript assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 5);
@@ -670,7 +670,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 4 JavaScript assets with the expected urls': function (assetGraph) {
             expect(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
@@ -685,7 +685,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
             topic: function (assetGraph) {
                 assetGraph
                     .flattenRequireJs({type: 'Html'})
-                    .run(this.callback);
+                    .run(done);
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -725,7 +725,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 4 JavaScript assets with the expected urls': function (assetGraph) {
             expect(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
@@ -742,7 +742,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 quuxJs.url = quuxJs.url.replace(/subsubdir/, 'othersubdir');
                 assetGraph
                     .flattenRequireJs({type: 'Html'})
-                    .run(this.callback);
+                    .run(done);
             },
             'the resulting scripts should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -778,7 +778,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 JavaScript assets with the expected urls': function (assetGraph) {
             expect(_.pluck(assetGraph.findAssets({type: 'JavaScript', isInline: false}), 'url').sort(), 'to equal', [
@@ -794,14 +794,14 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 Text asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Text');
         },
         'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs().run(this.callback);
+                assetGraph.flattenRequireJs().run(done);
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -825,14 +825,14 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         },
         'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs().run(this.callback);
+                assetGraph.flattenRequireJs().run(done);
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -875,14 +875,14 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 5 loaded JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 5);
         },
         'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs().run(this.callback);
+                assetGraph.flattenRequireJs().run(done);
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -918,14 +918,14 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         },
         'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
-                assetGraph.flattenRequireJs().run(this.callback);
+                assetGraph.flattenRequireJs().run(done);
             },
             'the JavaScript should have the expected contents': function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -949,7 +949,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 5 JavaScript assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 5);
@@ -961,7 +961,7 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                         (this._emittedWarnings = this._emittedWarnings || []).push(err);
                     })
                     .flattenRequireJs()
-                    .run(this.callback);
+                    .run(done);
             },
             'the correct error should be emitted': function (assetGraph) {
                 expect(assetGraph._emittedWarnings, 'This test has failed once in a random manner. If you see this again expect it to be a race condition', 'to be ok');
@@ -977,13 +977,13 @@ vows.describe('transforms.flattenRequireJs').addBatch({
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'then run the flattenRequireJs transform': {
             topic: function (assetGraph) {
                 assetGraph
                     .flattenRequireJs()
-                    .run(this.callback);
+                    .run(done);
             },
             'the file with the umdish pattern should be unchanged, except the canonical module name should be added as the first define argument': function (assetGraph) {
                 assertAstsEqual(assetGraph.findAssets({fileName: /backbone-localstorage/}).pop().parseTree, function () {

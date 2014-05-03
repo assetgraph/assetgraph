@@ -8,7 +8,7 @@ vows.describe('Changing the url of assets').addBatch({
         topic: function () {
             new AssetGraph({root: __dirname + '/refreshHref/'})
                 .loadAssets('index.html')
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 Html assets': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Html');

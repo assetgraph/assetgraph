@@ -8,7 +8,7 @@ vows.describe('mergeIdenticalAssets').addBatch({
             new AssetGraph({root: __dirname + '/mergeIdenticalAssets/combo/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 4 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 4);
@@ -27,7 +27,7 @@ vows.describe('mergeIdenticalAssets').addBatch({
         },
         'then running the mergeIdenticalAssets transform': {
             topic: function (assetGraph) {
-                assetGraph.mergeIdenticalAssets().run(this.callback);
+                assetGraph.mergeIdenticalAssets().run(done);
             },
             'the graph should contain 1 Png asset': function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Png');
@@ -47,7 +47,7 @@ vows.describe('mergeIdenticalAssets').addBatch({
             new AssetGraph({root: __dirname + '/mergeIdenticalAssets/identicalAssetsOfDifferentTypes/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 JavaScript asset': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'JavaScript', 2);
@@ -57,7 +57,7 @@ vows.describe('mergeIdenticalAssets').addBatch({
         },
         'then running the mergeIdenticalAssets transform': {
             topic: function (assetGraph) {
-                assetGraph.mergeIdenticalAssets().run(this.callback);
+                assetGraph.mergeIdenticalAssets().run(done);
             },
             'the graph should contain 1 JavaScript asset': function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'JavaScript');

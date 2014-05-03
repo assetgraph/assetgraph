@@ -8,7 +8,7 @@ vows.describe('css @font-face {src: ...}').addBatch({
             new AssetGraph({root: __dirname + '/CssFontFaceSrc/simple/'})
                 .loadAssets('index.css')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain one Css asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Css');
@@ -40,7 +40,7 @@ vows.describe('css @font-face {src: ...}').addBatch({
             new AssetGraph({root: __dirname + '/CssFontFaceSrc/multipleSrc/'})
                 .loadAssets('index.css')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain one Css asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Css');

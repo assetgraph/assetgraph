@@ -11,7 +11,7 @@ vows.describe('<object><param name="src" value="..."></object> test').addBatch({
             new AssetGraph({root: __dirname + '/HtmlObject/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 HtmlObject relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations including unresolved', 'HtmlObject', 3);

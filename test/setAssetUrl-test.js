@@ -9,7 +9,7 @@ vows.describe('Changing the url of assets').addBatch({
             new AssetGraph({root: __dirname + '/setAssetUrl/simple/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 3);
@@ -52,7 +52,7 @@ vows.describe('Changing the url of assets').addBatch({
             new AssetGraph({root: __dirname + '/setAssetUrl/multipleLevelsOfInline/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should a single Css asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Css');
@@ -67,7 +67,7 @@ vows.describe('Changing the url of assets').addBatch({
             topic: function (assetGraph) {
                 assetGraph.moveAssets({type: 'Html', isInline: false}, function (asset) {
                     return urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
-                }).run(this.callback);
+                }).run(done);
             },
             'the CssImage url should be relative to /subdir': function (assetGraph) {
                 expect(assetGraph.findRelations({type: 'CssImage'})[0].cssRule.style['background-image'], 'to equal', 'url(../foo.png)');
@@ -79,7 +79,7 @@ vows.describe('Changing the url of assets').addBatch({
             new AssetGraph({root: __dirname + '/setAssetUrl/nonTrivialBaseAsset/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain three Css assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 'Css', 3);
@@ -107,7 +107,7 @@ vows.describe('Changing the url of assets').addBatch({
                     url: 'file:///foo/bar/quux/baz/index.html',
                     text: '<!DOCTYPE html><html></html>'
                 }))
-                .run(this.callback);
+                .run(done);
         },
         'then change the url of the Html asset to a relative url': {
             topic: function (assetGraph) {

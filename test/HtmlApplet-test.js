@@ -8,7 +8,7 @@ vows.describe('HtmlApplet').addBatch({
             new AssetGraph({root: __dirname + '/HtmlApplet/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 2 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 2);

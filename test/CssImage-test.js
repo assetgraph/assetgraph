@@ -9,7 +9,7 @@ vows.describe('CssImage').addBatch({
             new AssetGraph({root: __dirname + '/CssImage/combo/'})
                 .loadAssets('index.css')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 17 CssImage relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations', 'CssImage', 17);
@@ -50,7 +50,7 @@ vows.describe('CssImage').addBatch({
             new AssetGraph({root: __dirname + '/CssImage/mouseCursors/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 5 assets': function (assetGraph) {
             expect(assetGraph, 'to contain assets', 5);

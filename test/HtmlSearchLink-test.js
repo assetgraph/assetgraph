@@ -8,7 +8,7 @@ vows.describe('Html with <link rel="search">').addBatch({
             new AssetGraph({root: __dirname + '/HtmlSearchLink/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain an HtmlSearchLink relation': function (assetGraph) {
             expect(assetGraph, 'to contain relation', 'HtmlSearchLink');

@@ -8,14 +8,14 @@ vows.describe('minifySvgAssetsWithSvgo').addBatch({
             new AssetGraph({root: __dirname + '/minifySvgAssetsWithSvgo/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain one Svg asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Svg');
         },
         'then run the minifySvgAssetsWithSvgo transform': {
             topic: function (assetGraph) {
-                assetGraph.minifySvgAssetsWithSvgo({type: 'Svg'}).run(this.callback);
+                assetGraph.minifySvgAssetsWithSvgo({type: 'Svg'}).run(done);
             },
             'the graph should still contain one Svg asset': function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Svg');

@@ -49,7 +49,7 @@ vows.describe('Css').addBatch({
             new AssetGraph({root: __dirname + '/Css/multipleFontFaceRules/'})
                 .loadAssets('index.css')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain one Css asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Css');

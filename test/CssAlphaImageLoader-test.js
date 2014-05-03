@@ -9,7 +9,7 @@ vows.describe('CssAlphaImageLoader').addBatch({
             new AssetGraph({root: __dirname + '/CssAlphaImageLoader/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 3 CssAlphaImageLoader relations': function (assetGraph) {
             expect(assetGraph, 'to contain relations', 'CssAlphaImageLoader', 3);

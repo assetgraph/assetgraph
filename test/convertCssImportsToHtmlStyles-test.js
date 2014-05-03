@@ -9,7 +9,7 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
             new AssetGraph({root: __dirname + '/convertCssImportsToHtmlStyles/'})
                 .loadAssets('index.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Html');
@@ -28,7 +28,7 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
         },
         'then run the convertCssImportsToHtmlStyles transform': {
             topic: function (assetGraph) {
-                assetGraph.convertCssImportsToHtmlStyles({type: 'Html'}).run(this.callback);
+                assetGraph.convertCssImportsToHtmlStyles({type: 'Html'}).run(done);
             },
             'the graph should contain 4 Css assets': function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Css', 4);
@@ -55,7 +55,7 @@ vows.describe('Converting Css @import rules to <link rel="stylesheet">').addBatc
                 },
                 'then run the bundleRelations transform on the HtmlStyles': {
                     topic: function (_, assetGraph) {
-                        assetGraph.bundleRelations({type: 'HtmlStyle'}).run(this.callback);
+                        assetGraph.bundleRelations({type: 'HtmlStyle'}).run(done);
                     },
                     'there should be 2 HtmlStyle relations': function (assetGraph) {
                         expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);

@@ -23,7 +23,7 @@ vows.describe('Changing the encoding of assets').addBatch({
             new AssetGraph({root: __dirname + '/setAssetEncoding/'})
                 .loadAssets('iso-8859-1-withMeta.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Html');
@@ -33,7 +33,7 @@ vows.describe('Changing the encoding of assets').addBatch({
         },
         'then change the encoding to utf-8': {
             topic: function (assetGraph) {
-                assetGraph.setAssetEncoding({type: 'Html'}, 'utf-8').run(this.callback);
+                assetGraph.setAssetEncoding({type: 'Html'}, 'utf-8').run(done);
             },
             'the contents should be recoded to utf-8': function (assetGraph) {
                 expect(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer("æøå", 'utf-8')), 'not to equal', -1);
@@ -52,7 +52,7 @@ vows.describe('Changing the encoding of assets').addBatch({
             new AssetGraph({root: __dirname + '/setAssetEncoding/'})
                 .loadAssets('iso-8859-1-withSimpleMeta.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Html');
@@ -62,7 +62,7 @@ vows.describe('Changing the encoding of assets').addBatch({
         },
         'then change the encoding to utf-8': {
             topic: function (assetGraph) {
-                assetGraph.setAssetEncoding({type: 'Html'}, 'utf-8').run(this.callback);
+                assetGraph.setAssetEncoding({type: 'Html'}, 'utf-8').run(done);
             },
             'the contents should be recoded to utf-8': function (assetGraph) {
                 expect(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer("æøå", 'utf-8')), 'not to equal', -1);
@@ -81,7 +81,7 @@ vows.describe('Changing the encoding of assets').addBatch({
             new AssetGraph({root: __dirname + '/setAssetEncoding/'})
                 .loadAssets('utf-8-withoutMeta.html')
                 .populate()
-                .run(this.callback);
+                .run(done);
         },
         'the graph should contain 1 Html asset': function (assetGraph) {
             expect(assetGraph, 'to contain asset', 'Html');
@@ -91,7 +91,7 @@ vows.describe('Changing the encoding of assets').addBatch({
         },
         'then change the encoding to iso-8859-1': {
             topic: function (assetGraph) {
-                assetGraph.setAssetEncoding({type: 'Html'}, 'iso-8859-1').run(this.callback);
+                assetGraph.setAssetEncoding({type: 'Html'}, 'iso-8859-1').run(done);
             },
             'the contents should be recoded to iso-8859-1': function (assetGraph) {
                 expect(bufferIndexOf(assetGraph.findAssets({type: 'Html'})[0].rawSrc, new Buffer([0xe6, 0xf8, 0xe5])), 'not to equal', -1);
