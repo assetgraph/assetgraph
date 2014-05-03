@@ -36,7 +36,6 @@ describe('CssImage', function () {
             .run(done);
     });
 
-
     it('should handle a test case with three CssImage relations pointing at mouse cursors', function (done) {
         new AssetGraph({root: __dirname + '/CssImage/mouseCursors/'})
             .loadAssets('index.html')
@@ -47,6 +46,16 @@ describe('CssImage', function () {
                 expect(assetGraph, 'to contain asset', 'Css');
                 expect(assetGraph, 'to contain assets', 'Png', 3);
                 expect(assetGraph, 'to contain relations', 'CssImage', 3);
+            })
+            .run(done);
+    });
+
+    it('should handle a test case with a CssImage relation inside a @media rule', function (done) {
+        new AssetGraph({root: __dirname + '/CssMediaRule/'})
+            .loadAssets('relationInMediaRule.css')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'CssImage', 2);
             })
             .run(done);
     });
