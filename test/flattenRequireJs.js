@@ -29,13 +29,13 @@ describe('flattenRequireJs', function () {
                     };
                     define("jquery.alpha", function (){});
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     $.fn.beta = function () {
                         return this.append("<p>Beta is Go!</p>");
                     };
                     define("jquery.beta", function () {});
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     require(["jquery", "jquery.alpha", "jquery.beta"], function ($) {
                         $(function () {
                             $("body").alpha().beta();
@@ -63,10 +63,10 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 3);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("myTextFile.txt",GETTEXT("myTextFile.txt"));
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     require(["myTextFile.txt"], function (contentsOfMyTextFile) {
                         alert(contentsOfMyTextFile + ", yay!");
                     });
@@ -78,10 +78,10 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 3);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("myTextFile.txt", "THE TEXT!\n");
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     require(["myTextFile.txt"], function (contentsOfMyTextFile) {
                         alert(contentsOfMyTextFile + ", yay!");
                     });
@@ -104,23 +104,23 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 5);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("popular", function(){
                         alert("I\'m a popular helper module");
                         return "foo";
                     });
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define("module1", ["popular"], function () {
                         return"module1";
                     });
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     define("module2", ["popular"], function () {
                         return"module2";
                     });
                 });
-                assertAstsEqual(htmlScripts[4].to.parseTree, function () {
+                expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
                     require(["module1", "module2"], function (module1, module2) {
                         alert("Got it all!");
                     });
@@ -143,17 +143,17 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 4);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("module2", [], function () {
                         return "module2";
                     });
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define("module1", ["module2"], function () {
                         return "module1";
                     });
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     require(["module1", "module2"], function (module1, module2) {
                         alert("Got it all!");
                     });
@@ -178,11 +178,11 @@ describe('flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 4);
                 expect(htmlScripts[0].href, 'to equal', 'includedInHtmlAndViaRequire.js');
                 expect(htmlScripts[1].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     alert("includedInHtmlAndViaRequire.js");
                     define("includedInHtmlAndViaRequire", function (){});
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     require(["includedInHtmlAndViaRequire"], function (foo){
                         alert("Here we are!");
                     });
@@ -206,23 +206,23 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 5);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("popular", function () {
                         alert("I'm a popular helper module");
                         return "foo";
                     });
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define("module1", ["popular"], function(){
                         return "module1";
                     });
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     define("module2", ["popular"], function () {
                         return "module2";
                     });
                 });
-                assertAstsEqual(htmlScripts[4].to.parseTree, function () {
+                expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
                     require(["module1", "module2"], function () {
                         alert("Got it all!");
                     });
@@ -272,22 +272,22 @@ describe('flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 5);
                 expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
 
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("module2", function() {
                         return "module2, who's my url?" + GETSTATICURL("foo.png");
                     });
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define("module1", ["module2"], function() {
                         return "module1";
                     });
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     define("module3", function() {
                         alert("module3.js");
                     });
                 });
-                assertAstsEqual(htmlScripts[4].to.parseTree, function () {
+                expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
                     require(["module1", "module2", "module3"], function (module1, module2, module3) {
                         alert("Got it all");
                     });
@@ -308,13 +308,13 @@ describe('flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 3);
                 expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
 
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("myumdmodule", function () {
                         return true;
                     });
                 });
 
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     require(['myumdmodule'], function (myUmdModule) {
                         alert(myUmdModule);
                     });
@@ -359,17 +359,17 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 4);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("someDependency", function (){
                         alert("got the dependency!");
                     });
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define("myumdmodule", ["someDependency"], function (someDependency) {
                         return true;
                     });
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     require(['myumdmodule'], function (myUmdModule) {
                         alert(myUmdModule);
                     });
@@ -389,7 +389,7 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 3);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     (function (global){
                         var signals = function () {return true;};
 
@@ -402,7 +402,7 @@ describe('flattenRequireJs', function () {
                         }
                    }(this));
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     require(['signals'], function (myUmdModule) {
                         alert(signals);
                     });
@@ -421,17 +421,17 @@ describe('flattenRequireJs', function () {
             .queue(function (assetGraph) {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index1\.html$/}});
                 expect(htmlScripts, 'to have length', 4);
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("someDependency", function () {
                         alert("here is the dependency of the common module");
                     });
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define("commonModule", ["someDependency"], function () {
                         alert("here is the common module");
                     });
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     require(["commonModule"], function (commonModule){
                         alert("here we are in app1!");
                     });
@@ -440,17 +440,17 @@ describe('flattenRequireJs', function () {
 
                 htmlScripts = assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index2\.html$/}});
                 expect(htmlScripts, 'to have length', 4);
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("someDependency", function () {
                         alert("here is the dependency of the common module");
                     });
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define("commonModule", ["someDependency"], function () {
                         alert("here is the common module");
                     });
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     require(["commonModule"], function (commonModule){
                         alert("here we are in app2!");
                     });
@@ -503,24 +503,24 @@ describe('flattenRequireJs', function () {
                 expect(htmlScripts[0].to.text, 'to match', /var require\s*=/);
                 expect(htmlScripts[1].to.url, 'to match', /\/require\.js$/);
 
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     alert('someDependency');
                     define('someDependency', function () {});
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     alert('nonAmdModule1');
                     define('nonAmdModule1', function () {});
                 });
-                assertAstsEqual(htmlScripts[4].to.parseTree, function () {
+                expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
                     alert('someOtherDependency');
                     define('someOtherDependency', function () {});
                 });
-                assertAstsEqual(htmlScripts[5].to.parseTree, function () {
+                expect(htmlScripts[5].to.parseTree, 'to have the same AST as', function () {
                     alert('nonAmdModule2');
                     window.foo = {bar: 'foo dot bar'};
                     define('nonAmdModule2', function () {return foo.bar;});
                 });
-                assertAstsEqual(htmlScripts[6].to.parseTree, function () {
+                expect(htmlScripts[6].to.parseTree, 'to have the same AST as', function () {
                     require(['nonAmdModule1', 'nonAmdModule2'], function (nonAmdModule1, nonAmdModule2) {
                         alert("Got 'em all!");
                     });
@@ -569,25 +569,25 @@ describe('flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 5);
 
                 expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("subdir/subsubdir/quux", function () {
                         alert("quux!");
                     });
                 });
 
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define("subdir/bar", ["./subsubdir/quux"], function (quux) {
                         alert("bar!");
                     });
                 });
 
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     define("subdir/foo", ["./bar", "./subsubdir/quux"], function (bar) {
                         alert("foo!");
                     });
                 });
 
-                assertAstsEqual(htmlScripts[4].to.parseTree, function () {
+                expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
                     require(["subdir/foo"], function (foo) {
                         alert("Got 'em all!");
                     });
@@ -619,22 +619,22 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 5);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("subdir/othersubdir/quux", function () {
                         alert("quux!");
                     });
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define("subdir/bar", ["./othersubdir/quux"], function (quux) {
                         alert("bar!");
                     });
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     define("subdir/foo", ["./bar", "./othersubdir/quux"], function (bar) {
                         alert("foo!");
                     });
                 });
-                assertAstsEqual(htmlScripts[4].to.parseTree, function () {
+                expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
                     require(["subdir/foo"], function (foo) {
                         alert("Got 'em all!");
                     });
@@ -672,10 +672,10 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 3);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define("foo.txt", GETTEXT("foo.txt"));
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     require(['foo.txt', 'foo.txt'], function (fooText1, fooText2){
                         alert("fooText1=" + fooText1 + " fooText2=" + fooText2);
                     });
@@ -699,23 +699,23 @@ describe('flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 5);
                 expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
 
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define('theLibrary', function () {
                         return 'the contents of theLibrary';
                     });
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define("subdir/bar", function () {
                         return "bar";
                     });
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     define("subdir/foo", ["./bar"], function (bar) {
                         alert("Got bar: " + bar);
                         return {};
                     });
                 });
-                assertAstsEqual(htmlScripts[4].to.parseTree, function () {
+                expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
                     require.config({
                         paths: {
                             theLibrary: '3rdparty/theLibrary'
@@ -743,22 +743,22 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 5);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define('/thingAtTheRoot.js', function () {
                         return 'thing at the root';
                     });
                 });
-                assertAstsEqual(htmlScripts[2].to.parseTree, function () {
+                expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     define('anotherThingAtTheRoot.js', function () {
                         return 'another thing at the root';
                     });
                 });
-                assertAstsEqual(htmlScripts[3].to.parseTree, function () {
+                expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
                     define('thingInScripts', function () {
                         return 'thing in scripts';
                     });
                 });
-                assertAstsEqual(htmlScripts[4].to.parseTree, function () {
+                expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
                     require(['/thingAtTheRoot.js', 'anotherThingAtTheRoot.js', 'thingInScripts'], function (thingAtTheRoot, anotherThingAtTheRoot, thingInScripts) {
                         alert('got ' + thingAtTheRoot + ', ' + anotherThingAtTheRoot + ', and ' + thingInScripts);
                     });
@@ -781,7 +781,7 @@ describe('flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
                 expect(htmlScripts, 'to have length', 2);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
-                assertAstsEqual(htmlScripts[1].to.parseTree, function () {
+                expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     define('main', function () {
                         alert('It gets lonely in here if nobody runs me');
                     });
@@ -825,7 +825,7 @@ describe('flattenRequireJs', function () {
             })
             .flattenRequireJs()
             .queue(function (assetGraph) {
-                assertAstsEqual(assetGraph.findAssets({fileName: /backbone-localstorage/}).pop().parseTree, function () {
+                expect(assetGraph.findAssets({fileName: /backbone-localstorage/}).pop().parseTree, 'to have the same AST as', function () {
                     (function (root, factory) {
                         if (typeof exports === 'object' && typeof require === 'function') {
                             module.exports = factory(require('underscore'), require('backbone'));

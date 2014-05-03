@@ -1,6 +1,9 @@
 var expect = module.exports = require('unexpected').clone(),
     URL = require('url'),
-    urlTools = require('urltools');
+    urlTools = require('urltools'),
+    AssetGraph = require('../lib/'),
+    uglifyJs = AssetGraph.JavaScript.uglifyJs,
+    uglifyAst = AssetGraph.JavaScript.uglifyAst;
 
 expect.addAssertion('to contain [no] (asset|assets)', function (expect, subject, queryObj, number) {
     this.errorMode = 'nested';
@@ -50,10 +53,10 @@ expect.addAssertion('to contain [no] (relation|relations) [including unresolved]
 function toAst(assetOrFunctionOrAst) {
     if (assetOrFunctionOrAst.isAsset) {
         return assetOrFunctionOrAst.parseTree;
-    } else if (typeof functionOrAst === 'function') {
-        return uglifyJs.parse(functionOrAst.toString().replace(/^function[^\(]*?\(\)\s*\{|\}$/g, ''));
+    } else if (typeof assetOrFunctionOrAst === 'function') {
+        return uglifyJs.parse(assetOrFunctionOrAst.toString().replace(/^function[^\(]*?\(\)\s*\{|\}$/g, ''));
     } else {
-        return functionOrAst;
+        return assetOrFunctionOrAst;
     }
 }
 
