@@ -47,6 +47,20 @@ expect.addAssertion('to contain [no] (relation|relations) [including unresolved]
     expect(subject.findRelations(queryObj, this.flags['including unresolved']).length, 'to equal', number);
 });
 
+function toAst(assetOrFunctionOrAst) {
+    if (assetOrFunctionOrAst.isAsset) {
+        return assetOrFunctionOrAst.parseTree;
+    } else if (typeof functionOrAst === 'function') {
+        return uglifyJs.parse(functionOrAst.toString().replace(/^function[^\(]*?\(\)\s*\{|\}$/g, ''));
+    } else {
+        return functionOrAst;
+    }
+}
+
+expect.addAssertion('to have the same AST as', function (expect, subject, value) {
+    expect(toAst(subject).print_to_string(), 'to equal', toAst(value).print_to_string());
+});
+
 expect.addType({
     identify: function (obj) {
         return obj && obj.isAsset;
