@@ -425,4 +425,94 @@ describe('Asset', function () {
                 .run(done);
         });
     });
+
+    describe('#outgoingRelations', function () {
+        it('should handle a combo test case', function () {
+            var htmlAsset = new AssetGraph.Html({
+                url: 'http://example.com/foo.html',
+                text:
+                    '<!DOCTYPE html>\n' +
+                    '<html><head><style type="text/css">body{background-image: url(foo.png)}</style></head>' +
+                    '<body><a href="quux.html">Link text</a></body></html>'
+            });
+
+            expect(htmlAsset.outgoingRelations, 'to have length', 2);
+            expect(htmlAsset.outgoingRelations[0].type, 'to equal', 'HtmlStyle');
+            expect(htmlAsset.outgoingRelations[1].type, 'to equal', 'HtmlAnchor');
+
+            expect(htmlAsset.outgoingRelations[0].to.isAsset, 'to equal', true);
+            expect(htmlAsset.outgoingRelations[0].to.type, 'to equal', 'Css');
+
+            expect(htmlAsset.outgoingRelations[0].to.outgoingRelations, 'to have length', 1);
+            expect(htmlAsset.outgoingRelations[0].to.outgoingRelations[0].type, 'to equal', 'CssImage');
+            expect(htmlAsset.outgoingRelations[0].to.outgoingRelations[0].to.isResolved, 'to be falsy');
+
+            expect(htmlAsset.outgoingRelations[1].to.isResolved, 'to be falsy');
+
+            var assetGraph = new AssetGraph({root: 'http://example.com/'});
+            assetGraph.addAsset(new AssetGraph.Html({
+                url: 'http://example.com/quux.html',
+                text: '<!DOCTYPE html>\n<html><head><title>Boring document</title></head></html>'
+            }));
+            assetGraph.addAsset(new AssetGraph.Html({
+                url: 'http://example.com/baz.html',
+                text: '<!DOCTYPE html>\n<html><head><title>Another boring document</title></head></html>'
+            }));
+            assetGraph.addAsset(htmlAsset);
+
+            expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: assetGraph.findAssets({url: /\/quux\.html$/})[0]});
+
+            expect(assetGraph, 'to contain relation', 'HtmlStyle');
+
+            expect(assetGraph, 'to contain relation', 'HtmlAnchor');
+
+            expect(assetGraph.findRelations({type: 'CssImage'}, true).length - assetGraph.findRelations({type: 'CssImage'}).length, 'to equal', 1);
+
+            var fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0];
+            fooHtml.text = '<!DOCTYPE html>\n<html><head></head><body><a href="baz.html">Another link text</a></body></html>';
+
+            expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: assetGraph.findAssets({type: 'Html', url: /\/baz\.html$/})});
+
+            new AssetGraph.HtmlAnchor({to: assetGraph.findAssets({url: /\/quux\.html$/})[0]}).attach(fooHtml, 'after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
+
+            expect(fooHtml.text, 'to match', /baz\.html/);
+            expect(fooHtml.text, 'to match', /quux\.html/);
+            assetGraph.removeAsset(fooHtml);
+
+            expect(fooHtml.outgoingRelations, 'to have length', 2);
+            expect(fooHtml.outgoingRelations[0].type, 'to equal', 'HtmlAnchor');
+            expect(fooHtml.outgoingRelations[0].to.url, 'to equal', 'http://example.com/baz.html');
+            expect(fooHtml.outgoingRelations[1].type, 'to equal', 'HtmlAnchor');
+            expect(fooHtml.outgoingRelations[1].to.url, 'to equal', 'http://example.com/quux.html');
+
+            expect(assetGraph, 'to contain no relations', 'HtmlAnchor');
+
+            assetGraph.addAsset(fooHtml);
+
+            expect(assetGraph, 'to contain relations', 'HtmlAnchor', 2);
+
+            var fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0],
+                clone = fooHtml.clone();
+            clone.url = 'http://example.com/fooclone1.html';
+
+            var clone = assetGraph.findAssets({url: /\/fooclone1\.html$/})[0];
+            expect(clone, 'not to be undefined');
+            var outgoingRelations = assetGraph.findRelations({from: clone});
+            expect(outgoingRelations, 'to have length', 2);
+            expect(outgoingRelations[0].to.url, 'to equal', 'http://example.com/baz.html');
+            expect(outgoingRelations[1].to.url, 'to equal', 'http://example.com/quux.html');
+
+            var fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0];
+            fooHtml.url = 'http://example.com/another/place/foo.html';
+            var clone = fooHtml.clone();
+            clone.url = 'http://example.com/another/place/fooclone2.html';
+
+            var clone = assetGraph.findAssets({url: /\/fooclone2\.html$/})[0];
+            expect(clone, 'not to be undefined');
+            var outgoingRelations = assetGraph.findRelations({from: clone});
+            expect(outgoingRelations, 'to have length', 2);
+            expect(outgoingRelations[0].to.url, 'to equal', 'http://example.com/baz.html');
+            expect(outgoingRelations[1].to.url, 'to equal', 'http://example.com/quux.html');
+        });
+    });
 });
