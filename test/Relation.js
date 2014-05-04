@@ -39,4 +39,43 @@ describe('Relation', function () {
                 .run(done);
         });
     });
+
+    function getTargetFileNames(relations) {
+        return _.pluck(_.pluck(relations, 'to'), 'url').map(function (url) {
+            return url.replace(/^.*\//, '');
+        });
+    }
+
+    describe('#updateTarget', function () {
+        it('should handle a combo test case', function (done) {
+            new AssetGraph({root: __dirname + '/Relation/updateTarget/'})
+                .loadAssets('index.html', 'd.js')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'JavaScript', 4);
+                    expect(getTargetFileNames(assetGraph.findRelations()), 'to equal',
+                                     ['a.js', 'b.js', 'c.js']);
+                    expect(getTargetFileNames(assetGraph.findRelations({type: 'HtmlScript'})), 'to equal',
+                                     ['a.js', 'b.js', 'c.js']);
+
+                    var htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
+                    expect(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})), 'to equal',
+                                     ['a.js', 'b.js', 'c.js']);
+
+                    var relation = assetGraph.findRelations({to: {url: /\/b\.js$/}})[0];
+                    relation.to = assetGraph.findAssets({url: /\/d\.js$/})[0];
+                    relation.refreshHref();
+
+                    expect(getTargetFileNames(assetGraph.findRelations()), 'to equal',
+                                     ['a.js', 'd.js', 'c.js']);
+
+                    expect(getTargetFileNames(assetGraph.findRelations({type: 'HtmlScript'})), 'to equal',
+                                     ['a.js', 'd.js', 'c.js']);
+
+                    expect(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})), 'to equal',
+                                     ['a.js', 'd.js', 'c.js']);
+                })
+                .run(done);
+        });
+    });
 });
