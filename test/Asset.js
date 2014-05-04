@@ -529,4 +529,98 @@ describe('Asset', function () {
                 .run(done);
         });
     });
+
+    describe('#url', function () {
+        it('should handle a test case with 3 assets', function (done) {
+            new AssetGraph({root: __dirname + '/setAssetUrl/simple/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 3);
+                    expect(assetGraph, 'to contain assets', 'Html', 2);
+                    expect(assetGraph, 'to contain asset', 'Png');
+
+                    var initialHtml = assetGraph.findAssets({type: 'Html'})[0];
+                    initialHtml.url = urlTools.resolveUrl(assetGraph.root, 'bogus/index.html');
+
+                    var relativeUrl = assetGraph.findRelations({type: 'HtmlAnchor'})[0].node.getAttribute('href');
+                    expect(relativeUrl, 'to equal', '../otherpage.html');
+
+                    var otherHtml = assetGraph.findAssets({type: 'Html'})[1];
+                    otherHtml.url = urlTools.resolveUrl(assetGraph.root, 'fluff/otherpage.html');
+
+                    relativeUrl = assetGraph.findRelations({type: 'HtmlAnchor'})[0].node.getAttribute('href');
+                    expect(relativeUrl, 'to equal', '../fluff/otherpage.html');
+
+                    relativeUrl = assetGraph.findRelations({type: 'HtmlImage'})[0].node.getAttribute('src');
+                    expect(relativeUrl, 'to equal', '../foo.png');
+                })
+                .run(done);
+        });
+
+        it('should handle a test case with an Html asset that has multiple levels of inline assets', function (done) {
+            new AssetGraph({root: __dirname + '/setAssetUrl/multipleLevelsOfInline/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', 'Css');
+                    expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});
+                    expect(assetGraph, 'to contain asset', {type: 'Html', isInline: false});
+                })
+                .moveAssets({type: 'Html', isInline: false}, function (asset, assetGraph) {
+                    return urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findRelations({type: 'CssImage'})[0].cssRule.style['background-image'], 'to equal', 'url(../foo.png)');
+                })
+                .run(done);
+        });
+        it('should handle a test case with an Html asset and a distant Htc asset that has the Html as its base asset', function (done) {
+            new AssetGraph({root: __dirname + '/setAssetUrl/nonTrivialBaseAsset/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'Css', 3);
+                    expect(assetGraph, 'to contain asset', 'Html');
+                    expect(assetGraph, 'to contain asset', 'Htc');
+
+                    assetGraph.findAssets({type: 'Html', isInline: false})[0].url = urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
+
+                    expect(assetGraph.findRelations({type: 'CssBehavior'})[0].cssRule.style.behavior, 'to equal', 'url(theBehavior.htc)');
+                })
+                .run(done);
+        });
+
+        it('should handle a test case with a single Html file', function (done) {
+            new AssetGraph({root: 'file:///foo/bar/quux'})
+                .loadAssets(new AssetGraph.Html({
+                    url: 'file:///foo/bar/quux/baz/index.html',
+                    text: '<!DOCTYPE html><html></html>'
+                }))
+                .queue(function (assetGraph) {
+                    assetGraph.findAssets()[0].url = 'otherdir/index.html';
+                    expect(assetGraph.findAssets()[0].url, 'to equal', 'file:///foo/bar/quux/baz/otherdir/index.html');
+
+                    assetGraph.findAssets()[0].url = '/hey/index.html';
+                    expect(assetGraph.findAssets()[0].url, 'to equal', 'file:///foo/bar/quux/hey/index.html');
+
+                    assetGraph.findAssets()[0].url = '//hey.com/there/index.html';
+                    expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/there/index.html');
+
+                    assetGraph.findAssets()[0].url = 'you/go/index.html';
+                    expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/there/you/go/index.html');
+
+                    assetGraph.findAssets()[0].url = '/and/then/here.html';
+                    expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/and/then/here.html');
+
+                    assetGraph.findAssets()[0].url = '//example.com/then/here.html';
+                    expect(assetGraph.findAssets()[0].url, 'to equal', 'http://example.com/then/here.html');
+
+                    assetGraph.findAssets()[0].url = 'https://example2.com/then/here.html';
+                    assetGraph.findAssets()[0].url = '//example.com/then/here.html';
+                    expect(assetGraph.findAssets()[0].url, 'to equal', 'https://example.com/then/here.html');
+                })
+                .run(done);
+        });
+    });
 });
