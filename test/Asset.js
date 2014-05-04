@@ -515,4 +515,18 @@ describe('Asset', function () {
             expect(outgoingRelations[1].to.url, 'to equal', 'http://example.com/quux.html');
         });
     });
+
+    describe('#rawSrc', function () {
+        it('should handle a test case with the same Png image loaded from disc and http', function (done) {
+            new AssetGraph({root: __dirname + '/Asset/rawSrc/'})
+                .loadAssets('purplealpha24bit.png', 'http://gofish.dk/purplealpha24bit.png')
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', {type: 'Png', isLoaded: true}, 2);
+                    var pngAssets = assetGraph.findAssets({type: 'Png'});
+                    expect(pngAssets[0].rawSrc, 'to have length', 8285);
+                    expect(pngAssets[0].rawSrc, 'to equal', pngAssets[1].rawSrc);
+                })
+                .run(done);
+        });
+    });
 });
