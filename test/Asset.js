@@ -375,7 +375,7 @@ describe('Asset', function () {
     });
 
     it('should handle a test case with Html assets with meta tags specifying iso-8859-1', function (done) {
-        new AssetGraph({root: __dirname + '/encoding/'})
+        new AssetGraph({root: __dirname + '/Asset/encoding/'})
             .loadAssets('iso-8859-1.html', 'iso-8859-1-simple-meta.html')
             .populate()
             .queue(function (assetGraph) {
@@ -390,7 +390,7 @@ describe('Asset', function () {
     });
 
     it('should handle a Css asset with @charset declaration of iso-8859-1', function (done) {
-        new AssetGraph({root: __dirname + '/encoding/'})
+        new AssetGraph({root: __dirname + '/Asset/encoding/'})
             .loadAssets('iso-8859-1.css')
             .populate()
             .queue(function (assetGraph) {
@@ -398,5 +398,31 @@ describe('Asset', function () {
                 expect(assetGraph.findAssets({})[0].parseTree.cssRules[0].style.foo, 'to equal', 'æøå');
             })
             .run(done);
+    });
+
+    describe('#inline()', function () {
+        it('should handle a test case with an Html asset that has an external Css asset in a conditional comment', function (done) {
+            new AssetGraph({root: __dirname + '/Asset/inline/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 4);
+                    expect(assetGraph, 'to contain assets', 'Html', 2);
+                    expect(assetGraph, 'to contain asset', 'Css');
+                    expect(assetGraph, 'to contain asset', 'Png');
+
+                    assetGraph.findRelations({type: 'HtmlStyle'})[0].inline();
+
+                    expect(assetGraph, 'to contain asset', {type: 'Css', isInline: true});
+                    expect(assetGraph.findRelations({type: 'CssImage'})[0].href, 'to equal', 'some/directory/foo.png');
+
+                    var text = assetGraph.findAssets({type: 'Html'})[0].text,
+                        matches = text.match(/url\((.*?foo\.png)\)/g);
+                    expect(matches, 'to be an array');
+                    expect(matches[1], 'to equal', "url(some\/directory\/foo.png)");
+                    expect(matches, 'to have length', 2);
+                })
+                .run(done);
+        });
     });
 });
