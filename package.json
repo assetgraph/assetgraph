@@ -58,6 +58,6 @@
   "scripts": {
     "lint": "jshint .",
     "test": "npm run lint && mocha",
-    "travis": "npm run lint && mocha -R spec"
+    "travis": "npm run lint && mocha"
   }
 }
