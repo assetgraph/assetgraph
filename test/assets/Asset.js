@@ -335,7 +335,7 @@ describe('assets/Asset', function () {
 
                     expect(assetGraph.findRelations({}, true).filter(function (relation) {
                         return !relation.to.isAsset;
-                    }), 'to equal', 0);
+                    }), 'to have length', 0);
 
                     expect(assetGraph.findRelations({from: assetGraph.findAssets().pop()}), 'to have length',
                              assetGraph.findRelations({from: {url: /\/main\.js$/}}).length);
