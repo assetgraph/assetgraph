@@ -109,3 +109,25 @@ expect.addType({
         }
     }
 });
+
+expect.addType({
+    identify: function (obj) {
+        return obj && obj.isRelation;
+    },
+    equal: function (a, b) {
+        return a === b;
+    },
+    inspect: function (relation) {
+        return relation.toString();
+    },
+    toJSON: function (relation) {
+        return {
+            $Relation: {
+                id: relation.id,
+                type: relation.type,
+                from: relation.from.urlOrDescription,
+                to: relation.to.urlOrDescription
+            }
+        }
+    }
+});
