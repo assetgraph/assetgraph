@@ -1,9 +1,11 @@
-var expect = module.exports = require('unexpected').clone(),
-    URL = require('url'),
+var URL = require('url'),
     urlTools = require('urltools'),
     AssetGraph = require('../lib/'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs,
-    uglifyAst = AssetGraph.JavaScript.uglifyAst;
+    uglifyAst = AssetGraph.JavaScript.uglifyAst,
+    expect = module.exports = require('unexpected')
+        .clone()
+        .installPlugin(require('unexpected-jsdom'));
 
 expect.addAssertion('to contain [no] (asset|assets)', function (expect, subject, queryObj, number) {
     this.errorMode = 'nested';
