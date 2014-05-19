@@ -45,7 +45,7 @@
     "onedox": "~0.0.1",
     "stylus": "=0.23.0",
     "svgo": "=0.4.4",
-    "unexpected": "=3.1.6",
+    "unexpected": "=3.2.0",
     "unexpected-jsdom": "=0.1.0",
     "yui-compressor": "=0.1.3"
   },
