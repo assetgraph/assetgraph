@@ -1,3 +1,4 @@
+/*global describe, it*/
 var AssetGraph = require('../../lib'),
     expect = require('../unexpected-with-plugins'),
     _ = require('underscore');

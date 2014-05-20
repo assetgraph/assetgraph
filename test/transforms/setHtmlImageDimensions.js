@@ -1,5 +1,5 @@
+/*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    urlTools = require('urltools'),
     AssetGraph = require('../../lib');
 
 describe('transforms/setHtmlImageDimensions', function () {

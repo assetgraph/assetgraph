@@ -1,3 +1,4 @@
+/*global describe, it*/
 var unexpected = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
     passError = require('passerror'),

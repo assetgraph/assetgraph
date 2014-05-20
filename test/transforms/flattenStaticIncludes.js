@@ -1,7 +1,7 @@
+/*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     _ = require('underscore'),
-    AssetGraph = require('../../lib'),
-    query = AssetGraph.query;
+    AssetGraph = require('../../lib');
 
 describe('transforms/flattenStaticIncludes transform', function () {
     it('should handle a combo test case', function (done) {

@@ -2,7 +2,6 @@ var URL = require('url'),
     urlTools = require('urltools'),
     AssetGraph = require('../lib/'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs,
-    uglifyAst = AssetGraph.JavaScript.uglifyAst,
     expect = module.exports = require('unexpected')
         .clone()
         .installPlugin(require('unexpected-jsdom'));
@@ -88,7 +87,7 @@ expect.addType({
                 urlOrDescription: asset.urlOrDescription,
                 outgoingRelations: asset.outgoingRelations
             }
-        }
+        };
     }
 });
 
@@ -106,7 +105,7 @@ expect.addType({
             $AssetGraph: {
                 assets: assetGraph.findAssets({isInline: false}),
             }
-        }
+        };
     }
 });
 
@@ -128,6 +127,6 @@ expect.addType({
                 from: relation.from.urlOrDescription,
                 to: relation.to.urlOrDescription
             }
-        }
+        };
     }
 });

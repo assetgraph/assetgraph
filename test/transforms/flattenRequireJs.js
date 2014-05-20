@@ -1,11 +1,7 @@
+/*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     _ = require('underscore'),
-    fs = require('fs'),
-    path = require('path'),
-    AssetGraph = require('../../lib'),
-    uglifyJs = AssetGraph.JavaScript.uglifyJs,
-    uglifyAst = AssetGraph.JavaScript.uglifyAst;
-
+    AssetGraph = require('../../lib');
 
 describe('transforms/flattenRequireJs', function () {
     it('should handle the jquery-require-sample test case', function (done) {
@@ -25,23 +21,23 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts[0].href, 'to equal', 'scripts/require-jquery.js');
                 expect(htmlScripts[1].to, 'to have the same AST as', function () {
                     $.fn.alpha = function() {
-                        return this.append("<p>Alpha is Go!</p>");
+                        return this.append('<p>Alpha is Go!</p>');
                     };
-                    define("jquery.alpha", function (){});
+                    define('jquery.alpha', function (){});
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     $.fn.beta = function () {
-                        return this.append("<p>Beta is Go!</p>");
+                        return this.append('<p>Beta is Go!</p>');
                     };
-                    define("jquery.beta", function () {});
+                    define('jquery.beta', function () {});
                 });
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    require(["jquery", "jquery.alpha", "jquery.beta"], function ($) {
+                    require(['jquery', 'jquery.alpha', 'jquery.beta'], function ($) {
                         $(function () {
-                            $("body").alpha().beta();
+                            $('body').alpha().beta();
                         });
                     });
-                    define("main", function () {});
+                    define('main', function () {});
                 });
             })
             .run(done);
@@ -64,13 +60,13 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 3);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("myTextFile.txt",GETTEXT("myTextFile.txt"));
+                    define('myTextFile.txt',GETTEXT('myTextFile.txt'));
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    require(["myTextFile.txt"], function (contentsOfMyTextFile) {
-                        alert(contentsOfMyTextFile + ", yay!");
+                    require(['myTextFile.txt'], function (contentsOfMyTextFile) {
+                        alert(contentsOfMyTextFile + ', yay!');
                     });
-                    define("main", function () {});
+                    define('main', function () {});
                 });
             })
             .inlineRelations({type: 'JavaScriptGetText'})
@@ -79,13 +75,13 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 3);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("myTextFile.txt", "THE TEXT!\n");
+                    define('myTextFile.txt', 'THE TEXT!\n');
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    require(["myTextFile.txt"], function (contentsOfMyTextFile) {
-                        alert(contentsOfMyTextFile + ", yay!");
+                    require(['myTextFile.txt'], function (contentsOfMyTextFile) {
+                        alert(contentsOfMyTextFile + ', yay!');
                     });
-                    define("main", function(){});
+                    define('main', function(){});
                 });
             })
             .run(done);
@@ -105,26 +101,26 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 5);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("popular", function(){
-                        alert("I\'m a popular helper module");
-                        return "foo";
+                    define('popular', function(){
+                        alert('I\'m a popular helper module');
+                        return 'foo';
                     });
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    define("module1", ["popular"], function () {
-                        return"module1";
+                    define('module1', ['popular'], function () {
+                        return'module1';
                     });
                 });
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    define("module2", ["popular"], function () {
-                        return"module2";
+                    define('module2', ['popular'], function () {
+                        return'module2';
                     });
                 });
                 expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
-                    require(["module1", "module2"], function (module1, module2) {
-                        alert("Got it all!");
+                    require(['module1', 'module2'], function (module1, module2) {
+                        alert('Got it all!');
                     });
-                    define("main", function () {});
+                    define('main', function () {});
                 });
             })
             .run(done);
@@ -144,20 +140,20 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 4);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("module2", [], function () {
-                        return "module2";
+                    define('module2', [], function () {
+                        return 'module2';
                     });
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    define("module1", ["module2"], function () {
-                        return "module1";
+                    define('module1', ['module2'], function () {
+                        return 'module1';
                     });
                 });
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    require(["module1", "module2"], function (module1, module2) {
-                        alert("Got it all!");
+                    require(['module1', 'module2'], function (module1, module2) {
+                        alert('Got it all!');
                     });
-                    define("main", function () {});
+                    define('main', function () {});
                 });
             })
             .run(done);
@@ -179,14 +175,14 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts[0].href, 'to equal', 'includedInHtmlAndViaRequire.js');
                 expect(htmlScripts[1].href, 'to equal', 'require.js');
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    alert("includedInHtmlAndViaRequire.js");
-                    define("includedInHtmlAndViaRequire", function (){});
+                    alert('includedInHtmlAndViaRequire.js');
+                    define('includedInHtmlAndViaRequire', function (){});
                 });
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    require(["includedInHtmlAndViaRequire"], function (foo){
-                        alert("Here we are!");
+                    require(['includedInHtmlAndViaRequire'], function (foo){
+                        alert('Here we are!');
                     });
-                    define("main", function (){});
+                    define('main', function (){});
                 });
             })
             .run(done);
@@ -207,24 +203,24 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 5);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("popular", function () {
-                        alert("I'm a popular helper module");
-                        return "foo";
+                    define('popular', function () {
+                        alert('I\'m a popular helper module');
+                        return 'foo';
                     });
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    define("module1", ["popular"], function(){
-                        return "module1";
+                    define('module1', ['popular'], function(){
+                        return 'module1';
                     });
                 });
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    define("module2", ["popular"], function () {
-                        return "module2";
+                    define('module2', ['popular'], function () {
+                        return 'module2';
                     });
                 });
                 expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
-                    require(["module1", "module2"], function () {
-                        alert("Got it all!");
+                    require(['module1', 'module2'], function () {
+                        alert('Got it all!');
                     });
                 });
             })
@@ -273,25 +269,25 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
 
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("module2", function() {
-                        return "module2, who's my url?" + GETSTATICURL("foo.png");
+                    define('module2', function() {
+                        return 'module2, who\'s my url?' + GETSTATICURL('foo.png');
                     });
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    define("module1", ["module2"], function() {
-                        return "module1";
+                    define('module1', ['module2'], function() {
+                        return 'module1';
                     });
                 });
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    define("module3", function() {
-                        alert("module3.js");
+                    define('module3', function() {
+                        alert('module3.js');
                     });
                 });
                 expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
-                    require(["module1", "module2", "module3"], function (module1, module2, module3) {
-                        alert("Got it all");
+                    require(['module1', 'module2', 'module3'], function (module1, module2, module3) {
+                        alert('Got it all');
                     });
-                    define("main", function (){});
+                    define('main', function (){});
                 });
             })
             .run(done);
@@ -309,7 +305,7 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
 
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("myumdmodule", function () {
+                    define('myumdmodule', function () {
                         return true;
                     });
                 });
@@ -318,7 +314,7 @@ describe('transforms/flattenRequireJs', function () {
                     require(['myumdmodule'], function (myUmdModule) {
                         alert(myUmdModule);
                     });
-                    define("main", function () {});
+                    define('main', function () {});
                 });
             })
             .run(done);
@@ -360,12 +356,12 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 4);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("someDependency", function (){
-                        alert("got the dependency!");
+                    define('someDependency', function (){
+                        alert('got the dependency!');
                     });
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    define("myumdmodule", ["someDependency"], function (someDependency) {
+                    define('myumdmodule', ['someDependency'], function (someDependency) {
                         return true;
                     });
                 });
@@ -373,7 +369,7 @@ describe('transforms/flattenRequireJs', function () {
                     require(['myumdmodule'], function (myUmdModule) {
                         alert(myUmdModule);
                     });
-                    define("main",function(){});
+                    define('main',function(){});
                 });
             })
             .run(done);
@@ -406,7 +402,7 @@ describe('transforms/flattenRequireJs', function () {
                     require(['signals'], function (myUmdModule) {
                         alert(signals);
                     });
-                    define("main",function(){});
+                    define('main',function(){});
                 });
             })
             .run(done);
@@ -422,39 +418,39 @@ describe('transforms/flattenRequireJs', function () {
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index1\.html$/}});
                 expect(htmlScripts, 'to have length', 4);
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("someDependency", function () {
-                        alert("here is the dependency of the common module");
+                    define('someDependency', function () {
+                        alert('here is the dependency of the common module');
                     });
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    define("commonModule", ["someDependency"], function () {
-                        alert("here is the common module");
+                    define('commonModule', ['someDependency'], function () {
+                        alert('here is the common module');
                     });
                 });
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    require(["commonModule"], function (commonModule){
-                        alert("here we are in app1!");
+                    require(['commonModule'], function (commonModule){
+                        alert('here we are in app1!');
                     });
-                    define("app1", function () {});
+                    define('app1', function () {});
                 });
 
                 htmlScripts = assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index2\.html$/}});
                 expect(htmlScripts, 'to have length', 4);
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("someDependency", function () {
-                        alert("here is the dependency of the common module");
+                    define('someDependency', function () {
+                        alert('here is the dependency of the common module');
                     });
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    define("commonModule", ["someDependency"], function () {
-                        alert("here is the common module");
+                    define('commonModule', ['someDependency'], function () {
+                        alert('here is the common module');
                     });
                 });
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    require(["commonModule"], function (commonModule){
-                        alert("here we are in app2!");
+                    require(['commonModule'], function (commonModule){
+                        alert('here we are in app2!');
                     });
-                    define("app2", function () {});
+                    define('app2', function () {});
                 });
             })
             .run(done);
@@ -522,7 +518,7 @@ describe('transforms/flattenRequireJs', function () {
                 });
                 expect(htmlScripts[6].to.parseTree, 'to have the same AST as', function () {
                     require(['nonAmdModule1', 'nonAmdModule2'], function (nonAmdModule1, nonAmdModule2) {
-                        alert("Got 'em all!");
+                        alert('Got \'em all!');
                     });
                     define('main', function () {});
                 });
@@ -570,28 +566,28 @@ describe('transforms/flattenRequireJs', function () {
 
                 expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("subdir/subsubdir/quux", function () {
-                        alert("quux!");
+                    define('subdir/subsubdir/quux', function () {
+                        alert('quux!');
                     });
                 });
 
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    define("subdir/bar", ["./subsubdir/quux"], function (quux) {
-                        alert("bar!");
+                    define('subdir/bar', ['./subsubdir/quux'], function (quux) {
+                        alert('bar!');
                     });
                 });
 
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    define("subdir/foo", ["./bar", "./subsubdir/quux"], function (bar) {
-                        alert("foo!");
+                    define('subdir/foo', ['./bar', './subsubdir/quux'], function (bar) {
+                        alert('foo!');
                     });
                 });
 
                 expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
-                    require(["subdir/foo"], function (foo) {
-                        alert("Got 'em all!");
+                    require(['subdir/foo'], function (foo) {
+                        alert('Got \'em all!');
                     });
-                    define("main", function () {});
+                    define('main', function () {});
                 });
             })
             .run(done);
@@ -620,25 +616,25 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 5);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("subdir/othersubdir/quux", function () {
-                        alert("quux!");
+                    define('subdir/othersubdir/quux', function () {
+                        alert('quux!');
                     });
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    define("subdir/bar", ["./othersubdir/quux"], function (quux) {
-                        alert("bar!");
+                    define('subdir/bar', ['./othersubdir/quux'], function (quux) {
+                        alert('bar!');
                     });
                 });
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    define("subdir/foo", ["./bar", "./othersubdir/quux"], function (bar) {
-                        alert("foo!");
+                    define('subdir/foo', ['./bar', './othersubdir/quux'], function (bar) {
+                        alert('foo!');
                     });
                 });
                 expect(htmlScripts[4].to.parseTree, 'to have the same AST as', function () {
-                    require(["subdir/foo"], function (foo) {
-                        alert("Got 'em all!");
+                    require(['subdir/foo'], function (foo) {
+                        alert('Got \'em all!');
                     });
-                    define("main", function () {});
+                    define('main', function () {});
                 });
             })
             .run(done);
@@ -673,13 +669,13 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 3);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
-                    define("foo.txt", GETTEXT("foo.txt"));
+                    define('foo.txt', GETTEXT('foo.txt'));
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
                     require(['foo.txt', 'foo.txt'], function (fooText1, fooText2){
-                        alert("fooText1=" + fooText1 + " fooText2=" + fooText2);
+                        alert('fooText1=' + fooText1 + ' fooText2=' + fooText2);
                     });
-                    define("main", function () {});
+                    define('main', function () {});
                 });
             })
             .run(done);
@@ -705,13 +701,13 @@ describe('transforms/flattenRequireJs', function () {
                     });
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
-                    define("subdir/bar", function () {
-                        return "bar";
+                    define('subdir/bar', function () {
+                        return 'bar';
                     });
                 });
                 expect(htmlScripts[3].to.parseTree, 'to have the same AST as', function () {
-                    define("subdir/foo", ["./bar"], function (bar) {
-                        alert("Got bar: " + bar);
+                    define('subdir/foo', ['./bar'], function (bar) {
+                        alert('Got bar: ' + bar);
                         return {};
                     });
                 });
@@ -722,9 +718,9 @@ describe('transforms/flattenRequireJs', function () {
                         }
                     });
                     require(['theLibrary', 'subdir/foo'], function (theLibrary) {
-                        alert("Got the library: " + theLibrary);
+                        alert('Got the library: ' + theLibrary);
                     });
-                    define("main", function () {});
+                    define('main', function () {});
                 });
             })
             .run(done);

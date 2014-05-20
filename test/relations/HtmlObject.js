@@ -1,3 +1,4 @@
+/*global describe, it*/
 var _ = require('underscore'),
     expect = require('../unexpected-with-plugins'),
     urlTools = require('urltools'),

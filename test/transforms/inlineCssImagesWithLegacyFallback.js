@@ -1,3 +1,4 @@
+/*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
@@ -10,7 +11,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
                 expect(assetGraph, 'to contain assets', 'Css', 5);
                 expect(assetGraph, 'to contain assets', {isImage: true}, 6);
             })
-            .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4)
+            .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3 / 4)
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Css', 7);
 

@@ -1,3 +1,4 @@
+/*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
     uglifyAst = AssetGraph.JavaScript.uglifyAst,
@@ -90,8 +91,8 @@ describe('transforms/pullGlobalsIntoVariables', function () {
                 type: 'JavaScript',
                 url: 'file:///foo.js',
                 text: getFunctionBodySource(function () {
-                    var a = "foobarquux",
-                        b = "foobarquux";
+                    var a = 'foobarquux',
+                        b = 'foobarquux';
                     f.foobarquux();
                 })
             })
@@ -100,7 +101,7 @@ describe('transforms/pullGlobalsIntoVariables', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal',
                     getFunctionBodySource(function () {
-                        var FOOBARQUUX = "foobarquux";
+                        var FOOBARQUUX = 'foobarquux';
                         var a = FOOBARQUUX,
                             b = FOOBARQUUX;
                         f[FOOBARQUUX]();
