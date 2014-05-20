@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('assets/StaticUrlMap', function () {
     it('should handle a combo test case', function (done) {
-        new AssetGraph({root: __dirname + '/StaticUrlMap/combo/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/StaticUrlMap/combo/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -21,7 +21,7 @@ describe('assets/StaticUrlMap', function () {
 
     it('should handle a complex test case with a multi-level GETSTATICURL construct', function (done) {
         this.timeout(20000);
-        new AssetGraph({root: __dirname + '/StaticUrlMap/multiLevel'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/StaticUrlMap/multiLevel'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/convertStylesheetsToInlineStyles', function () {
     it('should convert all stylesheets to inline styles', function (done) {
-        new AssetGraph({root: __dirname + '/convertStylesheetsToInlineStyles/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/convertStylesheetsToInlineStyles/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

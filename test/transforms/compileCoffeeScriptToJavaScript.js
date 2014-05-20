@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/compileCoffeeScriptToJavaScript', function () {
     it('should compile all CoffeeScript assets in the graph', function (done) {
-        new AssetGraph({root: __dirname + '/compileCoffeeScriptToJavaScript/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileCoffeeScriptToJavaScript/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: query.not(/^http:/)}}})
             .queue(function (assetGraph) {

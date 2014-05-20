@@ -299,7 +299,7 @@ describe('assets/Asset', function () {
 
     describe('#clone()', function () {
         it('should handle a test case with multiple Html assets', function (done) {
-            new AssetGraph({root: __dirname + '/Asset/clone/multipleHtmls/'})
+            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/multipleHtmls/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -325,7 +325,7 @@ describe('assets/Asset', function () {
         });
 
         it('should handle a test case with an advanced require.js construct', function (done) {
-            new AssetGraph({root: __dirname + '/Asset/clone/requireJs/'})
+            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/requireJs/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -355,7 +355,7 @@ describe('assets/Asset', function () {
         });
 
         it('should handle a test case with a Css asset with an inline image', function (done) {
-            new AssetGraph({root: __dirname + '/Asset/clone/cssWithInlineImage/'})
+            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'})
                 .loadAssets('index.css')
                 .populate()
                 .queue(function (assetGraph) {
@@ -375,7 +375,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle a test case with Html assets with meta tags specifying iso-8859-1', function (done) {
-        new AssetGraph({root: __dirname + '/Asset/encoding/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/encoding/'})
             .loadAssets('iso-8859-1.html', 'iso-8859-1-simple-meta.html')
             .populate()
             .queue(function (assetGraph) {
@@ -390,7 +390,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle a Css asset with @charset declaration of iso-8859-1', function (done) {
-        new AssetGraph({root: __dirname + '/Asset/encoding/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/encoding/'})
             .loadAssets('iso-8859-1.css')
             .populate()
             .queue(function (assetGraph) {
@@ -402,7 +402,7 @@ describe('assets/Asset', function () {
 
     describe('#inline()', function () {
         it('should handle a test case with an Html asset that has an external Css asset in a conditional comment', function (done) {
-            new AssetGraph({root: __dirname + '/Asset/inline/'})
+            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/inline/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -518,7 +518,7 @@ describe('assets/Asset', function () {
 
     describe('#rawSrc', function () {
         it('should handle a test case with the same Png image loaded from disc and http', function (done) {
-            new AssetGraph({root: __dirname + '/Asset/rawSrc/'})
+            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/rawSrc/'})
                 .loadAssets('purplealpha24bit.png', 'http://gofish.dk/purplealpha24bit.png')
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain assets', {type: 'Png', isLoaded: true}, 2);
@@ -532,7 +532,7 @@ describe('assets/Asset', function () {
 
     describe('#url', function () {
         it('should handle a test case with 3 assets', function (done) {
-            new AssetGraph({root: __dirname + '/Asset/setAssetUrl/simple/'})
+            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/simple/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -559,7 +559,7 @@ describe('assets/Asset', function () {
         });
 
         it('should handle a test case with an Html asset that has multiple levels of inline assets', function (done) {
-            new AssetGraph({root: __dirname + '/Asset/setAssetUrl/multipleLevelsOfInline/'})
+            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/multipleLevelsOfInline/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -576,7 +576,7 @@ describe('assets/Asset', function () {
                 .run(done);
         });
         it('should handle a test case with an Html asset and a distant Htc asset that has the Html as its base asset', function (done) {
-            new AssetGraph({root: __dirname + '/Asset/setAssetUrl/nonTrivialBaseAsset/'})
+            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/nonTrivialBaseAsset/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {

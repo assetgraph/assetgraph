@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/CssImage', function () {
     it('should handle a test case with a bunch of different CssImage relations', function (done) {
-        new AssetGraph({root: __dirname + '/CssImage/combo/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/CssImage/combo/'})
             .loadAssets('index.css')
             .populate()
             .queue(function (assetGraph) {
@@ -37,7 +37,7 @@ describe('relations/CssImage', function () {
     });
 
     it('should handle a test case with three CssImage relations pointing at mouse cursors', function (done) {
-        new AssetGraph({root: __dirname + '/CssImage/mouseCursors/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/CssImage/mouseCursors/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -51,7 +51,7 @@ describe('relations/CssImage', function () {
     });
 
     it('should handle a test case with a CssImage relation inside a @media rule', function (done) {
-        new AssetGraph({root: __dirname + '/CssImage/mediaRule/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/CssImage/mediaRule/'})
             .loadAssets('relationInMediaRule.css')
             .populate()
             .queue(function (assetGraph) {

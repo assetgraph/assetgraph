@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlInlineEventHandler', function () {
     it('should handle a test case with existing inline event handlers', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlInlineEventHandler/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlInlineEventHandler/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

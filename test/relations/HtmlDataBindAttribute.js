@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlDataBindAttribute', function () {
     it('should handle a simple test case', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlDataBindAttribute/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDataBindAttribute/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

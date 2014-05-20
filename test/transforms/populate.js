@@ -6,7 +6,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/populate', function () {
     it('should handle a test case with an Html asset and some stylesheets when tol dnot to follow relations to Css', function (done) {
-        new AssetGraph({root: __dirname + '/populate/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {type: query.not('Css')}}})
             .queue(function (assetGraph) {
@@ -23,7 +23,7 @@ describe('transforms/populate', function () {
     });
 
     it('should handle a test case with custom protocols', function (done) {
-        new AssetGraph({root: __dirname + '/populate/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/'})
             .loadAssets('customProtocols.html')
             .populate({followRelations: {to: {type: query.not('Css')}}})
             .queue(function (assetGraph) {
@@ -38,7 +38,7 @@ describe('transforms/populate', function () {
     });
 
     it('should populate a test case with protocol-relative urls from file:', function (done) {
-        new AssetGraph({root: __dirname + '/populate/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/'})
             .loadAssets('protocolRelativeUrls.html')
             .populate({from: {url: /^file:/}})
             .queue(function (assetGraph) {

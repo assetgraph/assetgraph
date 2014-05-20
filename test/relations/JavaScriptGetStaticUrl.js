@@ -1,10 +1,11 @@
 var expect = require('../unexpected-with-plugins'),
     urlTools = require('urltools'),
+    Path = require('path'),
     AssetGraph = require('../../lib');
 
 describe('relations/JavaScriptGetStaticUrl', function () {
     it('should handle a test case with a wildcard GETSTATICURL', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptGetStaticUrl/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptGetStaticUrl/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -39,13 +40,13 @@ describe('relations/JavaScriptGetStaticUrl', function () {
     });
 
     it('should handle the same wildcard GETSTATICURL test case again', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptGetStaticUrl/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptGetStaticUrl/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph, cb) {
-                new AssetGraph({root: __dirname + '/JavaScriptGetStaticUrl/'})
+                new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptGetStaticUrl/'})
                     .loadAssets({
-                        url: 'file://' + __dirname + '/JavaScriptGetStaticUrl/index2.html',
+                        url: 'file://' + Path.resolve(__dirname, '..', '..', 'testdata', 'relations', 'JavaScriptGetStaticUrl', 'index2.html'),
                         type: 'Html',
                         text: "<html><body><script>" + assetGraph.findAssets({type: 'JavaScript'})[0].text + "</script></body></html>"
                     })

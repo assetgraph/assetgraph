@@ -9,7 +9,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/flattenRequireJs', function () {
     it('should handle the jquery-require-sample test case', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/jquery-require-sample/webapp/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/jquery-require-sample/webapp/'})
             .registerRequireJsConfig()
             .loadAssets('app.html')
             .populate()
@@ -48,7 +48,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with a text dependency', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/textDependency/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/textDependency/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -92,7 +92,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with a module that has multiple incoming JavaScriptAmd* relations', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/multipleIncoming/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/multipleIncoming/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -131,7 +131,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a case with a module that has multiple incoming JavaScriptAmd* relations', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/multipleIncoming2/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/multipleIncoming2/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -164,7 +164,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with a module that is included via a script tag and a JavaScriptAmdRequire relation', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/nonOrphanedJavaScript/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/nonOrphanedJavaScript/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -194,7 +194,7 @@ describe('transforms/flattenRequireJs', function () {
 
 
     it('should handle a test case that uses require(...) in a regular <script>', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/withoutHtmlRequireJsMain/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/withoutHtmlRequireJsMain/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -232,7 +232,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case that uses require(...) to fetch a css file', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/cssRequire/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/cssRequire/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -254,7 +254,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case that includes a GETSTATICURL relation', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/withOneGetStaticUrl/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/withOneGetStaticUrl/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -298,7 +298,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle an umd test case', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/umd/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/umd/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -325,7 +325,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle the umd test case without requirejs', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/umdWithoutRequire/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/umdWithoutRequire/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -350,7 +350,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle an umd test case where the wrapper has a dependency in the define call', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/umdWithDependency/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/umdWithDependency/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -380,7 +380,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a non-umd test case', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/nonUmd/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/nonUmd/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -413,7 +413,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with multiple Html files depending on the same modules', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/multipleHtmls/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/multipleHtmls/'})
             .registerRequireJsConfig()
             .loadAssets('*.html')
             .populate()
@@ -461,7 +461,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case using the less! plugin', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/lessPlugin/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/lessPlugin/'})
             .registerRequireJsConfig()
             .loadAssets('index*.html')
             .populate()
@@ -483,7 +483,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with a shims config', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/shim/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/shim/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .queue(function (assetGraph) {
@@ -531,7 +531,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with a non-string items in the require array', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/nonString/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/nonString/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -550,7 +550,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with relative dependencies', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/relativeDependencies/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/relativeDependencies/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -598,7 +598,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with a relative dependencies once again', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/relativeDependencies/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/relativeDependencies/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -645,7 +645,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with a paths config that points jquery at a CDN', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/httpPath/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/httpPath/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -660,7 +660,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle aa test case with a root-relative require alongside a non-root-relative require to the same file', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/rootRelative/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/rootRelative/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -686,7 +686,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with a paths config that maps theLibrary to 3rdparty/theLibrary', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/paths/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/paths/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -731,7 +731,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with document-relative dependencies', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/documentRelativeDependencies/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/documentRelativeDependencies/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -769,7 +769,7 @@ describe('transforms/flattenRequireJs', function () {
     });
 
     it('should handle a test case with a data-main that only contains a define (#127)', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/issue127/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/issue127/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -796,7 +796,7 @@ describe('transforms/flattenRequireJs', function () {
     // function is run twice. This test case asserts that flattenRequireJs emits an error as the build will be broken.
     it('should handle a test case with a module that is referred to both with and without the .js extension', function (done) {
         var warns = [];
-        new AssetGraph({root: __dirname + '/flattenRequireJs/multipleIncomingWithAndWithoutDotJsSuffix/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/multipleIncomingWithAndWithoutDotJsSuffix/'})
             .on('warn', function (err) {
                 warns.push(err);
             })
@@ -817,7 +817,7 @@ describe('transforms/flattenRequireJs', function () {
     });
     */
     it('should handle a test case with a umdish factory pattern', function (done) {
-        new AssetGraph({root: __dirname + '/flattenRequireJs/umdishBackboneLocalstorage/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/umdishBackboneLocalstorage/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()

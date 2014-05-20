@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/compileStylusToCss', function () {
     it('should convert all Stylus assets to Css', function (done) {
-        new AssetGraph({root: __dirname + '/compileStylusToCss/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileStylusToCss/'})
             .loadAssets('example.styl')
             .populate()
             .queue(function (assetGraph) {

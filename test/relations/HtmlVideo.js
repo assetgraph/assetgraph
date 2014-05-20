@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlVideo', function () {
     it('should handle a test case with existing <video> tags', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlVideo/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlVideo/'})
             .loadAssets('index.html')
             .populate({
                 followRelations: function () {return false;}

@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 describe('transforms/bundleRelations', function () {
     describe('with the oneBundlePerIncludingAsset strategy', function (done) {
         it('should bundle two stylesheets', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/singleHtml'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/singleHtml'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -32,7 +32,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should bundle correctly when two Html assets that relate to some of the same Css assets', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/twoHtmls'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/twoHtmls'})
                 .loadAssets('1.html', '2.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -59,7 +59,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should bundle correctly in the presence of conditional comments', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/conditionalCommentInTheMiddle/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -92,7 +92,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should bundle HtmlStyles correctly when two of them are in an inverted conditional comment', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/invertedConditionalCommentInTheMiddle/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/invertedConditionalCommentInTheMiddle/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -122,7 +122,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should not bundle stylesheets with different media attributes', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/differentMedia/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/differentMedia/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -154,7 +154,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should respect the nobundle attribute', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/skippedScripts/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/skippedScripts/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -178,7 +178,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should gather all the copyright notices and put them at the top of the bundle', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/copyrightNotices/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/copyrightNotices/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
@@ -189,7 +189,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle 5 HtmlStyles in a Html asset, two of which are in a conditional comment', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/conditionalCommentInTheMiddle/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -221,7 +221,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle an @import in a second stylesheet', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/importRules/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/importRules/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'})
@@ -244,7 +244,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle multiple stylesheets, one of which is referred to with a root-relative url', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/rootRelative/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/rootRelative/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'})
@@ -257,7 +257,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle script tags interrupted by an external script inclusion', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/scriptExternal/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptExternal/'})
                 .loadAssets('index.html')
                 .populate({
                     followRelations: {href: query.not(/^https?:/)}
@@ -287,7 +287,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle script tags in both <head> and <body>', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/scriptsInHead/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptsInHead/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleRelations({
@@ -311,7 +311,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle script tags in alternating strict mode', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/strictScripts/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/strictScripts/'})
                 .on('info', function (e) {
                     if (!this._infos) {
                         this._infos = [];
@@ -340,7 +340,7 @@ describe('transforms/bundleRelations', function () {
 
     describe('with the sharedBundles strategy', function () {
         it('should handle a test case with 1 Html, 2 stylesheets, and 3 images', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/singleHtml'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/singleHtml'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -367,7 +367,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle a test case with two Html assets that relate to some of the same Css assets', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/twoHtmls'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/twoHtmls'})
                 .loadAssets('1.html', '2.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -394,7 +394,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle a test case with 5 HtmlStyles in a Html asset, two of which is in a conditional comment', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/conditionalCommentInTheMiddle/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -429,7 +429,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle a test case with stylesheets with different media attributes', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/differentMedia/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/differentMedia/'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -466,7 +466,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle a test with two pages, each containing an external HtmlStyle followed by an inline one', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/externalHtmlStyleFollowedByInlineStyle/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/externalHtmlStyleFollowedByInlineStyle/'})
                 .loadAssets('*.html')
                 .populate()
                 .bundleRelations({type: ['HtmlStyle']}, {strategyName: 'sharedBundles'})
@@ -480,7 +480,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle a duplicated script', function (done) {
-            new AssetGraph({root: __dirname + '/bundleRelations/duplicateScript/'})
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/duplicateScript/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: ['HtmlScript'], to: {isLoaded: true}}, {strategyName: 'sharedBundles'})

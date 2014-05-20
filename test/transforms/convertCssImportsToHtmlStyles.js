@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/convertCssImportsToHtmlStyles', function () {
     it('should converting Css @import rules to <link rel="stylesheet">', function (done) {
-        new AssetGraph({root: __dirname + '/convertCssImportsToHtmlStyles/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/convertCssImportsToHtmlStyles/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

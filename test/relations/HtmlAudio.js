@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlAudio', function () {
     it('should handle a test case with existing <audio> tags', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlAudio/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlAudio/'})
             .loadAssets('index.html')
             .populate({
                 followRelations: function () {return false;}

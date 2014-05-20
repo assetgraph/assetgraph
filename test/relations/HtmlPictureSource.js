@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlPictureSource test', function () {
     it('should handle a test case with an existing <picture><source src="..."></picture> construct', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlPictureSource/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPictureSource/'})
             .loadAssets('index.html')
             .populate({
                 followRelations: function () {return false;}

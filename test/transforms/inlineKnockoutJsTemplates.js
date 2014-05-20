@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/inlineKnockoutJsTemplates', function () {
     it('should handle a test case with Knockout.js templates loaded using the tpl plugin', function (done) {
-        new AssetGraph({root: __dirname + '/inlineKnockoutJsTemplates/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineKnockoutJsTemplates/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/flattenStaticIncludes transform', function () {
     it('should handle a combo test case', function (done) {
-        new AssetGraph({root: __dirname + '/flattenStaticIncludes/combo/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenStaticIncludes/combo/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -31,7 +31,7 @@ describe('transforms/flattenStaticIncludes transform', function () {
     });
 
     it('should handle a test case where one of the INCLUDEd files is already included via a <script>', function (done) {
-        new AssetGraph({root: __dirname + '/flattenStaticIncludes/duplicate/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenStaticIncludes/duplicate/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -61,7 +61,7 @@ describe('transforms/flattenStaticIncludes transform', function () {
     });
 
     it('should handle a test case with .template and .html assets being INCLUDEd', function (done) {
-        new AssetGraph({root: __dirname + '/flattenStaticIncludes/inlineScriptTemplates/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenStaticIncludes/inlineScriptTemplates/'})
             .loadAssets('index.html')
             .populate()
             .flattenStaticIncludes({type: 'Html'})
@@ -72,7 +72,7 @@ describe('transforms/flattenStaticIncludes transform', function () {
     });
 
     it('should handle a test case with .less and .css assets being INCLUDEd', function (done) {
-        new AssetGraph({root: __dirname + '/flattenStaticIncludes/lessAndCss/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenStaticIncludes/lessAndCss/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

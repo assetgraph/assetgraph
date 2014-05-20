@@ -5,7 +5,7 @@ var AssetGraph = require('../../lib'),
 describe('relations/Relation', function () {
     describe('#href', function () {
         it('should handle a test case with urls with different hrefTypes', function (done) {
-            new AssetGraph({root: __dirname + '/Relation/refreshHref/'})
+            new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/'})
                 .loadAssets('index.html')
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain asset', 'Html');
@@ -48,7 +48,7 @@ describe('relations/Relation', function () {
 
     describe('#updateTarget', function () {
         it('should handle a combo test case', function (done) {
-            new AssetGraph({root: __dirname + '/Relation/updateTarget/'})
+            new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/updateTarget/'})
                 .loadAssets('index.html', 'd.js')
                 .populate()
                 .queue(function (assetGraph) {

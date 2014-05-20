@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('resolvers/file', function () {
     it('should handle a test case with non-ASCII file names', function (done) {
-        new AssetGraph({root: __dirname + '/file/'})
+        new AssetGraph({root: __dirname + '/../../testdata/resolvers/file/'})
             .loadAssets('spaces, unsafe chars & ñøń-ÃßÇ¡¡.html')
             .populate()
             .queue(function (assetGraph) {

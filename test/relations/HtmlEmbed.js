@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlEmbed', function () {
     it('should handle a test case with an existing <embed src="..."> element', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlEmbed/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlEmbed/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlAppleTouchStartupImage', function () {
     it('should handle a simple test case', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlAppleTouchStartupImage/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlAppleTouchStartupImage/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

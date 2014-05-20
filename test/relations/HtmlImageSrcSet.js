@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', function () {
     it('should handle a test case with an existing <img srcset=...> element', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlImageSrcSet/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlImageSrcSet/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

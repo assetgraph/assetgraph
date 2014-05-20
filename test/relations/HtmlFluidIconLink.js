@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlFluidIconLink', function () {
     it('should handle a test case with an existing <link rel="fluid-icon"> element', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlFluidIconLink/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlFluidIconLink/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

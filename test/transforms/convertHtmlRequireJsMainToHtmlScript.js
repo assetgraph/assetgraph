@@ -6,7 +6,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/convertHtmlRequireJsMainToHtmlScript', function () {
     it('should convert the data-main attribute to a separate HtmlScript relation', function (done) {
-        new AssetGraph({root: __dirname + '/convertHtmlRequireJsMainToHtmlScript/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/convertHtmlRequireJsMainToHtmlScript/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()

@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/inlineCssImagesWithLegacyFallback', function () {
     it('should handle a test case with a single Html asset', function (done) {
-        new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/combo/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/combo/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -40,7 +40,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
     });
 
     it('should handle a test case with multiple Html asset that point at the same Css', function (done) {
-        new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/multipleHtmls/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/multipleHtmls/'})
             .loadAssets('*.html')
             .populate()
             .queue(function (assetGraph) {
@@ -66,7 +66,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
     });
 
     it('should handle a test case with a root-relative HtmlStyle relation', function (done) {
-        new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/rootRelative/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/rootRelative/'})
             .loadAssets('index.html')
             .populate()
             .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4)
@@ -78,7 +78,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
     });
 
     it('should handle a test case with a small background-image inside a @media query', function (done) {
-        new AssetGraph({root: __dirname + '/inlineCssImagesWithLegacyFallback/mediaQuery/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/mediaQuery/'})
             .loadAssets('index.html')
             .populate()
             .inlineCssImagesWithLegacyFallback({isInitial: true}, 10000)

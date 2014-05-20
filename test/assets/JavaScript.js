@@ -7,7 +7,7 @@ var expect = require('../unexpected-with-plugins'),
 describe('assets/JavaScript', function () {
     it('should handle a test case that has a parse error in an inline JavaScript asset', function (done) {
         var firstWarning;
-        new AssetGraph({root: __dirname + '/JavaScript/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
             .on('warn', function (err) {
                 firstWarning = firstWarning || err;
             })
@@ -23,7 +23,7 @@ describe('assets/JavaScript', function () {
 
     it('should handle a test case that has a parse error in an external JavaScript asset', function (done) {
         var firstWarning;
-        new AssetGraph({root: __dirname + '/JavaScript/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
             .on('warn', function (err) {
                 firstWarning = firstWarning || err;
             })
@@ -39,7 +39,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with relations located at multiple levels in the parse tree', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScript/relationsDepthFirst/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/relationsDepthFirst/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -53,7 +53,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should preserve the copyright notice in a JavaScript asset', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScript/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
             .loadAssets('copyrightNotice.js')
             .queue(function (assetGraph) {
                 var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
@@ -73,7 +73,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with JavaScript assets that have regular comments as the first non-whitespace tokens', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScript/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
             .loadAssets('initialComment*.js')
             .queue(function (assetGraph) {
                 assetGraph.findAssets({type: 'JavaScript'}).forEach(function (javaScript) {
@@ -96,7 +96,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with a JavaScript asset that has comments right before EOF, then marking it as dirty', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScript/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
             .loadAssets('commentsBeforeEof.js')
             .populate()
             .queue(function (assetGraph) {
@@ -117,7 +117,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with conditional compilation (@cc_on)', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScript/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
             .loadAssets('conditionalCompilation.js')
             .queue(function (assetGraph) {
                 assetGraph.findAssets({type: 'JavaScript'}).forEach(function (javaScript) {
@@ -135,7 +135,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with global strict mode', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScript/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
             .loadAssets('globalstrict.html')
             .populate()
             .queue(function (assetGraph) {

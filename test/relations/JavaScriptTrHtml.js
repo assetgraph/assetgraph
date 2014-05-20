@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/JavaScriptTrHtml', function () {
     it('should handle a test case with a simple JavaScriptTrHtml relation', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptTrHtml/simple/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptTrHtml/simple/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -43,7 +43,7 @@ describe('relations/JavaScriptTrHtml', function () {
     });
 
     it('should handle a test case with a JavaScriptTrHtml relation consisting of TRHTML(GETTEXT(...))', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptTrHtml/TrHtmlGetText/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptTrHtml/TrHtmlGetText/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlConditionalComment', function () {
     it('should handle a test case with some existing conditional comments', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlConditionalComment/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlConditionalComment/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -31,7 +31,7 @@ describe('relations/HtmlConditionalComment', function () {
     });
 
     it('should handle a test case with the HTML5 boilerplate conditional comments', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlConditionalComment/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlConditionalComment/'})
             .loadAssets('html5Boilerplate.html')
             .populate()
             .queue(function (assetGraph) {

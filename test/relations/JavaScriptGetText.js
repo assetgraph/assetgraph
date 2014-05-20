@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/JavaScriptGetText', function () {
     it('should handle a test case with an existing GETTEXT function call', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptGetText/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptGetText/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/CssAlphaImageLoader', function () {
     it('should handle a simple test case', function (done) {
-        new AssetGraph({root: __dirname + '/CssAlphaImageLoader/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/CssAlphaImageLoader/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

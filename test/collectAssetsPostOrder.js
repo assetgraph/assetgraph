@@ -5,7 +5,7 @@ var expect = require('./unexpected-with-plugins'),
 
 describe('AssetGraph#collectAssetsPostOrder()', function () {
     it('should visit some JavaScript assets in the correct order', function (done) {
-        new AssetGraph({root: __dirname + '/collectAssetsPostOrder/'})
+        new AssetGraph({root: __dirname + '/../testdata/collectAssetsPostOrder/'})
             .loadAssets('index.js')
             .populate()
             .queue(function (assetGraph) {

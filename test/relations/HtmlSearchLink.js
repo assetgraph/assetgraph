@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlSearchLink', function () {
     it('should handle a test case with an existing <link rel="search"> element', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlSearchLink/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlSearchLink/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

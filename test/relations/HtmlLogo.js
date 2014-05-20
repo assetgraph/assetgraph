@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlLogo', function () {
     it('should handle a test case with an existing <link rel="logo" href="..."> element', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlLogo/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlLogo/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

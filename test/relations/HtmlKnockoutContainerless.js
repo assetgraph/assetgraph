@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlKnockoutContainerless', function () {
     it('should handle a test case with existing <!-- ko ... --> comments', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlKnockoutContainerless/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlKnockoutContainerless/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

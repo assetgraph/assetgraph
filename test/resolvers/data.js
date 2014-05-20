@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('resolvers/data', function () {
     it('should handle a test case with data: url anchors', function (done) {
-        new AssetGraph({root: __dirname + '/data/'})
+        new AssetGraph({root: __dirname + '/../../testdata/resolvers/data/'})
             .loadAssets('dataUrl.html')
             .populate()
             .queue(function (assetGraph) {
@@ -20,7 +20,7 @@ describe('resolvers/data', function () {
     });
 
     it('should handle a test case with an unparsable data: url', function (done) {
-        new AssetGraph({root: __dirname + '/dataUrl/'})
+        new AssetGraph({root: __dirname + '/../../testdata/resolvers/dataUrl/'})
             .loadAssets('unparsableDataUrl.html')
             .populate()
             .queue(function (assetGraph) {

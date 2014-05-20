@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlShortcutIcon', function () {
     it('should handle a test case with an existing <link rel="shortcut icon" href="..."> elements in different variants', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlShortcutIcon/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlShortcutIcon/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

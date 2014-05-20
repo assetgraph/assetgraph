@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/setHtmlImageDimensions', function () {
     it('should handle a simple test case', function (done) {
-        new AssetGraph({root: __dirname + '/setHtmlImageDimensions/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/setHtmlImageDimensions/'})
             .loadAssets('index.html')
             .populate()
             .setHtmlImageDimensions()

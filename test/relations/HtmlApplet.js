@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlApplet', function () {
     it('should handle a simple test case', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlApplet/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplet/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

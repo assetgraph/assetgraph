@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/JavaScriptSourceUrl', function () {
     it('should handle a test case with a JavaScript asset that has @sourceMappingURL directive', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptSourceMappingUrl/existingSourceMap/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

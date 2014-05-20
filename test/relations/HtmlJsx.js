@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlJsx', function () {
     it('should handle a test case with existing <script type="text/jsx"> elements', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlJsx/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlJsx/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

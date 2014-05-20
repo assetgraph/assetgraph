@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/JavaScriptCommonJsRequire', function () {
     it('should handle a test case with existing require(...) expressions', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptCommonJsRequire/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptCommonJsRequire/'})
             .loadAssets('index.js')
             .populate()
             .queue(function (assetGraph) {

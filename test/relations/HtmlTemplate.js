@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlTemplate', function () {
     it('should handle a test case with an existing <template> element', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlTemplate/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlTemplate/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

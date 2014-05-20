@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/requireJsConfig test', function () {
     it('should handle a test case with a shim dependency', function (done) {
-        new AssetGraph({root: __dirname + '/registerRequireJsConfig/shimDependency'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/registerRequireJsConfig/shimDependency'})
             .loadAssets('index.html')
             .registerRequireJsConfig()
             .populate()

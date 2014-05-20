@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/CssFontFaceSrc', function () {
     it('should handle a simple test case', function (done) {
-        new AssetGraph({root: __dirname + '/CssFontFaceSrc/simple/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/CssFontFaceSrc/simple/'})
             .loadAssets('index.css')
             .populate()
             .queue(function (assetGraph) {
@@ -20,7 +20,7 @@ describe('relations/CssFontFaceSrc', function () {
     });
 
     it('should handle a test case with multiple src properties in one rule and multiple urls in one value', function (done) {
-        new AssetGraph({root: __dirname + '/CssFontFaceSrc/multipleSrc/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/CssFontFaceSrc/multipleSrc/'})
             .loadAssets('index.css')
             .populate()
             .queue(function (assetGraph) {

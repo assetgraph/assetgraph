@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('assets/Svg', function () {
     it('should handle a test case with an Svg asset', function (done) {
-        new AssetGraph({root: __dirname + '/Svg/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/Svg/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

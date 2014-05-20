@@ -16,7 +16,7 @@ describe('assets/Html', function () {
     });
 
     it('should handle a test case with a javascript: url', function (done) {
-        new AssetGraph({root: __dirname + '/Html/javascriptUrl/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/Html/javascriptUrl/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('assets/Rss', function () {
     it('should find an Rss asset', function (done) {
-        new AssetGraph({root: __dirname + '/Rss/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/Rss/'})
           .loadAssets('feed.rss')
           .populate()
           .queue(function (assetGraph) {

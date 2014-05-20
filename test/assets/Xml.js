@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('assets/Xml', function () {
     it('should handle a test case with an existing Xml asset', function (done) {
-        new AssetGraph({root: __dirname + '/Xml/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/Xml/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

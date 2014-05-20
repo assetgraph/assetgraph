@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/JavaScriptAngularJsTemplate', function () {
     it('should handle a test case exercising different syntaxes for using templates', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAngularJsTemplate/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAngularJsTemplate/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

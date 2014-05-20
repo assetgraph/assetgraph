@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/JavaScriptInclude', function () {
     it('should handle a combo test case', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptInclude/topLevelStatements/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptInclude/topLevelStatements/'})
             .loadAssets('index.js')
             .populate()
             .queue(function (assetGraph) {
@@ -67,7 +67,7 @@ describe('relations/JavaScriptInclude', function () {
     });
 
     it('should handle the same test case with original INCLUDE statements in one sequenced statement', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptInclude/sequencedStatements/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptInclude/sequencedStatements/'})
             .loadAssets('index.js')
             .populate()
             .queue(function (assetGraph) {

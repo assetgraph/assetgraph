@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 describe('transforms/splitCssIfIeLimitIsReached', function () {
     it('should handle a simple Css test case', function (done) {
         var infos = [];
-        new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
             .on('info', function (err) {
                 infos.push(err);
             })
@@ -59,7 +59,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
 
     it('should handle a real life huge Css test case', function (done) {
         var infos = [];
-        new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
             .on('info', function (err) {
                 infos.push(err);
             })
@@ -127,7 +127,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     });
 
     it('should handle a test case with an inline stylesheet', function (done) {
-        new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
             .loadAssets('inline.html')
             .populate()
             .queue(function (assetGraph) {
@@ -155,7 +155,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     });
 
     it('should handle a test case with an inline that has rules in media queries', function (done) {
-        new AssetGraph({root: __dirname + '/splitCssIfIeLimitIsReached/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
             .loadAssets('inlineWithMedia.html')
             .populate()
             .queue(function (assetGraph) {

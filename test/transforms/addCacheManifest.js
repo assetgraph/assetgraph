@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/addCacheManifest', function () {
     it('should handle a single page with an existing cache manifest', function (done) {
-        new AssetGraph({root: __dirname + '/addCacheManifest/existingCacheManifest/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/existingCacheManifest/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -46,7 +46,7 @@ describe('transforms/addCacheManifest', function () {
     });
 
     it('should add a cache manifest to a page that does not already have one', function (done) {
-        new AssetGraph({root: __dirname + '/addCacheManifest/noCacheManifest/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifest/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: /^file:/}}})
             .queue(function (assetGraph) {
@@ -72,7 +72,7 @@ describe('transforms/addCacheManifest', function () {
     });
 
     it('should add cache manifest to multiple pages', function (done) {
-        new AssetGraph({root: __dirname + '/addCacheManifest/noCacheManifestMultiPage/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifestMultiPage/'})
             .loadAssets('*.html')
             .populate()
             .queue(function (assetGraph) {
@@ -100,7 +100,7 @@ describe('transforms/addCacheManifest', function () {
     });
 
     it('should add a cache manifest and update the existing one in a multi-page test case with one existing manifest', function (done) {
-        new AssetGraph({root: __dirname + '/addCacheManifest/existingCacheManifestMultiPage/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/existingCacheManifestMultiPage/'})
             .loadAssets('*.html')
             .populate()
             .queue(function (assetGraph) {

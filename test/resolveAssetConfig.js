@@ -1,7 +1,8 @@
 var expect = require('./unexpected-with-plugins'),
     passError = require('passerror'),
     AssetGraph = require('../lib'),
-    assetGraphRoot = __dirname + '/resolveAssetConfig/';
+    Path = require('path'),
+    assetGraphRoot = Path.resolve(__dirname, '..', 'testdata', 'resolveAssetConfig') + '/';
 
 function resolveAssetConfig(assetConfig, fromUrl, cb) {
     if (typeof fromUrl === 'function') {

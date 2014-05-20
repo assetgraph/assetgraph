@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlEdgeSideInclude', function () {
     it('should handle a test case with existing <esi ...> elements', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlEdgeSideInclude/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlEdgeSideInclude/'})
             .loadAssets('index.html')
             .populate({
                 followRelations: {to: {url: /\.html$/}}

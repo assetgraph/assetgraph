@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlIFrameSrcDoc', function () {
     it('should handle a test case with an existing <iframe srcdoc=...> element', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlIFrameSrcDoc/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlIFrameSrcDoc/'})
             .loadAssets('index.html')
             .populate({
                 followRelations: {to: {url: /^file:/}}

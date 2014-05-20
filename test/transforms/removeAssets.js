@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/removeAssets', function () {
     it('should handle a test case with empty assets', function (done) {
-        new AssetGraph({root: __dirname + '/removeAssets/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/removeAssets/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/JavaScriptAmdRequire', function () {
     it('should handle a test case with an Html asset that loads require.js and uses it in an inline script', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/simple/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/simple/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -24,7 +24,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case with an Html asset that loads require.js and includes a data-main attribute on the script tag', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withDataMain/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/withDataMain/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -38,7 +38,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case with require.js and a paths setting', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withPaths/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/withPaths/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -50,7 +50,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case with the require.js config in an IIFE in a script', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/iife/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/iife/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -61,7 +61,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case with require.js, a baseUrl and a paths setting', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withPathsAndBaseUrl/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/withPathsAndBaseUrl/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -72,7 +72,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case with require.js, data-main and a paths setting', function (done) {
-            new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withPathsAndDataMain/'})
+            new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/withPathsAndDataMain/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()
@@ -100,7 +100,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case where the require.config({...}) statement is in the data-main script', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/withConfigInDataMain/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/withConfigInDataMain/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -117,7 +117,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case with a require() statement followed by a define(<string>, function () {})', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/alreadyFlattened/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/alreadyFlattened/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -129,7 +129,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case with a require() statement followed by a define(<string>, function () {}) in a comma sequence', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/alreadyFlattenedSeq/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/alreadyFlattenedSeq/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -141,7 +141,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case where the require main module does not have an incoming relation from a html file', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/noHtml/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/noHtml/'})
             .registerRequireJsConfig()
             .loadAssets('main.js')
             .populate()
@@ -153,7 +153,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case where the require main module doesn\'t have an incoming relation from a html file, but has a requirejs.baseUrl configuration', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptAmdRequire/noHtmlWithConfig/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/noHtmlWithConfig/'})
             .registerRequireJsConfig()
             .loadAssets('main.js')
             .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})

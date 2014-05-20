@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlStyleAttribute', function () {
     it('should handle a test case with existing <link rel="stylesheet"> and <style> elements', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlStyleAttribute/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlStyleAttribute/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

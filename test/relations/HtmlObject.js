@@ -6,7 +6,7 @@ var _ = require('underscore'),
 
 describe('relations/HtmlObject', function () {
     it('should handle a test case with an existing <object><param name="src" value="..."></object> construct', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlObject/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlObject/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

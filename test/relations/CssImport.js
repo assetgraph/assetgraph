@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/CssImport', function () {
     it('should handle a simple test case', function (done) {
-        new AssetGraph({root: __dirname + '/CssImport/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/CssImport/'})
             .loadAssets('index.css')
             .populate()
             .queue(function (assetGraph) {

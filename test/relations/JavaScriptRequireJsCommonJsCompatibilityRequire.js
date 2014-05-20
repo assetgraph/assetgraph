@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/JavaScriptRequireJsCommonJsCompatibilityRequire', function () {
     it('should handle a test case that also has some common.js requires', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptRequireJsCommonJsCompatibilityRequire/withCommonJsShorthand/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptRequireJsCommonJsCompatibilityRequire/withCommonJsShorthand/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()
@@ -29,7 +29,7 @@ describe('relations/JavaScriptRequireJsCommonJsCompatibilityRequire', function (
 
     it('should handle the ACE editor', function (done) {
         this.timeout(10000);
-        new AssetGraph({root: __dirname + '/JavaScriptRequireJsCommonJsCompatibilityRequire/ace/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptRequireJsCommonJsCompatibilityRequire/ace/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
             .populate()

@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/JavaScriptSourceUrl', function () {
     it('should handle a test case with an existing bundle that has @sourceURL directives', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptSourceUrl/existingBundle/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceUrl/existingBundle/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -26,7 +26,7 @@ describe('relations/JavaScriptSourceUrl', function () {
     });
 
     it('should handle a test case with two JavaScript assets, then running the addJavaScriptSourceUrl transform', function (done) {
-        new AssetGraph({root: __dirname + '/JavaScriptSourceUrl/bundleRelations/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceUrl/bundleRelations/'})
             .loadAssets('index.html')
             .populate()
             .addJavaScriptSourceUrl()

@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlEdgeSideIncludeSafeComment', function () {
     it('should handle a test case with existing <!--esi ...---> comments', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlEdgeSideIncludeSafeComment/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlEdgeSideIncludeSafeComment/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

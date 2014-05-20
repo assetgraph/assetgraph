@@ -1,12 +1,12 @@
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
     fs = require('fs'),
-    requirejs = fs.readFileSync(__dirname + '/replaceRequireJsWithAlmond/mixed/require.js', 'utf8'),
-    almond = fs.readFileSync(__dirname + '/replaceRequireJsWithAlmond/mixed/almond.js', 'utf8');
+    requirejs = fs.readFileSync(__dirname + '/../../testdata/transforms/replaceRequireJsWithAlmond/mixed/require.js', 'utf8'),
+    almond = fs.readFileSync(__dirname + '/../../testdata/transforms/replaceRequireJsWithAlmond/mixed/almond.js', 'utf8');
 
 describe('transforms/replaceRequireJsWithAlmond', function () {
     it('should handle a non-almond test case', function (done) {
-        new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/mixed/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/replaceRequireJsWithAlmond/mixed/'})
             .registerRequireJsConfig({preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true})
             .loadAssets('require-pure.html')
             .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
@@ -25,7 +25,7 @@ describe('transforms/replaceRequireJsWithAlmond', function () {
     });
 
     it('should handle a test case with several data-almond attributes', function (done) {
-        new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/mixed/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/replaceRequireJsWithAlmond/mixed/'})
             .registerRequireJsConfig({preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true})
             .loadAssets('require-almond.html')
             .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
@@ -53,7 +53,7 @@ describe('transforms/replaceRequireJsWithAlmond', function () {
 
     it('should handle an almond test case that uses requirejs as script loader', function (done) {
         var firstWarning;
-        new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/mixed/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/replaceRequireJsWithAlmond/mixed/'})
             .on('warn', function (err) {
                 firstWarning = firstWarning || err;
             })
@@ -89,7 +89,7 @@ describe('transforms/replaceRequireJsWithAlmond', function () {
     });
 
     it('should handle a test case where multiple Html assets use the same require.js and have a data-almond attribute', function (done) {
-        new AssetGraph({root: __dirname + '/replaceRequireJsWithAlmond/multipleHtml/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/replaceRequireJsWithAlmond/multipleHtml/'})
             .registerRequireJsConfig({preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true})
             .loadAssets('*.html')
             .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})

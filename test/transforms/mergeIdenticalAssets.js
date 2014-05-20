@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/mergeIdenticalAssets', function () {
     it('should handle a combo test case', function (done) {
-        new AssetGraph({root: __dirname + '/mergeIdenticalAssets/combo/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/mergeIdenticalAssets/combo/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -26,7 +26,7 @@ describe('transforms/mergeIdenticalAssets', function () {
     });
 
     it('should handle a test case with a JavaScript asset and a Css asset with identical contents', function (done) {
-        new AssetGraph({root: __dirname + '/mergeIdenticalAssets/identicalAssetsOfDifferentTypes/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/mergeIdenticalAssets/identicalAssetsOfDifferentTypes/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {

@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/HtmlInlineScriptTemplate', function () {
     it('should handle a test case with an existing <script type="text/html"> element', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlInlineScriptTemplate/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlInlineScriptTemplate/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -22,7 +22,7 @@ describe('relations/HtmlInlineScriptTemplate', function () {
     });
 
     it('should handle a test case with some advanced markup in a <script type="text/html"> element', function (done) {
-        new AssetGraph({root: __dirname + '/HtmlInlineScriptTemplate/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlInlineScriptTemplate/'})
             .loadAssets('advancedMarkup.html')
             .populate()
             .queue(function (assetGraph) {

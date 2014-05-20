@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 describe('assets/Css', function () {
     it('should handle a test case with a parse error in an inline Css asset', function (done) {
         var err;
-        new AssetGraph({root: __dirname + '/Css/parseErrors/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/Css/parseErrors/'})
             .on('warn', function (_err) {
                 err = _err;
             })
@@ -18,7 +18,7 @@ describe('assets/Css', function () {
 
     it('should handle a test case with a parse error in an external Css asset', function (done) {
         var err;
-        new AssetGraph({root: __dirname + '/Css/parseErrors/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/Css/parseErrors/'})
             .on('warn', function (_err) {
                 err = _err;
             })
@@ -32,7 +32,7 @@ describe('assets/Css', function () {
     });
 
     it('should handle a test case that has multiple neighbour @font-face rules', function (done) {
-        new AssetGraph({root: __dirname + '/Css/multipleFontFaceRules/'})
+        new AssetGraph({root: __dirname + '/../../testdata/assets/Css/multipleFontFaceRules/'})
             .loadAssets('index.css')
             .populate()
             .queue(function (assetGraph) {

@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/externalizeRelations and transforms/mergeIdenticalAssets', function () {
     it('should handle a test case with multiple inline scripts then externalizing them', function (done) {
-        new AssetGraph({root: __dirname + '/externalizeAndMergeIdenticalAssets/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/externalizeAndMergeIdenticalAssets/'})
             .loadAssets('first.html', 'second.html')
             .populate()
             .externalizeRelations({type: 'HtmlScript'})
