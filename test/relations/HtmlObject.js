@@ -2,8 +2,7 @@
 var _ = require('underscore'),
     expect = require('../unexpected-with-plugins'),
     urlTools = require('urltools'),
-    AssetGraph = require('../../lib'),
-    query = AssetGraph.query;
+    AssetGraph = require('../../lib');
 
 describe('relations/HtmlObject', function () {
     it('should handle a test case with an existing <object><param name="src" value="..."></object> construct', function (done) {

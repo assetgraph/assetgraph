@@ -128,7 +128,7 @@ describe('assets/Asset', function () {
         expect(htmlAsset.extension, 'to equal', '.blerg');
         expect(htmlAsset.fileName, 'to equal', 'index.blerg');
         expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg#yay');
-        htmlAsset.extension = "";
+        htmlAsset.extension = '';
         expect(htmlAsset.extension, 'to equal', '');
         expect(htmlAsset.fileName, 'to equal', 'index');
         expect(htmlAsset.url, 'to equal', 'http://example.com/index#yay');
@@ -159,7 +159,7 @@ describe('assets/Asset', function () {
         expect(htmlAsset.extension, 'to equal', '.blerg');
         expect(htmlAsset.fileName, 'to equal', 'index.blerg');
         expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg?yay=bar');
-        htmlAsset.extension = "";
+        htmlAsset.extension = '';
         expect(htmlAsset.fileName, 'to equal', 'index');
         expect(htmlAsset.url, 'to equal', 'http://example.com/index?yay=bar');
     });
@@ -189,7 +189,7 @@ describe('assets/Asset', function () {
         expect(htmlAsset.extension, 'to equal', '.blerg');
         expect(htmlAsset.fileName, 'to equal', 'index.blerg');
         expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg?yay=bar#really');
-        htmlAsset.extension = "";
+        htmlAsset.extension = '';
         expect(htmlAsset.extension, 'to equal', '');
         expect(htmlAsset.fileName, 'to equal', 'index');
         expect(htmlAsset.url, 'to equal', 'http://example.com/index?yay=bar#really');
@@ -206,7 +206,7 @@ describe('assets/Asset', function () {
         expect(htmlAsset.extension, 'to equal', '.blerg');
         expect(htmlAsset.fileName, 'to equal', 'index.blerg');
         expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg?yay=bar#really');
-        htmlAsset.extension = "";
+        htmlAsset.extension = '';
         expect(htmlAsset.extension, 'to equal', '');
         expect(htmlAsset.fileName, 'to equal', 'index');
         expect(htmlAsset.url, 'to equal', 'http://example.com/index?yay=bar#really');
@@ -243,7 +243,7 @@ describe('assets/Asset', function () {
             text: 'foo'
         });
         expect(htmlAsset.extension, 'to equal', '.yay');
-        expect(htmlAsset.fileName, 'to equal', "thething.yay");
+        expect(htmlAsset.fileName, 'to equal', 'thething.yay');
         htmlAsset.extension = '.blerg';
         expect(htmlAsset.extension, 'to equal', '.blerg');
         expect(htmlAsset.fileName, 'to equal', 'thething.blerg');
@@ -310,7 +310,7 @@ describe('assets/Asset', function () {
 
                     var indexHtml = assetGraph.findAssets({type: 'Html'})[0],
                         assetClone = indexHtml.clone();
-                    assetClone.url = indexHtml.url.replace(/\.html$/, ".clone.html");
+                    assetClone.url = indexHtml.url.replace(/\.html$/, '.clone.html');
 
                     expect(assetGraph, 'to contain asset', {url: /\/index\.clone\.html$/});
                     expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {url: /\/anotherpage\.html$/}});
@@ -332,7 +332,7 @@ describe('assets/Asset', function () {
                 .populate()
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain assets', 7);
-                    var clone = assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.clone();
+                    assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.clone();
 
                     expect(assetGraph.findRelations({}, true).filter(function (relation) {
                         return !relation.to.isAsset;
@@ -385,7 +385,7 @@ describe('assets/Asset', function () {
                 });
 
                 expect(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'to equal', 'æøåÆØÅ');
-                expect(assetGraph.findAssets()[0].rawSrc.toString('binary'), 'to contain', "\u00e6\u00f8\u00e5\u00c6\u00d8\u00c5");
+                expect(assetGraph.findAssets()[0].rawSrc.toString('binary'), 'to contain', '\u00e6\u00f8\u00e5\u00c6\u00d8\u00c5');
             })
             .run(done);
     });
@@ -420,7 +420,7 @@ describe('assets/Asset', function () {
                     var text = assetGraph.findAssets({type: 'Html'})[0].text,
                         matches = text.match(/url\((.*?foo\.png)\)/g);
                     expect(matches, 'to be an array');
-                    expect(matches[1], 'to equal', "url(some\/directory\/foo.png)");
+                    expect(matches[1], 'to equal', 'url(some\/directory\/foo.png)');
                     expect(matches, 'to have length', 2);
                 })
                 .run(done);
@@ -492,25 +492,21 @@ describe('assets/Asset', function () {
 
             expect(assetGraph, 'to contain relations', 'HtmlAnchor', 2);
 
-            var fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0],
-                clone = fooHtml.clone();
+            var clone = fooHtml.clone();
             clone.url = 'http://example.com/fooclone1.html';
 
-            var clone = assetGraph.findAssets({url: /\/fooclone1\.html$/})[0];
             expect(clone, 'not to be undefined');
             var outgoingRelations = assetGraph.findRelations({from: clone});
             expect(outgoingRelations, 'to have length', 2);
             expect(outgoingRelations[0].to.url, 'to equal', 'http://example.com/baz.html');
             expect(outgoingRelations[1].to.url, 'to equal', 'http://example.com/quux.html');
 
-            var fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0];
             fooHtml.url = 'http://example.com/another/place/foo.html';
-            var clone = fooHtml.clone();
+            clone = fooHtml.clone();
             clone.url = 'http://example.com/another/place/fooclone2.html';
 
-            var clone = assetGraph.findAssets({url: /\/fooclone2\.html$/})[0];
             expect(clone, 'not to be undefined');
-            var outgoingRelations = assetGraph.findRelations({from: clone});
+            outgoingRelations = assetGraph.findRelations({from: clone});
             expect(outgoingRelations, 'to have length', 2);
             expect(outgoingRelations[0].to.url, 'to equal', 'http://example.com/baz.html');
             expect(outgoingRelations[1].to.url, 'to equal', 'http://example.com/quux.html');

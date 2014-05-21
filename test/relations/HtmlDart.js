@@ -10,7 +10,7 @@ describe('relations/HtmlDart', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation');
                 expect(assetGraph.findRelations()[0].href, 'to equal', 'app.dart');
-                expect(assetGraph.findAssets({type: 'Dart'})[0].text, 'to equal', "'I am Dart'\n");
+                expect(assetGraph.findAssets({type: 'Dart'})[0].text, 'to equal', '\'I am Dart\'\n');
             })
             .run(done);
     });

@@ -18,7 +18,7 @@ describe('relations/JavaScriptInclude', function () {
 
                 var newJavaScriptAsset = new AssetGraph.JavaScript({
                     url: urlTools.resolveUrl(assetGraph.root, 'quux.js'),
-                    text: "alert('quux.js');"
+                    text: 'alert(\'quux.js\');'
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
                 new AssetGraph.JavaScriptInclude({
@@ -30,7 +30,7 @@ describe('relations/JavaScriptInclude', function () {
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
                     url: urlTools.resolveUrl(assetGraph.root, 'baz.js'),
-                    text: "alert('baz.js');"
+                    text: 'alert(\'baz.js\');'
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
                 new AssetGraph.JavaScriptInclude({
@@ -42,7 +42,7 @@ describe('relations/JavaScriptInclude', function () {
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
                     url: urlTools.resolveUrl(assetGraph.root, 'bazze.js'),
-                    text: "alert('bazze.js');"
+                    text: 'alert(\'bazze.js\');'
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
                 new AssetGraph.JavaScriptInclude({
@@ -54,7 +54,7 @@ describe('relations/JavaScriptInclude', function () {
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
                     url: urlTools.resolveUrl(assetGraph.root, 'prinzenrolle.js'),
-                    text: "alert('prinzenrolle.js');"
+                    text: 'alert(\'prinzenrolle.js\');'
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
                 new AssetGraph.JavaScriptInclude({
@@ -79,7 +79,7 @@ describe('relations/JavaScriptInclude', function () {
 
                 var newJavaScriptAsset = new AssetGraph.JavaScript({
                     url: urlTools.resolveUrl(assetGraph.root, 'quux.js'),
-                    text: "alert('quux.js');"
+                    text: 'alert(\'quux.js\');'
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
                 new AssetGraph.JavaScriptInclude({
@@ -91,7 +91,7 @@ describe('relations/JavaScriptInclude', function () {
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
                     url: urlTools.resolveUrl(assetGraph.root, 'baz.js'),
-                    text: "alert('baz.js');"
+                    text: 'alert(\'baz.js\');'
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
                 new AssetGraph.JavaScriptInclude({
@@ -103,7 +103,7 @@ describe('relations/JavaScriptInclude', function () {
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
                     url: urlTools.resolveUrl(assetGraph.root, 'bazze.js'),
-                    text: "alert('bazze.js');"
+                    text: 'alert(\'bazze.js\');'
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
                 new AssetGraph.JavaScriptInclude({
@@ -115,7 +115,7 @@ describe('relations/JavaScriptInclude', function () {
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
                     url: urlTools.resolveUrl(assetGraph.root, 'prinzenrolle.js'),
-                    text: "alert('prinzenrolle.js');"
+                    text: 'alert(\'prinzenrolle.js\');'
                 });
                 assetGraph.addAsset(newJavaScriptAsset);
                 new AssetGraph.JavaScriptInclude({

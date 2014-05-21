@@ -1,6 +1,5 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    _ = require('underscore'),
     AssetGraph = require('../../lib');
 
 describe('relations/JavaScriptAmdRequire', function () {
@@ -108,7 +107,7 @@ describe('relations/JavaScriptAmdRequire', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 6);
 
-                assetGraph.findAssets({url: /\/my\/module\.js$/})[0].fileName = "renamedModule.js";
+                assetGraph.findAssets({url: /\/my\/module\.js$/})[0].fileName = 'renamedModule.js';
                 expect(assetGraph.findRelations({to: {url: /\/my\/renamedModule\.js$/}})[0].href, 'to equal', 'my/renamedModule');
 
                 assetGraph.findRelations({to: {url: /\/my\/renamedModule\.js$/}})[0].hrefType = 'documentRelative';

@@ -1,7 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
-    uglifyAst = AssetGraph.JavaScript.uglifyAst,
     uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
 function getFunctionBodySource(fn) {
@@ -17,6 +16,7 @@ describe('transforms/pullGlobalsIntoVariables', function () {
                 type: 'JavaScript',
                 url: 'file:///foo.js',
                 text: getFunctionBodySource(function () {
+                    /* jshint ignore:start */
                     var MATHMIN = 2;
                     var parseInt = function () {
                         return 99;
@@ -31,6 +31,7 @@ describe('transforms/pullGlobalsIntoVariables', function () {
                         var bar = Math.min(Math.min(4, 6), Math.max(4, 6) + Math.floor(8.2) + foo.bar.quux.baz + foo.bar.quux.w00p + parseInt('123') + parseInt('456'), parseFloat('99.5') + parseFloat('99.5') + isFinite(1) + isFinite(1));
                         setTimeout(foo, 100);
                     }, 100);
+                    /* jshint ignore:end */
                 })
             })
             .pullGlobalsIntoVariables({type: 'JavaScript'}, {globalNames: ['foo.bar.quux', 'setTimeout', 'Math', 'Math.max', 'Math.floor', 'Math.min', 'isFinite', 'parseFloat', 'parseInt']})
@@ -38,6 +39,7 @@ describe('transforms/pullGlobalsIntoVariables', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal',
                     getFunctionBodySource(function () {
+                        /* jshint ignore:start */
                         var SETTIMEOUT = setTimeout,
                             MATH = Math,
                             MATHMIN_ = MATH.min,
@@ -56,6 +58,7 @@ describe('transforms/pullGlobalsIntoVariables', function () {
                             var bar = MATHMIN_(MATHMIN_(4, 6), MATH.max(4, 6) + MATH.floor(8.2) + FOOBARQUUX.baz + FOOBARQUUX.w00p + parseInt('123') + parseInt('456'), parseFloat('99.5') + parseFloat('99.5') + isFinite(1) + isFinite(1));
                             SETTIMEOUT(foo, 100);
                         }, 100);
+                        /* jshint ignore:end */
                     })
                 );
             })
@@ -91,9 +94,11 @@ describe('transforms/pullGlobalsIntoVariables', function () {
                 type: 'JavaScript',
                 url: 'file:///foo.js',
                 text: getFunctionBodySource(function () {
+                    /* jshint ignore:start */
                     var a = 'foobarquux',
                         b = 'foobarquux';
                     f.foobarquux();
+                    /* jshint ignore:end */
                 })
             })
             .pullGlobalsIntoVariables({type: 'JavaScript'}, {stringLiterals: true})
@@ -101,10 +106,12 @@ describe('transforms/pullGlobalsIntoVariables', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal',
                     getFunctionBodySource(function () {
+                        /* jshint ignore:start */
                         var FOOBARQUUX = 'foobarquux';
                         var a = FOOBARQUUX,
                             b = FOOBARQUUX;
                         f[FOOBARQUUX]();
+                        /* jshint ignore:end */
                     })
                 );
             })

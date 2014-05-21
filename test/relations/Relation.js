@@ -26,7 +26,7 @@ describe('relations/Relation', function () {
                     ]);
 
                     assetGraph.findRelations({type: 'HtmlAnchor'}, true).forEach(function (htmlAnchor) {
-                        htmlAnchor.to.url = htmlAnchor.to.url.replace(/\.html$/, "2.html");
+                        htmlAnchor.to.url = htmlAnchor.to.url.replace(/\.html$/, '2.html');
                         htmlAnchor.refreshHref();
                     });
 

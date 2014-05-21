@@ -1,6 +1,5 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    _ = require('underscore'),
     AssetGraph = require('../../lib');
 
 describe('assets/Rss', function () {

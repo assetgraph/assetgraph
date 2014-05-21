@@ -13,8 +13,8 @@ describe('relations/JavaScriptAngularJsTemplate', function () {
                 expect(assetGraph, 'to contain relations', 'JavaScriptAngularJsTemplate', 4);
                 expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true, text: /<img src="foo.png">/});
                 expect(assetGraph, 'to contain relations', 'JavaScriptAngularJsTemplateCacheAssignment', 2);
-                expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true, text: "<h1>4: Template with a relation (<img src='bar.png'>) injected directly into <code>$templateCache</code></h1>"});
-                expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true, text: "<h1>5: Template with a relation (<img src='quux.png'>) injected directly into <code>$templateCache</code>, but using a different variable name</h1>"});
+                expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true, text: '<h1>4: Template with a relation (<img src=\'bar.png\'>) injected directly into <code>$templateCache</code></h1>'});
+                expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true, text: '<h1>5: Template with a relation (<img src=\'quux.png\'>) injected directly into <code>$templateCache</code>, but using a different variable name</h1>'});
                 expect(assetGraph, 'to contain asset', {type: 'Png', url: /\/foo\.png$/});
                 expect(assetGraph, 'to contain asset', {type: 'Png', url: /\/bar\.png$/});
                 expect(assetGraph, 'to contain asset', {type: 'Png', url: /\/quux\.png$/});

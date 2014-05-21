@@ -1,7 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib'),
-    query = AssetGraph.query;
+    AssetGraph = require('../../lib');
 
 describe('transforms/compileStylusToCss', function () {
     it('should convert all Stylus assets to Css', function (done) {

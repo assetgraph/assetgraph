@@ -28,20 +28,19 @@ describe('transforms/addCacheManifest', function () {
                     });
                 expect(assetGraph, 'to contain relation', {from: manifest, to: barPng});
 
-                var cacheManifestText = assetGraph.findAssets({type: 'CacheManifest'})[0].text;
+                var cacheManifest = assetGraph.findAssets({type: 'CacheManifest'})[0];
 
-                var fooPngMatches = cacheManifestText.match(/\bfoo.png/gm);
+                var fooPngMatches = cacheManifest.text.match(/\bfoo.png/gm);
                 expect(fooPngMatches, 'to be an array');
                 expect(fooPngMatches, 'to have length', 1);
 
-                expect(cacheManifestText, 'to contain', 'NETWORK:\n# I am a comment\n/helloworld.php\n');
-                expect(cacheManifestText, 'to contain', 'FALLBACK:\nheresthething.asp foo.png\n');
+                expect(cacheManifest.text, 'to contain', 'NETWORK:\n# I am a comment\n/helloworld.php\n');
+                expect(cacheManifest.text, 'to contain', 'FALLBACK:\nheresthething.asp foo.png\n');
 
                 assetGraph.findAssets({url: /foo.png$/})[0].url = urlTools.resolveUrl(assetGraph.root, 'somewhere/else/quux.png');
 
-                var cacheManifestText = assetGraph.findAssets({type: 'CacheManifest'})[0].text;
-                expect(cacheManifestText, 'not to match', /\bfoo.png/);
-                expect(cacheManifestText, 'to contain', 'FALLBACK:\nheresthething.asp somewhere/else/quux.png\n');
+                expect(cacheManifest.text, 'not to match', /\bfoo.png/);
+                expect(cacheManifest.text, 'to contain', 'FALLBACK:\nheresthething.asp somewhere/else/quux.png\n');
             })
             .run(done);
     });
@@ -93,8 +92,8 @@ describe('transforms/addCacheManifest', function () {
                 expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/foo\.png$/}});
                 expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/otherpage\.html$/}});
 
-                var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/otherpage\.html$/}}});
-                expect(assetGraph, 'to contain relation', {from: cacheManifest});
+                var otherCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/otherpage\.html$/}}});
+                expect(assetGraph, 'to contain relation', {from: otherCacheManifest});
                 expect(assetGraph.findRelations({from: cacheManifest})[0].to, 'to equal', assetGraph.findAssets({url: /\/foo\.png$/})[0]);
             })
             .run(done);
@@ -120,10 +119,10 @@ describe('transforms/addCacheManifest', function () {
                 expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/quux\.png/}});
                 expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/foo\.png/}});
 
-                var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/pagetwo\.html$/}}})[0];
-                expect(assetGraph, 'to contain relations', {from: cacheManifest}, 2);
-                expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/style\.css/}});
-                expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/quux\.png/}});
+                var pageTwoCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/pagetwo\.html$/}}})[0];
+                expect(assetGraph, 'to contain relations', {from: pageTwoCacheManifest}, 2);
+                expect(assetGraph, 'to contain relation', {from: pageTwoCacheManifest, to: {url: /\/style\.css/}});
+                expect(assetGraph, 'to contain relation', {from: pageTwoCacheManifest, to: {url: /\/quux\.png/}});
             })
             .run(done);
     });

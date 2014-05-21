@@ -2,8 +2,7 @@
 var unexpected = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
     passError = require('passerror'),
-    uglifyJs = AssetGraph.JavaScript.uglifyJs,
-    uglifyAst = AssetGraph.JavaScript.uglifyAst;
+    uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
 describe('assets/Html', function () {
     var expect = unexpected.clone().addAssertion('to minify to', function (expect, subject, value, manipulator) {

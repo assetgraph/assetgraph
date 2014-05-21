@@ -1,8 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     _ = require('underscore'),
-    AssetGraph = require('../../lib'),
-    query = AssetGraph.query;
+    AssetGraph = require('../../lib');
 
 describe('relations/HtmlVideo', function () {
     it('should handle a test case with existing <video> tags', function (done) {

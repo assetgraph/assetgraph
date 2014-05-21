@@ -6,7 +6,7 @@ describe('transforms/compressJavaScript', function () {
     [undefined, 'uglifyJs'/*, 'yuicompressor', 'closurecompiler'*/].forEach(function (compressorName) {
         it('with compressorName=' + compressorName + ' should yield a compressed JavaScript', function (done) {
             new AssetGraph()
-                .loadAssets(new AssetGraph.JavaScript({text: "var foo = 123;"}))
+                .loadAssets(new AssetGraph.JavaScript({text: 'var foo = 123;'}))
                 .compressJavaScript({type: 'JavaScript'}, compressorName)
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain asset', 'JavaScript');

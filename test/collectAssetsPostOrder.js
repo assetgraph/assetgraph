@@ -1,3 +1,4 @@
+/*global describe, it*/
 var expect = require('./unexpected-with-plugins'),
     Path = require('path'),
     _ = require('underscore'),

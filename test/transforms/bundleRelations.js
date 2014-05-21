@@ -50,7 +50,8 @@ describe('transforms/bundleRelations', function () {
                     expect(cssRules[2].style.color, 'to equal', 'crimson');
                     expect(cssRules[3].style.color, 'to equal', 'deeppink');
                     expect(cssRules[4].style.color, 'to equal', '#eeeee0');
-                    var cssRules = assetGraph.findAssets({type: 'Css', incoming: {from: {url: /\/2\.html$/}}})[0].parseTree.cssRules;
+
+                    cssRules = assetGraph.findAssets({type: 'Css', incoming: {from: {url: /\/2\.html$/}}})[0].parseTree.cssRules;
                     expect(cssRules, 'to have length', 3);
                     expect(cssRules[0].style.color, 'to equal', '#eeeee0');
                     expect(cssRules[1].style.color, 'to equal', 'beige');
@@ -227,7 +228,7 @@ describe('transforms/bundleRelations', function () {
                 .populate()
                 .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'})
                 .queue(function (assetGraph) {
-                    var htmlStyles = cssAsset = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'});
+                    var htmlStyles = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'});
 
                     expect(htmlStyles, 'to have length', 1);
                     expect(htmlStyles[0].hrefType, 'to equal', 'relative');
@@ -303,9 +304,7 @@ describe('transforms/bundleRelations', function () {
                 .queue(function (assetGraph) {
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
                     expect(htmlScripts, 'to have length', 2);
-                    var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
                     expect(htmlScripts[0].node.parentNode.tagName, 'to equal', 'HEAD');
-                    var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
                     expect(htmlScripts[1].node.parentNode.tagName, 'to equal', 'BODY');
                 })
                 .run(done);
@@ -445,17 +444,18 @@ describe('transforms/bundleRelations', function () {
 
                     expect(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[0].node.hasAttribute('media'), 'to be falsy');
 
-                    var htmlStyle = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[0];
-                    expect(htmlStyle.to.parseTree.cssRules, 'to have length', 2);
-                    expect(htmlStyle.to.parseTree.cssRules[0].style.getPropertyValue('color'), 'to equal', '#aaaaaa');
-                    expect(htmlStyle.to.parseTree.cssRules[1].style.getPropertyValue('color'), 'to equal', '#bbbbbb');
+                    var firstHtmlStyle = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[0];
+                    expect(firstHtmlStyle.to.parseTree.cssRules, 'to have length', 2);
+                    expect(firstHtmlStyle.to.parseTree.cssRules[0].style.getPropertyValue('color'), 'to equal', '#aaaaaa');
+                    expect(firstHtmlStyle.to.parseTree.cssRules[1].style.getPropertyValue('color'), 'to equal', '#bbbbbb');
 
                     expect(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[1].node.getAttribute('media'), 'to equal', 'aural and (device-aspect-ratio: 16/9)');
 
-                    var htmlStyle = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[1];
-                    expect(htmlStyle.to.parseTree.cssRules, 'to have length', 2);
-                    expect(htmlStyle.to.parseTree.cssRules[0].style.getPropertyValue('color'), 'to equal', '#cccccc');
-                    expect(htmlStyle.to.parseTree.cssRules[1].style.getPropertyValue('color'), 'to equal', '#dddddd');
+                    var secondHtmlStyle = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[1];
+
+                    expect(secondHtmlStyle.to.parseTree.cssRules, 'to have length', 2);
+                    expect(secondHtmlStyle.to.parseTree.cssRules[0].style.getPropertyValue('color'), 'to equal', '#cccccc');
+                    expect(secondHtmlStyle.to.parseTree.cssRules[1].style.getPropertyValue('color'), 'to equal', '#dddddd');
 
                     expect(assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[2].node.getAttribute('media'), 'to equal', 'screen');
 

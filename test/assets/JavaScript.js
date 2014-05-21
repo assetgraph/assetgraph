@@ -2,8 +2,7 @@
 var expect = require('../unexpected-with-plugins'),
     _ = require('underscore'),
     AssetGraph = require('../../lib'),
-    uglifyJs = AssetGraph.JavaScript.uglifyJs,
-    uglifyAst = AssetGraph.JavaScript.uglifyAst;
+    uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
 describe('assets/JavaScript', function () {
     it('should handle a test case that has a parse error in an inline JavaScript asset', function (done) {

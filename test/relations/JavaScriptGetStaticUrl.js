@@ -23,6 +23,7 @@ describe('relations/JavaScriptGetStaticUrl', function () {
                 assetGraph.findAssets({url: /\/a.json/})[0].url = urlTools.resolveUrl(assetGraph.root, 'static/a76a76a7a.json');
 
                 var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
+                /*jshint evil:true*/
                 expect(new Function(src + ';return theThing;')(), 'to equal', 'static/a76a76a7a.json');
                 expect(new Function(src + ';return theDoubleStarThing;')(), 'to equal', 'json/subsubdir/d.json');
                 expect(new Function(src + ';return theBracketThing;')(), 'to equal', 'json/c.json');
@@ -32,10 +33,10 @@ describe('relations/JavaScriptGetStaticUrl', function () {
                     javaScriptGetStaticUrl.inline();
                 });
 
-                var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
                 expect(new Function(src + ';return theThing;')(), 'to equal', 'static/a76a76a7a.json');
                 expect(new Function(src + ';return theDoubleStarThing;')(), 'to equal', 'json/subsubdir/d.json');
                 expect(new Function(src + ';return theBracketThing;')(), 'to equal', 'json/c.json');
+                /*jshint evil:false*/
             })
             .run(done);
     });
@@ -49,7 +50,7 @@ describe('relations/JavaScriptGetStaticUrl', function () {
                     .loadAssets({
                         url: 'file://' + Path.resolve(__dirname, '..', '..', 'testdata', 'relations', 'JavaScriptGetStaticUrl', 'index2.html'),
                         type: 'Html',
-                        text: "<html><body><script>" + assetGraph.findAssets({type: 'JavaScript'})[0].text + "</script></body></html>"
+                        text: '<html><body><script>' + assetGraph.findAssets({type: 'JavaScript'})[0].text + '</script></body></html>'
                     })
                     .populate()
                     .queue(function (assetGraph) {
@@ -66,6 +67,7 @@ describe('relations/JavaScriptGetStaticUrl', function () {
                         assetGraph.findAssets({url: /\/a.json/})[0].url = urlTools.resolveUrl(assetGraph.root, 'static/a76a76a7a.json');
 
                         var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
+                        /*jshint evil:true*/
                         expect(new Function(src + ';return theThing;')(), 'to equal', 'static/a76a76a7a.json');
                         expect(new Function(src + ';return theDoubleStarThing;')(), 'to equal', 'json/subsubdir/d.json');
                         expect(new Function(src + ';return theBracketThing;')(), 'to equal', 'json/c.json');
@@ -75,10 +77,10 @@ describe('relations/JavaScriptGetStaticUrl', function () {
                             javaScriptGetStaticUrl.inline();
                         });
 
-                        var src = assetGraph.findAssets({type: 'JavaScript'})[0].text;
                         expect(new Function(src + ';return theThing;')(), 'to equal', 'static/a76a76a7a.json');
                         expect(new Function(src + ';return theDoubleStarThing;')(), 'to equal', 'json/subsubdir/d.json');
                         expect(new Function(src + ';return theBracketThing;')(), 'to equal', 'json/c.json');
+                        /*jshint evil:false*/
                     })
                     .run(cb);
             })

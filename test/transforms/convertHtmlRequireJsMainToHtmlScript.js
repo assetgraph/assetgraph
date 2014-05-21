@@ -1,8 +1,5 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    _ = require('underscore'),
-    fs = require('fs'),
-    path = require('path'),
     AssetGraph = require('../../lib');
 
 describe('transforms/convertHtmlRequireJsMainToHtmlScript', function () {

@@ -12,7 +12,7 @@ describe('assets/StaticUrlMap', function () {
                 expect(assetGraph, 'to contain relations', 'JavaScriptGetStaticUrl', 2);
                 expect(assetGraph, 'to contain assets', 'StaticUrlMap', 2);
                 expect(assetGraph, 'to contain relations', 'StaticUrlMapEntry', 4);
-                assetGraph.findAssets({type: 'JavaScript', text: 'alert("ac.js");\n'})[0].url = "http://google.com/foo.js";
+                assetGraph.findAssets({type: 'JavaScript', text: 'alert("ac.js");\n'})[0].url = 'http://google.com/foo.js';
                 assetGraph.findAssets({type: 'Json', parseTree: {iAmQuux: true}})[0].url = urlTools.resolveUrl(assetGraph.root, 'anotherquux.json');
                 expect(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text, 'to match', /google\.com/);
                 expect(assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text, 'to match', /anotherquux.json/);

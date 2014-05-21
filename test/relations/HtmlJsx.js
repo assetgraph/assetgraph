@@ -17,8 +17,8 @@ describe('relations/HtmlJsx', function () {
 
                 var assets = _.pluck(assetGraph.findRelations(), 'to');
 
-                expect(assets[0].text, 'to equal', "'external'\n");
-                expect(assets[1].text, 'to equal', "'inline'");
+                expect(assets[0].text, 'to equal', '\'external\'\n');
+                expect(assets[1].text, 'to equal', '\'inline\'');
             })
             .run(done);
     });

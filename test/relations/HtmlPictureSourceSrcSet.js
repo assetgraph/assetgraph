@@ -1,8 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    _ = require('underscore'),
-    AssetGraph = require('../../lib'),
-    query = AssetGraph.query;
+    AssetGraph = require('../../lib');
 
 describe('relations/HtmlPictureSourceSrcSet', function () {
     it('should handle a test case with an existing <picture srcset="..."> element', function (done) {

@@ -1,8 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
-    uglifyJs = AssetGraph.JavaScript.uglifyJs,
-    uglifyAst = AssetGraph.JavaScript.uglifyAst;
+    uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
 describe('relations/HtmlDataBindAttribute', function () {
     it('should handle a simple test case', function (done) {

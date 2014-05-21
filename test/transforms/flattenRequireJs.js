@@ -386,6 +386,7 @@ describe('transforms/flattenRequireJs', function () {
                 expect(htmlScripts, 'to have length', 3);
                 expect(htmlScripts[0].href, 'to equal', 'require.js');
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
+                    /* jshint ignore:start */
                     (function (global){
                         var signals = function () {return true;};
 
@@ -397,11 +398,14 @@ describe('transforms/flattenRequireJs', function () {
                             global['signals'] = signals;
                         }
                    }(this));
+                    /* jshint ignore:end */
                 });
                 expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
+                    /* jshint ignore:start */
                     require(['signals'], function (myUmdModule) {
                         alert(signals);
                     });
+                    /* jshint ignore:end */
                     define('main',function(){});
                 });
             })
@@ -512,9 +516,11 @@ describe('transforms/flattenRequireJs', function () {
                     define('someOtherDependency', function () {});
                 });
                 expect(htmlScripts[5].to.parseTree, 'to have the same AST as', function () {
+                    /* jshint ignore:start */
                     alert('nonAmdModule2');
                     window.foo = {bar: 'foo dot bar'};
                     define('nonAmdModule2', function () {return foo.bar;});
+                    /* jshint ignore:end */
                 });
                 expect(htmlScripts[6].to.parseTree, 'to have the same AST as', function () {
                     require(['nonAmdModule1', 'nonAmdModule2'], function (nonAmdModule1, nonAmdModule2) {

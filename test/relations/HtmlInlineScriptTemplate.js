@@ -29,7 +29,7 @@ describe('relations/HtmlInlineScriptTemplate', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Html', 2);
                 expect(assetGraph, 'to contain relation', 'HtmlInlineScriptTemplate');
-                expect(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'})[0].to.text, 'to equal', "\n<div>foo<!--ko 'if':true-->bar<!--/ko-->quux</div>\n");
+                expect(assetGraph.findRelations({type: 'HtmlInlineScriptTemplate'})[0].to.text, 'to equal', '\n<div>foo<!--ko \'if\':true-->bar<!--/ko-->quux</div>\n');
 
                 var inlineHtml = assetGraph.findAssets({type: 'Html', isInline: true})[0],
                     document = inlineHtml.parseTree;
