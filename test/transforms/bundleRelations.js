@@ -339,6 +339,20 @@ describe('transforms/bundleRelations', function () {
                 .run(done);
         });
 
+        it('should handle script tags interrupted by an unloaded script', function (done) {
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/unloadedScript/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    assetGraph.findAssets({fileName: 'b.js'})[0].unload();
+                })
+                .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'JavaScript', 2);
+                })
+                .run(done);
+        });
+
         it('should handle script tags in both <head> and <body>', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptsInHead/'})
                 .loadAssets('index.html')
