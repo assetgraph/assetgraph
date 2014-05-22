@@ -155,7 +155,7 @@ describe('transforms/bundleRelations', function () {
                 .run(done);
         });
 
-        it('should respect the nobundle attribute', function (done) {
+        it('should not bundle scripts with additional attributes', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/skippedScripts/'})
                 .loadAssets('index.html')
                 .populate()
@@ -164,7 +164,7 @@ describe('transforms/bundleRelations', function () {
                     expect(assetGraph, 'to contain asset', 'Html');
                     expect(assetGraph, 'to contain assets', 'JavaScript', 5);
                 })
-                .bundleRelations({type: 'HtmlScript', node: function (node) {return !node.hasAttribute('nobundle');}}, {strategyName: 'oneBundlePerIncludingAsset'})
+                .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain assets', 'JavaScript', 4);
                     expect(assetGraph.findRelations({type: 'HtmlScript'}).map(function (htmlScript) {
@@ -179,6 +179,31 @@ describe('transforms/bundleRelations', function () {
                 .run(done);
         });
 
+        it('treat defer="defer" and async="async" as bundle discriminators and treat additional attributes like "nobundle"', function (done) {
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlScriptAttributes'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 12);
+                    expect(assetGraph, 'to contain asset', 'Html');
+                    expect(assetGraph, 'to contain assets', 'JavaScript', 11);
+                    expect(assetGraph, 'to contain relations', 'HtmlScript', 11);
+                })
+                .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain relations', 'HtmlScript', 6);
+                    var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
+                    expect(htmlScripts[0].to.text, 'to equal', 'alert("a");alert("b");alert("c");');
+                    expect(htmlScripts[1].node.getAttribute('data-foo'), 'to equal', 'bar');
+                    expect(htmlScripts[1].to.text, 'to equal', 'alert("d");');
+                    expect(htmlScripts[2].to.text, 'to equal', 'alert("e");');
+                    expect(htmlScripts[3].to.text, 'to equal', 'alert("f");alert("g");');
+                    expect(htmlScripts[4].to.text, 'to equal', 'alert("h");alert("i");');
+                    expect(htmlScripts[5].to.text, 'to equal', 'alert("j");alert("k");');
+                })
+                .run(done);
+        });
+
         it('should gather all the copyright notices and put them at the top of the bundle', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/copyrightNotices/'})
                 .loadAssets('index.html')
@@ -186,6 +211,32 @@ describe('transforms/bundleRelations', function () {
                 .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
                 .queue(function (assetGraph) {
                     expect(assetGraph.findAssets({type: 'JavaScript'})[0].text,'to match', /\/\*! Copyright a \*\/[\s\S]*\/\*! Copyright c \*\//);
+                })
+                .run(done);
+        });
+
+        it('should not bundle stylesheets with additional attributes on the tag', function (done) {
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlStyleAttributes'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 10);
+                    expect(assetGraph, 'to contain asset', 'Html');
+                    expect(assetGraph, 'to contain assets', 'Css', 9);
+                    expect(assetGraph, 'to contain relations', 'HtmlStyle', 9);
+                })
+                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'})
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain relations', 'HtmlStyle', 5);
+                    var htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'});
+                    expect(htmlStyles[0].to.text, 'to equal', 'body{color:#000}body{color:#111}body{color:#222}');
+                    expect(htmlStyles[1].node.getAttribute('data-foo'), 'to equal', 'bar');
+                    expect(htmlStyles[1].to.text, 'to equal', 'body {color: #333;}');
+                    expect(htmlStyles[2].to.text, 'to equal', 'body {color: #444;}');
+                    expect(htmlStyles[3].node.getAttribute('media'), 'to equal', 'screen');
+                    expect(htmlStyles[3].to.text, 'to equal', 'body{color:#555}body{color:#666}');
+                    expect(htmlStyles[4].node.getAttribute('media'), 'to equal', 'projection');
+                    expect(htmlStyles[4].to.text, 'to equal', 'body{color:#777}body{color:#888}');
                 })
                 .run(done);
         });
@@ -497,6 +548,57 @@ describe('transforms/bundleRelations', function () {
                     expect(assetGraph, 'to contain assets', 'JavaScript', 2);
                     expect(assetGraph, 'to contain asset', {type: 'JavaScript', text: 'alert("a");\n'});
                     expect(assetGraph, 'to contain asset', {type: 'JavaScript', text: 'alert("b");\n'});
+                })
+                .run(done);
+        });
+
+        it('treat defer="defer" and async="async" as bundle discriminators and treat additional attributes like "nobundle"', function (done) {
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlScriptAttributes'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 12);
+                    expect(assetGraph, 'to contain asset', 'Html');
+                    expect(assetGraph, 'to contain assets', 'JavaScript', 11);
+                    expect(assetGraph, 'to contain relations', 'HtmlScript', 11);
+                })
+                .bundleRelations({type: 'HtmlScript'}, {strategyName: 'sharedBundles'})
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain relations', 'HtmlScript', 6);
+                    var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
+                    expect(htmlScripts[0].to.text, 'to equal', 'alert("a");alert("b");alert("c");');
+                    expect(htmlScripts[1].node.getAttribute('data-foo'), 'to equal', 'bar');
+                    expect(htmlScripts[1].to.text, 'to equal', 'alert("d");');
+                    expect(htmlScripts[2].to.text, 'to equal', 'alert("e");');
+                    expect(htmlScripts[3].to.text, 'to equal', 'alert("f");alert("g");');
+                    expect(htmlScripts[4].to.text, 'to equal', 'alert("h");alert("i");');
+                    expect(htmlScripts[5].to.text, 'to equal', 'alert("j");alert("k");');
+                })
+                .run(done);
+        });
+
+        it('should not bundle stylesheets with additional attributes on the tag', function (done) {
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlStyleAttributes'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 10);
+                    expect(assetGraph, 'to contain asset', 'Html');
+                    expect(assetGraph, 'to contain assets', 'Css', 9);
+                    expect(assetGraph, 'to contain relations', 'HtmlStyle', 9);
+                })
+                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'sharedBundles'})
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain relations', 'HtmlStyle', 5);
+                    var htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'});
+                    expect(htmlStyles[0].to.text, 'to equal', 'body{color:#000}body{color:#111}body{color:#222}');
+                    expect(htmlStyles[1].node.getAttribute('data-foo'), 'to equal', 'bar');
+                    expect(htmlStyles[1].to.text, 'to equal', 'body {color: #333;}');
+                    expect(htmlStyles[2].to.text, 'to equal', 'body {color: #444;}');
+                    expect(htmlStyles[3].node.getAttribute('media'), 'to equal', 'screen');
+                    expect(htmlStyles[3].to.text, 'to equal', 'body{color:#555}body{color:#666}');
+                    expect(htmlStyles[4].node.getAttribute('media'), 'to equal', 'projection');
+                    expect(htmlStyles[4].to.text, 'to equal', 'body{color:#777}body{color:#888}');
                 })
                 .run(done);
         });
