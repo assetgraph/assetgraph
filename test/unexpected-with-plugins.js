@@ -51,13 +51,15 @@ expect.addAssertion('to contain [no] (relation|relations) [including unresolved]
     expect(subject.findRelations(queryObj, this.flags['including unresolved']).length, 'to equal', number);
 });
 
-function toAst(assetOrFunctionOrAst) {
-    if (assetOrFunctionOrAst.isAsset) {
-        return assetOrFunctionOrAst.parseTree;
-    } else if (typeof assetOrFunctionOrAst === 'function') {
-        return uglifyJs.parse(assetOrFunctionOrAst.toString().replace(/^function[^\(]*?\(\)\s*\{|\}$/g, ''));
+function toAst(stringOrAssetOrFunctionOrAst) {
+    if (typeof stringOrAssetOrFunctionOrAst === 'string') {
+        return uglifyJs.parse(stringOrAssetOrFunctionOrAst);
+    } else if (stringOrAssetOrFunctionOrAst.isAsset) {
+        return stringOrAssetOrFunctionOrAst.parseTree;
+    } else if (typeof stringOrAssetOrFunctionOrAst === 'function') {
+        return uglifyJs.parse(stringOrAssetOrFunctionOrAst.toString().replace(/^function[^\(]*?\(\)\s*\{|\}$/g, ''));
     } else {
-        return assetOrFunctionOrAst;
+        return stringOrAssetOrFunctionOrAst;
     }
 }
 
@@ -127,6 +129,23 @@ expect.addType({
                 from: relation.from.urlOrDescription,
                 to: relation.to.urlOrDescription
             }
+        };
+    }
+});
+
+expect.addType({
+    identify: function (obj) {
+        return obj instanceof uglifyJs.AST_Node;
+    },
+    equal: function (a, b) {
+        return a.equivalent_to(b);
+    },
+    inspect: function (astNode) {
+        return '[AST: ' + astNode.print_to_string() + ']';
+    },
+    toJSON: function (astNode) {
+        return {
+            $Ast: astNode.print_to_string()
         };
     }
 });
