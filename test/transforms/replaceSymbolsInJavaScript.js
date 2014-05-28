@@ -60,4 +60,70 @@ describe('replaceSymbolsInJavaScript', function () {
             /* jshint ignore:end */
         }, done);
     });
+
+    it('should replace nested value with dot notation', function (done) {
+        expect({
+            text: 'var bar = FOO.quux;',
+            defines: {
+                FOO: {quux: 'baz'}
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            var bar = 'baz';
+            /* jshint ignore:end */
+        }, done);
+    });
+
+    it('should replace nested value with bracket notation', function (done) {
+        expect({
+            text: 'var bar = FOO["quux"];',
+            defines: {
+                FOO: {quux: 'baz'}
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            var bar = 'baz';
+            /* jshint ignore:end */
+        }, done);
+    });
+
+    it('should replace nested value with mixed notation', function (done) {
+        expect({
+            text: 'var bar = FOO["quux"].baz;',
+            defines: {
+                FOO: { quux: { baz: 'foo' } }
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            var bar = 'foo';
+            /* jshint ignore:end */
+        }, done);
+    });
+
+    it('should not replace nested value if no value is found', function (done) {
+        // assetGraph will emit a warning telling you what went wrong...
+        expect({
+            text: 'var bar = FOO["quux"];',
+            defines: {
+                FOO: { bar: 'baz' }
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            var bar = FOO['quux'];
+            /* jshint ignore:end */
+        }, done);
+    });
+
+    it.skip('should not proceed if contents of brackets is not a constant', function (done) {
+        expect({
+            text: 'var bar = FOO[function () { return "NO"; }];',
+            defines: {
+                FOO: { bar: 'baz' }
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            var bar = { bar: 'baz' }[function () { return "NO"; }];
+            /* jshint ignore:end */
+        }, done);
+    });
 });
