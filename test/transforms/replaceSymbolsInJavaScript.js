@@ -126,4 +126,44 @@ describe('replaceSymbolsInJavaScript', function () {
             /* jshint ignore:end */
         }, done);
     });
+
+    // Wishful thinking:
+    it.skip('should support dot notation in the LHS', function (done) {
+        expect({
+            text: 'console.log(123);',
+            defines: {
+                'console.log': 'foo.bar'
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            foo.bar(123);
+            /* jshint ignore:end */
+        }, done);
+    });
+
+    it.skip('should support bracket notation in the LHS', function (done) {
+        expect({
+            text: 'alert(123 + hereIs["the thing"]);',
+            defines: {
+                'hereIs["the thing"]': 987
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            alert(123 + 987);
+            /* jshint ignore:end */
+        }, done);
+    });
+
+    it.skip('should support a complex expression in the LHS', function (done) {
+        expect({
+            text: '123 + foo(1 + 2);',
+            defines: {
+                'foo(1 + 2)': '456'
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            123 + 456;
+            /* jshint ignore:end */
+        }, done);
+    });
 });
