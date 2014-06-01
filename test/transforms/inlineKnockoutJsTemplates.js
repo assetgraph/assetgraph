@@ -33,7 +33,7 @@ describe('transforms/inlineKnockoutJsTemplates', function () {
             .run(done);
     });
 
-    it('should not touch scripts inside templates that are not loaded via require.js', function (done) {
+    it('should not touch scripts inside templates that do not have a file extension of .ko', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineKnockoutJsTemplates/noTplPlugin/'})
             .loadAssets('index.html')
             .populate()
