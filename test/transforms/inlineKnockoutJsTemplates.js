@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/inlineKnockoutJsTemplates', function () {
     it('should handle a test case with Knockout.js templates loaded using the tpl plugin', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineKnockoutJsTemplates/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineKnockoutJsTemplates/tplPlugin/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -29,6 +29,25 @@ describe('transforms/inlineKnockoutJsTemplates', function () {
                 relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'bar'; }})[0];
                 expect(relation, 'to be ok');
                 expect(relation.to.text, 'to equal', '<div>\n    <h1>bar.ko</h1>\n</div>\n');
+            })
+            .run(done);
+    });
+
+    it('should not touch scripts inside templates that are not loaded via require.js', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineKnockoutJsTemplates/noTplPlugin/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 'Html', 3);
+                expect(assetGraph, 'to contain assets', {type: 'Html', isFragment: true}, 2);
+                expect(assetGraph, 'to contain assets', {type: 'Html', isInline: true}, 1);
+            })
+            .inlineKnockoutJsTemplates()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 'Html', 3);
+                expect(assetGraph, 'to contain assets', {type: 'Html', isFragment: true}, 2);
+                expect(assetGraph, 'to contain assets', {type: 'Html', isInline: true}, 1);
+                expect(assetGraph.findAssets({fileName: 'test.html'})[0].text, 'to contain', '<script');
             })
             .run(done);
     });
