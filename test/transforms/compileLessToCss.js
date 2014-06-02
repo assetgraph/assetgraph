@@ -1,11 +1,12 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
+    Path = require('path'),
     query = AssetGraph.query;
 
 describe('transforms/compileLessToCss', function () {
     it('should compile all Less assets to Css', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/combo/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: query.not(/^http:/)}}})
             .queue(function (assetGraph) {
@@ -32,6 +33,86 @@ describe('transforms/compileLessToCss', function () {
                     '  border-color: #7d2717;\n' +
                     '}\n'
                 );
+            })
+            .run(done);
+    });
+
+    it('should emit parse errors as warnings', function (done) {
+        var warnings = [];
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/parseError/'})
+            .on('warn', function (err) {
+                warnings.push(err);
+            })
+            .loadAssets('index.less')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Less');
+            })
+            .compileLessToCss({type: 'Less'})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Less');
+                expect(warnings, 'to have length', 1);
+                expect(warnings[0].message, 'to equal', 'missing opening `{` in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileLessToCss/parseError/index.less')) + ' at line 2, column 0:\n}\n\n');
+            })
+            .run(done);
+    });
+
+    it('should emit parse errors in @imported files as warnings', function (done) {
+        var warnings = [];
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/parseErrorInImport/'})
+            .on('warn', function (err) {
+                warnings.push(err);
+            })
+            .loadAssets('index.less')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Less');
+            })
+            .compileLessToCss({type: 'Less'})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Less');
+                expect(warnings, 'to have length', 1);
+                expect(warnings[0].message, 'to equal', 'missing opening `{` in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileLessToCss/parseErrorInImport/imported.less')) + ' at line 2, column 0:\n}\n\n');
+            })
+            .run(done);
+    });
+
+    it('should emit invalid references as warnings', function (done) {
+        var warnings = [];
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/invalidReference/'})
+            .on('warn', function (err) {
+                warnings.push(err);
+            })
+            .loadAssets('index.less')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Less');
+            })
+            .compileLessToCss({type: 'Less'})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Less');
+                expect(warnings, 'to have length', 1);
+                expect(warnings[0].message, 'to equal', '.notFound is undefined in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileLessToCss/invalidReference/index.less')) + ' at line 2, column 4:\n.foo {\n    .notFound()\n}');
+            })
+            .run(done);
+    });
+
+    it('should emit invalid references in @imported files as warnings', function (done) {
+        var warnings = [];
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/invalidReferenceInImport/'})
+            .on('warn', function (err) {
+                warnings.push(err);
+            })
+            .loadAssets('index.less')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Less');
+            })
+            .compileLessToCss({type: 'Less'})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Less');
+                expect(warnings, 'to have length', 1);
+                expect(warnings[0].message, 'to equal', '.notFound is undefined in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileLessToCss/invalidReferenceInImport/imported.less')) + ' at line 2, column 4:\n.foo {\n    .notFound()\n}');
             })
             .run(done);
     });
