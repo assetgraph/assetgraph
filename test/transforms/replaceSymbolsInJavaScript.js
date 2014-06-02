@@ -1,9 +1,15 @@
-/*global describe, it*/
+/*global describe, it, beforeEach*/
 var unexpected = require('../unexpected-with-plugins'),
+    passError = require('passerror'),
     AssetGraph = require('../../lib/'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
 describe('replaceSymbolsInJavaScript', function () {
+    var assetGraph;
+    beforeEach(function () {
+        assetGraph = new AssetGraph();
+    });
+
     var expect = unexpected.clone().addAssertion('to come out as', function (expect, subject, value, done) {
         // subject.code, subject.defines
         expect(subject, 'to be an object');
@@ -17,7 +23,7 @@ describe('replaceSymbolsInJavaScript', function () {
         } else if (Buffer.isBuffer(subject.rawSrc)) {
             assetConfig.rawSrc = subject.rawSrc;
         }
-        new AssetGraph()
+        assetGraph
             .loadAssets(new AssetGraph.JavaScript(assetConfig))
             .replaceSymbolsInJavaScript({type: 'JavaScript'}, subject.defines || {})
             .queue(function (assetGraph) {
@@ -101,7 +107,10 @@ describe('replaceSymbolsInJavaScript', function () {
     });
 
     it('should not replace nested value if no value is found', function (done) {
-        // assetGraph will emit a warning telling you what went wrong...
+        var warnings = [];
+        assetGraph.on('warn', function (err) {
+            warnings.push(err);
+        });
         expect({
             text: 'var bar = FOO["quux"];',
             defines: {
@@ -111,7 +120,11 @@ describe('replaceSymbolsInJavaScript', function () {
             /* jshint ignore:start */
             var bar = FOO['quux'];
             /* jshint ignore:end */
-        }, done);
+        }, passError(done, function () {
+            expect(warnings, 'to have length', 1);
+            expect(warnings[0].message, 'to equal', 'Trying to replace with non-existent key "quux" on FOO');
+            done();
+        }));
     });
 
     it.skip('should not proceed if contents of brackets is not a constant', function (done) {
