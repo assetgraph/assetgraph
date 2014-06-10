@@ -23,6 +23,7 @@
     "httperrors": "=0.2.0",
     "imageinfo": "=1.0.4",
     "jsdom": "=0.10.6",
+    "lodash": "^2.4.1",
     "mkdirp": "=0.3.5",
     "normalizeurl": "=0.1.2",
     "optimist": "=0.6.1",
@@ -33,7 +34,6 @@
     "source-map": "=0.1.33",
     "uglify-js-papandreou": "=2.4.13-patch1",
     "uglifyast": "=0.3.1",
-    "underscore": "=1.6.0",
     "urltools": "=0.1.0",
     "xmldom": "=0.1.19"
   },
