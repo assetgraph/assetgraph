@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
-    _ = require('underscore');
+    _ = require('lodash');
 
 describe('transforms/splitCssIfIeLimitIsReached', function () {
     it('should handle a simple Css test case', function (done) {

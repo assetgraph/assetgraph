@@ -1,7 +1,7 @@
 /*global describe, it*/
 var AssetGraph = require('../../lib'),
     expect = require('../unexpected-with-plugins'),
-    _ = require('underscore');
+    _ = require('lodash');
 
 describe('relations/Relation', function () {
     describe('#href', function () {

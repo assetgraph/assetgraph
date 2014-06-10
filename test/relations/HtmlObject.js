@@ -1,5 +1,5 @@
 /*global describe, it*/
-var _ = require('underscore'),
+var _ = require('lodash'),
     expect = require('../unexpected-with-plugins'),
     urlTools = require('urltools'),
     AssetGraph = require('../../lib');
