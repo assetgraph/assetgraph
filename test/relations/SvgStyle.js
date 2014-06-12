@@ -1,6 +1,5 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    _ = require('lodash'),
     AssetGraph = require('../../lib');
 
 describe('relations/SvgStyle', function () {
