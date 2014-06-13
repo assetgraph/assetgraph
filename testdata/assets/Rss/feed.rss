@@ -2,7 +2,7 @@
 <rss version="2.0">
     <channel>
       <title>Example Channel</title>
-      <link>http://www.example.com/</link>
+      <link>bar.html</link>
       <description>This is the channel description</description>
       <item>
           <description>This contains an image: &lt;img src="foo.png"&gt; and a &lt;a href="bar.html"&gt;relative link&lt;/a&gt;</description>
