@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "async": "=0.2.9",
+    "chalk": "=0.4.0",
     "createerror": "=0.4.1",
     "cssmin": "=0.3.1",
     "cssom-papandreou": "=0.2.4-patch4",
@@ -23,7 +24,7 @@
     "httperrors": "=0.2.0",
     "imageinfo": "=1.0.4",
     "jsdom": "=0.10.6",
-    "lodash": "^2.4.1",
+    "lodash": "=2.4.1",
     "mkdirp": "=0.3.5",
     "normalizeurl": "=0.1.2",
     "optimist": "=0.6.1",
