@@ -8,8 +8,8 @@ describe('relations/HtmlInlineFragment', function () {
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 4);
-                expect(assetGraph, 'to contain assets', 'Html', 2);
+                expect(assetGraph, 'to contain assets', 5);
+                expect(assetGraph, 'to contain assets', 'Html', 3);
                 expect(assetGraph, 'to contain assets', 'Rss', 1);
                 expect(assetGraph, 'to contain assets', 'Png', 1);
                 expect(assetGraph, 'to contain relation', 'HtmlInlineFragment');
