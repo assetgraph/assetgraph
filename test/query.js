@@ -15,7 +15,7 @@ describe('query', function () {
         done();
     });
 
-    it ('it should implement boolean AND correctly', function (done) {
+    it('it should implement boolean AND correctly', function (done) {
         var andQuery = query.and({
                 type: 'Html'
             },
@@ -86,7 +86,7 @@ describe('query', function () {
         done();
     });
 
-    it ('it should implement boolean OR correctly', function (done) {
+    it('it should implement boolean OR correctly', function (done) {
         var orQuery = query.or({
                 type: 'Html'
             },
@@ -145,6 +145,68 @@ describe('query', function () {
             }
         ], 'to be an array whose items satisfy', function (item) {
             expect(orQuery(item), 'to be false');
+        });
+
+        done();
+    });
+
+    it('it should implement boolean NOT correctly', function (done) {
+        var notQuery = query.not({
+                type: 'Html'
+            });
+
+        expect(notQuery, 'to be a function');
+
+        expect([
+            {},
+            {
+                type: 'JavaScript',
+                isInline: true
+            },
+            {
+                type: 'Css',
+                foo: 'bar'
+            },
+            {
+                type: 'HtmlTemplate',
+                inline: function () { return 'foo'; }
+            },
+            {
+                isInline: true,
+                matcher: /^http:/
+            },
+            {
+                type: 'Xml',
+                isInline: true,
+                amount: 10
+            }
+        ], 'to be an array whose items satisfy', function (item) {
+            expect(notQuery(item), 'to be true');
+        });
+
+        expect([
+            {
+                type: 'Html',
+                isInline: true
+            },
+            {
+                type: 'Html',
+                isInline: false
+            },
+            {
+                type: 'Html'
+            },
+            {
+                type: 'Html',
+                isRepetitive: true
+            },
+            {
+                type: 'Html',
+                isInline: true,
+                amount: 10
+            }
+        ], 'to be an array whose items satisfy', function (item) {
+            expect(notQuery(item), 'to be false');
         });
 
         done();
