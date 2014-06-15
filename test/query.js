@@ -14,4 +14,75 @@ describe('query', function () {
 
         done();
     });
+
+    it ('it should implement boolean AND correctly', function (done) {
+        var andQuery = query.and({
+                type: 'Html'
+            },
+            {
+                isInline: false
+            });
+
+        expect(andQuery, 'to be a function');
+
+        expect([
+            {
+                type: 'Html',
+                isInline: false
+            },
+            {
+                type: 'Html',
+                isInline: false,
+                foo: 'bar'
+            },
+            {
+                type: 'Html',
+                isInline: false,
+                inline: function () { return 'foo'; }
+            },
+            {
+                type: 'Html',
+                isInline: false,
+                matcher: /^http:/
+            },
+            {
+                type: 'Html',
+                isInline: false,
+                amount: 10
+            }
+        ], 'to be an array whose items satisfy', function (item) {
+            expect(andQuery(item), 'to be true');
+        });
+
+        expect([
+            {
+                type: 'JavaScript',
+                isInline: false
+            },
+            {
+                type: 'Css',
+                isInline: false,
+                foo: 'bar'
+            },
+            {
+                type: 'HtmlTemplate',
+                isInline: false,
+                inline: function () { return 'foo'; }
+            },
+            {
+                type: 'Html',
+                isInline: true,
+                matcher: /^http:/
+            },
+            {
+                type: 'Xml',
+                isInline: true,
+                amount: 10
+            }
+        ], 'to be an array whose items satisfy', function (item) {
+            expect(andQuery(item), 'to be false');
+        });
+
+        done();
+    });
 });
