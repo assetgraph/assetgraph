@@ -85,4 +85,68 @@ describe('query', function () {
 
         done();
     });
+
+    it ('it should implement boolean OR correctly', function (done) {
+        var orQuery = query.or({
+                type: 'Html'
+            },
+            {
+                isInline: false
+            });
+
+        expect(orQuery, 'to be a function');
+
+        expect([
+            {
+                type: 'Html',
+                isInline: true
+            },
+            {
+                type: 'Html',
+                isInline: false
+            },
+            {
+                type: 'Html'
+            },
+            {
+                isInline: false
+            },
+            {
+                type: 'Html',
+                isInline: true,
+                amount: 10
+            }
+        ], 'to be an array whose items satisfy', function (item) {
+            expect(orQuery(item), 'to be true');
+        });
+
+        expect([
+            {},
+            {
+                type: 'JavaScript',
+                isInline: true
+            },
+            {
+                type: 'Css',
+                foo: 'bar'
+            },
+            {
+                type: 'HtmlTemplate',
+                inline: function () { return 'foo'; }
+            },
+            {
+                isInline: true,
+                matcher: /^http:/
+            },
+            {
+                type: 'Xml',
+                isInline: true,
+                amount: 10
+            }
+        ], 'to be an array whose items satisfy', function (item) {
+            expect(orQuery(item), 'to be false');
+        });
+
+        done();
+    });
 });
