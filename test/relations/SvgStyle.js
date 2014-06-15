@@ -7,7 +7,6 @@ describe('relations/SvgStyle', function () {
         new AssetGraph({root: __dirname + '/../../testdata/relations/SvgStyle/'})
             .loadAssets('kiwi.svg')
             .populate()
-            .drawGraph('debug.svg')
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Svg', 1);
                 expect(assetGraph, 'to contain relations', 'SvgStyle', 1);
@@ -24,18 +23,52 @@ describe('relations/SvgStyle', function () {
                 var clone = assetGraph.findAssets({ type: 'Css' })[0].clone();
                 clone.url = undefined;
                 var svg = assetGraph.findAssets({ type: 'Svg' })[0];
-                var svgStyle = new AssetGraph.SvgStyle({
+                var cloneSvgStyle = new AssetGraph.SvgStyle({
                     to: clone
                 });
 
-                // TODO: Test inserting first with and without existing style node in place
+                // Test inserting first without existing style node in place
+                cloneSvgStyle.attach(svg, 'first');
+
+                expect(assetGraph, 'to contain assets', 'Svg', 1);
+                expect(assetGraph, 'to contain relations', 'XmlStylesheet', 1);
+                expect(assetGraph, 'to contain relations', 'SvgStyle', 1);
+                expect(assetGraph, 'to contain assets', 'Css', 2);
+                expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[0], 'to be', cloneSvgStyle.node);
+
+                // Test inserting first with existing style node in place
+                var svgStyle = new AssetGraph.SvgStyle({
+                    to: clone.clone()
+                });
+
                 svgStyle.attach(svg, 'first');
 
-                // TODO: Test these. Seems broken calling super classes directly
-                // svgStyle.attach(svg, 'before');
-                // svgStyle.attach(svg, 'after');
+                expect(assetGraph, 'to contain assets', 'Svg', 1);
+                expect(assetGraph, 'to contain relations', 'XmlStylesheet', 1);
+                expect(assetGraph, 'to contain relations', 'SvgStyle', 2);
+                expect(assetGraph, 'to contain assets', 'Css', 3);
+                expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[0], 'to be', svgStyle.node);
+                expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[1], 'to be', cloneSvgStyle.node);
 
-                console.log(svg.text);
+                // Attach relation after other node
+                svgStyle.attach(svg, 'after', cloneSvgStyle);
+
+                expect(assetGraph, 'to contain assets', 'Svg', 1);
+                expect(assetGraph, 'to contain relations', 'XmlStylesheet', 1);
+                expect(assetGraph, 'to contain relations', 'SvgStyle', 2);
+                expect(assetGraph, 'to contain assets', 'Css', 3);
+                expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[0], 'to be', cloneSvgStyle.node);
+                expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[1], 'to be', svgStyle.node);
+
+                // Attach relation before other node
+                svgStyle.attach(svg, 'before', cloneSvgStyle);
+
+                expect(assetGraph, 'to contain assets', 'Svg', 1);
+                expect(assetGraph, 'to contain relations', 'XmlStylesheet', 1);
+                expect(assetGraph, 'to contain relations', 'SvgStyle', 2);
+                expect(assetGraph, 'to contain assets', 'Css', 3);
+                expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[0], 'to be', svgStyle.node);
+                expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[1], 'to be', cloneSvgStyle.node);
             })
             .run(done);
     });
