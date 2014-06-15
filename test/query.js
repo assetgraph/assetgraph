@@ -245,6 +245,7 @@ describe('query', function () {
 
         var matcher = query.createValueMatcher(buf);
 
+        expect(Buffer.isBuffer(buf), 'to be true');
         expect(matcher, 'to be a function');
 
         expect(matcher(new Buffer('Lorem Ipsum is simply dummy text of the printing and typesetting industry.')), 'to be true');
