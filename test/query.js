@@ -239,4 +239,32 @@ describe('query', function () {
 
         done();
     });
+
+    it('should implement Buffer matching', function (done) {
+        var buf = new Buffer('Lorem Ipsum is simply dummy text of the printing and typesetting industry.');
+
+        var matcher = query.createValueMatcher(buf);
+
+        expect(matcher, 'to be a function');
+
+        expect(matcher(new Buffer('Lorem Ipsum is simply dummy text of the printing and typesetting industry.')), 'to be true');
+
+        expect([
+            new Buffer('Lorem Ipsum is simply dummy text of the printing and typesetting industry'),
+            new Buffer('Lorem Ipsum is simply Dummy text of the printing and typesetting industry.'),
+            new Buffer('lorem Ipsum is simply dummy text of the printing and typesetting industry.'),
+            new Buffer('Lrem Ipsum is simply dummy text of the printing and typesetting industry.'),
+            new Buffer('I am a fish!'),
+            false,
+            true,
+            /^http:/,
+            9999,
+            function () { return true; },
+            {}
+        ], 'to be an array whose items satisfy', function (item) {
+            expect(matcher(item), 'to be false');
+        });
+
+        done();
+    });
 });
