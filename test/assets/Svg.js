@@ -18,9 +18,9 @@ describe('assets/Svg', function () {
                 expect(assetGraph, 'to contain relation', 'SvgScript');
                 expect(assetGraph, 'to contain relation', 'SvgStyleAttribute');
                 expect(assetGraph, 'to contain relation', 'CssImage');
-                expect(assetGraph, 'to contain relations', 'SvgStyle', 2);
+                expect(assetGraph, 'to contain relation', 'SvgStyle');
                 expect(assetGraph, 'to contain relation', 'SvgFontFaceUri');
-                expect(assetGraph, 'to contain relation', 'XmlStylesheet');
+                expect(assetGraph, 'to contain relations', 'XmlStylesheet', 2);
                 expect(assetGraph, 'to contain relation', 'SvgInlineEventHandler');
                 expect(assetGraph, 'to contain relation', 'SvgAnchor');
             })

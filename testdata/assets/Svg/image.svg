@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?xml-stylesheet href="transform.xsl" type="application/xml"?>
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="dialog-information.svg" sodipodi:docbase="/home/garrett/Source/tango-icon-theme/scalable/status" inkscape:version="0.46" sodipodi:version="0.32" id="svg19655" height="48px" width="48px" inkscape:export-filename="/home/jimmac/Desktop/poing.png" inkscape:export-xdpi="392.72742" inkscape:export-ydpi="392.72742" inkscape:output_extension="org.inkscape.output.svg.inkscape">
+<?xml-stylesheet href="transform.xsl" type="application/xml+xslt"?>
+<?xml-stylesheet href="external.css" type="text/css"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <style type="text/css">
-        #foo {background-color: red;}
+        rect { stroke: purple;}
     </style>
     <font-face font-family="blabla">
       <font-face-src>
         <font-face-uri xlink:href="fontawesome-webfont.ttf" />
       </font-face-src>
     </font-face>
-    <style xlink:href="external.css" />
     <script type="text/javascript" xlink:href="script.js" />
     <image onclick="alert('hey')" x="2cm" y="2cm" width="5cm" height="5cm" id="img" xlink:href="foo.png"></image>
     <rect x="200" y="100" width="600" height="300" fill="red" stroke="blue" stroke-width="3" style="background-image: url(bar.png);"/>
