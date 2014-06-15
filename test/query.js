@@ -3,7 +3,7 @@ var expect = require('./unexpected-with-plugins'),
     query = require('../lib').query;
 
 describe('query', function () {
-    it('it should throw on error conditions', function (done) {
+    it('should throw on error conditions', function (done) {
         expect(function andUndefined() { query.and(); }, 'to throw');
         expect(function andSingle() { query.and({}); }, 'to throw');
 
@@ -15,7 +15,7 @@ describe('query', function () {
         done();
     });
 
-    it('it should implement boolean AND correctly', function (done) {
+    it('should implement boolean AND correctly', function (done) {
         var andQuery = query.and({
                 type: 'Html'
             },
@@ -86,7 +86,7 @@ describe('query', function () {
         done();
     });
 
-    it('it should implement boolean OR correctly', function (done) {
+    it('should implement boolean OR correctly', function (done) {
         var orQuery = query.or({
                 type: 'Html'
             },
@@ -150,7 +150,7 @@ describe('query', function () {
         done();
     });
 
-    it('it should implement boolean NOT correctly', function (done) {
+    it('should implement boolean NOT correctly', function (done) {
         var notQuery = query.not({
                 type: 'Html'
             });
@@ -207,6 +207,34 @@ describe('query', function () {
             }
         ], 'to be an array whose items satisfy', function (item) {
             expect(notQuery(item), 'to be false');
+        });
+
+        done();
+    });
+
+    it('should implement string prefix matching', function (done) {
+        var prefixMatcher = query.createPrefixMatcher('http');
+
+        expect(prefixMatcher, 'to be a function');
+
+        expect([
+            'http://fisk.dk',
+            'http://cnn.com',
+            'http://asetgraph.org',
+            'https://github.com',
+            'https://twitter.com'
+        ], 'to be an array whose items satisfy', function (item) {
+            expect(prefixMatcher(item), 'to be true');
+        });
+
+        expect([
+            ' http://fisk.dk',
+            'htp://cnn.com',
+            'ftp+http://asetgraph.org',
+            'ftp://github.com',
+            'gopher://twitter.com'
+        ], 'to be an array whose items satisfy', function (item) {
+            expect(prefixMatcher(item), 'to be false');
         });
 
         done();
