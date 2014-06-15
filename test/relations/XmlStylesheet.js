@@ -15,9 +15,7 @@ describe('relations/XmlStylesheet', function () {
                 expect(assetGraph, 'to contain relations', 'XmlStylesheet', 1);
                 expect(assetGraph, 'to contain assets', 'Css', 1);
 
-                var svg = assetGraph.findAssets({ type: 'Svg' })[0];
-
-                expect(assetGraph.findRelations()[0].href, 'to be', '2.css');
+                expect(assetGraph.findRelations()[0].href, 'to be', assetGraph.findAssets({ type: 'Css' })[0].id + '.css');
 
                 assetGraph.findAssets({
                     type: 'Css'
