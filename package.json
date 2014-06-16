@@ -15,6 +15,7 @@
     }
   ],
   "dependencies": {
+    "accord": "=0.11.0",
     "async": "=0.2.9",
     "chalk": "=0.4.0",
     "createerror": "=0.4.1",
