@@ -60,4 +60,37 @@ describe('relations/SvgScript', function () {
             })
             .run(done);
     });
+
+    it('should attach correctly in the parent document', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+            .loadAssets('logo-external.svg')
+            .populate()
+            .inlineRelations()
+            .queue(function (assetGraph) {
+                var svg = assetGraph.findAssets({ type: 'Svg' })[0];
+                var docEl = assetGraph.findAssets({ type: 'Svg' })[0].parseTree;
+                var svgEl = docEl.getElementsByTagName('svg')[0];
+
+                var originalRelation = assetGraph.findRelations()[0];
+                expect(svgEl.childNodes[0] === originalRelation.node, 'to be false');
+
+                originalRelation.attach(svg, 'first');
+
+                expect(svgEl.childNodes[0] === originalRelation.node, 'to be true');
+
+                var clonedRelation = new AssetGraph.SvgScript({
+                    to: originalRelation.to.clone()
+                });
+
+                clonedRelation.attach(svg, 'first');
+                expect(svgEl.childNodes[0] === clonedRelation.node, 'to be true');
+
+                clonedRelation.attach(svg, 'after', originalRelation);
+                expect(svgEl.childNodes[1] === clonedRelation.node, 'to be true');
+
+                clonedRelation.attach(svg, 'before', originalRelation);
+                expect(svgEl.childNodes[0] === clonedRelation.node, 'to be true');
+            })
+            .run(done);
+    });
 });
