@@ -247,6 +247,14 @@ describe('assets/Html', function () {
             );
         });
 
+        it('should preserve Htmlizer containerless binding comment, but remove its leading and trailing whitespace', function () {
+            expect(
+                '<!DOCTYPE html>\n<html><head></head><body><!-- hz foreach: blah --><div></div><!--/hz --></body></html>',
+                'to minify to',
+                '<!DOCTYPE html>\n<html><head></head><body><!--hz foreach: blah--><div></div><!--/hz--></body></html>'
+            );
+        });
+
         it('should remove leading whitespace in the first text node child of a block-level element', function () {
             expect(
                 '<!DOCTYPE html>\n<html><head></head><body><div>   blah</div></body></html>',
