@@ -50,6 +50,19 @@ describe('assets/JavaScript', function () {
         done();
     });
 
+    it('should handle setting a new parseTree', function (done) {
+        var one = new AssetGraph.JavaScript({ text: 'var test = "true";' });
+        var two = new AssetGraph.JavaScript({ text: 'var test = "false";' });
+
+        expect(one, 'not to have the same AST as', two);
+
+        two.parseTree = one.parseTree;
+
+        expect(one, 'to have the same AST as', two);
+
+        done();
+    });
+
     it('should handle a test case with relations located at multiple levels in the parse tree', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/relationsDepthFirst/'})
             .loadAssets('index.html')
