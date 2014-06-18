@@ -38,6 +38,18 @@ describe('assets/JavaScript', function () {
             .run(done);
     });
 
+    it('should handle a test case that has a parse error in an asset not in an assetgraph', function (done) {
+        function parseError() {
+            return  new AssetGraph.JavaScript({
+                text: 'var test)'
+            }).parseTree;
+        }
+
+        expect(parseError, 'to throw');
+
+        done();
+    });
+
     it('should handle a test case with relations located at multiple levels in the parse tree', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/relationsDepthFirst/'})
             .loadAssets('index.html')
