@@ -63,6 +63,20 @@ describe('assets/JavaScript', function () {
         done();
     });
 
+    it('should handle minification', function (done) {
+        var one = new AssetGraph.JavaScript({ text: 'function test (argumentName) { return argumentName; }' });
+        var two = new AssetGraph.JavaScript({ text: 'function test (argumentName) { return argumentName; }' });
+
+        expect(one, 'to have the same AST as', two);
+
+        two.minify();
+
+        expect(one.text, 'not to equal', two.text);
+        expect(two.text, 'to equal', 'function test(argumentName){return argumentName};');
+
+        done();
+    });
+
     it('should handle a test case with relations located at multiple levels in the parse tree', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/relationsDepthFirst/'})
             .loadAssets('index.html')
