@@ -64,8 +64,12 @@ function toAst(stringOrAssetOrFunctionOrAst) {
     }
 }
 
-expect.addAssertion('to have the same AST as', function (expect, subject, value) {
-    expect(toAst(subject).print_to_string(), 'to equal', toAst(value).print_to_string());
+expect.addAssertion('[not] to have the same AST as', function (expect, subject, value) {
+    if (this.flags.not) {
+        expect(toAst(subject).print_to_string(), 'not to equal', toAst(value).print_to_string());
+    } else {
+        expect(toAst(subject).print_to_string(), 'to equal', toAst(value).print_to_string());
+    }
 });
 
 expect.addType({
