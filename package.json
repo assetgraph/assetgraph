@@ -23,7 +23,7 @@
     "glob": "=3.2.9",
     "httperrors": "=0.2.0",
     "imageinfo": "=1.0.4",
-    "jsdom": "=0.10.6",
+    "jsdom": "=0.11.0",
     "lodash": "=2.4.1",
     "mkdirp": "=0.3.5",
     "normalizeurl": "=0.1.2",
