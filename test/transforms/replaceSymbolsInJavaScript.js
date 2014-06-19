@@ -141,7 +141,7 @@ describe('replaceSymbolsInJavaScript', function () {
     });
 
     // Wishful thinking:
-    it.skip('should support dot notation in the LHS', function (done) {
+    it('should support dot notation in the LHS', function (done) {
         expect({
             text: 'console.log(123);',
             defines: {
@@ -154,7 +154,7 @@ describe('replaceSymbolsInJavaScript', function () {
         }, done);
     });
 
-    it.skip('should support bracket notation in the LHS', function (done) {
+    it('should support bracket notation in the LHS', function (done) {
         expect({
             text: 'alert(123 + hereIs["the thing"]);',
             defines: {
@@ -167,7 +167,7 @@ describe('replaceSymbolsInJavaScript', function () {
         }, done);
     });
 
-    it.skip('should support a complex expression in the LHS', function (done) {
+    it('should support a complex expression in the LHS', function (done) {
         expect({
             text: '123 + foo(1 + 2);',
             defines: {
