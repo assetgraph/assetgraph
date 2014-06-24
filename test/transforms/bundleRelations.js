@@ -401,6 +401,26 @@ describe('transforms/bundleRelations', function () {
                 })
                 .run(done);
         });
+
+        it('should handle named bundles', function (done) {
+            new AssetGraph({ root: __dirname + '/../../testdata/transforms/bundleRelations/namedBundles/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRelations({
+                    type: 'HtmlScript',
+                    to: {
+                        type: 'JavaScript',
+                        isLoaded: true
+                    }
+                }, {
+                    strategyName: 'oneBundlePerIncludingAsset'
+                })
+                .queue(function (assetGraph) {
+                    var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+                    expect(htmlScripts, 'to have length', 2);
+                })
+                .run(done);
+        });
     });
 
     describe('with the sharedBundles strategy', function () {
