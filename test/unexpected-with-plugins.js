@@ -4,6 +4,7 @@ var URL = require('url'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs,
     expect = module.exports = require('unexpected')
         .clone()
+        .installPlugin(require('unexpected-sinon'))
         .installPlugin(require('unexpected-jsdom'));
 
 expect.addAssertion('to contain [no] (asset|assets)', function (expect, subject, queryObj, number) {
