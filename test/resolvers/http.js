@@ -179,4 +179,36 @@ describe('resolvers/http', function () {
             })
             .run(done);
     });
+
+    it('should successfully load the asset when a timed out request that had the headers sent succeeds after retrying', function (done) {
+        var requestHandler = sinon.spy(function (req, res) {
+                res.writeHead(200, {
+                    'Content-Type': 'text/html; charset=UTF-8'
+                });
+                if (requestHandler.callCount > 1) {
+                    res.end('Foo');
+                }
+            }),
+            server = http.createServer(requestHandler).listen(0),
+            serverAddress = server.address(),
+            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/',
+            warnings = [];
+
+        new AssetGraph({root: rootUrl})
+            .on('warn', function (err) {
+                warnings.push(err);
+            })
+            .queue(function (assetGraph) {
+                assetGraph.resolverByProtocol.http.requestOptions = {numRetries: 2, timeout: 50};
+            })
+            .loadAssets('/foo.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(warnings, 'to have length', 0);
+                expect(requestHandler, 'was called twice');
+                expect(assetGraph, 'to contain asset', {type: 'Html', text: 'Foo'});
+                server.close();
+            })
+            .run(done);
+    });
 });
