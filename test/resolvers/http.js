@@ -106,7 +106,7 @@ describe('resolvers/file', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(warnings, 'to have length', 1);
-                expect(warnings[0].message, 'to equal', 'ETIMEDOUT');
+                expect(warnings[0].message, 'to match', /^E(?:SOCKET)?TIMEDOUT$/);
                 expect(requestHandler, 'was called thrice');
                 expect(assetGraph, 'to contain no assets');
                 server.close();
