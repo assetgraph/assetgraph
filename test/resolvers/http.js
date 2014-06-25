@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
     sinon = require('sinon'),
     http = require('http');
 
-describe('resolvers/file', function () {
+describe('resolvers/http', function () {
     it('should resolve an http url and load an asset', function (done) {
         var server = http.createServer(function (req, res) {
                 res.writeHead(200, {
