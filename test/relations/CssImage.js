@@ -60,4 +60,16 @@ describe('relations/CssImage', function () {
             })
             .run(done);
     });
+
+    it('should handle a test case with multiple CSS filter urls', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/CssImage/filter/'})
+            .loadAssets('index.css')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Css', 1);
+                expect(assetGraph, 'to contain assets', {type: 'Svg', isLoaded: true}, 3);
+                expect(assetGraph, 'to contain asset', {type: 'Svg', isInline: true});
+            })
+            .run(done);
+    });
 });

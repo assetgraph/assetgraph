@@ -1,0 +1,15 @@
+#filter1 {
+    filter: url(gaussianBlur.svg#element-id);
+}
+
+#filter2 {
+    filter: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxmaWx0ZXIgaWQ9ImRlc2F0dXJhdGUiPjxmZUNvbG9yTWF0cml4IHR5cGU9InNhdHVyYXRlIiB2YWx1ZXM9IjAiLz48L2ZpbHRlcj48L3N2Zz4%3D#desaturate);
+}
+
+#filter3 {
+    filter: url(#foo);
+}
+
+#filter2 {
+    +filter: url(brightness.svg);
+}
