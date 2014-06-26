@@ -2,6 +2,7 @@
 var expect = require('../unexpected-with-plugins'),
     _ = require('lodash'),
     AssetGraph = require('../../lib'),
+    errors = require('../../lib/errors'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
 describe('assets/JavaScript', function () {
@@ -73,6 +74,34 @@ describe('assets/JavaScript', function () {
 
         expect(one.text, 'not to equal', two.text);
         expect(two.text, 'to equal', 'function test(argumentName){return argumentName};');
+
+        done();
+    });
+
+    it('should handle custom relations syntax errors outside a graph', function (done) {
+        var includeError = new AssetGraph.JavaScript({ text: 'INCLUDE(1, 2);' });
+        expect(includeError.findOutgoingRelationsInParseTree.bind(includeError), 'to throw', function (e) {
+            expect(e.type, 'to be', errors.SyntaxError.type);
+            expect(e.message, 'to match', /Invalid INCLUDE syntax: Must take a single string argument/);
+        });
+
+        var gettextManyArguments = new AssetGraph.JavaScript({ text: 'GETTEXT(1, 2, 3);' });
+        expect(gettextManyArguments.findOutgoingRelationsInParseTree.bind(gettextManyArguments), 'to throw', function (e) {
+            expect(e.type, 'to be', errors.SyntaxError.type);
+            expect(e.message, 'to match', /Invalid GETTEXT syntax/);
+        });
+
+        var gettextWrongArgumentType = new AssetGraph.JavaScript({ text: 'GETTEXT(1);' });
+        expect(gettextWrongArgumentType.findOutgoingRelationsInParseTree.bind(gettextWrongArgumentType), 'to throw', function (e) {
+            expect(e.type, 'to be', errors.SyntaxError.type);
+            expect(e.message, 'to match', /Invalid GETTEXT syntax/);
+        });
+
+        var trhtmlWrongArgumentType = new AssetGraph.JavaScript({ text: 'TRHTML(1, 2, 3);' });
+        expect(trhtmlWrongArgumentType.findOutgoingRelationsInParseTree.bind(trhtmlWrongArgumentType), 'to throw', function (e) {
+            expect(e.type, 'to be', errors.SyntaxError.type);
+            expect(e.message, 'to be', 'Invalid TRHTML syntax: TRHTML(1,2,3)');
+        });
 
         done();
     });
