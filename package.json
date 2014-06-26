@@ -20,7 +20,7 @@
     "chalk": "=0.4.0",
     "createerror": "=0.4.1",
     "cssmin": "=0.3.1",
-    "cssom-papandreou": "=0.2.4-patch5",
+    "cssom-papandreou": "=0.2.4-patch6",
     "glob": "=3.2.9",
     "httperrors": "=0.2.0",
     "imageinfo": "=1.0.4",
