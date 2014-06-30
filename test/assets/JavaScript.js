@@ -103,7 +103,23 @@ describe('assets/JavaScript', function () {
             expect(e.message, 'to be', 'Invalid TRHTML syntax: TRHTML(1,2,3)');
         });
 
-        done();
+        var warnings = [];
+        new AssetGraph({ root: '.' })
+            .on('warn', function (warning) {
+                warnings.push(warning);
+            })
+            .loadAssets([
+                includeError,
+                gettextManyArguments,
+                gettextWrongArgumentType,
+                trhtmlWrongArgumentType
+            ])
+            .populate()
+            .run(function (assetGraph) {
+                expect(warnings, 'to have length', 4);
+                done();
+            });
+
     });
 
     it('should handle a test case with relations located at multiple levels in the parse tree', function (done) {
