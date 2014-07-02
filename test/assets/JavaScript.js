@@ -3,6 +3,7 @@ var expect = require('../unexpected-with-plugins'),
     _ = require('lodash'),
     AssetGraph = require('../../lib'),
     errors = require('../../lib/errors'),
+    sinon = require('sinon'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
 describe('assets/JavaScript', function () {
@@ -120,6 +121,36 @@ describe('assets/JavaScript', function () {
                 done();
             });
 
+    });
+
+    it('should handle invalid arguments for Amd define call', function (done) {
+        sinon.stub(console, 'info');
+
+        var invalidArgument = new AssetGraph.JavaScript({
+            isRequired: true,
+            text: 'define([1], function () {})'
+        });
+
+        invalidArgument.findOutgoingRelationsInParseTree();
+
+        expect(console.info.callCount, 'to be', 1);
+        expect(console.info.getCall(0).args[0], 'to match', /Skipping non-string JavaScriptAmdDefine item/);
+
+        console.info.restore();
+
+        var infos = [];
+        new AssetGraph({ root: '.' })
+            .on('info', function (info) {
+                infos.push(info);
+            })
+            .loadAssets([
+                invalidArgument
+            ])
+            .populate()
+            .run(function (assetGraph) {
+                expect(infos, 'to have length', 1);
+                done();
+            });
     });
 
     it('should handle a test case with relations located at multiple levels in the parse tree', function (done) {
