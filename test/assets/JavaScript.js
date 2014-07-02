@@ -2,6 +2,8 @@
 var expect = require('../unexpected-with-plugins'),
     _ = require('lodash'),
     AssetGraph = require('../../lib'),
+    errors = require('../../lib/errors'),
+    sinon = require('sinon'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
 describe('assets/JavaScript', function () {
@@ -36,6 +38,178 @@ describe('assets/JavaScript', function () {
                 expect(firstWarning.message, 'to match', /column 14\b/);
             })
             .run(done);
+    });
+
+    it('should handle a test case that has a parse error in an asset not in an assetgraph', function (done) {
+        function parseError() {
+            return  new AssetGraph.JavaScript({
+                text: 'var test)'
+            }).parseTree;
+        }
+
+        expect(parseError, 'to throw');
+
+        done();
+    });
+
+    it('should handle setting a new parseTree', function (done) {
+        var one = new AssetGraph.JavaScript({ text: 'var test = "true";' });
+        var two = new AssetGraph.JavaScript({ text: 'var test = "false";' });
+
+        expect(one, 'not to have the same AST as', two);
+
+        two.parseTree = one.parseTree;
+
+        expect(one, 'to have the same AST as', two);
+
+        done();
+    });
+
+    it('should handle minification', function (done) {
+        var one = new AssetGraph.JavaScript({ text: 'function test (argumentName) { return argumentName; }' });
+        var two = new AssetGraph.JavaScript({ text: 'function test (argumentName) { return argumentName; }' });
+
+        expect(one, 'to have the same AST as', two);
+
+        two.minify();
+
+        expect(one.text, 'not to equal', two.text);
+        expect(two.text, 'to equal', 'function test(argumentName){return argumentName};');
+
+        done();
+    });
+
+    it('should handle custom relations syntax errors outside a graph', function (done) {
+        var includeError = new AssetGraph.JavaScript({ text: 'INCLUDE(1, 2);' });
+        expect(includeError.findOutgoingRelationsInParseTree.bind(includeError), 'to throw', function (e) {
+            expect(e.type, 'to be', errors.SyntaxError.type);
+            expect(e.message, 'to match', /Invalid INCLUDE syntax: Must take a single string argument/);
+        });
+
+        var gettextManyArguments = new AssetGraph.JavaScript({ text: 'GETTEXT(1, 2, 3);' });
+        expect(gettextManyArguments.findOutgoingRelationsInParseTree.bind(gettextManyArguments), 'to throw', function (e) {
+            expect(e.type, 'to be', errors.SyntaxError.type);
+            expect(e.message, 'to match', /Invalid GETTEXT syntax/);
+        });
+
+        var gettextWrongArgumentType = new AssetGraph.JavaScript({ text: 'GETTEXT(1);' });
+        expect(gettextWrongArgumentType.findOutgoingRelationsInParseTree.bind(gettextWrongArgumentType), 'to throw', function (e) {
+            expect(e.type, 'to be', errors.SyntaxError.type);
+            expect(e.message, 'to match', /Invalid GETTEXT syntax/);
+        });
+
+        var trhtmlWrongArgumentType = new AssetGraph.JavaScript({ text: 'TRHTML(1, 2, 3);' });
+        expect(trhtmlWrongArgumentType.findOutgoingRelationsInParseTree.bind(trhtmlWrongArgumentType), 'to throw', function (e) {
+            expect(e.type, 'to be', errors.SyntaxError.type);
+            expect(e.message, 'to be', 'Invalid TRHTML syntax: TRHTML(1,2,3)');
+        });
+
+        var warnings = [];
+        new AssetGraph({ root: '.' })
+            .on('warn', function (warning) {
+                warnings.push(warning);
+            })
+            .loadAssets([
+                includeError,
+                gettextManyArguments,
+                gettextWrongArgumentType,
+                trhtmlWrongArgumentType
+            ])
+            .populate()
+            .run(function (assetGraph) {
+                expect(warnings, 'to have length', 4);
+                done();
+            });
+
+    });
+
+    it('should handle invalid arguments for Amd define call', function (done) {
+        sinon.stub(console, 'info');
+
+        var invalidArgument = new AssetGraph.JavaScript({
+            isRequired: true,
+            text: 'define([1], function () {})'
+        });
+
+        invalidArgument.findOutgoingRelationsInParseTree();
+
+        expect(console.info.callCount, 'to be', 1);
+        expect(console.info.getCall(0).args[0], 'to match', /Skipping non-string JavaScriptAmdDefine item/);
+
+        console.info.restore();
+
+        var infos = [];
+        new AssetGraph({ root: '.' })
+            .on('info', function (info) {
+                infos.push(info);
+            })
+            .loadAssets([
+                invalidArgument
+            ])
+            .populate()
+            .run(function (assetGraph) {
+                expect(infos, 'to have length', 1);
+                done();
+            });
+    });
+
+    it('should handle non-file-scheme RequireJS.require dependency errors', function (done) {
+        sinon.stub(console, 'warn');
+
+        var invalidScheme = new AssetGraph.JavaScript({
+            text: 'require("http://assetgraph.org/foo.js")'
+        });
+
+        invalidScheme.findOutgoingRelationsInParseTree();
+
+        expect(console.warn.callCount, 'to be', 1);
+        expect(console.warn.getCall(0).args[0], 'to match', /Skipping JavaScriptCommonJsRequire \(only supported from file: urls\)/);
+
+        console.warn.restore();
+
+        var warnings = [];
+        new AssetGraph({ root: '.' })
+            .on('warn', function (warning) {
+                warnings.push(warning);
+            })
+            .loadAssets([
+                invalidScheme
+            ])
+            .populate()
+            .run(function (assetGraph) {
+                expect(warnings, 'to have length', 1);
+                done();
+            });
+    });
+
+    it('should handle non-file-scheme RequireJS.require dependency errors', function (done) {
+        sinon.stub(console, 'warn');
+
+        var invalidScheme = new AssetGraph.JavaScript({
+            url: 'file://requireFoo.js',
+            text: 'require("./foo")'
+        });
+
+        invalidScheme.findOutgoingRelationsInParseTree();
+
+        expect(console.warn.callCount, 'to be', 1);
+        expect(console.warn.getCall(0).args[0], 'to be', 'Couldn\'t resolve require("./foo"), skipping');
+
+        console.warn.restore();
+
+        var warnings = [];
+        new AssetGraph({ root: '.' })
+            .on('warn', function (warning) {
+                warnings.push(warning);
+            })
+            .loadAssets([
+                invalidScheme
+            ])
+            .populate()
+            .run(function (assetGraph) {
+                expect(warnings, 'to have length', 1);
+                done();
+            });
     });
 
     it('should handle a test case with relations located at multiple levels in the parse tree', function (done) {
