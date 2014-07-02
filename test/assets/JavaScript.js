@@ -153,6 +153,35 @@ describe('assets/JavaScript', function () {
             });
     });
 
+    it('should handle non-file-scheme RequireJS.require dependency errors', function (done) {
+        sinon.stub(console, 'warn');
+
+        var invalidScheme = new AssetGraph.JavaScript({
+            text: 'require("http://assetgraph.org/foo.js")'
+        });
+
+        invalidScheme.findOutgoingRelationsInParseTree();
+
+        expect(console.warn.callCount, 'to be', 1);
+        expect(console.warn.getCall(0).args[0], 'to match', /Skipping JavaScriptCommonJsRequire \(only supported from file: urls\)/);
+
+        console.warn.restore();
+
+        var warnings = [];
+        new AssetGraph({ root: '.' })
+            .on('warn', function (warning) {
+                warnings.push(warning);
+            })
+            .loadAssets([
+                invalidScheme
+            ])
+            .populate()
+            .run(function (assetGraph) {
+                expect(warnings, 'to have length', 1);
+                done();
+            });
+    });
+
     it('should handle a test case with relations located at multiple levels in the parse tree', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/relationsDepthFirst/'})
             .loadAssets('index.html')
