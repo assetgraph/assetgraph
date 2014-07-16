@@ -10,6 +10,8 @@ framework for manipulating and optimizing web pages and web
 applications. It's the core of the third generation of the production
 builder tool we are using at One.com for some of our web apps.
 
+If you just want to get started with the basics, read [Peter Müller - Getting started with Assetgraph](http://mntr.dk/2014/getting-started-with-assetgraph/).
+
 If you are looking for a prepackaged build system take a look at <a
 href="https://github.com/One-com/assetgraph-builder">Assetgraph-builder</a>.
 
