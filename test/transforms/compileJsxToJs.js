@@ -31,4 +31,27 @@ describe('transforms/compileJsxToJs', function () {
             })
             .run(done);
     });
+    it('should compile all Jsx assets to Js', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileJsxToJs/jsxWithInclude/'})
+            .loadAssets('index.jsx')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Jsx');
+            })
+            .compileJsxToJs({type: 'Jsx'})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain no assets', 'Jsx');
+                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', [
+                    '/** @jsx React.DOM */',
+                    'React.renderComponent(',
+                    '    React.DOM.h1(null, "Hello, world!"),',
+                    '    document.getElementById(\'example\')',
+                    ');',
+                    '',
+                    'INCLUDE(\'include.js\');',
+                    ''
+                ].join('\n'));
+            })
+            .run(done);
+    });
 });
