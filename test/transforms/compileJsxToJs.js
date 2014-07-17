@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('transforms/compileJsxToJs', function () {
     it('should compile all Jsx assets to Js', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileJsxToJs/'})
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileJsxToJs/singleJsxFile/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: query.not(/^http:/)}}})
             .queue(function (assetGraph) {
