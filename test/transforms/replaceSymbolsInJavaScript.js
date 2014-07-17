@@ -4,7 +4,7 @@ var unexpected = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib/'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
-describe('replaceSymbolsInJavaScript', function () {
+describe('transforms/replaceSymbolsInJavaScript', function () {
     var assetGraph;
     beforeEach(function () {
         assetGraph = new AssetGraph();
