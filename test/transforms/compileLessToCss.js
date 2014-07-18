@@ -116,4 +116,24 @@ describe('transforms/compileLessToCss', function () {
             })
             .run(done);
     });
+
+    it('should populate relations found in the compiled output if a followRelationsw', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/outgoingRelation/', followRelations: {}})
+            .loadAssets('index.less')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Less');
+                expect(assetGraph, 'to contain no asset', 'Css');
+                expect(assetGraph, 'to contain no relation', 'CssImage');
+                expect(assetGraph, 'to contain no asset', 'Png');
+            })
+            .compileLessToCss({type: 'Less'})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain no asset', 'Less');
+                expect(assetGraph, 'to contain asset', 'Css');
+                expect(assetGraph, 'to contain relation', 'CssImage');
+                expect(assetGraph, 'to contain asset', 'Png');
+            })
+            .run(done);
+    });
 });
