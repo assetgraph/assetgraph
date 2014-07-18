@@ -12,13 +12,15 @@ describe('relations/HtmlJsx', function () {
                 expect(assetGraph, 'to contain relations including unresolved', 'HtmlJsx', 2);
                 expect(_.pluck(assetGraph.findRelations(), 'href'), 'to equal', [
                     'externalWithTypeTextJsx.js',
-                    undefined
+                    undefined,
+                    'external.jsx'
                 ]);
 
                 var assets = _.pluck(assetGraph.findRelations(), 'to');
 
                 expect(assets[0].text, 'to equal', '\'external\'\n');
                 expect(assets[1].text, 'to equal', '\'inline\'');
+                expect(assets[2].text, 'to equal', '\'externalNoContentType\'');
             })
             .run(done);
     });
