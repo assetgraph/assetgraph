@@ -39,6 +39,26 @@ describe('relations/Relation', function () {
                 })
                 .run(done);
         });
+
+        it('should handle a test case with urls with different hrefTypes, where hrefs have leading white space', function (done)  {
+            new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/'})
+                .loadAssets('index.html')
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', 'Html');
+
+                    assetGraph.findAssets({ type: 'Html' }).forEach(function (asset) {
+                        asset.text = asset.text.replace(/href="/g, 'href=" ');
+                    });
+
+                    expect(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), 'to equal', [
+                        'relative',
+                        'rootRelative',
+                        'protocolRelative',
+                        'absolute'
+                    ]);
+                })
+                .run(done);
+        });
     });
 
     function getTargetFileNames(relations) {
