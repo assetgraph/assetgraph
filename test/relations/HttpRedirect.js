@@ -39,6 +39,7 @@ describe('relations/HttpRedirect', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Html', 4);
+                expect(assetGraph, 'to contain assets', {isRedirect: true}, 2);
                 expect(assetGraph, 'to contain relations', 'HttpRedirect', 2);
                 server.close();
             })
