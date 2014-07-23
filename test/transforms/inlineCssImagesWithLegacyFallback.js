@@ -11,7 +11,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
                 expect(assetGraph, 'to contain assets', 'Css', 5);
                 expect(assetGraph, 'to contain assets', {isImage: true}, 6);
             })
-            .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3 / 4)
+            .inlineCssImagesWithLegacyFallback({isInitial: true}, {sizeThreshold: 32768 * 3 / 4})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Css', 7);
 
@@ -49,7 +49,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
                 expect(assetGraph, 'to contain asset', 'Css');
                 expect(assetGraph, 'to contain asset', {isImage: true});
             })
-            .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4)
+            .inlineCssImagesWithLegacyFallback({isInitial: true}, {sizeThreshold: 32768 * 3/4})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Css', 3);
                 expect(assetGraph, 'to contain relations', 'HtmlConditionalComment', 2);
@@ -70,7 +70,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/rootRelative/'})
             .loadAssets('index.html')
             .populate()
-            .inlineCssImagesWithLegacyFallback({isInitial: true}, 32768 * 3/4)
+            .inlineCssImagesWithLegacyFallback({isInitial: true}, {sizeThreshold: 32768 * 3/4})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
                 expect(assetGraph, 'to contain relations', {type: 'HtmlStyle', hrefType: 'rootRelative'}, 2);
@@ -82,7 +82,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/mediaQuery/'})
             .loadAssets('index.html')
             .populate()
-            .inlineCssImagesWithLegacyFallback({isInitial: true}, 10000)
+            .inlineCssImagesWithLegacyFallback({isInitial: true}, {sizeThreshold: 10000})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', {type: 'CssImage', to: {isInline: false}});
                 expect(assetGraph, 'to contain no relations', {type: 'CssImage', to: {isInline: true}});
