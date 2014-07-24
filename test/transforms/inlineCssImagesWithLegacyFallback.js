@@ -40,6 +40,25 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
             .run(done);
     });
 
+    it('should not create the fallback stylesheet if a minimumIeVersion of 9 is specified', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/combo/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 'Css', 5);
+                expect(assetGraph, 'to contain assets', {isImage: true}, 6);
+            })
+            .inlineCssImagesWithLegacyFallback({isInitial: true}, {
+                minimumIeVersion: 9,
+                sizeThreshold: 32768 * 3 / 4
+            })
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 'Css', 5);
+                expect(assetGraph, 'to contain relations', {type: 'CssImage', to: {isInline: true}}, 3);
+            })
+            .run(done);
+    });
+
     it('should handle a test case with multiple Html asset that point at the same Css', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/multipleHtmls/'})
             .loadAssets('*.html')
