@@ -155,7 +155,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
             .run(done);
     });
 
-    it('should handle a test case with an inline that has rules in media queries', function (done) {
+    it('should handle a test case with an inline stylesheet that has rules in media queries', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
             .loadAssets('inlineWithMedia.html')
             .populate()
@@ -181,6 +181,86 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                     matchInlineStylesheets = htmlAsset.text.match(/<style type="text\/css">/g);
                 expect(matchInlineStylesheets, 'to be ok');
                 expect(matchInlineStylesheets, 'to have length', 4);
+            })
+            .run(done);
+    });
+
+    it('should leave a big stylesheet alone if minimumIeVersion is 10', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
+            .loadAssets({
+                type: 'Html',
+                url: 'http://example.com/foo.html',
+                text: '<!DOCTYPE html><html><body><style type="text/css">' + new Array(5000).join('body {color: red;}') + '</style></body></html>'
+            })
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 2);
+                expect(assetGraph, 'to contain asset', 'Html');
+                expect(assetGraph, 'to contain asset', 'Css');
+            })
+            .splitCssIfIeLimitIsReached({}, {minimumIeVersion: 10})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Css');
+            })
+            .run(done);
+    });
+
+    it('should split an enourmous stylesheet if minimumIeVersion is 10', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
+            .loadAssets({
+                type: 'Html',
+                url: 'http://example.com/foo.html',
+                text: '<!DOCTYPE html><html><body><style type="text/css">' + new Array(65536).join('body {color: red;}') + '</style></body></html>'
+            })
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 2);
+                expect(assetGraph, 'to contain asset', 'Html');
+                expect(assetGraph, 'to contain asset', 'Css');
+            })
+            .splitCssIfIeLimitIsReached({}, {minimumIeVersion: 10})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 'Css', 2);
+            })
+            .run(done);
+    });
+
+    it('should leave an enourmous stylesheet alone if minimumIeVersion is null', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
+            .loadAssets({
+                type: 'Html',
+                url: 'http://example.com/foo.html',
+                text: '<!DOCTYPE html><html><body><style type="text/css">' + new Array(65536).join('body {color: red;}') + '</style></body></html>'
+            })
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 2);
+                expect(assetGraph, 'to contain asset', 'Html');
+                expect(assetGraph, 'to contain asset', 'Css');
+            })
+            .splitCssIfIeLimitIsReached({}, {minimumIeVersion: null})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Css');
+            })
+            .run(done);
+    });
+
+    it('should split a big stylesheet alone if minimumIeVersion is 9', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
+            .loadAssets({
+                type: 'Html',
+                url: 'http://example.com/foo.html',
+                text: '<!DOCTYPE html><html><body><style type="text/css">' + new Array(5000).join('body {color: red;}') + '</style></body></html>'
+            })
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 2);
+                expect(assetGraph, 'to contain asset', 'Html');
+                expect(assetGraph, 'to contain asset', 'Css');
+            })
+            .splitCssIfIeLimitIsReached({}, {minimumIeVersion: 9})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 'Css', 2);
             })
             .run(done);
     });
