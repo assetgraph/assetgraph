@@ -88,10 +88,30 @@ describe('resolveAssetConfig', function () {
             assetGraph._warnings.push(warning);
         });
 
-        assetGraph.resolveAssetConfig('my-funky-scheme://www.example.com/', assetGraph.root, function (resolvedAssetConfig) {
-            expect(resolvedAssetConfig, 'to be', null);
+        assetGraph.resolveAssetConfig('my-funky.scheme://www.example.com/', assetGraph.root, function (error, resolvedAssetConfig) {
+            expect(error, 'to be', null);
+            expect(resolvedAssetConfig, 'to be an empty array');
             expect(assetGraph._warnings, 'to be an array');
             expect(assetGraph._warnings, 'to have length', 1);
+            expect(assetGraph._warnings[0].message, 'to match', /^AssetGraph.resolveAssetConfig: Cannot resolve asset url/);
+            done();
+        });
+    });
+
+    it('should accept `-` as part of the protocol', function (done) {
+        var assetGraph = new AssetGraph({root: assetGraphRoot});
+        assetGraph._warnings = [];
+
+        assetGraph.on('warn', function (warning) {
+            assetGraph._warnings.push(warning);
+        });
+
+        assetGraph.resolveAssetConfig('android-app://www.example.com/', assetGraph.root, function (error, resolvedAssetConfig) {
+            expect(error, 'to be', null);
+            expect(resolvedAssetConfig, 'to be an empty array');
+            expect(assetGraph._warnings, 'to be an array');
+            expect(assetGraph._warnings, 'to have length', 1);
+            expect(assetGraph._warnings[0].message, 'to be', 'AssetGraph.resolveAssetConfig: No resolver found for protocol: android-app');
             done();
         });
     });
