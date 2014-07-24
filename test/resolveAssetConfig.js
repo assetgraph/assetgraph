@@ -79,4 +79,20 @@ describe('resolveAssetConfig', function () {
             done();
         }));
     });
+
+    it('should not loop infinitely when encountering non-resolvable urls', function (done) {
+        var assetGraph = new AssetGraph({root: assetGraphRoot});
+        assetGraph._warnings = [];
+
+        assetGraph.on('warn', function (warning) {
+            assetGraph._warnings.push(warning);
+        });
+
+        assetGraph.resolveAssetConfig('my-funky-scheme://www.example.com/', assetGraph.root, function (resolvedAssetConfig) {
+            expect(resolvedAssetConfig, 'to be', null);
+            expect(assetGraph._warnings, 'to be an array');
+            expect(assetGraph._warnings, 'to have length', 1);
+            done();
+        });
+    });
 });
