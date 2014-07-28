@@ -363,7 +363,7 @@ describe('assets/Html', function () {
             expect(
                 '<div><span data-i18n="ShowingXToYOfZ">\n    <span>1</span>\n     -                <span>50</span>\nof                      <span>0</span>\n            </span>\n</div>',
                 'to minify to',
-                '<div><span data-i18n="ShowingXToYOfZ"><span>1</span> - <span>50</span>\nof <span>0</span></span></div>'
+                '<div><span data-i18n="ShowingXToYOfZ"><span>1</span> - <span>50</span> of <span>0</span></span></div>'
             );
         });
 
