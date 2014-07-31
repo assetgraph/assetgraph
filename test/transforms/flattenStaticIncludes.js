@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
     _ = require('lodash'),
     AssetGraph = require('../../lib');
 
-describe('transforms/flattenStaticIncludes transform', function () {
+describe('transforms/flattenStaticIncludes', function () {
     it('should handle a combo test case', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenStaticIncludes/combo/'})
             .loadAssets('index.html')
