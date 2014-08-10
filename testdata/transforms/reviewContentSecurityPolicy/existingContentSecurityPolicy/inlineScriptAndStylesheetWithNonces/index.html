@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="style-src 'nonce-sure'; script-src 'nonce-yeah'">
+        <style type="text/css" nonce="sure">body { color: red; }</style>
+    </head>
+    <body>
+        <script nonce="yeah">alert('foo');</script>
+        <p>Show me red!</p>
+    </body>
+</html>
