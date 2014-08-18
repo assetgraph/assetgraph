@@ -45,6 +45,44 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         }, done);
     });
 
+    it('should not replace an undefined value', function (done) {
+        expect({
+            text: 'var bar = FOO;',
+            defines: {
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            var bar = FOO;
+            /* jshint ignore:end */
+        }, done);
+    });
+
+    it('should replace an undefined value in an object with undefined', function (done) {
+        expect({
+            text: 'var bar = FOO.BAR;',
+            defines: {
+                FOO: {}
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            var bar = undefined;
+            /* jshint ignore:end */
+        }, done);
+    });
+
+    it('should replace an undefined value in a nested object with undefined', function (done) {
+        expect({
+            text: 'var bar = !BAZ.FOO.BAR;',
+            defines: {
+                BAZ: {}
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            var bar = !undefined;
+            /* jshint ignore:end */
+        }, done);
+    });
+
     it('should not replace the LHS of an assignment', function (done) {
         expect({
             text: 'var FOO = "bar";',
@@ -106,23 +144,23 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         }, done);
     });
 
-    it('should not replace nested value if no value is found', function (done) {
-        var warnings = [];
-        assetGraph.on('warn', function (err) {
-            warnings.push(err);
+    it('should replace nested value with undefined if no value is found', function (done) {
+        var infos = [];
+        assetGraph.on('info', function (err) {
+            infos.push(err);
         });
         expect({
-            text: 'var bar = FOO["quux"];',
+            text: 'var qux = FOO.bar.baz.quux',
             defines: {
-                FOO: { bar: 'baz' }
+                FOO: { bar: { baz: {} } }
             }
         }, 'to come out as', function () {
             /* jshint ignore:start */
-            var bar = FOO['quux'];
+            var qux = undefined;
             /* jshint ignore:end */
         }, passError(done, function () {
-            expect(warnings, 'to have length', 1);
-            expect(warnings[0].message, 'to equal', 'Trying to replace with non-existent key "quux" on FOO');
+            expect(infos, 'to have length', 1);
+            expect(infos[0].message, 'to equal', 'Could not find a value for "FOO.bar.baz.quux". Replacing with undefined.');
             done();
         }));
     });
