@@ -61,25 +61,14 @@ describe('relations/HttpRedirect', function () {
         var assetGraph = new AssetGraph({root: rootUrl});
 
         assetGraph
-            .on('warn', function (warning) {
-                if (!Array.isArray(assetGraph._warnings)) {
-                    assetGraph._warnings = [];
-                }
-                assetGraph._warnings.push(warning);
-            })
             .loadAssets('/301', '/302', '/loop', '/infiniteloop')
             .populate()
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'Html', 9);
-                expect(assetGraph, 'to contain assets', {isRedirect: true}, 6);
-                expect(assetGraph, 'to contain relations', 'HttpRedirect', 6);
+                expect(assetGraph, 'to contain assets', 'Html', 7);
+                expect(assetGraph, 'to contain assets', {isRedirect: true}, 4);
+                expect(assetGraph, 'to contain relations', 'HttpRedirect', 4);
                 expect(loopCount, 'to be', 1);
                 expect(infiniteloopCount, 'to be', 2);
-                expect(assetGraph._warnings, 'to be a non-empty array');
-                expect(assetGraph._warnings, 'to be an array whose items satisfy', function (item) {
-                    expect(item, 'to be an', Error);
-                    expect(item.message, 'to be', 'Infinite redirect loop detected.');
-                });
                 server.close();
             })
             .run(done);
