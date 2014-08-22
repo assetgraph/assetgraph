@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+    <div params="visible: foo > 10, text: TR('keyname', 'oh, you know')">foo</div>
+    <div params=" { text: 'alternative object literal syntax' } ">foo</div>
+    <div params="
+     { text: 'alternative object literal syntax with line breaks before and after' }
+ ">foo</div>
+    <div params="something that does not parse as a JavaScript object literal"></div>
+</body>
+</html>
