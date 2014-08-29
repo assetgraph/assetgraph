@@ -12,10 +12,10 @@ describe('relations/HtmlInlineFragment', function () {
                 expect(assetGraph, 'to contain assets', 'Html', 3);
                 expect(assetGraph, 'to contain assets', 'Rss', 1);
                 expect(assetGraph, 'to contain assets', 'Png', 1);
-                expect(assetGraph, 'to contain relation', 'HtmlInlineFragment');
+                expect(assetGraph, 'to contain relation', 'XmlHtmlInlineFragment');
 
                 var rss = assetGraph.findAssets({ type: 'Rss' })[0];
-                var fragmentRelation = assetGraph.findRelations({type: 'HtmlInlineFragment'})[0];
+                var fragmentRelation = assetGraph.findRelations({type: 'XmlHtmlInlineFragment'})[0];
 
                 expect(fragmentRelation.to.text, 'to equal', 'Here is some text containing an interesting description and an image: <img src="foo.png">.');
 
