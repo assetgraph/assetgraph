@@ -293,7 +293,7 @@ describe('transforms/flattenRequireJs', function () {
             .run(done);
     });
 
-    it('should handle an umd test case', function (done) {
+    it('should handle a umd test case', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/umd/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
@@ -345,7 +345,7 @@ describe('transforms/flattenRequireJs', function () {
             .run(done);
     });
 
-    it('should handle an umd test case where the wrapper has a dependency in the define call', function (done) {
+    it('should handle a umd test case where the wrapper has a dependency in the define call', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/umdWithDependency/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
@@ -661,7 +661,7 @@ describe('transforms/flattenRequireJs', function () {
             .run(done);
     });
 
-    it('should handle aa test case with a root-relative require alongside a non-root-relative require to the same file', function (done) {
+    it('should handle a test case with a root-relative require alongside a non-root-relative require to the same file', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenRequireJs/rootRelative/'})
             .registerRequireJsConfig()
             .loadAssets('index.html')
