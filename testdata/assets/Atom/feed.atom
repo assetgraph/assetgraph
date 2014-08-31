@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title>Yeoman Blog</title>
+  <link href="http://yeoman.io/blog/blog.atom" rel="self"/>
+  <link href="http://yeoman.io"/>
+  <updated>2014-08-29T00:11:13+02:00</updated>
+  <id>http://yeoman.io/</id>
+  <author>
+    <name>Yeoman.io</name>
+  </author>
+
+  <entry>
+    <title>Karma Generator Rewrite 0.8.0</title>
+    <link href="http://yeoman.io/blog/generator-karma-rewrite.html"/>
+    <updated>2014-05-12T00:00:00+02:00</updated>
+    <id>http://yeoman.io/blog/generator-karma-rewrite</id>
+    <content type="html">This contains an image: &lt;img src=&quot;foo.png&quot;&gt; and a &lt;a href=&quot;bar.html&quot;&gt;relative link&lt;/a&gt;</content>
+  </entry>
+
+  <entry>
+    <title>Karma Generator Rewrite 0.8.0</title>
+    <link href="http://yeoman.io/blog/generator-karma-rewrite.html"/>
+    <updated>2014-05-12T00:00:00+02:00</updated>
+    <id>http://yeoman.io/blog/generator-karma-rewrite</id>
+    <content type="html"><![CDATA[This contains an image: <img src="foo.png"> and a <a href="bar.html">relative link</a>]]></content>
+  </entry>
+</feed>
