@@ -165,4 +165,17 @@ describe('relations/JavaScriptAmdRequire', function () {
             })
             .run(done);
     });
+
+    it('should handle a test case where require.js is kept as an object, but updated before loading require.js', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/withSeparateBaseUrlAssignment/'})
+            .registerRequireJsConfig()
+            .loadAssets('index.html')
+            .populate()
+            .assumeRequireJsConfigHasBeenFound()
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', {isLoaded: true, text: /Yay/});
+            })
+            .run(done);
+    });
 });
