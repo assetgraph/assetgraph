@@ -24,9 +24,9 @@ describe('relations/HtmlConditionalComment', function () {
             .queue(function (assetGraph) {
                 var text = assetGraph.findAssets({url: /\/index\.html$/})[0].text;
                 expect(text, 'to match', /Good old/);
-                expect(text, 'to match', /<script src="fixIE6ForTheLoveOfGod\.js"><\/script>/);
+                expect(text, 'to match', /<script src=fixIE6ForTheLoveOfGod\.js><\/script>/);
                 expect(text, 'to match', /<!--\[if !IE\]>\s*-->Not IE<!--\s*<!\[endif\]-->/);
-                expect(text, 'to match', /<!--\[if IE\]>\s*<link rel="stylesheet" href="[^\"]+\.css">\s*<!\[endif\]-->/);
+                expect(text, 'to match', /<!--\[if IE\]>\s*<link rel=stylesheet href=[^\"]+\.css>\s*<!\[endif\]-->/);
             })
             .run(done);
     });

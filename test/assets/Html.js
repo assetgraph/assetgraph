@@ -355,7 +355,7 @@ describe('assets/Html', function () {
             expect(
                 '<!DOCTYPE html><html><head></head><body>  Here is the thing:  <span data-i18n="blah">foo</span>  and furthermore...  </body></html>',
                 'to minify to',
-                '<!DOCTYPE html><html><head></head><body>Here is the thing: <span data-i18n="blah">foo</span> and furthermore...</body></html>'
+                '<!DOCTYPE html><html><head></head><body>Here is the thing: <span data-i18n=blah>foo</span> and furthermore...</body></html>'
             );
         });
 
@@ -363,7 +363,7 @@ describe('assets/Html', function () {
             expect(
                 '<div><span data-i18n="ShowingXToYOfZ">\n    <span>1</span>\n     -                <span>50</span>\nof                      <span>0</span>\n            </span>\n</div>',
                 'to minify to',
-                '<div><span data-i18n="ShowingXToYOfZ"><span>1</span> - <span>50</span> of <span>0</span></span></div>'
+                '<div><span data-i18n=ShowingXToYOfZ><span>1</span> - <span>50</span> of <span>0</span></span></div>'
             );
         });
 
@@ -453,6 +453,14 @@ describe('assets/Html', function () {
                 '<html><head><title>The title</title> <!--[if lt IE 8]><![endif]--></head></html>',
                 'to minify to',
                 '<html><head><title>The title</title><!--[if lt IE 8]><![endif]--></head></html>'
+            );
+        });
+
+        it('should apply the configured html-minifier transformations', function () {
+            expect(
+                '<!DOCTYPE html>\n<html><head></head><body id=" " class="foo"><script type="text/javascript">foo();</script><input type="text" disabled="disabled"></body></html>',
+                'to minify to',
+                '<!DOCTYPE html><html><head></head><body class=foo><script>foo();</script><input disabled></body></html>'
             );
         });
     });
