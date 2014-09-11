@@ -11,7 +11,7 @@ describe('relations/HtmlStyleAttribute', function () {
                 expect(assetGraph, 'to contain assets', 4);
                 expect(assetGraph, 'to contain asset', 'Html');
                 expect(assetGraph, 'to contain relations', 'HtmlStyleAttribute', 2);
-                expect(assetGraph, 'to contain relations', 'CssImage', 2);
+                expect(assetGraph, 'to contain relation', 'CssImage');
                 expect(assetGraph, 'to contain asset', 'Png');
             })
             .inlineRelations({type: 'CssImage'})
