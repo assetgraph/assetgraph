@@ -34,7 +34,7 @@ describe('relations/JavaScriptRequireJsCommonJsCompatibilityRequire', function (
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 76);
+                expect(assetGraph, 'to contain assets', 75);
                 expect(assetGraph, 'to contain relations', 'JavaScriptRequireJsCommonJsCompatibilityRequire', 168);
                 expect(assetGraph, 'to contain no relations', {type: 'JavaScriptAmdDefine'});
             })
