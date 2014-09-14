@@ -6,9 +6,6 @@ var expect = require('../unexpected-with-plugins'),
 describe('transforms/subResourceIntegrity', function () {
     it('should load external sources', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/subResourceIntegrity/'})
-            .on('addAsset', function (asset) {
-                console.log('addAsset', asset.toString());
-            })
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: query.not(/^https?:/)}}})
             .queue(function (assetGraph) {
