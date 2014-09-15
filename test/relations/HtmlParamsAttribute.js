@@ -25,6 +25,11 @@ describe('relations/HtmlParamsAttribute', function () {
                 javaScript.markDirty();
 
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /yup/);
+
+                assetGraph.findRelations({type: 'HtmlParamsAttribute'}).forEach(function (htmlParamsAttributeRelation) {
+                    htmlParamsAttributeRelation.inline();
+                });
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to match', /data-bind/);
             })
             .run(done);
     });
