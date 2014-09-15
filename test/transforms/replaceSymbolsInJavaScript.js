@@ -144,6 +144,19 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         }, done);
     });
 
+    it('should work with numbers and bracket notation', function (done) {
+        expect({
+            text: 'var bar = FOO[1];',
+            defines: {
+                FOO: { 1: 'baz' }
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            var bar = 'baz';
+            /* jshint ignore:end */
+        }, done);
+    });
+
     it('should replace nested value with undefined if no value is found', function (done) {
         var infos = [];
         assetGraph.on('info', function (err) {
@@ -165,15 +178,15 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         }));
     });
 
-    it.skip('should not proceed if contents of brackets is not a constant', function (done) {
+    it('should proceed as far as possible if contents of brackets is not a constant', function (done) {
         expect({
-            text: 'var bar = FOO[function () { return "NO"; }];',
+            text: 'var bar = FOO[function () { return "bar"; }];',
             defines: {
                 FOO: { bar: 'baz' }
             }
         }, 'to come out as', function () {
             /* jshint ignore:start */
-            var bar = { bar: 'baz' }[function () { return "NO"; }];
+            var bar = { bar: 'baz' }[function () { return "bar"; }];
             /* jshint ignore:end */
         }, done);
     });
