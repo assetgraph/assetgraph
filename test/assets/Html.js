@@ -460,7 +460,7 @@ describe('assets/Html', function () {
             expect(
                 '<!DOCTYPE html>\n<html><head></head><body id=" " class="foo"><script type="text/javascript">foo();</script><input type="text" disabled="disabled"></body></html>',
                 'to minify to',
-                '<!DOCTYPE html><html><head></head><body class=foo><script>foo();</script><input disabled></body></html>'
+                '<!DOCTYPE html><html><head></head><body class=foo><script>foo();</script><input type=text disabled></body></html>'
             );
         });
     });
