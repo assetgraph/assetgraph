@@ -2,7 +2,7 @@
   "name": "assetgraph",
   "description": "Optimization framework for web pages and applications",
   "repository": "git://github.com/assetgraph/assetgraph.git",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "license": "BSD",
   "maintainers": [
     {
