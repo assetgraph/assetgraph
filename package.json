@@ -29,7 +29,7 @@
     "html-minifier": "=0.6.8",
     "httperrors": "=0.2.0",
     "imageinfo": "=1.0.4",
-    "jsdom": "=0.11.0",
+    "jsdom": "=1.0.0-pre.6",
     "lodash": "=2.4.1",
     "minimize": "=0.7.6",
     "mkdirp": "=0.3.5",
