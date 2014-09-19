@@ -13,7 +13,7 @@ builder tool we are using at One.com for some of our web apps.
 If you just want to get started with the basics, read [Peter Müller - Getting started with Assetgraph](http://mntr.dk/2014/getting-started-with-assetgraph/).
 
 If you are looking for a prepackaged build system take a look at <a
-href="https://github.com/One-com/assetgraph-builder">Assetgraph-builder</a>.
+href="https://github.com/assetgraph/assetgraph-builder">Assetgraph-builder</a>.
 
 Check out <a href="http://gofish.dk/assetgraph.pdf">the slides from a
 presentation of AssetGraph</a> held at <a
@@ -21,7 +21,7 @@ href="http://www.meetup.com/The-Oresund-JavaScript-Meetup/">the
 Öresund JavaScript Meetup</a> on June 16th, 2011.
 
 The complete AssetGraph-based build system mentioned in the slides can
-be found <a href="https://github.com/One-com/assetgraph-builder">here</a>.
+be found <a href="https://github.com/assetgraph/assetgraph-builder">here</a>.
 
 
 Assets and relations
@@ -130,7 +130,7 @@ Features
   rewrite all references to them.
 * Use Graphviz to visualize your dependencies at any step.
 * Using the separate <a
-  href="https://github.com/One-com/assetgraph-sprite">assetgraph-sprite
+  href="https://github.com/assetgraph/assetgraph-sprite">assetgraph-sprite
   transform</a>: Optimize CSS background images by creating sprite
   images. The spriting is guided by a set of custom CSS properties
   with a `-ag-sprite` prefix.
@@ -470,7 +470,7 @@ rel='stylesheet' href='...'>`) relations.
 If your project uses deeply nested `INCLUDE` statements, this
 transform allows you to create a "development version" that works in a
 browser. Refer to <a
-href="https://github.com/One-com/assetgraph-builder/blob/master/bin/buildDevelopment">the
+href="https://github.com/assetgraph/assetgraph-builder/blob/master/bin/buildDevelopment">the
 buildDevelopment script from AssetGraph-builder</a>.
 
 For example:
@@ -736,7 +736,7 @@ the assets that have already been moved don't change as a result of
 updating the urls of the related assets after the fact.
 
 Here's a simplified example taken from `buildProduction` in
-<a href="http://github.com/One-com/assetgraph-builder">AssetGraph-builder</a>.
+<a href="http://github.com/assetgraph/assetgraph-builder">AssetGraph-builder</a>.
 
 ```javascript
 assetGraph.moveAssetsInOrder({type: ['JavaScript', 'Css', 'Jpeg', 'Gif', 'Png']}, function (asset) {
@@ -983,7 +983,7 @@ Starts watching all non-inline `file://` assets (or those matching
 following transformations when a source file is changed on disc.
 
 Used to power `buildDevelopment --watch` in <a
-href="http://github.com/One-com/assetgraph-builder">AssetGraph-builder</a>.
+href="http://github.com/assetgraph/assetgraph-builder">AssetGraph-builder</a>.
 Should be considered experimental.
 
 
