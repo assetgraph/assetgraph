@@ -43,7 +43,7 @@
     "source-map": "0.1.33",
     "uglify-js-papandreou": "2.4.13-patch1",
     "uglifyast": "0.3.1",
-    "urltools": "0.1.1",
+    "urltools": "0.2.0",
     "xmldom": "0.1.19"
   },
   "devDependencies": {
