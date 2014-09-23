@@ -25,6 +25,7 @@
     "createerror": "=0.4.1",
     "cssmin": "=0.3.1",
     "cssom-papandreou": "=0.2.4-patch6",
+    "deep-extend": "=0.2.11",
     "glob": "=4.0.3",
     "html-minifier": "=0.6.8",
     "httperrors": "=0.2.0",
