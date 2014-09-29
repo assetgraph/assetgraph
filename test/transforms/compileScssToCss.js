@@ -135,4 +135,20 @@ describe('transforms/compileScssToCss', function () {
             })
             .run(done);
     });
+
+    it('should pick up and compile scss included via requirejs css plugin', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileScssToCss/requirePlugin/', followRelations: {}})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Scss');
+                expect(assetGraph, 'to contain no asset', 'Css');
+            })
+            .compileScssToCss({type: 'Scss'})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain no asset', 'Scss');
+                expect(assetGraph, 'to contain asset', 'Css');
+            })
+            .run(done);
+    });
 });
