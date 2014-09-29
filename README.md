@@ -315,6 +315,14 @@ Finds all `Less` assets in the graph (or those specified by
 originals.
 
 
+assetGraph.compileScssToCss([queryObj])
+---------------------------------------
+
+Finds all `Scss` assets in the graph (or those specified by
+`queryObj`), compiles them to `Css` assets and replaces the
+originals.
+
+
 assetGraph.compressJavaScript([queryObj[, compressorName[, compressorOptions]]])
 --------------------------------------------------------------------------------
 
