@@ -14,4 +14,18 @@ describe('relations/HtmlDart', function () {
             })
             .run(done);
     });
+
+    it('should not inline Dart assets (unsupported)', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDart/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', { type: 'Dart', isInline: false }, 1);
+            })
+            .inlineRelations('HtmlDart')
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', { type: 'Dart', isInline: false }, 1);
+            })
+            .run(done);
+    });
 });
