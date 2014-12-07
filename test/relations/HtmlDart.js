@@ -22,7 +22,7 @@ describe('relations/HtmlDart', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', { type: 'Dart', isInline: false }, 1);
             })
-            .inlineRelations('HtmlDart')
+            .inlineRelations({ type: 'HtmlDart' })
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', { type: 'Dart', isInline: false }, 1);
             })
