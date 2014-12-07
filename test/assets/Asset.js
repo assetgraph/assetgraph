@@ -118,7 +118,7 @@ describe('assets/Asset', function () {
     });
 
     it('should yet yet another Html asset with an url that has an extension', function () {
-        var htmlAsset =new AssetGraph.Html({
+        var htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index.blah'
         });
@@ -550,6 +550,31 @@ describe('assets/Asset', function () {
 
             expect(getRawSrc, 'not to throw');
             expect(emitSpy, 'was called once');
+            expect(getRawSrc(), 'to be undefined');
+        });
+
+        it('should set the rawSrc of an asset correctly', function () {
+            var original = new AssetGraph.Asset({
+                rawSrc: new Buffer('original', 'utf8')
+            });
+            var clone = new AssetGraph.Asset({
+                rawSrc: new Buffer('clone', 'utf8')
+            });
+
+            var assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/assets/Asset/rawSrc/' });
+            assetGraph.addAsset(original);
+            assetGraph.addAsset(clone);
+
+            var unloadSpy = sinon.spy(clone, 'unload');
+            var markDirtySpy = sinon.spy(clone, 'markDirty');
+            var populateSpy = sinon.spy(clone, 'populate');
+
+            clone.rawSrc = original.rawSrc;
+
+            expect(unloadSpy, 'was called once');
+            expect(markDirtySpy, 'was called once');
+            expect(populateSpy, 'was called once');
+            expect(clone.rawSrc.toString(), 'to be', original.rawSrc.toString());
         });
 
         it('should handle a test case with the same Png image loaded from disc and http', function (done) {
