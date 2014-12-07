@@ -1,11 +1,9 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins').clone(),
+var expect = require('../unexpected-with-plugins'),
     sinon = require('sinon'),
     _ = require('lodash'),
     urlTools = require('urltools'),
     AssetGraph = require('../../lib');
-
-expect.installPlugin(require('unexpected-sinon'));
 
 describe('assets/Asset', function () {
     describe('#load(cb)', function () {
