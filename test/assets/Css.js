@@ -49,6 +49,26 @@ describe('assets/Css', function () {
             .run(done);
     });
 
+    it('should get the default encoding when there is no other way to determine encoding', function () {
+        var asset = new AssetGraph.Css({});
+
+        expect(asset.encoding, 'to be', AssetGraph.Text.prototype.defaultEncoding);
+    });
+
+    it('should get set a new encoding correctly', function () {
+        var asset = new AssetGraph.Css({
+            encoding: 'utf-8',
+            text: 'body:before { content: "🐮"; }'
+        });
+
+        var markDirtySpy = sinon.spy(asset, 'markDirty');
+
+        asset.encoding = 'iso-8859-1';
+
+        expect(markDirtySpy, 'was called once');
+        expect(asset.encoding, 'to be', 'iso-8859-1');
+    });
+
     it('should minify Css text', function () {
         var cssText = 'body {\n    background: red;\n}\n';
         var asset = new AssetGraph.Css({
