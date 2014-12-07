@@ -22,6 +22,23 @@ describe('relations/HtmlScript', function () {
             .run(done);
     });
 
+    it('should attach script node after another when using the `after` position', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                var firstScript = assetGraph.findRelations({ type: 'HtmlScript' })[0];
+
+                expect(firstScript.node.hasAttribute('src'), 'to be', true);
+                expect(firstScript.node.getAttribute('src'), 'to be', 'externalNoType.js');
+
+                firstScript.inline();
+
+                expect(firstScript.node.hasAttribute('src'), 'to be', false);
+            })
+            .run(done);
+    });
+
     it('should attach script node before the first existing script node when using the `first` position', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'})
             .loadAssets('index.html')
