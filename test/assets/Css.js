@@ -125,4 +125,25 @@ describe('assets/Css', function () {
 
         expect(emitter, 'was called once');
     });
+
+    it('should update the text of a Css asset when setting parseTree', function () {
+        var cssText = 'body {}';
+        var first = new AssetGraph.Css({
+            text: 'h1 {}'
+        });
+        var second = new AssetGraph.Css({
+            text: cssText
+        });
+
+        var unloadSpy = sinon.spy(first, 'unload');
+        var markDirtySpy = sinon.spy(first, 'markDirty');
+
+        first.parseTree = second.parseTree;
+
+        expect(unloadSpy, 'was called once');
+        expect(markDirtySpy, 'was called once');
+
+        console.log(first.parseTree.toString());
+        expect(first.text, 'to be', cssText);
+    });
 });
