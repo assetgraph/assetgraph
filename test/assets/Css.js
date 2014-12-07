@@ -45,4 +45,28 @@ describe('assets/Css', function () {
             })
             .run(done);
     });
+
+    it('should minify Css text', function () {
+        var cssText = 'body {\n    background: red;\n}\n';
+        var asset = new AssetGraph.Css({
+            text: cssText
+        });
+
+        expect(asset.text, 'to be', cssText);
+
+        asset.minify();
+        expect(asset.text, 'to be', 'body{background:red}');
+    });
+
+    it('should pretty print Css text', function () {
+        var cssText = 'body{background:red}';
+        var asset = new AssetGraph.Css({
+            text: cssText
+        });
+
+        expect(asset.text, 'to be', cssText);
+
+        asset.prettyPrint();
+        expect(asset.text, 'to be', 'body {background: red;}\n');
+    });
 });
