@@ -5,6 +5,17 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
 describe('assets/Asset', function () {
+    describe('#load(cb)', function () {
+        it('should error when there is no file handle and the asset is not in a graph', function (done) {
+            var asset = new AssetGraph.Asset({});
+
+            asset.load(function (err) {
+                expect(err, 'to be an', Error);
+                done();
+            });
+        });
+    });
+
     it('should handle an asset with an extensionless url', function () {
         var htmlAsset = new AssetGraph.Html({
             text: 'foo',
