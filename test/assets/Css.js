@@ -1,6 +1,9 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
+var expect = require('../unexpected-with-plugins').clone(),
+    sinon = require('sinon'),
     AssetGraph = require('../../lib');
+
+expect.installPlugin(require('unexpected-sinon'));
 
 describe('assets/Css', function () {
     it('should handle a test case with a parse error in an inline Css asset', function (done) {
@@ -68,5 +71,40 @@ describe('assets/Css', function () {
 
         asset.prettyPrint();
         expect(asset.text, 'to be', 'body {background: red;}\n');
+    });
+
+    it('should throw an error on completely invalid CSS', function () {
+        var asset = new AssetGraph.Css({
+            text: 'body {}'
+        });
+        function getParseTree() {
+            return asset.parseTree;
+        }
+
+        expect(getParseTree, 'not to throw');
+
+        asset.text = '}';
+
+        expect(getParseTree, 'to throw');
+    });
+
+    it('should emit an error on completely invalid CSS if the asset is part of an assetGraph', function () {
+        var assetGraph = new AssetGraph();
+        var asset = new AssetGraph.Css({
+            text: 'body {}'
+        });
+        function getParseTree() {
+            return asset.parseTree;
+        }
+
+        assetGraph.addAsset(asset);
+        var emitter = sinon.spy(assetGraph, 'emit');
+
+        expect(getParseTree, 'not to throw');
+        expect(emitter, 'was not called');
+
+        asset.text = '}';
+
+        expect(emitter, 'was called once');
     });
 });
