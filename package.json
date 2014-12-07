@@ -62,8 +62,8 @@
     "sinon": "1.10.2",
     "stylus": "0.23.0",
     "svgo": "0.4.4",
-    "unexpected": "3.2.0",
-    "unexpected-jsdom": "0.1.0",
+    "unexpected": "5.0.0-beta23",
+    "unexpected-jsdom": "5.0.0",
     "unexpected-sinon": "3.0.2",
     "yui-compressor": "0.1.3"
   },

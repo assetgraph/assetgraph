@@ -1,9 +1,7 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins').clone(),
+var expect = require('../unexpected-with-plugins'),
     sinon = require('sinon'),
     AssetGraph = require('../../lib');
-
-expect.installPlugin(require('unexpected-sinon'));
 
 describe('assets/Css', function () {
     it('should handle a test case with a parse error in an inline Css asset', function (done) {
