@@ -631,4 +631,28 @@ describe('assets/Asset', function () {
                 .run(done);
         });
     });
+
+    describe('#extension', function () {
+        it('should be appended when no etension exists', function () {
+            var asset = new AssetGraph.Asset({
+                fileName: 'foo'
+            });
+
+            asset.extension = '.bar';
+
+            expect(asset.extension, 'to be', '.bar');
+            expect(asset.fileName, 'to be', 'foo.bar');
+        });
+
+        it('should be replaced it if exists', function () {
+            var asset = new AssetGraph.Asset({
+                fileName: 'foo.bar'
+            });
+
+            asset.extension = '.baz';
+
+            expect(asset.extension, 'to be', '.baz');
+            expect(asset.fileName, 'to be', 'foo.baz');
+        });
+    });
 });
