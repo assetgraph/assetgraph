@@ -35,7 +35,7 @@ module.exports = function (expect) {
 
             assetGraph.findAssets({isInline: false}).forEach(function (asset) {
                 output.text((asset.isLoaded ? ' ' : '!') + ' ' + urlTools.buildRelativeUrl(assetGraph.root, asset.url)).nl();
-            })
+            });
 
             return output.text(')');
         }
