@@ -1,8 +1,11 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
+var expect = require('../unexpected-with-plugins').clone(),
+    sinon = require('sinon'),
     _ = require('lodash'),
     urlTools = require('urltools'),
     AssetGraph = require('../../lib');
+
+expect.installPlugin(require('unexpected-sinon'));
 
 describe('assets/Asset', function () {
     describe('#load(cb)', function () {
@@ -525,6 +528,30 @@ describe('assets/Asset', function () {
     });
 
     describe('#rawSrc', function () {
+        it('should throw when getting a non-existing rawSrc', function () {
+            var asset = new AssetGraph.Asset({});
+            var getRawSrc = function () {
+                return asset.rawSrc;
+            };
+
+            expect(getRawSrc, 'to throw');
+        });
+
+        it('should emit an error when getting a non-existing rawSrc from an asset in a graph', function () {
+            var assetGraph = new AssetGraph();
+            var asset = new AssetGraph.Asset({});
+            var getRawSrc = function () {
+                return asset.rawSrc;
+            };
+
+            assetGraph.addAsset(asset);
+
+            var emitSpy = sinon.spy(assetGraph, 'emit');
+
+            expect(getRawSrc, 'not to throw');
+            expect(emitSpy, 'was called once');
+        });
+
         it('should handle a test case with the same Png image loaded from disc and http', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/rawSrc/'})
                 .loadAssets('purplealpha24bit.png', 'http://gofish.dk/purplealpha24bit.png')
