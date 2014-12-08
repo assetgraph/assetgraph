@@ -125,4 +125,24 @@ describe('assets/Css', function () {
 
         expect(emitter, 'was called once');
     });
+
+    it('should update the text of a Css asset when setting parseTree', function () {
+        var cssText = 'h1{color:hotpink}';
+        var first = new AssetGraph.Css({
+            text: 'h1{color:red}'
+        });
+        var second = new AssetGraph.Css({
+            text: cssText
+        });
+
+        var unloadSpy = sinon.spy(first, 'unload');
+        var markDirtySpy = sinon.spy(first, 'markDirty');
+
+        first.parseTree = second.parseTree;
+
+        expect(unloadSpy, 'was called once');
+        expect(markDirtySpy, 'was called once');
+
+        expect(first.text, 'to be', cssText);
+    });
 });
