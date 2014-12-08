@@ -447,6 +447,14 @@ describe('assets/Asset', function () {
         });
     });
 
+    describe('#populate()', function () {
+        it('should throw when trying to populate an asset that is not in a graph', function () {
+            var asset = new AssetGraph.Asset({});
+
+            expect(function () { return asset.populate(); }, 'to throw');
+        });
+    });
+
     describe('#outgoingRelations', function () {
         it('should handle a combo test case', function () {
             var htmlAsset = new AssetGraph.Html({
