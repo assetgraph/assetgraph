@@ -127,9 +127,9 @@ describe('assets/Css', function () {
     });
 
     it('should update the text of a Css asset when setting parseTree', function () {
-        var cssText = 'body {}';
+        var cssText = 'h1{color:hotpink}';
         var first = new AssetGraph.Css({
-            text: 'h1 {}'
+            text: 'h1{color:red}'
         });
         var second = new AssetGraph.Css({
             text: cssText
@@ -143,7 +143,6 @@ describe('assets/Css', function () {
         expect(unloadSpy, 'was called once');
         expect(markDirtySpy, 'was called once');
 
-        console.log(first.parseTree.toString());
         expect(first.text, 'to be', cssText);
     });
 });
