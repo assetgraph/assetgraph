@@ -455,6 +455,34 @@ describe('assets/Asset', function () {
         });
     });
 
+    describe('#replaceWith()', function () {
+        it('should throw when replacing an asset that is not in a graph', function () {
+            var asset = new AssetGraph.Asset({});
+
+            expect(function () { return asset.replaceWith(new AssetGraph.Asset({})); }, 'to throw');
+        });
+
+        it('should throw when replacing an asset with a non-asset', function () {
+            var graph = new AssetGraph();
+            var asset = new AssetGraph.Asset({});
+
+            graph.addAsset(asset);
+
+            expect(function () { return asset.replaceWith(); }, 'to throw');
+        });
+
+        it('should throw when replacing an asset with an asset that is already in the graph', function () {
+            var graph = new AssetGraph();
+            var asset = new AssetGraph.Asset({});
+            var newAsset = new AssetGraph.Asset({});
+
+            graph.addAsset(asset);
+            graph.addAsset(newAsset);
+
+            expect(function () { return asset.replaceWith(newAsset); }, 'to throw');
+        });
+    });
+
     describe('#outgoingRelations', function () {
         it('should handle a combo test case', function () {
             var htmlAsset = new AssetGraph.Html({
