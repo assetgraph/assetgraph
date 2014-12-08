@@ -680,6 +680,20 @@ describe('assets/Asset', function () {
                 })
                 .run(done);
         });
+
+        it('should throw when trying to set an url on a non-externalizable asset', function () {
+            var asset = new AssetGraph.Asset({
+                isExternalizable: false
+            });
+
+            expect(function () { asset.url = 'foo'; }, 'to throw');
+        });
+
+        it('should throw when trying to set a relative url with no base or ancestor to determine the relativity', function () {
+            var asset = new AssetGraph.Asset({});
+
+            expect(function () { asset.url = 'foo'; }, 'to throw');
+        });
     });
 
     describe('#extension', function () {
