@@ -51,7 +51,7 @@
     "coffee-script": "1.2.0",
     "coveralls": "2.11.1",
     "iconv": "2.0.3",
-    "istanbul": "0.2.10",
+    "istanbul": "0.3.5",
     "jshint": "2.5.0",
     "less": "1.4.2",
     "mocha": "2.0.1",
@@ -78,6 +78,6 @@
     "lint": "jshint .",
     "test": "npm run lint && mocha",
     "travis": "npm run lint && npm run coverage",
-    "coverage": "NODE_ENV=development ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- --reporter dot"
+    "coverage": "NODE_ENV=development ./node_modules/.bin/istanbul cover -x '**/examples/**' -x '**/testdata/**' --include-all-sources ./node_modules/mocha/bin/_mocha -- --reporter dot"
   }
 }
