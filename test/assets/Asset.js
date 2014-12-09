@@ -763,4 +763,32 @@ describe('assets/Asset', function () {
             expect(asset.fileName, 'to be', 'foo.baz');
         });
     });
+
+    describe('#urlOrDescription', function () {
+        it('should return the path to the file if the url is not a file-url', function () {
+            var url = process.cwd() + '/foo/bar.baz';
+            var asset = new AssetGraph.Asset({
+                url: url
+            });
+
+            expect(asset.urlOrDescription, 'to be', url);
+        });
+
+        it('should return the url if the url is not a file-url', function () {
+            var url = 'https://twitter.com/';
+            var asset = new AssetGraph.Asset({
+                url: url
+            });
+
+            expect(asset.urlOrDescription, 'to be', url);
+        });
+
+        it('should make a file-url under process.cwd() relative to process.cwd()', function () {
+            var asset = new AssetGraph.Asset({
+                url: 'file://' + process.cwd() + '/foo/bar.baz'
+            });
+
+            expect(asset.urlOrDescription, 'to be', 'foo/bar.baz');
+        });
+    });
 });
