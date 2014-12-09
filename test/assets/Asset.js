@@ -311,6 +311,40 @@ describe('assets/Asset', function () {
     });
 
     describe('#clone()', function () {
+        it('should throw if supplying incoming relations and the asset is not in a graph', function () {
+            var asset = new AssetGraph.Asset({});
+
+            expect(asset.clone.bind(asset, true), 'to throw', /incomingRelations not supported because asset/);
+        });
+
+        it('should preserve the assets original url when preserveUrl argument is true', function (done) {
+            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'})
+                .loadAssets('index.css')
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'Css', 1);
+
+                    var original = assetGraph.findAssets({type: 'Css'})[0];
+                    var clone = original.clone(undefined, true);
+
+                    expect(assetGraph, 'to contain assets', 'Css', 2);
+                    expect(clone.url, 'to be', original.url);
+                })
+                .run(done);
+        });
+
+        it('should throw when cloning an asset with invalid incoming relations', function (done) {
+            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'})
+                .loadAssets('index.css')
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'Css', 1);
+
+                    var original = assetGraph.findAssets({type: 'Css'})[0];
+
+                    expect(original.clone.bind(original, [{}]), 'to throw', /Incoming relation is not a relation/);
+                })
+                .run(done);
+        });
+
         it('should handle a test case with multiple Html assets', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/multipleHtmls/'})
                 .loadAssets('index.html')
