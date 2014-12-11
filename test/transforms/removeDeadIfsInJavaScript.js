@@ -5,7 +5,6 @@ var expect = require('../unexpected-with-plugins'),
 describe('transforms/removeDeadIfsInJavaScript', function () {
     it('should remove and preserve the correct if statements', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/removeDeadIfsInJavaScript/'})
-.logEvents()
             .loadAssets('index.js')
             .removeDeadIfsInJavaScript()
             .queue(function (assetGraph) {
