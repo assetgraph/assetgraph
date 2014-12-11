@@ -126,11 +126,16 @@ module.exports = function (expect) {
         }
     }
 
+    function prettyPrintAst(ast) {
+        var outputStream = uglifyJs.OutputStream({
+            comments: false,
+            beautify: true
+        });
+        ast.print(outputStream);
+        return outputStream.get();
+    }
+
     expect.addAssertion('[not] to have the same AST as', function (expect, subject, value) {
-        if (this.flags.not) {
-            expect(toAst(subject).print_to_string(), 'not to equal', toAst(value).print_to_string());
-        } else {
-            expect(toAst(subject).print_to_string(), 'to equal', toAst(value).print_to_string());
-        }
+        expect(prettyPrintAst(toAst(subject)), '[not] to equal', prettyPrintAst(toAst(value)));
     });
 };
