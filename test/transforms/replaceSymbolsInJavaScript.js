@@ -2,6 +2,7 @@
 var unexpected = require('../unexpected-with-plugins'),
     passError = require('passerror'),
     AssetGraph = require('../../lib/'),
+    passError = require('passerror'),
     uglifyJs = AssetGraph.JavaScript.uglifyJs;
 
 describe('transforms/replaceSymbolsInJavaScript', function () {
@@ -11,6 +12,7 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
     });
 
     var expect = unexpected.clone().addAssertion('to come out as', function (expect, subject, value, done) {
+        this.args.pop(); // Don't inspect the callback when the assertion fails
         // subject.code, subject.defines
         expect(subject, 'to be an object');
         var assetConfig = {
@@ -29,7 +31,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({fileName: 'bogus.js'})[0], 'to have the same AST as', value);
             })
-            .run(done);
+            .run(function (err) {
+                done(err, !err && assetGraph.findAssets()[0].parseTree);
+            });
     });
 
     it('should replace a primitive value', function (done) {
@@ -229,5 +233,23 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
             123 + 456;
             /* jshint ignore:end */
         }, done);
+    });
+
+    it('should not use the same AST node instance when replacing multiple occurrences', function (done) {
+        expect({
+            text: 'FOO + FOO',
+            defines: {
+                FOO: 2
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            2 + 2;
+            /* jshint ignore:end */
+        }, passError(done, function (parseTree) {
+            var binOp = parseTree.body[0].body;
+            expect(binOp, 'to be an', uglifyJs.AST_Binary);
+            expect(binOp.left, 'not to be', binOp.right);
+            done();
+        }));
     });
 });
