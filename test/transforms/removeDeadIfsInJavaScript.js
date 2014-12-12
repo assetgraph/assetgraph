@@ -36,6 +36,10 @@ describe('transforms/removeDeadIfsInJavaScript', function () {
                     } else {
                         keepMe();
                     }
+
+                    function fooBar() {
+                        keepMe();
+                    }
                     /*jshint ignore:end*/
                 });
             })

@@ -49,3 +49,12 @@ if ("foo" === "bar") {
 } else {
     keepMe();
 }
+
+function fooBar() {
+    if ("foo" === "foo") {
+        keepMe();
+    }
+    if ("foo" === "bar") {
+        removeMe();
+    }
+}
