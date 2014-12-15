@@ -2,7 +2,7 @@ AssetGraph
 ==========
 [![NPM version](https://badge.fury.io/js/assetgraph.svg)](http://badge.fury.io/js/assetgraph)
 [![Build Status](https://travis-ci.org/assetgraph/assetgraph.svg?branch=master)](https://travis-ci.org/assetgraph/assetgraph)
-[![Coverage Status](https://img.shields.io/coveralls/assetgraph/assetgraph/badge.png)](https://coveralls.io/r/assetgraph/assetgraph)
+[![Coverage Status](https://img.shields.io/coveralls/assetgraph/assetgraph.svg)](https://coveralls.io/r/assetgraph/assetgraph?branch=master)
 [![Dependency Status](https://david-dm.org/assetgraph/assetgraph.svg)](https://david-dm.org/assetgraph/assetgraph)
 
 AssetGraph is an extensible, <a href="http://nodejs.org/">node.js</a>-based
