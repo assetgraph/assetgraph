@@ -3,6 +3,13 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
 describe('transforms/moveAssets', function () {
+    it('should throw if mandatory second argument is missing', function () {
+        var tq = new AssetGraph({root: 'http://www.example.com/blah/'})
+            .loadAssets({type: 'Html', text: 'foo', url: 'http://www.example.com/blah/quux.html'});
+
+        expect(tq.moveAssets, 'to throw');
+    });
+
     it('should handle a test case with a non-inline asset that is moved to another absolute url', function (done) {
         new AssetGraph({root: 'http://www.example.com/blah/'})
             .loadAssets({type: 'Html', text: 'foo', url: 'http://www.example.com/blah/quux.html'})
