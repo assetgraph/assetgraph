@@ -16,7 +16,8 @@
   ],
   "files": [
     "lib",
-    "examples"
+    "examples",
+    "test/unexpectedAssetGraph.js"
   ],
   "dependencies": {
     "accord": "0.11.0",
