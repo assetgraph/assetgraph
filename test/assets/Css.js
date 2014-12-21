@@ -145,4 +145,19 @@ describe('assets/Css', function () {
 
         expect(first.text, 'to be', cssText);
     });
+
+    it('should not fail parsing nested media queries', function (done) {
+        var warnings = [];
+
+        new AssetGraph({ root: __dirname + '/../../testdata/assets/Css/parseErrors/' })
+            .on('warn', function (warning) {
+                warnings.push(warning);
+            })
+            .loadAssets('nestedMediaQueries.css')
+            .populate()
+            .queue(function checkWarnings(assetGraph) {
+                expect(warnings, 'to be an empty array');
+            })
+            .run(done);
+    });
 });
