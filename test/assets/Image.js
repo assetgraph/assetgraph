@@ -50,7 +50,7 @@ describe('assets/Image', function () {
                 devicePixelRatio: 2
             });
 
-            expect(img.fileName, 'to be', 'foo@2x.png');
+            expect(img.fileName, 'to be', 'foo.png');
             expect(img.devicePixelRatio, 'to be', 2);
         });
 
@@ -70,7 +70,7 @@ describe('assets/Image', function () {
 
             img.devicePixelRatio = 2;
 
-            expect(img.fileName, 'to be', 'foo@2x.png');
+            expect(img.fileName, 'to be', 'foo.png');
             expect(img.devicePixelRatio, 'to be', 2);
         });
 
