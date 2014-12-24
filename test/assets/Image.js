@@ -74,6 +74,17 @@ describe('assets/Image', function () {
             expect(img.devicePixelRatio, 'to be', 2);
         });
 
+        it('should keep its device pixel ratio even when a filname changes to no longer contain the ratio', function () {
+            var img = new AssetGraph.Image({
+                fileName: 'foo@4x.png'
+            });
+
+            img.fileName = 'foo.png';
+
+            expect(img.fileName, 'to be', 'foo.png');
+            expect(img.devicePixelRatio, 'to be', 4);
+        });
+
         it('should update device pixel ratio when settign fileName', function () {
             var img = new AssetGraph.Image({
                 fileName: 'foo.png'
