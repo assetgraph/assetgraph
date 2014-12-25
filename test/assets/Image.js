@@ -63,6 +63,15 @@ describe('assets/Image', function () {
             expect(img.devicePixelRatio, 'to be', 3);
         });
 
+        it('should set device pixel ratio as a side effect of url via constructor options', function () {
+            var img = new AssetGraph.Image({
+                url: 'path/to/foo@3x.png'
+            });
+
+            expect(img.fileName, 'to be', 'foo@3x.png');
+            expect(img.devicePixelRatio, 'to be', 3);
+        });
+
         it('should be able to set device pixel ratio via setter', function () {
             var img = new AssetGraph.Image({
                 fileName: 'foo.png'
@@ -85,12 +94,23 @@ describe('assets/Image', function () {
             expect(img.devicePixelRatio, 'to be', 4);
         });
 
-        it('should update device pixel ratio when settign fileName', function () {
+        it('should update device pixel ratio when setting fileName', function () {
             var img = new AssetGraph.Image({
                 fileName: 'foo.png'
             });
 
             img.fileName = 'foo@2x.png';
+
+            expect(img.fileName, 'to be', 'foo@2x.png');
+            expect(img.devicePixelRatio, 'to be', 2);
+        });
+
+        it('should update device pixel ratio when setting url', function () {
+            var img = new AssetGraph.Image({
+                url: 'path/to/foo.png'
+            });
+
+            img.url = 'path/to/foo@2x.png';
 
             expect(img.fileName, 'to be', 'foo@2x.png');
             expect(img.devicePixelRatio, 'to be', 2);
