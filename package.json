@@ -17,6 +17,7 @@
   "files": [
     "lib",
     "examples",
+    "test/unexpected-with-plugins.js",
     "test/unexpectedAssetGraph.js"
   ],
   "dependencies": {
