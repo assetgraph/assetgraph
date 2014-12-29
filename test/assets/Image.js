@@ -116,6 +116,30 @@ describe('assets/Image', function () {
             expect(img.devicePixelRatio, 'to be', 2);
         });
 
+        it('should support using comma as decimal seperator in device pixel ratio in url', function () {
+            var img = new AssetGraph.Image({
+                url: 'path/to/foo@2,5x.png'
+            });
+
+            expect(img.devicePixelRatio, 'to be', 2.5);
+
+            img.url = 'path/to/foo@2,3x.png';
+
+            expect(img.devicePixelRatio, 'to be', 2.3);
+        });
+
+        it('should support using comma as decimal seperator in device pixel ratio in fileName', function () {
+            var img = new AssetGraph.Image({
+                fileName: 'foo@2,5x.png'
+            });
+
+            expect(img.devicePixelRatio, 'to be', 2.5);
+
+            img.fileName = 'foo@2,3x.png';
+
+            expect(img.devicePixelRatio, 'to be', 2.3);
+        });
+
         it('should throw if setting a non-number device pixel ratio', function () {
             var img = new AssetGraph.Image({
                 fileName: 'foo.png'
@@ -125,8 +149,11 @@ describe('assets/Image', function () {
             expect(function () { img.devicePixelRatio = 0.1; }, 'not to throw');
             expect(function () { img.devicePixelRatio = 0.000001; }, 'not to throw');
             expect(function () { img.devicePixelRatio = 99999999; }, 'not to throw');
+            expect(function () { img.devicePixelRatio = '2'; }, 'not to throw');
+            expect(function () { img.devicePixelRatio = '2.12345'; }, 'not to throw');
+            expect(function () { img.devicePixelRatio = '2,5'; }, 'not to throw');
 
-            expect(function () { img.devicePixelRatio = '2'; }, 'to throw');
+            expect(function () { img.devicePixelRatio = '-2'; }, 'to throw');
             expect(function () { img.devicePixelRatio = ''; }, 'to throw');
             expect(function () { img.devicePixelRatio = function () {}; }, 'to throw');
             expect(function () { img.devicePixelRatio = {}; }, 'to throw');
