@@ -178,4 +178,18 @@ describe('relations/JavaScriptAmdRequire', function () {
             })
             .run(done);
     });
+
+    it('should handle a test case with nested requirejs require statements', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/lazyRequire/'})
+            .registerRequireJsConfig()
+            .loadAssets('index.html')
+            .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
+            .assumeRequireJsConfigHasBeenFound()
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 4);
+            })
+            .run(done);
+     });
+
 });
