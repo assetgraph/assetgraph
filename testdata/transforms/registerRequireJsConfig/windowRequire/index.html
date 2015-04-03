@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+        window.require = {
+            shim: {
+                underscore: {
+                    exports: '_'
+                },
+                backbone: {
+                    deps: [
+                        'underscore'
+                    ],
+                    exports: 'Backbone'
+                }
+            },
+            paths: {
+                underscore: '../vendor/underscore',
+                backbone: '../vendor/backbone'
+            }
+        };
+    </script>
+    <script src="require.js" data-main="js/main"></script>
+
+</body>
+</html>
