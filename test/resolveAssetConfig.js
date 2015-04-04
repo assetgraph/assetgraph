@@ -108,10 +108,8 @@ describe('resolveAssetConfig', function () {
 
         assetGraph.resolveAssetConfig('android-app://www.example.com/', assetGraph.root, function (error, resolvedAssetConfig) {
             expect(error, 'to be', null);
-            expect(resolvedAssetConfig, 'to be an empty array');
-            expect(assetGraph._warnings, 'to be an array');
-            expect(assetGraph._warnings, 'to have length', 1);
-            expect(assetGraph._warnings[0].message, 'to be', 'AssetGraph.resolveAssetConfig: No resolver found for protocol: android-app');
+            expect(resolvedAssetConfig, 'to equal', { url: 'android-app://www.example.com/' });
+            expect(assetGraph._warnings, 'to be an empty array');
             done();
         });
     });
