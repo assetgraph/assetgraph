@@ -12,7 +12,7 @@ describe('assets/Xml', function () {
                 expect(assetGraph, 'to contain asset', 'Xml');
 
                 var xml = assetGraph.findAssets({type: 'Xml'})[0];
-                expect(xml.parseTree.getElementsByTagName('Description'), 'to have length', 1);
+                expect(xml.parseTree.getElementsByTagName('Description'), 'to have property', 'length', 1);
 
                 xml.parseTree.getElementsByTagName('Description')[0].setAttribute('yay', 'foobarquux');
                 xml.markDirty();
