@@ -79,4 +79,20 @@ describe('transforms/requireJsConfig', function () {
             })
             .run(done);
     });
+
+    it('should pick up requirejs configuration when it is in an already loaded asset when transform is run', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/registerRequireJsConfig/windowRequirejs'})
+            .loadAssets('index.html')
+            .registerRequireJsConfig()
+            .queue(function (assetGraph) {
+                expect(assetGraph.requireJsConfig, 'to satisfy', {
+                    foundConfig: true,
+                    paths: {
+                        underscore: '../vendor/underscore',
+                        backbone: '../vendor/backbone'
+                    }
+                });
+            })
+            .run(done);
+    });
 });
