@@ -1,7 +1,7 @@
 var expect = require('unexpected')
     .clone()
     .installPlugin(require('unexpected-sinon'))
-    .installPlugin(require('unexpected-jsdom'))
+    .installPlugin(require('unexpected-dom'))
     .installPlugin(require('./unexpectedAssetGraph'));
 
 expect.output.installPlugin(require('magicpen-prism'));
