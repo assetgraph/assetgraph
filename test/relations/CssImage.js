@@ -72,4 +72,14 @@ describe('relations/CssImage', function () {
             })
             .run(done);
     });
+
+    it('should handle a test case with a singlequote in a background-image url(...)', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/CssImage/singleQuoteInUrl/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', {type: 'Png'});
+            })
+            .run(done);
+    });
 });
