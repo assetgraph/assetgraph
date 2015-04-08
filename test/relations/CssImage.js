@@ -84,10 +84,10 @@ describe('relations/CssImage', function () {
                 });
                 var text = assetGraph.findAssets({type: 'Css'})[0].text;
                 expect
-                    .it('to contain', "'foo%27bar.png.bogus'")
-                    .and('to contain', "'bar%27quux.png.bogus'")
-                    .and('to contain', "'blah%22baz.png.bogus'")
-                    .and('to contain', "'blerg%22zyp.png.bogus'")
+                    .it('to contain', '\'foo%27bar.png.bogus\'')
+                    .and('to contain', '\'bar%27quux.png.bogus\'')
+                    .and('to contain', '\'blah%22baz.png.bogus\'')
+                    .and('to contain', '\'blerg%22zyp.png.bogus\'')
                     (text);
             })
             .run(done);
