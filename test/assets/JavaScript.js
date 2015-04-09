@@ -182,6 +182,35 @@ describe('assets/JavaScript', function () {
             });
     });
 
+    it('should assume self encapsulation when require function is exposed as argument from outer scope', function (done) {
+        sinon.stub(console, 'warn');
+
+        var selfEncapsulated = new AssetGraph.JavaScript({
+            text: '(function (require, module) { require("dependency"); })'
+        });
+
+        selfEncapsulated.findOutgoingRelationsInParseTree();
+
+        expect(console.warn, 'was not called');
+
+        console.warn.restore();
+
+        var warnings = [];
+        new AssetGraph({ root: '.' })
+            .on('warn', function (warning) {
+                warnings.push(warning);
+            })
+            .loadAssets([
+                selfEncapsulated
+            ])
+            .populate()
+            .queue(function (assetGraph) {
+                expect(warnings, 'to have length', 0);
+                expect(assetGraph, 'to contain relations', 0);
+            })
+            .run(done);
+    });
+
     it('should handle non-file-scheme RequireJS.require dependency errors', function (done) {
         sinon.stub(console, 'warn');
 
