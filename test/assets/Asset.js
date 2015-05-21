@@ -774,6 +774,19 @@ describe('assets/Asset', function () {
         });
     });
 
+    it('should handle an inline asset with an empty url (should resolve to the url of the containing asset)', function (done) {
+        new AssetGraph({root: 'file:///foo/bar/quux'})
+            .loadAssets(new AssetGraph.Html({
+                url: 'file:///foo/bar/quux/baz/index.html',
+                text: '<!DOCTYPE html><html><head><style type="text/css">body{background:url()}</style></head><body></body></html>'
+            }))
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relation', {from: {url: 'file:///foo/bar/quux/baz/index.html'}, to: {type: 'Css', isInline: true}});
+                expect(assetGraph, 'to contain relation', {from: {type: 'Css'}, to: {url: 'file:///foo/bar/quux/baz/index.html'}});
+            })
+            .run(done);
+    });
+
     describe('#extension', function () {
         it('should be appended when no etension exists', function () {
             var asset = new AssetGraph.Asset({
