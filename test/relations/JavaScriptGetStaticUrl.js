@@ -6,7 +6,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/JavaScriptGetStaticUrl', function () {
     it('should handle a test case with a wildcard GETSTATICURL', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptGetStaticUrl/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptGetStaticUrl/wildcard/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -42,7 +42,7 @@ describe('relations/JavaScriptGetStaticUrl', function () {
     });
 
     it('should handle the same wildcard GETSTATICURL test case again', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptGetStaticUrl/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptGetStaticUrl/wildcard/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph, cb) {
