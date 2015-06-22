@@ -2,6 +2,7 @@
 var expect = require('../unexpected-with-plugins'),
     urlTools = require('urltools'),
     Path = require('path'),
+    _ = require('lodash'),
     AssetGraph = require('../../lib');
 
 describe('relations/JavaScriptGetStaticUrl', function () {
@@ -83,6 +84,19 @@ describe('relations/JavaScriptGetStaticUrl', function () {
                         /*jshint evil:false*/
                     })
                     .run(cb);
+            })
+            .run(done);
+    });
+
+    it('should handle root relative urls in a GETSTATICURL', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptGetStaticUrl/rootRelative/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(_.pluck(assetGraph.findRelations({type: 'StaticUrlMapEntry'}), 'href'), 'to equal', [
+                    '/images/bar.png',
+                    '/images/foo.png'
+                ]);
             })
             .run(done);
     });
