@@ -25,8 +25,8 @@ describe('relations/HtmlSvgIsland', function () {
                 expect(assetGraph.findAssets({type: 'Html'})[0].parseTree, 'queried for', 'svg', 'to satisfy', [
                     {
                         attributes: {
-                            foo: 'bar'
-                            // hey: undefined // Waiting for https://github.com/Munter/unexpected-dom/pull/21
+                            foo: 'bar',
+                            hey: undefined
                         }
                     }
                 ]);
