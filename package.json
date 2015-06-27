@@ -21,7 +21,7 @@
     "test/unexpectedAssetGraph.js"
   ],
   "dependencies": {
-    "accord-papandreou": "0.20.0-patch1",
+    "accord": "0.20.1",
     "async": "0.2.9",
     "chalk": "0.4.0",
     "createerror": "0.4.1",
