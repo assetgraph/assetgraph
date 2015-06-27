@@ -21,7 +21,7 @@
     "test/unexpectedAssetGraph.js"
   ],
   "dependencies": {
-    "accord": "0.11.0",
+    "accord-papandreou": "0.20.0-patch1",
     "async": "0.2.9",
     "chalk": "0.4.0",
     "createerror": "0.4.1",
@@ -56,7 +56,7 @@
     "iconv": "2.1.8",
     "istanbul": "0.3.5",
     "jshint": "2.5.0",
-    "less": "1.4.2",
+    "less": "2.5.1",
     "mocha": "2.2.5",
     "mocha-lcov-reporter": "0.0.1",
     "node-sass": "3.2.0",

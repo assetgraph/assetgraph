@@ -2,6 +2,7 @@
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
     Path = require('path'),
+    errors = require('../../lib/errors'),
     query = AssetGraph.query;
 
 describe('transforms/compileScssToCss', function () {
@@ -51,7 +52,7 @@ describe('transforms/compileScssToCss', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Scss');
                 expect(warnings, 'to have length', 1);
-                expect(warnings[0].message, 'to equal', 'invalid top-level expression in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/parseError/index.scss')) + ' at line 1');
+                expect(warnings[0].message, 'to equal', 'invalid top-level expression in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/parseError/index.scss')) + ' at line 1, column 1');
             })
             .run(done);
     });
@@ -71,7 +72,7 @@ describe('transforms/compileScssToCss', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Scss');
                 expect(warnings, 'to have length', 1);
-                expect(warnings[0].message, 'to equal', 'invalid top-level expression in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/parseErrorInImport/imported.scss')) + ' at line 1');
+                expect(warnings[0].message, 'to equal', 'invalid top-level expression in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/parseErrorInImport/imported.scss')) + ' at line 1, column 1');
             })
             .run(done);
     });
@@ -91,7 +92,8 @@ describe('transforms/compileScssToCss', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Scss');
                 expect(warnings, 'to have length', 1);
-                expect(warnings[0].message, 'to equal', 'no mixin named notFound in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/invalidReference/index.scss')) + ' at line 2');
+                expect(warnings[0].message, 'to contain', 'no mixin named notFound');
+                expect(warnings[0].message, 'to contain', Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/invalidReference/index.scss')));
             })
             .run(done);
     });
@@ -110,13 +112,16 @@ describe('transforms/compileScssToCss', function () {
             .compileScssToCss({type: 'Scss'})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Scss');
+                expect(warnings, 'to satisfy', [ expect.it('to be a', errors.ParseError) ]);
                 expect(warnings, 'to have length', 1);
-                expect(warnings[0].message, 'to equal', 'no mixin named notFound in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/invalidReferenceInImport/imported.scss')) + ' at line 2');
-            })
+                expect(warnings[0].message, 'to contain', 'no mixin named notFound');
+                expect(warnings[0].message, 'to contain', Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/invalidReferenceInImport/imported.scss')));
+                expect(warnings[0].message, 'to match', /at line 2|:2/);
+             })
             .run(done);
     });
 
-    it('should populate relations found in the compiled output if a followRelationsw', function (done) {
+    it('should populate relations found in the compiled output if a followRelations', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/compileScssToCss/outgoingRelation/', followRelations: {}})
             .loadAssets('index.scss')
             .populate()
