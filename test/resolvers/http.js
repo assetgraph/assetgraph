@@ -13,7 +13,8 @@ describe('resolvers/http', function () {
                 res.end('Foo');
             }).listen(0),
             serverAddress = server.address(),
-            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/';
+            serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address,
+            rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/';
 
         new AssetGraph({root: rootUrl})
             .queue(function (assetGraph) {
@@ -34,7 +35,8 @@ describe('resolvers/http', function () {
             }),
             server = http.createServer(requestHandler).listen(0),
             serverAddress = server.address(),
-            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/',
+            serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address,
+            rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/',
             warnings = [];
 
         new AssetGraph({root: rootUrl})
@@ -59,7 +61,8 @@ describe('resolvers/http', function () {
             }),
             server = http.createServer(requestHandler).listen(0),
             serverAddress = server.address(),
-            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/',
+            serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address,
+            rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/',
             warnings = [];
 
         new AssetGraph({root: rootUrl})
@@ -92,7 +95,8 @@ describe('resolvers/http', function () {
             }),
             server = http.createServer(requestHandler).listen(0),
             serverAddress = server.address(),
-            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/',
+            serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address,
+            rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/',
             warnings = [];
 
         new AssetGraph({root: rootUrl})
@@ -127,7 +131,8 @@ describe('resolvers/http', function () {
             }),
             server = http.createServer(requestHandler).listen(0),
             serverAddress = server.address(),
-            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/',
+            serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address,
+            rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/',
             warnings = [];
 
         new AssetGraph({root: rootUrl})
@@ -159,7 +164,8 @@ describe('resolvers/http', function () {
             }),
             server = http.createServer(requestHandler).listen(0),
             serverAddress = server.address(),
-            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/',
+            serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address,
+            rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/',
             warnings = [];
 
         new AssetGraph({root: rootUrl})
@@ -189,7 +195,8 @@ describe('resolvers/http', function () {
             }),
             server = http.createServer(requestHandler).listen(0),
             serverAddress = server.address(),
-            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/',
+            serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address,
+            rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/',
             warnings = [];
 
         new AssetGraph({root: rootUrl})
@@ -219,7 +226,8 @@ describe('resolvers/http', function () {
             }),
             server = http.createServer(requestHandler).listen(0),
             serverAddress = server.address(),
-            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/',
+            serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address,
+            rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/',
             warnings = [];
 
         new AssetGraph({root: rootUrl})
@@ -252,7 +260,8 @@ describe('resolvers/http', function () {
             }),
             server = http.createServer(requestHandler).listen(0),
             serverAddress = server.address(),
-            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/',
+            serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address,
+            rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/',
             warnings = [];
 
         new AssetGraph({root: rootUrl})
@@ -285,7 +294,8 @@ describe('resolvers/http', function () {
             }),
             server = http.createServer(requestHandler).listen(0),
             serverAddress = server.address(),
-            rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/',
+            serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address,
+            rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/',
             warnings = [];
 
         new AssetGraph({root: rootUrl})

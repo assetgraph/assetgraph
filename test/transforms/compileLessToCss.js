@@ -52,7 +52,7 @@ describe('transforms/compileLessToCss', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Less');
                 expect(warnings, 'to have length', 1);
-                expect(warnings[0].message, 'to equal', 'missing opening `{` in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileLessToCss/parseError/index.less')) + ' at line 2, column 0:\n}\n\n');
+                expect(warnings[0].message, 'to equal', 'Unrecognised input. Possibly missing opening \'{\' in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileLessToCss/parseError/index.less')) + ' at line 1, column 0:\n\n}\n');
             })
             .run(done);
     });
@@ -72,7 +72,7 @@ describe('transforms/compileLessToCss', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Less');
                 expect(warnings, 'to have length', 1);
-                expect(warnings[0].message, 'to equal', 'missing opening `{` in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileLessToCss/parseErrorInImport/imported.less')) + ' at line 2, column 0:\n}\n\n');
+                expect(warnings[0].message, 'to equal', 'Unrecognised input. Possibly missing opening \'{\' in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileLessToCss/parseErrorInImport/imported.less')) + ' at line 1, column 0:\n\n}\n');
             })
             .run(done);
     });

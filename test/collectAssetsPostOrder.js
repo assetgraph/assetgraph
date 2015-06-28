@@ -13,7 +13,9 @@ describe('AssetGraph#collectAssetsPostOrder()', function () {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 6);
                 var initialAsset = assetGraph.findAssets({url: /index\.js$/})[0];
                 expect(
-                    _.pluck(assetGraph.collectAssetsPostOrder(initialAsset, {type: 'JavaScriptInclude'}), 'url').map(Path.basename),
+                    _.pluck(assetGraph.collectAssetsPostOrder(initialAsset, {type: 'JavaScriptInclude'}), 'url').map(function (url) {
+                        return Path.basename(url);
+                    }),
                     'to equal',
                     ['c.js', 'b.js', 'a.js', 'e.js', 'd.js', 'index.js']
                 );

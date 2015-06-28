@@ -56,7 +56,8 @@ describe('relations/HttpRedirect', function () {
             }).listen(0);
 
         serverAddress = server.address();
-        rootUrl = 'http://' + serverAddress.address + ':' + serverAddress.port + '/';
+        var serverHostname = serverAddress.address === '::' ? 'localhost' : serverAddress.address;
+        rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/';
 
         var assetGraph = new AssetGraph({root: rootUrl});
 
