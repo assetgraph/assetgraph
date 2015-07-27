@@ -99,4 +99,17 @@ describe('relations/Relation', function () {
                 .run(done);
         });
     });
+
+    it('should not add index.html to a relation that does not have it', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/indexHtmlOnFile/'})
+            .loadAssets('linker.html')
+            .populate()
+            .queue(function (assetGraph) {
+                var htmlAnchor = assetGraph.findRelations({type: 'HtmlAnchor'})[0];
+                expect(htmlAnchor.href, 'to equal', '/');
+                htmlAnchor.to.url = 'hey/index.html';
+                expect(htmlAnchor.href, 'to equal', '/hey/');
+            })
+            .run(done);
+    });
 });
