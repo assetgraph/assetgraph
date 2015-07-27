@@ -6,8 +6,8 @@ var expect = require('../unexpected-with-plugins'),
     query = AssetGraph.query;
 
 describe('transforms/populate', function () {
-    it('should handle a test case with an Html asset and some stylesheets when tol dnot to follow relations to Css', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/'})
+    it('should handle a test case with an Html asset and some stylesheets when told not to follow relations to Css', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/notToCss/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {type: query.not('Css')}}})
             .queue(function (assetGraph) {
@@ -24,14 +24,14 @@ describe('transforms/populate', function () {
     });
 
     it('should handle a test case with custom protocols', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/'})
-            .loadAssets('customProtocols.html')
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/customProtocols/'})
+            .loadAssets('index.html')
             .populate({followRelations: {to: {type: query.not('Css')}}})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset');
                 expect(assetGraph, 'to contain no relations');
 
-                var matches = assetGraph.findAssets({url: /\/customProtocols\.html$/})[0].text.match(/<a [^>]*?>/g);
+                var matches = assetGraph.findAssets({url: /\/index\.html$/})[0].text.match(/<a [^>]*?>/g);
                 expect(matches, 'not to be null');
                 expect(matches, 'to have length', 4);
             })
@@ -39,8 +39,8 @@ describe('transforms/populate', function () {
     });
 
     it('should populate a test case with protocol-relative urls from file:', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/'})
-            .loadAssets('protocolRelativeUrls.html')
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/protocolRelativeUrls/'})
+            .loadAssets('index.html')
             .populate({from: {url: /^file:/}})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 3);
@@ -68,7 +68,7 @@ describe('transforms/populate', function () {
                     'absolute'
                 ]);
 
-                expect(assetGraph.findAssets({url: /\/protocolRelativeUrls\.html$/})[0].text.match(/src="(.*?)"/g), 'to equal', [
+                expect(assetGraph.findAssets({url: /\/index\.html$/})[0].text.match(/src="(.*?)"/g), 'to equal', [
                     'src="//cdn.example.com/jquery.min.js"',
                     'src="http://cdn.example.com/jquery.min.js"',
                     'src="https://cdn.example.com/jquery.min.js"'
