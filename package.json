@@ -67,6 +67,7 @@
     "svgo": "0.4.4",
     "unexpected": "9.4.0",
     "unexpected-dom": "1.1.3",
+    "unexpected-mitm": "7.5.1",
     "unexpected-sinon": "6.4.2",
     "yui-compressor": "0.1.3"
   },

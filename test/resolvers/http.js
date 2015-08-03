@@ -315,4 +315,46 @@ describe('resolvers/http', function () {
             })
             .run(done);
     });
+
+    it('should retry once encountering a self-redirect', function () {
+        return expect(function (cb) {
+            new AssetGraph({ root: 'http://example.com/' })
+                .loadAssets('/')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', 'Html');
+                })
+                .run(cb);
+        }, 'with http mocked out', [
+            { request: 'GET http://example.com/', response: { statusCode: 301, headers: { Location: 'http://example.com/' } } },
+            {
+                request: 'GET http://example.com/',
+                response: {
+                    headers: 'Content-Type: text/html; charset=UTF-8',
+                    body: '<!DOCTYPE html><html><head></head><body>Hey!</body></html>'
+                }
+            },
+        ], 'to call the callback without error');
+    });
+
+    it('should disregard the fragment identifier of both the asset being loaded and the Location header when deciding whether it is a self-redirect', function () {
+        return expect(function (cb) {
+            new AssetGraph({ root: 'http://example.com/' })
+                .loadAssets('/#foo')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', 'Html');
+                })
+                .run(cb);
+        }, 'with http mocked out', [
+            { request: 'GET http://example.com/', response: { statusCode: 301, headers: { Location: 'http://example.com/#bar' } } },
+            {
+                request: 'GET http://example.com/',
+                response: {
+                    headers: 'Content-Type: text/html; charset=UTF-8',
+                    body: '<!DOCTYPE html><html><head></head><body>Hey!</body></html>'
+                }
+            },
+        ], 'to call the callback without error');
+    });
 });
