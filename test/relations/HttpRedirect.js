@@ -62,6 +62,9 @@ describe('relations/HttpRedirect', function () {
         var assetGraph = new AssetGraph({root: rootUrl});
 
         assetGraph
+            .queue(function (assetGraph) {
+                assetGraph.resolverByProtocol.http.requestOptions = { numRetries: 1 };
+            })
             .loadAssets('/301', '/302', '/loop', '/infiniteloop')
             .populate()
             .queue(function (assetGraph) {
