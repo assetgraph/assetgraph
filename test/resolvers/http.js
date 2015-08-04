@@ -43,14 +43,17 @@ describe('resolvers/http', function () {
             .on('warn', function (err) {
                 warnings.push(err);
             })
+            .queue(function (assetGraph) {
+                assetGraph.resolverByProtocol.http.requestOptions = { numRetries: 0 };
+            })
             .loadAssets('/foo.html')
             .populate()
             .queue(function (assetGraph) {
+                server.close();
                 expect(warnings, 'to have length', 1);
                 expect(warnings[0].message, 'to equal', 'socket hang up');
                 expect(requestHandler, 'was called once');
                 expect(assetGraph, 'to contain no assets');
-                server.close();
             })
             .run(done);
     });
@@ -75,11 +78,11 @@ describe('resolvers/http', function () {
             .loadAssets('/foo.html')
             .populate()
             .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain no assets');
+                server.close();
                 expect(warnings, 'to have length', 1);
                 expect(warnings[0].message, 'to equal', 'socket hang up');
                 expect(requestHandler, 'was called thrice');
-                expect(assetGraph, 'to contain no assets');
-                server.close();
             })
             .run(done);
     });
@@ -104,16 +107,16 @@ describe('resolvers/http', function () {
                 warnings.push(err);
             })
             .queue(function (assetGraph) {
-                assetGraph.resolverByProtocol.http.requestOptions = {numRetries: 2, timeout: 100};
+                assetGraph.resolverByProtocol.http.requestOptions = {numRetries: 2, timeout: 10};
             })
             .loadAssets('/foo.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(warnings, 'to have length', 1);
-                expect(warnings[0].message, 'to match', /^E(?:SOCKET)?TIMEDOUT$/);
-                expect(requestHandler, 'was called thrice');
-                expect(assetGraph, 'to contain no assets');
                 server.close();
+                expect(assetGraph, 'to contain no assets');
+                expect(requestHandler, 'was called thrice');
+                expect(warnings, 'to have length', 1);
+                expect(warnings[0].name, 'to match', /^E(?:SOCKET)?TIMEDOUT$/);
             })
             .run(done);
     });
@@ -145,10 +148,10 @@ describe('resolvers/http', function () {
             .loadAssets('/foo.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(warnings, 'to equal', []);
-                expect(requestHandler, 'was called twice');
-                expect(assetGraph, 'to contain asset', {type: 'Html', text: 'Foo'});
                 server.close();
+                expect(assetGraph, 'to contain asset', {type: 'Html', text: 'Foo'});
+                expect(requestHandler, 'was called twice');
+                expect(warnings, 'to equal', []);
             })
             .run(done);
     });
@@ -178,10 +181,10 @@ describe('resolvers/http', function () {
             .loadAssets('/foo.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(warnings, 'to equal', []);
+                server.close();
                 expect(requestHandler, 'was called twice');
                 expect(assetGraph, 'to contain asset', {type: 'Html', text: 'Foo'});
-                server.close();
+                expect(warnings, 'to equal', []);
             })
             .run(done);
     });
@@ -209,10 +212,10 @@ describe('resolvers/http', function () {
             .loadAssets('/foo.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(warnings, 'to equal', []);
+                server.close();
                 expect(requestHandler, 'was called twice');
                 expect(assetGraph, 'to contain asset', {type: 'Html', text: 'Foo'});
-                server.close();
+                expect(warnings, 'to equal', []);
             })
             .run(done);
     });
@@ -240,11 +243,11 @@ describe('resolvers/http', function () {
             .loadAssets('/foo.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(warnings, 'to have length', 1);
-                expect(warnings[0].NotFound, 'to be true');
+                server.close();
                 expect(requestHandler, 'was called once');
                 expect(assetGraph, 'to contain no assets', {type: 'Html', text: 'Foo'});
-                server.close();
+                expect(warnings, 'to have length', 1);
+                expect(warnings[0].NotFound, 'to be true');
             })
             .run(done);
     });
@@ -274,10 +277,10 @@ describe('resolvers/http', function () {
             .loadAssets('/foo.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(warnings, 'to equal', []);
+                server.close();
                 expect(requestHandler, 'was called twice');
                 expect(assetGraph, 'to contain asset', {type: 'Html', text: 'Foo'});
-                server.close();
+                expect(warnings, 'to equal', []);
             })
             .run(done);
     });
@@ -303,15 +306,15 @@ describe('resolvers/http', function () {
                 warnings.push(err);
             })
             .queue(function (assetGraph) {
-                assetGraph.resolverByProtocol.http.requestOptions = {numRetries: 2, timeout: 50};
+                assetGraph.resolverByProtocol.http.requestOptions = {numRetries: 2, timeout: 20};
             })
             .loadAssets('/foo.html')
             .populate()
             .queue(function (assetGraph) {
+                server.close();
+                expect(assetGraph, 'to contain asset', {type: 'Html', text: 'FooBar'});
                 expect(requestHandler, 'was called twice');
                 expect(warnings, 'to equal', []);
-                expect(assetGraph, 'to contain asset', {type: 'Html', text: 'FooBar'});
-                server.close();
             })
             .run(done);
     });
@@ -319,6 +322,9 @@ describe('resolvers/http', function () {
     it('should retry once encountering a self-redirect', function () {
         return expect(function (cb) {
             new AssetGraph({ root: 'http://example.com/' })
+                .queue(function (assetGraph) {
+                    assetGraph.resolverByProtocol.http.requestOptions = { numRetries: 1 };
+                })
                 .loadAssets('/')
                 .populate()
                 .queue(function (assetGraph) {
@@ -340,6 +346,9 @@ describe('resolvers/http', function () {
     it('should disregard the fragment identifier of both the asset being loaded and the Location header when deciding whether it is a self-redirect', function () {
         return expect(function (cb) {
             new AssetGraph({ root: 'http://example.com/' })
+                .queue(function (assetGraph) {
+                    assetGraph.resolverByProtocol.http.requestOptions = { numRetries: 1 };
+                })
                 .loadAssets('/#foo')
                 .populate()
                 .queue(function (assetGraph) {
