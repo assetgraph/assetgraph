@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
     http = require('http');
 
-describe('relations/HtmlMetaRefresn', function () {
+describe('relations/HtmlMetaRefresh', function () {
     it('should handle a basic test case', function (done) {
         var serverAddress,
             rootUrl,
