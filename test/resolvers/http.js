@@ -339,7 +339,7 @@ describe('resolvers/http', function () {
                     headers: 'Content-Type: text/html; charset=UTF-8',
                     body: '<!DOCTYPE html><html><head></head><body>Hey!</body></html>'
                 }
-            },
+            }
         ], 'to call the callback without error');
     });
 
@@ -363,7 +363,29 @@ describe('resolvers/http', function () {
                     headers: 'Content-Type: text/html; charset=UTF-8',
                     body: '<!DOCTYPE html><html><head></head><body>Hey!</body></html>'
                 }
-            },
+            }
+        ], 'to call the callback without error');
+    });
+
+    it('should not provide metadata.contentType when the Content-Type header cannot be parsed, thus falling back to parsing the extension', function () {
+        var html = '<!DOCTYPE html>\n<html><head></head><body><p>Hello, world</p></body></html>';
+        return expect(function (cb) {
+            new AssetGraph({ root: 'http://example.com/' })
+                .loadAssets('/foo.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', { type: 'Html', text: html });
+                })
+                .run(cb);
+        }, 'with http mocked out', [
+            {
+                request: 'GET http://example.com/foo.html',
+                response: {
+                    statusCode: 200,
+                    headers: 'Content-Type: &',
+                    body: new Buffer(html)
+                }
+            }
         ], 'to call the callback without error');
     });
 });
