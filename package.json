@@ -2,7 +2,7 @@
   "name": "assetgraph-teepee",
   "description": "An auto discovery dependency graph based optimization framework for web pages and applications",
   "repository": "git://github.com/assetgraph/assetgraph.git",
-  "version": "1.22.0",
+  "version": "1.22.0-patch1",
   "license": "BSD",
   "maintainers": [
     {
