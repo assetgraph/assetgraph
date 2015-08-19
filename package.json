@@ -65,7 +65,7 @@
     "sinon": "1.10.2",
     "stylus": "0.23.0",
     "svgo": "0.4.4",
-    "unexpected": "9.5.0",
+    "unexpected": "9.6.0",
     "unexpected-dom": "1.2.0",
     "unexpected-mitm": "7.7.0",
     "unexpected-sinon": "6.4.2",
