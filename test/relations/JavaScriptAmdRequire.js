@@ -190,6 +190,25 @@ describe('relations/JavaScriptAmdRequire', function () {
                 expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 4);
             })
             .run(done);
-     });
+    });
 
+    it('should handle a test case where the 2nd require parameter is a symbol ref to a function rather than a function', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/requireWithSymbolRef/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptAmdRequire', 3);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 5);
+
+                assetGraph.findRelations({to: {url: /\/a\.js$/}})[0].detach();
+                expect(assetGraph, 'to contain relations', 'JavaScriptAmdRequire', 2);
+
+                expect(
+                    assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text,
+                    'to equal',
+                    'function hello(){}require(["some/module","b.js"],hello);'
+                );
+            })
+            .run(done);
+    });
 });
