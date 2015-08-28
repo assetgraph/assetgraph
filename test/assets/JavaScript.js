@@ -133,22 +133,12 @@ describe('assets/JavaScript', function () {
 
         invalidArgument.findOutgoingRelationsInParseTree();
 
-        expect(console.info.callCount, 'to be', 1);
-        expect(console.info.getCall(0).args[0], 'to match', /Skipping non-string JavaScriptAmdDefine item/);
-
-        console.info.restore();
-
-        var infos = [];
         new AssetGraph({ root: '.' })
-            .on('info', function (info) {
-                infos.push(info);
-            })
             .loadAssets([
                 invalidArgument
             ])
             .populate()
             .run(function (assetGraph) {
-                expect(infos, 'to have length', 1);
                 done();
             });
     });
