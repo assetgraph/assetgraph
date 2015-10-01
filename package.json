@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "closure-compiler": "0.2.3",
-    "coffee-script": "1.2.0",
+    "coffee-script": "1.10.0",
     "coveralls": "2.11.1",
     "iconv": "2.1.11",
     "istanbul": "0.3.21",
