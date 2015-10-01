@@ -33,7 +33,7 @@
     "httperrors": "0.2.0",
     "imageinfo": "1.0.4",
     "jsdom-papandreou": "0.11.0-patch3",
-    "lodash": "2.4.1",
+    "lodash": "3.10.1",
     "minimize": "1.7.2",
     "mkdirp": "0.3.5",
     "normalizeurl": "0.1.3",
