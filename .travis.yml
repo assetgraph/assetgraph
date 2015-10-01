@@ -6,6 +6,9 @@ cache:
 node_js:
   - "0.10"
   - "0.12"
+  - "1"
+  - "2"
+  - "3"
   - "4"
 script: "npm run-script travis"
 after_success: "<coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js"
@@ -21,4 +24,5 @@ notifications:
 # libsass and iconv fails on Node 4.1 (as of 01/10/2015)
 matrix:
   allow_failures:
+      - node_js: "3"
       - node_js: "4"
