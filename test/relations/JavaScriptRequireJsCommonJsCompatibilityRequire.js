@@ -18,7 +18,7 @@ describe('relations/JavaScriptRequireJsCommonJsCompatibilityRequire', function (
             .liftUpJavaScriptRequireJsCommonJsCompatibilityRequire()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'JavaScriptAmdDefine');
-                expect(assetGraph, 'to contain asset', {text: /\["require","somewhere\/foo"\]/});
+                expect(assetGraph, 'to contain asset', {text: /\[\'require\',\'somewhere\/foo\'\]/});
             })
             .flattenRequireJs({type: 'Html'})
             .queue(function (assetGraph) {

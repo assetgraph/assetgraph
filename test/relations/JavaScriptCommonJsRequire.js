@@ -21,7 +21,7 @@ describe('relations/JavaScriptCommonJsRequire', function () {
                 expect(assetGraph.findRelations({to: {url: /\/otherSubdir\/otherModule\.js$/}})[0].href, 'to match',
                              /\/otherSubdir\/otherModule\.js$/);
 
-                expect(assetGraph.findAssets({url: /\/index\.js$/})[0].text, 'to contain', 'require("./otherSubdir/otherModule.js")');
+                expect(assetGraph.findAssets({url: /\/index\.js$/})[0].text, 'to contain', 'require(\'./otherSubdir/otherModule.js\')');
             })
             .run(done);
     });

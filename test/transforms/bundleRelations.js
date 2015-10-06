@@ -170,10 +170,10 @@ describe('transforms/bundleRelations', function () {
                     expect(assetGraph.findRelations({type: 'HtmlScript'}).map(function (htmlScript) {
                         return htmlScript.to.text.replace(/\n/g, '');
                     }), 'to equal', [
-                        'alert("a.js");',
-                        'alert("b.js");alert("c.js");',
-                        'alert("d.js");',
-                        'alert("e.js");'
+                        'alert(\'a.js\');',
+                        'alert(\'b.js\');alert(\'c.js\');',
+                        'alert(\'d.js\');',
+                        'alert(\'e.js\');'
                     ]);
                 })
                 .run(done);
@@ -193,13 +193,13 @@ describe('transforms/bundleRelations', function () {
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain relations', 'HtmlScript', 6);
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                    expect(htmlScripts[0].to.text, 'to equal', 'alert("a");alert("b");alert("c");');
+                    expect(htmlScripts[0].to.text, 'to equal', 'alert(\'a\');alert(\'b\');alert(\'c\');');
                     expect(htmlScripts[1].node.getAttribute('data-foo'), 'to equal', 'bar');
-                    expect(htmlScripts[1].to.text, 'to equal', 'alert("d");');
-                    expect(htmlScripts[2].to.text, 'to equal', 'alert("e");');
-                    expect(htmlScripts[3].to.text, 'to equal', 'alert("f");alert("g");');
-                    expect(htmlScripts[4].to.text, 'to equal', 'alert("h");alert("i");');
-                    expect(htmlScripts[5].to.text, 'to equal', 'alert("j");alert("k");');
+                    expect(htmlScripts[1].to.text, 'to equal', 'alert(\'d\');');
+                    expect(htmlScripts[2].to.text, 'to equal', 'alert(\'e\');');
+                    expect(htmlScripts[3].to.text, 'to equal', 'alert(\'f\');alert(\'g\');');
+                    expect(htmlScripts[4].to.text, 'to equal', 'alert(\'h\');alert(\'i\');');
+                    expect(htmlScripts[5].to.text, 'to equal', 'alert(\'j\');alert(\'k\');');
                 })
                 .run(done);
         });
@@ -580,8 +580,8 @@ describe('transforms/bundleRelations', function () {
                     expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
 
                     expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-                    expect(assetGraph, 'to contain asset', {type: 'JavaScript', text: 'alert("a");\n'});
-                    expect(assetGraph, 'to contain asset', {type: 'JavaScript', text: 'alert("b");\n'});
+                    expect(assetGraph, 'to contain asset', {type: 'JavaScript', text: 'alert(\'a\');\n'});
+                    expect(assetGraph, 'to contain asset', {type: 'JavaScript', text: 'alert(\'b\');\n'});
                 })
                 .run(done);
         });
@@ -600,13 +600,13 @@ describe('transforms/bundleRelations', function () {
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain relations', 'HtmlScript', 6);
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                    expect(htmlScripts[0].to.text, 'to equal', 'alert("a");alert("b");alert("c");');
+                    expect(htmlScripts[0].to.text, 'to equal', 'alert(\'a\');alert(\'b\');alert(\'c\');');
                     expect(htmlScripts[1].node.getAttribute('data-foo'), 'to equal', 'bar');
-                    expect(htmlScripts[1].to.text, 'to equal', 'alert("d");');
-                    expect(htmlScripts[2].to.text, 'to equal', 'alert("e");');
-                    expect(htmlScripts[3].to.text, 'to equal', 'alert("f");alert("g");');
-                    expect(htmlScripts[4].to.text, 'to equal', 'alert("h");alert("i");');
-                    expect(htmlScripts[5].to.text, 'to equal', 'alert("j");alert("k");');
+                    expect(htmlScripts[1].to.text, 'to equal', 'alert(\'d\');');
+                    expect(htmlScripts[2].to.text, 'to equal', 'alert(\'e\');');
+                    expect(htmlScripts[3].to.text, 'to equal', 'alert(\'f\');alert(\'g\');');
+                    expect(htmlScripts[4].to.text, 'to equal', 'alert(\'h\');alert(\'i\');');
+                    expect(htmlScripts[5].to.text, 'to equal', 'alert(\'j\');alert(\'k\');');
                 })
                 .run(done);
         });
