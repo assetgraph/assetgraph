@@ -1,7 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib'),
-    uglifyJs = AssetGraph.JavaScript.uglifyJs;
+    AssetGraph = require('../../lib');
 
 describe('relations/HtmlDataBindAttribute', function () {
     it('should handle a simple test case', function (done) {
@@ -18,10 +17,11 @@ describe('relations/HtmlDataBindAttribute', function () {
                 });
 
                 var javaScript = assetGraph.findAssets({type: 'JavaScript', isInline: true})[0];
-                javaScript.parseTree.body[0].body.properties.push(new uglifyJs.AST_ObjectKeyVal({
-                    key: 'yup',
-                    value: new uglifyJs.AST_String({value: 'right'})
-                }));
+                javaScript.parseTree.body[0].expression.properties.push({
+                    type: 'Property',
+                    key: { type: 'Identifier', name: 'yup' },
+                    value: { type: 'Literal', value: 'yup', raw: '\'yup\''}
+                });
                 javaScript.markDirty();
 
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /yup/);

@@ -1,8 +1,7 @@
 /*global describe, it*/
 var unexpected = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
-    passError = require('passerror'),
-    uglifyJs = AssetGraph.JavaScript.uglifyJs;
+    passError = require('passerror');
 
 describe('assets/Html', function () {
     var expect = unexpected.clone().addAssertion('to minify to', function (expect, subject, value, manipulator) {
@@ -26,12 +25,11 @@ describe('assets/Html', function () {
                 expect(assetGraph, 'to contain asset', 'JavaScript');
 
                 var javaScript = assetGraph.findAssets({type: 'JavaScript', isInline: true})[0];
-                javaScript.parseTree.body.push(new uglifyJs.AST_SimpleStatement({
-                    body: new uglifyJs.AST_Call({
-                        expression: new uglifyJs.AST_SymbolRef({name: 'alert'}),
-                        args: [new uglifyJs.AST_String({value: 'bar'})]
-                    })
-                }));
+                javaScript.parseTree.body.push({
+                    type: 'CallExpression',
+                    callee: { type: 'Identifier', name: 'alert' },
+                    arguments: [ { type: 'Literal', value: 'bar', raw: '\'bar\'' } ]
+                });
                 javaScript.markDirty();
 
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /bar/);

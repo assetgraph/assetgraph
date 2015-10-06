@@ -1,1 +1,1 @@
-alert("a");
+alert('a');
