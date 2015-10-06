@@ -2,8 +2,7 @@
 var unexpected = require('../unexpected-with-plugins'),
     passError = require('passerror'),
     AssetGraph = require('../../lib/'),
-    passError = require('passerror'),
-    uglifyJs = AssetGraph.JavaScript.uglifyJs;
+    passError = require('passerror');
 
 describe('transforms/replaceSymbolsInJavaScript', function () {
     var assetGraph;
@@ -18,7 +17,7 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         var assetConfig = {
             url: 'file://' + __dirname + '/bogus.js'
         };
-        if (subject.parseTree instanceof uglifyJs.AST_Node) {
+        if (subject && typeof subject.type === 'string') {
             assetConfig.parseTree = subject.parseTree;
         } else if (typeof subject.text === 'string') {
             assetConfig.text = subject.text;
@@ -91,7 +90,7 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         expect({
             text: 'var FOO = "bar";',
             defines: {
-                FOO: new uglifyJs.AST_String({value: 'foo'})
+                FOO: { type: 'Literal', value: 'foo' }
             }
         }, 'to come out as', 'var FOO = "bar";', done);
     });
@@ -246,8 +245,8 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
             2 + 2;
             /* jshint ignore:end */
         }, passError(done, function (parseTree) {
-            var binOp = parseTree.body[0].body;
-            expect(binOp, 'to be an', uglifyJs.AST_Binary);
+            var binOp = parseTree.body[0].expression;
+            expect(binOp.type, 'to equal', 'BinaryExpression');
             expect(binOp.left, 'not to be', binOp.right);
             done();
         }));

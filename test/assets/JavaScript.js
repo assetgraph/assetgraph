@@ -3,8 +3,7 @@ var expect = require('../unexpected-with-plugins'),
     _ = require('lodash'),
     AssetGraph = require('../../lib'),
     errors = require('../../lib/errors'),
-    sinon = require('sinon'),
-    uglifyJs = AssetGraph.JavaScript.uglifyJs;
+    sinon = require('sinon');
 
 describe('assets/JavaScript', function () {
     it('should handle a test case that has a parse error in an inline JavaScript asset', function (done) {
@@ -18,7 +17,6 @@ describe('assets/JavaScript', function () {
                 expect(firstWarning, 'to be an', Error);
                 expect(firstWarning.message, 'to match', /parseErrorInInlineJavaScript\.html/);
                 expect(firstWarning.message, 'to match', /line 2\b/);
-                expect(firstWarning.message, 'to match', /column 9\b/);
             })
             .run(done);
     });
@@ -35,7 +33,6 @@ describe('assets/JavaScript', function () {
                 expect(firstWarning, 'to be an', Error);
                 expect(firstWarning.message, 'to match', /parseError\.js/);
                 expect(firstWarning.message, 'to match', /line 6\b/);
-                expect(firstWarning.message, 'to match', /column 14\b/);
             })
             .run(done);
     });
@@ -101,7 +98,7 @@ describe('assets/JavaScript', function () {
         var trhtmlWrongArgumentType = new AssetGraph.JavaScript({ text: 'TRHTML(1, 2, 3);' });
         expect(trhtmlWrongArgumentType.findOutgoingRelationsInParseTree.bind(trhtmlWrongArgumentType), 'to throw', function (e) {
             expect(e.type, 'to be', errors.SyntaxError.type);
-            expect(e.message, 'to be', 'Invalid TRHTML syntax: TRHTML(1,2,3)');
+            expect(e.message, 'to be', 'Invalid TRHTML syntax: TRHTML(1, 2, 3)');
         });
 
         var warnings = [];
@@ -212,7 +209,7 @@ describe('assets/JavaScript', function () {
         invalidScheme.findOutgoingRelationsInParseTree();
 
         expect(console.warn.callCount, 'to be', 1);
-        expect(console.warn.getCall(0).args[0], 'to be', 'Couldn\'t resolve require("./foo"), skipping');
+        expect(console.warn.getCall(0).args[0], 'to be', 'Couldn\'t resolve require(\'./foo\'), skipping');
 
         console.warn.restore();
 
@@ -250,14 +247,20 @@ describe('assets/JavaScript', function () {
             .loadAssets('copyrightNotice.js')
             .queue(function (assetGraph) {
                 var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
-                javaScript.parseTree.body.push(new uglifyJs.AST_Var({
-                    definitions: [
-                        new uglifyJs.AST_VarDef({
-                            name: new uglifyJs.AST_SymbolVar({name: 'foo'}),
-                            value: new uglifyJs.AST_String({value: 'quux'})
-                        })
+                javaScript.parseTree.body.push({
+                    type: 'VariableDeclaration',
+                    kind: 'var',
+                    declarations: [
+                        {
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'foo'
+                            },
+                            init: { type: 'Literal', value: 'quux' }
+                        }
                     ]
-                }));
+                });
                 javaScript.markDirty();
 
                 expect(javaScript.text, 'to match', /Copyright blablabla/);
@@ -270,20 +273,26 @@ describe('assets/JavaScript', function () {
             .loadAssets('initialComment*.js')
             .queue(function (assetGraph) {
                 assetGraph.findAssets({type: 'JavaScript'}).forEach(function (javaScript) {
-                    javaScript.parseTree.body.push(new uglifyJs.AST_Var({
-                        definitions: [
-                            new uglifyJs.AST_VarDef({
-                                name: new uglifyJs.AST_SymbolVar({name: 'foo'}),
-                                value: new uglifyJs.AST_String({value: 'quux'})
-                            })
+                    javaScript.parseTree.body.push({
+                        type: 'VariableDeclaration',
+                        declarations: [
+                            {
+                                type: 'VariableDeclarator',
+                                id: {
+                                    type: 'Identifier',
+                                    name: 'foo'
+                                },
+                                kind: 'var',
+                                init: { type: 'Literal', value: 'quux' }
+                            }
                         ]
-                    }));
-                    javaScript.markDirty();
+                    });
+                    javaScript.minify();
                 });
 
                 var javaScripts = assetGraph.findAssets({type: 'JavaScript'});
-                expect(/Initial comment/.test(javaScripts[0].text), 'to be false');
-                expect(/Initial comment/.test(javaScripts[1].text), 'to be false');
+                expect(javaScripts[0].text, 'not to match', /Initial comment/);
+                expect(javaScripts[1].text, 'not to match', /Initial comment/);
             })
             .run(done);
     });
@@ -293,18 +302,19 @@ describe('assets/JavaScript', function () {
             .loadAssets('commentsBeforeEof.js')
             .populate()
             .queue(function (assetGraph) {
-                assetGraph.findAssets({type: 'JavaScript'})[0].markDirty();
-
+                var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
                 // The reserialized JavaScript asset should still contain @preserve comment before eof, but not the quux one
 
-                var javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
-                expect(javaScript.text, 'to match', /@preserve/);
-                expect(/quux/.test(javaScript.text), 'to be false');
+                javaScript.markDirty();
 
-                // The reserialized JavaScript asset should contain both the @preserve and the quux comment when pretty printed
-                javaScript.prettyPrint();
                 expect(javaScript.text, 'to match', /@preserve/);
                 expect(javaScript.text, 'to match', /quux/);
+
+                javaScript.minify();
+
+                // The reserialized JavaScript asset should contain both the @preserve and the quux comment when pretty printed
+                expect(javaScript.text, 'to match', /@preserve/);
+                expect(javaScript.text, 'not to match', /quux/);
             })
             .run(done);
     });
@@ -336,5 +346,16 @@ describe('assets/JavaScript', function () {
                 expect(assetGraph.findAssets({fileName: 'nonstrict.js'})[0].strict, 'to equal', false);
             })
             .run(done);
+    });
+
+    it('should attempt to fold constants in require calls to string', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
+            .loadAssets('foldableConstants.js')
+            .populate()
+            .queue(function (assetGraph) {
+                var asset = assetGraph.findAssets({type: 'JavaScript'})[0];
+                expect(asset.text, 'to match', /require\(\['foobar'/);
+                expect(asset.text, 'to match', /require\(\['http:\/\/example.com\/foo.js'/);
+            }).run(done);
     });
 });
