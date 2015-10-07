@@ -1,5 +1,6 @@
+services:
+  - docker
 language: node_js
-sudo: false
 cache:
   directories:
   - node_modules
@@ -10,6 +11,14 @@ node_js:
   - "2"
   - "3"
   - "4"
+
+addons:
+  apt:
+    packages:
+      - gcc-4.8
+      - g++-4.8
+env: CXX="g++-4.8" CC="gcc-4.8"
+
 script: "npm run-script travis"
 after_success: "<coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js"
 
