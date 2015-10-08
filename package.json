@@ -56,7 +56,7 @@
     "iconv": "2.1.11",
     "istanbul": "0.3.21",
     "jshint": "2.8.0",
-    "less": "2.5.1",
+    "less": "2.5.3",
     "mocha": "2.2.5",
     "mocha-lcov-reporter": "0.0.1",
     "node-sass": "3.3.3",
