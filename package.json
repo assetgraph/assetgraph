@@ -55,7 +55,7 @@
     "coveralls": "2.11.1",
     "iconv": "2.1.11",
     "istanbul": "0.3.21",
-    "jshint": "2.5.0",
+    "jshint": "2.8.0",
     "less": "2.5.1",
     "mocha": "2.2.5",
     "mocha-lcov-reporter": "0.0.1",
