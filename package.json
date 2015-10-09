@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "accord": "0.20.3",
-    "async": "0.2.9",
+    "async": "1.4.2",
     "chalk": "1.1.1",
     "createerror": "0.4.1",
     "cssmin": "0.3.1",
