@@ -24,7 +24,7 @@
     "accord": "0.20.3",
     "async": "1.4.2",
     "chalk": "1.1.1",
-    "createerror": "0.4.1",
+    "createerror": "1.0.1",
     "cssmin": "0.3.1",
     "cssom-papandreou": "0.3.0-patch2",
     "deep-extend": "0.4.0",
