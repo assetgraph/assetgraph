@@ -28,7 +28,7 @@
     "cssmin": "0.3.1",
     "cssom-papandreou": "0.3.0-patch2",
     "deep-extend": "0.4.0",
-    "glob": "4.2.1",
+    "glob": "5.0.15",
     "html-minifier": "0.6.8",
     "httperrors": "1.1.0",
     "imageinfo": "1.0.4",
