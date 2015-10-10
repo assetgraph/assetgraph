@@ -30,7 +30,7 @@
     "deep-extend": "0.2.11",
     "glob": "4.2.1",
     "html-minifier": "0.6.8",
-    "httperrors": "0.2.0",
+    "httperrors": "1.1.0",
     "imageinfo": "1.0.4",
     "jsdom-papandreou": "0.11.0-patch3",
     "lodash": "3.10.1",
