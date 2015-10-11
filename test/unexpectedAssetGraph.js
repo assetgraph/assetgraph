@@ -71,23 +71,25 @@ module.exports = {
             }
         });
 
-        expect.addAssertion('AssetGraph', 'to contain [no] (asset|assets)', function (expect, subject, value, number) {
-            this.errorMode = 'nested';
-            if (typeof value === 'string') {
-                value = {type: value};
-            } else if (typeof value === 'number') {
-                number = value;
-                value = {};
-            }
-            if (this.flags.no) {
-                number = 0;
-            } else if (typeof number === 'undefined') {
-                number = 1;
-            }
-            expect(subject.findAssets(value).length, 'to equal', number);
-        });
+        expect.addAssertion([
+            '<AssetGraph> to contain [no] (asset|assets) <string|object|number?>',
+            '<AssetGraph> to contain [no] (asset|assets) <string|object|number> <number?>'], function (expect, subject, value, number) {
+                this.errorMode = 'nested';
+                if (typeof value === 'string') {
+                    value = {type: value};
+                } else if (typeof value === 'number') {
+                    number = value;
+                    value = {};
+                }
+                if (this.flags.no) {
+                    return expect(subject.findAssets(value), 'to satisfy', []);
+                } else if (typeof number === 'undefined') {
+                    number = 1;
+                }
+                expect(subject.findAssets(value), 'to have length', number);
+            });
 
-        expect.addAssertion('AssetGraph', 'to contain (url|urls)', function (expect, subject, urls) {
+        expect.addAssertion('<AssetGraph> to contain (url|urls) <string|array?>', function (expect, subject, urls) {
             if (!Array.isArray(urls)) {
                 urls = [urls];
             }
@@ -96,11 +98,11 @@ module.exports = {
             }, this);
             this.errorMode = 'nested';
             urls.forEach(function (url) {
-                expect(subject.findAssets({url: url}).length, 'to equal', 1);
+                expect(subject.findAssets({url: url}), 'to have length', 1);
             });
         });
 
-        expect.addAssertion('AssetGraph', 'to contain [no] (relation|relations) [including unresolved]', function (expect, subject, queryObj, number) {
+        expect.addAssertion('<AssetGraph> to contain [no] (relation|relations) [including unresolved] <string|object|number?>', function (expect, subject, queryObj, number) {
             if (typeof queryObj === 'string') {
                 queryObj = {type: queryObj};
             } else if (typeof queryObj === 'number') {
@@ -113,7 +115,23 @@ module.exports = {
                 number = 1;
             }
             this.errorMode = 'nested';
-            expect(subject.findRelations(queryObj, this.flags['including unresolved']).length, 'to equal', number);
+            expect(subject.findRelations(queryObj, this.flags['including unresolved']), 'to have length', number);
+        });
+
+        expect.addAssertion('<AssetGraph> to contain [no] (relation|relations) [including unresolved] <string|object|number> <number?>', function (expect, subject, queryObj, number) {
+            if (typeof queryObj === 'string') {
+                queryObj = {type: queryObj};
+            } else if (typeof queryObj === 'number') {
+                number = queryObj;
+                queryObj = {};
+            }
+            if (this.flags.no) {
+                number = 0;
+            } else if (typeof number === 'undefined') {
+                number = 1;
+            }
+            this.errorMode = 'nested';
+            expect(subject.findRelations(queryObj, this.flags['including unresolved']), 'to have length', number);
         });
 
         function toAst(stringOrAssetOrFunctionOrAst) {

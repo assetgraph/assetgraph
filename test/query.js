@@ -270,7 +270,7 @@ describe('query', function () {
     });
 
     it('should should handle null input for createValueMatcher', function (done) {
-        expect(query.createValueMatcher(null), 'not to throw error');
+        expect(query.createValueMatcher(null), 'not to throw');
         expect(query.createValueMatcher(null), 'to be a function');
         expect(query.createValueMatcher(null).name, 'to be', 'matchEqual');
 
