@@ -95,4 +95,27 @@ describe('transforms/requireJsConfig', function () {
             })
             .run(done);
     });
+
+    it('should pick up require.js configurations from objects that use bracket notation', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/registerRequireJsConfig/bracketNotation'})
+            .loadAssets('index.html')
+            .registerRequireJsConfig()
+            .queue(function (assetGraph) {
+                expect(assetGraph.requireJsConfig, 'to satisfy', {
+                    foundConfig: true,
+                    paths: {
+                        underscore: '../vendor/underscore',
+                        backbone: '../vendor/backbone'
+                    },
+                    shim: {
+                        backbone: {
+                            deps: [ 'underscore' ],
+                            exports: 'Backbone'
+                        },
+                        underscore: { exports: '_' }
+                    }
+                });
+            })
+            .run(done);
+    });
 });
