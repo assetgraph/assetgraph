@@ -251,4 +251,17 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
             done();
         }));
     });
+
+    it('should support literal object properties in the RHS', function (done) {
+        expect({
+            text: 'alert(123 + theThing.foo + theThing["foo"]);',
+            defines: {
+                theThing: '{"foo": "bar"}'
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            alert(123 + 'bar' + 'bar');
+            /* jshint ignore:end */
+        }, done);
+    });
 });
