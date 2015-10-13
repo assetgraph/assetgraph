@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <script src="system.js"></script>
+        <script src="test-tree.config.js"></script>
+        <script>
+            System.config({
+                paths: {
+                    'jquery-cdn': 'http://code.jquery.com/jquery-1.11.3.min.js'
+                },
+                meta: {
+                    'jquery-cdn': { build: false }
+                }
+            });
+        </script>
+        <script>System.import('amd-1.js');</script>
+    </body>
+</html>
