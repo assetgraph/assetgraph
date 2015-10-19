@@ -61,7 +61,7 @@
     "mocha-lcov-reporter": "1.0.0",
     "node-sass": "3.3.3",
     "onedox": "~0.0.1",
-    "react-tools": "0.10.0",
+    "react-tools": "0.13.3",
     "sinon": "1.17.1",
     "stylus": "0.52.4",
     "svgo": "0.5.6",
