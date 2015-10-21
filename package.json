@@ -43,7 +43,7 @@
     "schemes": "^1.0.1",
     "seq": "0.3.5",
     "setimmediate": "1.0.4",
-    "source-map": "0.5.1",
+    "source-map": "0.5.2",
     "uglify-js-papandreou": "2.4.13-patch1",
     "uglifyast": "0.3.1",
     "urltools": "0.2.0",
