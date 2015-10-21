@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <script src="system.js"></script>
+        <script>
+            System.config({
+                manualBundles: { foo: [ 'a.js', 'b.js' ] }
+            });
+            System.config({
+                manualBundles: { foo: [ 'a.js', 'b.js' ] }
+            });
+        </script>
+        <script>System.import('main.js');</script>
+    </body>
+</html>

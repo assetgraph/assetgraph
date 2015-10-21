@@ -327,4 +327,44 @@ describe('relations/JavaScriptSystemImport', function () {
             })
             .run(done);
     });
+
+    it('should handle a System.import test case with a manual bundle', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/manualBundle/'})
+            .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
+            .loadAssets('index.html')
+            .populate()
+            .bundleSystemJs({ deferredImports: true })
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', {fileName: 'foo.js'});
+                expect(assetGraph.findAssets({fileName: 'foo.js'})[0].text, 'to contain', 'a.js').and('to contain', 'b.js');
+
+                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'not to contain', 'a.js').and('not to contain', 'b.js');
+            })
+            .run(done);
+    });
+
+    it('should allow multiple identical definitions of the same manual bundle', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/duplicateManualBundle/'})
+            .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
+            .loadAssets('index.html')
+            .populate()
+            .bundleSystemJs({ deferredImports: true })
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', {fileName: 'foo.js'});
+                expect(assetGraph.findAssets({fileName: 'foo.js'})[0].text, 'to contain', 'a.js').and('to contain', 'b.js');
+            })
+            .run(done);
+    });
+
+    it('should error out if the same manual bundle is defined multiple times', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingManualBundles/'})
+            .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
+            .loadAssets('index.html')
+            .populate()
+            .bundleSystemJs({ deferredImports: true })
+            .run(function (err) {
+                expect(err, 'to equal', new Error('bundleSystemJs transform: Conflicting definitions of the manual bundle foo'));
+                done();
+            });
+    });
 });
