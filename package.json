@@ -51,7 +51,6 @@
     "setimmediate": "1.0.4",
     "source-map": "0.5.1",
     "uglify-js": "2.4.24",
-    "uglify-js-papandreou": "2.4.13-patch1",
     "urltools": "0.2.0",
     "xmldom": "0.1.19"
   },
