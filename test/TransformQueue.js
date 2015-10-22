@@ -17,7 +17,22 @@ AssetGraph.registerTransform(function pushItemToArrayAsync(item, array) {
     };
 });
 
+AssetGraph.registerTransform(function throwErrorDespiteBeingAsync() {
+    return function (assetGraph, cb) {
+        throw new Error('urgh');
+    };
+});
+
 describe('TransformQueue', function () {
+    it('should propagate a thrown error asynchronously when an async transform throws synchronously' , function (done) {
+        new AssetGraph()
+            .throwErrorDespiteBeingAsync()
+            .run(function (err) {
+                expect(err, 'to equal', new Error('unnamed transform: urgh'));
+                done();
+            });
+    });
+
     it('should handle multiple levels of nested transforms', function (done) {
         var array = [];
         new AssetGraph()
