@@ -1,1 +1,1 @@
-alert("b.js");
+alert('b.js');

@@ -1,12 +1,11 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
-    uglifyJs = AssetGraph.JavaScript.uglifyJs;
+    esprima = require('esprima'),
+    escodegen = require('escodegen');
 
 function getFunctionBodySource(fn) {
-    var outputStream = uglifyJs.OutputStream({beautify: true});
-    uglifyJs.parse(fn.toString().replace(/^function \(\) \{\n|\}$/g, '')).print(outputStream);
-    return outputStream.get();
+    return escodegen.generate(esprima.parse(fn.toString().replace(/^function \(\) \{\n|\}$/g, '')));
 }
 
 describe('transforms/pullGlobalsIntoVariables', function () {

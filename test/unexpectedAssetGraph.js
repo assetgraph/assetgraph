@@ -1,7 +1,7 @@
-var URL = require('url'),
-    urlTools = require('urltools'),
-    AssetGraph = require('../lib/'),
-    uglifyJs = AssetGraph.JavaScript.uglifyJs;
+var URL = require('url');
+var urlTools = require('urltools');
+var esprima = require('esprima');
+var escodegen = require('escodegen');
 
 module.exports = {
     name: 'unexpected-assetgraph',
@@ -57,37 +57,24 @@ module.exports = {
             }
         });
 
-        expect.addType({
-            name: 'UglifyJS',
-            base: 'object',
-            identify: function (obj) {
-                return obj instanceof uglifyJs.AST_Node;
-            },
-            equal: function (a, b) {
-                return a.equivalent_to(b);
-            },
-            inspect: function (astNode, depth, output) {
-                return output.text('AST(').code(astNode.print_to_string(), 'javascript').text(')');
-            }
-        });
-
         expect.addAssertion([
             '<AssetGraph> to contain [no] (asset|assets) <string|object|number?>',
-            '<AssetGraph> to contain [no] (asset|assets) <string|object|number> <number?>'], function (expect, subject, value, number) {
-                this.errorMode = 'nested';
-                if (typeof value === 'string') {
-                    value = {type: value};
-                } else if (typeof value === 'number') {
-                    number = value;
-                    value = {};
-                }
-                if (this.flags.no) {
-                    return expect(subject.findAssets(value), 'to satisfy', []);
-                } else if (typeof number === 'undefined') {
-                    number = 1;
-                }
-                expect(subject.findAssets(value), 'to have length', number);
-            });
+            '<AssetGraph> to contain [no] (asset|assets) <string|object|number> <number?>'
+        ], function (expect, subject, value, number) {
+            this.errorMode = 'nested';
+            if (typeof value === 'string') {
+                value = {type: value};
+            } else if (typeof value === 'number') {
+                number = value;
+                value = {};
+            }
+            if (this.flags.no) {
+                return expect(subject.findAssets(value), 'to satisfy', []);
+            } else if (typeof number === 'undefined') {
+                number = 1;
+            }
+            expect(subject.findAssets(value), 'to have length', number);
+        });
 
         expect.addAssertion('<AssetGraph> to contain (url|urls) <string|array?>', function (expect, subject, urls) {
             if (!Array.isArray(urls)) {
@@ -136,23 +123,18 @@ module.exports = {
 
         function toAst(stringOrAssetOrFunctionOrAst) {
             if (typeof stringOrAssetOrFunctionOrAst === 'string') {
-                return uglifyJs.parse(stringOrAssetOrFunctionOrAst);
+                return esprima.parse(stringOrAssetOrFunctionOrAst);
             } else if (stringOrAssetOrFunctionOrAst.isAsset) {
                 return stringOrAssetOrFunctionOrAst.parseTree;
             } else if (typeof stringOrAssetOrFunctionOrAst === 'function') {
-                return uglifyJs.parse(stringOrAssetOrFunctionOrAst.toString().replace(/^function[^\(]*?\(\)\s*\{|\}$/g, ''));
+                return { type: 'Program', body: esprima.parse('!' + stringOrAssetOrFunctionOrAst.toString()).body[0].expression.argument.body.body };
             } else {
                 return stringOrAssetOrFunctionOrAst;
             }
         }
 
         function prettyPrintAst(ast) {
-            var outputStream = uglifyJs.OutputStream({
-                comments: false,
-                beautify: true
-            });
-            ast.print(outputStream);
-            return outputStream.get();
+            return escodegen.generate(ast);
         }
 
         expect.addAssertion('[not] to have the same AST as', function (expect, subject, value) {
