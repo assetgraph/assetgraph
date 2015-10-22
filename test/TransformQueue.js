@@ -66,6 +66,29 @@ describe('TransformQueue', function () {
             });
     });
 
+    it('should support .then(...)', function (done) {
+        var workDone = false;
+        new AssetGraph()
+            .queue(function (assetGraph, cb) {
+                setTimeout(function () {
+                    workDone = true;
+                    cb();
+                }, 10);
+            })
+            .then(function () {
+                expect(workDone, 'to be true');
+                done();
+            });
+    });
+
+    it('should support .then(..., errBack)', function () {
+        return expect(
+            new AssetGraph().queue(function (assetGraph) { throw new Error('aie'); }),
+            'to be rejected with',
+            new Error('unnamed transform: aie')
+        );
+    });
+
     it('should handle multiple levels of nested transforms', function (done) {
         var array = [];
         new AssetGraph()
