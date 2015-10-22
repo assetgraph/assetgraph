@@ -3,8 +3,8 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
 describe('relations/JavaScriptSystemImport', function () {
-    it('should handle a simple test case', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simple/'})
+    it('should handle a simple test case', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simple/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('index.html')
             .populate()
@@ -35,12 +35,11 @@ describe('relations/JavaScriptSystemImport', function () {
             .bundleRelations()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 1);
-            })
-            .run(done);
+            });
     });
 
-    it('should handle a simple test case with an extra System.config call', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simpleWithExtraConfigCall/'})
+    it('should handle a simple test case with an extra System.config call', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simpleWithExtraConfigCall/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('index.html')
             .populate()
@@ -67,12 +66,11 @@ describe('relations/JavaScriptSystemImport', function () {
             .bundleRelations()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 1);
-            })
-            .run(done);
+            });
     });
 
-    it('should handle a complex test case', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/test-tree/'})
+    it('should handle a complex test case', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/test-tree/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('index.html')
             .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSystemImport') } })
@@ -98,12 +96,11 @@ describe('relations/JavaScriptSystemImport', function () {
             .bundleRelations()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 1);
-            })
-            .run(done);
+            });
     });
 
-    it('should handle a multi-page test case with one System.import call per page importing the same thing', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageOneSystemImportEach/'})
+    it('should handle a multi-page test case with one System.import call per page importing the same thing', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageOneSystemImportEach/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('*.html')
             .populate()
@@ -141,12 +138,11 @@ describe('relations/JavaScriptSystemImport', function () {
             .bundleRelations()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-            })
-            .run(done);
+            });
     });
 
-    it('should handle a multi-page test case with one System.import call per page importing different things', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageDifferentSystemImports/'})
+    it('should handle a multi-page test case with one System.import call per page importing different things', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageDifferentSystemImports/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('*.html')
             .populate()
@@ -183,12 +179,11 @@ describe('relations/JavaScriptSystemImport', function () {
             .bundleRelations()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-            })
-            .run(done);
+            });
     });
 
-    it('should handle a test case with a template plugin', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/templatePlugin/'})
+    it('should handle a test case with a template plugin', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/templatePlugin/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('index.html')
             .populate()
@@ -207,12 +202,11 @@ describe('relations/JavaScriptSystemImport', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no relations', 'SystemJsBundle');
                 expect(assetGraph, 'to contain relation', 'HtmlInlineScriptTemplate');
-            })
-            .run(done);
+            });
     });
 
-    it('should handle a test case with a css plugin', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/cssPlugin/'})
+    it('should handle a test case with a css plugin', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/cssPlugin/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('index.html')
             .populate()
@@ -232,60 +226,55 @@ describe('relations/JavaScriptSystemImport', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no relations', 'SystemJsBundle');
                 expect(assetGraph, 'to contain relation', 'HtmlStyle');
-            })
-            .run(done);
-    });
-
-    it('should error out if two pages include the same System.config assets in different orders', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs/'})
-            .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
-            .loadAssets('page*.html')
-            .populate()
-            .bundleSystemJs()
-            .run(function (err) {
-                expect(err, 'to equal', new Error('bundleSystemJs transform: System.config calls come in conflicting order across pages'));
-                done();
             });
     });
 
-    it('should error out if two pages include the same System.config assets in different orders, second scenario', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs2/'})
-            .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
-            .loadAssets('page*.html')
-            .populate()
-            .bundleSystemJs()
-            .run(function (err) {
-                expect(err, 'to equal', new Error('bundleSystemJs transform: System.config calls come in conflicting order across pages'));
-                done();
-            });
+    it('should error out if two pages include the same System.config assets in different orders', function () {
+        return expect(
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs/'})
+                .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
+                .loadAssets('page*.html')
+                .populate()
+                .bundleSystemJs(),
+            'to be rejected with', new Error('bundleSystemJs transform: System.config calls come in conflicting order across pages')
+        );
     });
 
-    it('should error out if two pages include conflicting System.js configs', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs3/'})
-            .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
-            .loadAssets('page*.html')
-            .populate()
-            .bundleSystemJs()
-            .run(function (err) {
-                expect(err, 'to equal', new Error('bundleSystemJs transform: Configs conflict'));
-                done();
-            });
+    it('should error out if two pages include the same System.config assets in different orders, second scenario', function () {
+        return expect(
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs2/'})
+                .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
+                .loadAssets('page*.html')
+                .populate()
+                .bundleSystemJs(),
+            'to be rejected with', new Error('bundleSystemJs transform: System.config calls come in conflicting order across pages')
+        );
     });
 
-    it('should handle a lazy import System.import case', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/lazySystemImport/'})
+    it('should error out if two pages include conflicting System.js configs', function () {
+        return expect(
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs3/'})
+                .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
+                .loadAssets('page*.html')
+                .populate()
+                .bundleSystemJs(),
+            'to be rejected with', new Error('bundleSystemJs transform: Configs conflict')
+        );
+    });
+
+    it('should handle a lazy import System.import case', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/lazySystemImport/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('index.html')
             .populate()
             .bundleSystemJs({ deferredImports: true })
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'SystemJsLazyBundle');
-            })
-            .run(done);
+            });
     });
 
-    it('should handle a multi-page lazy import System.import case', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageLazySystemImport/'})
+    it('should handle a multi-page lazy import System.import case', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageLazySystemImport/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('*.html')
             .populate()
@@ -324,12 +313,11 @@ describe('relations/JavaScriptSystemImport', function () {
                     'to contain',
                     'System.config({bundles:{\'static/'
                 );
-            })
-            .run(done);
+            });
     });
 
-    it('should handle a System.import test case with a manual bundle', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/manualBundle/'})
+    it('should handle a System.import test case with a manual bundle', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/manualBundle/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('index.html')
             .populate()
@@ -339,12 +327,11 @@ describe('relations/JavaScriptSystemImport', function () {
                 expect(assetGraph.findAssets({fileName: 'foo.js'})[0].text, 'to contain', 'a.js').and('to contain', 'b.js');
 
                 expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'not to contain', 'a.js').and('not to contain', 'b.js');
-            })
-            .run(done);
+            });
     });
 
-    it('should allow multiple identical definitions of the same manual bundle', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/duplicateManualBundle/'})
+    it('should allow multiple identical definitions of the same manual bundle', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/duplicateManualBundle/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('index.html')
             .populate()
@@ -352,19 +339,18 @@ describe('relations/JavaScriptSystemImport', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', {fileName: 'foo.js'});
                 expect(assetGraph.findAssets({fileName: 'foo.js'})[0].text, 'to contain', 'a.js').and('to contain', 'b.js');
-            })
-            .run(done);
+            });
     });
 
-    it('should error out if the same manual bundle is defined multiple times', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingManualBundles/'})
-            .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
-            .loadAssets('index.html')
-            .populate()
-            .bundleSystemJs({ deferredImports: true })
-            .run(function (err) {
-                expect(err, 'to equal', new Error('bundleSystemJs transform: Conflicting definitions of the manual bundle foo'));
-                done();
-            });
+    it('should error out if the same manual bundle is defined multiple times', function () {
+        return expect(
+            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingManualBundles/'})
+                .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
+                .loadAssets('index.html')
+                .populate()
+                .bundleSystemJs({ deferredImports: true }),
+            'to be rejected with',
+            new Error('bundleSystemJs transform: Conflicting definitions of the manual bundle foo')
+        );
     });
 });
