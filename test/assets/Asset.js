@@ -442,7 +442,7 @@ describe('assets/Asset', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets()[0].text, 'to contain', 'æøå');
-                expect(assetGraph.findAssets({})[0].parseTree.cssRules[0].style.foo, 'to equal', 'æøå');
+                expect(assetGraph.findAssets({})[0].parseTree.nodes[3].nodes, 'to satisfy', { 0: { prop: 'foo', value: 'æøå' } });
             })
             .run(done);
     });
@@ -707,7 +707,7 @@ describe('assets/Asset', function () {
                     return urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({type: 'CssImage'})[0].cssRule.style['background-image'], 'to equal', 'url(../foo.png)');
+                    expect(assetGraph.findRelations({type: 'CssImage'})[0].propertyNode.value, 'to equal', 'url(../foo.png)');
                 })
                 .run(done);
         });
@@ -722,7 +722,7 @@ describe('assets/Asset', function () {
 
                     assetGraph.findAssets({type: 'Html', isInline: false})[0].url = urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
 
-                    expect(assetGraph.findRelations({type: 'CssBehavior'})[0].cssRule.style.behavior, 'to equal', 'url(theBehavior.htc)');
+                    expect(assetGraph.findRelations({type: 'CssBehavior'})[0].propertyNode.value, 'to equal', 'url(theBehavior.htc)');
                 })
                 .run(done);
         });

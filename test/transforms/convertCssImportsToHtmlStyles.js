@@ -3,6 +3,15 @@ var expect = require('../unexpected-with-plugins'),
     urlTools = require('urltools'),
     AssetGraph = require('../../lib');
 
+// Helper for extracting all values of a specific property from a postcss rule
+function getPropertyValues(container, propertyName) {
+    return container.nodes.filter(function (node) {
+        return node.prop === propertyName;
+    }).map(function (node) {
+        return node.value;
+    });
+}
+
 describe('transforms/convertCssImportsToHtmlStyles', function () {
     it('should converting Css @import rules to <link rel="stylesheet">', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/convertCssImportsToHtmlStyles/'})
@@ -37,14 +46,14 @@ describe('transforms/convertCssImportsToHtmlStyles', function () {
                 expect(assetGraph, 'to contain assets', 'Css', 2);
 
                 var cssAsset = assetGraph.findAssets({type: 'Css'})[0];
-                expect(cssAsset.parseTree.cssRules, 'to have length', 1);
-                expect(cssAsset.parseTree.cssRules[0].style['background-color'], 'to equal', 'maroon');
+                expect(cssAsset.parseTree.nodes, 'to have length', 1);
+                expect(getPropertyValues(cssAsset.parseTree.nodes[0], 'background-color'), 'to equal', [ 'maroon' ]);
 
                 cssAsset = assetGraph.findAssets({type: 'Css'})[1];
-                expect(cssAsset.parseTree.cssRules, 'to have length', 3);
-                expect(cssAsset.parseTree.cssRules[0].style.color, 'to equal', 'teal');
-                expect(cssAsset.parseTree.cssRules[1].style.color, 'to equal', 'tan');
-                expect(cssAsset.parseTree.cssRules[2].style.color, 'to equal', 'blue');
+                expect(cssAsset.parseTree.nodes, 'to have length', 3);
+                expect(getPropertyValues(cssAsset.parseTree.nodes[0], 'color'), 'to equal', [ 'teal' ]);
+                expect(getPropertyValues(cssAsset.parseTree.nodes[1], 'color'), 'to equal', [ 'tan' ]);
+                expect(getPropertyValues(cssAsset.parseTree.nodes[2], 'color'), 'to equal', [ 'blue' ]);
 
 
                 assetGraph.findAssets({type: 'Html'})[0].url = urlTools.resolveUrl(assetGraph.root, 'subdir/index2.html');

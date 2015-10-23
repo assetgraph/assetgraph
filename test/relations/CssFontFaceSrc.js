@@ -32,7 +32,7 @@ describe('relations/CssFontFaceSrc', function () {
 
                 expect(assetGraph.findRelations({to: {url: /\/foo\.ttf$/}})[0].href, 'to equal', 'http://example.com/foo.ttf');
 
-                expect(assetGraph.findAssets({type: 'Css'})[0].parseTree.cssRules[1].style.getPropertyValue('src').match(/\burl\((\'|\"|)([^\'\"]+?)\1\)/g), 'to equal', [
+                expect(assetGraph.findAssets({type: 'Css'})[0].parseTree.nodes[0].nodes[2].value.match(/\burl\((\'|\"|)([^\'\"]+?)\1\)/g), 'to equal', [
                     'url(\'fontawesome-webfont.eot?#iefix\')',
                     'url(\'fontawesome-webfont.woff\')',
                     'url(\'http://example.com/foo.ttf\')',

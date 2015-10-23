@@ -88,7 +88,7 @@ describe('assets/Css', function () {
         expect(asset.text, 'to be', cssText);
 
         asset.prettyPrint();
-        expect(asset.text, 'to be', 'body {background: red;}\n');
+        expect(asset.text, 'to be', 'body {\n    background: red;\n}\n');
     });
 
     it('should throw an error on completely invalid CSS', function () {

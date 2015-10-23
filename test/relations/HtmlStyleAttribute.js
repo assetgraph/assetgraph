@@ -19,12 +19,12 @@ describe('relations/HtmlStyleAttribute', function () {
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /data:/);
 
                 var cssAsset = assetGraph.findAssets({type: 'Css'})[0];
-                cssAsset.parseTree.cssRules[0].style.setProperty('line-height', '200%');
+                cssAsset.parseTree.nodes[0].append('line-height: 200%');
                 cssAsset.markDirty();
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /line-height:/);
 
                 cssAsset = assetGraph.findAssets({type: 'Css'})[1];
-                cssAsset.parseTree.cssRules[0].style.setProperty('line-height', '200%');
+                cssAsset.parseTree.nodes[0].append('line-height: 200%');
                 cssAsset.markDirty();
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /foo:\s*bar;.*foo:\s*quux/);
             })
