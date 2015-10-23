@@ -38,6 +38,30 @@ describe('transforms/bundleSystemJs', function () {
             });
     });
 
+    it('should pick up the source map information', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simple/'})
+            .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
+            .loadAssets('index.html')
+            .populate()
+            .bundleSystemJs()
+            .assumeRequireJsConfigHasBeenFound() // And System.js
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph.findAssets({
+                    type: 'JavaScript',
+                    fileName: /bundle/
+                })[0].parseTree, 'to satisfy', {
+                    body: {
+                        0: {
+                            loc: {
+                                source: 'main.js'
+                            }
+                        }
+                    }
+                });
+            });
+    });
+
     it('should handle a simple test case with an extra System.config call', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simpleWithExtraConfigCall/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
