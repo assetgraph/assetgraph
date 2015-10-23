@@ -2,7 +2,7 @@
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
-describe('relations/JavaScriptSystemImport', function () {
+describe('transforms/bundleSystemJs', function () {
     it('should handle a simple test case', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simple/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
