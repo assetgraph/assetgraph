@@ -52,7 +52,7 @@ using a relevant API: DOM for HTML (using <a
 href="https://github.com/tmpvar/jsdom">jsdom</a>, CSSOM for CSS (using
 <a href="https://github.com/NV/CSSOM">NV's CSSOM module</a>, and an
 abstract syntax tree for JavaScript (powered by <a
-href="https://github.com/mishoo/UglifyJS/">UglifyJS</a>' parser).
+href="http://esprima.org/">Esprima</a>).
 
 AssetGraph represents inline assets the same way as non-inline ones,
 so eg. inline scripts, stylesheets, and images specified as `data:`
@@ -685,9 +685,9 @@ The asset gets marked as minified (`isPretty` is set to
 `false`), which doesn't affect the in-memory representation
 (`asset.parseTree`), but is honored when the asset is serialized.
 For `JavaScript` this only governs the amount of whitespace
-(UglifyJS' `beautify` parameter); for how to apply variable
-renaming and other compression techniques see
-`assetGraph.compressJavaScript`.
+(<a href="https://github.com/estools/escodegen">escodegen</a>'s
+`compact` parameter); for how to apply variable renaming and
+other compression techniques see `assetGraph.compressJavaScript`.
 
 Compare to `assetGraph.prettyPrintAssets`.
 
