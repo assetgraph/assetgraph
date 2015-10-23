@@ -41,7 +41,7 @@ describe('transforms/serializeSourceMaps', function () {
                     javaScript.parseTree.body.push(esprima.parse('var bogus = 123;', {
                         loc: true,
                         attachComment: true,
-                        source: 'bogus.js'
+                        source: assetGraph.root + 'bogus.js'
                     }).body[0]);
                     javaScript.markDirty();
                 })
@@ -51,7 +51,7 @@ describe('transforms/serializeSourceMaps', function () {
                     var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
                     expect(sourceMap.parseTree, 'not to be', initialSourceMapParseTree);
                     expect(JSON.parse(sourceMap.text), 'to satisfy', {
-                        sources: expect.it('to contain', 'bogus.js')
+                        sources: expect.it('to contain', assetGraph.root + 'bogus.js')
                     });
                 });
         });
@@ -93,6 +93,33 @@ describe('transforms/serializeSourceMaps', function () {
                     expect(assetGraph.findAssets({fileName: 'myScript.js'})[0].text, 'to contain', '//@ sourceMappingURL=myScript.js.map');
                     expect(JSON.parse(sourceMap.text), 'to satisfy', {
                         sources: [ assetGraph.root + 'myScript.js', assetGraph.root + 'bogus.js' ]
+                    });
+                });
+        });
+
+        it('should retain the source mapping info when cloning an asset', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/serializeSourceMaps/noExistingJavaScriptSourceMap/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    var myScript = assetGraph.findAssets({ fileName: 'myScript.js' })[0];
+                    myScript.parseTree.body.push(esprima.parse('var bogus = 123;', {
+                        loc: true,
+                        attachComment: true,
+                        source: assetGraph.root + 'bogus.js'
+                    }).body[0]);
+                    myScript.markDirty();
+                    var clonedMyScript = myScript.clone();
+                    assetGraph.removeAsset(myScript);
+                    clonedMyScript.url = assetGraph.root + 'clonedMyScript.js';
+                    // FIXME: Retain dirtiness when cloning?
+                    clonedMyScript.markDirty();
+                })
+                .serializeSourceMaps()
+                .queue(function (assetGraph) {
+                    var sourceMap = assetGraph.findRelations({ from: { fileName: 'clonedMyScript.js' }, to: { type: 'SourceMap' } })[0].to;
+                    expect(JSON.parse(sourceMap.text), 'to satisfy', {
+                        sources: expect.it('to contain', assetGraph.root + 'bogus.js')
                     });
                 });
         });
