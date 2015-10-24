@@ -112,6 +112,8 @@ describe('transforms/serializeSourceMaps', function () {
                     var clonedMyScript = myScript.clone();
                     assetGraph.removeAsset(myScript);
                     clonedMyScript.url = assetGraph.root + 'clonedMyScript.js';
+                    // FIXME: Retain dirtiness when cloning?
+                    clonedMyScript.markDirty();
                 })
                 .serializeSourceMaps()
                 .queue(function (assetGraph) {
