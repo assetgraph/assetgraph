@@ -29,7 +29,7 @@
     "cssom-papandreou": "0.3.0-patch2",
     "deep-extend": "0.4.0",
     "glob": "5.0.15",
-    "html-minifier": "0.8.0",
+    "html-minifier": "1.0.0",
     "httperrors": "1.1.0",
     "esanimate": "1.0.3",
     "escodegen": "1.7.0",
