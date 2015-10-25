@@ -15,13 +15,12 @@ describe('transforms/serializeSourceMaps', function () {
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain assets', 'JavaScript', 2);
                     expect(assetGraph, 'to contain asset', 'SourceMap');
-                    expect(assetGraph, 'to contain no assets', { type: 'SourceMap', isDirty: true });
                     initialSourceMapParseTree = assetGraph.findAssets({type: 'SourceMap'})[0]._parseTree;
                     initialSourceMapParseTreeCopy = _.clone(initialSourceMapParseTree, true);
                 })
                 .serializeSourceMaps()
                 .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain no assets', { type: 'SourceMap', isDirty: true });
+                    expect(assetGraph, 'to contain asset', 'SourceMap');
                     var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
                     expect(sourceMap.parseTree, 'to be', initialSourceMapParseTree);
                     expect(sourceMap.parseTree, 'to satisfy', initialSourceMapParseTreeCopy);
@@ -47,7 +46,7 @@ describe('transforms/serializeSourceMaps', function () {
                 })
                 .serializeSourceMaps()
                 .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', { type: 'SourceMap', isDirty: true });
+                    expect(assetGraph, 'to contain asset', 'SourceMap');
                     var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
                     expect(sourceMap.parseTree, 'not to be', initialSourceMapParseTree);
                     expect(JSON.parse(sourceMap.text), 'to satisfy', {
@@ -88,7 +87,6 @@ describe('transforms/serializeSourceMaps', function () {
                 .serializeSourceMaps()
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain asset', 'SourceMap');
-                    expect(assetGraph, 'to contain asset', { type: 'SourceMap', isDirty: true });
                     var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
                     expect(assetGraph.findAssets({fileName: 'myScript.js'})[0].text, 'to contain', '//@ sourceMappingURL=myScript.js.map');
                     expect(JSON.parse(sourceMap.text), 'to satisfy', {
