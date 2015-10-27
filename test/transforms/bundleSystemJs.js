@@ -54,7 +54,7 @@ describe('transforms/bundleSystemJs', function () {
                     body: {
                         0: {
                             loc: {
-                                source: 'main.js'
+                                source: assetGraph.root + 'main.js'
                             }
                         }
                     }

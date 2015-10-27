@@ -34,7 +34,7 @@ describe('relations/JavaScriptSourceMappingUrl', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0].parseTree.body[0].expression.argument.loc, 'to satisfy', {
                     start: { line: 15, column: 1 },
-                    source: 'jquery-1.11.3.js'
+                    source: assetGraph.root + 'jquery-1.11.3.js'
                 });
             })
             .run(done);
