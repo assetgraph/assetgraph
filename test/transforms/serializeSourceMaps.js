@@ -88,7 +88,7 @@ describe('transforms/serializeSourceMaps', function () {
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain asset', 'SourceMap');
                     var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
-                    expect(assetGraph.findAssets({fileName: 'myScript.js'})[0].text, 'to contain', '//@ sourceMappingURL=myScript.js.map');
+                    expect(assetGraph.findAssets({fileName: 'myScript.js'})[0].text, 'to contain', '//# sourceMappingURL=myScript.js.map');
                     expect(JSON.parse(sourceMap.text), 'to satisfy', {
                         sources: [ assetGraph.root + 'myScript.js', assetGraph.root + 'bogus.js' ]
                     });

@@ -33,8 +33,8 @@ describe('relations/JavaScriptSourceUrl', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptSourceUrl', 2);
 
-                expect(assetGraph.findAssets({url: /\/foo\.js$/})[0].text, 'to match', /@\s*sourceURL=\/foo\.js/);
-                expect(assetGraph.findAssets({url: /\/bar\.js$/})[0].text, 'to match', /@\s*sourceURL=\/bar\.js/);
+                expect(assetGraph.findAssets({url: /\/foo\.js$/})[0].text, 'to match', /#\s*sourceURL=\/foo\.js/);
+                expect(assetGraph.findAssets({url: /\/bar\.js$/})[0].text, 'to match', /#\s*sourceURL=\/bar\.js/);
             })
             .bundleRelations({type: 'HtmlScript'})
             .queue(function (assetGraph) {
@@ -42,7 +42,7 @@ describe('relations/JavaScriptSourceUrl', function () {
                 expect(
                     assetGraph.findAssets({type: 'JavaScript'}).pop().text,
                     'to match',
-                    /\/\/\s*@\ssourceURL=\/foo\.js[\s\S]*\/\/\s*@\s*sourceURL=\/bar\.js/
+                    /\/\/\s*#\ssourceURL=\/foo\.js[\s\S]*\/\/\s*#\s*sourceURL=\/bar\.js/
                 );
             })
             .run(done);
