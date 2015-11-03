@@ -33,6 +33,15 @@ describe('transforms/compileLessToCss', function () {
                     '  border-color: #7d2717;\n' +
                     '}\n'
                 );
+                expect(assetGraph.findAssets({type: 'Css'})[0].sourceMap.sources, 'to satisfy', [
+                    assetGraph.root + 'styles.less'
+                ]);
+
+                assetGraph.findAssets({type: 'Css'})[0]._sourceMap = undefined;
+
+                expect(assetGraph.findAssets({type: 'Css'})[0].sourceMap.sources, 'to satisfy', [
+                    assetGraph.root + 'styles.less'
+                ]);
             })
             .run(done);
     });
