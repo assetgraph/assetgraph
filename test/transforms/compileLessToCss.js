@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
     query = AssetGraph.query;
 
 describe('transforms/compileLessToCss', function () {
-    it('should compile all Less assets to Css', function (done) {
+    it.skip('should compile all Less assets to Css', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/combo/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: query.not(/^http:/)}}})

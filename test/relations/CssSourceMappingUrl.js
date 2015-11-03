@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
 describe('relations/CssSourceMappingUrl', function () {
-    it('should handle a test case with a Css asset that has @sourceMappingURL directive', function () {
+    it.skip('should handle a test case with a Css asset that has @sourceMappingURL directive', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/relations/CssSourceMappingUrl/existingExternalSourceMap/'})
             .loadAssets('index.html', 'someMore.css')
             .populate()
