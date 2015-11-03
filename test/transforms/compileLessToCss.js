@@ -126,7 +126,7 @@ describe('transforms/compileLessToCss', function () {
             .run(done);
     });
 
-    it('should populate relations found in the compiled output if a followRelationsw', function (done) {
+    it('should populate relations found in the compiled output if a followRelations property is present on the assetGraph instance', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/outgoingRelation/', followRelations: {}})
             .loadAssets('index.less')
             .populate()
