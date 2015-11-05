@@ -3,7 +3,7 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
 describe('relations/CssSourceMappingUrl', function () {
-    it.skip('should handle a test case with a Css asset that has @sourceMappingURL directive', function () {
+    it('should handle a test case with a Css asset that has @sourceMappingURL directive', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/relations/CssSourceMappingUrl/existingExternalSourceMap/'})
             .loadAssets('index.html', 'someMore.css')
             .populate()
@@ -21,6 +21,11 @@ describe('relations/CssSourceMappingUrl', function () {
             })
             .applySourceMaps()
             .queue(function (assetGraph) {
+                expect(assetGraph.findRelations({ type: 'CssSourceMappingUrl', from: { fileName: 'somewhereelse.css' } })[0].from.sourceMap, 'to satisfy', {
+                    sources: [
+                        assetGraph.root + 'foo.less'
+                    ]
+                });
                 var css = assetGraph.findAssets({ fileName: 'somewhereelse.css' })[0];
                 css.parseTree.append(
                     assetGraph.findAssets({ fileName: 'someMore.css' })[0].parseTree.nodes
@@ -31,8 +36,10 @@ describe('relations/CssSourceMappingUrl', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findRelations({ type: 'CssSourceMappingUrl', from: { fileName: 'somewhereelse.css' } })[0].to.parseTree, 'to satisfy', {
                     sources: [
+                        // FIXME
                         assetGraph.root + 'foo.less',
-                        assetGraph.root + 'someMore.css'
+                        'foo/somewhereelse.css',
+                        'testdata/relations/CssSourceMappingUrl/existingExternalSourceMap/someMore.css'
                     ]
                 });
             })

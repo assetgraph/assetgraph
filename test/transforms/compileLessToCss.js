@@ -5,7 +5,7 @@ var expect = require('../unexpected-with-plugins'),
     query = AssetGraph.query;
 
 describe('transforms/compileLessToCss', function () {
-    it.skip('should compile all Less assets to Css', function (done) {
+    it('should compile all Less assets to Css', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/combo/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: query.not(/^http:/)}}})
@@ -33,12 +33,6 @@ describe('transforms/compileLessToCss', function () {
                     '  border-color: #7d2717;\n' +
                     '}\n'
                 );
-                expect(assetGraph.findAssets({type: 'Css'})[0].sourceMap.sources, 'to satisfy', [
-                    assetGraph.root + 'styles.less'
-                ]);
-
-                assetGraph.findAssets({type: 'Css'})[0]._sourceMap = undefined;
-
                 expect(assetGraph.findAssets({type: 'Css'})[0].sourceMap.sources, 'to satisfy', [
                     assetGraph.root + 'styles.less'
                 ]);
