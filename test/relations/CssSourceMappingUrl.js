@@ -39,11 +39,10 @@ describe('relations/CssSourceMappingUrl', function () {
                         // FIXME
                         assetGraph.root + 'foo.less',
                         'foo/somewhereelse.css',
-                        'testdata/relations/CssSourceMappingUrl/existingExternalSourceMap/someMore.css'
+                        assetGraph.root + 'someMore.css'
                     ]
                 });
             })
-            .updateRelations({ type: 'SourceMapSource' }, { hrefType: 'rootRelative' }, { includeUnresolved: true })
-            .writeAssetsToDisc({ url: /^file:/}, 'outroot');
+            .updateRelations({ type: 'SourceMapSource' }, { hrefType: 'rootRelative' }, { includeUnresolved: true });
     });
 });
