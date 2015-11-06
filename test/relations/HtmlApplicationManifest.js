@@ -53,7 +53,7 @@ describe('relations/HtmlApplicationManifest', function () {
     it('should append <link rel="manifest"> to a containing document', function (done) {
         var relation = new AssetGraph.HtmlApplicationManifest({
             to: new AssetGraph.ApplicationManifest({
-                url: 'attach,json',
+                url: 'attach.json',
                 text: '{"name":"attach"}'
             })
         });
@@ -68,6 +68,29 @@ describe('relations/HtmlApplicationManifest', function () {
                 relation.attach(html, 'before', adjacentRelation);
 
                 expect(assetGraph, 'to contain relations', 'HtmlApplicationManifest', 2);
+            })
+            .run(done);
+    });
+
+    it('should warn when there are multiple application manifests linked from the same document', function (done) {
+        var html = new AssetGraph.Html({
+            text: '<html><head><link rel="manifest" href="manifest.json"><link rel="manifest" href="manifest.json"></head><body></body></html>'
+        });
+
+        var warns = [];
+
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
+            .on('warn', function (warning) {
+                warns.push(warning);
+            })
+            .loadAssets(html)
+            .populate()
+            .queue(function (assetGraph) {
+                expect(warns, 'to satisfy', [
+                    {
+                        message: /^Multiple ApplicationManifest relations/
+                    }
+                ]);
             })
             .run(done);
     });
