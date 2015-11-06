@@ -9,6 +9,7 @@ describe('relations/HtmlApplicationManifest', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'HtmlApplicationManifest', 1);
+                expect(assetGraph, 'to contain assets', 'ApplicationManifest', 1);
             })
             .run(done);
     });
