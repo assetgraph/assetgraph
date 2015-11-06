@@ -49,4 +49,26 @@ describe('relations/HtmlApplicationManifest', function () {
             })
             .run(done);
     });
+
+    it('should append <link rel="manifest"> to a containing document', function (done) {
+        var relation = new AssetGraph.HtmlApplicationManifest({
+            to: new AssetGraph.ApplicationManifest({
+                url: 'attach,json',
+                text: '{"name":"attach"}'
+            })
+        });
+
+        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                var html = assetGraph.findAssets({ type: 'Html' })[0];
+                var adjacentRelation = assetGraph.findRelations({ type: 'HtmlApplicationManifest' })[0];
+
+                relation.attach(html, 'before', adjacentRelation);
+
+                expect(assetGraph, 'to contain relations', 'HtmlApplicationManifest', 2);
+            })
+            .run(done);
+    });
 });
