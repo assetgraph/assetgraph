@@ -1,0 +1,39 @@
+{
+    "lang": "en-US",
+    "name": "My full featured application manifest aplication",
+    "short_name": "FullManifest",
+    "splash_screens": [
+        {
+            "src": "splash/splash.png",
+            "type": "image/png"
+        },
+        {
+            "src": "splash/splash.jpg",
+            "type": "image/jpeg"
+        }
+    ],
+    "icons": [
+        {
+            "src": "icons/icon.png",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/splash.jpg",
+            "type": "image/jpeg"
+        }
+    ],
+    "start_url": "/",
+    "theme_color": "#ffffff",
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=com.twitter.android",
+            "id": "com.twitter.android"
+        },
+        {
+            "platform": "itunes",
+            "url": "https://itunes.apple.com/us/app/twitter/id333903271?mt=8"
+        }
+    ],
+    "background_color": "#123456"
+}
