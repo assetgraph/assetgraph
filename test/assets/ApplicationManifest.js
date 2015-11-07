@@ -27,6 +27,12 @@ describe('assets/ApplicationManifest', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations including unresolved', 'Relation', 2);
             })
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'Relation', 2);
+                expect(assetGraph, 'to contain assets', 'Png', 1);
+                expect(assetGraph, 'to contain assets', 'Jpeg', 1);
+            })
             .run(done);
     });
 
