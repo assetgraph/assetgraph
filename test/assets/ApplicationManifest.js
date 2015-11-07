@@ -44,6 +44,12 @@ describe('assets/ApplicationManifest', function () {
             .loadAssets('start_url.webmanifest')
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations including unresolved', 'Relation', 1);
+                expect(assetGraph, 'to contain assets', 'Html', 0);
+            })
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'Relation', 1);
+                expect(assetGraph, 'to contain assets', 'Html', 1);
             })
             .run(done);
     });

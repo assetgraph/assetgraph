@@ -1,3 +1,12 @@
 {
-    "start_url": "/"
+    "icons": [
+        {
+            "src": "icons/icon.png",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/splash.jpg",
+            "type": "image/jpeg"
+        }
+    ]
 }
