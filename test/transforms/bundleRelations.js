@@ -430,6 +430,39 @@ describe('transforms/bundleRelations', function () {
                 })
                 .run(done);
         });
+
+        it('should propagate source map information correctly', function () {
+            return new AssetGraph({ root: __dirname + '/../../testdata/transforms/bundleRelations/cssSourceMaps/'})
+                .loadAssets('index.html')
+                .populate()
+                .compileLessToCss()
+                .serializeSourceMaps()
+                .queue(function (assetGraph ) {
+                    expect(assetGraph.findAssets({ type: 'SourceMap' })[0].parseTree.sources, 'to equal', [
+                        assetGraph.root + 'a.less',
+                    ]);
+                    expect(assetGraph.findAssets({ type: 'SourceMap' })[1].parseTree.sources, 'to equal', [
+                        assetGraph.root + 'b.less',
+                    ]);
+                })
+                .bundleRelations({
+                    type: 'HtmlStyle',
+                    to: {
+                        type: 'Css',
+                        isLoaded: true
+                    }
+                }, {
+                    strategyName: 'oneBundlePerIncludingAsset'
+                })
+                .serializeSourceMaps()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', 'SourceMap');
+                    expect(assetGraph.findAssets({ type: 'SourceMap' })[0].parseTree.sources, 'to equal', [
+                        assetGraph.root + 'a.less',
+                        assetGraph.root + 'b.less'
+                    ]);
+                });
+        });
     });
 
     describe('with the sharedBundles strategy', function () {
