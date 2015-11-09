@@ -36,9 +36,7 @@ describe('relations/CssSourceMappingUrl', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findRelations({ type: 'CssSourceMappingUrl', from: { fileName: 'somewhereelse.css' } })[0].to.parseTree, 'to satisfy', {
                     sources: [
-                        // FIXME
                         assetGraph.root + 'foo.less',
-                        'foo/somewhereelse.css',
                         assetGraph.root + 'someMore.css'
                     ]
                 });
