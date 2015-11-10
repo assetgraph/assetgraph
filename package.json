@@ -72,6 +72,7 @@
     "onedox": "~0.0.1",
     "react-tools": "0.13.3",
     "sinon": "1.17.2",
+    "source-map": "0.5.3",
     "stylus": "0.52.4",
     "svgo": "0.5.6",
     "systemjs-builder": "0.14.9",

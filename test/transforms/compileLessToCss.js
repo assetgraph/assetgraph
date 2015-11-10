@@ -2,11 +2,12 @@
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
     Path = require('path'),
+    mozilla = require('source-map'),
     query = AssetGraph.query;
 
 describe('transforms/compileLessToCss', function () {
-    it('should compile all Less assets to Css', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/combo/'})
+    it('should compile all Less assets to Css', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/combo/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: query.not(/^http:/)}}})
             .queue(function (assetGraph) {
@@ -23,6 +24,9 @@ describe('transforms/compileLessToCss', function () {
                 expect(htmlText, 'to contain', '<link rel="stylesheet" href="styles.css">');
 
                 expect(assetGraph.findAssets({type: 'Css'})[0].text, 'to equal',
+                    'strong {\n' +
+                    '  font-weight: 400;\n' +
+                    '}\n' +
                     '#header {\n' +
                     '  color: #333333;\n' +
                     '  border-left: 1px;\n' +
@@ -34,10 +38,34 @@ describe('transforms/compileLessToCss', function () {
                     '}\n'
                 );
                 expect(assetGraph.findAssets({type: 'Css'})[0].sourceMap.sources, 'to satisfy', [
+                    assetGraph.root + 'morestyles.less',
                     assetGraph.root + 'styles.less'
                 ]);
             })
-            .run(done);
+            .serializeSourceMaps()
+            .queue(function (assetGraph) {
+                var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
+                var consumer = new mozilla.SourceMapConsumer(sourceMap.parseTree);
+                expect(consumer.generatedPositionFor({
+                    source: assetGraph.root + 'styles.less',
+                    line: 6,
+                    column: 0
+                }), 'to equal', {
+                    line: 4,
+                    column: 0,
+                    lastColumn: null
+                });
+
+                expect(consumer.generatedPositionFor({
+                    source: assetGraph.root + 'morestyles.less',
+                    line: 3,
+                    column: 0
+                }), 'to equal', {
+                    line: 1,
+                    column: 0,
+                    lastColumn: null
+                });
+            });
     });
 
     it('should emit parse errors as warnings', function (done) {
