@@ -45,7 +45,7 @@
     "optimist": "0.6.1",
     "passerror": "1.1.1",
     "perfectionist": "2.1.2",
-    "postcss": "5.0.10",
+    "postcss": "git://github.com/papandreou/postcss.git#4c2118a74618e7da408370cb35ae66a48ecc2391",
     "repeat-string": "1.5.2",
     "request": "2.9.153",
     "rsvp": "3.1.0",
