@@ -35,7 +35,6 @@ describe('relations/JsonUrl', function () {
                     }
                 ]);
             })
-            .drawGraph('debug.svg')
             .run(done);
     });
 });
