@@ -1,6 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     sinon = require('sinon'),
+    mozilla = require('source-map'),
     AssetGraph = require('../../lib');
 
 describe('assets/Css', function () {
@@ -79,6 +80,28 @@ describe('assets/Css', function () {
         expect(asset.text, 'to be', 'body{background:red}');
     });
 
+    it('should propagate source map source map information when minifying', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/assets/Css/minifyWithSourceMap/'})
+            .loadAssets('index.css')
+            .minifyAssets()
+            .serializeSourceMaps()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'SourceMap');
+
+                var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
+                var consumer = new mozilla.SourceMapConsumer(sourceMap.parseTree);
+                expect(consumer.generatedPositionFor({
+                    source: assetGraph.root + 'index.css',
+                    line: 2,
+                    column: 4
+                }), 'to equal', {
+                    line: 1,
+                    column: 6,
+                    lastColumn: null
+                });
+            });
+    });
+
     it('should pretty print Css text', function () {
         var cssText = 'body{background:red}';
         var asset = new AssetGraph.Css({
@@ -89,6 +112,37 @@ describe('assets/Css', function () {
 
         asset.prettyPrint();
         expect(asset.text, 'to be', 'body {\n    background: red;\n}\n');
+    });
+
+    it('should propagate source map source map information when pretty-printing', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/assets/Css/prettyPrintWithSourceMap/'})
+            .loadAssets('index.css')
+            .prettyPrintAssets()
+            .serializeSourceMaps()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'SourceMap');
+
+                var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
+                var consumer = new mozilla.SourceMapConsumer(sourceMap.parseTree);
+                expect(consumer.generatedPositionFor({
+                    source: assetGraph.root + 'index.css',
+                    line: 2,
+                    column: 4
+                }), 'to equal', {
+                    line: 1,
+                    column: 6,
+                    lastColumn: null
+                });
+
+                expect(consumer.generatedPositionFor({
+                    source: assetGraph.root + 'index.css',
+                    line: 1,
+                    column: 6
+                }), 'to equal', {
+                    line: 2,
+                    column: 4
+                });
+            });
     });
 
     it('should throw an error on completely invalid CSS', function () {
