@@ -96,7 +96,7 @@ describe('assets/Css', function () {
                     column: 4
                 }), 'to equal', {
                     line: 1,
-                    column: 6,
+                    column: 5,
                     lastColumn: null
                 });
             });
@@ -126,21 +126,12 @@ describe('assets/Css', function () {
                 var consumer = new mozilla.SourceMapConsumer(sourceMap.parseTree);
                 expect(consumer.generatedPositionFor({
                     source: assetGraph.root + 'index.css',
-                    line: 2,
-                    column: 4
-                }), 'to equal', {
-                    line: 1,
-                    column: 6,
-                    lastColumn: null
-                });
-
-                expect(consumer.generatedPositionFor({
-                    source: assetGraph.root + 'index.css',
                     line: 1,
                     column: 6
                 }), 'to equal', {
                     line: 2,
-                    column: 4
+                    column: 4,
+                    lastColumn: null
                 });
             });
     });
