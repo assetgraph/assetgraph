@@ -1,0 +1,12 @@
+{
+    "splash_screens": [
+        {
+            "src": "splash/splash.png",
+            "type": "image/png"
+        },
+        {
+            "src": "splash/splash.jpg",
+            "type": "image/jpeg"
+        }
+    ]
+}

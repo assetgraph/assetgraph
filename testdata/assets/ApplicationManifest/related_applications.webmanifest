@@ -1,0 +1,13 @@
+{
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=com.twitter.android",
+            "id": "com.twitter.android"
+        },
+        {
+            "platform": "itunes",
+            "url": "https://itunes.apple.com/us/app/twitter/id333903271?mt=8"
+        }
+    ]
+}
