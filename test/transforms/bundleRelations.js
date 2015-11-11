@@ -438,10 +438,16 @@ describe('transforms/bundleRelations', function () {
                 .compileLessToCss()
                 .serializeSourceMaps()
                 .queue(function (assetGraph ) {
-                    expect(assetGraph.findAssets({ type: 'SourceMap' })[0].parseTree.sources, 'to equal', [
+                    var sourceMaps = assetGraph.findAssets({ type: 'SourceMap' });
+                    sourceMaps.sort(function (a, b) {
+                        a = a.parseTree.sources[0];
+                        b = b.parseTree.sources[0];
+                        return (a < b) ? -1 : (a > b ? 1 : 0);
+                    });
+                    expect(sourceMaps[0].parseTree.sources, 'to equal', [
                         assetGraph.root + 'a.less',
                     ]);
-                    expect(assetGraph.findAssets({ type: 'SourceMap' })[1].parseTree.sources, 'to equal', [
+                    expect(sourceMaps[1].parseTree.sources, 'to equal', [
                         assetGraph.root + 'b.less',
                     ]);
                 })
