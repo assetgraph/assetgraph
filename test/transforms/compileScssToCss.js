@@ -14,7 +14,7 @@ describe('transforms/compileScssToCss', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Scss');
             })
-            .compileScssToCss({type: 'Scss'})
+            .compileScssToCss({type: 'Scss'}, {sourceMaps: true})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no assets', 'Scss');
                 expect(assetGraph, 'to contain asset', 'Css');
