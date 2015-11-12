@@ -13,7 +13,7 @@ describe('transforms/compileLessToCss', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Less');
             })
-            .compileLessToCss({type: 'Less'})
+            .compileLessToCss({type: 'Less'}, {sourceMaps: true})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no assets', 'Less');
                 expect(assetGraph, 'to contain asset', 'Css');
