@@ -12,7 +12,7 @@ describe('transforms/compileCoffeeScriptToJavaScript', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'CoffeeScript', 2);
             })
-            .compileCoffeeScriptToJavaScript({type: 'CoffeeScript'})
+            .compileCoffeeScriptToJavaScript({type: 'CoffeeScript'}, {sourceMaps: true})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no assets', 'CoffeeScript');
                 expect(assetGraph, 'to contain assets', 'JavaScript', 2);
