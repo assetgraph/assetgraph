@@ -65,7 +65,7 @@
     "less": "2.5.3",
     "mocha": "2.3.3",
     "mocha-lcov-reporter": "1.0.0",
-    "node-sass": "3.3.3",
+    "node-sass": "3.4.0",
     "onedox": "~0.0.1",
     "react-tools": "0.10.0",
     "sinon": "1.17.2",
