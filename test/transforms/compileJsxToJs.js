@@ -31,14 +31,14 @@ describe('transforms/compileJsxToJs', function () {
                 ].join('\n'));
             });
     });
-    it('should compile all Jsx assets to Js', function () {
+    it('should compile all Jsx assets to Js and propagate source map information', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/compileJsxToJs/jsxWithInclude/', followRelations: {}})
             .loadAssets('index.jsx')
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Jsx');
             })
-            .compileJsxToJs({type: 'Jsx'})
+            .compileJsxToJs({ type: 'Jsx' }, { sourceMaps: true })
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no assets', 'Jsx');
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', [
