@@ -51,8 +51,12 @@ describe('transforms/compileScssToCss', function () {
             .compileScssToCss({type: 'Scss'})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Scss');
-                expect(warnings, 'to have length', 1);
-                expect(warnings[0].message, 'to equal', 'invalid top-level expression in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/parseError/index.scss')) + ' at line 1, column 1');
+
+                expect(warnings, 'to satisfy', [
+                    {
+                        message: expect.it('to end with', Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/parseError/index.scss')) + ' at line 1, column 1')
+                    }
+                ]);
             })
             .run(done);
     });
@@ -71,8 +75,12 @@ describe('transforms/compileScssToCss', function () {
             .compileScssToCss({type: 'Scss'})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Scss');
-                expect(warnings, 'to have length', 1);
-                expect(warnings[0].message, 'to equal', 'invalid top-level expression in ' + Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/parseErrorInImport/imported.scss')) + ' at line 1, column 1');
+
+                expect(warnings, 'to satisfy', [
+                    {
+                        message: expect.it('to end with', Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/parseErrorInImport/imported.scss')) + ' at line 1, column 1')
+                    }
+                ]);
             })
             .run(done);
     });
