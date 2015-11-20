@@ -32,7 +32,7 @@ describe('relations/CssImage', function () {
                     'dir/foo2.png'
                 ]);
 
-                expect(assetGraph.findAssets({url: /\/index\.css$/})[0].text, 'to match', /\.baz{background-image:url\(dir\/foo2\.png\)!important/);
+                expect(assetGraph.findAssets({url: /\/index\.css$/})[0].text, 'to match', /\.baz {\n    background-image: url\(dir\/foo2\.png\) !important/);
             })
             .run(done);
     });

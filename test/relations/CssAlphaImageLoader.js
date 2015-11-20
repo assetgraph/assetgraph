@@ -18,9 +18,15 @@ describe('relations/CssAlphaImageLoader', function () {
                     'bar.png',
                     '/images/quux.png'
                 ]);
-                var cssRules = assetGraph.findAssets({type: 'Css'})[0].parseTree.cssRules;
-                expect(cssRules[0].style.getPropertyValue('filter'), 'to match', /src='images\/quux\.png'.*src='bar\.png'/);
-                expect(cssRules[1].style.getPropertyValue('filter'), 'to match', /src='\/images\/quux\.png'/);
+                var cssRules = assetGraph.findAssets({type: 'Css'})[0].parseTree.nodes;
+                expect(cssRules[0].nodes[0].value, 'to match', /src='images\/quux\.png'.*src='bar\.png'/);
+                expect(cssRules[1].nodes[0].value, 'to match', /src='\/images\/quux\.png'/);
+
+                assetGraph.findRelations({type: 'CssAlphaImageLoader'})[0].detach();
+                assetGraph.findRelations({type: 'CssAlphaImageLoader'})[1].detach();
+
+                expect(assetGraph.findAssets({type: 'Css'})[0].text, 'to contain', 'body {\n}')
+                    .and('to contain', 'div {\n}');
             })
             .run(done);
     });

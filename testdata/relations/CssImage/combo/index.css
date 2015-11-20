@@ -10,9 +10,8 @@
     -moz-border-image: url(foo.png) repeat stretch;
     -quux-border-image: url("foo.png") 25 30 10 20 repeat;
     border-image: url(foo.png);
-    /* These shouldn't match: */
+    /* This one shouldn't be picked up: */
     color: url(bar.png);
-    _border-image: url(bar.png);
 }
 
 .quux {

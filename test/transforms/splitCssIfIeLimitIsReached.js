@@ -16,7 +16,8 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                 var cssAssets = assetGraph.findAssets({type: 'Css'});
                 expect(cssAssets, 'to have length', 1);
                 assetGraph._parseTreeBefore = cssAssets[0].parseTree;
-                expect(assetGraph.findAssets({type: 'Css'})[0].parseTree.cssRules, 'to have length', 4096);
+
+                expect(assetGraph.findAssets({type: 'Css'})[0].parseTree.nodes, 'to have length', 4096);
             })
             .splitCssIfIeLimitIsReached()
             .queue(function (assetGraph) {
@@ -25,14 +26,14 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                 expect(assetGraph, 'to contain assets', 'Css', 2);
 
                 expect(assetGraph.findAssets({ type: 'Css' }).map(function (cssAsset) {
-                    return cssAsset.parseTree.cssRules.length;
+                    return cssAsset.parseTree.nodes.length;
                 }).reduce(function (prev, current) {
                     return prev + current;
                 }, 0), 'to equal', 4096);
 
                 // Each Css asset should be smaller than the original
                 assetGraph.findAssets({type: 'Css'}).forEach(function (cssAsset) {
-                    expect(cssAsset.parseTree.cssRules.length, 'to be less than', assetGraph._parseTreeBefore.cssRules.length);
+                    expect(cssAsset.parseTree.nodes.length, 'to be less than', assetGraph._parseTreeBefore.nodes.length);
                 });
 
                 var cssAfter = new AssetGraph.Css({
@@ -41,7 +42,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                     }).join('')
                 }).parseTree.toString();
 
-                expect(assetGraph._parseTreeBefore.toString(), 'to equal', cssAfter);
+                expect(assetGraph._parseTreeBefore.toString(), 'to equal', cssAfter + '\n');
 
                 var cssAssets = assetGraph.findAssets({
                         type: 'Css'
@@ -72,9 +73,9 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
 
                 assetGraph._parseTreeBefore = cssAssets[0].parseTree;
 
-                var rules = assetGraph.findAssets({ type: 'Css' })[0].parseTree.cssRules.length;
+                var rules = assetGraph.findAssets({ type: 'Css' })[0].parseTree.nodes.length;
                 assetGraph.__rules = rules;
-                expect(rules, 'to equal', 6290);
+                expect(rules, 'to equal', 6039);
 
                 ['png', 'gif', 'svg', 'ttf', 'eot', 'woff'].forEach(function (extension) {
                     expect(assetGraph, 'to contain asset', {
@@ -90,19 +91,19 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                 expect(assetGraph, 'to contain assets', 'Css', 3);
 
                 expect(assetGraph.findAssets({type: 'Css'}).map(function (cssAsset) {
-                    return cssAsset.parseTree.cssRules.length;
+                    return cssAsset.parseTree.nodes.length;
                 }).reduce(function (prev, current) {
                     return prev + current;
-                }, 0), 'to equal', 6290);
+                }, 0), 'to equal', 6039);
 
                 var cssAssets = assetGraph.findAssets({type: 'Css'}),
                     parseTreeBefore = assetGraph._parseTreeBefore,
-                    rules = [2806, 2399, 1085],
+                    rules = [2796, 2544, 699],
                     sum = 0;
 
                 cssAssets.forEach(function (cssAsset, idx) {
-                    var assetRules = cssAsset.parseTree.cssRules;
-                    expect(assetRules.length, 'to be less than', parseTreeBefore.cssRules.length);
+                    var assetRules = cssAsset.parseTree.nodes;
+                    expect(assetRules.length, 'to be less than', parseTreeBefore.nodes.length);
                     expect(assetRules.length, 'to equal', rules[idx]);
                     sum += assetRules.length;
                 });
@@ -116,7 +117,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                     text: text
                 }).parseTree;
 
-                expect(assetGraph._parseTreeBefore.toString(), 'to equal', parseTreeAfter.toString());
+                expect(assetGraph._parseTreeBefore.toString().replace(/\n+/g, '\n'), 'to equal', (parseTreeAfter.toString() + '\n').replace(/\n+/g, '\n'));
 
                 ['png', 'gif', 'svg', 'ttf', 'eot', 'woff'].forEach(function (extension) {
                     expect(assetGraph, 'to contain asset', {
@@ -142,9 +143,9 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                 expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
                 expect(_.pluck(assetGraph.findAssets({type: 'Css'}), 'text'), 'to equal',
                     [
-                        '.a {color: #aaa;}.b {color: #bbb;}',
-                        '.c {color: #ccc;}.d {color: #ddd;}',
-                        '.e {color: #eee;}'
+                        '\n          .a {color: #aaa;}\n          .b {color: #bbb;}',
+                        '\n          .c {color: #ccc;}\n          .d {color: #ddd;}',
+                        '\n          .e {color: #eee;}'
                     ]
                 );
                 var htmlAsset = assetGraph.findAssets({type: 'Html'})[0],
@@ -170,10 +171,10 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                 expect(assetGraph, 'to contain relations', 'HtmlStyle', 4);
                 expect(_.pluck(assetGraph.findAssets({type: 'Css'}), 'text'), 'to equal',
                     [
-                        '@media screen {.a, .quux, .baz {color: #aaa;}}',
-                        '.b {color: #bbb;}.c {color: #ccc;}',
-                        '@media print {.d {color: #ddd;}.e {color: #eee;}.f {color: #fff;}}',
-                        '.hey {color: #000;}.there {color: #fff;}'
+                        '\n          @media screen {\n              .a, .quux, .baz {color: #aaa;}\n          }',
+                        '\n          .b {color: #bbb;}\n          .c {color: #ccc;}',
+                        '\n          @media print {\n             .d {color: #ddd;}\n             .e {color: #eee;}\n             .f {color: #fff;}\n          }',
+                        '\n          .hey {color: #000;}\n          .there {color: #fff;}'
                     ]
                 );
 

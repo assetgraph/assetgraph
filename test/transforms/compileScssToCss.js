@@ -3,17 +3,18 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
     Path = require('path'),
     errors = require('../../lib/errors'),
+    mozilla = require('source-map'),
     query = AssetGraph.query;
 
 describe('transforms/compileScssToCss', function () {
-    it('should compile all Scss assets to Css', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileScssToCss/combo/'})
+    it('should compile all Scss assets to Css', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/compileScssToCss/combo/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: query.not(/^http:/)}}})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Scss');
             })
-            .compileScssToCss({type: 'Scss'})
+            .compileScssToCss({type: 'Scss'}, {sourceMaps: true})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no assets', 'Scss');
                 expect(assetGraph, 'to contain asset', 'Css');
@@ -23,6 +24,9 @@ describe('transforms/compileScssToCss', function () {
                 expect(htmlText, 'to contain', '<link rel="stylesheet" href="styles.css">');
 
                 expect(assetGraph.findAssets({type: 'Css'})[0].text, 'to equal',
+                    'strong {\n' +
+                    '  font-weight: 400; }\n' +
+                    '\n' +
                     '#header {\n' +
                     '  color: #333333;\n' +
                     '  border-left: 1px;\n' +
@@ -34,7 +38,36 @@ describe('transforms/compileScssToCss', function () {
                     '  border-color: #7d2717; }\n'
                 );
             })
-            .run(done);
+            .serializeSourceMaps()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'SourceMap');
+                var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
+                var consumer = new mozilla.SourceMapConsumer(sourceMap.parseTree);
+                expect(consumer.generatedPositionFor({
+                    source: assetGraph.root + 'styles.scss',
+                    line: 6,
+                    column: 0
+                }), 'to equal', {
+                    line: 4,
+                    column: 0,
+                    lastColumn: null
+                });
+
+                expect(consumer.generatedPositionFor({
+                    source: assetGraph.root + 'morestyles.scss',
+                    line: 3,
+                    column: 0
+                }), 'to equal', {
+                    line: 1,
+                    column: 0,
+                    lastColumn: null
+                });
+                expect(assetGraph.findAssets({type: 'Css'})[0].sourceMap.sources, 'to satisfy', [
+                    assetGraph.root + 'morestyles.scss',
+                    assetGraph.root + 'styles.scss',
+                    /^<input css \d+>$/ // FIXME
+                ]);
+            });
     });
 
     it('should emit parse errors as warnings', function (done) {

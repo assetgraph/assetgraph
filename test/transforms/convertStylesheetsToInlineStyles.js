@@ -20,11 +20,11 @@ describe('transforms/convertStylesheetsToInlineStyles', function () {
                 expect(assetGraph, 'to contain relations', 'HtmlStyleAttribute', 5);
 
                 var document = assetGraph.findAssets({type: 'Html'})[0].parseTree;
-                expect(document.documentElement.getAttribute('style'), 'to equal', 'padding:0');
-                expect(document.body.getAttribute('style'), 'to equal', 'padding:0');
-                expect(document.querySelectorAll('.a')[0].getAttribute('style'), 'to equal', 'padding:0;color:red;background-image:url(foo.png);background-color:blue');
-                expect(document.querySelectorAll('.b')[0].getAttribute('style'), 'to equal', 'padding:0;color:red;background-image:url(foo.png)');
-                expect(document.querySelectorAll('.c')[0].getAttribute('style'), 'to equal', 'font-weight:bold;padding:0');
+                expect(document.documentElement.getAttribute('style'), 'to equal', 'padding: 0');
+                expect(document.body.getAttribute('style'), 'to equal', 'padding: 0');
+                expect(document.querySelectorAll('.a')[0].getAttribute('style'), 'to equal', 'padding: 0; color: red; background-image: url(foo.png); background-color: blue');
+                expect(document.querySelectorAll('.b')[0].getAttribute('style'), 'to equal', 'padding: 0; color: red; background-image: url(foo.png)');
+                expect(document.querySelectorAll('.c')[0].getAttribute('style'), 'to equal', 'font-weight: bold; padding: 0');
             })
             .run(done);
     });

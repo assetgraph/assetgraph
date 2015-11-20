@@ -2,17 +2,18 @@
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
     Path = require('path'),
+    mozilla = require('source-map'),
     query = AssetGraph.query;
 
 describe('transforms/compileLessToCss', function () {
-    it('should compile all Less assets to Css', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/combo/'})
+    it('should compile all Less assets to Css', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/combo/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: query.not(/^http:/)}}})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Less');
             })
-            .compileLessToCss({type: 'Less'})
+            .compileLessToCss({type: 'Less'}, {sourceMaps: true})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no assets', 'Less');
                 expect(assetGraph, 'to contain asset', 'Css');
@@ -23,6 +24,9 @@ describe('transforms/compileLessToCss', function () {
                 expect(htmlText, 'to contain', '<link rel="stylesheet" href="styles.css">');
 
                 expect(assetGraph.findAssets({type: 'Css'})[0].text, 'to equal',
+                    'strong {\n' +
+                    '  font-weight: 400;\n' +
+                    '}\n' +
                     '#header {\n' +
                     '  color: #333333;\n' +
                     '  border-left: 1px;\n' +
@@ -33,8 +37,40 @@ describe('transforms/compileLessToCss', function () {
                     '  border-color: #7d2717;\n' +
                     '}\n'
                 );
+                expect(assetGraph.findAssets({type: 'Css'})[0].sourceMap.sources, 'to satisfy', [
+                    assetGraph.root + 'morestyles.less',
+                    assetGraph.root + 'styles.less'
+                ]);
             })
-            .run(done);
+            .serializeSourceMaps()
+            .queue(function (assetGraph) {
+                var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
+                var consumer = new mozilla.SourceMapConsumer(sourceMap.parseTree);
+                expect(consumer.generatedPositionFor({
+                    source: assetGraph.root + 'styles.less',
+                    line: 6,
+                    column: 0
+                }), 'to equal', {
+                    line: 4,
+                    column: 0,
+                    lastColumn: null
+                });
+
+                expect(consumer.generatedPositionFor({
+                    source: assetGraph.root + 'morestyles.less',
+                    line: 3,
+                    column: 0
+                }), 'to equal', {
+                    line: 1,
+                    column: 0,
+                    lastColumn: null
+                });
+                expect(assetGraph.findAssets({type: 'Css'})[0].sourceMap.sources, 'to satisfy', [
+                    assetGraph.root + 'morestyles.less',
+                    assetGraph.root + 'styles.less',
+                    /^<input css \d+>$/ // FIXME
+                ]);
+            });
     });
 
     it('should emit parse errors as warnings', function (done) {
@@ -117,7 +153,7 @@ describe('transforms/compileLessToCss', function () {
             .run(done);
     });
 
-    it('should populate relations found in the compiled output if a followRelationsw', function (done) {
+    it('should populate relations found in the compiled output if a followRelations property is present on the assetGraph instance', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/compileLessToCss/outgoingRelation/', followRelations: {}})
             .loadAssets('index.less')
             .populate()

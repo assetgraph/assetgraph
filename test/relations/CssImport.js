@@ -11,7 +11,7 @@ describe('relations/CssImport', function () {
                 expect(assetGraph, 'to contain assets', 'Css', 2);
                 expect(assetGraph, 'to contain relation', 'CssImport');
                 assetGraph.findRelations({type: 'CssImport'})[0].detach();
-                expect(assetGraph.findAssets({url: /\/index.css$/})[0].parseTree.cssRules, 'to have length', 1);
+                expect(assetGraph.findAssets({url: /\/index.css$/})[0].parseTree.nodes, 'to have length', 1);
             })
             .run(done);
     });
