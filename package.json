@@ -75,7 +75,7 @@
     "stylus": "0.52.4",
     "svgo": "0.5.6",
     "systemjs-builder": "0.14.11",
-    "unexpected": "10.2.0",
+    "unexpected": "10.3.0",
     "unexpected-dom": "3.0.2",
     "unexpected-mitm": "8.0.0",
     "unexpected-sinon": "8.0.0",
