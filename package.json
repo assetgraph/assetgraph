@@ -77,7 +77,7 @@
     "systemjs-builder": "0.14.11",
     "unexpected": "10.2.0",
     "unexpected-dom": "3.0.2",
-    "unexpected-mitm": "8.0.0",
+    "unexpected-mitm": "8.1.0",
     "unexpected-sinon": "8.0.0",
     "yui-compressor": "0.1.3"
   },
