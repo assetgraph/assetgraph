@@ -21,7 +21,7 @@
     "test/unexpectedAssetGraph.js"
   ],
   "dependencies": {
-    "accord": "0.20.3",
+    "accord": "0.20.5",
     "async": "1.5.0",
     "chalk": "1.1.1",
     "createerror": "1.0.1",
