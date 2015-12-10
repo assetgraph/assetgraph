@@ -60,7 +60,7 @@
   "devDependencies": {
     "closure-compiler": "0.2.12",
     "coffee-script": "1.10.0",
-    "coveralls": "2.11.4",
+    "coveralls": "2.11.5",
     "iconv": "2.1.11",
     "istanbul": "0.4.1",
     "jshint": "2.8.0",
