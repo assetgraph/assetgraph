@@ -28,7 +28,7 @@
     "cssnano": "3.4.0",
     "deep-extend": "0.4.0",
     "esanimate": "1.0.3",
-    "escodegen": "1.7.1",
+    "escodegen": "1.8.0",
     "esmangle": "1.0.1",
     "esprima": "2.7.1",
     "espurify": "1.5.0",
