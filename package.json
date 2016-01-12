@@ -62,7 +62,7 @@
     "coffee-script": "1.10.0",
     "coveralls": "2.11.6",
     "iconv": "2.1.11",
-    "istanbul": "0.4.1",
+    "istanbul": "0.4.2",
     "jshint": "2.8.0",
     "less": "2.5.3",
     "mocha": "2.3.4",
