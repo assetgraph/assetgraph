@@ -26,7 +26,7 @@
     "chalk": "1.1.1",
     "createerror": "1.0.1",
     "cssnano": "3.4.0",
-    "deep-extend": "0.4.0",
+    "deep-extend": "0.4.1",
     "esanimate": "1.0.3",
     "escodegen": "1.8.0",
     "esmangle": "1.0.1",
