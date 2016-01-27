@@ -65,7 +65,7 @@
     "istanbul": "0.4.1",
     "jshint": "2.8.0",
     "less": "2.5.3",
-    "mocha": "2.3.4",
+    "mocha": "2.4.3",
     "mocha-lcov-reporter": "1.0.0",
     "node-sass": "3.4.2",
     "onedox": "~0.0.1",
