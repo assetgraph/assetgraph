@@ -37,7 +37,7 @@
     "html-minifier": "1.0.0",
     "imageinfo": "1.0.4",
     "jsdom-papandreou": "0.11.0-patch3",
-    "lodash": "3.10.1",
+    "lodash": "4.2.0",
     "minimize": "1.7.4",
     "mkdirp": "0.5.1",
     "normalizeurl": "0.1.3",
