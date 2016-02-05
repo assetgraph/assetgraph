@@ -160,10 +160,10 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         }, done);
     });
 
-    it('should replace nested value with undefined if no value is found', function (done) {
-        var infos = [];
-        assetGraph.on('info', function (err) {
-            infos.push(err);
+    it('should replace nested value with undefined if no value is found and emit a warning', function (done) {
+        var warnings = [];
+        assetGraph.on('warn', function (err) {
+            warnings.push(err);
         });
         expect({
             text: 'var qux = FOO.bar.baz.quux',
@@ -175,8 +175,7 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
             var qux = undefined;
             /* jshint ignore:end */
         }, passError(done, function () {
-            expect(infos, 'to have length', 1);
-            expect(infos[0].message, 'to equal', 'Could not find a value for "FOO.bar.baz.quux". Replacing with undefined.');
+            expect(warnings, 'to satisfy', [ 'Could not find a value for "FOO.bar.baz.quux". Replacing with undefined.' ]);
             done();
         }));
     });
