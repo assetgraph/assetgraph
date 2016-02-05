@@ -81,5 +81,6 @@
     "test": "npm run lint && mocha",
     "travis": "npm run lint && npm run coverage",
     "coverage": "NODE_ENV=development ./node_modules/.bin/istanbul cover -x '**/examples/**' -x '**/testdata/**' --include-all-sources ./node_modules/mocha/bin/_mocha -- --reporter dot"
-  }
+  },
+  "tag": "v1"
 }
