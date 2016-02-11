@@ -263,4 +263,17 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
             /* jshint ignore:end */
         }, done);
     });
+
+    it('should only touch occurrences that are not part of a larger sequence of MemberExpressions', function (done) {
+        expect({
+            text: 'window.FOO + window[FOO] + foo.bar.FOO + FOO',
+            defines: {
+                FOO: 2
+            }
+        }, 'to come out as', function () {
+            /* jshint ignore:start */
+            window.FOO + window[FOO] + foo.bar.FOO + 2;
+            /* jshint ignore:end */
+        }, done);
+    });
 });
