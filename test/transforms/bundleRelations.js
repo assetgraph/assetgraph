@@ -202,13 +202,13 @@ describe('transforms/bundleRelations', function () {
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain relations', 'HtmlScript', 6);
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                    expect(htmlScripts[0].to.text, 'to equal', 'alert(\'a\');alert(\'b\');alert(\'c\');');
+                    expect(htmlScripts[0].to.text, 'to equal', 'alert(\'a\');\nalert(\'b\');\nalert(\'c\');');
                     expect(htmlScripts[1].node.getAttribute('data-foo'), 'to equal', 'bar');
                     expect(htmlScripts[1].to.text, 'to equal', 'alert(\'d\');');
                     expect(htmlScripts[2].to.text, 'to equal', 'alert(\'e\');');
-                    expect(htmlScripts[3].to.text, 'to equal', 'alert(\'f\');alert(\'g\');');
-                    expect(htmlScripts[4].to.text, 'to equal', 'alert(\'h\');alert(\'i\');');
-                    expect(htmlScripts[5].to.text, 'to equal', 'alert(\'j\');alert(\'k\');');
+                    expect(htmlScripts[3].to.text, 'to equal', 'alert(\'f\');\nalert(\'g\');');
+                    expect(htmlScripts[4].to.text, 'to equal', 'alert(\'h\');\nalert(\'i\');');
+                    expect(htmlScripts[5].to.text, 'to equal', 'alert(\'j\');\nalert(\'k\');');
                 })
                 .run(done);
         });
@@ -649,13 +649,13 @@ describe('transforms/bundleRelations', function () {
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain relations', 'HtmlScript', 6);
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
-                    expect(htmlScripts[0].to.text, 'to equal', 'alert(\'a\');alert(\'b\');alert(\'c\');');
+                    expect(htmlScripts[0].to.text, 'to equal', 'alert(\'a\');\nalert(\'b\');\nalert(\'c\');');
                     expect(htmlScripts[1].node.getAttribute('data-foo'), 'to equal', 'bar');
                     expect(htmlScripts[1].to.text, 'to equal', 'alert(\'d\');');
                     expect(htmlScripts[2].to.text, 'to equal', 'alert(\'e\');');
-                    expect(htmlScripts[3].to.text, 'to equal', 'alert(\'f\');alert(\'g\');');
-                    expect(htmlScripts[4].to.text, 'to equal', 'alert(\'h\');alert(\'i\');');
-                    expect(htmlScripts[5].to.text, 'to equal', 'alert(\'j\');alert(\'k\');');
+                    expect(htmlScripts[3].to.text, 'to equal', 'alert(\'f\');\nalert(\'g\');');
+                    expect(htmlScripts[4].to.text, 'to equal', 'alert(\'h\');\nalert(\'i\');');
+                    expect(htmlScripts[5].to.text, 'to equal', 'alert(\'j\');\nalert(\'k\');');
                 })
                 .run(done);
         });

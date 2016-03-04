@@ -17,7 +17,11 @@ describe('relations/JavaScriptAmdRequire', function () {
                 expect(
                     assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text,
                     'to equal',
-                    'require([\'some/module\',\'b.js\'],function(someModule,b){});'
+                    'require([\n' +
+                    '    \'some/module\',\n' +
+                    '    \'b.js\'\n' +
+                    '], function (someModule, b) {\n' +
+                    '});'
                 );
             })
             .run(done);
@@ -206,7 +210,12 @@ describe('relations/JavaScriptAmdRequire', function () {
                 expect(
                     assetGraph.findAssets({type: 'JavaScript', isInline: true})[0].text,
                     'to equal',
-                    'function hello(){}require([\'some/module\',\'b.js\'],hello);'
+                    'function hello() {\n' +
+                    '}\n' +
+                    'require([\n' +
+                    '    \'some/module\',\n' +
+                    '    \'b.js\'\n' +
+                    '], hello);'
                 );
             })
             .run(done);

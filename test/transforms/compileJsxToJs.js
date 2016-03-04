@@ -43,7 +43,8 @@ describe('transforms/compileJsxToJs', function () {
                 expect(assetGraph, 'to contain no assets', 'Jsx');
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', [
                     '/** @jsx React.DOM */',
-                    'React.renderComponent(React.createElement(\'h1\',null,\'Hello, world!\'),document.getElementById(\'example\'));INCLUDE(\'include.js\');'
+                    'React.renderComponent(React.createElement(\'h1\', null, \'Hello, world!\'), document.getElementById(\'example\'));\n' +
+                    'INCLUDE(\'include.js\');'
                 ].join('\n'));
             })
             .serializeSourceMaps()
