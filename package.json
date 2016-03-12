@@ -75,7 +75,7 @@
     "unexpected": "^10.8.1",
     "unexpected-dom": "^3.0.2",
     "unexpected-mitm": "^8.2.0",
-    "unexpected-sinon": "^10.1.1",
+    "unexpected-sinon": "^10.2.0",
     "yui-compressor": "0.1.3"
   },
   "publishConfig": {
