@@ -2,4 +2,4 @@
 --timeout 60000
 --recursive
 --check-leaks
---globals Symbol,$traceurRuntime,Map,Set,traceur,Promise,URLPolyfill,Reflect,LoaderPolyfill,System,SystemJS,module,exports,require,__cjsWrapper,babel,WeakMap,WeakSet
+--globals Symbol,$traceurRuntime,Map,Set,traceur,Promise,URLPolyfill,Reflect,LoaderPolyfill,System,SystemJS,module,exports,require,__cjsWrapper,babel,WeakMap,WeakSet,$__curScript
