@@ -113,9 +113,9 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                 var text = assetGraph.findAssets({type: 'Css'}).map(function (cssAsset) {
                         return cssAsset.text;
                     }).join('\n'),
-                parseTreeAfter = new AssetGraph.Css({
-                    text: text
-                }).parseTree;
+                    parseTreeAfter = new AssetGraph.Css({
+                        text: text
+                    }).parseTree;
 
                 expect(assetGraph._parseTreeBefore.toString().replace(/\n+/g, '\n'), 'to equal', (parseTreeAfter.toString() + '\n').replace(/\n+/g, '\n'));
 

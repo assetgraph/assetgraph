@@ -17,8 +17,8 @@ describe('query', function () {
 
     it('should implement boolean AND correctly', function (done) {
         var andQuery = query.and({
-                type: 'Html'
-            },
+            type: 'Html'
+        },
             {
                 isInline: false
             });
@@ -88,8 +88,8 @@ describe('query', function () {
 
     it('should implement boolean OR correctly', function (done) {
         var orQuery = query.or({
-                type: 'Html'
-            },
+            type: 'Html'
+        },
             {
                 isInline: false
             });
@@ -152,8 +152,8 @@ describe('query', function () {
 
     it('should implement boolean NOT correctly', function (done) {
         var notQuery = query.not({
-                type: 'Html'
-            });
+            type: 'Html'
+        });
 
         expect(notQuery, 'to be a function');
 

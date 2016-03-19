@@ -31,7 +31,7 @@ AssetGraph.registerTransform(function returnPromiseDespiteBeingAsync() {
 });
 
 describe('TransformQueue', function () {
-    it('should propagate a thrown error asynchronously when an async transform throws synchronously' , function (done) {
+    it('should propagate a thrown error asynchronously when an async transform throws synchronously', function (done) {
         new AssetGraph()
             .throwErrorDespiteBeingAsync()
             .run(function (err) {
@@ -40,7 +40,7 @@ describe('TransformQueue', function () {
             });
     });
 
-    it('should error out when an async transform returns a promise' , function (done) {
+    it('should error out when an async transform returns a promise', function (done) {
         new AssetGraph()
             .returnPromiseDespiteBeingAsync()
             .run(function (err) {
@@ -49,7 +49,7 @@ describe('TransformQueue', function () {
             });
     });
 
-    it('should support a sync (single parameter) transform returning a promise' , function (done) {
+    it('should support a sync (single parameter) transform returning a promise', function (done) {
         var promiseFulfilled = false;
         new AssetGraph()
             .queue(function (assetGraph) {
