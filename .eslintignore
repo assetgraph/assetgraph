@@ -1,2 +1,4 @@
 testdata
 examples
+node_modules
+coverage
