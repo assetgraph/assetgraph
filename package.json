@@ -61,6 +61,8 @@
     "closure-compiler": "^0.2.12",
     "coffee-script": "^1.10.0",
     "coveralls": "^2.11.6",
+    "eslint": "2.4.0",
+    "eslint-config-onelint": "1.0.0",
     "iconv": "^2.1.11",
     "istanbul": "^0.4.1",
     "jshint": "^2.8.0",
