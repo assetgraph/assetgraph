@@ -10,7 +10,7 @@ describe('transforms/removeDeadIfsInJavaScript', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'JavaScript');
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0], 'to have the same AST as', function () {
-                    /*jshint ignore:start*/
+                    /*eslint-disable*/
                     if (foo) {
                         doNotTouchMe();
                     }
@@ -40,7 +40,7 @@ describe('transforms/removeDeadIfsInJavaScript', function () {
                     function fooBar() {
                         keepMe();
                     }
-                    /*jshint ignore:end*/
+                    /*eslint-enable*/
                 });
             })
             .run(done);
