@@ -1,8 +1,7 @@
 /*global describe, it, beforeEach*/
 var unexpected = require('../unexpected-with-plugins'),
     passError = require('passerror'),
-    AssetGraph = require('../../lib/'),
-    passError = require('passerror');
+    AssetGraph = require('../../lib/');
 
 describe('transforms/replaceSymbolsInJavaScript', function () {
     var assetGraph;
