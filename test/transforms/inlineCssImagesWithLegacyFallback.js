@@ -68,7 +68,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
                 expect(assetGraph, 'to contain asset', 'Css');
                 expect(assetGraph, 'to contain asset', {isImage: true});
             })
-            .inlineCssImagesWithLegacyFallback({isInitial: true}, {sizeThreshold: 32768 * 3/4})
+            .inlineCssImagesWithLegacyFallback({isInitial: true}, {sizeThreshold: 32768 * 3 / 4})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Css', 3);
                 expect(assetGraph, 'to contain relations', 'HtmlConditionalComment', 2);
@@ -89,7 +89,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
         new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/rootRelative/'})
             .loadAssets('index.html')
             .populate()
-            .inlineCssImagesWithLegacyFallback({isInitial: true}, {sizeThreshold: 32768 * 3/4})
+            .inlineCssImagesWithLegacyFallback({isInitial: true}, {sizeThreshold: 32768 * 3 / 4})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
                 expect(assetGraph, 'to contain relations', {type: 'HtmlStyle', hrefType: 'rootRelative'}, 2);

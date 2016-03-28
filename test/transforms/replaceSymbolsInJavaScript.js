@@ -1,8 +1,7 @@
 /*global describe, it, beforeEach*/
 var unexpected = require('../unexpected-with-plugins'),
     passError = require('passerror'),
-    AssetGraph = require('../../lib/'),
-    passError = require('passerror');
+    AssetGraph = require('../../lib/');
 
 describe('transforms/replaceSymbolsInJavaScript', function () {
     var assetGraph;
@@ -42,9 +41,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: '"foo"'
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var bar = 'foo';
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -54,9 +53,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
             defines: {
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var bar = FOO;
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -67,9 +66,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: {}
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var bar = undefined;
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -80,9 +79,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 BAZ: {}
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var bar = !undefined;
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -102,9 +101,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: {quux: {baz: 123}}
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var bar = {quux: {baz: 123}};
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -115,9 +114,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: {quux: 'baz'}
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var bar = 'baz';
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -128,9 +127,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: {quux: 'baz'}
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var bar = 'baz';
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -141,9 +140,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: { quux: { baz: 'foo' } }
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var bar = 'foo';
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -154,9 +153,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: { 1: 'baz' }
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var bar = 'baz';
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -171,9 +170,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: { bar: { baz: {} } }
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var qux = undefined;
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, passError(done, function () {
             expect(warnings, 'to satisfy', [ 'Could not find a value for "FOO.bar.baz.quux". Replacing with undefined.' ]);
             done();
@@ -187,9 +186,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: { bar: 'baz' }
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             var bar = { bar: 'baz' }[function () { return "bar"; }];
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -201,9 +200,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 'console.log': 'foo.bar'
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             foo.bar(123);
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -214,9 +213,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 'hereIs["the thing"]': 987
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             alert(123 + 987);
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -227,9 +226,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 'foo(1 + 2)': '456'
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             123 + 456;
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -240,9 +239,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: 2
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             2 + 2;
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, passError(done, function (parseTree) {
             var binOp = parseTree.body[0].expression;
             expect(binOp.type, 'to equal', 'BinaryExpression');
@@ -258,9 +257,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 theThing: '{"foo": "bar"}'
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             alert(123 + 'bar' + 'bar');
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 
@@ -271,9 +270,9 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
                 FOO: 2
             }
         }, 'to come out as', function () {
-            /* jshint ignore:start */
+            /* eslint-disable */
             window.FOO + window[FOO] + foo.bar.FOO + 2;
-            /* jshint ignore:end */
+            /* eslint-enable */
         }, done);
     });
 });

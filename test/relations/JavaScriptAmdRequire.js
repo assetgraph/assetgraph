@@ -76,7 +76,7 @@ describe('relations/JavaScriptAmdRequire', function () {
     });
 
     it('should handle a test case with require.js, data-main and a paths setting', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/withPathsAndDataMain/'})
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptAmdRequire/withPathsAndDataMain/'})
                 .registerRequireJsConfig()
                 .loadAssets('index.html')
                 .populate()

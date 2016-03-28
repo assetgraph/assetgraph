@@ -219,7 +219,7 @@ describe('transforms/bundleRelations', function () {
                 .populate()
                 .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text,'to match', /\/\*! Copyright a \*\/[\s\S]*\/\*! Copyright c \*\//);
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /\/\*! Copyright a \*\/[\s\S]*\/\*! Copyright c \*\//);
                 })
                 .run(done);
         });
@@ -324,17 +324,15 @@ describe('transforms/bundleRelations', function () {
                 .populate({
                     followRelations: {href: query.not(/^https?:/)}
                 })
-                .bundleRelations(
-                    {
-                        type: 'HtmlScript',
-                        to: {
-                            type: 'JavaScript',
-                            isLoaded: true
-                        }
-                    }, {
-                        strategyName: 'oneBundlePerIncludingAsset'
+                .bundleRelations({
+                    type: 'HtmlScript',
+                    to: {
+                        type: 'JavaScript',
+                        isLoaded: true
                     }
-                )
+                }, {
+                    strategyName: 'oneBundlePerIncludingAsset'
+                })
                 .queue(function (assetGraph) {
                     var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
                     expect(htmlScripts, 'to have length', 3);
@@ -437,7 +435,7 @@ describe('transforms/bundleRelations', function () {
                 .populate()
                 .compileLessToCss()
                 .serializeSourceMaps()
-                .queue(function (assetGraph ) {
+                .queue(function (assetGraph) {
                     var sourceMaps = assetGraph.findAssets({ type: 'SourceMap' });
                     sourceMaps.sort(function (a, b) {
                         a = a.parseTree.sources[0];
@@ -445,10 +443,10 @@ describe('transforms/bundleRelations', function () {
                         return (a < b) ? -1 : (a > b ? 1 : 0);
                     });
                     expect(sourceMaps[0].parseTree.sources, 'to equal', [
-                        assetGraph.root + 'a.less',
+                        assetGraph.root + 'a.less'
                     ]);
                     expect(sourceMaps[1].parseTree.sources, 'to equal', [
-                        assetGraph.root + 'b.less',
+                        assetGraph.root + 'b.less'
                     ]);
                 })
                 .bundleRelations({

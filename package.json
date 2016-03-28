@@ -61,9 +61,10 @@
     "closure-compiler": "^0.2.12",
     "coffee-script": "^1.10.0",
     "coveralls": "^2.11.6",
+    "eslint": "2.4.0",
+    "eslint-config-onelint": "1.0.2",
     "iconv": "^2.1.11",
     "istanbul": "^0.4.1",
-    "jshint": "^2.8.0",
     "less": "2.6.1",
     "mocha": "^2.4.5",
     "node-sass": "3.4.2",
@@ -83,7 +84,7 @@
   },
   "main": "lib",
   "scripts": {
-    "lint": "jshint .",
+    "lint": "eslint .",
     "test": "npm run lint && mocha",
     "travis": "npm run lint && npm run coverage",
     "coverage": "NODE_ENV=development ./node_modules/.bin/istanbul cover -x '**/examples/**' -x '**/testdata/**' --include-all-sources ./node_modules/mocha/bin/_mocha -- --reporter dot && echo google-chrome coverage/lcov-report/index.html"

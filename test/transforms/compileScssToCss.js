@@ -158,7 +158,7 @@ describe('transforms/compileScssToCss', function () {
                 expect(warnings[0].message, 'to contain', 'no mixin named notFound');
                 expect(warnings[0].message, 'to contain', Path.relative(process.cwd(), Path.resolve(__dirname, '../../testdata/transforms/compileScssToCss/invalidReferenceInImport/imported.scss')));
                 expect(warnings[0].message, 'to match', /at line 2|:2/);
-             })
+            })
             .run(done);
     });
 

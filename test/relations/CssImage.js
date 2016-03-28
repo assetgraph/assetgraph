@@ -80,7 +80,7 @@ describe('relations/CssImage', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', {type: 'Png'}, 4);
                 assetGraph.findRelations({type: 'CssImage'}).forEach(function (cssImage) {
-                   cssImage.to.url += '.bogus';
+                    cssImage.to.url += '.bogus';
                 });
                 var text = assetGraph.findAssets({type: 'Css'})[0].text;
                 expect
