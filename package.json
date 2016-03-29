@@ -23,7 +23,7 @@
   "dependencies": {
     "accord": "0.22.3",
     "async": "1.5.1",
-    "chalk": "1.1.1",
+    "chalk": "1.1.3",
     "createerror": "1.1.0",
     "cssnano": "3.5.2",
     "deep-extend": "0.4.0",
