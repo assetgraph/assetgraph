@@ -190,4 +190,28 @@ describe('assets/Css', function () {
 
         expect(first.text, 'to be', cssText);
     });
+
+    // https://github.com/ben-eb/postcss-merge-longhand/issues/21
+    it('should not convert long hand properties to short hand ones', function () {
+        var cssAsset = new AssetGraph.Css({
+            text:
+                'div{\n' +
+                'border-top-width: 5px;\n' +
+                'border-right-width: 5px;\n' +
+                'border-bottom-width: 5px;\n' +
+                'border-left-width: 5px;\n' +
+                'border-top-style: solid;\n' +
+                'border-right-style: solid;\n' +
+                'border-bottom-style: solid;\n' +
+                'border-left-style: solid;\n' +
+                'border-top-color: rgb(24,27,255);\n' +
+                'border-right-color: rgb(24,27,255);\n' +
+                'border-bottom-color: rgb(24,27,255);\n' +
+                'border-left-color: rgb(24,27,255);\n' +
+                '}\n'
+
+        });
+        cssAsset.minify();
+        expect(cssAsset.text, 'to equal', 'div{border-top-width:5px;border-right-width:5px;border-bottom-width:5px;border-left-width:5px;border-top-style:solid;border-right-style:solid;border-bottom-style:solid;border-left-style:solid;border-top-color:#181bff;border-right-color:#181bff;border-bottom-color:#181bff;border-left-color:#181bff}');
+    });
 });
