@@ -13,14 +13,14 @@ describe('relations/HtmlObject', function () {
                 expect(assetGraph, 'to contain relations including unresolved', 'HtmlObject', 3);
                 expect(assetGraph, 'to contain assets', 'Flash', 3);
                 expect(
-                    _.pluck(assetGraph.findRelations({type: 'HtmlObject'}, true), 'href'),
+                    _.map(assetGraph.findRelations({type: 'HtmlObject'}, true), 'href'),
                     'to equal',
                     ['themovie.swf', 'theothermovie.swf', 'yetanothermovie.swf']
                 );
 
                 assetGraph.findAssets({type: 'Html'})[0].url = urlTools.resolveUrl(assetGraph.root, 'foo/index.html');
                 expect(
-                    _.pluck(assetGraph.findRelations({type: 'HtmlObject'}, true), 'href'),
+                    _.map(assetGraph.findRelations({type: 'HtmlObject'}, true), 'href'),
                     'to equal',
                     ['../themovie.swf', '../theothermovie.swf', '../yetanothermovie.swf']
                 );

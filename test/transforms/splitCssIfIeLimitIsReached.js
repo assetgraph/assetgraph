@@ -141,7 +141,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', {type: 'Css', isInline: true}, 3);
                 expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
-                expect(_.pluck(assetGraph.findAssets({type: 'Css'}), 'text'), 'to equal',
+                expect(_.map(assetGraph.findAssets({type: 'Css'}), 'text'), 'to equal',
                     [
                         '\n          .a {color: #aaa;}\n          .b {color: #bbb;}',
                         '\n          .c {color: #ccc;}\n          .d {color: #ddd;}',
@@ -169,7 +169,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', {type: 'Css', isInline: true}, 4);
                 expect(assetGraph, 'to contain relations', 'HtmlStyle', 4);
-                expect(_.pluck(assetGraph.findAssets({type: 'Css'}), 'text'), 'to equal',
+                expect(_.map(assetGraph.findAssets({type: 'Css'}), 'text'), 'to equal',
                     [
                         '\n          @media screen {\n              .a, .quux, .baz {color: #aaa;}\n          }',
                         '\n          .b {color: #bbb;}\n          .c {color: #ccc;}',

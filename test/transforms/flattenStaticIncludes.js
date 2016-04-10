@@ -14,7 +14,7 @@ describe('transforms/flattenStaticIncludes', function () {
             })
             .flattenStaticIncludes({type: 'Html'})
             .queue(function (assetGraph) {
-                expect(_.pluck(assetGraph.findRelations({from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'), 'to equal', [
                     'a.js',
                     'b.js',
                     'c.js',
@@ -41,7 +41,7 @@ describe('transforms/flattenStaticIncludes', function () {
             })
             .flattenStaticIncludes({type: 'Html'})
             .queue(function (assetGraph) {
-                expect(_.pluck(assetGraph.findRelations({type: 'HtmlScript', from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({type: 'HtmlScript', from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'), 'to equal', [
                     'a.js',
                     'b.js',
                     'c.js',
@@ -49,7 +49,7 @@ describe('transforms/flattenStaticIncludes', function () {
                     'd.js'
                 ]);
 
-                expect(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({type: 'HtmlStyle', from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'), 'to equal', [
 
                     'a.css',
                     'c.css',
@@ -81,7 +81,7 @@ describe('transforms/flattenStaticIncludes', function () {
             })
             .flattenStaticIncludes({type: 'Html'})
             .queue(function (assetGraph) {
-                expect(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({type: 'HtmlStyle', from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'), 'to equal', [
                     'a.css',
                     'b.less',
                     'c.css'

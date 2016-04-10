@@ -11,14 +11,14 @@ describe('relations/Relation', function () {
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain asset', 'Html');
 
-                    expect(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), 'to equal', [
+                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), 'to equal', [
                         'relative.html',
                         '/rootRelative.html',
                         '//example.com/protocolRelative.html',
                         'http://example.com/absolute.html'
                     ]);
 
-                    expect(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), 'to equal', [
+                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), 'to equal', [
                         'relative',
                         'rootRelative',
                         'protocolRelative',
@@ -30,7 +30,7 @@ describe('relations/Relation', function () {
                         htmlAnchor.refreshHref();
                     });
 
-                    expect(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), 'to equal', [
+                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), 'to equal', [
                         'relative2.html',
                         '/rootRelative2.html',
                         '//example.com/protocolRelative2.html',
@@ -50,7 +50,7 @@ describe('relations/Relation', function () {
                         asset.text = asset.text.replace(/href="/g, 'href=" ');
                     });
 
-                    expect(_.pluck(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), 'to equal', [
+                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), 'to equal', [
                         'relative',
                         'rootRelative',
                         'protocolRelative',
@@ -62,7 +62,7 @@ describe('relations/Relation', function () {
     });
 
     function getTargetFileNames(relations) {
-        return _.pluck(_.pluck(relations, 'to'), 'url').map(function (url) {
+        return _.map(_.map(relations, 'to'), 'url').map(function (url) {
             return url.replace(/^.*\//, '');
         });
     }

@@ -393,9 +393,9 @@ describe('assets/Asset', function () {
                     expect(assetGraph.findAssets().pop().text, 'to equal', assetGraph.findAssets({url: /\/thelib\.js$/})[0].text);
 
                     expect(
-                        _.pluck(assetGraph.findRelations({from: assetGraph.findAssets().pop()}), 'type'),
+                        _.map(assetGraph.findRelations({from: assetGraph.findAssets().pop()}), 'type'),
                         'to equal',
-                        _.pluck(assetGraph.findRelations({from: {url: /\/thelib\.js$/}}), 'type')
+                        _.map(assetGraph.findRelations({from: {url: /\/thelib\.js$/}}), 'type')
                     );
                 })
                 .run(done);

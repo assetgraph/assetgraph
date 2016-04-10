@@ -471,13 +471,13 @@ describe('transforms/flattenRequireJs', function () {
             .populate()
             .flattenRequireJs({type: 'Html'})
             .queue(function (assetGraph) {
-                expect(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}}), 'href'), 'to equal', [
                     'b.less',
                     'a.less',
                     'c.less'
                 ]);
 
-                expect(_.pluck(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index2\.html$/}}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index2\.html$/}}), 'href'), 'to equal', [
                     'b.less',
                     'a.less',
                     'c.less'
@@ -542,7 +542,7 @@ describe('transforms/flattenRequireJs', function () {
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
+                expect(_.map(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
                     assetGraph.root + 'main.js',
                     assetGraph.root + 'require.js',
                     assetGraph.root + 'something.js'
@@ -561,7 +561,7 @@ describe('transforms/flattenRequireJs', function () {
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
+                expect(_.map(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
                     assetGraph.root + 'main.js',
                     assetGraph.root + 'require.js',
                     assetGraph.root + 'subdir/bar.js',
@@ -609,7 +609,7 @@ describe('transforms/flattenRequireJs', function () {
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(_.pluck(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
+                expect(_.map(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
                     assetGraph.root + 'main.js',
                     assetGraph.root + 'require.js',
                     assetGraph.root + 'subdir/bar.js',
@@ -656,7 +656,7 @@ describe('transforms/flattenRequireJs', function () {
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(_.pluck(assetGraph.findAssets({type: 'JavaScript', isInline: false}), 'url').sort(), 'to equal', [
+                expect(_.map(assetGraph.findAssets({type: 'JavaScript', isInline: false}), 'url').sort(), 'to equal', [
                     assetGraph.root + 'main.js',
                     assetGraph.root + 'require.js',
                     'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'

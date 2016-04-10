@@ -16,7 +16,7 @@ describe('relations/HtmlPictureSource test', function () {
                 assetGraph.findRelations({}, true).forEach(function (relation) {
                     relation.hrefType = 'relative';
                 });
-                expect(_.pluck(assetGraph.findRelations({}, true), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({}, true), 'href'), 'to equal', [
                     '../image.png',
                     '../otherImage.jpg'
                 ]);

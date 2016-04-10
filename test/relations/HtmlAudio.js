@@ -18,7 +18,7 @@ describe('relations/HtmlAudio', function () {
                     relation.hrefType = 'relative';
                 });
 
-                expect(_.pluck(assetGraph.findRelations({}, true), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({}, true), 'href'), 'to equal', [
                     '../sound.mp3',
                     '../sound.wav',
                     '../sound.wma',

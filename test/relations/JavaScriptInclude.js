@@ -25,7 +25,7 @@ describe('relations/JavaScriptInclude', function () {
                     to: newJavaScriptAsset
                 }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'first');
 
-                expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
+                expect(_.map(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                  ['quux.js', 'bar.js']);
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
@@ -37,7 +37,7 @@ describe('relations/JavaScriptInclude', function () {
                     to: newJavaScriptAsset
                 }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'after', assetGraph.findRelations({to: {url: /\/quux\.js$/}})[0]);
 
-                expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
+                expect(_.map(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                  ['quux.js', 'baz.js', 'bar.js']);
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
@@ -49,7 +49,7 @@ describe('relations/JavaScriptInclude', function () {
                     to: newJavaScriptAsset
                 }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'before', assetGraph.findRelations({to: {url: /\/bar\.js$/}})[0]);
 
-                expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
+                expect(_.map(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                  ['quux.js', 'baz.js', 'bazze.js', 'bar.js']);
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
@@ -61,7 +61,7 @@ describe('relations/JavaScriptInclude', function () {
                     to: newJavaScriptAsset
                 }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'last');
 
-                expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
+                expect(_.map(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                  ['quux.js', 'baz.js', 'bazze.js', 'bar.js', 'prinzenrolle.js']);
             })
             .run(done);
@@ -86,7 +86,7 @@ describe('relations/JavaScriptInclude', function () {
                     to: newJavaScriptAsset
                 }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'first');
 
-                expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
+                expect(_.map(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                  ['quux.js', 'bar.js']);
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
@@ -98,7 +98,7 @@ describe('relations/JavaScriptInclude', function () {
                     to: newJavaScriptAsset
                 }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'after', assetGraph.findRelations({to: {url: /\/quux\.js$/}})[0]);
 
-                expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
+                expect(_.map(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                  ['quux.js', 'baz.js', 'bar.js']);
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
@@ -110,7 +110,7 @@ describe('relations/JavaScriptInclude', function () {
                     to: newJavaScriptAsset
                 }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'before', assetGraph.findRelations({to: {url: /\/bar\.js$/}})[0]);
 
-                expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
+                expect(_.map(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                  ['quux.js', 'baz.js', 'bazze.js', 'bar.js']);
 
                 newJavaScriptAsset = new AssetGraph.JavaScript({
@@ -122,7 +122,7 @@ describe('relations/JavaScriptInclude', function () {
                     to: newJavaScriptAsset
                 }).attach(assetGraph.findAssets({url: /\/index\.js$/})[0], 'last');
 
-                expect(_.pluck(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
+                expect(_.map(assetGraph.findRelations({from: {url: /\/index\.js$/}}), 'href'), 'to equal',
                                  ['quux.js', 'baz.js', 'bazze.js', 'bar.js', 'prinzenrolle.js']);
             })
             .run(done);

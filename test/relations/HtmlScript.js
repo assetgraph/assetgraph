@@ -10,7 +10,7 @@ describe('relations/HtmlScript', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations including unresolved', 'HtmlScript', 6);
-                expect(_.pluck(assetGraph.findRelations(), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
                     'externalNoType.js',
                     undefined,
                     'externalWithTypeTextJavaScript.js',

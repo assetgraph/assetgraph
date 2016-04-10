@@ -19,7 +19,7 @@ describe('relations/HtmlVideo', function () {
                     relation.hrefType = 'relative';
                 });
 
-                expect(_.pluck(assetGraph.findRelations({}, true), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({}, true), 'href'), 'to equal', [
                     '../movie1.mp4',
                     '../movie1.jpg',
                     '../movie2.png',
