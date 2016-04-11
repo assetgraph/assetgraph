@@ -233,7 +233,7 @@ describe('assets/JavaScript', function () {
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(_.pluck(assetGraph.findRelations({from: {type: 'JavaScript'}}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({from: {type: 'JavaScript'}}), 'href'), 'to equal', [
                     './foo',
                     './data.json',
                     './bar'

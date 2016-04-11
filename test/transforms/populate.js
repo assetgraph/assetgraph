@@ -46,7 +46,7 @@ describe('transforms/populate', function () {
                 expect(assetGraph, 'to contain assets', 3);
                 expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
 
-                expect(_.pluck(assetGraph.findRelations({type: 'HtmlScript'}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({type: 'HtmlScript'}), 'href'), 'to equal', [
                     '//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
                     'http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
                     'https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'
@@ -62,7 +62,7 @@ describe('transforms/populate', function () {
                     javaScript.url = javaScript.url.match(/^(https?:)/)[1] + '//cdn.example.com/' + javaScript.fileName;
                 });
 
-                expect(_.pluck(assetGraph.findRelations({type: 'HtmlScript'}), 'hrefType'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({type: 'HtmlScript'}), 'hrefType'), 'to equal', [
                     'protocolRelative',
                     'absolute',
                     'absolute'

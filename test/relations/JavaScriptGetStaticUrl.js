@@ -93,7 +93,7 @@ describe('relations/JavaScriptGetStaticUrl', function () {
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(_.pluck(assetGraph.findRelations({type: 'StaticUrlMapEntry'}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({type: 'StaticUrlMapEntry'}), 'href'), 'to equal', [
                     '/images/bar.png',
                     '/images/foo.png'
                 ]);

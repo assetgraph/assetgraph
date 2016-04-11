@@ -13,7 +13,7 @@ describe('relations/CssAlphaImageLoader', function () {
 
                 assetGraph.findAssets({url: /\/foo.png$/})[0].url = assetGraph.root + 'images/quux.png';
 
-                expect(_.pluck(assetGraph.findRelations({type: 'CssAlphaImageLoader'}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({type: 'CssAlphaImageLoader'}), 'href'), 'to equal', [
                     'images/quux.png',
                     'bar.png',
                     '/images/quux.png'

@@ -10,13 +10,13 @@ describe('relations/HtmlJsx', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations including unresolved', 'HtmlJsx', 2);
-                expect(_.pluck(assetGraph.findRelations(), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
                     'externalWithTypeTextJsx.js',
                     undefined,
                     'external.jsx'
                 ]);
 
-                var assets = _.pluck(assetGraph.findRelations(), 'to');
+                var assets = _.map(assetGraph.findRelations(), 'to');
 
                 expect(assets[0].text, 'to equal', '\'external\'\n');
                 expect(assets[1].text, 'to equal', '\'inline\'');

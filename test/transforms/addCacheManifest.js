@@ -62,7 +62,7 @@ describe('transforms/addCacheManifest', function () {
             .addCacheManifest({isInitial: true})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'CacheManifest');
-                expect(_.pluck(assetGraph.findRelations({from: {type: 'CacheManifest'}}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({from: {type: 'CacheManifest'}}), 'href'), 'to equal', [
                     'foo.png',
                     'style.css',
                     'modernBrowsers.js'
