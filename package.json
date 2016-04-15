@@ -60,7 +60,7 @@
     "closure-compiler": "^0.2.12",
     "coffee-script": "^1.10.0",
     "coveralls": "^2.11.6",
-    "eslint": "2.7.0",
+    "eslint": "2.8.0",
     "eslint-config-onelint": "1.0.2",
     "iconv": "^2.1.11",
     "istanbul": "^0.4.1",
