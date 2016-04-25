@@ -70,7 +70,7 @@
     "react-tools": "0.13.3",
     "sinon": "^1.17.3",
     "stylus": "^0.54.0",
-    "svgo": "0.6.4",
+    "svgo": "0.6.6",
     "systemjs-builder": "0.15.15",
     "unexpected": "^10.13.0",
     "unexpected-dom": "^3.0.2",
