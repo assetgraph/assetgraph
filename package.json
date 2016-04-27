@@ -66,7 +66,7 @@
     "istanbul": "^0.4.1",
     "less": "2.6.1",
     "mocha": "^2.4.5",
-    "node-sass": "3.5.3",
+    "node-sass": "^3.6.0",
     "react-tools": "0.13.3",
     "sinon": "^1.17.3",
     "stylus": "^0.54.0",
