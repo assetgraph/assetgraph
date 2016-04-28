@@ -71,7 +71,7 @@
     "sinon": "^1.17.3",
     "stylus": "^0.54.0",
     "svgo": "0.6.4",
-    "systemjs-builder": "0.15.15",
+    "systemjs-builder": "papandreou/builder#fix/nodeJs6",
     "unexpected": "^10.13.0",
     "unexpected-dom": "^3.0.2",
     "unexpected-mitm": "^9.0.0",
