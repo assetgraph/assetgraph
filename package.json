@@ -69,7 +69,7 @@
     "node-sass": "^3.6.0",
     "react-tools": "0.13.3",
     "sinon": "^1.17.3",
-    "stylus": "^0.54.0",
+    "stylus": "^0.54.4",
     "svgo": "0.6.4",
     "systemjs-builder": "systemjs/builder#master",
     "unexpected": "^10.13.0",
