@@ -62,7 +62,7 @@
     "coveralls": "^2.11.6",
     "eslint": "2.8.0",
     "eslint-config-onelint": "1.0.2",
-    "iconv": "^2.1.11",
+    "iconv": "^2.2.0",
     "istanbul": "^0.4.1",
     "less": "2.6.1",
     "mocha": "^2.4.5",
