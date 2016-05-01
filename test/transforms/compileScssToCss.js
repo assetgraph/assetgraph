@@ -64,8 +64,7 @@ describe('transforms/compileScssToCss', function () {
                 });
                 expect(assetGraph.findAssets({type: 'Css'})[0].sourceMap.sources, 'to satisfy', [
                     assetGraph.root + 'morestyles.scss',
-                    assetGraph.root + 'styles.scss',
-                    /^<input css \d+>$/ // FIXME
+                    assetGraph.root + 'styles.scss'
                 ]);
             });
     });

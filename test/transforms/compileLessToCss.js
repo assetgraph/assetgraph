@@ -67,8 +67,7 @@ describe('transforms/compileLessToCss', function () {
                 });
                 expect(assetGraph.findAssets({type: 'Css'})[0].sourceMap.sources, 'to satisfy', [
                     assetGraph.root + 'morestyles.less',
-                    assetGraph.root + 'styles.less',
-                    /^<input css \d+>$/ // FIXME
+                    assetGraph.root + 'styles.less'
                 ]);
             });
     });
