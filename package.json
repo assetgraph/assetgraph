@@ -43,7 +43,7 @@
     "optimist": "0.6.1",
     "passerror": "^1.1.1",
     "perfectionist": "2.1.3",
-    "postcss": "~5.0.22",
+    "postcss": "~5.0.21",
     "repeat-string": "^1.5.4",
     "rsvp": "3.2.1",
     "schemes": "^1.0.1",
