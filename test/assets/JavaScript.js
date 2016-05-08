@@ -1,6 +1,5 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    _ = require('lodash'),
     AssetGraph = require('../../lib'),
     errors = require('../../lib/errors'),
     sinon = require('sinon');
@@ -140,108 +139,6 @@ describe('assets/JavaScript', function () {
             });
     });
 
-    it('should handle non-file-scheme RequireJS.require dependency errors', function (done) {
-        sinon.stub(console, 'warn');
-
-        var invalidScheme = new AssetGraph.JavaScript({
-            text: 'require("http://assetgraph.org/foo.js")'
-        });
-
-        invalidScheme.findOutgoingRelationsInParseTree();
-
-        expect(console.warn.callCount, 'to be', 1);
-        expect(console.warn.getCall(0).args[0], 'to match', /Skipping JavaScriptCommonJsRequire \(only supported from file: urls\)/);
-
-        console.warn.restore();
-
-        var warnings = [];
-        new AssetGraph({ root: '.' })
-            .on('warn', function (warning) {
-                warnings.push(warning);
-            })
-            .loadAssets([
-                invalidScheme
-            ])
-            .populate()
-            .run(function (assetGraph) {
-                expect(warnings, 'to have length', 1);
-                done();
-            });
-    });
-
-    it('should assume self encapsulation when require function is exposed as argument from outer scope', function (done) {
-        sinon.stub(console, 'warn');
-
-        var selfEncapsulated = new AssetGraph.JavaScript({
-            text: '(function (require, module) { require("dependency"); })'
-        });
-
-        selfEncapsulated.findOutgoingRelationsInParseTree();
-
-        expect(console.warn, 'was not called');
-
-        console.warn.restore();
-
-        var warnings = [];
-        new AssetGraph({ root: '.' })
-            .on('warn', function (warning) {
-                warnings.push(warning);
-            })
-            .loadAssets([
-                selfEncapsulated
-            ])
-            .populate()
-            .queue(function (assetGraph) {
-                expect(warnings, 'to have length', 0);
-                expect(assetGraph, 'to contain relations', 0);
-            })
-            .run(done);
-    });
-
-    it('should handle non-file-scheme RequireJS.require dependency errors', function (done) {
-        sinon.stub(console, 'warn');
-
-        var invalidScheme = new AssetGraph.JavaScript({
-            url: 'file://requireFoo.js',
-            text: 'require("./foo")'
-        });
-
-        invalidScheme.findOutgoingRelationsInParseTree();
-
-        expect(console.warn.callCount, 'to be', 1);
-        expect(console.warn.getCall(0).args[0], 'to be', 'Couldn\'t resolve require(\'./foo\'), skipping');
-
-        console.warn.restore();
-
-        var warnings = [];
-        new AssetGraph({ root: '.' })
-            .on('warn', function (warning) {
-                warnings.push(warning);
-            })
-            .loadAssets([
-                invalidScheme
-            ])
-            .populate()
-            .run(function (assetGraph) {
-                expect(warnings, 'to have length', 1);
-                done();
-            });
-    });
-
-    it('should handle a test case with relations located at multiple levels in the parse tree', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/relationsDepthFirst/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(_.map(assetGraph.findRelations({from: {type: 'JavaScript'}}), 'href'), 'to equal', [
-                    './foo',
-                    './data.json',
-                    './bar'
-                ]);
-            })
-            .run(done);
-    });
-
     it('should preserve the copyright notice in a JavaScript asset', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
             .loadAssets('copyrightNotice.js')
@@ -346,16 +243,5 @@ describe('assets/JavaScript', function () {
                 expect(assetGraph.findAssets({fileName: 'nonstrict.js'})[0].strict, 'to equal', false);
             })
             .run(done);
-    });
-
-    it('should attempt to fold constants in require calls to string', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
-            .loadAssets('foldableConstants.js')
-            .populate()
-            .queue(function (assetGraph) {
-                var asset = assetGraph.findAssets({type: 'JavaScript'})[0];
-                expect(asset.text, 'to match', /require\(\['foobar'/);
-                expect(asset.text, 'to match', /require\(\['http:\/\/example.com\/foo.js'/);
-            }).run(done);
     });
 });

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+    <script>
+        var require = {
+            separateCSS: true,
+            baseUrl: '.',
+            packages: [
+                {
+                    name: 'less',
+                    location: 'require-less',
+                    main: 'less'
+                }
+            ],
+            paths: {
+                style: 'less-style'
+            }
+        };
+    </script>
+    <script src='require.js' data-main="main"></script>
+</body>
+</html>

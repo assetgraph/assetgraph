@@ -1,4 +1,0 @@
-System.config({
-  paths: {},
-  meta: {}
-});

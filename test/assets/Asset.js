@@ -1,7 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     sinon = require('sinon'),
-    _ = require('lodash'),
     urlTools = require('urltools'),
     AssetGraph = require('../../lib');
 
@@ -367,36 +366,6 @@ describe('assets/Asset', function () {
 
                     var originalAndCloned = assetGraph.findAssets({url: /\/index(?:\.clone)?.html/});
                     expect(originalAndCloned[0].text, 'to equal', originalAndCloned[1].text);
-                })
-                .run(done);
-        });
-
-        it('should handle a test case with an advanced require.js construct', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/requireJs/'})
-                .registerRequireJsConfig()
-                .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 7);
-                    assetGraph.findRelations({type: 'HtmlRequireJsMain'})[0].to.clone();
-
-                    expect(assetGraph.findRelations({}, true).filter(function (relation) {
-                        return !relation.to.isAsset;
-                    }), 'to have length', 0);
-
-                    expect(assetGraph.findRelations({from: assetGraph.findAssets().pop()}), 'to have length',
-                             assetGraph.findRelations({from: {url: /\/main\.js$/}}).length);
-
-
-                    assetGraph.findAssets({url: /\/thelib\.js/})[0].clone();
-
-                    expect(assetGraph.findAssets().pop().text, 'to equal', assetGraph.findAssets({url: /\/thelib\.js$/})[0].text);
-
-                    expect(
-                        _.map(assetGraph.findRelations({from: assetGraph.findAssets().pop()}), 'type'),
-                        'to equal',
-                        _.map(assetGraph.findRelations({from: {url: /\/thelib\.js$/}}), 'type')
-                    );
                 })
                 .run(done);
         });
