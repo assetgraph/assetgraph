@@ -64,7 +64,7 @@
     "eslint-config-onelint": "1.1.0",
     "iconv": "^2.2.0",
     "istanbul": "^0.4.1",
-    "less": "2.7.0",
+    "less": "2.7.1",
     "mocha": "^2.4.5",
     "node-sass": "^3.6.0",
     "react-tools": "0.13.3",
