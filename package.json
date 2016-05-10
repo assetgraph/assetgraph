@@ -2,7 +2,7 @@
   "name": "assetgraph",
   "description": "An auto discovery dependency graph based optimization framework for web pages and applications",
   "repository": "git://github.com/assetgraph/assetgraph.git",
-  "version": "2.5.1",
+  "version": "2.5.3",
   "license": "BSD-3-Clause",
   "maintainers": [
     {
@@ -64,7 +64,7 @@
     "eslint-config-onelint": "1.1.0",
     "iconv": "^2.2.0",
     "istanbul": "^0.4.1",
-    "less": "2.7.0",
+    "less": "2.7.1",
     "mocha": "^2.4.5",
     "node-sass": "^3.6.0",
     "react-tools": "0.13.3",
