@@ -462,4 +462,87 @@ describe('assets/Html', function () {
             );
         });
     });
+
+    describe('#allowsPerCsp', function () {
+        it('should support a non-camelCased directive name', function () {
+            expect(new AssetGraph.Html({
+                text:
+                    '<!DOCTYPE html><html><head>' +
+                    '<meta http-equiv="Content-Security-Policy" content="style-src foo.com">' +
+                    '</head><body></body></html>'
+            }).allowsPerCsp('style-src', 'http://foo.com/yeah.css', 'http://example.com/index.html'), 'to be true');
+        });
+
+        it('should support a camelCased directive name', function () {
+            expect(new AssetGraph.Html({
+                url: 'http://example.com/index.html',
+                text:
+                    '<!DOCTYPE html><html><head>' +
+                    '<meta http-equiv="Content-Security-Policy" content="style-src foo.com">' +
+                    '</head><body></body></html>'
+            }).allowsPerCsp('styleSrc', 'http://foo.com/yeah.css', 'http://example.com/index.html'), 'to be true');
+        });
+
+        describe('with no CSPs', function () {
+            it('should allow an http: url for any directive', function () {
+                expect(new AssetGraph.Html({
+                    url: 'http://example.com/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body></body></html>'
+                }).allowsPerCsp('scriptSrc', 'http://example.com/script.js', 'http://example.com/index.html'), 'to be true');
+            });
+
+            it('should allow a data: url for any directive', function () {
+                expect(new AssetGraph.Html({
+                    url: 'http://example.com/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body></body></html>'
+                }).allowsPerCsp('imageSrc', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNQUFD4z6Crq/sfAAuYAuYl+7lfAAAAAElFTkSuQmCC', 'http://example.com/index.html'), 'to be true');
+            });
+        });
+
+        describe('with multiple CSPs in effect', function () {
+            describe('when both policies have the given directive', function () {
+                it('should allow a url if both policies allow it', function () {
+                    expect(new AssetGraph.Html({
+                        text:
+                            '<!DOCTYPE html><html><head>' +
+                            '<meta http-equiv="Content-Security-Policy" content="style-src foo.com">' +
+                            '<meta http-equiv="Content-Security-Policy" content="style-src http://foo.com/">' +
+                            '</head><body></body></html>'
+                    }).allowsPerCsp('styleSrc', 'http://foo.com/styles/myStyles.css', 'http://example.com/index.html'), 'to be true');
+                });
+
+                it('should disallow a url when one of the policies has \'none\' for that directive', function () {
+                    expect(new AssetGraph.Html({
+                        text:
+                            '<!DOCTYPE html><html><head>' +
+                            '<meta http-equiv="Content-Security-Policy" content="style-src foo.com">' +
+                            '<meta http-equiv="Content-Security-Policy" content="style-src \'none\'">' +
+                            '</head><body></body></html>'
+                    }).allowsPerCsp('styleSrc', 'http://foo.com/styles/myStyles.css', 'http://example.com/index.html'), 'to be false');
+                });
+            });
+
+            describe('when one of the policies does not list that directive, but has a default-src directive', function () {
+                it('should disallow the url when the default-src says \'none\'', function () {
+                    expect(new AssetGraph.Html({
+                        text:
+                            '<!DOCTYPE html><html><head>' +
+                            '<meta http-equiv="Content-Security-Policy" content="style-src foo.com">' +
+                            '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'">' +
+                            '</head><body></body></html>'
+                    }).allowsPerCsp('styleSrc', 'http://foo.com/styles.css', 'http://example.com/index.html'), 'to be false');
+                });
+
+                it('should disallow the url when the default-src disallows it', function () {
+                    expect(new AssetGraph.Html({
+                        text:
+                            '<!DOCTYPE html><html><head>' +
+                            '<meta http-equiv="Content-Security-Policy" content="style-src foo.com">' +
+                            '<meta http-equiv="Content-Security-Policy" content="default-src http://bar.com/">' +
+                            '</head><body></body></html>'
+                    }).allowsPerCsp('styleSrc', 'http://foo.com/styles.css', 'http://example.com/index.html'), 'to be false');
+                });
+            });
+        });
+    });
 });
