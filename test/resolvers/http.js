@@ -94,7 +94,7 @@ describe('resolvers/http', function () {
                         'Content-Type': 'text/html; charset=UTF-8'
                     });
                     res.end('Foo');
-                }, 200);
+                }, 1000);
             }),
             server = http.createServer(requestHandler).listen(0),
             serverAddress = server.address(),
