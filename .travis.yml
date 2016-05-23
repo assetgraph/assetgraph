@@ -20,6 +20,7 @@ addons:
       - g++-4.8
 env: CXX="g++-4.8" CC="gcc-4.8"
 
+before_install: "npm install schmod/npm#issue-10727"
 script: "npm run-script travis"
 after_success: "<coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js"
 
