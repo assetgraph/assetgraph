@@ -31,7 +31,7 @@
     "escodegen": "^1.8.0",
     "esmangle": "^1.0.1",
     "esprima": "^2.7.2",
-    "espurify": "^1.5.1",
+    "espurify": "^1.6.0",
     "estraverse": "^4.2.0",
     "glob": "^7.0.3",
     "html-minifier": "^2.1.2",
