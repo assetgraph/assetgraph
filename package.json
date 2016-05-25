@@ -2,7 +2,7 @@
   "name": "assetgraph",
   "description": "An auto discovery dependency graph based optimization framework for web pages and applications",
   "repository": "git://github.com/assetgraph/assetgraph.git",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "license": "BSD-3-Clause",
   "maintainers": [
     {
