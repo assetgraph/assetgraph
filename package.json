@@ -72,7 +72,7 @@
     "sinon": "^1.17.3",
     "stylus": "^0.54.5",
     "svgo": "0.6.6",
-    "systemjs-builder": "0.15.16",
+    "systemjs-builder": "0.15.19",
     "unexpected": "^10.13.0",
     "unexpected-dom": "^3.0.2",
     "unexpected-mitm": "^9.0.0",
