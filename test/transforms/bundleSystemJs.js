@@ -57,13 +57,13 @@ describe('transforms/bundleSystemJs', function () {
                                 callee: {
                                     property: {
                                         loc: {
-                                             source: assetGraph.root + 'main.js'
-                                         }
-                                     }
-                                 }
-                             }
-                         }
-                     }
+                                            source: assetGraph.root + 'main.js'
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 });
             });
     });
