@@ -53,8 +53,14 @@ describe('transforms/bundleSystemJs', function () {
                 })[0].parseTree, 'to satisfy', {
                     body: {
                         0: {
-                            loc: {
-                                source: assetGraph.root + 'main.js'
+                            expression: {
+                                callee: {
+                                    property: {
+                                        loc: {
+                                            source: assetGraph.root + 'main.js'
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

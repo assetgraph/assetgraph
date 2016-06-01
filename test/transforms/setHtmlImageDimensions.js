@@ -3,8 +3,8 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
 describe('transforms/setHtmlImageDimensions', function () {
-    it('should handle a simple test case', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/setHtmlImageDimensions/'})
+    it('should handle a simple test case', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/setHtmlImageDimensions/'})
             .loadAssets('index.html')
             .populate()
             .setHtmlImageDimensions()
@@ -28,7 +28,10 @@ describe('transforms/setHtmlImageDimensions', function () {
                 expect(htmlImages[2].node.getAttribute('height'), 'to equal', '123');
                 expect(htmlImages[3].node.getAttribute('width'), 'to equal', '123');
                 expect(htmlImages[3].node.getAttribute('height'), 'to equal', '123');
-            })
-            .run(done);
+
+                var svgHtmlImages = assetGraph.findRelations({type: 'HtmlImage', to: {url: /\.svg$/}});
+                expect(svgHtmlImages[0].node.getAttribute('width'), 'to equal', '612');
+                expect(svgHtmlImages[0].node.getAttribute('height'), 'to equal', '502.174');
+            });
     });
 });
