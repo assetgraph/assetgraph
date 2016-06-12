@@ -13,8 +13,8 @@ function getPropertyValues(container, propertyName) {
 }
 
 describe('transforms/convertCssImportsToHtmlStyles', function () {
-    it('should converting Css @import rules to <link rel="stylesheet">', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/convertCssImportsToHtmlStyles/'})
+    it('should converting Css @import rules to <link rel="stylesheet">', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/convertCssImportsToHtmlStyles/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -55,10 +55,8 @@ describe('transforms/convertCssImportsToHtmlStyles', function () {
                 expect(getPropertyValues(cssAsset.parseTree.nodes[1], 'color'), 'to equal', [ 'tan' ]);
                 expect(getPropertyValues(cssAsset.parseTree.nodes[2], 'color'), 'to equal', [ 'blue' ]);
 
-
                 assetGraph.findAssets({type: 'Html'})[0].url = urlTools.resolveUrl(assetGraph.root, 'subdir/index2.html');
-                expect(assetGraph.findRelations({type: 'CssAlphaImageLoader'})[0].href, 'to equal', '../foo.png');
-            })
-            .run(done);
+                expect(assetGraph.findRelations({type: 'CssAlphaImageLoader'})[0].href, 'to equal', '/foo.png');
+            });
     });
 });

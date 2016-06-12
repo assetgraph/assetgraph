@@ -14,12 +14,12 @@ describe('relations/CssAlphaImageLoader', function () {
                 assetGraph.findAssets({url: /\/foo.png$/})[0].url = assetGraph.root + 'images/quux.png';
 
                 expect(_.map(assetGraph.findRelations({type: 'CssAlphaImageLoader'}), 'href'), 'to equal', [
-                    'images/quux.png',
-                    'bar.png',
+                    '/images/quux.png',
+                    '/bar.png',
                     '/images/quux.png'
                 ]);
                 var cssRules = assetGraph.findAssets({type: 'Css'})[0].parseTree.nodes;
-                expect(cssRules[0].nodes[0].value, 'to match', /src='images\/quux\.png'.*src='bar\.png'/);
+                expect(cssRules[0].nodes[0].value, 'to match', /src='\/images\/quux\.png'.*src='\/bar\.png'/);
                 expect(cssRules[1].nodes[0].value, 'to match', /src='\/images\/quux\.png'/);
 
                 assetGraph.findRelations({type: 'CssAlphaImageLoader'})[0].detach();

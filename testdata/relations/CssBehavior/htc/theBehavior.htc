@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src='js/theScript.js'></script>
+<script src='../js/theScript.js'></script>
 <style>
 .body {color:red;}
 </style>
