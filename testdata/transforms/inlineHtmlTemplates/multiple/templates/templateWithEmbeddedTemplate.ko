@@ -1,0 +1,10 @@
+<div data-bind="template: 'theEmbeddedTemplate'"></div>
+<script type="text/html" id="theEmbeddedTemplate" foo="bar">
+    <h1>This is the embedded template, which should also end up in the main document</h1>
+</script>
+<script type="text/html" foo="bar1">
+    <h1>This embedded template has no id. This too should end up in the main document, along with it's attributes</h1>
+</script>
+<script type="text/html" foo="bar2">
+    <h1>This embedded template has no id. This too should end up in the main document, along with it's attributes</h1>
+</script>
