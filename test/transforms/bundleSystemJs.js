@@ -320,7 +320,7 @@ describe('transforms/bundleSystemJs', function () {
     });
 
     describe('with a data-systemjs-polyfill attribute', function () {
-        it('should remove the data-systemjs-polyfill attribute when instructed to', function () {
+        it('should remove the data-systemjs-polyfill attribute', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/polyfill/simple/'})
                 .loadAssets('index.html')
                 .populate()
@@ -335,6 +335,7 @@ describe('transforms/bundleSystemJs', function () {
                     expect(assetGraph, 'to contain assets', 'JavaScript', 3);
                     expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
                     expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
+                    expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'data-systemjs-polyfill');
                 });
         });
 
@@ -374,6 +375,46 @@ describe('transforms/bundleSystemJs', function () {
                         expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
                     });
             });
+        });
+    });
+
+    describe('with a data-systemjs-replacement attribute', function () {
+        it('should remove the data-systemjs-replacement attribute', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/replacement/simple/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'Html', 1);
+                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+                })
+                .bundleSystemJs()
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+                    expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
+                    expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'data-systemjs-replacement');
+                    expect(assetGraph, 'to contain no assets', { fileName: 'system.js' });
+                });
+        });
+
+        it('should replace system.js with the referenced asset', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/replacement/simple/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'Html', 1);
+                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+                })
+                .bundleSystemJs()
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+                    expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
+                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+                });
         });
     });
 });
