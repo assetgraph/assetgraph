@@ -36,7 +36,7 @@
     "glob": "^7.0.3",
     "html-minifier": "^2.1.2",
     "imageinfo": "1.0.4",
-    "jsdom-papandreou": "0.11.0-patch3",
+    "jsdom-papandreou": "0.11.0-patch4",
     "lodash": "^4.11.2",
     "mkdirp": "^0.5.1",
     "normalizeurl": "0.1.3",
