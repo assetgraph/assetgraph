@@ -27,7 +27,7 @@
     "createerror": "^1.1.0",
     "cssnano-paras20xx": "3.6.2-patch1",
     "deep-extend": "^0.4.1",
-    "esanimate": "^1.0.3",
+    "esanimate": "^1.1.0",
     "escodegen": "^1.8.0",
     "esmangle": "^1.0.1",
     "esprima": "^2.7.2",
