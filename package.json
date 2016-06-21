@@ -33,7 +33,7 @@
     "esprima": "^2.7.2",
     "espurify": "^1.5.1",
     "estraverse": "^4.2.0",
-    "glob": "^7.0.3",
+    "glob": "^7.0.5",
     "html-minifier": "^2.1.2",
     "imageinfo": "1.0.4",
     "jsdom-papandreou": "0.11.0-patch4",
