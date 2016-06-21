@@ -1,7 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
-    sinon = require('sinon'),
     http = require('http');
 
 describe('resolvers/http', function () {
