@@ -214,4 +214,23 @@ describe('assets/Css', function () {
         cssAsset.minify();
         expect(cssAsset.text, 'to equal', 'div{border-top-width:5px;border-right-width:5px;border-bottom-width:5px;border-left-width:5px;border-top-style:solid;border-right-style:solid;border-bottom-style:solid;border-left-style:solid;border-top-color:#181bff;border-right-color:#181bff;border-bottom-color:#181bff;border-left-color:#181bff}');
     });
+
+    it('should unload a Css asset correctly', function (done) {
+        var assetGraph = new AssetGraph();
+        var asset = new AssetGraph.Css({
+            text: 'body {}'
+        });
+
+        assetGraph.addAsset(asset);
+
+        expect(asset, 'to satisfy', {
+            text: 'body {}'
+        });
+
+        asset.unload();
+
+        expect(asset, 'to satisfy', {
+            text: undefined
+        });
+    });
 });
