@@ -68,38 +68,66 @@ describe('assets/Css', function () {
         expect(asset.encoding, 'to be', 'iso-8859-1');
     });
 
-    it('should minify Css text', function () {
-        var cssText = 'body {\n    background: red;\n}\n';
-        var asset = new AssetGraph.Css({
-            text: cssText
+    describe('#minify', function () {
+        it('should minify the Css text', function () {
+            var cssText = 'body {\n    background: red;\n}\n';
+            var asset = new AssetGraph.Css({
+                text: cssText
+            });
+
+            expect(asset.text, 'to be', cssText);
+
+            asset.minify();
+            expect(asset.text, 'to be', 'body{background:red}');
         });
 
-        expect(asset.text, 'to be', cssText);
+        it('should propagate source map source map information', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/assets/Css/minifyWithSourceMap/'})
+                .loadAssets('index.css')
+                .minifyAssets()
+                .serializeSourceMaps()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', 'SourceMap');
 
-        asset.minify();
-        expect(asset.text, 'to be', 'body{background:red}');
-    });
-
-    it('should propagate source map source map information when minifying', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/assets/Css/minifyWithSourceMap/'})
-            .loadAssets('index.css')
-            .minifyAssets()
-            .serializeSourceMaps()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain asset', 'SourceMap');
-
-                var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
-                var consumer = new mozilla.SourceMapConsumer(sourceMap.parseTree);
-                expect(consumer.generatedPositionFor({
-                    source: assetGraph.root + 'index.css',
-                    line: 2,
-                    column: 4
-                }), 'to equal', {
-                    line: 1,
-                    column: 5,
-                    lastColumn: null
+                    var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
+                    var consumer = new mozilla.SourceMapConsumer(sourceMap.parseTree);
+                    expect(consumer.generatedPositionFor({
+                        source: assetGraph.root + 'index.css',
+                        line: 2,
+                        column: 4
+                    }), 'to equal', {
+                        line: 1,
+                        column: 5,
+                        lastColumn: null
+                    });
                 });
+        });
+
+        it('should preserve CSS hacks that depend on raws being present', function () {
+            var cssText = '.foo {\n  *padding-left: 180px;\n}';
+            var asset = new AssetGraph.Css({
+                text: cssText
             });
+
+            expect(asset.text, 'to be', cssText);
+
+            asset.minify();
+            expect(asset.text, 'to be', '.foo{*padding-left:180px}');
+        });
+
+        it('should not destroy existing relations', function () {
+            var asset = new AssetGraph.Css({
+                text: '.foo {\n  background-image: url(foo.png);\n}.foo {\n  background-image: url(foo.png);\n}'
+            });
+            var relations = asset.outgoingRelations;
+            asset.minify();
+            asset.text;
+            asset.prettyPrint();
+            relations[0].href = 'blah.png';
+            relations[1].href = 'quux.png';
+            asset.markDirty();
+            expect(asset.text, 'to contain', 'blah.png').and('to contain', 'quux.png');
+        });
     });
 
     it('should pretty print Css text', function () {
