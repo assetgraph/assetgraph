@@ -1,3 +1,0 @@
-this._ = {
-    underscore: true
-};

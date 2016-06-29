@@ -1,2 +1,0 @@
-These are the contents of foo.txt
-
