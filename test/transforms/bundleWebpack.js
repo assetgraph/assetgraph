@@ -4,7 +4,6 @@ var AssetGraph = require('../../lib/');
 describe('bundleWebpack', function () {
     it('should create a bundle consisting of a single file', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/simple/'})
-.logEvents()
             .loadAssets('index.html')
             .populate()
             .bundleWebpack()
@@ -22,5 +21,17 @@ describe('bundleWebpack', function () {
                 })[0].to.text, 'to contain', 'alert(\'main!\');');
             });
 
+    });
+
+    it('should discover relations in the bundle', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/relationInBundle/'})
+            .loadAssets('index.html')
+            .populate()
+            .bundleWebpack()
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Json');
+                expect(assetGraph, 'to contain relation', { type: 'JavaScriptGetStaticUrl', to: { fileName: /^[a-f0-9]{32}\.json$/ } });
+            });
     });
 });
