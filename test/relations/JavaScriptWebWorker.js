@@ -17,8 +17,26 @@ describe('JavascriptWebWorker', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 5);
+            });
+    });
+
+    it('should support attaching and detaching importScripts relations', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptWebWorker/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
                 assetGraph.findRelations({to: { fileName: 'foo.js' }})[0].detach();
-                expect(assetGraph.findRelations({type: 'JavaScriptWebWorker'})[0].to.text, 'to contain', 'importScripts(\'bar.js\');');
+                var webWorker = assetGraph.findRelations({type: 'JavaScriptWebWorker'})[0].to;
+                expect(webWorker.text, 'not to contain', '\'foo.js\';');
+                expect(webWorker.text, 'to contain', 'importScripts(\'bar.js\');');
+                new AssetGraph.JavaScriptImportScripts({
+                    to: { url: 'foo.js' }
+                }).attach(
+                    webWorker,
+                    'before',
+                    assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
+                );
+                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\');');
             });
     });
 });
