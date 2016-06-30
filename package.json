@@ -53,7 +53,7 @@
     "setimmediate": "1.0.4",
     "source-map": "^0.5.6",
     "sourcemap-to-ast": "0.0.2",
-    "teepee": "^2.21.4",
+    "teepee": "^2.23.0",
     "uglify-js": "2.6.4",
     "urltools": "0.2.1",
     "xmldom": "0.1.22"
