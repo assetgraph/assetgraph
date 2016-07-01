@@ -20,7 +20,6 @@ describe('bundleWebpack', function () {
                     to: { fileName: /bundle/ }
                 })[0].to.text, 'to contain', 'alert(\'main!\');');
             });
-
     });
 
     it('should discover relations in the bundle', function () {
