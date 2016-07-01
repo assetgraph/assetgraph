@@ -7,7 +7,7 @@ describe('bundleWebpack', function () {
             .loadAssets('index.html')
             .populate()
             .bundleWebpack()
-            .populate()
+            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'JavaScript');
                 expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 1);
@@ -28,7 +28,7 @@ describe('bundleWebpack', function () {
             .loadAssets('index.html')
             .populate()
             .bundleWebpack()
-            .populate()
+            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Json');
                 expect(assetGraph, 'to contain relation', { type: 'JavaScriptGetStaticUrl', to: { fileName: /^[a-f0-9]{32}\.json$/ } });
