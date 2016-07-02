@@ -433,8 +433,7 @@ describe('transforms/bundleRelations', function () {
             return new AssetGraph({ root: __dirname + '/../../testdata/transforms/bundleRelations/cssSourceMaps/'})
                 .loadAssets('index.html')
                 .populate()
-                .compileLessToCss()
-                .serializeSourceMaps()
+                .applySourceMaps()
                 .queue(function (assetGraph) {
                     var sourceMaps = assetGraph.findAssets({ type: 'SourceMap' });
                     sourceMaps.sort(function (a, b) {
@@ -442,12 +441,8 @@ describe('transforms/bundleRelations', function () {
                         b = b.parseTree.sources[0];
                         return (a < b) ? -1 : (a > b ? 1 : 0);
                     });
-                    expect(sourceMaps[0].parseTree.sources, 'to equal', [
-                        assetGraph.root + 'a.less'
-                    ]);
-                    expect(sourceMaps[1].parseTree.sources, 'to equal', [
-                        assetGraph.root + 'b.less'
-                    ]);
+                    expect(sourceMaps[0].parseTree.sources, 'to equal', [ '/a.less' ]);
+                    expect(sourceMaps[1].parseTree.sources, 'to equal', [ '/b.less' ]);
                 })
                 .bundleRelations({
                     type: 'HtmlStyle',
