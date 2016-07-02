@@ -37,6 +37,22 @@ describe('JavaScriptWebWorker', function () {
                     assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
                 );
                 expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\');');
+                new AssetGraph.JavaScriptImportScripts({
+                    to: { url: 'after.js' }
+                }).attach(
+                    webWorker,
+                    'after',
+                    assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
+                );
+                expect(webWorker.text, 'to contain', 'importScripts(\'bar.js\');\nimportScripts(\'after.js\')');
+                new AssetGraph.JavaScriptImportScripts({
+                    to: { url: 'last.js' }
+                }).attach(webWorker, 'last');
+                new AssetGraph.JavaScriptImportScripts({
+                    to: { url: 'first.js' }
+                }).attach(webWorker, 'first');
+                expect(webWorker.text, 'to begin with', 'importScripts(\'first.js\');')
+                    .and('to end with', 'importScripts(\'last.js\');');
             });
     });
 
@@ -57,6 +73,22 @@ describe('JavaScriptWebWorker', function () {
                     assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
                 );
                 expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\')');
+                new AssetGraph.JavaScriptImportScripts({
+                    to: { url: 'after.js' }
+                }).attach(
+                    webWorker,
+                    'after',
+                    assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
+                );
+                expect(webWorker.text, 'to contain', 'importScripts(\'bar.js\'), importScripts(\'after.js\')');
+                new AssetGraph.JavaScriptImportScripts({
+                    to: { url: 'last.js' }
+                }).attach(webWorker, 'last');
+                new AssetGraph.JavaScriptImportScripts({
+                    to: { url: 'first.js' }
+                }).attach(webWorker, 'first');
+                expect(webWorker.text, 'to begin with', 'importScripts(\'first.js\');')
+                    .and('to end with', 'importScripts(\'last.js\');');
             });
     });
 });
