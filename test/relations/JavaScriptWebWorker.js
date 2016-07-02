@@ -36,7 +36,7 @@ describe('JavaScriptWebWorker', function () {
                     'before',
                     assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
                 );
-                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\');');
+                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\', \'bar.js\');');
                 new AssetGraph.JavaScriptImportScripts({
                     to: { url: 'after.js' }
                 }).attach(
@@ -44,7 +44,7 @@ describe('JavaScriptWebWorker', function () {
                     'after',
                     assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
                 );
-                expect(webWorker.text, 'to contain', 'importScripts(\'bar.js\');\nimportScripts(\'after.js\')');
+                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\', \'bar.js\', \'after.js\')');
                 new AssetGraph.JavaScriptImportScripts({
                     to: { url: 'last.js' }
                 }).attach(webWorker, 'last');
@@ -72,7 +72,7 @@ describe('JavaScriptWebWorker', function () {
                     'before',
                     assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
                 );
-                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\')');
+                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\', \'bar.js\')');
                 new AssetGraph.JavaScriptImportScripts({
                     to: { url: 'after.js' }
                 }).attach(
@@ -80,7 +80,7 @@ describe('JavaScriptWebWorker', function () {
                     'after',
                     assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
                 );
-                expect(webWorker.text, 'to contain', 'importScripts(\'bar.js\'), importScripts(\'after.js\')');
+                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\', \'bar.js\', \'after.js\')');
                 new AssetGraph.JavaScriptImportScripts({
                     to: { url: 'last.js' }
                 }).attach(webWorker, 'last');
