@@ -3,9 +3,64 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
 describe('relations/JavaScriptFetch', function () {
-    it('should populate the relation', function (done) {
+    it('should not populate dynamic endpoints', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
-            .loadAssets('index.html')
+            .loadAssets('dynamic.js')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 0);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 1);
+            })
+            .run(done);
+    });
+
+    it('should populate naked fetch', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
+            .loadAssets('fetch.js')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
+            })
+            .run(done);
+    });
+
+    it('should populate window.fetch', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
+            .loadAssets('windowFetch.js')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
+            })
+            .run(done);
+    });
+
+    it('should populate this.fetch', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
+            .loadAssets('thisFetch.js')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
+            })
+            .run(done);
+    });
+
+    it('should populate self.fetch', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
+            .loadAssets('selfFetch.js')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
+            })
+            .run(done);
+    });
+
+    it('should populate a sequence fetch', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
+            .loadAssets('selfFetch.js')
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
@@ -16,7 +71,7 @@ describe('relations/JavaScriptFetch', function () {
 
     it('should read the href correctly', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
-            .loadAssets('index.html')
+            .loadAssets('fetch.js')
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations including unresolved', 'JavaScriptFetch', 1);
 
@@ -31,7 +86,7 @@ describe('relations/JavaScriptFetch', function () {
 
     it('should write the href correctly', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
-            .loadAssets('index.html')
+            .loadAssets('fetch.js')
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
@@ -57,37 +112,63 @@ describe('relations/JavaScriptFetch', function () {
             .run(done);
     });
 
-    it('should throw when inlining', function (done) {
+    it('should inline as data-uri', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
-            .loadAssets('index.html')
+            .loadAssets('fetch.js')
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
 
                 var relation = assetGraph.findRelations({ type: 'JavaScriptFetch' })[0];
 
-                expect(relation.inline, 'to throw', 'JavaScriptFetch.inline(): Not allowed');
+                relation.inline();
+
+                expect(relation.from, 'to satisfy', {
+                    text: 'fetch(\'data:application/javascript,module.exports%20%3D%20\\\'fetched\\\'%3B%0A\');'
+                });
             })
             .run(done);
     });
 
-    it('should throw when detaching', function (done) {
+    it('should detach simple fetch statement correctly', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
-            .loadAssets('index.html')
+            .loadAssets('a.js')
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
 
                 var relation = assetGraph.findRelations({ type: 'JavaScriptFetch' })[0];
 
-                expect(relation.detach, 'to throw', 'JavaScriptFetch.detach(): Not implemented');
+                relation.detach();
+
+                expect(relation.from, 'to satisfy', {
+                    text: ''
+                });
+            })
+            .run(done);
+    });
+
+    it('should detach fetch-then statement correctly', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
+            .loadAssets('fetchThen.js')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
+
+                var relation = assetGraph.findRelations({ type: 'JavaScriptFetch' })[0];
+
+                relation.detach();
+
+                expect(relation.from, 'to satisfy', {
+                    text: ''
+                });
             })
             .run(done);
     });
 
     it('should throw when attaching', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
-            .loadAssets('index.html')
+            .loadAssets('a.js')
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);

@@ -34,7 +34,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'JavaScriptServiceWorkerRegistration', 1);
+                expect(assetGraph, 'to contain relations', 'JavaScriptServiceWorkerRegistration', 1);
 
                 var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' }, true)[0];
 
