@@ -11,84 +11,23 @@ describe('JavaScriptWebWorker', function () {
             });
     });
 
-    it('should pick up importScripts() and self.importScripts as relations', function () {
+    it('should refuse to inline, attach and detach', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptWebWorker/simple/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 5);
-            });
-    });
+                var javaScriptWebWorker = assetGraph.findRelations({type: 'JavaScriptWebWorker'})[0];
+                expect(function () {
+                    javaScriptWebWorker.inline();
+                }, 'to throw', /Not supported/);
 
-    it('should support attaching and detaching importScripts relations', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptWebWorker/simple/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                assetGraph.findRelations({to: { fileName: 'foo.js' }})[0].detach();
-                var webWorker = assetGraph.findRelations({type: 'JavaScriptWebWorker'})[0].to;
-                expect(webWorker.text, 'not to contain', '\'foo.js\';');
-                expect(webWorker.text, 'to contain', 'importScripts(\'bar.js\');');
-                new AssetGraph.JavaScriptImportScripts({
-                    to: { url: 'foo.js' }
-                }).attach(
-                    webWorker,
-                    'before',
-                    assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
-                );
-                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\', \'bar.js\');');
-                new AssetGraph.JavaScriptImportScripts({
-                    to: { url: 'after.js' }
-                }).attach(
-                    webWorker,
-                    'after',
-                    assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
-                );
-                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\', \'bar.js\', \'after.js\')');
-                new AssetGraph.JavaScriptImportScripts({
-                    to: { url: 'last.js' }
-                }).attach(webWorker, 'last');
-                new AssetGraph.JavaScriptImportScripts({
-                    to: { url: 'first.js' }
-                }).attach(webWorker, 'first');
-                expect(webWorker.text, 'to begin with', 'importScripts(\'first.js\');')
-                    .and('to end with', 'importScripts(\'last.js\');');
-            });
-    });
+                expect(function () {
+                    javaScriptWebWorker.detach();
+                }, 'to throw', /Not supported/);
 
-    it('should support attaching and detaching importScripts separated by comma in the source file', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptWebWorker/seq/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                assetGraph.findRelations({to: { fileName: 'foo.js' }})[0].detach();
-                var webWorker = assetGraph.findRelations({type: 'JavaScriptWebWorker'})[0].to;
-                expect(webWorker.text, 'not to contain', '\'foo.js\';');
-                expect(webWorker.text, 'to contain', 'importScripts(\'bar.js\')');
-                new AssetGraph.JavaScriptImportScripts({
-                    to: { url: 'foo.js' }
-                }).attach(
-                    webWorker,
-                    'before',
-                    assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
-                );
-                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\', \'bar.js\')');
-                new AssetGraph.JavaScriptImportScripts({
-                    to: { url: 'after.js' }
-                }).attach(
-                    webWorker,
-                    'after',
-                    assetGraph.findRelations({type: 'JavaScriptImportScripts', to: {fileName: 'bar.js'}})[0]
-                );
-                expect(webWorker.text, 'to contain', 'importScripts(\'foo.js\', \'bar.js\', \'after.js\')');
-                new AssetGraph.JavaScriptImportScripts({
-                    to: { url: 'last.js' }
-                }).attach(webWorker, 'last');
-                new AssetGraph.JavaScriptImportScripts({
-                    to: { url: 'first.js' }
-                }).attach(webWorker, 'first');
-                expect(webWorker.text, 'to begin with', 'importScripts(\'first.js\');')
-                    .and('to end with', 'importScripts(\'last.js\');');
+                expect(function () {
+                    javaScriptWebWorker.attach(javaScriptWebWorker.from, 'first');
+                }, 'to throw', /Not supported/);
             });
     });
 });
