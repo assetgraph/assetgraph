@@ -9,13 +9,11 @@ describe('relations/HtmlScript', function () {
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'HtmlScript', 6);
+                expect(assetGraph, 'to contain relations including unresolved', 'HtmlScript', 4);
                 expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
                     'externalNoType.js',
                     undefined,
                     'externalWithTypeTextJavaScript.js',
-                    undefined,
-                    'externalWithTypeTextCoffeeScript.js',
                     undefined
                 ]);
             })
