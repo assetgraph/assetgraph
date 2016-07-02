@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('./unexpected-with-plugins'),
     AssetGraph = require('../lib'),
-    Promise = require('rsvp').Promise;
+    Promise = require('bluebird');
 
 AssetGraph.registerTransform(function pushItemToArraySync(item, array) {
     return function (assetGraph) {
