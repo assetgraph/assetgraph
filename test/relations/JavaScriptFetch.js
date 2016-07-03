@@ -108,7 +108,7 @@ describe('relations/JavaScriptFetch', function () {
             .run(done);
     });
 
-    it('should detach simple fetch statement correctly', function (done) {
+    it('should throw when detaching', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
             .loadAssets('a.js')
             .populate()
@@ -117,29 +117,9 @@ describe('relations/JavaScriptFetch', function () {
 
                 var relation = assetGraph.findRelations({ type: 'JavaScriptFetch' })[0];
 
-                relation.detach();
-
-                expect(relation.from, 'to satisfy', {
-                    text: ''
-                });
-            })
-            .run(done);
-    });
-
-    it('should detach fetch-then statement correctly', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
-            .loadAssets('fetchThen.js')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
-
-                var relation = assetGraph.findRelations({ type: 'JavaScriptFetch' })[0];
-
-                relation.detach();
-
-                expect(relation.from, 'to satisfy', {
-                    text: ''
-                });
+                expect(function () {
+                    relation.detach();
+                }, 'to throw', 'JavaScriptFetch.detach(): Not implemented');
             })
             .run(done);
     });
