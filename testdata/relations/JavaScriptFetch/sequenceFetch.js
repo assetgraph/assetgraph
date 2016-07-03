@@ -1,3 +1,3 @@
-var a = 'b', result = this.fetch('b.js');
+var a = 'b', result = window.fetch('b.js');
 
 console.log(a, result);

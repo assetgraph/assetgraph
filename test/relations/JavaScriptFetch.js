@@ -36,31 +36,9 @@ describe('relations/JavaScriptFetch', function () {
             .run(done);
     });
 
-    it('should populate this.fetch', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
-            .loadAssets('thisFetch.js')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
-                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-            })
-            .run(done);
-    });
-
-    it('should populate self.fetch', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
-            .loadAssets('selfFetch.js')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
-                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-            })
-            .run(done);
-    });
-
     it('should populate a sequence fetch', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
-            .loadAssets('selfFetch.js')
+            .loadAssets('sequenceFetch.js')
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
