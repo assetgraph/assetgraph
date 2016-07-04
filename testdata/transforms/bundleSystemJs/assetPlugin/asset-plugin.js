@@ -77,19 +77,17 @@ exports.translate = function(load) {
         return objStr + '}';
       }
 
-      resolve(`
-        var obj = ${serialize(obj)};
-
-        module.exports = function() {
-          var output = obj;
-          for (var i = 0; i < arguments.length; i++) {
-            if (typeof obj[arguments[i]] != 'object')
-              throw new TypeError('Unable to read argument "' + arguments[i] + '" from glob in ' + module.id);
-            output = output[arguments[i]];
-          }
-          return output;
-        };
-      `);
+      resolve('var obj = ' + objStr + '\n' +
+        'module.exports = function() {\n' +
+        '  var output = obj;\n' +
+        '  for (var i = 0; i < arguments.length; i++) {\n' +
+        '    if (typeof obj[arguments[i]] != \'object\')\n' +
+        '      throw new TypeError(\'Unable to read argument "\' + arguments[i] + \'" from glob in \' + module.id);\n' +
+        '    output = output[arguments[i]];\n' +
+        '  }\n' +
+        '  return output;\n' +
+        '};'
+      );
     });
   });
 };
