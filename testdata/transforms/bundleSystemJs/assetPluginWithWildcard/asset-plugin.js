@@ -19,6 +19,8 @@ exports.translate = function(load, traceOpts) {
   if (!this.builder)
     return load.source;
 
+  // load.metadata.timestamp = -1;
+
   if (load.address.indexOf('*') == -1)
     return 'module.exports = GETSTATICURL("' + makeRootRelative(load.address) + '");';
 
