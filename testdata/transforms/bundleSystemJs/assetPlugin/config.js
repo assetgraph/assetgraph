@@ -1,18 +1,11 @@
 System.config({
     map: {
+        asset: 'asset.js',
         fooOrBar: 'fooOrBar.js'
     },
     meta: {
         '*.txt': {
             loader: 'asset'
-        }
-    },
-    packages: {
-        asset: {
-            main: {
-                build: './url-builder.js',
-                default: './url.js'
-            }
         }
     }
 });
