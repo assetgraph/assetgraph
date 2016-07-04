@@ -3,8 +3,8 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
 describe('relations/SvgStyle', function () {
-    it('should handle a test case with inline <style> elements', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/SvgStyle/'})
+    it('should handle a test case with inline <style> elements', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgStyle/'})
             .loadAssets('kiwi.svg')
             .populate()
             .queue(function (assetGraph) {
@@ -69,7 +69,6 @@ describe('relations/SvgStyle', function () {
                 expect(assetGraph, 'to contain assets', 'Css', 3);
                 expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[0], 'to be', svgStyle.node);
                 expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[1], 'to be', cloneSvgStyle.node);
-            })
-            .run(done);
+            });
     });
 });

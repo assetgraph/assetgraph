@@ -87,12 +87,12 @@ describe('transforms/addCacheManifest', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'CacheManifest', 2);
 
-                var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/index\.html$/}}});
+                var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/index\.html$/}}})[0];
                 expect(assetGraph, 'to contain relations', {from: cacheManifest}, 2);
                 expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/foo\.png$/}});
                 expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/otherpage\.html$/}});
 
-                var otherCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/otherpage\.html$/}}});
+                var otherCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/otherpage\.html$/}}})[0];
                 expect(assetGraph, 'to contain relation', {from: otherCacheManifest});
                 expect(assetGraph.findRelations({from: cacheManifest})[0].to, 'to equal', assetGraph.findAssets({url: /\/foo\.png$/})[0]);
             })

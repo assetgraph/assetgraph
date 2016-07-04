@@ -4,8 +4,8 @@ var expect = require('./unexpected-with-plugins'),
     query = AssetGraph.query;
 
 describe('AssetGraph.findAssets', function () {
-    it('should handle a simple test case', function (done) {
-        new AssetGraph()
+    it('should handle a simple test case', function () {
+        return new AssetGraph()
             .loadAssets(
                 new AssetGraph.Html({url: 'a', text: 'a', foo: 'bar'}),
                 new AssetGraph.Html({url: 'b', text: 'b', foo: 'bar'}),
@@ -16,32 +16,25 @@ describe('AssetGraph.findAssets', function () {
             )
             .queue(
                 function (assetGraph) {
-                    assetGraph.addRelation(new AssetGraph.HtmlStyle({
-                        from: assetGraph.findAssets({text: 'a'})[0],
+                    assetGraph.findAssets({text: 'a'})[0].addRelation(new AssetGraph.HtmlStyle({
                         to: assetGraph.findAssets({text: 'd'})[0]
                     }));
-                    assetGraph.addRelation(new AssetGraph.HtmlAnchor({
-                        from: assetGraph.findAssets({text: 'a'})[0],
+                    assetGraph.findAssets({text: 'a'})[0].addRelation(new AssetGraph.HtmlAnchor({
                         to: assetGraph.findAssets({text: 'b'})[0]
                     }));
-                    assetGraph.addRelation(new AssetGraph.HtmlAnchor({
-                        from: assetGraph.findAssets({text: 'a'})[0],
+                    assetGraph.findAssets({text: 'a'})[0].addRelation(new AssetGraph.HtmlAnchor({
                         to: assetGraph.findAssets({text: 'c'})[0]
                     }));
-                    assetGraph.addRelation(new AssetGraph.HtmlAnchor({
-                        from: assetGraph.findAssets({text: 'b'})[0],
+                    assetGraph.findAssets({text: 'b'})[0].addRelation(new AssetGraph.HtmlAnchor({
                         to: assetGraph.findAssets({text: 'c'})[0]
                     }));
-                    assetGraph.addRelation(new AssetGraph.HtmlStyle({
-                        from: assetGraph.findAssets({text: 'b'})[0],
+                    assetGraph.findAssets({text: 'b'})[0].addRelation(new AssetGraph.HtmlStyle({
                         to: assetGraph.findAssets({text: 'e'})[0]
                     }));
-                    assetGraph.addRelation(new AssetGraph.CssImage({
-                        from: assetGraph.findAssets({text: 'd'})[0],
+                    assetGraph.findAssets({text: 'd'})[0].addRelation(new AssetGraph.CssImage({
                         to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0]
                     }));
-                    assetGraph.addRelation(new AssetGraph.CssImage({
-                        from: assetGraph.findAssets({text: 'e'})[0],
+                    assetGraph.findAssets({text: 'e'})[0].addRelation(new AssetGraph.CssImage({
                         to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0]
                     }));
                 }
@@ -96,7 +89,6 @@ describe('AssetGraph.findAssets', function () {
                         foo: function (val) {return typeof val === 'undefined';}
                     }
                 }, 1);
-            })
-            .run(done);
+            });
     });
 });

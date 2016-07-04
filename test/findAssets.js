@@ -41,20 +41,17 @@ describe('AssetGraph.findAssets', function () {
 
                 expect(assetGraph, 'to contain no assets', {outgoing: {type: 'HtmlAnchor'}});
 
-                assetGraph.addRelation(new AssetGraph.HtmlAnchor({
-                    from: assetGraph.findAssets({text: 'a'})[0],
+
+                assetGraph.findAssets({text: 'a'})[0].addRelation(new AssetGraph.HtmlAnchor({
                     to: assetGraph.findAssets({text: 'b'})[0]
                 }));
-                assetGraph.addRelation(new AssetGraph.HtmlAnchor({ // Identical to the first
-                    from: assetGraph.findAssets({text: 'a'})[0],
+                assetGraph.findAssets({text: 'a'})[0].addRelation(new AssetGraph.HtmlAnchor({ // Identical to the first
                     to: assetGraph.findAssets({text: 'b'})[0]
                 }));
-                assetGraph.addRelation(new AssetGraph.HtmlAnchor({
-                    from: assetGraph.findAssets({text: 'a'})[0],
+                assetGraph.findAssets({text: 'a'})[0].addRelation(new AssetGraph.HtmlAnchor({
                     to: assetGraph.findAssets({text: 'c'})[0]
                 }));
-                assetGraph.addRelation(new AssetGraph.CssImage({
-                    from: assetGraph.findAssets({text: 'e'})[0],
+                assetGraph.findAssets({text: 'e'})[0].addRelation(new AssetGraph.CssImage({
                     to: assetGraph.findAssets({text: 'f'})[0]
                 }));
 
