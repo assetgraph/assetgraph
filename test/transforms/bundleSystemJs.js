@@ -428,8 +428,23 @@ describe('transforms/bundleSystemJs', function () {
                 expect(assetGraph, 'to contain assets', 'Text', 2);
                 expect(assetGraph, 'to contain relations', 'JavaScriptGetStaticUrl', 2);
                 assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
-                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "GETSTATICURL('" + assetGraph.root + "somethingElse.txt')")
-                    .and('not to contain', "GETSTATICURL('" + assetGraph.root + "test-foo.txt')");
+                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "GETSTATICURL('/somethingElse.txt')")
+                    .and('not to contain', "GETSTATICURL('/test-foo.txt')");
+            });
+    });
+
+    it('should pick up assets referenced via an asset plugin using a wildcard', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetPluginWithWildcard/'})
+            .loadAssets('index.html')
+            .populate()
+            .bundleSystemJs()
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 'Text', 2);
+                expect(assetGraph, 'to contain relations', 'JavaScriptGetStaticUrl', 2);
+                assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
+                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "GETSTATICURL('/somethingElse.txt')")
+                    .and('not to contain', "GETSTATICURL('/test-foo.txt')");
             });
     });
 });

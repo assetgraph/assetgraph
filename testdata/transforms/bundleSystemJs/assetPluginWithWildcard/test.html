@@ -1,0 +1,10 @@
+<!doctype html>
+  <script src="node_modules/systemjs/dist/system.src.js"></script>
+  <script>
+    System.config({
+      map: {
+        file: './asset-plugin.js'
+      }
+    });
+    System.import('test.js');
+  </script>
