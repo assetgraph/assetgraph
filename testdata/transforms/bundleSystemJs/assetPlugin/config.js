@@ -1,6 +1,6 @@
 System.config({
     map: {
-        asset: 'asset.js',
+        asset: 'asset-plugin.js',
         fooOrBar: 'fooOrBar.js'
     },
     meta: {
