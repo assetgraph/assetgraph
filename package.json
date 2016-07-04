@@ -76,6 +76,7 @@
     "sinon": "^1.17.3",
     "stylus": "^0.54.5",
     "svgo": "0.6.6",
+    "systemjs-asset-plugin": "1.0.0",
     "systemjs-builder": "systemjs/builder#master",
     "unexpected": "^10.13.0",
     "unexpected-dom": "^3.0.2",
