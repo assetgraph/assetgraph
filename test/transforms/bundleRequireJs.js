@@ -173,7 +173,6 @@ describe('transforms/bundleRequireJs', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'JavaScriptGetStaticUrl');
-                expect(assetGraph, 'to contain relation', 'StaticUrlMapEntry');
                 expect(assetGraph, 'to contain asset', 'Png');
 
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
