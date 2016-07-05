@@ -1,0 +1,4 @@
+<div></div>
+<script type="text/html" id="theEmbeddedTemplate" foo="bar">
+    <h1>This is an embedded template, which should also end up in the main document</h1>
+</script>

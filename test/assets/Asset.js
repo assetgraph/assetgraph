@@ -680,21 +680,6 @@ describe('assets/Asset', function () {
                 })
                 .run(done);
         });
-        it('should handle a test case with an Html asset and a distant Htc asset that has the Html as its base asset', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/nonTrivialBaseAsset/'})
-                .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'Css', 3);
-                    expect(assetGraph, 'to contain asset', 'Html');
-                    expect(assetGraph, 'to contain asset', 'Htc');
-
-                    assetGraph.findAssets({type: 'Html', isInline: false})[0].url = urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
-
-                    expect(assetGraph.findRelations({type: 'CssBehavior'})[0].propertyNode.value, 'to equal', 'url(theBehavior.htc)');
-                })
-                .run(done);
-        });
 
         it('should handle a test case with a single Html file', function (done) {
             new AssetGraph({root: 'file:///foo/bar/quux'})
