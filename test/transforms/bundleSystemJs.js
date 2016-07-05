@@ -461,10 +461,10 @@ describe('transforms/bundleSystemJs', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Text', 2);
-                expect(assetGraph, 'to contain relations', 'JavaScriptGetStaticUrl', 2);
+                expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 2);
                 assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
-                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "GETSTATICURL('/somethingElse.txt')")
-                    .and('not to contain', "GETSTATICURL('/test-foo.txt')");
+                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "'/somethingElse.txt' /* @url */")
+                    .and('not to contain', "'/test-foo.txt' /* @url */");
             });
     });
 
@@ -476,10 +476,10 @@ describe('transforms/bundleSystemJs', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Text', 2);
-                expect(assetGraph, 'to contain relations', 'JavaScriptGetStaticUrl', 2);
+                expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 2);
                 assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
-                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "GETSTATICURL('/somethingElse.txt')")
-                    .and('not to contain', "GETSTATICURL('/test-foo.txt')");
+                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "'/somethingElse.txt' /* @url */")
+                    .and('not to contain', "'/test-foo.txt' /* @url */");
             });
     });
 

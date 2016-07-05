@@ -173,8 +173,8 @@ describe('transforms/bundleRequireJs', function () {
             });
     });
 
-    it('should handle a test case that includes a GETSTATICURL relation', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/withOneGetStaticUrl/'})
+    it('should handle a test case that includes a JavaScriptStaticUrl relation', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/withOneStaticUrl/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -183,7 +183,7 @@ describe('transforms/bundleRequireJs', function () {
             .bundleRequireJs({type: 'Html'})
             .populate()
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'JavaScriptGetStaticUrl');
+                expect(assetGraph, 'to contain relation', 'JavaScriptStaticUrl');
                 expect(assetGraph, 'to contain asset', 'Png');
 
                 var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
@@ -193,7 +193,7 @@ describe('transforms/bundleRequireJs', function () {
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     /* eslint-disable */
                     define('module2', [], function () {
-                        return 'module2, who\'s my url?' + GETSTATICURL('foo.png');
+                        return 'foo.png' /* @url */
                     });
                     define('module1', ['module2'], function () {
                         return 'module1';

@@ -1,1 +1,1 @@
-<img data-bind="attr: {src: GETSTATICURL('/foo.png')}">
+<img data-bind="attr: {src: '/foo.png' /* @url */}">
