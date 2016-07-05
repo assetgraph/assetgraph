@@ -13,7 +13,7 @@ function getPropertyValues(container, propertyName) {
 }
 
 describe('transforms/bundleRelations', function () {
-    describe('with the oneBundlePerIncludingAsset strategy', function (done) {
+    describe('with the oneBundlePerIncludingAsset strategy', function () {
         it('should bundle two stylesheets', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/singleHtml'})
                 .loadAssets('index.html')
@@ -465,6 +465,23 @@ describe('transforms/bundleRelations', function () {
                         assetGraph.root + 'a.less',
                         assetGraph.root + 'b.less'
                     ]);
+                });
+        });
+
+        it('should bundle importScripts(...) relations in a web worker', function () {
+            return new AssetGraph({ root: __dirname + '/../../testdata/transforms/bundleRelations/webWorker/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRelations({type: 'JavaScriptImportScripts'}, {trategyName: 'oneBundlePerIncludingAsset'})
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+                    expect(assetGraph, 'to contain relation', 'JavaScriptImportScripts');
+                    expect(
+                        assetGraph.findRelations({type: 'JavaScriptImportScripts'})[0].to.text,
+                        'to equal',
+                        "console.log('foo');\nconsole.log('bar');\nconsole.log('quux');"
+                    );
+                    expect(assetGraph.findAssets({fileName: 'worker.js'})[0].text, 'to match', /^importScripts\('bundle-\d+\.js'\);$/);
                 });
         });
     });

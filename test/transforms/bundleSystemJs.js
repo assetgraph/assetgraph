@@ -284,6 +284,19 @@ describe('transforms/bundleSystemJs', function () {
             });
     });
 
+    it('should handle the use of system.js in a web worker', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/webWorker/'})
+            .loadAssets('*.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 2);
+            })
+            .bundleSystemJs()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 3);
+            });
+    });
+
     it('should handle a System.import test case with a manual bundle', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/manualBundle/'})
             .loadAssets('index.html')
