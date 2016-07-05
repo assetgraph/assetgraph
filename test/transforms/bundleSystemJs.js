@@ -357,7 +357,7 @@ describe('transforms/bundleSystemJs', function () {
                 });
         });
 
-        describe('with a data-systemjs-polyfill attribute that has no value', function () {
+        describe('that has no value', function () {
             it('should polyfill system.js', function () {
                 return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/polyfill/noValue/'})
                     .loadAssets('index.html')
@@ -378,8 +378,8 @@ describe('transforms/bundleSystemJs', function () {
         });
     });
 
-    describe('with a data-systemjs-replacement attribute', function () {
-        it('should remove the data-systemjs-replacement attribute', function () {
+    describe('with a data-systemjs-csp-production attribute', function () {
+        it('should remove the data-systemjs-csp-production attribute', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/replacement/simple/'})
                 .loadAssets('index.html')
                 .populate()
@@ -394,7 +394,7 @@ describe('transforms/bundleSystemJs', function () {
                     expect(assetGraph, 'to contain assets', 'JavaScript', 3);
                     expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
                     expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
-                    expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'data-systemjs-replacement');
+                    expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'data-system-csp-production');
                     expect(assetGraph, 'to contain no assets', { fileName: 'system.js' });
                 });
         });
@@ -414,7 +414,29 @@ describe('transforms/bundleSystemJs', function () {
                     expect(assetGraph, 'to contain assets', 'JavaScript', 3);
                     expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
                     expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+                    expect(assetGraph, 'to contain asset', {fileName: 'systemjs-csp-production.js'});
                 });
+        });
+
+        describe('that has no value', function () {
+            it('should replace system.js with the default system-csp-production.js', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/replacement/noValue/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph, 'to contain assets', 'Html', 1);
+                        expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+                        expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+                    })
+                    .bundleSystemJs()
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+                        expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
+                        expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+                        expect(assetGraph, 'to contain asset', {fileName: 'systemjs-csp-production.js'});
+                    });
+            });
         });
     });
 
