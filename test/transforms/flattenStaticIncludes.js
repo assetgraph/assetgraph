@@ -71,19 +71,17 @@ describe('transforms/flattenStaticIncludes', function () {
             .run(done);
     });
 
-    it('should handle a test case with .less and .css assets being INCLUDEd', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenStaticIncludes/lessAndCss/'})
+    it('should handle a test case with .css assets being INCLUDEd', function (done) {
+        new AssetGraph({root: __dirname + '/../../testdata/transforms/flattenStaticIncludes/css/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Css', 2);
-                expect(assetGraph, 'to contain asset', 'Less');
             })
             .flattenStaticIncludes({type: 'Html'})
             .queue(function (assetGraph) {
                 expect(_.map(assetGraph.findRelations({type: 'HtmlStyle', from: assetGraph.findAssets({type: 'Html'})[0]}), 'href'), 'to equal', [
                     'a.css',
-                    'b.less',
                     'c.css'
                 ]);
             })
