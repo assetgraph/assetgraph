@@ -71,7 +71,7 @@
     "requirejs": "2.2.0",
     "sinon": "^1.17.3",
     "svgo": "0.6.6",
-    "systemjs-asset-plugin": "1.0.0",
+    "systemjs-asset-plugin": "2.0.0",
     "systemjs-builder": "systemjs/builder#master",
     "unexpected": "^10.13.0",
     "unexpected-dom": "^3.0.2",
