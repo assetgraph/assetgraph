@@ -427,7 +427,7 @@ describe('transforms/bundleSystemJs', function () {
                     expect(assetGraph, 'to contain assets', 'JavaScript', 3);
                     expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
                     expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                    expect(assetGraph, 'to contain asset', {fileName: 'systemjs-csp-production.js'});
+                    expect(assetGraph, 'to contain asset', {fileName: 'system-csp-production.js'});
                 });
         });
 
@@ -447,7 +447,7 @@ describe('transforms/bundleSystemJs', function () {
                         expect(assetGraph, 'to contain assets', 'JavaScript', 3);
                         expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
                         expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                        expect(assetGraph, 'to contain asset', {fileName: 'systemjs-csp-production.js'});
+                        expect(assetGraph, 'to contain asset', {fileName: 'system-csp-production.js'});
                     });
             });
         });
