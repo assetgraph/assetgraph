@@ -506,4 +506,29 @@ describe('transforms/bundleSystemJs', function () {
                 });
         });
     });
+
+    describe('with conditionals', function () {
+        describe('when specifying the values of the conditionals up front', function () {
+            it('should exclude the unneeded branches from the created bundle', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/exclude/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs({
+                        conditions: {
+                            lang: 'en_us'
+                        }
+                    })
+                    .populate()
+                    .queue(function (assetGraph) {
+                        var bundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                        expect(bundleAsset.text, 'to contain', 'American English')
+                            .and('not to contain', 'Danish')
+                            .and('to contain', 'neededInAllLanguages')
+                            .and('to contain', 'neededInAmericanEnglish')
+                            .and('not to contain', 'neededInDanish')
+                            .and('not to contain', 'Math.random');
+                    });
+            });
+        });
+    });
 });
