@@ -571,5 +571,24 @@ describe('transforms/bundleSystemJs', function () {
                     });
             });
         });
+
+        it.skip('should create separate bundles per variant', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/oneBundlePerVariant/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleSystemJs({
+                    conditions: [ 'lang' ]
+                })
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+">/g), 'to equal', [
+                        '<script src="system.js">',
+                        '<script src="config.js">',
+                        '<script src="common-bundle.js">',
+                        '<script src="common-bundle-lang-da.js" data-cond-lang="da">',
+                        '<script src="common-bundle-lang-en_us.js" data-cond-lang="en_us">'
+                    ]);
+                });
+        });
     });
 });
