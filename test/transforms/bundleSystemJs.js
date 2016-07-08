@@ -482,4 +482,28 @@ describe('transforms/bundleSystemJs', function () {
                     .and('not to contain', "GETSTATICURL('/test-foo.txt')");
             });
     });
+
+    describe('with a data-systemjs-build-config attribute on one of the <script> elements that contain config', function () {
+        it('should remove the <script> after building', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfig/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleSystemJs()
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain no asset', { fileName: 'build-config.js' });
+                });
+        });
+
+        it('should apply the build config during the build', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfig/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleSystemJs()
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', {fileName: 'styles.css'});
+                });
+        });
+    });
 });

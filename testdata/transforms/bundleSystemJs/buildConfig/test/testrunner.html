@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="../node_modules/systemjs/dist/system.src.js"></script>
+    <!-- Make lookups relative to the project folder (not the test folder)-->
+    <script>System.config({ baseURL: '../' })</script>
+    <link rel="stylesheet" type="text/css" href="../node_modules/mocha/mocha.css">
+    <script src="../node_modules/mocha/mocha.js"></script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script>
+      // Set up the test framework
+      System.import('./mocha-setup.js')
+      .then(function(setup){
+        return setup(window)
+      })
+      .then(function(){
+          return Promise.all([
+            // add your tests to this array
+            System.import('test/css.browser.spec.js')
+          ])
+      })
+      .then(function(){
+        // Run the tests after they are imported
+        mocha.run();
+      })
+      .catch(function(err){console.error(err.stack)})
+    </script>
+  </body>
+</html>
