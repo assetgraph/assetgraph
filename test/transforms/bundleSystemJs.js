@@ -1,6 +1,5 @@
 /*global describe, it*/
-var _ = require('lodash'),
-    expect = require('../unexpected-with-plugins'),
+var expect = require('../unexpected-with-plugins'),
     estraverse = require('estraverse'),
     AssetGraph = require('../../lib');
 
