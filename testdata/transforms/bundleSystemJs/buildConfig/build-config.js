@@ -4,12 +4,7 @@ System.config({
     },
     meta: {
         '*.css': {
-            loader: 'css.js'
-        }
-    },
-    packages: {
-        css: {
-            main: 'css.js'
+            loader: 'css'
         }
     }
 });
