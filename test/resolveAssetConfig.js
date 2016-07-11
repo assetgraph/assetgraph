@@ -35,18 +35,6 @@ describe('resolveAssetConfig', function () {
         }));
     });
 
-    it('should handle a wildcard: *.png', function (done) {
-        resolveAssetConfig('*.png', passError(done, function (resolvedAssetConfigs) {
-            expect(resolvedAssetConfigs, 'to be an array');
-            expect(resolvedAssetConfigs, 'to have length', 2);
-            expect(resolvedAssetConfigs[0], 'to be an object');
-            expect(resolvedAssetConfigs[0].type, 'to equal', 'Png');
-            expect(resolvedAssetConfigs[1], 'to be an object');
-            expect(resolvedAssetConfigs[1].type, 'to equal', 'Png');
-            done();
-        }));
-    });
-
     it('should handle an http: url', function (done) {
         resolveAssetConfig('http://www.example.com/foo.gif', passError(done, function (resolvedAssetConfig) {
             expect(resolvedAssetConfig, 'to be an object');
