@@ -32,7 +32,7 @@ describe('resolvers/http', function () {
         return expect(function (cb) {
             new AssetGraph({ root: 'http://example.com/' })
                 .queue(function (assetGraph) {
-                    assetGraph.resolverByProtocol.http.requestOptions = { numRetries: 1 };
+                    assetGraph.requestOptions = { numRetries: 1 };
                 })
                 .loadAssets('/')
                 .populate()
@@ -56,7 +56,7 @@ describe('resolvers/http', function () {
         return expect(function (cb) {
             new AssetGraph({ root: 'http://example.com/' })
                 .queue(function (assetGraph) {
-                    assetGraph.resolverByProtocol.http.requestOptions = { numRetries: 1 };
+                    assetGraph.requestOptions = { numRetries: 1 };
                 })
                 .loadAssets('/#foo')
                 .populate()
