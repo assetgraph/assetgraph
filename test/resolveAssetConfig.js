@@ -78,10 +78,10 @@ describe('resolveAssetConfig', function () {
 
         assetGraph.resolveAssetConfig('my-funky.scheme://www.example.com/', assetGraph.root, function (error, resolvedAssetConfig) {
             expect(error, 'to be', null);
-            expect(resolvedAssetConfig, 'to be an empty array');
+            expect(resolvedAssetConfig, 'to equal', {url: 'my-funky.scheme://www.example.com/'});
             expect(assetGraph._warnings, 'to be an array');
             expect(assetGraph._warnings, 'to have length', 1);
-            expect(assetGraph._warnings[0].message, 'to match', /^AssetGraph.resolveAssetConfig: Cannot resolve asset url/);
+            expect(assetGraph._warnings[0].message, 'to match', /^No resolver found for protocol: my-funky.scheme/);
             done();
         });
     });
