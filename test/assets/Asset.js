@@ -6,13 +6,10 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('assets/Asset', function () {
     describe('#load(cb)', function () {
-        it('should error when there is no file handle and the asset is not in a graph', function (done) {
+        it('should error when there is no file handle and the asset is not in a graph', function () {
             var asset = new AssetGraph.Asset({});
 
-            asset.load(function (err) {
-                expect(err, 'to be an', Error);
-                done();
-            });
+            return expect(asset.load(), 'to be rejected');
         });
     });
 

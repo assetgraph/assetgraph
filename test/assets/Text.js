@@ -1,6 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     passError = require('passerror'),
+    Promise = require('bluebird'),
     AssetGraph = require('../../lib');
 
 describe('assets/Text', function () {
@@ -9,18 +10,15 @@ describe('assets/Text', function () {
             expect(new AssetGraph.Text({rawSrc: new Buffer('Hello, world!\u263a')}).text, 'to equal', 'Hello, world!\u263a');
         });
 
-        it('should get text of AssetGraph.Text with rawSrcProxy', function (done) {
+        it('should get text of AssetGraph.Text with rawSrcProxy', function () {
             var asset = new AssetGraph.Text({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('Hello, world!\u263a'));
-                    });
+                rawSrcProxy: function () {
+                    return Promise.resolve([new Buffer('Hello, world!\u263a')]);
                 }
             });
-            asset.load(passError(done, function () {
+            return asset.load().then(function () {
                 expect(asset.text, 'to equal', 'Hello, world!\u263a');
-                done();
-            }));
+            });
         });
 
         it('should get text of AssetGraph.Text with text property', function () {
@@ -35,18 +33,15 @@ describe('assets/Text', function () {
             }).rawSrc, 'to equal', new Buffer('Hello, world!\u263a', 'utf-8'));
         });
 
-        it('should get rawSrc of AssetGraph.Text with rawSrcProxy', function (done) {
+        it('should get rawSrc of AssetGraph.Text with rawSrcProxy', function () {
             var asset = new AssetGraph.Text({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('Hello, world!\u263a', 'utf-8'));
-                    });
+                rawSrcProxy: function () {
+                    return Promise.resolve([new Buffer('Hello, world!\u263a', 'utf-8')]);
                 }
             });
-            asset.load(passError(done, function () {
+            return asset.load().then(function () {
                 expect(asset.rawSrc, 'to equal', new Buffer('Hello, world!\u263a', 'utf-8'));
-                done();
-            }));
+            });
         });
 
         it('should get rawSrc of AssetGraph.Text with text property', function () {
