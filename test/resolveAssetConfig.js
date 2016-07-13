@@ -1,6 +1,5 @@
 /*global describe, it*/
 var expect = require('./unexpected-with-plugins'),
-    passError = require('passerror'),
     AssetGraph = require('../lib'),
     Path = require('path'),
     assetGraphRoot = Path.resolve(__dirname, '..', 'testdata', 'resolveAssetConfig') + '/';
