@@ -1,6 +1,5 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    passError = require('passerror'),
     Promise = require('bluebird'),
     AssetGraph = require('../../lib');
 
