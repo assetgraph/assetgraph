@@ -10,13 +10,9 @@ function resolveAssetConfig(assetConfig, fromUrl) {
     return assetGraph.resolveAssetConfig(assetConfig, fromUrl || assetGraph.root);
 }
 
-function resolveAssetConfigAndEnsureType(assetConfig, fromUrl, cb) {
-    if (typeof fromUrl === 'function') {
-        cb = fromUrl;
-        fromUrl = null;
-    }
+function resolveAssetConfigAndEnsureType(assetConfig, fromUrl) {
     var assetGraph = new AssetGraph({root: assetGraphRoot});
-    assetGraph.ensureAssetConfigHasType(assetGraph.resolveAssetConfig(assetConfig, fromUrl || assetGraph.root), cb);
+    return assetGraph.ensureAssetConfigHasType(assetGraph.resolveAssetConfig(assetConfig, fromUrl || assetGraph.root));
 }
 
 describe('resolveAssetConfig', function () {
@@ -37,20 +33,18 @@ describe('resolveAssetConfig', function () {
         expect(resolvedAssetConfig.rawSrc, 'to equal', new Buffer('Hello, world!\n', 'utf-8'));
     });
 
-    it('should expand dir without trailing slash', function (done) {
-        resolveAssetConfigAndEnsureType('subdir', passError(done, function (resolvedAssetConfig) {
+    it('should expand dir without trailing slash', function () {
+        return resolveAssetConfigAndEnsureType('subdir').then(function (resolvedAssetConfig) {
             expect(resolvedAssetConfig.type, 'to equal', 'Html');
             expect(resolvedAssetConfig.url, 'to equal', 'file://' + assetGraphRoot + 'subdir/index.html');
-            done();
-        }));
+        });
     });
 
-    it('should expand dir with trailing slash', function (done) {
-        resolveAssetConfigAndEnsureType('subdir', passError(done, function (resolvedAssetConfig) {
+    it('should expand dir with trailing slash', function () {
+        return resolveAssetConfigAndEnsureType('subdir').then(function (resolvedAssetConfig) {
             expect(resolvedAssetConfig.type, 'to equal', 'Html');
             expect(resolvedAssetConfig.url, 'to equal', 'file://' + assetGraphRoot + 'subdir/index.html');
-            done();
-        }));
+        });
     });
 
     it('should not loop infinitely when encountering non-resolvable urls', function () {

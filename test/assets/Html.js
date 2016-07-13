@@ -1,7 +1,7 @@
 /*global describe, it*/
 var unexpected = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib'),
-    passError = require('passerror');
+    Promise = require('bluebird');
 
 describe('assets/Html', function () {
     var expect = unexpected.clone().addAssertion('to minify to', function (expect, subject, value, manipulator) {
@@ -14,8 +14,8 @@ describe('assets/Html', function () {
         expect(htmlAsset.text, 'to equal', value);
     });
 
-    it('should handle a test case with a javascript: url', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/assets/Html/javascriptUrl/'})
+    it('should handle a test case with a javascript: url', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/assets/Html/javascriptUrl/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -33,8 +33,7 @@ describe('assets/Html', function () {
                 javaScript.markDirty();
 
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /bar/);
-            })
-            .run(done);
+            });
     });
 
     describe('#text', function () {
@@ -44,18 +43,15 @@ describe('assets/Html', function () {
             }).text, 'to equal', '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>');
         });
 
-        it('should get text of AssetGraph.Html with rawSrcProxy', function (done) {
+        it('should get text of AssetGraph.Html with rawSrcProxy', function () {
             var asset = new AssetGraph.Html({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'));
-                    });
+                rawSrcProxy: function () {
+                    return Promise.resolve([new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')]);
                 }
             });
-            asset.load(passError(done, function () {
+            return asset.load().then(function () {
                 expect(asset.text, 'to equal', '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>');
-                done();
-            }));
+            });
         });
 
         it('should get text of AssetGraph.Html instantiated with text property', function () {
@@ -73,20 +69,17 @@ describe('assets/Html', function () {
             expect(htmlAsset.text, 'to equal', '<!DOCTYPE html><html><body>Not so much!</body></html>');
         });
 
-        it('should get text of AssetGraph.Html with rawSrcProxy and modified parse tree', function (done) {
+        it('should get text of AssetGraph.Html with rawSrcProxy and modified parse tree', function () {
             var htmlAsset = new AssetGraph.Html({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'));
-                    });
+                rawSrcProxy: function () {
+                    return Promise.resolve([new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')]);
                 }
             });
-            htmlAsset.load(passError(done, function () {
+            return htmlAsset.load().then(function () {
                 htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
                 htmlAsset.markDirty();
                 expect(htmlAsset.text, 'to equal', '<!DOCTYPE html><html><body>Not so much!</body></html>');
-                done();
-            }));
+            });
         });
 
         it('should get text of AssetGraph.Html with text property and modified parse tree', function () {
@@ -106,18 +99,15 @@ describe('assets/Html', function () {
             }).rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>', 'utf-8'));
         });
 
-        it('should get rawSrc of AssetGraph.Html with rawSrcProxy', function (done) {
+        it('should get rawSrc of AssetGraph.Html with rawSrcProxy', function () {
             var asset = new AssetGraph.Html({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'));
-                    });
+                rawSrcProxy: function () {
+                    return Promise.resolve([new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')]);
                 }
             });
-            asset.load(passError(done, function () {
+            return asset.load().then(function () {
                 expect(asset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>', 'utf-8'));
-                done();
-            }));
+            });
         });
 
         it('should get rawSrc of AssetGraph.Html instantiated with text property', function () {
@@ -135,20 +125,17 @@ describe('assets/Html', function () {
             expect(htmlAsset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><body>Not so much!</body></html>', 'utf-8'));
         });
 
-        it('should get rawSrc of AssetGraph.Html with rawSrcProxy and modified parse tree', function (done) {
+        it('should get rawSrc of AssetGraph.Html with rawSrcProxy and modified parse tree', function () {
             var htmlAsset = new AssetGraph.Html({
-                rawSrcProxy: function (cb) {
-                    process.nextTick(function () {
-                        cb(null, new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'));
-                    });
+                rawSrcProxy: function () {
+                    return Promise.resolve([new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')]);
                 }
             });
-            htmlAsset.load(passError(done, function () {
+            return htmlAsset.load().then(function () {
                 htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
                 htmlAsset.markDirty();
                 expect(htmlAsset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><body>Not so much!</body></html>', 'utf-8'));
-                done();
-            }));
+            });
         });
 
         it('should get rawSrc of AssetGraph.Html with text property and modified parse tree', function () {
