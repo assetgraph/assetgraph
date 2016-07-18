@@ -1,74 +1,52 @@
 /*global describe, it*/
 var expect = require('./unexpected-with-plugins'),
-    passError = require('passerror'),
     AssetGraph = require('../lib'),
     Path = require('path'),
     assetGraphRoot = Path.resolve(__dirname, '..', 'testdata', 'resolveAssetConfig') + '/';
 
-function resolveAssetConfig(assetConfig, fromUrl, cb) {
-    if (typeof fromUrl === 'function') {
-        cb = fromUrl;
-        fromUrl = null;
-    }
+function resolveAssetConfig(assetConfig, fromUrl) {
     var assetGraph = new AssetGraph({root: assetGraphRoot});
-    assetGraph.resolveAssetConfig(assetConfig, fromUrl || assetGraph.root, cb);
+    return assetGraph.resolveAssetConfig(assetConfig, fromUrl || assetGraph.root);
 }
 
-function resolveAssetConfigAndEnsureType(assetConfig, fromUrl, cb) {
-    if (typeof fromUrl === 'function') {
-        cb = fromUrl;
-        fromUrl = null;
-    }
+function resolveAssetConfigAndEnsureType(assetConfig, fromUrl) {
     var assetGraph = new AssetGraph({root: assetGraphRoot});
-    assetGraph.resolveAssetConfig(assetConfig, fromUrl || assetGraph.root, passError(cb, function (resolvedAssetConfig) {
-        assetGraph.ensureAssetConfigHasType(resolvedAssetConfig, passError(cb, function () {
-            cb(null, resolvedAssetConfig);
-        }));
-    }));
+    return assetGraph.ensureAssetConfigHasType(assetGraph.resolveAssetConfig(assetConfig, fromUrl || assetGraph.root));
 }
 
 describe('resolveAssetConfig', function () {
-    it('should handle a relative path', function (done) {
-        resolveAssetConfig('foo.png', passError(done, function (resolvedAssetConfig) {
-            expect(resolvedAssetConfig.type, 'to equal', 'Png');
-            done();
-        }));
+    it('should handle a relative path', function () {
+        expect(resolveAssetConfig('foo.png').type, 'to equal', 'Png');
     });
 
-    it('should handle an http: url', function (done) {
-        resolveAssetConfig('http://www.example.com/foo.gif', passError(done, function (resolvedAssetConfig) {
-            expect(resolvedAssetConfig, 'to be an object');
-            expect(resolvedAssetConfig.url, 'to equal', 'http://www.example.com/foo.gif');
-            expect(resolvedAssetConfig.type, 'to equal', 'Gif');
-            done();
-        }));
+    it('should handle an http: url', function () {
+        var resolvedAssetConfig = resolveAssetConfig('http://www.example.com/foo.gif');
+        expect(resolvedAssetConfig, 'to be an object');
+        expect(resolvedAssetConfig.url, 'to equal', 'http://www.example.com/foo.gif');
+        expect(resolvedAssetConfig.type, 'to equal', 'Gif');
     });
 
-    it('should handle a data: url', function (done) {
-        resolveAssetConfig('data:text/html;base64,SGVsbG8sIHdvcmxkIQo=', passError(done, function (resolvedAssetConfig) {
-            expect(resolvedAssetConfig, 'to be an object');
-            expect(resolvedAssetConfig.rawSrc, 'to equal', new Buffer('Hello, world!\n', 'utf-8'));
-            done();
-        }));
+    it('should handle a data: url', function () {
+        var resolvedAssetConfig = resolveAssetConfig('data:text/html;base64,SGVsbG8sIHdvcmxkIQo=');
+        expect(resolvedAssetConfig, 'to be an object');
+        expect(resolvedAssetConfig.rawSrc, 'to equal', new Buffer('Hello, world!\n', 'utf-8'));
     });
 
-    it('should expand dir without trailing slash', function (done) {
-        resolveAssetConfigAndEnsureType('subdir', passError(done, function (resolvedAssetConfig) {
+    it('should expand dir without trailing slash', function () {
+        return resolveAssetConfigAndEnsureType('subdir').then(function (resolvedAssetConfig) {
             expect(resolvedAssetConfig.type, 'to equal', 'Html');
             expect(resolvedAssetConfig.url, 'to equal', 'file://' + assetGraphRoot + 'subdir/index.html');
-            done();
-        }));
+        });
     });
 
-    it('should expand dir with trailing slash', function (done) {
-        resolveAssetConfigAndEnsureType('subdir', passError(done, function (resolvedAssetConfig) {
+    it('should expand dir with trailing slash', function () {
+        return resolveAssetConfigAndEnsureType('subdir').then(function (resolvedAssetConfig) {
             expect(resolvedAssetConfig.type, 'to equal', 'Html');
             expect(resolvedAssetConfig.url, 'to equal', 'file://' + assetGraphRoot + 'subdir/index.html');
-            done();
-        }));
+        });
     });
 
-    it('should not loop infinitely when encountering non-resolvable urls', function (done) {
+    it('should not loop infinitely when encountering non-resolvable urls', function () {
         var assetGraph = new AssetGraph({root: assetGraphRoot});
         assetGraph._warnings = [];
 
@@ -76,17 +54,14 @@ describe('resolveAssetConfig', function () {
             assetGraph._warnings.push(warning);
         });
 
-        assetGraph.resolveAssetConfig('my-funky.scheme://www.example.com/', assetGraph.root, function (error, resolvedAssetConfig) {
-            expect(error, 'to be', null);
-            expect(resolvedAssetConfig, 'to be an empty array');
-            expect(assetGraph._warnings, 'to be an array');
-            expect(assetGraph._warnings, 'to have length', 1);
-            expect(assetGraph._warnings[0].message, 'to match', /^AssetGraph.resolveAssetConfig: Cannot resolve asset url/);
-            done();
-        });
+        var resolvedAssetConfig = assetGraph.resolveAssetConfig('my-funky.scheme://www.example.com/', assetGraph.root);
+        expect(resolvedAssetConfig, 'to equal', {url: 'my-funky.scheme://www.example.com/'});
+        expect(assetGraph._warnings, 'to be an array');
+        expect(assetGraph._warnings, 'to have length', 1);
+        expect(assetGraph._warnings[0].message, 'to match', /^No resolver found for protocol: my-funky.scheme/);
     });
 
-    it('should accept `-` as part of the protocol', function (done) {
+    it('should accept `-` as part of the protocol', function () {
         var assetGraph = new AssetGraph({root: assetGraphRoot});
         assetGraph._warnings = [];
 
@@ -94,17 +69,14 @@ describe('resolveAssetConfig', function () {
             assetGraph._warnings.push(warning);
         });
 
-        assetGraph.resolveAssetConfig('android-app://www.example.com/', assetGraph.root, function (error, resolvedAssetConfig) {
-            expect(error, 'to be', null);
-            expect(resolvedAssetConfig, 'to equal', { url: 'android-app://www.example.com/' });
-            expect(assetGraph._warnings, 'to be an empty array');
-            done();
-        });
+        var resolvedAssetConfig = assetGraph.resolveAssetConfig('android-app://www.example.com/', assetGraph.root);
+        expect(resolvedAssetConfig, 'to equal', { url: 'android-app://www.example.com/' });
+        expect(assetGraph._warnings, 'to be an empty array');
     });
 
-    it('should only warn about unknown unsupported protocols', function (done) {
+    it('should only warn about unknown unsupported protocols', function () {
         var warnings = [];
-        new AssetGraph({root: __dirname + '/../testdata/unsupportedProtocols/'})
+        return new AssetGraph({root: __dirname + '/../testdata/unsupportedProtocols/'})
             .on('warn', function (err) {
                 warnings.push(err);
             })
@@ -121,7 +93,6 @@ describe('resolveAssetConfig', function () {
                 expect(warnings, 'to equal', [
                     new Error('No resolver found for protocol: httpz\n\tIf you think this protocol should exist, please contribute it here:\n\thttps://github.com/Munter/schemes#contributing')
                 ]);
-            })
-            .run(done);
+            });
     });
 });
