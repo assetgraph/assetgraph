@@ -1,19 +1,18 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    passError = require('passerror'),
     AssetGraph = require('../../lib/'),
     urlTools = require('urltools');
 
 describe('transforms.duplicateFavicon', function () {
-    it('should handle a referenced favicon.ico', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/duplicateFavicon/referencedFavicon'})
+    it('should handle a referenced favicon.ico', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/duplicateFavicon/referencedFavicon'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 1);
             })
             .duplicateFavicon()
-            .run(passError(done, function (assetGraph) {
+            .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'HtmlShortcutIcon');
                 expect(assetGraph, 'to contain relation', {type: 'HtmlShortcutIcon', href: 'favicon.copy.ico'});
                 expect(assetGraph, 'to contain assets', 'Ico', 2);
@@ -28,19 +27,18 @@ describe('transforms.duplicateFavicon', function () {
                     '    <body>\n' +
                     '    </body>\n' +
                     '</html>\n');
-                done();
-            }));
+            });
     });
 
-    it('should handle an unreferenced favicon.ico', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/duplicateFavicon/unreferencedFavicon'})
+    it('should handle an unreferenced favicon.ico', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/duplicateFavicon/unreferencedFavicon'})
             .loadAssets('index.html', 'noHead.html', 'favicon.ico')
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 0);
             })
             .duplicateFavicon()
-            .run(passError(done, function (assetGraph) {
+            .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'HtmlShortcutIcon', 2);
                 expect(assetGraph, 'to contain assets', 'Ico', 2);
                 expect(assetGraph, 'to contain asset', {url: urlTools.resolveUrl(assetGraph.root, 'favicon.ico'), isInitial: true});
@@ -61,7 +59,6 @@ describe('transforms.duplicateFavicon', function () {
                     '    </body>\n' +
                     '</html>\n'
                 );
-                done();
-            }));
+            });
     });
 });
