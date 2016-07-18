@@ -1,0 +1,3 @@
+// Some comment
+
+alert('noExistingSourceMap');
