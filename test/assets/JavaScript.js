@@ -76,12 +76,6 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle custom relations syntax errors outside a graph', function (done) {
-        var includeError = new AssetGraph.JavaScript({ text: 'INCLUDE(1, 2);' });
-        expect(includeError.findOutgoingRelationsInParseTree.bind(includeError), 'to throw', function (e) {
-            expect(e.type, 'to be', errors.SyntaxError.type);
-            expect(e.message, 'to match', /Invalid INCLUDE syntax: Must take a single string argument/);
-        });
-
         var gettextManyArguments = new AssetGraph.JavaScript({ text: 'GETTEXT(1, 2, 3);' });
         expect(gettextManyArguments.findOutgoingRelationsInParseTree.bind(gettextManyArguments), 'to throw', function (e) {
             expect(e.type, 'to be', errors.SyntaxError.type);
@@ -106,14 +100,13 @@ describe('assets/JavaScript', function () {
                 warnings.push(warning);
             })
             .loadAssets([
-                includeError,
                 gettextManyArguments,
                 gettextWrongArgumentType,
                 trhtmlWrongArgumentType
             ])
             .populate()
             .run(function (assetGraph) {
-                expect(warnings, 'to have length', 4);
+                expect(warnings, 'to have length', 3);
                 done();
             });
 
