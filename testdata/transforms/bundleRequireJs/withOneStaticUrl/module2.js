@@ -1,3 +1,3 @@
 define(function () {
-    return 'foo.png' /* @url */;
+    return 'foo.png'.toString('url');
 });

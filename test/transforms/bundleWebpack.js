@@ -30,7 +30,7 @@ describe('bundleWebpack', function () {
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Json');
-                expect(assetGraph, 'to contain relation', { type: 'JavaScriptGetStaticUrl', to: { fileName: /^[a-f0-9]{32}\.json$/ } });
+                expect(assetGraph, 'to contain relation', { type: 'JavaScriptStaticUrl', to: { fileName: /^[a-f0-9]{32}\.json$/ } });
             });
     });
 

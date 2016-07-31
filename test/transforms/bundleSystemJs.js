@@ -463,8 +463,8 @@ describe('transforms/bundleSystemJs', function () {
                 expect(assetGraph, 'to contain assets', 'Text', 2);
                 expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 2);
                 assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
-                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "'/somethingElse.txt' /* @url */")
-                    .and('not to contain', "'/test-foo.txt' /* @url */");
+                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "'/somethingElse.txt'.toString('url')")
+                    .and('not to contain', "'/test-foo.txt'.toString('url')");
             });
     });
 
@@ -478,8 +478,8 @@ describe('transforms/bundleSystemJs', function () {
                 expect(assetGraph, 'to contain assets', 'Text', 2);
                 expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 2);
                 assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
-                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "'/somethingElse.txt' /* @url */")
-                    .and('not to contain', "'/test-foo.txt' /* @url */");
+                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "'/somethingElse.txt'.toString('url')")
+                    .and('not to contain', "'/test-foo.txt'.toString('url')");
             });
     });
 

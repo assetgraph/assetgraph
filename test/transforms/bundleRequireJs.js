@@ -193,7 +193,7 @@ describe('transforms/bundleRequireJs', function () {
                 expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
                     /* eslint-disable */
                     define('module2', [], function () {
-                        return 'foo.png' /* @url */
+                        return 'foo.png'.toString('url');
                     });
                     define('module1', ['module2'], function () {
                         return 'module1';
