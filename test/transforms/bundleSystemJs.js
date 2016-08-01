@@ -1,5 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
+    estraverse = require('estraverse'),
     AssetGraph = require('../../lib');
 
 describe('transforms/bundleSystemJs', function () {
@@ -39,24 +40,18 @@ describe('transforms/bundleSystemJs', function () {
             .bundleSystemJs()
             .populate()
             .queue(function (assetGraph) {
-                expect(assetGraph.findAssets({
+                var numNodesWithCorrectLoc = 0;
+                estraverse.traverse(assetGraph.findAssets({
                     type: 'JavaScript',
                     fileName: /bundle/
-                })[0].parseTree, 'to satisfy', {
-                    body: {
-                        0: {
-                            expression: {
-                                callee: {
-                                    property: {
-                                        loc: {
-                                            source: assetGraph.root + 'main.js'
-                                        }
-                                    }
-                                }
-                            }
+                })[0].parseTree, {
+                    enter: function (node) {
+                        if (node.loc && node.loc.source === assetGraph.root + 'main.js') {
+                            numNodesWithCorrectLoc += 1;
                         }
                     }
                 });
+                expect(numNodesWithCorrectLoc, 'to be greater than or equal to', 1);
             });
     });
 
