@@ -112,4 +112,54 @@ describe('relations/Relation', function () {
             })
             .run(done);
     });
+
+    describe('#crossorigin', function () {
+        it('should evaluate to false for a relation that points from file: to file:', function () {
+            return new AssetGraph({root: __dirname})
+                .loadAssets({
+                    type: 'Html',
+                    url: 'file://' + __dirname + '/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="other.html">Link</a></body></html>'
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                });
+        });
+
+        it('should evaluate to true for a relation that points from file: to http:', function () {
+            return new AssetGraph({root: __dirname})
+                .loadAssets({
+                    type: 'Html',
+                    url: 'file://' + __dirname + '/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/">Link</a></body></html>'
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be true');
+                });
+        });
+
+        it('should evaluate to true for a relation that points to a different hostname via http', function () {
+            return new AssetGraph({root: __dirname})
+                .loadAssets({
+                    type: 'Html',
+                    url: 'http://example.com/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="http://anotherexample.com/">Link</a></body></html>'
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be true');
+                });
+        });
+
+        it('should evaluate to false for an absolute relation that points at the same hostname via http', function () {
+            return new AssetGraph({root: __dirname})
+                .loadAssets({
+                    type: 'Html',
+                    url: 'http://example.com/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>'
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                });
+        });
+    });
 });
