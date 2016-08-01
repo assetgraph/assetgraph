@@ -161,5 +161,65 @@ describe('relations/Relation', function () {
                     expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
                 });
         });
+
+        it('should evaluate to true for an absolute relation that points at the same scheme and hostname, but a different port', function () {
+            return new AssetGraph({root: __dirname})
+                .loadAssets({
+                    type: 'Html',
+                    url: 'http://example.com:1337/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com:1338/other.html">Link</a></body></html>'
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be true');
+                });
+        });
+
+        it('should take the default http port into account when the source url omits it', function () {
+            return new AssetGraph({root: __dirname})
+                .loadAssets({
+                    type: 'Html',
+                    url: 'http://example.com/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com:80/other.html">Link</a></body></html>'
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                });
+        });
+
+        it('should take the default http port into account when the target url omits it', function () {
+            return new AssetGraph({root: __dirname})
+                .loadAssets({
+                    type: 'Html',
+                    url: 'http://example.com:80/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>'
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                });
+        });
+
+        it('should take the default https port into account when the source url omits it', function () {
+            return new AssetGraph({root: __dirname})
+                .loadAssets({
+                    type: 'Html',
+                    url: 'https://example.com/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="https://example.com:443/other.html">Link</a></body></html>'
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                });
+        });
+
+        it('should take the default https port into account when the target url omits it', function () {
+            return new AssetGraph({root: __dirname})
+                .loadAssets({
+                    type: 'Html',
+                    url: 'https://example.com:443/index.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="https://example.com/other.html">Link</a></body></html>'
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                });
+        });
     });
 });
