@@ -20,7 +20,8 @@ describe('transforms/addRelNoopenerToBlankTargetAnchors', function () {
                     null,
                     null,
                     'nofollow',
-                    'noopener'
+                    'noopener',
+                    'opener'
                 ]);
             })
             .addRelNoopenerToBlankTargetAnchors()
@@ -37,7 +38,8 @@ describe('transforms/addRelNoopenerToBlankTargetAnchors', function () {
                     null,
                     'noopener',
                     'nofollow noopener',
-                    'noopener'
+                    'noopener',
+                    'opener'
                 ]);
             });
     });
