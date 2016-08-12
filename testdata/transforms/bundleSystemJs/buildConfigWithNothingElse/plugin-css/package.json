@@ -1,0 +1,27 @@
+{
+  "name": "systemjs-plugin-css",
+  "version": "0.1.23",
+  "main": "css",
+  "registry": "jspm",
+  "scripts": {
+    "test": "mocha --harmony test/test.js"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "mocha": "^2.4.5",
+    "mocha-phantomjs": "^4.0.2",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0",
+    "systemjs": "^0.19.28",
+    "systemjs-builder": "^0.15.17"
+  },
+  "gitHead": "a079a28e5997ce166be27054815d53c4ff0467f6",
+  "readme": "css\n===\n\nCSS loading plugin\n\nInstallation\n---\nFor installing with JSPM run:\n\n```\njspm install css\n```\n\nBasic Use\n---\n\n```javascript\nimport './style.css!'\n```\n\nCurrently CSS bundling is only supported in jspm, please post an issue if you would like support outside of jspm.\n\nIf not using jspm, set `System.buildCSS = false` to disable the builds.\n\nModular CSS Concepts\n---\n\nCSS in the dependency tree implies a CSS modularisation where styles can be scoped directly to the render code that they are bundled with.\n\nJust like JS requires, the order of CSS injection can't be guaranteed. The idea here is that whenever there are style overrides, they should be based on using a more specific selector with an extra id or class at the base, and not assuming a CSS load order. Reset and global styles are a repeated dependency of all modular styles that build on top of them.\n\nBuilder Support\n---\n\nWhen building with [SystemJS Builder](https://github.com/systemjs/builder), by default CSS will be inlined into the JS bundle and injected on execution.\n\nTo alter this behaviour use the SystemJS configuration options:\n\n* `separateCSS`: true / false whether to build a CSS file at the same output name as the bundle itself to be included with a link tag. Defaults to false.\n* `buildCSS`: true / false whether to bundle CSS files or leave as separate requests. Defaults to true.\n* `rootURL`: Optional, address that when set normalizes all CSS URLs to be absolute relative to this path.\n\n### Build Example\n\n```javascript\n  var builder = require('systemjs-builder');\n\n  // `builder.loadConfig` will load config from a file\n  builder.loadConfig('./cfg.js')\n  .then(function() {\n    // additional config can also be set through `builder.config`\n    builder.config({\n      baseURL: 'file:' + process.cwd(),\n      separateCSS: true,\n      rootURL: 'file:' + process.cwd(),\n\n      // to disable css optimizations\n      // cssOptimize: false\n    });\n\n    return builder.build('myModule', 'bundle.js');\n  });\n```\n\nWill generate `bundle.js` containing the JS files and `bundle.css` containing the compressed CSS for the bundle.\n\n### Source Maps\n\nCSS source maps are supported when using the `separateCSS` output option.\n\n### License\n\nMIT\n",
+  "readmeFilename": "README.md",
+  "description": "css ===",
+  "_id": "systemjs-plugin-css@0.1.23",
+  "_shasum": "4f22215f8cb8b0f224246a9b920d1a118897e9ef",
+  "_from": "git://github.com/systemjs/plugin-css.git#a079a28e5997ce166be27054815d53c4ff0467f6",
+  "_resolved": "git://github.com/systemjs/plugin-css.git#a079a28e5997ce166be27054815d53c4ff0467f6"
+}

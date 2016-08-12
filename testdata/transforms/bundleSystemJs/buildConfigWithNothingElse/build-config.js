@@ -1,5 +1,4 @@
 System.config({
-    foo: 123,
     buildConfig: {
         map: {
             css: 'plugin-css/css.js'
@@ -9,6 +8,5 @@ System.config({
                 loader: 'css'
             }
         }
-    },
-    testConfig: {}
+    }
 });

@@ -478,18 +478,7 @@ describe('transforms/bundleSystemJs', function () {
             });
     });
 
-    describe('with a data-systemjs-build-config attribute on one of the <script> elements that contain config', function () {
-        it('should remove the <script> after building', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfig/'})
-                .loadAssets('index.html')
-                .populate()
-                .bundleSystemJs()
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain no asset', { fileName: 'build-config.js' });
-                });
-        });
-
+    describe('with a buildConfig property in a System.config({...})', function () {
         it('should apply the build config during the build', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfig/'})
                 .loadAssets('index.html')
@@ -498,6 +487,41 @@ describe('transforms/bundleSystemJs', function () {
                 .populate()
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain asset', {fileName: 'styles.css'});
+                });
+        });
+
+        it('should remove the buildConfig and testConfig properties after building', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfig/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleSystemJs()
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({fileName: 'build-config.js'})[0].text, 'not to contain', 'buildConfig')
+                        .and('not to contain', 'testConfig');
+                });
+        });
+
+        it('should remove the System.config call if there is no other properties after removing the buildConfig property', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfigWithNothingElse/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleSystemJs()
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({fileName: 'build-config.js'})[0].text, 'not to contain', 'System.config');
+                });
+        });
+
+        it('should remove the System.config call in a SequenceExpression if there is no other properties after removing the buildConfig property', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfigWithNothingElseInASequenceExpression/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleSystemJs()
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({fileName: 'build-config.js'})[0].text, 'not to contain', 'System.config')
+                        .and('to contain', 'console.log');
                 });
         });
     });
