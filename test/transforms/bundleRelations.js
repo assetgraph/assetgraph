@@ -250,6 +250,20 @@ describe('transforms/bundleRelations', function () {
                 .run(done);
         });
 
+        it('should ignore the nonce attribute when bundling', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/nonceAttribute'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'})
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain relations', 'HtmlStyle', 1);
+                    expect(assetGraph.findRelations({type: 'HtmlStyle'})[0].to.text, 'to equal', 'body {color: #000;}body {color: #111;}');
+
+                    expect(assetGraph, 'to contain relations', 'HtmlScript', 1);
+                    expect(assetGraph.findRelations({type: 'HtmlScript'})[0].to.text, 'to equal', "alert('a');\nalert('b');");
+                });
+        });
+
         it('should handle 5 HtmlStyles in a Html asset, two of which are in a conditional comment', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'})
                 .loadAssets('index.html')
