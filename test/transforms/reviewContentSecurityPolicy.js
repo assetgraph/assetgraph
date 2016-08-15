@@ -218,6 +218,20 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             });
     });
 
+    it('should remove a nonce from the CSP when relations with the same nonce have been bundled (integration with bundleRelations)', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/bundledScriptsWithSameNonce/'})
+            .loadAssets('index.html')
+            .populate()
+            .bundleRelations({type: 'HtmlStyle'})
+            .reviewContentSecurityPolicy(undefined, {update: true})
+            .queue(function (assetGraph) {
+                expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                    styleSrc: ['\'self\'']
+                });
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'nonce');
+            });
+    });
+
     describe('with update:false', function () {
         it('emits a warn event when an inline relation is prohibited by the policy', function () {
             var warnSpy = sinon.spy().named('warn');

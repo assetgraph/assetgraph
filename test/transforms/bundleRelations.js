@@ -264,6 +264,30 @@ describe('transforms/bundleRelations', function () {
                 });
         });
 
+        describe('when all nonces of the bundled relations match', function () {
+            it('should reattach the nonce value to the bundle relation', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/matchingNonceAttributes'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'})
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', 'nonce="foo"');
+                    });
+            });
+        });
+
+        describe('when the nonces of the bundled relations mismatch', function () {
+            it('should reattach the nonce value to the bundle relation', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/mismatchingNonceAttributes'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'})
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'nonce=');
+                    });
+            });
+        });
+
         it('should handle 5 HtmlStyles in a Html asset, two of which are in a conditional comment', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'})
                 .loadAssets('index.html')
