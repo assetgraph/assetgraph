@@ -208,10 +208,11 @@ describe('transforms/bundleSystemJs', function () {
                         expect(assetGraph, 'to contain no assets', 'Css');
                     })
                     .bundleSystemJs()
-                    .populate({startAssets: {type: 'JavaScript'}})
-                    .flattenStaticIncludes()
+                    .populate()
                     .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/styles.less">');
                         expect(assetGraph, 'to contain no asset', 'JavaScript');
+                        expect(assetGraph, 'to contain asset', 'Css');
                     });
             });
         });
