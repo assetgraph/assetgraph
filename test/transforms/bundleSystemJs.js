@@ -197,6 +197,26 @@ describe('transforms/bundleSystemJs', function () {
             });
     });
 
+    describe('with systemjs-plugin-less', function () {
+        describe('and all JavaScript assets marked for removal via data-systemjs-remove', function () {
+            it('should remove system.js and the configuration and not inject the bundle', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/onlyLess/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph, 'to contain assets', 'Html', 1);
+                        expect(assetGraph, 'to contain no assets', 'Css');
+                    })
+                    .bundleSystemJs()
+                    .populate({startAssets: {type: 'JavaScript'}})
+                    .flattenStaticIncludes()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph, 'to contain no asset', 'JavaScript');
+                    });
+            });
+        });
+    });
+
     it('should error out if two pages include the same System.config assets in different orders', function () {
         return expect(
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs/'})

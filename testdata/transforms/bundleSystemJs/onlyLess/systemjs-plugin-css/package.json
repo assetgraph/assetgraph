@@ -1,0 +1,83 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "systemjs-plugin-css@0.1.25",
+        "scope": null,
+        "escapedName": "systemjs-plugin-css",
+        "name": "systemjs-plugin-css",
+        "rawSpec": "0.1.25",
+        "spec": "0.1.25",
+        "type": "version"
+      },
+      "/home/andreas/work/webmail"
+    ]
+  ],
+  "_from": "systemjs-plugin-css@0.1.25",
+  "_id": "systemjs-plugin-css@0.1.25",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/systemjs-plugin-css",
+  "_nodeVersion": "6.3.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/systemjs-plugin-css-0.1.25.tgz_1469547043677_0.3472099583595991"
+  },
+  "_npmUser": {
+    "name": "guybedford",
+    "email": "guybedford@gmail.com"
+  },
+  "_npmVersion": "3.10.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "systemjs-plugin-css@0.1.25",
+    "scope": null,
+    "escapedName": "systemjs-plugin-css",
+    "name": "systemjs-plugin-css",
+    "rawSpec": "0.1.25",
+    "spec": "0.1.25",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "/systemjs-plugin-less"
+  ],
+  "_resolved": "https://registry.npmjs.org/systemjs-plugin-css/-/systemjs-plugin-css-0.1.25.tgz",
+  "_shasum": "0ed8255f10aaa2ef7b9daf6710ba0c00399e7348",
+  "_shrinkwrap": null,
+  "_spec": "systemjs-plugin-css@0.1.25",
+  "_where": "/home/andreas/work/webmail",
+  "dependencies": {},
+  "description": "css ===",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "mocha": "^2.4.5",
+    "mocha-phantomjs": "^4.0.2",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0",
+    "systemjs": "^0.19.28",
+    "systemjs-builder": "^0.15.17"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "0ed8255f10aaa2ef7b9daf6710ba0c00399e7348",
+    "tarball": "https://registry.npmjs.org/systemjs-plugin-css/-/systemjs-plugin-css-0.1.25.tgz"
+  },
+  "gitHead": "2df4c7444f15a106e61de079763984d52dfd83b6",
+  "main": "css",
+  "maintainers": [
+    {
+      "name": "guybedford",
+      "email": "guybedford@gmail.com"
+    }
+  ],
+  "name": "systemjs-plugin-css",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "registry": "jspm",
+  "scripts": {
+    "test": "mocha --harmony test/test.js"
+  },
+  "version": "0.1.25"
+}
