@@ -232,6 +232,16 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             });
     });
 
+    it('should always remove a nonce with a value of \"developmentonly\", even when it is not referenced by a <script> or <link>', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/unreferencedDevelopmentOnlyNonce/'})
+            .loadAssets('index.html')
+            .populate()
+            .reviewContentSecurityPolicy(undefined, {update: true})
+            .queue(function (assetGraph) {
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'nonce-developmentonly');
+            });
+    });
+
     describe('with update:false', function () {
         it('emits a warn event when an inline relation is prohibited by the policy', function () {
             var warnSpy = sinon.spy().named('warn');
