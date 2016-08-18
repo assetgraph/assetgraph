@@ -396,7 +396,7 @@ describe('assets/Asset', function () {
                     expect(asset.text, 'to contain', 'æøåÆØÅ');
                 });
 
-                expect(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'to equal', 'æøåÆØÅ');
+                expect(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'to begin with', 'æøåÆØÅ');
                 expect(assetGraph.findAssets()[0].rawSrc.toString('binary'), 'to contain', '\u00e6\u00f8\u00e5\u00c6\u00d8\u00c5');
             })
             .run(done);
