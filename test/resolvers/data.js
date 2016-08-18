@@ -9,8 +9,8 @@ describe('resolvers/data', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 8);
-                expect(assetGraph.findAssets({type: 'Html'})[1].parseTree.body.firstChild.nodeValue, 'to equal', '\u263a');
-                expect(assetGraph.findAssets({type: 'Html'})[2].parseTree.body.firstChild.nodeValue, 'to equal', 'æøå');
+                expect(assetGraph.findAssets({type: 'Html'})[1].parseTree.body.firstChild.nodeValue, 'to equal', '\u263a\n');
+                expect(assetGraph.findAssets({type: 'Html'})[2].parseTree.body.firstChild.nodeValue, 'to equal', 'æøå\n');
                 expect(assetGraph.findAssets({type: 'Html'})[3].text, 'to match', /^<!DOCTYPE html>/);
                 expect(assetGraph.findAssets({type: 'Text'})[0].text, 'to equal', 'ΩδΦ');
                 expect(assetGraph.findAssets({type: 'Text'})[1].text, 'to equal', 'Hellö');
