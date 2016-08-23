@@ -19,14 +19,13 @@ describe('transforms.duplicateFavicon', function () {
                 expect(assetGraph, 'to contain asset', {url: urlTools.resolveUrl(assetGraph.root, 'favicon.ico')});
                 expect(assetGraph, 'to contain asset', {url: urlTools.resolveUrl(assetGraph.root, 'favicon.copy.ico')});
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to equal',
-                    '<!DOCTYPE html>\n' +
-                    '<html>\n' +
-                    '    <head>\n' +
+                    '<!DOCTYPE html><html><head>\n' +
                     '        <link rel="shortcut icon" href="favicon.copy.ico">\n' +
                     '    </head>\n' +
                     '    <body>\n' +
-                    '    </body>\n' +
-                    '</html>\n');
+                    '    \n' +
+                    '\n' +
+                    '</body></html>');
             });
     });
 
@@ -44,20 +43,18 @@ describe('transforms.duplicateFavicon', function () {
                 expect(assetGraph, 'to contain asset', {url: urlTools.resolveUrl(assetGraph.root, 'favicon.ico'), isInitial: true});
                 expect(assetGraph, 'to contain asset', {url: urlTools.resolveUrl(assetGraph.root, 'favicon.copy.ico'), isInitial: function (isInitial) {return !isInitial; }});
                 expect(assetGraph.findAssets({type: 'Html', fileName: 'index.html'})[0].text, 'to equal',
-                    '<!DOCTYPE html>\n' +
-                    '<html>\n' +
-                    '    <head>\n' +
+                    '<!DOCTYPE html><html><head>\n' +
                     '    <link rel="shortcut icon" href="favicon.copy.ico"></head>\n' +
                     '    <body>\n' +
-                    '    </body>\n' +
-                    '</html>\n'
+                    '    \n' +
+                    '\n' +
+                    '</body></html>'
                 );
                 expect(assetGraph.findAssets({type: 'Html', fileName: 'noHead.html'})[0].text, 'to equal',
-                    '<!DOCTYPE html>\n' +
-                    '<html><head><link rel="shortcut icon" href="favicon.copy.ico"></head>\n' +
-                    '    <body>\n' +
-                    '    </body>\n' +
-                    '</html>\n'
+                    '<!DOCTYPE html><html><head><link rel="shortcut icon" href="favicon.copy.ico"></head><body>\n' +
+                    '    \n' +
+                    '\n' +
+                    '</body></html>'
                 );
             });
     });

@@ -34,7 +34,7 @@ describe('transforms/minifySvgAssetsWithSvgo', function () {
                 expect(
                     assetGraph.findAssets({type: 'Html'})[0].text,
                     'to contain',
-                    '<svg role="img" viewbox="0 0 250 250"'
+                    '<svg viewBox="0 0 250 250" role="img"'
                 );
             });
     });

@@ -66,7 +66,7 @@ describe('assets/Html', function () {
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
             htmlAsset.markDirty();
-            expect(htmlAsset.text, 'to equal', '<!DOCTYPE html><html><body>Not so much!</body></html>');
+            expect(htmlAsset.text, 'to equal', '<!DOCTYPE html><html><head></head><body>Not so much!</body></html>');
         });
 
         it('should get text of AssetGraph.Html with rawSrcProxy and modified parse tree', function () {
@@ -78,7 +78,7 @@ describe('assets/Html', function () {
             return htmlAsset.load().then(function () {
                 htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
                 htmlAsset.markDirty();
-                expect(htmlAsset.text, 'to equal', '<!DOCTYPE html><html><body>Not so much!</body></html>');
+                expect(htmlAsset.text, 'to equal', '<!DOCTYPE html><html><head></head><body>Not so much!</body></html>');
             });
         });
 
@@ -88,53 +88,53 @@ describe('assets/Html', function () {
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
             htmlAsset.markDirty();
-            expect(htmlAsset.text, 'to equal', '<!DOCTYPE html><html><body>Not so much!</body></html>');
+            expect(htmlAsset.text, 'to equal', '<!DOCTYPE html><html><head></head><body>Not so much!</body></html>');
         });
     });
 
     describe('#rawSrc', function () {
         it('should get rawSrc of AssetGraph.Html with rawSrc property', function () {
             expect(new AssetGraph.Html({
-                rawSrc: new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')
-            }).rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>', 'utf-8'));
+                rawSrc: new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>')
+            }).rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>', 'utf-8'));
         });
 
         it('should get rawSrc of AssetGraph.Html with rawSrcProxy', function () {
             var asset = new AssetGraph.Html({
                 rawSrcProxy: function () {
-                    return Promise.resolve([new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')]);
+                    return Promise.resolve([new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>')]);
                 }
             });
             return asset.load().then(function () {
-                expect(asset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>', 'utf-8'));
+                expect(asset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>', 'utf-8'));
             });
         });
 
         it('should get rawSrc of AssetGraph.Html instantiated with text property', function () {
             expect(new AssetGraph.Html({
-                text: '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'
-            }).rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>', 'utf-8'));
+                text: '<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>'
+            }).rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>', 'utf-8'));
         });
 
         it('should get rawSrc of AssetGraph.Html with rawSrc property and modified parse tree', function () {
             var htmlAsset = new AssetGraph.Html({
-                rawSrc: new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')
+                rawSrc: new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>')
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
             htmlAsset.markDirty();
-            expect(htmlAsset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><body>Not so much!</body></html>', 'utf-8'));
+            expect(htmlAsset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><head></head><body>Not so much!</body></html>', 'utf-8'));
         });
 
         it('should get rawSrc of AssetGraph.Html with rawSrcProxy and modified parse tree', function () {
             var htmlAsset = new AssetGraph.Html({
                 rawSrcProxy: function () {
-                    return Promise.resolve([new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')]);
+                    return Promise.resolve([new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>')]);
                 }
             });
             return htmlAsset.load().then(function () {
                 htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
                 htmlAsset.markDirty();
-                expect(htmlAsset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><body>Not so much!</body></html>', 'utf-8'));
+                expect(htmlAsset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><head></head><body>Not so much!</body></html>', 'utf-8'));
             });
         });
 
@@ -144,7 +144,7 @@ describe('assets/Html', function () {
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
             htmlAsset.markDirty();
-            expect(htmlAsset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><body>Not so much!</body></html>', 'utf-8'));
+            expect(htmlAsset.rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><head></head><body>Not so much!</body></html>', 'utf-8'));
         });
     });
 
@@ -435,9 +435,9 @@ describe('assets/Html', function () {
 
         it('should remove whitespace between </title> and conditional comment in <head>', function () {
             expect(
-                '<html><head><title>The title</title> <!--[if lt IE 8]><![endif]--></head></html>',
+                '<html><head><title>The title</title> <!--[if lt IE 8]><![endif]--></head><body></body></html>',
                 'to minify to',
-                '<html><head><title>The title</title><!--[if lt IE 8]><![endif]--></head></html>'
+                '<html><head><title>The title</title><!--[if lt IE 8]><![endif]--></head><body></body></html>'
             );
         });
 

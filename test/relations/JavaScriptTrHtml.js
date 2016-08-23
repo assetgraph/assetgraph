@@ -26,7 +26,7 @@ describe('relations/JavaScriptTrHtml', function () {
 
                 expect(assetGraph.findRelations({type: 'JavaScriptTrHtml'})[0].href, 'to be undefined');
 
-                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<div>foo<\/div><\/body><\/html>\\n\1/);
+                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><head><\/head><body>Boo!\\n<div>foo<\/div><\/body><\/html>\1/);
 
                 assetGraph.findAssets({type: 'Html', isInline: true})[0].url = 'http://example.com/template.html';
             });
@@ -47,14 +47,14 @@ describe('relations/JavaScriptTrHtml', function () {
             })
             .inlineRelations({type: 'JavaScriptTrHtml'})
             .queue(function (assetGraph) {
-                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<\/body><\/html>\\n\1/);
+                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><head><\/head><body>Boo!<\/body><\/html>\\n\1/);
 
                 var htmlAsset = assetGraph.findAssets({type: 'Html', isInline: true})[0],
                     document = htmlAsset.parseTree;
                 document.body.appendChild(document.createElement('div')).appendChild(document.createTextNode('foo'));
                 htmlAsset.markDirty();
 
-                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><body>Boo!<div>foo<\/div><\/body><\/html>\\n\1/);
+                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /var myHtmlString\s*=\s*(['"])<html><head><\/head><body>Boo!\\n<div>foo<\/div><\/body><\/html>\1/);
             });
     });
 

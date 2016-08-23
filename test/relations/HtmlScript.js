@@ -96,8 +96,8 @@ describe('relations/HtmlScript', function () {
             .run(done);
     });
 
-    it('should attach script node as the last node in document.head if there is no ocuemnt.body and no other scripts exist when using the `first` position', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'})
+    it('should attach script node as the last node in document.body if no other scripts exist when using the `first` position', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'})
             .loadAssets(new AssetGraph.Html({
                 url: 'index.html',
                 text: '<html><head><title>first test</title></head></html>'
@@ -114,11 +114,10 @@ describe('relations/HtmlScript', function () {
 
                 relation.attach(html, 'first');
 
-                expect(relation.node.parentNode, 'not to be', document.body);
-                expect(relation.node.parentNode, 'to be', document.head);
-                expect(relation.node, 'to be', document.head.lastChild);
-            })
-            .run(done);
+                expect(relation.node.parentNode, 'not to be', document.head);
+                expect(relation.node.parentNode, 'to be', document.body);
+                expect(relation.node, 'to be', document.body.lastChild);
+            });
     });
 
     it('should attach script node before another when using the `before` position', function (done) {
