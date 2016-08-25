@@ -65,7 +65,7 @@
     "mocha": "^3.0.0",
     "requirejs": "2.2.0",
     "sinon": "^1.17.3",
-    "svgo": "0.6.6",
+    "svgo": "0.7.0",
     "systemjs-asset-plugin": "3.0.0",
     "systemjs-builder": "0.15.30",
     "unexpected": "^10.15.1",
