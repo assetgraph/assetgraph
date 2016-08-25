@@ -572,7 +572,7 @@ describe('transforms/bundleSystemJs', function () {
             });
         });
 
-        it.skip('should create separate bundles per variant', function () {
+        it('should create separate bundles per variant', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/oneBundlePerVariant/'})
                 .loadAssets('index.html')
                 .populate()
