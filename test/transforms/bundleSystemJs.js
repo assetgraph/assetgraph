@@ -470,7 +470,7 @@ describe('transforms/bundleSystemJs', function () {
         });
     });
 
-    it('should pick up assets referenced via an asset plugin', function () {
+    it.skip('should pick up assets referenced via an asset plugin', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetPlugin/'})
             .loadAssets('index.html')
             .populate()
@@ -485,7 +485,7 @@ describe('transforms/bundleSystemJs', function () {
             });
     });
 
-    it('should pick up assets referenced via an asset plugin using a wildcard', function () {
+    it.skip('should pick up assets referenced via an asset plugin using a wildcard', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetPluginWithWildcard/'})
             .loadAssets('index.html')
             .populate()
