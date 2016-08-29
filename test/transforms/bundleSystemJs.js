@@ -581,12 +581,12 @@ describe('transforms/bundleSystemJs', function () {
                 })
                 .populate()
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+">/g), 'to equal', [
+                    expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
                         '<script src="system.js">',
                         '<script src="config.js">',
                         '<script src="common-bundle.js">',
-                        '<script src="common-bundle-lang-da.js" data-cond-lang="da">',
-                        '<script src="common-bundle-lang-en_us.js" data-cond-lang="en_us">'
+                        '<script src="bundle-main-da.js" data-cond="{&quot;lang.js|default&quot;:&quot;da&quot;}">',
+                        '<script src="bundle-main-en_us.js" data-cond="{&quot;lang.js|default&quot;:&quot;en_us&quot;}">'
                     ]);
                 });
         });
