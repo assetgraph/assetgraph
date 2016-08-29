@@ -585,8 +585,8 @@ describe('transforms/bundleSystemJs', function () {
                         '<script src="system.js">',
                         '<script src="config.js">',
                         '<script src="common-bundle.js">',
-                        '<script src="bundle-main-da.js" data-cond="{&quot;lang.js|default&quot;:&quot;da&quot;}">',
-                        '<script src="bundle-main-en_us.js" data-cond="{&quot;lang.js|default&quot;:&quot;en_us&quot;}">'
+                        '<script src="bundle-main-da.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">',
+                        '<script src="bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">'
                     ]);
                 });
         });
