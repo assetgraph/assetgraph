@@ -272,12 +272,12 @@ describe('transforms/bundleSystemJs', function () {
                 expect(
                     assetGraph.findAssets({ url: /\/page1\.html$/})[0].text,
                     'to contain',
-                    '<script src="bundle-page1.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
+                    '<script src="/bundle-page1.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
                 );
                 expect(
                     assetGraph.findAssets({ url: /\/page2\.html$/})[0].text,
                     'to contain',
-                    '<script src="bundle-page2.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
+                    '<script src="/bundle-page2.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
                 );
                 expect(assetGraph, 'to contain relation', 'SystemJsLazyBundle', 2);
             })
@@ -572,23 +572,23 @@ describe('transforms/bundleSystemJs', function () {
             });
         });
 
-        it('should create separate bundles per variant', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/oneBundlePerVariant/'})
-                .loadAssets('index.html')
-                .populate()
-                .bundleSystemJs({
-                    conditions: [ 'lang' ]
-                })
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
-                        '<script src="system.js">',
-                        '<script src="config.js">',
-                        '<script src="common-bundle.js">',
-                        '<script src="bundle-main-da.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">',
-                        '<script src="bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">'
-                    ]);
-                });
+        describe('with unspecified conditionals', function () {
+            it('should create separate bundles per variant', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/oneBundlePerVariant/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs()
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                            '<script src="system.js">',
+                            '<script src="config.js">',
+                            '<script src="/common-bundle.js">',
+                            '<script src="/bundle-main-da.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">'
+                        ]);
+                    });
+            });
         });
     });
 });
