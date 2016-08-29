@@ -187,10 +187,6 @@ describe('transforms/bundleSystemJs', function () {
             .populate({startAssets: {type: 'JavaScript'}})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Css');
-                expect(assetGraph, 'to contain relation', 'SystemJsBundle');
-            })
-            .populate({ startAssets: { type: 'JavaScript' } })
-            .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no relations', 'SystemJsBundle');
                 expect(assetGraph, 'to contain relation', 'HtmlStyle');
             });
