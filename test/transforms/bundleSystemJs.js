@@ -190,7 +190,6 @@ describe('transforms/bundleSystemJs', function () {
                 expect(assetGraph, 'to contain relation', 'SystemJsBundle');
             })
             .populate({ startAssets: { type: 'JavaScript' } })
-            .flattenStaticIncludes()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no relations', 'SystemJsBundle');
                 expect(assetGraph, 'to contain relation', 'HtmlStyle');
@@ -587,6 +586,20 @@ describe('transforms/bundleSystemJs', function () {
                             '<script src="/bundle-main-da.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">',
                             '<script src="/bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">'
                         ]);
+                    });
+            });
+
+            it('should create separate stylesheets per variant', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/stylesheet/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs()
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain',
+                            '<link rel="stylesheet" href="/styles.da.css" data-systemjs-conditionals="\'lang.js|default\': \'da\'">'
+                        ).and('to contain', '<link rel="stylesheet" href="/styles.en_us.css" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">');
                     });
             });
         });
