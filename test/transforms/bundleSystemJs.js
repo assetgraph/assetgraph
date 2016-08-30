@@ -607,7 +607,7 @@ describe('transforms/bundleSystemJs', function () {
                     .populate()
                     .queue(function (assetGraph) {
                         expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain',
-                            "System.registerDynamic('main.js', ['test-*.txt!systemjs-asset-plugin/asset-plugin.js'], true, function ($__require, exports, module) {"
+                            "System.registerDynamic('main.js', ['test-*.txt!systemjs-asset-plugin/asset-plugin.js'"
                         );
                     });
             });
