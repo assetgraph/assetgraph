@@ -582,6 +582,7 @@ describe('transforms/bundleSystemJs', function () {
                             '<script src="/bundle-main-da.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">',
                             '<script src="/bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">'
                         ]);
+                        expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', 'System.registerDynamic(\'lang.js');
                     });
             });
 
