@@ -22,7 +22,7 @@
     "test/unexpectedAssetGraph.js"
   ],
   "dependencies": {
-    "bluebird": "3.4.0",
+    "bluebird": "3.4.4",
     "chalk": "^1.1.3",
     "createerror": "^1.1.0",
     "cssnano": "^3.7.4",
