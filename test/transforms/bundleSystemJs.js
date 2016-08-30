@@ -609,8 +609,7 @@ describe('transforms/bundleSystemJs', function () {
                         expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain',
                             "System.registerDynamic('main.js', ['test-*.txt!systemjs-asset-plugin/asset-plugin.js'], true, function ($__require, exports, module) {"
                         );
-                    })
-                    .writeAssetsToDisc({url: /^file:/, isLoaded: true}, 'foo')
+                    });
             });
         });
     });
