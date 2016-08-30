@@ -598,6 +598,20 @@ describe('transforms/bundleSystemJs', function () {
                         ).and('to contain', '<link rel="stylesheet" href="/styles.en_us.css" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">');
                     });
             });
+
+            it('should work when combined with the asset list plugin', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/combinedWithAssetPlugin/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs()
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain',
+                            "System.registerDynamic('main.js', ['test-*.txt!systemjs-asset-plugin/asset-plugin.js'], true, function ($__require, exports, module) {"
+                        );
+                    })
+                    .writeAssetsToDisc({url: /^file:/, isLoaded: true}, 'foo')
+            });
         });
     });
 });
