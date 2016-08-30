@@ -204,7 +204,7 @@ describe('transforms/bundleSystemJs', function () {
             .populate({startAssets: {type: 'JavaScript'}})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Css');
-                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/styles.less.css">');
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/styles.less">');
             });
     });
 
