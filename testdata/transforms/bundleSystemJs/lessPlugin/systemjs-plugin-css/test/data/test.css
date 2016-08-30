@@ -1,0 +1,6 @@
+@import "./dep.css";
+
+body {
+  background-color: red;
+  background-image: url(x.png);
+}
