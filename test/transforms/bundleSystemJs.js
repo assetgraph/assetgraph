@@ -496,7 +496,7 @@ describe('transforms/bundleSystemJs', function () {
                 assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
                 expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "'/somethingElse.txt'.toString('url')")
                     .and('not to contain', "'/test-foo.txt'.toString('url')")
-                    .and('to contain' , "System.registerDynamic('test-*.txt!systemjs-asset-plugin/asset-plugin.js'");
+                    .and('to contain', "System.registerDynamic('test-*.txt!systemjs-asset-plugin/asset-plugin.js'");
             });
     });
 
