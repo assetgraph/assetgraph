@@ -560,6 +560,7 @@ describe('transforms/bundleSystemJs', function () {
     });
 
     describe('with conditionals', function () {
+
         describe('when specifying the values of the conditionals up front', function () {
             it('should exclude the unneeded branches from the created bundle', function () {
                 return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/exclude/'})
