@@ -631,7 +631,7 @@ describe('transforms/bundleSystemJs', function () {
                     .loadAssets('index.html')
                     .populate()
                     .bundleSystemJs({
-                        conditions: { weather: 'sunny' }
+                        conditions: { 'weather.js': 'sunny' }
                     })
                     .populate()
                     .queue(function (assetGraph) {
@@ -640,7 +640,7 @@ describe('transforms/bundleSystemJs', function () {
                             '<script src="config.js">',
                             '<script src="/common-bundle.js">',
                             '<script src="/bundle-main-da.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">'
+                            '<script src="/bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">'
                         ]);
                         var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
                         expect(commonBundle.text, 'not to contain', 'rainy');
