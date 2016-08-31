@@ -1,1 +1,1 @@
-require('./alert-in-#{lang}.js');
+require('./alert-lang-#{lang}.js');
