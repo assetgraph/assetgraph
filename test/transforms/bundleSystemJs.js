@@ -644,6 +644,7 @@ describe('transforms/bundleSystemJs', function () {
                         ]);
                         var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
                         expect(commonBundle.text, 'not to contain', 'rainy');
+                        expect(commonBundle.text, 'not to contain', '#{weather.js');
                     });
             });
 
