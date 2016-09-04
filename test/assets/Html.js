@@ -532,4 +532,13 @@ describe('assets/Html', function () {
             });
         });
     });
+
+    it('should not evaluate inline scripts', function () {
+        var htmlAsset = new AssetGraph.Html({
+            text: '<!DOCTYPE html><html><head></head><body><script>document.write("<foo>" + "</foo>");</script></body></html>'
+        });
+        htmlAsset.parseTree;
+        htmlAsset.markDirty();
+        expect(htmlAsset.text, 'not to contain', '<foo></foo>');
+    });
 });
