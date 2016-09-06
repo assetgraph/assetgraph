@@ -187,13 +187,24 @@ describe('transforms/bundleSystemJs', function () {
             .populate({startAssets: {type: 'JavaScript'}})
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Css');
-                expect(assetGraph, 'to contain relation', 'SystemJsBundle');
-            })
-            .populate({ startAssets: { type: 'JavaScript' } })
-            .flattenStaticIncludes()
-            .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain no relations', 'SystemJsBundle');
                 expect(assetGraph, 'to contain relation', 'HtmlStyle');
+            });
+    });
+
+    it('should handle a test case with a less plugin', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/lessPlugin/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 'Html', 1);
+                expect(assetGraph, 'to contain no assets', 'Css');
+            })
+            .bundleSystemJs()
+            .populate({startAssets: {type: 'JavaScript'}})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Css');
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/styles.less">');
             });
     });
 
@@ -272,12 +283,12 @@ describe('transforms/bundleSystemJs', function () {
                 expect(
                     assetGraph.findAssets({ url: /\/page1\.html$/})[0].text,
                     'to contain',
-                    '<script src="bundle-page1.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
+                    '<script src="/bundle-page1.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
                 );
                 expect(
                     assetGraph.findAssets({ url: /\/page2\.html$/})[0].text,
                     'to contain',
-                    '<script src="bundle-page2.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
+                    '<script src="/bundle-page2.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
                 );
                 expect(assetGraph, 'to contain relation', 'SystemJsLazyBundle', 2);
             })
@@ -479,7 +490,7 @@ describe('transforms/bundleSystemJs', function () {
                 expect(assetGraph, 'to contain assets', 'Text', 2);
                 expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 2);
                 assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
-                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "'/somethingElse.txt'.toString('url')")
+                expect(assetGraph.findAssets({fileName: 'bundle-main-foo.js'})[0].text, 'to contain', "'/somethingElse.txt'.toString('url')")
                     .and('not to contain', "'/test-foo.txt'.toString('url')");
             });
     });
@@ -549,6 +560,7 @@ describe('transforms/bundleSystemJs', function () {
     });
 
     describe('with conditionals', function () {
+
         describe('when specifying the values of the conditionals up front', function () {
             it('should exclude the unneeded branches from the created bundle', function () {
                 return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/exclude/'})
@@ -568,6 +580,121 @@ describe('transforms/bundleSystemJs', function () {
                             .and('to contain', 'neededInAmericanEnglish')
                             .and('not to contain', 'neededInDanish')
                             .and('not to contain', 'Math.random');
+                    });
+            });
+        });
+
+        describe('with unspecified conditionals', function () {
+            it('should create separate bundles per variant', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/oneBundlePerVariant/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs()
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                            '<script src="system.js">',
+                            '<script src="config.js">',
+                            '<script src="/common-bundle.js">',
+                            '<script src="/bundle-main-da.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">'
+                        ]);
+                        expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', 'System.registerDynamic(\'lang.js');
+                    });
+            });
+
+            it('should support independent conditionals', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/twoIndependentConditionals/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs()
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                            '<script src="system.js">',
+                            '<script src="config.js">',
+                            '<script src="/common-bundle.js">',
+                            '<script src="/bundle-main-da-rainy.js" data-systemjs-conditionals="\'lang.js|default\': \'da\', \'weather.js|default\': \'rainy\'">',
+                            '<script src="/bundle-main-da-sunny.js" data-systemjs-conditionals="\'lang.js|default\': \'da\', \'weather.js|default\': \'sunny\'">',
+                            '<script src="/bundle-main-en_us-rainy.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\', \'weather.js|default\': \'rainy\'">',
+                            '<script src="/bundle-main-en_us-sunny.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\', \'weather.js|default\': \'sunny\'">'
+                        ]);
+                        var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                        expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
+                            .and('not to contain', 'neededInAmericanEnglish')
+                            .and('not to contain', 'neededInDanish');
+                    });
+            });
+
+            it('should support independent conditionals with one of the conditions provided up front', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/twoIndependentConditionals/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs({
+                        conditions: { 'weather.js': 'sunny' }
+                    })
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                            '<script src="system.js">',
+                            '<script src="config.js">',
+                            '<script src="/common-bundle.js">',
+                            '<script src="/bundle-main-da.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">'
+                        ]);
+                        var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                        expect(commonBundle.text, 'not to contain', 'rainy');
+                        expect(commonBundle.text, 'not to contain', '#{weather.js');
+                    });
+            });
+
+            it('should support dependent conditionals', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/twoDependentConditionals/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs()
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                            '<script src="system.js">',
+                            '<script src="config.js">',
+                            '<script src="/common-bundle.js">',
+                            '<script src="/bundle-main-rainy-da.js" data-systemjs-conditionals="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-rainy-en_us.js" data-systemjs-conditionals="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'en_us\'">',
+                            '<script src="/bundle-main-sunny-da.js" data-systemjs-conditionals="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-sunny-en_us.js" data-systemjs-conditionals="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'en_us\'">'
+                        ]);
+                        var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                        expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
+                            .and('not to contain', 'neededInAmericanEnglish')
+                            .and('not to contain', 'neededInDanish');
+                    });
+            });
+
+            it('should create separate stylesheets per variant', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/stylesheet/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs()
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain',
+                            '<link rel="stylesheet" href="/styles.da.css" data-systemjs-conditionals="\'lang.js|default\': \'da\'">'
+                        ).and('to contain', '<link rel="stylesheet" href="/styles.en_us.css" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">');
+                    });
+            });
+
+            it('should work when combined with the asset list plugin', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/combinedWithAssetPlugin/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs()
+                    .populate()
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain',
+                            "System.registerDynamic('main.js', ['test-*.txt!systemjs-asset-plugin/asset-plugin.js'"
+                        );
                     });
             });
         });

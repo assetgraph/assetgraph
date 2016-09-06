@@ -1,0 +1,1 @@
+alert('Jah, solen skinner!');
