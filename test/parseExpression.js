@@ -4,7 +4,7 @@ var parseExpression = require('../lib/parseExpression');
 
 describe('parseExpression', function () {
     expect.addAssertion('to parse as', function (expect, subject, value) {
-        expect(parseExpression(subject), 'to equal', value);
+        expect(parseExpression(subject), 'to exhaustively satisfy', value);
     });
 
     it('should parse a number', function () {
