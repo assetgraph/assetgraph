@@ -596,8 +596,8 @@ describe('transforms/bundleSystemJs', function () {
                             '<script src="system.js">',
                             '<script src="config.js">',
                             '<script src="/common-bundle.js">',
-                            '<script src="/bundle-main-da.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">'
+                            '<script src="/bundle-main-da.js" data-systemjs-conditions="\'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-en_us.js" data-systemjs-conditions="\'lang.js|default\': \'en_us\'">'
                         ]);
                         expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', 'System.registerDynamic(\'lang.js');
                     });
@@ -614,10 +614,10 @@ describe('transforms/bundleSystemJs', function () {
                             '<script src="system.js">',
                             '<script src="config.js">',
                             '<script src="/common-bundle.js">',
-                            '<script src="/bundle-main-da-rainy.js" data-systemjs-conditionals="\'lang.js|default\': \'da\', \'weather.js|default\': \'rainy\'">',
-                            '<script src="/bundle-main-da-sunny.js" data-systemjs-conditionals="\'lang.js|default\': \'da\', \'weather.js|default\': \'sunny\'">',
-                            '<script src="/bundle-main-en_us-rainy.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\', \'weather.js|default\': \'rainy\'">',
-                            '<script src="/bundle-main-en_us-sunny.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\', \'weather.js|default\': \'sunny\'">'
+                            '<script src="/bundle-main-da-rainy.js" data-systemjs-conditions="\'lang.js|default\': \'da\', \'weather.js|default\': \'rainy\'">',
+                            '<script src="/bundle-main-da-sunny.js" data-systemjs-conditions="\'lang.js|default\': \'da\', \'weather.js|default\': \'sunny\'">',
+                            '<script src="/bundle-main-en_us-rainy.js" data-systemjs-conditions="\'lang.js|default\': \'en_us\', \'weather.js|default\': \'rainy\'">',
+                            '<script src="/bundle-main-en_us-sunny.js" data-systemjs-conditions="\'lang.js|default\': \'en_us\', \'weather.js|default\': \'sunny\'">'
                         ]);
                         var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
                         expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
@@ -639,8 +639,8 @@ describe('transforms/bundleSystemJs', function () {
                             '<script src="system.js">',
                             '<script src="config.js">',
                             '<script src="/common-bundle.js">',
-                            '<script src="/bundle-main-da.js" data-systemjs-conditionals="\'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-en_us.js" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">'
+                            '<script src="/bundle-main-da.js" data-systemjs-conditions="\'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-en_us.js" data-systemjs-conditions="\'lang.js|default\': \'en_us\'">'
                         ]);
                         var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
                         expect(commonBundle.text, 'not to contain', 'rainy');
@@ -659,10 +659,10 @@ describe('transforms/bundleSystemJs', function () {
                             '<script src="system.js">',
                             '<script src="config.js">',
                             '<script src="/common-bundle.js">',
-                            '<script src="/bundle-main-rainy-da.js" data-systemjs-conditionals="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-rainy-en_us.js" data-systemjs-conditionals="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'en_us\'">',
-                            '<script src="/bundle-main-sunny-da.js" data-systemjs-conditionals="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-sunny-en_us.js" data-systemjs-conditionals="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'en_us\'">'
+                            '<script src="/bundle-main-rainy-da.js" data-systemjs-conditions="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-rainy-en_us.js" data-systemjs-conditions="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'en_us\'">',
+                            '<script src="/bundle-main-sunny-da.js" data-systemjs-conditions="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-sunny-en_us.js" data-systemjs-conditions="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'en_us\'">'
                         ]);
                         var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
                         expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
@@ -680,8 +680,8 @@ describe('transforms/bundleSystemJs', function () {
                     .queue(function (assetGraph) {
                         expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
                         expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain',
-                            '<link rel="stylesheet" href="/styles.da.css" data-systemjs-conditionals="\'lang.js|default\': \'da\'">'
-                        ).and('to contain', '<link rel="stylesheet" href="/styles.en_us.css" data-systemjs-conditionals="\'lang.js|default\': \'en_us\'">');
+                            '<link rel="stylesheet" href="/styles.da.css" data-systemjs-conditions="\'lang.js|default\': \'da\'">'
+                        ).and('to contain', '<link rel="stylesheet" href="/styles.en_us.css" data-systemjs-conditions="\'lang.js|default\': \'en_us\'">');
                     });
             });
 
