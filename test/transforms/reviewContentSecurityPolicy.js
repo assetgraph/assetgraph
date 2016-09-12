@@ -37,7 +37,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
                     defaultSrc: ['\'self\'', 'whatever.com/yadda'],
-                    scriptSrc: ['\'self\'', 'scriptland.com', 'whatever.com/yadda']
+                    scriptSrc: ['\'self\'', 'http://scriptland.com/script.js', 'whatever.com/yadda']
                 });
             });
     });
@@ -60,7 +60,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
                     defaultSrc: ['\'none\''],
-                    scriptSrc: ['scriptland.com']
+                    scriptSrc: ['http://scriptland.com/somewhere/script.js']
                 });
             });
     });
@@ -77,8 +77,23 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                 .reviewContentSecurityPolicy(undefined, {update: true})
                 .queue(function (assetGraph) {
                     expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
-                        scriptSrc: ['\'self\'', 'scriptland.com'],
-                        styleSrc: ['\'self\'', 'styleland.com']
+                        scriptSrc: ['\'self\'', 'http://scriptland.com/script.js'],
+                        styleSrc: ['\'self\'', 'http://styleland.com/styles.css']
+                    });
+                });
+        });
+
+        it('should just whitelist the host name of the origin for less sensitive media types such as images', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    assetGraph.findAssets({type: 'Png'})[0].url = 'http://imageland.com/foo.png';
+                })
+                .reviewContentSecurityPolicy(undefined, {update: true})
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                        imgSrc: ['\'self\'', 'imageland.com']
                     });
                 });
         });
@@ -134,7 +149,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             .populate()
             .queue(function (assetGraph) {
                 var contentSecurityPolicy = assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0];
-                contentSecurityPolicy.parseTree.defaultSrc = ['\'self\'', 'scriptland.com'];
+                contentSecurityPolicy.parseTree.defaultSrc = ['\'self\'', 'http://scriptland.com/script.js'];
                 contentSecurityPolicy.markDirty();
 
                 assetGraph.findAssets({type: 'Css'})[0].url = 'http://styleland.com/styles.css';
@@ -143,9 +158,9 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             .reviewContentSecurityPolicy(undefined, {update: true})
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
-                    defaultSrc: ['\'self\'', 'scriptland.com'],
+                    defaultSrc: ['\'self\'', 'http://scriptland.com/script.js'],
                     scriptSrc: undefined,
-                    styleSrc: ['\'self\'', 'styleland.com']
+                    styleSrc: ['\'self\'', 'http://styleland.com/styles.css']
                 });
             });
     });
