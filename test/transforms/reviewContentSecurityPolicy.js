@@ -83,6 +83,21 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                 });
         });
 
+        it('should just whitelist the host name of the origin for less sensitive media types such as images', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    assetGraph.findAssets({type: 'Png'})[0].url = 'http://imageland.com/foo.png';
+                })
+                .reviewContentSecurityPolicy(undefined, {update: true})
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                        imgSrc: ['\'self\'', 'imageland.com']
+                    });
+                });
+        });
+
         it('should not update the style-src and script-src directives of a Content-Security-Policy when an existing source expression allows the url', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet'})
                 .loadAssets('index.html')
