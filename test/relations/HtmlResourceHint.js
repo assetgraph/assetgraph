@@ -21,7 +21,7 @@ describe('relations/HtmlResourceHint', function () {
                 to: { url: 'foo.css' }
             });
 
-            expect(relation.inline, 'to throw', /Inlining of reource hints is not allowed/);
+            expect(relation.inline, 'to throw', /Inlining of resource hints is not allowed/);
         });
     });
 
