@@ -28,7 +28,6 @@ describe('relations/HtmlDnsPrefetchLink', function () {
     it('should handle a test case with an existing <link rel="dns-prefetch"> element', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDnsPrefetchLink/'})
             .loadAssets('index.html')
-            .populate({ followRelations: { crossorigin: false } })
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation including unresolved', 'HtmlDnsPrefetchLink');
             });
@@ -37,7 +36,6 @@ describe('relations/HtmlDnsPrefetchLink', function () {
     it('should update the href', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDnsPrefetchLink/'})
             .loadAssets('index.html')
-            .populate({ followRelations: { crossorigin: false } })
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation including unresolved', 'HtmlDnsPrefetchLink');
 
