@@ -30,7 +30,7 @@ describe('relations/HtmlDnsPrefetchLink', function () {
             .loadAssets('index.html')
             .populate({ followRelations: { crossorigin: false } })
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');
+                expect(assetGraph, 'to contain relation including unresolved', 'HtmlDnsPrefetchLink');
             });
     });
 
@@ -39,11 +39,14 @@ describe('relations/HtmlDnsPrefetchLink', function () {
             .loadAssets('index.html')
             .populate({ followRelations: { crossorigin: false } })
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');
+                expect(assetGraph, 'to contain relation including unresolved', 'HtmlDnsPrefetchLink');
 
-                var link = assetGraph.findRelations({ type: 'HtmlDnsPrefetchLink' })[0];
+                var link = assetGraph.findRelations({ type: 'HtmlDnsPrefetchLink' }, true)[0];
 
                 link.to.url = 'foo.bar';
+                // This is necessary because link.to is an asset config object, not a real asset that will
+                // propagate url changes:
+                link.refreshHref();
 
                 expect(link, 'to satisfy', {
                     href: 'foo.bar'
