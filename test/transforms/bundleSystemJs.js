@@ -321,6 +321,7 @@ describe('transforms/bundleSystemJs', function () {
             .bundleSystemJs()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 3);
+                expect(assetGraph.findAssets({fileName: 'worker.js'})[0].text, 'to contain', "importScripts('system.js', 'config.js', '/common-bundle.js')");
             });
     });
 
@@ -334,6 +335,21 @@ describe('transforms/bundleSystemJs', function () {
             .bundleSystemJs()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 3);
+                expect(assetGraph.findAssets({fileName: 'sw.js'})[0].text, 'to contain', "importScripts('system.js', 'config.js', '/common-bundle.js')");
+            });
+    });
+
+    it('should handle the use of system.js in a service worker registered via navigator.serviceWorker.register(...)', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/JavaScriptServiceWorkerRegistration/'})
+            .loadAssets('*.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 2);
+            })
+            .bundleSystemJs()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 3);
+                expect(assetGraph.findAssets({fileName: 'sw.js'})[0].text, 'to contain', "importScripts('system.js', 'config.js', '/common-bundle.js')");
             });
     });
 
