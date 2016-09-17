@@ -624,8 +624,28 @@ describe('transforms/bundleSystemJs', function () {
                     })
                     .populate()
                     .queue(function (assetGraph) {
-                        var bundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
-                        expect(bundleAsset.text, 'to contain', 'foo').and('to contain', 'quux').and('not to contain', 'bar');
+                        var commonBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                        expect(commonBundleAsset.text, 'to contain', 'foo')
+                            .and('to contain', 'quux')
+                            .and('not to contain', 'bar');
+
+                        var fooBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                        expect(fooBundleAsset.text, 'to contain', "alert('foo')")
+                            .and('not to contain', "alert('bar');")
+                            .and('not to contain', "alert('quux');");
+
+                        var quuxBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                        expect(quuxBundleAsset.text, 'to contain', "alert('quux')")
+                            .and('not to contain', "alert('bar');")
+                            .and('not to contain', "alert('foo');");
+
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                            '<script src="system.js">',
+                            '<script src="config.js">',
+                            '<script src="/common-bundle.js">',
+                            '<script src="/bundle-main-foo.js" data-systemjs-conditions="\'whichTest.js|default\': \'foo\'">',
+                            '<script src="/bundle-main-quux.js" data-systemjs-conditions="\'whichTest.js|default\': \'quux\'">'
+                        ]);
                     });
             });
 
@@ -641,8 +661,21 @@ describe('transforms/bundleSystemJs', function () {
                         })
                         .populate()
                         .queue(function (assetGraph) {
-                            var bundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
-                            expect(bundleAsset.text, 'to contain', "alert('en_us')").and('to contain', "alert('da');");
+                            expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                                '<script src="system.js">',
+                                '<script src="config.js">',
+                                '<script src="/common-bundle.js">',
+                                '<script src="/bundle-main-da.js" data-systemjs-conditions="\'locale.js|default\': \'da\'">',
+                                '<script src="/bundle-main-en_us.js" data-systemjs-conditions="\'locale.js|default\': \'en_us\'">'
+                            ]);
+                            var commonBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                            expect(commonBundleAsset.text, 'not to contain', "alert('en_us')").and('not to contain', "alert('da');");
+
+                            var americanEnglishBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                            expect(americanEnglishBundleAsset.text, 'to contain', "alert('en_us')").and('not to contain', "alert('da');");
+
+                            var danishBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                            expect(danishBundleAsset.text, 'to contain', "alert('da')").and('not to contain', "alert('en_us');");
                         });
                 });
             });
