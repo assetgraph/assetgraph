@@ -589,8 +589,7 @@ describe('transforms/bundleSystemJs', function () {
     });
 
     describe('with conditionals', function () {
-
-        describe('when specifying the values of the conditionals up front', function () {
+        describe('when specifying a single value of the a conditional up front', function () {
             it('should exclude the unneeded branches from the created bundle', function () {
                 return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/exclude/'})
                     .loadAssets('index.html')
@@ -610,6 +609,75 @@ describe('transforms/bundleSystemJs', function () {
                             .and('not to contain', 'neededInDanish')
                             .and('not to contain', 'Math.random');
                     });
+            });
+        });
+
+        describe('when specifying multiple values of a conditional up front', function () {
+            it('should trace the provided values of the conditional (and only those)', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/multipleValuesGiven/'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .bundleSystemJs({
+                        conditions: {
+                            'whichTest.js': ['foo', 'quux']
+                        }
+                    })
+                    .populate()
+                    .queue(function (assetGraph) {
+                        var commonBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                        expect(commonBundleAsset.text, 'to contain', 'foo')
+                            .and('not to contain', 'quux')
+                            .and('not to contain', 'bar');
+
+                        var fooBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-foo.js'})[0];
+                        expect(fooBundleAsset.text, 'to contain', "alert('foo')")
+                            .and('not to contain', "alert('bar');")
+                            .and('not to contain', "alert('quux');");
+
+                        var quuxBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-quux.js'})[0];
+                        expect(quuxBundleAsset.text, 'to contain', "alert('quux')")
+                            .and('not to contain', "alert('bar');")
+                            .and('not to contain', "alert('foo');");
+
+                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                            '<script src="system.js">',
+                            '<script src="config.js">',
+                            '<script src="/common-bundle.js">',
+                            '<script src="/bundle-main-foo.js" data-systemjs-conditions="\'whichTest.js|default\': \'foo\'">',
+                            '<script src="/bundle-main-quux.js" data-systemjs-conditions="\'whichTest.js|default\': \'quux\'">'
+                        ]);
+                    });
+            });
+
+            describe('with a plugin providing a value based on the conditional', function () {
+                it('should trace the provided values of the conditional', function () {
+                    return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/pluginAndMultipleValuesGiven/'})
+                        .loadAssets('index.html')
+                        .populate()
+                        .bundleSystemJs({
+                            conditions: {
+                                'locale.js': ['en_us', 'da']
+                            }
+                        })
+                        .populate()
+                        .queue(function (assetGraph) {
+                            expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                                '<script src="system.js">',
+                                '<script src="config.js">',
+                                '<script src="/common-bundle.js">',
+                                '<script src="/bundle-main-en_us.js" data-systemjs-conditions="\'locale.js|default\': \'en_us\'">',
+                                '<script src="/bundle-main-da.js" data-systemjs-conditions="\'locale.js|default\': \'da\'">'
+                            ]);
+                            var commonBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                            expect(commonBundleAsset.text, 'not to contain', "alert('en_us')").and('not to contain', "alert('da');");
+
+                            var americanEnglishBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-en_us.js'})[0];
+                            expect(americanEnglishBundleAsset.text, 'to contain', "alert('en_us')").and('not to contain', "alert('da');");
+
+                            var danishBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-da.js'})[0];
+                            expect(danishBundleAsset.text, 'to contain', "alert('da')").and('not to contain', "alert('en_us');");
+                        });
+                });
             });
         });
 
