@@ -175,6 +175,19 @@ describe('transforms/bundleSystemJs', function () {
             });
     });
 
+    it('should only deduplicate asset list entries (as determined by the url)', function () {
+        // The tpl.js in this test has been tweaked to list each template twice
+        // in the asset list
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/sameAssetListEntryTwice/'})
+            .loadAssets('index.html')
+            .populate()
+            .bundleSystemJs()
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', {isFragment: true});
+            });
+    });
+
     it('should add a SystemJsBundle relation to a non-Css entry in the asset list', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/template/'})
             .loadAssets('index.html')
@@ -183,7 +196,7 @@ describe('transforms/bundleSystemJs', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', {fileName: 'foo.html', type: 'Html', isFragment: true});
-                expect(assetGraph, 'to contain relations', { type: 'SystemJsBundle'}, 1);
+                expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 1);
                 expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', '//# SystemJsBundle=/foo.html');
             });
     });
@@ -196,7 +209,7 @@ describe('transforms/bundleSystemJs', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', {type: 'Html', isFragment: true}, 2);
-                expect(assetGraph, 'to contain relations', { type: 'SystemJsBundle'}, 2);
+                expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 2);
                 expect(assetGraph.findAssets({fileName: 'bundle-main-sunny.js'})[0].text, 'to contain', '//# SystemJsBundle=/foo-sunny.html')
                     .and('not to contain', 'rainy');
                 expect(assetGraph.findAssets({fileName: 'bundle-main-rainy.js'})[0].text, 'to contain', '//# SystemJsBundle=/foo-rainy.html')
