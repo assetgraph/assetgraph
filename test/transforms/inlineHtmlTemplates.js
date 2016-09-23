@@ -88,7 +88,7 @@ describe('transforms/inlineHtmlTemplates', function () {
                     '<script type="text/html" id="foo"><img data-bind="attr: {src: \'/foo.png\'.toString(\'url\')}">\n</script><script type="text/html" id="bar"><div>\n    <h1>bar.ko</h1>\n</div>\n</script><script type="text/html" id="templateWithEmbeddedTemplate"><div data-bind="template: \'theEmbeddedTemplate\'"></div>\n\n\n\n</script></body></html>'
                 );
 
-                var relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'foo'; }})[0];
+                relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'foo'; }})[0];
                 expect(relation, 'to be ok');
                 expect(relation.to.text, 'to equal', '<img data-bind="attr: {src: \'/foo.png\'.toString(\'url\')}">\n');
 
