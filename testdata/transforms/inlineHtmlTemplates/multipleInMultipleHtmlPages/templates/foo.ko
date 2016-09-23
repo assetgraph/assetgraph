@@ -1,0 +1,1 @@
+<img data-bind="attr: {src: '/foo.png'.toString('url')}">
