@@ -69,7 +69,7 @@ describe('relations/Relation', function () {
     describe('with canonical hrefType', function () {
         var testDataDir = pathModule.resolve(__dirname + '/../../testdata/relations/Relation/canonicalHref/');
 
-        it('should populate "canonical" similar to root relative', function () {
+        it('should populate "canonical" from the local root', function () {
             return expect(function () {
                 return new AssetGraph({
                     root: testDataDir,
@@ -88,16 +88,7 @@ describe('relations/Relation', function () {
                         }
                     ]);
                 });
-            }, 'with http mocked out', [
-                {
-                    request: 'GET http://canonical.com/local.js',
-                    response: {
-                        statusCode: 200,
-                        headers: 'Content-Type: application/javascript',
-                        body: new Buffer("console.log('Not the JavaScript you are looking for');")
-                    }
-                }
-            ], 'not to error');
+            }, 'with http mocked out', [], 'not to error');
         });
 
         it('should treat "canonical" as non-crossorigin', function () {
@@ -116,16 +107,33 @@ describe('relations/Relation', function () {
                         }
                     ]);
                 });
-            }, 'with http mocked out', [
-                {
-                    request: 'GET http://canonical.com/local.js',
-                    response: {
-                        statusCode: 200,
-                        headers: 'Content-Type: application/javascript',
-                        body: new Buffer("console.log('Not the JavaScript you are looking for');")
-                    }
-                }
-            ], 'not to error');
+            }, 'with http mocked out', [], 'not to error');
+        });
+
+        it('should keep "canonical" relative href when moving target asset', function () {
+            return expect(function () {
+                return new AssetGraph({
+                    root: testDataDir,
+                    canonicalRoot: 'http://canonical.com/'
+                })
+                .loadAssets('canonical.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain relations', 1);
+
+                    var relation = assetGraph.findRelations()[0];
+
+                    expect(relation, 'to satisfy', {
+                        href: 'http://canonical.com/local.js'
+                    });
+
+                    relation.to.fileName = 'movedLocal.js';
+
+                    expect(relation, 'to satisfy', {
+                        href: 'http://canonical.com/movedLocal.js'
+                    });
+                });
+            }, 'with http mocked out', [], 'not to error');
         });
 
         it('should add the canonical root to a local file with canonical hrefType', function () {
@@ -158,7 +166,6 @@ describe('relations/Relation', function () {
                     }
                 });
             });
-
         });
     });
 
