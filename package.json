@@ -69,7 +69,7 @@
     "svgo": "0.7.0",
     "systemjs-asset-plugin": "3.0.0",
     "systemjs-builder": "systemjs/builder#e426c5985",
-    "unexpected": "^10.15.1",
+    "unexpected": "^10.18.0",
     "unexpected-dom": "^3.0.2",
     "unexpected-mitm": "^9.2.0",
     "unexpected-sinon": "^10.2.0",
