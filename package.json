@@ -28,7 +28,6 @@
     "cssnano": "^3.7.4",
     "esanimate": "^1.1.0",
     "escodegen": "^1.8.0",
-    "esmangle": "^1.0.1",
     "esprima": "^3.0.0",
     "espurify": "^1.5.1",
     "estraverse": "^4.2.0",

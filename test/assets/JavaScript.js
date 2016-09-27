@@ -75,43 +75,6 @@ describe('assets/JavaScript', function () {
         done();
     });
 
-    it('should handle custom relations syntax errors outside a graph', function (done) {
-        var gettextManyArguments = new AssetGraph.JavaScript({ text: 'GETTEXT(1, 2, 3);' });
-        expect(gettextManyArguments.findOutgoingRelationsInParseTree.bind(gettextManyArguments), 'to throw', function (e) {
-            expect(e.type, 'to be', errors.SyntaxError.type);
-            expect(e.message, 'to match', /Invalid GETTEXT syntax/);
-        });
-
-        var gettextWrongArgumentType = new AssetGraph.JavaScript({ text: 'GETTEXT(1);' });
-        expect(gettextWrongArgumentType.findOutgoingRelationsInParseTree.bind(gettextWrongArgumentType), 'to throw', function (e) {
-            expect(e.type, 'to be', errors.SyntaxError.type);
-            expect(e.message, 'to match', /Invalid GETTEXT syntax/);
-        });
-
-        var trhtmlWrongArgumentType = new AssetGraph.JavaScript({ text: 'TRHTML(1, 2, 3);' });
-        expect(trhtmlWrongArgumentType.findOutgoingRelationsInParseTree.bind(trhtmlWrongArgumentType), 'to throw', function (e) {
-            expect(e.type, 'to be', errors.SyntaxError.type);
-            expect(e.message, 'to be', 'Invalid TRHTML syntax: TRHTML(1, 2, 3)');
-        });
-
-        var warnings = [];
-        new AssetGraph({ root: '.' })
-            .on('warn', function (warning) {
-                warnings.push(warning);
-            })
-            .loadAssets([
-                gettextManyArguments,
-                gettextWrongArgumentType,
-                trhtmlWrongArgumentType
-            ])
-            .populate()
-            .run(function (assetGraph) {
-                expect(warnings, 'to have length', 3);
-                done();
-            });
-
-    });
-
     it('should handle invalid arguments for Amd define call', function (done) {
         sinon.stub(console, 'info');
 
