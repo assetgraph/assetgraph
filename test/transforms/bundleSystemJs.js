@@ -837,5 +837,22 @@ describe('transforms/bundleSystemJs', function () {
                     });
             });
         });
+
+        it('should support a combination of paths aliases and conditions', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/specfiedAndUnspecified/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleSystemJs({
+                    conditions: {
+                        locale: ['en_us', 'da'],
+                        environment: ['development', 'production']
+                    }
+                })
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "System.registerDynamic('environment'")
+                        .and('to contain', "System.registerDynamic('main.js', ['virtual-#{environment|default}.configjson', 'virtual-#{locale|default}.i18n', 'actual-#{locale|default}.js']");
+                });
+        });
     });
 });
