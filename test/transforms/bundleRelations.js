@@ -188,6 +188,22 @@ describe('transforms/bundleRelations', function () {
                 .run(done);
         });
 
+        it('allows bundling scripts with different data-assetgraph-conditions attributes, but merges the values', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditions/'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
+                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'})
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 'JavaScript', 1);
+                    expect(assetGraph, 'to contain assets', 'Css', 1);
+                    expect(assetGraph, 'to contain relation', 'HtmlStyle');
+                    expect(assetGraph, 'to contain relation', 'HtmlScript');
+                    expect(assetGraph.findRelations({type: 'HtmlStyle'})[0].node.getAttribute('data-assetgraph-conditions'), 'to equal', "weather: ['sunny', 'rainy'], mood: ['happy', 'sad'], food: 'ham'");
+                    expect(assetGraph.findRelations({type: 'HtmlScript'})[0].node.getAttribute('data-assetgraph-conditions'), 'to equal', "weather: ['sunny', 'rainy'], mood: ['happy', 'sad'], food: 'ham'");
+                });
+        });
+
         it('treat defer="defer" and async="async" as bundle discriminators and treat additional attributes like "nobundle"', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlScriptAttributes'})
                 .loadAssets('index.html')
