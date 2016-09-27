@@ -217,6 +217,27 @@ describe('transforms/bundleSystemJs', function () {
             });
     });
 
+    it('should add a SystemJsBundle relation to a conditional non-Css entry in the asset list in a multi-page setting', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/multiPageConditionalTemplate/'})
+            .loadAssets(['index1.html', 'index2.html'])
+            .populate()
+            .bundleSystemJs({
+                conditions: {
+                    weather: ['rainy', 'sunny']
+                }
+            })
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', {type: 'Html', isFragment: true}, 3);
+                expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 4);
+            })
+            .inlineHtmlTemplates({type: 'Html'})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate'}, 6);
+                expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 0);
+            });
+    });
+
     it('should handle a test case with a css plugin', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/cssPlugin/'})
             .loadAssets('index.html')
