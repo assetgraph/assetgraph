@@ -117,14 +117,13 @@ describe('transforms/bundleSystemJs', function () {
             .bundleSystemJs()
             .populate()
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 6);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 5);
                 expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 4);
                 expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 4);
-                // FIXME: Expect the two to be the same bundle asset?
-                expect(assetGraph, 'to contain assets', {
+                expect(assetGraph, 'to contain asset', {
                     type: 'JavaScript',
                     fileName: /bundle/
-                }, 2);
+                });
                 expect(assetGraph.findRelations({
                     from: { url: /page1\.html$/ },
                     to: { fileName: /bundle/ }
