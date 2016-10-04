@@ -776,7 +776,7 @@ describe('transforms/bundleSystemJs', function () {
                             '<script src="/bundle-main-rainy.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\'">',
                             '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
                             '<script src="/bundle-main-sunny.js" data-assetgraph-conditions="\'weather.js|default\': \'sunny\'">',
-                            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">',
+                            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
                         ]);
                         var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
                         expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
