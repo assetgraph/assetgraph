@@ -139,6 +139,13 @@ describe('transforms/bundleSystemJs', function () {
             });
     });
 
+    it('should handle a multi-page test case with one System.import call per page importing different modules with nothing in common, one of them using a condition', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageNothingInCommon/'})
+            .loadAssets('*.html')
+            .populate()
+            .bundleSystemJs();
+    });
+
     it('should handle a multi-page test case with one System.import call per page importing different things', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageDifferentSystemImports/'})
             .loadAssets('*.html')
