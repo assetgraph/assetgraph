@@ -139,6 +139,13 @@ describe('transforms/bundleSystemJs', function () {
             });
     });
 
+    it('should handle a multi-page test case with one System.import call per page importing different modules with nothing in common, one of them using a condition', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageNothingInCommon/'})
+            .loadAssets('*.html')
+            .populate()
+            .bundleSystemJs();
+    });
+
     it('should handle a multi-page test case with one System.import call per page importing different things', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageDifferentSystemImports/'})
             .loadAssets('*.html')
@@ -773,10 +780,10 @@ describe('transforms/bundleSystemJs', function () {
                             '<script src="system.js">',
                             '<script src="config.js">',
                             '<script src="/common-bundle.js">',
-                            '<script src="/bundle-main-da-rainy.js" data-assetgraph-conditions="\'lang.js|default\': \'da\', \'weather.js|default\': \'rainy\'">',
-                            '<script src="/bundle-main-da-sunny.js" data-assetgraph-conditions="\'lang.js|default\': \'da\', \'weather.js|default\': \'sunny\'">',
-                            '<script src="/bundle-main-en_us-rainy.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\', \'weather.js|default\': \'rainy\'">',
-                            '<script src="/bundle-main-en_us-sunny.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\', \'weather.js|default\': \'sunny\'">'
+                            '<script src="/bundle-main-rainy.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\'">',
+                            '<script src="/bundle-main-sunny.js" data-assetgraph-conditions="\'weather.js|default\': \'sunny\'">',
+                            '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
                         ]);
                         var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
                         expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
@@ -818,6 +825,8 @@ describe('transforms/bundleSystemJs', function () {
                             '<script src="system.js">',
                             '<script src="config.js">',
                             '<script src="/common-bundle.js">',
+                            '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
+                            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">',
                             '<script src="/bundle-main-rainy-da.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'da\'">',
                             '<script src="/bundle-main-rainy-en_us.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'en_us\'">',
                             '<script src="/bundle-main-sunny-da.js" data-assetgraph-conditions="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'da\'">',
