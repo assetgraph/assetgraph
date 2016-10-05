@@ -23,7 +23,7 @@ describe('relations/Relation', function () {
                     expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), 'to equal', [
                         'relative',
                         'rootRelative',
-                        'canonical',
+                        'absolute',
                         'protocolRelative',
                         'absolute'
                     ]);
@@ -57,7 +57,7 @@ describe('relations/Relation', function () {
                     expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), 'to equal', [
                         'relative',
                         'rootRelative',
-                        'canonical',
+                        'absolute',
                         'protocolRelative',
                         'absolute'
                     ]);
@@ -66,7 +66,7 @@ describe('relations/Relation', function () {
         });
     });
 
-    describe('with canonical hrefType', function () {
+    describe('#canonical', function () {
         var testDataDir = pathModule.resolve(__dirname + '/../../testdata/relations/Relation/canonicalHref/');
 
         it('should populate "canonical" from the local root', function () {
@@ -80,7 +80,9 @@ describe('relations/Relation', function () {
                 .queue(function (assetGraph) {
                     expect(assetGraph.findRelations(), 'to satisfy', [
                         {
-                            hrefType: 'canonical',
+                            canonical: true,
+                            crossorigin: false,
+                            hrefType: 'absolute',
                             href: 'http://canonical.com/local.js',
                             to: {
                                 url: 'file://' + pathModule.join(testDataDir, 'local.js')
@@ -102,7 +104,8 @@ describe('relations/Relation', function () {
                 .queue(function (assetGraph) {
                     expect(assetGraph.findRelations({}, true), 'to satisfy', [
                         {
-                            hrefType: 'canonical',
+                            hrefType: 'absolute',
+                            canonical: true,
                             crossorigin: false
                         }
                     ]);
@@ -136,7 +139,7 @@ describe('relations/Relation', function () {
             }, 'with http mocked out', [], 'not to error');
         });
 
-        it('should add the canonical root to a local file with canonical hrefType', function () {
+        it('should add the canonical root to the href of a local file', function () {
             return new AssetGraph({
                 root: testDataDir,
                 canonicalRoot: 'http://canonical.com/'
@@ -156,11 +159,47 @@ describe('relations/Relation', function () {
                     }
                 });
 
-                relation.hrefType = 'canonical';
+                relation.canonical = true;
 
                 expect(relation, 'to satisfy', {
-                    hrefType: 'canonical',
+                    hrefType: 'absolute',
+                    canonical: true,
+                    crossorigin: false,
                     href: 'http://canonical.com/local.js',
+                    to: {
+                        url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                    }
+                });
+            });
+        });
+
+        it('should remove the canonical root fromthe href of a local file', function () {
+            return new AssetGraph({
+                root: testDataDir,
+                canonicalRoot: 'http://canonical.com/'
+            })
+            .loadAssets('canonical.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 1);
+
+                var relation = assetGraph.findRelations()[0];
+
+                expect(relation, 'to satisfy', {
+                    hrefType: 'absolute',
+                    canonical: true,
+                    crossorigin: false,
+                    href: 'http://canonical.com/local.js',
+                    to: {
+                        url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                    }
+                });
+
+                relation.canonical = false;
+
+                expect(relation, 'to satisfy', {
+                    hrefType: 'relative',
+                    href: 'local.js',
                     to: {
                         url: 'file://' + pathModule.join(testDataDir, 'local.js')
                     }
