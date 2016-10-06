@@ -750,4 +750,16 @@ describe('transforms/bundleRelations', function () {
                 .run(done);
         });
     });
+
+    it('should reattach the outgoing relations correctly when bundling assets that reside in different directories', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/stylesheetsInDifferentDirs/'})
+            .loadAssets('index.html')
+            .populate()
+            .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'sharedBundles'})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Css');
+                expect(assetGraph.findAssets({type: 'Css'})[0].text, 'to contain', 'url(foo/bar.png)')
+                    .and('to contain', 'url(foo/blah/yadda.png)');
+            });
+    });
 });
