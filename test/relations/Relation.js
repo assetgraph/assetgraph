@@ -162,7 +162,7 @@ describe('relations/Relation', function () {
                 relation.canonical = true;
 
                 expect(relation, 'to satisfy', {
-                    hrefType: 'absolute',
+                    hrefType: 'relative',
                     canonical: true,
                     crossorigin: false,
                     href: 'http://canonical.com/local.js',
@@ -198,8 +198,8 @@ describe('relations/Relation', function () {
                 relation.canonical = false;
 
                 expect(relation, 'to satisfy', {
-                    hrefType: 'relative',
-                    href: 'local.js',
+                    hrefType: 'rootRelative',
+                    href: '/local.js',
                     to: {
                         url: 'file://' + pathModule.join(testDataDir, 'local.js')
                     }
