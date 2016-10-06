@@ -16,7 +16,7 @@ describe('Assetgraph', function () {
             }, 'to throw', /canonicalRoot must be a URL string/);
         });
 
-        it('should accept a http URL', function () {
+        it('should accept an http URL', function () {
             return expect(function () {
                 var ag = new AssetGraph({ canonicalRoot: 'http://fisk.dk/' });
 
@@ -24,7 +24,15 @@ describe('Assetgraph', function () {
             }, 'not to throw');
         });
 
-        it('should accept a http URL with a path', function () {
+        it('should add a trailing slash', function () {
+            return expect(function () {
+                var ag = new AssetGraph({ canonicalRoot: 'http://fisk.dk' });
+
+                expect(ag.canonicalRoot, 'to be', 'http://fisk.dk/');
+            }, 'not to throw');
+        });
+
+        it('should accept an http URL with a path', function () {
             return expect(function () {
                 var ag = new AssetGraph({ canonicalRoot: 'http://fisk.dk/foo/bar/baz/' });
 
@@ -32,7 +40,15 @@ describe('Assetgraph', function () {
             }, 'not to throw');
         });
 
-        it('should accept a http URL with a subdomain', function () {
+        it('should accept an http URL with a port', function () {
+            return expect(function () {
+                var ag = new AssetGraph({ canonicalRoot: 'http://fisk.dk:3000/' });
+
+                expect(ag.canonicalRoot, 'to be', 'http://fisk.dk:3000/');
+            }, 'not to throw');
+        });
+
+        it('should accept an http URL with a subdomain', function () {
             return expect(function () {
                 var ag = new AssetGraph({ canonicalRoot: 'http://sub.fisk.dk/' });
 
@@ -40,7 +56,7 @@ describe('Assetgraph', function () {
             }, 'not to throw');
         });
 
-        it('should accept a https URL', function () {
+        it('should accept an https URL', function () {
             return expect(function () {
                 var ag = new AssetGraph({ canonicalRoot: 'https://fisk.dk/' });
 

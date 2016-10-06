@@ -173,7 +173,7 @@ describe('relations/Relation', function () {
             });
         });
 
-        it('should remove the canonical root fromthe href of a local file', function () {
+        it('should remove the canonical root from the href of a local file', function () {
             return new AssetGraph({
                 root: testDataDir,
                 canonicalRoot: 'http://canonical.com/'
