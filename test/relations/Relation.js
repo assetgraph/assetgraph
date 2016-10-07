@@ -173,6 +173,39 @@ describe('relations/Relation', function () {
             });
         });
 
+        it('should silently ignore a canonical setting when there is no canonicalRoot', function () {
+            return new AssetGraph({
+                root: testDataDir,
+            })
+            .loadAssets('local.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 1);
+
+                var relation = assetGraph.findRelations()[0];
+
+                expect(relation, 'to satisfy', {
+                    hrefType: 'relative',
+                    href: 'local.js',
+                    to: {
+                        url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                    }
+                });
+
+                relation.canonical = true;
+
+                expect(relation, 'to satisfy', {
+                    hrefType: 'relative',
+                    canonical: false,
+                    crossorigin: false,
+                    href: 'local.js',
+                    to: {
+                        url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                    }
+                });
+            });
+        });
+
         it('should remove the canonical root from the href of a local file', function () {
             return new AssetGraph({
                 root: testDataDir,
