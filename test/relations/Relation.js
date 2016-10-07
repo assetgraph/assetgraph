@@ -175,7 +175,7 @@ describe('relations/Relation', function () {
 
         it('should silently ignore a canonical setting when there is no canonicalRoot', function () {
             return new AssetGraph({
-                root: testDataDir,
+                root: testDataDir
             })
             .loadAssets('local.html')
             .populate()
