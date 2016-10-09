@@ -359,4 +359,146 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                 });
         });
     });
+
+    describe('when HTTP redirects are present', function () {
+        it('should whitelist both the redirect source and target', function () {
+            return expect(function () {
+                return new AssetGraph()
+                    .loadAssets('http://www.example.com/')
+                    .populate()
+                    .reviewContentSecurityPolicy(undefined, {update: true})
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                            styleSrc: ["'self'", 'http://www.somewhereelse.com/styles.css', 'http://www.yetanotherone.com/styles.css']
+                        });
+                    });
+            }, 'with http mocked out', [
+                {
+                    request: 'GET http://www.example.com/',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/html; charset=utf-8'
+                        },
+                        body: '<!DOCTYPE html><html><head><meta http-equiv="Content-Security-Policy" content="style-src \'self\'"><link rel="stylesheet" href="http://www.somewhereelse.com/styles.css"></head><body></body></html>'
+                    }
+                },
+                {
+                    request: 'GET http://www.somewhereelse.com/styles.css',
+                    response: {
+                        statusCode: 302,
+                        headers: {
+                            Location: 'http://www.yetanotherone.com/styles.css'
+                        }
+                    }
+                },
+                {
+                    request: 'GET http://www.yetanotherone.com/styles.css',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: 'body {color: maroon;}'
+                    }
+                }
+            ], 'not to error');
+        });
+
+        it('should only whitelist the relevant redirect steps', function () {
+            return expect(function () {
+                return new AssetGraph()
+                    .loadAssets(['http://www.example.com/page1.html', 'http://www.example.com/page2.html'])
+                    .populate()
+                    .reviewContentSecurityPolicy(undefined, {update: true})
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
+                            styleSrc: ["'self'"],
+                            scriptSrc: ['http://www.somewhereelse.com/styles.css', 'http://www.yetanotherone.com/styles.css' ]
+                        });
+                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[1].parseTree, 'to exhaustively satisfy', {
+                            styleSrc: ["'self'", 'http://www.somewhereelse.com/styles.css', 'http://www.yetanotherone.com/styles.css']
+                        });
+                    });
+            }, 'with http mocked out', [
+                {
+                    request: 'GET http://www.example.com/page1.html',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/html; charset=utf-8'
+                        },
+                        body: '<!DOCTYPE html><html><head><meta http-equiv="Content-Security-Policy" content="style-src \'self\'"></head><body><script src="http://www.somewhereelse.com/styles.css"></body></html>'
+                    }
+                },
+                {
+                    request: 'GET http://www.example.com/page2.html',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/html; charset=utf-8'
+                        },
+                        body: '<!DOCTYPE html><html><head><meta http-equiv="Content-Security-Policy" content="style-src \'self\'"><link rel="stylesheet" href="http://www.somewhereelse.com/styles.css"></head><body></body></html>'
+                    }
+                },
+                {
+                    request: 'GET http://www.somewhereelse.com/styles.css',
+                    response: {
+                        statusCode: 302,
+                        headers: {
+                            Location: 'http://www.yetanotherone.com/styles.css'
+                        }
+                    }
+                },
+                {
+                    request: 'GET http://www.yetanotherone.com/styles.css',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: 'body {color: maroon;}'
+                    }
+                }
+            ], 'not to error');
+        });
+
+        it('should not break when there is a redirection loop', function () {
+            return expect(function () {
+                return new AssetGraph()
+                    .loadAssets('http://www.example.com/')
+                    .populate()
+                    .reviewContentSecurityPolicy(undefined, {update: true})
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
+                            styleSrc: ["'self'"],
+                            scriptSrc: ['http://www.somewhereelse.com/styles.css', 'http://www.yetanotherone.com/styles.css' ]
+                        });
+                    });
+            }, 'with http mocked out', [
+                {
+                    request: 'GET http://www.example.com/',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/html; charset=utf-8'
+                        },
+                        body: '<!DOCTYPE html><html><head><meta http-equiv="Content-Security-Policy" content="style-src \'self\'"></head><body><script src="http://www.somewhereelse.com/styles.css"></body></html>'
+                    }
+                },
+                {
+                    request: 'GET http://www.somewhereelse.com/styles.css',
+                    response: {
+                        statusCode: 302,
+                        headers: {
+                            Location: 'http://www.yetanotherone.com/styles.css'
+                        }
+                    }
+                },
+                {
+                    request: 'GET http://www.yetanotherone.com/styles.css',
+                    response: {
+                        statusCode: 302,
+                        headers: {
+                            Location: 'http://www.somewhereelse.com/styles.css'
+                        }
+                    }
+                }
+            ], 'not to error');
+        });
+    });
 });
