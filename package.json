@@ -70,7 +70,7 @@
     "systemjs-builder": "^0.15.32",
     "unexpected": "^10.15.1",
     "unexpected-dom": "^3.0.2",
-    "unexpected-mitm": "^9.2.0",
+    "unexpected-mitm": "^9.3.0",
     "unexpected-sinon": "^10.2.0",
     "webpack": "1.13.2",
     "yui-compressor": "0.1.3"
