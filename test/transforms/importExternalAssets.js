@@ -34,6 +34,13 @@ describe('transforms/importExternalAssets', function () {
                             to: {
                                 text: undefined
                             }
+                        },
+                        {
+                            type: 'HtmlAnchor',
+                            href: 'http://fisk.dk',
+                            to: {
+                                text: undefined
+                            }
                         }
                     ]);
                 })
@@ -65,6 +72,13 @@ describe('transforms/importExternalAssets', function () {
                             to: {
                                 text: 'I am YUI Pure base-min',
                                 url: /external-imports\/base-min-\d+.css$/
+                            }
+                        },
+                        {
+                            type: 'HtmlAnchor',
+                            href: 'http://fisk.dk',
+                            to: {
+                                text: undefined
                             }
                         }
                     ]);
