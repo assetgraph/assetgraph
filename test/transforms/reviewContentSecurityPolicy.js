@@ -587,4 +587,17 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             }
         ], 'not to error');
     });
+
+    it('should hash an inline script when there is a nonce, even when \'unsafe-inline\' is permitted', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/nonceAndUnsafeInline/'})
+            .loadAssets('index.html')
+            .populate()
+            .reviewContentSecurityPolicy(undefined, {update: true})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'ContentSecurityPolicy');
+                expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
+                    scriptSrc: ["'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs='", "'unsafe-inline'"]
+                });
+            });
+    });
 });
