@@ -83,7 +83,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                 });
         });
 
-        it('should just whitelist the host name of the origin for less sensitive media types such as images', function () {
+        it('should just whitelist the host:port of the origin for less sensitive media types such as images', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/'})
                 .loadAssets('index.html')
                 .populate()
@@ -93,7 +93,37 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                 .reviewContentSecurityPolicy(undefined, {update: true})
                 .queue(function (assetGraph) {
                     expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
-                        imgSrc: ['\'self\'', 'imageland.com']
+                        imgSrc: ['\'self\'', 'http://imageland.com']
+                    });
+                });
+        });
+
+        it('should include the port if non-default', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    assetGraph.findAssets({type: 'Png'})[0].url = 'http://imageland.com:1337/foo.png';
+                })
+                .reviewContentSecurityPolicy(undefined, {update: true})
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                        imgSrc: ['\'self\'', 'http://imageland.com:1337']
+                    });
+                });
+        });
+
+        it('should omit the port if default', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/'})
+                .loadAssets('index.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    assetGraph.findAssets({type: 'Png'})[0].url = 'http://imageland.com:80/foo.png';
+                })
+                .reviewContentSecurityPolicy(undefined, {update: true})
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                        imgSrc: ['\'self\'', 'http://imageland.com']
                     });
                 });
         });
@@ -512,5 +542,49 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                 }
             ], 'not to error');
         });
+    });
+
+    it('should not list the protocol when there is a protocol-relative relation on the path', function () {
+        return expect(function () {
+            return new AssetGraph()
+                .loadAssets('http://www.example.com/')
+                .populate()
+                .reviewContentSecurityPolicy(undefined, {update: true})
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
+                        styleSrc: ["'self'", 'www.somewhereelse.com/styles.css'],
+                        imgSrc: ['www.somewhereelse.com']
+                    });
+                });
+        }, 'with http mocked out', [
+            {
+                request: 'GET http://www.example.com/',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/html; charset=utf-8'
+                    },
+                    body: '<!DOCTYPE html><html><head><meta http-equiv="Content-Security-Policy" content="style-src \'self\'"><link rel="stylesheet" href="//www.somewhereelse.com/styles.css"></head><body></body></html>'
+                }
+            },
+            {
+                request: 'GET http://www.somewhereelse.com/styles.css',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: 'body {background-image: url(foo.svg);}'
+                }
+            },
+            {
+                request: 'GET http://www.somewhereelse.com/foo.svg',
+                response: {
+                    statusCode: 302,
+                    headers: {
+                        'Content-Type': 'image/svg+xml'
+                    },
+                    body: '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg></svg>'
+                }
+            }
+        ], 'not to error');
     });
 });
