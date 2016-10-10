@@ -257,6 +257,18 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             });
     });
 
+    it('should leave the empty script as an allowed hash when removing nonces so unsafe-inline would be left alone and thus take effect with CSP2+', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/unreferencedNonceAndUnsafeInline/'})
+            .loadAssets('index.html')
+            .populate()
+            .reviewContentSecurityPolicy(undefined, {update: true})
+            .queue(function (assetGraph) {
+                expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
+                    styleSrc: ["'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='", "'unsafe-inline'"]
+                });
+            });
+    });
+
     describe('with update:false', function () {
         it('emits a warn event when an inline relation is prohibited by the policy', function () {
             var warnSpy = sinon.spy().named('warn');
