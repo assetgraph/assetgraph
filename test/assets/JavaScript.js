@@ -69,7 +69,7 @@ describe('assets/JavaScript', function () {
         two.minify();
 
         expect(one.text, 'not to equal', two.text);
-        expect(two.text, 'to equal', 'function test(argumentName){return argumentName};');
+        expect(two.text, 'to equal', 'function test(argumentName){return argumentName}');
 
         done();
     });
