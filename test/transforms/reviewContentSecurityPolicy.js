@@ -37,7 +37,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
                     defaultSrc: ['\'self\'', 'whatever.com/yadda'],
-                    scriptSrc: ['\'self\'', 'http://scriptland.com/script.js', 'whatever.com/yadda']
+                    scriptSrc: ['\'self\'', 'http://scriptland.com', 'whatever.com/yadda']
                 });
             });
     });
@@ -60,27 +60,67 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
                     defaultSrc: ['\'none\''],
-                    scriptSrc: ['http://scriptland.com/somewhere/script.js']
+                    scriptSrc: ['http://scriptland.com']
                 });
             });
     });
 
     describe('when assets are present on other domains', function () {
-        it('should update the style-src and script-src directives of a Content-Security-Policy when no existing source expression allows the url', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet'})
-                .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    assetGraph.findAssets({type: 'Css'})[0].url = 'http://styleland.com/styles.css';
-                    assetGraph.findAssets({type: 'JavaScript'})[0].url = 'http://scriptland.com/script.js';
-                })
-                .reviewContentSecurityPolicy(undefined, {update: true})
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
-                        scriptSrc: ['\'self\'', 'http://scriptland.com/script.js'],
-                        styleSrc: ['\'self\'', 'http://styleland.com/styles.css']
+        describe('with includePath enabled for script-src and style-src', function () {
+            it('should update the style-src and script-src directives of a Content-Security-Policy when no existing source expression allows the url', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .queue(function (assetGraph) {
+                        assetGraph.findAssets({type: 'Css'})[0].url = 'http://styleland.com/styles.css';
+                        assetGraph.findAssets({type: 'JavaScript'})[0].url = 'http://scriptland.com/script.js';
+                    })
+                    .reviewContentSecurityPolicy(undefined, {update: true, includePath: ['script-src', 'styleSrc']})
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                            scriptSrc: ['\'self\'', 'http://scriptland.com/script.js'],
+                            styleSrc: ['\'self\'', 'http://styleland.com/styles.css']
+                        });
                     });
-                });
+            });
+        });
+
+        describe('with includePath:true', function () {
+            it('should update the style-src and script-src directives of a Content-Security-Policy when no existing source expression allows the url', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .queue(function (assetGraph) {
+                        assetGraph.findAssets({type: 'Css'})[0].url = 'http://styleland.com/styles.css';
+                        assetGraph.findAssets({type: 'JavaScript'})[0].url = 'http://scriptland.com/script.js';
+                    })
+                    .reviewContentSecurityPolicy(undefined, {update: true, includePath: true})
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                            scriptSrc: ['\'self\'', 'http://scriptland.com/script.js'],
+                            styleSrc: ['\'self\'', 'http://styleland.com/styles.css']
+                        });
+                    });
+            });
+        });
+
+        describe('with includePath disabled (defaults to off)', function () {
+            it('should update the style-src and script-src directives of a Content-Security-Policy when no existing source expression allows the url', function () {
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet'})
+                    .loadAssets('index.html')
+                    .populate()
+                    .queue(function (assetGraph) {
+                        assetGraph.findAssets({type: 'Css'})[0].url = 'http://styleland.com/styles.css';
+                        assetGraph.findAssets({type: 'JavaScript'})[0].url = 'http://scriptland.com/script.js';
+                    })
+                    .reviewContentSecurityPolicy(undefined, {update: true})
+                    .queue(function (assetGraph) {
+                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                            scriptSrc: ['\'self\'', 'http://scriptland.com'],
+                            styleSrc: ['\'self\'', 'http://styleland.com']
+                        });
+                    });
+            });
         });
 
         it('should just whitelist the host:port of the origin for less sensitive media types such as images', function () {
@@ -179,7 +219,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             .populate()
             .queue(function (assetGraph) {
                 var contentSecurityPolicy = assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0];
-                contentSecurityPolicy.parseTree.defaultSrc = ['\'self\'', 'http://scriptland.com/script.js'];
+                contentSecurityPolicy.parseTree.defaultSrc = ['\'self\'', 'http://scriptland.com'];
                 contentSecurityPolicy.markDirty();
 
                 assetGraph.findAssets({type: 'Css'})[0].url = 'http://styleland.com/styles.css';
@@ -188,9 +228,9 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             .reviewContentSecurityPolicy(undefined, {update: true})
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
-                    defaultSrc: ['\'self\'', 'http://scriptland.com/script.js'],
+                    defaultSrc: ['\'self\'', 'http://scriptland.com'],
                     scriptSrc: undefined,
-                    styleSrc: ['\'self\'', 'http://styleland.com/styles.css']
+                    styleSrc: ['\'self\'', 'http://styleland.com']
                 });
             });
     });
@@ -424,7 +464,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                     .reviewContentSecurityPolicy(undefined, {update: true})
                     .queue(function (assetGraph) {
                         expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
-                            styleSrc: ["'self'", 'http://www.somewhereelse.com/styles.css', 'http://www.yetanotherone.com/styles.css']
+                            styleSrc: ["'self'", 'http://www.somewhereelse.com', 'http://www.yetanotherone.com']
                         });
                     });
             }, 'with http mocked out', [
@@ -467,10 +507,10 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                     .queue(function (assetGraph) {
                         expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
                             styleSrc: ["'self'"],
-                            scriptSrc: ['http://www.somewhereelse.com/styles.css', 'http://www.yetanotherone.com/styles.css' ]
+                            scriptSrc: ['http://www.somewhereelse.com', 'http://www.yetanotherone.com' ]
                         });
                         expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[1].parseTree, 'to exhaustively satisfy', {
-                            styleSrc: ["'self'", 'http://www.somewhereelse.com/styles.css', 'http://www.yetanotherone.com/styles.css']
+                            styleSrc: ["'self'", 'http://www.somewhereelse.com', 'http://www.yetanotherone.com']
                         });
                     });
             }, 'with http mocked out', [
@@ -522,7 +562,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                     .queue(function (assetGraph) {
                         expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
                             styleSrc: ["'self'"],
-                            scriptSrc: ['http://www.somewhereelse.com/styles.css', 'http://www.yetanotherone.com/styles.css' ]
+                            scriptSrc: ['http://www.somewhereelse.com', 'http://www.yetanotherone.com' ]
                         });
                     });
             }, 'with http mocked out', [
@@ -565,7 +605,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                 .reviewContentSecurityPolicy(undefined, {update: true})
                 .queue(function (assetGraph) {
                     expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
-                        styleSrc: ["'self'", 'www.somewhereelse.com/styles.css'],
+                        styleSrc: ["'self'", 'www.somewhereelse.com'],
                         imgSrc: ['www.somewhereelse.com']
                     });
                 });
