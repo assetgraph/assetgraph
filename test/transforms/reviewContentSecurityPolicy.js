@@ -235,15 +235,15 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             });
     });
 
-    it('should include hash-source fragments for inline scripts and stylesheets when unsafe-inline is not in the existing policy', function () {
+    it('should include hash-source fragments and add \'unsafe-inline\' for inline scripts and stylesheets when \'unsafe-inline\' is not in the existing policy', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'})
             .loadAssets('index.html')
             .populate()
             .reviewContentSecurityPolicy(undefined, {update: true})
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
-                    scriptSrc: ['\'self\'', '\'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs=\''],
-                    styleSrc: ['\'self\'', '\'sha256-XeYlw2NVzOfB1UCIJqCyGr+0n7bA4fFslFpvKu84IAw=\'']
+                    scriptSrc: ['\'self\'', '\'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs=\'', '\'unsafe-inline\''],
+                    styleSrc: ['\'self\'', '\'sha256-XeYlw2NVzOfB1UCIJqCyGr+0n7bA4fFslFpvKu84IAw=\'', '\'unsafe-inline\'']
                 });
             });
     });
@@ -288,15 +288,15 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             });
     });
 
-    it('should upgrade nonces to hashes and remove the nonce attributes', function () {
+    it('should upgrade nonces to hashes and remove the nonce attributes (and add \'unsafe-inline\' for CSP1 compatibility)', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheetWithNonces/'})
             .loadAssets('index.html')
             .populate()
             .reviewContentSecurityPolicy(undefined, {update: true})
             .queue(function (assetGraph) {
                 expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
-                    scriptSrc: ['\'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs=\''],
-                    styleSrc: ['\'sha256-XeYlw2NVzOfB1UCIJqCyGr+0n7bA4fFslFpvKu84IAw=\'']
+                    scriptSrc: ['\'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs=\'', "'unsafe-inline'"],
+                    styleSrc: ['\'sha256-XeYlw2NVzOfB1UCIJqCyGr+0n7bA4fFslFpvKu84IAw=\'', "'unsafe-inline'"]
                 });
                 var html = assetGraph.findAssets({type: 'Html'})[0].text;
                 expect(html, 'not to contain', '<script nonce').and('not to contain', '<style type="text/css" nonce');
