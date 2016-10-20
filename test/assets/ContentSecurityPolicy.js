@@ -63,4 +63,16 @@ describe('assets/ContentSecurityPolicy', function () {
         contentSecurityPolicy.markDirty();
         expect(contentSecurityPolicy.text, 'to equal', 'upgrade-insecure-requests; block-all-mixed-content');
     });
+
+    it('should tolerate leading newlines', function () {
+        var csp = new AssetGraph.ContentSecurityPolicy({
+            text: "\n     default-src 'self'; img-src 'self'"
+        });
+        expect(csp.parseTree, 'to satisfy', {
+            defaultSrc: ["'self'"],
+            imgSrc: ["'self'"]
+        });
+        csp.markDirty();
+        expect(csp.text, 'to equal', "default-src 'self'; img-src 'self'");
+    });
 });
