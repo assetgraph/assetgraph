@@ -789,4 +789,21 @@ describe('assets/Asset', function () {
             expect(asset.urlOrDescription, 'to be', 'foo/bar.baz');
         });
     });
+
+    it('should consider a fragment part of the relation href, not the asset url', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/fragment/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 2);
+                expect(assetGraph, 'to contain asset', {url: /\/otherpage\.html$/});
+                expect(assetGraph, 'to contain relation', {href: 'otherpage.html#fragment1'});
+                expect(assetGraph, 'to contain relation', {href: 'otherpage.html#fragment2'});
+
+                assetGraph.findAssets({fileName: 'otherpage.html'})[0].url = 'http://example.com/';
+
+                expect(assetGraph, 'to contain relation', {href: 'http://example.com/#fragment1'});
+                expect(assetGraph, 'to contain relation', {href: 'http://example.com/#fragment2'});
+            });
+    });
 });
