@@ -63,7 +63,7 @@ describe('relations/HtmlPreconnectLink', function () {
 
             relation.attachToHead(htmlAsset, 'first');
 
-            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preconnect" href="http://assetgraph.org">');
+            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preconnect" href="http://assetgraph.org/">');
         });
     });
 });

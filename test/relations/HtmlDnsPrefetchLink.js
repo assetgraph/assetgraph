@@ -63,7 +63,7 @@ describe('relations/HtmlDnsPrefetchLink', function () {
 
             relation.attachToHead(htmlAsset, 'first');
 
-            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="dns-prefetch" href="http://assetgraph.org">');
+            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="dns-prefetch" href="http://assetgraph.org/">');
         });
     });
 });

@@ -800,10 +800,15 @@ describe('assets/Asset', function () {
                 expect(assetGraph, 'to contain relation', {href: 'otherpage.html#fragment1'});
                 expect(assetGraph, 'to contain relation', {href: 'otherpage.html#fragment2'});
 
+                expect(assetGraph, 'to contain relation', {href: '#selffragment'});
+
                 assetGraph.findAssets({fileName: 'otherpage.html'})[0].url = 'http://example.com/';
 
                 expect(assetGraph, 'to contain relation', {href: 'http://example.com/#fragment1'});
                 expect(assetGraph, 'to contain relation', {href: 'http://example.com/#fragment2'});
+
+                assetGraph.findAssets({fileName: 'index.html'})[0].url = 'http://example.com/yaddayadda.html';
+                expect(assetGraph, 'to contain relation', {href: '#selffragment'});
             });
     });
 });
