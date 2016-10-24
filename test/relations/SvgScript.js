@@ -3,8 +3,8 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
 describe('relations/SvgScript', function () {
-    it('should handle a test case with an inline <script> element', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+    it('should handle a test case with an inline <script> element', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
             .loadAssets('logo.svg')
             .populate()
             .queue(function (assetGraph) {
@@ -13,12 +13,11 @@ describe('relations/SvgScript', function () {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 1);
 
                 expect(assetGraph.findRelations()[0].to.isInline, 'to be true');
-            })
-            .run(done);
+            });
     });
 
-    it('should handle a test case with an external <script> element', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+    it('should handle a test case with an external <script> element', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
             .loadAssets('logo-external.svg')
             .populate()
             .queue(function (assetGraph) {
@@ -27,12 +26,11 @@ describe('relations/SvgScript', function () {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 1);
 
                 expect(assetGraph.findRelations()[0].to.isInline, 'to be false');
-            })
-            .run(done);
+            });
     });
 
-    it('should externalize inline <script> elements correctly', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+    it('should externalize inline <script> elements correctly', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
             .loadAssets('logo.svg')
             .populate()
             .externalizeRelations()
@@ -42,12 +40,11 @@ describe('relations/SvgScript', function () {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 1);
 
                 expect(assetGraph.findRelations()[0].to.isInline, 'to be false');
-            })
-            .run(done);
+            });
     });
 
-    it('should inline external <script> elements correctly', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+    it('should inline external <script> elements correctly', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
             .loadAssets('logo-external.svg')
             .populate()
             .inlineRelations()
@@ -57,12 +54,11 @@ describe('relations/SvgScript', function () {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 1);
 
                 expect(assetGraph.findRelations()[0].to.isInline, 'to be true');
-            })
-            .run(done);
+            });
     });
 
-    it('should attach correctly in the parent document', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+    it('should attach correctly in the parent document', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
             .loadAssets('logo-external.svg')
             .populate()
             .inlineRelations()
@@ -90,7 +86,6 @@ describe('relations/SvgScript', function () {
 
                 clonedRelation.attach(svg, 'before', originalRelation);
                 expect(svgEl.childNodes[0] === clonedRelation.node, 'to be true');
-            })
-            .run(done);
+            });
     });
 });
