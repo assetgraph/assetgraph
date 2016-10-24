@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg>
+    <font-face font-family="blabla">
+        <font-face-src>
+            <font-face-uri href="fontawesome-webfont.ttf" />
+        </font-face-src>
+    </font-face>
+</svg>
