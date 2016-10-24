@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="434.69778"
+   height="206.8298"
+   id="svg5442">
+  <defs
+     id="defs5444">
+    <pattern
+       href="gaussianBlur.svg"
+       id="pattern3207"
+       patternTransform="matrix(1.3176643,0,0,1.3176643,60.7684,-800.71053)" />
+  </defs>
+</svg>
