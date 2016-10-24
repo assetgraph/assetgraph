@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/SvgScript', function () {
     it('should handle a test case with an inline <script> element', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/xlinkhref/'})
             .loadAssets('logo.svg')
             .populate()
             .queue(function (assetGraph) {
@@ -16,8 +16,8 @@ describe('relations/SvgScript', function () {
             });
     });
 
-    it('should handle a test case with an external <script> element', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+    it('should handle a test case with an external <script href=...> element', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/href/'})
             .loadAssets('logo-external.svg')
             .populate()
             .queue(function (assetGraph) {
@@ -26,11 +26,28 @@ describe('relations/SvgScript', function () {
                 expect(assetGraph, 'to contain assets', 'JavaScript', 1);
 
                 expect(assetGraph.findRelations()[0].to.isInline, 'to be false');
+                assetGraph.findAssets({type: 'JavaScript'})[0].fileName = 'yadda.js';
+                expect(assetGraph.findAssets({type: 'Svg'})[0].text, 'to contain', '<script type="text/javascript" href="yadda.js"/>');
+            });
+    });
+
+    it('should handle a test case with an external <script xlink:href=...> element', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/xlinkhref/'})
+            .loadAssets('logo-external.svg')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 'Svg', 1);
+                expect(assetGraph, 'to contain relations', 'SvgScript', 1);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 1);
+
+                expect(assetGraph.findRelations()[0].to.isInline, 'to be false');
+                assetGraph.findAssets({type: 'JavaScript'})[0].fileName = 'yadda.js';
+                expect(assetGraph.findAssets({type: 'Svg'})[0].text, 'to contain', '<script type="text/javascript" xlink:href="yadda.js"/>');
             });
     });
 
     it('should externalize inline <script> elements correctly', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/xlinkhref/'})
             .loadAssets('logo.svg')
             .populate()
             .externalizeRelations()
@@ -44,7 +61,7 @@ describe('relations/SvgScript', function () {
     });
 
     it('should inline external <script> elements correctly', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/xlinkhref/'})
             .loadAssets('logo-external.svg')
             .populate()
             .inlineRelations()
@@ -58,7 +75,7 @@ describe('relations/SvgScript', function () {
     });
 
     it('should attach correctly in the parent document', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/'})
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/SvgScript/xlinkhref/'})
             .loadAssets('logo-external.svg')
             .populate()
             .inlineRelations()
