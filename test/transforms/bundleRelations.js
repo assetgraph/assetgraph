@@ -204,8 +204,8 @@ describe('transforms/bundleRelations', function () {
                 });
         });
 
-        it('treat defer="defer" and async="async" as bundle discriminators and treat additional attributes like "nobundle"', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlScriptAttributes'})
+        it('should treat defer="defer" and async="async" as bundle discriminators and treat additional attributes like "nobundle"', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlScriptAttributes'})
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
@@ -225,8 +225,20 @@ describe('transforms/bundleRelations', function () {
                     expect(htmlScripts[3].to.text, 'to equal', 'alert(\'f\');\nalert(\'g\');');
                     expect(htmlScripts[4].to.text, 'to equal', 'alert(\'h\');\nalert(\'i\');');
                     expect(htmlScripts[5].to.text, 'to equal', 'alert(\'j\');\nalert(\'k\');');
-                })
-                .run(done);
+                });
+        });
+
+        it('should reinstate async="async" and defer="defer" on the relations to the bundle asset', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/asyncAndDeferredScripts'})
+                .loadAssets('index.html')
+                .populate()
+                .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({fileName: 'index.html'})[0].text, 'not to contain', 'alert')
+                        .and('to match', /<script src="[^"]+" async="async">/)
+                        .and('to match', /<script src="[^"]+" defer="defer">/);
+                    expect(assetGraph, 'to contain assets', {type: 'JavaScript', isInline: false, text: /alert/}, 2);
+                });
         });
 
         it('should gather all the copyright notices and put them at the top of the bundle', function (done) {

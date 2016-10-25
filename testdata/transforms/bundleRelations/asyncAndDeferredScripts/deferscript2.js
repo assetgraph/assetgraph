@@ -1,0 +1,1 @@
+alert('defer2');
