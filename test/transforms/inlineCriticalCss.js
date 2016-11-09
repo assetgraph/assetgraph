@@ -8,16 +8,20 @@ describe('tranforms/inlineCriticalCss', function () {
             .populate()
             .inlineCriticalCss()
             .queue(function (assetGraph) {
-                expect(assetGraph.findAssets({ type: 'Css' }), 'to satisfy', [
+                expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
                     {
-                        inline: true,
-                        text: 'h1{color:red}',
+                        to: {
+                            isInline: true,
+                            text: 'h1 {\n    color: red\n}'
+                        },
                         node: function (node) {
                             return node && node.parentNode && node.parentNode.tagName === 'HEAD';
                         }
                     },
                     {
-                        fileName: 'simple.css'
+                        to: {
+                            fileName: 'simple.css'
+                        }
                     }
                 ]);
             });
