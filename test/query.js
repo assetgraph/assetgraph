@@ -16,12 +16,7 @@ describe('query', function () {
     });
 
     it('should implement boolean AND correctly', function (done) {
-        var andQuery = query.and({
-            type: 'Html'
-        },
-            {
-                isInline: false
-            });
+        var andQuery = query.and({ type: 'Html' }, { isInline: false });
 
         expect(andQuery, 'to be a function');
 
@@ -87,12 +82,7 @@ describe('query', function () {
     });
 
     it('should implement boolean OR correctly', function (done) {
-        var orQuery = query.or({
-            type: 'Html'
-        },
-            {
-                isInline: false
-            });
+        var orQuery = query.or({ type: 'Html' }, { isInline: false });
 
         expect(orQuery, 'to be a function');
 
