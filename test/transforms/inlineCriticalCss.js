@@ -64,7 +64,7 @@ describe('tranforms/inlineCriticalCss', function () {
                     {
                         to: {
                             isInline: true,
-                            text: 'h1 {\n    color: red\n}'
+                            text: 'h1 {\n    color: red\n}\na {\n    color: rebeccapurple\n}'
                         },
                         node: function (node) {
                             return node && node.parentNode && node.parentNode.tagName === 'HEAD';
@@ -94,7 +94,7 @@ describe('tranforms/inlineCriticalCss', function () {
                     {
                         to: {
                             isInline: true,
-                            text: 'h1{color:red}'
+                            text: 'h1{color:red}a{color:#639}'
                         },
                         node: function (node) {
                             return node && node.parentNode && node.parentNode.tagName === 'HEAD';
