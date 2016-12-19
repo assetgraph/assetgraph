@@ -1,7 +1,59 @@
 var expect = require('../unexpected-with-plugins');
+var sinon = require('sinon');
 var AssetGraph = require('../../lib');
 
 describe('tranforms/inlineCriticalCss', function () {
+    it('should not do anything on an empty page', function () {
+        var relations;
+        var assets;
+
+        return new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
+            .loadAssets('empty.html')
+            .populate()
+            .queue(function (assetGraph) {
+                relations = assetGraph.findRelations();
+                assets = assetGraph.findAssets();
+            })
+            .inlineCriticalCss()
+            .queue(function (assetGraph) {
+                expect(assetGraph.findRelations(), 'to satisfy', relations);
+                expect(assetGraph.findAssets(), 'to satisfy', assets);
+            });
+    });
+
+    it('should emit a warning when encountering broken html', function () {
+        var relations;
+        var assets;
+
+        var graph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
+        var spy = sinon.spy();
+
+        graph.on('warn', spy);
+
+        return graph
+            .loadAssets('missing-structure.html')
+            .populate()
+            .queue(function (assetGraph) {
+                relations = assetGraph.findRelations();
+                assets = assetGraph.findAssets();
+            })
+            .inlineCriticalCss()
+            .queue(function (assetGraph) {
+                expect(assetGraph.findRelations(), 'to satisfy', relations);
+                expect(assetGraph.findAssets(), 'to satisfy', assets);
+
+                expect(spy, 'to have calls satisfying', [
+                    {
+                        args: [
+                            {
+                                message: /Missing <html> and <head>/
+                            }
+                        ]
+                    }
+                ]);
+            });
+    });
+
     it('should inline the heading style of a simple test case', function () {
         return new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
             .loadAssets('simple.html')
