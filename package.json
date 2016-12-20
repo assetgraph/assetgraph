@@ -35,7 +35,7 @@
     "glob": "^7.0.5",
     "html-minifier": "^3.0.1",
     "imageinfo": "1.0.4",
-    "jsdom": "9.8.3",
+    "jsdom": "9.9.1",
     "lodash": "^4.11.2",
     "mkdirp": "^0.5.1",
     "normalizeurl": "1.0.0",
