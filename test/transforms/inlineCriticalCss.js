@@ -79,6 +79,31 @@ describe('tranforms/inlineCriticalCss', function () {
             });
     });
 
+    it('should include the <html> node in critical nodes', function () {
+        return new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
+            .loadAssets('htmlnode.html')
+            .populate()
+            .inlineCriticalCss()
+            .queue(function (assetGraph) {
+                expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
+                    {
+                        to: {
+                            isInline: true,
+                            text: 'html {\n    color: red\n}'
+                        },
+                        node: function (node) {
+                            return node && node.parentNode && node.parentNode.tagName === 'HEAD';
+                        }
+                    },
+                    {
+                        to: {
+                            fileName: 'htmlnode.css'
+                        }
+                    }
+                ]);
+            });
+    });
+
     it('should handle at-rule block nested CSS rules', function () {
         return new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
             .loadAssets('media.html')
