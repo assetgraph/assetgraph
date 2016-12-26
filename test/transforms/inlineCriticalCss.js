@@ -79,6 +79,31 @@ describe('tranforms/inlineCriticalCss', function () {
             });
     });
 
+    it('should handle at-rule block nested CSS rules', function () {
+        return new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
+            .loadAssets('media.html')
+            .populate()
+            .inlineCriticalCss()
+            .queue(function (assetGraph) {
+                expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
+                    {
+                        to: {
+                            isInline: true,
+                            text: '@media screen {\n    h1 {\n        color: red\n    }\n    p {\n        color: green\n    }\n}@media print {\n    h1 {\n        background: black\n    }\n}'
+                        },
+                        node: function (node) {
+                            return node && node.parentNode && node.parentNode.tagName === 'HEAD';
+                        }
+                    },
+                    {
+                        to: {
+                            fileName: 'media.css'
+                        }
+                    }
+                ]);
+            });
+    });
+
     it('should combine with other CSS transforms without throwing', function () {
         return new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
             .loadAssets('simple.html')

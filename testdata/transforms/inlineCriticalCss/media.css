@@ -1,0 +1,19 @@
+@media screen {
+    h1 {
+        color: red;
+    }
+
+    p {
+        color: green;
+    }
+
+    hr {
+        border: 1px solid hotpink;
+    }
+}
+
+@media print {
+    h1 {
+        background: black;
+    }
+}
