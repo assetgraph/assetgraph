@@ -114,7 +114,7 @@ describe('tranforms/inlineCriticalCss', function () {
                     {
                         to: {
                             isInline: true,
-                            text: '@media screen {\n    h1 {\n        color: red\n    }\n    p {\n        color: green\n    }\n}@media print {\n    h1 {\n        background: black\n    }\n}'
+                            text: '@media screen {\n    h1 {\n        color: red\n    }\n    p {\n        color: green\n    }\n}\n@media print {\n    h1 {\n        background: black\n    }\n}'
                         },
                         node: function (node) {
                             return node && node.parentNode && node.parentNode.tagName === 'HEAD';
