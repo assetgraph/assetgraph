@@ -35,11 +35,11 @@ describe('CssUrlTokenRelation', function () {
         });
 
         it('should allow other escaped characters inside an unquoted value', function () {
-            expect("url(foo\\$)", 'to come out as', 'foo$');
+            expect('url(foo\\$)', 'to come out as', 'foo$');
         });
 
         it('should allow an escaped end paren inside a unquoted value', function () {
-            expect("url(foo\\)bar)", 'to come out as', 'foo)bar');
+            expect('url(foo\\)bar)', 'to come out as', 'foo)bar');
         });
 
         it('should allow an escaped single quote inside a unquoted value', function () {

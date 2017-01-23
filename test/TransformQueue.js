@@ -60,7 +60,7 @@ describe('TransformQueue', function () {
                     }, 10);
                 });
             })
-            .run(function (err) {
+            .run(function () {
                 expect(promiseFulfilled, 'to be true');
                 done();
             });
