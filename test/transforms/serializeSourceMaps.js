@@ -95,6 +95,19 @@ describe('transforms/serializeSourceMaps', function () {
                 });
         });
 
+        it('should preserve the sourcesContent property when manipulations have happened and options.sourcesContent is provided', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/serializeSourceMaps/existingJavaScriptSourceMapWithSourcesContent/'})
+                .loadAssets('index.html')
+                .populate()
+                .applySourceMaps()
+                .serializeSourceMaps({sourcesContent: true})
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', 'SourceMap');
+                    var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
+                    expect(sourceMap.parseTree.sourcesContent, 'to equal', ['foo']);
+                });
+        });
+
         it('should retain the source mapping info when cloning an asset', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/serializeSourceMaps/noExistingJavaScriptSourceMap/'})
                 .loadAssets('index.html')
