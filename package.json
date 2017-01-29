@@ -65,7 +65,7 @@
     "open": "0.0.5",
     "requirejs": "2.3.2",
     "sinon": "^1.17.3",
-    "svgo": "0.7.1",
+    "svgo": "0.7.2",
     "systemjs-asset-plugin": "3.0.0",
     "systemjs-builder": "^0.15.32",
     "unexpected": "^10.15.1",
