@@ -57,7 +57,7 @@
     "coveralls": "^2.11.6",
     "eslint": "3.14.1",
     "eslint-config-onelint": "2.0.0",
-    "file-loader": "0.9.0",
+    "file-loader": "0.10.0",
     "iconv-lite": "^0.4.13",
     "istanbul": "^0.4.1",
     "less": "2.7.2",
