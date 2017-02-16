@@ -13,11 +13,11 @@ describe('assets/MsApplicationConfig', function () {
 
                 expect(assetGraph.findRelations({}, true), 'to satisfy', [
                     { type: 'HtmlMsApplicationConfig' },
-                    { href: 'tile/TileImage.png' },
-                    { href: 'tile/square70x70logo.png' },
-                    { href: 'tile/square150x150logo.png' },
-                    { href: 'tile/wide310x150logo.png' },
-                    { href: 'tile/square310x310logo.png' },
+                    { href: '/tile/TileImage.png' },
+                    { href: '/tile/square70x70logo.png' },
+                    { href: '/tile/square150x150logo.png' },
+                    { href: '/tile/wide310x150logo.png' },
+                    { href: '/tile/square310x310logo.png' },
                     { href: 'badge/polling.xml' },
                     { href: 'notification/polling-1.xml' },
                     { href: 'notification/polling-2.xml' },
