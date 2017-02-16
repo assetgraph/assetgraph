@@ -13,17 +13,17 @@ describe('assets/MsApplicationConfig', function () {
 
                 expect(assetGraph.findRelations({}, true), 'to satisfy', [
                     { type: 'HtmlMsApplicationConfig' },
-                    { href: '/tile/TileImage.png' },
-                    { href: '/tile/square70x70logo.png' },
-                    { href: '/tile/square150x150logo.png' },
-                    { href: '/tile/wide310x150logo.png' },
-                    { href: '/tile/square310x310logo.png' },
-                    { href: 'badge/polling.xml' },
-                    { href: 'notification/polling-1.xml' },
-                    { href: 'notification/polling-2.xml' },
-                    { href: 'notification/polling-3.xml' },
-                    { href: 'notification/polling-4.xml' },
-                    { href: 'notification/polling-5.xml' }
+                    { type: 'MsApplicationConfigImage', href: '/tile/TileImage.png' },
+                    { type: 'MsApplicationConfigImage', href: '/tile/square70x70logo.png' },
+                    { type: 'MsApplicationConfigImage', href: '/tile/square150x150logo.png' },
+                    { type: 'MsApplicationConfigImage', href: '/tile/wide310x150logo.png' },
+                    { type: 'MsApplicationConfigImage', href: '/tile/square310x310logo.png' },
+                    { type: 'MsApplicationConfigPollingUri', href: '/badge/polling.xml' },
+                    { type: 'MsApplicationConfigPollingUri', href: '/notification/polling-1.xml' },
+                    { type: 'MsApplicationConfigPollingUri', href: '/notification/polling-2.xml' },
+                    { type: 'MsApplicationConfigPollingUri', href: '/notification/polling-3.xml' },
+                    { type: 'MsApplicationConfigPollingUri', href: '/notification/polling-4.xml' },
+                    { type: 'MsApplicationConfigPollingUri', href: '/notification/polling-5.xml' }
                 ]);
             })
             .run(done);
