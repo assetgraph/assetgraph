@@ -653,4 +653,19 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                 });
             });
     });
+
+    describe('when level is set to 1', function () {
+        it('should add \'unsafe-inline\' for inline scripts and styles (and no hashes) when \'unsafe-inline\' is not in the existing policy', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'})
+                .loadAssets('index.html')
+                .populate()
+                .reviewContentSecurityPolicy(undefined, {update: true, level: 1})
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                        scriptSrc: ["'self'", "'unsafe-inline'"],
+                        styleSrc: ["'self'", "'unsafe-inline'"]
+                    });
+                });
+        });
+    });
 });
