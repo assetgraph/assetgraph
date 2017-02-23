@@ -90,6 +90,7 @@ module.exports = {
         });
 
         expect.addAssertion('<AssetGraph> to contain [no] (relation|relations) [including unresolved] <string|object|number?>', function (expect, subject, queryObj) {
+            var number;
             if (typeof queryObj === 'string') {
                 queryObj = {type: queryObj};
             } else if (typeof queryObj === 'number') {
