@@ -29,7 +29,7 @@
     "esanimate": "^1.1.0",
     "escodegen": "^1.8.0",
     "esprima": "^3.0.0",
-    "espurify": "^1.5.1",
+    "espurify": "^1.7.0",
     "estraverse": "^4.2.0",
     "gettemporaryfilepath": "0.0.1",
     "glob": "^7.0.5",
