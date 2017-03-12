@@ -67,7 +67,7 @@
     "sinon": "^1.17.3",
     "svgo": "0.7.2",
     "systemjs-asset-plugin": "3.0.0",
-    "systemjs-builder": "^0.16.1",
+    "systemjs-builder": "^0.16.3",
     "unexpected": "^10.26.0",
     "unexpected-dom": "^3.0.2",
     "unexpected-mitm": "^9.3.0",
