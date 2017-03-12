@@ -1,0 +1,15 @@
+h1:not(.non-existent) {
+    background: red;
+}
+
+h1:after {
+    border: 1px solid yellow;
+}
+
+p:nth-child(2) {
+    background: hotpink;
+}
+
+p:nth-child(5) {
+    background: blue;
+}

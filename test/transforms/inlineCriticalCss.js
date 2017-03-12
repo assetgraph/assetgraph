@@ -129,6 +129,41 @@ describe('tranforms/inlineCriticalCss', function () {
             });
     });
 
+    it('should handle pseudo-selectors', function () {
+        return new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
+            .loadAssets('pseudo.html')
+            .populate()
+            .inlineCriticalCss()
+            .queue(function (assetGraph) {
+                expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
+                    {
+                        to: {
+                            isInline: true,
+                            text: [
+                                'h1:not(.non-existent) {',
+                                '    background: red',
+                                '}',
+                                'h1:after {',
+                                '    border: 1px solid yellow',
+                                '}',
+                                'p:nth-child(2) {',
+                                '    background: hotpink',
+                                '}'
+                            ].join('\n')
+                        },
+                        node: function (node) {
+                            return node && node.parentNode && node.parentNode.tagName === 'HEAD';
+                        }
+                    },
+                    {
+                        to: {
+                            fileName: 'pseudo.css'
+                        }
+                    }
+                ]);
+            });
+    });
+
     it('should combine with other CSS transforms without throwing', function () {
         return new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
             .loadAssets('simple.html')
