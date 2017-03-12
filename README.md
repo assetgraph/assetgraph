@@ -48,11 +48,9 @@ abstraction. For instance, if you change the url of an asset, all
 relations pointing at it are automatically updated.
 
 Additionally, each individual asset can be inspected and massaged
-using a relevant API: DOM for HTML (using <a
-href="https://github.com/tmpvar/jsdom">jsdom</a>, CSSOM for CSS (using
-<a href="https://github.com/NV/CSSOM">NV's CSSOM module</a>, and an
-abstract syntax tree for JavaScript (powered by <a
-href="http://esprima.org/">Esprima</a>).
+using a relevant API: <a
+href="https://github.com/tmpvar/jsdom">jsdom</a> for HTML, <a href="https://github.com/postcss/postcss">PostCSS</a> for CSS, and an <a
+href="http://esprima.org/">Esprima</a> AST for Javascript.
 
 AssetGraph represents inline assets the same way as non-inline ones,
 so eg. inline scripts, stylesheets, and images specified as `data:`
