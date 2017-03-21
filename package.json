@@ -41,6 +41,7 @@
     "normalizeurl": "1.0.0",
     "perfectionist": "2.4.0",
     "postcss": "~5.2.16",
+    "read-pkg-up": "^2.0.0",
     "repeat-string": "^1.5.4",
     "schemes": "^1.0.1",
     "semver": "^5.3.0",
