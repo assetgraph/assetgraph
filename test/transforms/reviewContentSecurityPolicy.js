@@ -2,6 +2,7 @@
 var expect = require('../unexpected-with-plugins');
 var sinon = require('sinon');
 var AssetGraph = require('../../lib/');
+var httpception = require('httpception');
 
 describe('transforms/reviewContentSecurityPolicy', function () {
     it('should not do anything for Html assets that do not have an existing policy', function () {
@@ -457,17 +458,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
 
     describe('when HTTP redirects are present', function () {
         it('should whitelist both the redirect source and target', function () {
-            return expect(function () {
-                return new AssetGraph()
-                    .loadAssets('http://www.example.com/')
-                    .populate()
-                    .reviewContentSecurityPolicy(undefined, {update: true})
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
-                            styleSrc: ["'self'", 'http://www.somewhereelse.com', 'http://www.yetanotherone.com']
-                        });
-                    });
-            }, 'with http mocked out', [
+            httpception([
                 {
                     request: 'GET http://www.example.com/',
                     response: {
@@ -495,25 +486,21 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                         body: 'body {color: maroon;}'
                     }
                 }
-            ], 'not to error');
+            ]);
+
+            return new AssetGraph()
+                .loadAssets('http://www.example.com/')
+                .populate()
+                .reviewContentSecurityPolicy(undefined, {update: true})
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to satisfy', {
+                        styleSrc: ["'self'", 'http://www.somewhereelse.com', 'http://www.yetanotherone.com']
+                    });
+                });
         });
 
         it('should only whitelist the relevant redirect steps', function () {
-            return expect(function () {
-                return new AssetGraph()
-                    .loadAssets(['http://www.example.com/page1.html', 'http://www.example.com/page2.html'])
-                    .populate()
-                    .reviewContentSecurityPolicy(undefined, {update: true})
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
-                            styleSrc: ["'self'"],
-                            scriptSrc: ['http://www.somewhereelse.com', 'http://www.yetanotherone.com' ]
-                        });
-                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[1].parseTree, 'to exhaustively satisfy', {
-                            styleSrc: ["'self'", 'http://www.somewhereelse.com', 'http://www.yetanotherone.com']
-                        });
-                    });
-            }, 'with http mocked out', [
+            httpception([
                 {
                     request: 'GET http://www.example.com/page1.html',
                     response: {
@@ -550,22 +537,25 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                         body: 'body {color: maroon;}'
                     }
                 }
-            ], 'not to error');
+            ]);
+
+            return new AssetGraph()
+                .loadAssets(['http://www.example.com/page1.html', 'http://www.example.com/page2.html'])
+                .populate()
+                .reviewContentSecurityPolicy(undefined, {update: true})
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
+                        styleSrc: ["'self'"],
+                        scriptSrc: ['http://www.somewhereelse.com', 'http://www.yetanotherone.com' ]
+                    });
+                    expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[1].parseTree, 'to exhaustively satisfy', {
+                        styleSrc: ["'self'", 'http://www.somewhereelse.com', 'http://www.yetanotherone.com']
+                    });
+                });
         });
 
         it('should not break when there is a redirection loop', function () {
-            return expect(function () {
-                return new AssetGraph()
-                    .loadAssets('http://www.example.com/')
-                    .populate()
-                    .reviewContentSecurityPolicy(undefined, {update: true})
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
-                            styleSrc: ["'self'"],
-                            scriptSrc: ['http://www.somewhereelse.com', 'http://www.yetanotherone.com' ]
-                        });
-                    });
-            }, 'with http mocked out', [
+            httpception([
                 {
                     request: 'GET http://www.example.com/',
                     response: {
@@ -593,23 +583,23 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                         }
                     }
                 }
-            ], 'not to error');
-        });
-    });
+            ]);
 
-    it('should not list the protocol when there is a protocol-relative relation on the path', function () {
-        return expect(function () {
             return new AssetGraph()
                 .loadAssets('http://www.example.com/')
                 .populate()
                 .reviewContentSecurityPolicy(undefined, {update: true})
                 .queue(function (assetGraph) {
                     expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
-                        styleSrc: ["'self'", 'www.somewhereelse.com'],
-                        imgSrc: ['www.somewhereelse.com']
+                        styleSrc: ["'self'"],
+                        scriptSrc: ['http://www.somewhereelse.com', 'http://www.yetanotherone.com' ]
                     });
                 });
-        }, 'with http mocked out', [
+        });
+    });
+
+    it('should not list the protocol when there is a protocol-relative relation on the path', function () {
+        httpception([
             {
                 request: 'GET http://www.example.com/',
                 response: {
@@ -638,7 +628,18 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                     body: '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg></svg>'
                 }
             }
-        ], 'not to error');
+        ]);
+
+        return new AssetGraph()
+            .loadAssets('http://www.example.com/')
+            .populate()
+            .reviewContentSecurityPolicy(undefined, {update: true})
+            .queue(function (assetGraph) {
+                expect(assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0].parseTree, 'to exhaustively satisfy', {
+                    styleSrc: ["'self'", 'www.somewhereelse.com'],
+                    imgSrc: ['www.somewhereelse.com']
+                });
+            });
     });
 
     it('should hash an inline script when there is a nonce, even when \'unsafe-inline\' is permitted', function () {
