@@ -1,3 +1,3 @@
-require('file!./foo.json');
+require('./foo.json');
 
 alert('main!');
