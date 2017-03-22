@@ -242,21 +242,19 @@ describe('relations/Relation', function () {
         });
 
         it('should handle mailto: protocols where host matches canonicalroot ', function () {
-            return expect(function () {
-                return new AssetGraph({
-                    root: testDataDir,
-                    canonicalRoot: 'http://bar.com/'
-                })
-                .loadAssets('mailto.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true), 'to satisfy', [
-                        {
-                            canonical: false
-                        }
-                    ]);
-                });
-            }, 'with http mocked out', [], 'not to error');
+            return new AssetGraph({
+                root: testDataDir,
+                canonicalRoot: 'http://bar.com/'
+            })
+            .loadAssets('mailto.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph.findRelations({}, true), 'to satisfy', [
+                    {
+                        canonical: false
+                    }
+                ]);
+            });
         });
     });
 
