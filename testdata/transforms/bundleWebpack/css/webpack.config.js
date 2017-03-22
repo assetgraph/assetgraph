@@ -1,0 +1,17 @@
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+module.exports = {
+    entry: './main',
+    output: {
+        path: 'dist',
+        filename: 'bundle.js'
+    },
+    module: {
+        loaders: [
+            { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader') }
+        ]
+    },
+    plugins: [
+        new ExtractTextPlugin('[name].css')
+    ]
+};

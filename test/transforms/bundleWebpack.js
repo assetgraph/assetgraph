@@ -93,4 +93,17 @@ describe('bundleWebpack', function () {
                 });
             });
     });
+
+    it('should pick up CSS assets in the output bundles', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/css/'})
+            .loadAssets('index.html')
+            .populate()
+            .bundleWebpack()
+            .applySourceMaps()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'Css');
+                expect(assetGraph, 'to contain relation', {type: 'HtmlStyle', href: '/dist/main.css', from: { type: 'Html' }, to: { type: 'Css' }});
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/dist/main.css');
+            });
+    });
 });
