@@ -2,7 +2,9 @@
 var expect = require('../unexpected-with-plugins'),
     sinon = require('sinon'),
     urlTools = require('urltools'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib'),
+    httpception = require('httpception'),
+    fs = require('fs');
 
 describe('assets/Asset', function () {
     describe('#load(cb)', function () {
@@ -620,6 +622,16 @@ describe('assets/Asset', function () {
         });
 
         it('should handle a test case with the same Png image loaded from disc and http', function (done) {
+            httpception({
+                request: 'GET http://gofish.dk/purplealpha24bit.png',
+                response: {
+                    statusCode: 200,
+                    'Content-Length': 8285,
+                    'Content-Type': 'image/png',
+                    body: fs.readFileSync(__dirname + '/../../testdata/assets/Asset/rawSrc/purplealpha24bit.png')
+                }
+            });
+
             new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/rawSrc/'})
                 .loadAssets('purplealpha24bit.png', 'http://gofish.dk/purplealpha24bit.png')
                 .queue(function (assetGraph) {

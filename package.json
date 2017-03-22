@@ -59,6 +59,7 @@
     "eslint": "3.18.0",
     "eslint-config-onelint": "2.0.0",
     "file-loader": "0.10.0",
+    "httpception": "0.4.0",
     "iconv-lite": "^0.4.15",
     "istanbul": "^0.4.1",
     "less": "2.7.2",
