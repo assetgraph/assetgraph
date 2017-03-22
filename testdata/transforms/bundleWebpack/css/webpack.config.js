@@ -8,14 +8,10 @@ module.exports = {
     },
     module: {
         loaders: [
-            {
-                test: /\.css$/,
-                loader: ExtractTextPlugin.extract('style', 'css?importLoaders=1!postcss')
-                // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
-            }
+            { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader') }
         ]
     },
     plugins: [
-        new ExtractTextPlugin('css/[name].css')
+        new ExtractTextPlugin('[name].css')
     ]
 };

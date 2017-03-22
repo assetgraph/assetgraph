@@ -99,7 +99,7 @@ describe('bundleWebpack', function () {
             .loadAssets('index.html')
             .populate()
             .bundleWebpack()
-            .populate()
+            // .populate()
             .applySourceMaps()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Css');
