@@ -199,4 +199,18 @@ describe('assets/JavaScript', function () {
             })
             .run(done);
     });
+
+    it('should tolerate ES6 syntax', function () {
+        var javaScript = new AssetGraph.JavaScript({
+            text: 'import gql from \'graphql-tag\';\nlet a = 123;'
+        });
+        expect(javaScript.parseTree, 'to satisfy', {
+            type: 'Program',
+            body: [
+                { type: 'ImportDeclaration' },
+                { type: 'VariableDeclaration', kind: 'let' }
+            ],
+            sourceType: 'module'
+        });
+    });
 });
