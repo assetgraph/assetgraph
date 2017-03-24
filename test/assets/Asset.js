@@ -621,7 +621,7 @@ describe('assets/Asset', function () {
             expect(clone.rawSrc.toString(), 'to be', original.rawSrc.toString());
         });
 
-        it('should handle a test case with the same Png image loaded from disc and http', function (done) {
+        it('should handle a test case with the same Png image loaded from disc and http', function () {
             httpception({
                 request: 'GET http://gofish.dk/purplealpha24bit.png',
                 response: {
@@ -632,15 +632,14 @@ describe('assets/Asset', function () {
                 }
             });
 
-            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/rawSrc/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/rawSrc/'})
                 .loadAssets('purplealpha24bit.png', 'http://gofish.dk/purplealpha24bit.png')
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain assets', {type: 'Png', isLoaded: true}, 2);
                     var pngAssets = assetGraph.findAssets({type: 'Png'});
                     expect(pngAssets[0].rawSrc, 'to have length', 8285);
                     expect(pngAssets[0].rawSrc, 'to equal', pngAssets[1].rawSrc);
-                })
-                .run(done);
+                });
         });
     });
 

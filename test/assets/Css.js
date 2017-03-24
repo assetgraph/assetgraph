@@ -2,6 +2,7 @@
 var expect = require('../unexpected-with-plugins'),
     sinon = require('sinon'),
     mozilla = require('source-map'),
+    httpception = require('httpception'),
     AssetGraph = require('../../lib');
 
 describe('assets/Css', function () {
@@ -34,18 +35,21 @@ describe('assets/Css', function () {
             .run(done);
     });
 
-    it('should handle a test case that has multiple neighbour @font-face rules', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/assets/Css/multipleFontFaceRules/'})
+    it('should handle a test case that has multiple neighbour @font-face rules', function () {
+        httpception();
+
+        return new AssetGraph({root: __dirname + '/../../testdata/assets/Css/multipleFontFaceRules/'})
             .loadAssets('index.css')
-            .populate()
+            .populate({
+                followRelations: { crossdomain: false }
+            })
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain asset', 'Css');
                 expect(assetGraph.findAssets({type: 'Css'})[0].text.match(/@font-face/g), 'to have length', 3);
 
                 assetGraph.findAssets({type: 'Css'})[0].markDirty();
                 expect(assetGraph.findAssets({type: 'Css'})[0].text.match(/@font-face/g), 'to have length', 3);
-            })
-            .run(done);
+            });
     });
 
     it('should get the default encoding when there is no other way to determine encoding', function () {
