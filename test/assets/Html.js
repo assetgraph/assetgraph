@@ -148,6 +148,24 @@ describe('assets/Html', function () {
         });
     });
 
+    describe('#findOutgoingRelationsInParseTree', function () {
+        it('should add Css type to HtmlStyle relation targets that have no .css file extension', function () {
+            var htmlAsset = new AssetGraph.Html({
+                text: '<link rel="stylesheet" href="foo">'
+            });
+
+            expect(htmlAsset.findOutgoingRelationsInParseTree(), 'to satisfy', [
+                {
+                    href: 'foo',
+                    to: {
+                        type: 'Css',
+                        url: 'foo'
+                    }
+                }
+            ]);
+        });
+    });
+
     describe('template escaping', function () {
         function createAsset(inputHtml) {
             return new AssetGraph.Html({
