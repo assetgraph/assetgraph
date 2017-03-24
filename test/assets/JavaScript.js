@@ -201,8 +201,9 @@ describe('assets/JavaScript', function () {
     });
 
     it('should tolerate ES6 syntax', function () {
+        var es6Text = 'import gql from \'graphql-tag\';\nlet a = 123;';
         var javaScript = new AssetGraph.JavaScript({
-            text: 'import gql from \'graphql-tag\';\nlet a = 123;'
+            text: es6Text
         });
         expect(javaScript.parseTree, 'to satisfy', {
             type: 'Program',
@@ -212,5 +213,46 @@ describe('assets/JavaScript', function () {
             ],
             sourceType: 'module'
         });
+        javaScript.markDirty();
+        expect(javaScript.text, 'to equal', es6Text);
+    });
+
+    it('should tolerate JSX syntax', function () {
+        var jsxText = 'function render() { return (<MyComponent />); }';
+        var javaScript = new AssetGraph.JavaScript({
+            text: jsxText
+        });
+        expect(javaScript.parseTree, 'to satisfy', {
+            type: 'Program',
+            body: [
+                {
+                    type: 'FunctionDeclaration',
+                    body: {
+                        type: 'BlockStatement',
+                        body: [
+                            {
+                                type: 'ReturnStatement',
+                                argument: {
+                                    type: 'JSXElement',
+                                    openingElement: {
+                                        type: 'JSXOpeningElement',
+                                        name: {
+                                            type: 'JSXIdentifier',
+                                            name: 'MyComponent'
+                                        }
+                                    },
+                                    children: [],
+                                    closingElement: null
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            sourceType: 'module'
+        });
+        javaScript.markDirty();
+        // This doesn't work because escodegen doesn't support JSX:
+        // expect(javaScript.text, 'to equal', jsxText);
     });
 });
