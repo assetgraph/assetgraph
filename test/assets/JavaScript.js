@@ -217,6 +217,21 @@ describe('assets/JavaScript', function () {
         expect(javaScript.text, 'to equal', es6Text);
     });
 
+    it.skip('should tolerate Object spread syntax', function () {
+        var text = 'const foo = { ...bar };';
+        var javaScript = new AssetGraph.JavaScript({
+            text: text
+        });
+        expect(javaScript.parseTree, 'to satisfy', {
+            type: 'Program',
+            body: [
+            ],
+            sourceType: 'module'
+        });
+        javaScript.markDirty();
+        expect(javaScript.text, 'to equal', text);
+    });
+
     it('should tolerate JSX syntax', function () {
         var jsxText = 'function render() { return (<MyComponent />); }';
         var javaScript = new AssetGraph.JavaScript({
