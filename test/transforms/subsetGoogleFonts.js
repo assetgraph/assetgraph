@@ -30,12 +30,12 @@ describe('transforms/subsetGoogleFonts', function () {
                         'Content-Type': 'text/css'
                     },
                     body:
-                        "@font-face {\n" +
-                        "  font-family: 'Open Sans';\n" +
-                        "  font-style: normal;\n" +
-                        "  font-weight: 400;\n" +
-                        "  src: local('Open Sans'), local('OpenSans'), url(http://fonts.gstatic.com/l/font?kit=hG1DT3NOdnKcUMCexTjsHnY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format('truetype');\n" +
-                        "}"
+                        '@font-face {\n' +
+                        '  font-family: \'Open Sans\';\n' +
+                        '  font-style: normal;\n' +
+                        '  font-weight: 400;\n' +
+                        '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(http://fonts.gstatic.com/l/font?kit=hG1DT3NOdnKcUMCexTjsHnY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'truetype\');\n' +
+                        '}'
                 }
             },
             {
