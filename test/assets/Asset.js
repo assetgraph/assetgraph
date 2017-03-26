@@ -626,8 +626,10 @@ describe('assets/Asset', function () {
                 request: 'GET http://gofish.dk/purplealpha24bit.png',
                 response: {
                     statusCode: 200,
-                    'Content-Length': 8285,
-                    'Content-Type': 'image/png',
+                    headers: {
+                        'Content-Length': 8285,
+                        'Content-Type': 'image/png'
+                    },
                     body: fs.readFileSync(__dirname + '/../../testdata/assets/Asset/rawSrc/purplealpha24bit.png')
                 }
             });
