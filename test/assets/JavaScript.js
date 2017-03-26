@@ -199,4 +199,75 @@ describe('assets/JavaScript', function () {
             })
             .run(done);
     });
+
+    it('should tolerate ES6 syntax', function () {
+        var es6Text = 'import gql from \'graphql-tag\';\nlet a = 123;';
+        var javaScript = new AssetGraph.JavaScript({
+            text: es6Text
+        });
+        expect(javaScript.parseTree, 'to satisfy', {
+            type: 'Program',
+            body: [
+                { type: 'ImportDeclaration' },
+                { type: 'VariableDeclaration', kind: 'let' }
+            ],
+            sourceType: 'module'
+        });
+        javaScript.markDirty();
+        expect(javaScript.text, 'to equal', es6Text);
+    });
+
+    it.skip('should tolerate Object spread syntax', function () {
+        var text = 'const foo = { ...bar };';
+        var javaScript = new AssetGraph.JavaScript({
+            text: text
+        });
+        expect(javaScript.parseTree, 'to satisfy', {
+            type: 'Program',
+            body: [
+            ],
+            sourceType: 'module'
+        });
+        javaScript.markDirty();
+        expect(javaScript.text, 'to equal', text);
+    });
+
+    it('should tolerate JSX syntax', function () {
+        var jsxText = 'function render() { return (<MyComponent />); }';
+        var javaScript = new AssetGraph.JavaScript({
+            text: jsxText
+        });
+        expect(javaScript.parseTree, 'to satisfy', {
+            type: 'Program',
+            body: [
+                {
+                    type: 'FunctionDeclaration',
+                    body: {
+                        type: 'BlockStatement',
+                        body: [
+                            {
+                                type: 'ReturnStatement',
+                                argument: {
+                                    type: 'JSXElement',
+                                    openingElement: {
+                                        type: 'JSXOpeningElement',
+                                        name: {
+                                            type: 'JSXIdentifier',
+                                            name: 'MyComponent'
+                                        }
+                                    },
+                                    children: [],
+                                    closingElement: null
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            sourceType: 'module'
+        });
+        javaScript.markDirty();
+        // This doesn't work because escodegen doesn't support JSX:
+        // expect(javaScript.text, 'to equal', jsxText);
+    });
 });
