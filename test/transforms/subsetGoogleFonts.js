@@ -10,7 +10,9 @@ describe('transforms/subsetGoogleFonts', function () {
             {
                 request: 'GET http://fonts.googleapis.com/css?family=Open+Sans',
                 response: {
-                    contentType: 'text/css',
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
                     body: [
                         '@font-face {',
                         '  font-family: \'Open Sans\';',
