@@ -101,4 +101,14 @@ describe('bundleWebpack', function () {
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/dist/main.css');
             });
     });
+
+    it('should not build unused bundles', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/namedUnusedBundles/'})
+            .loadAssets('index.html')
+            .bundleWebpack()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', { fileName: 'bundle.main.js', isLoaded: true })
+                    .and('to contain no asset', { fileName: 'bundle.unused.js' });
+            });
+    });
 });
