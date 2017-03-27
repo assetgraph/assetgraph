@@ -48,7 +48,7 @@
     "source-map": "^0.5.6",
     "sourcemap-to-ast": "0.0.2",
     "teepee": "^2.28.0",
-    "uglify-js": "2.8.14",
+    "uglify-js": "2.8.16",
     "urltools": "0.3.1",
     "xmldom": "0.1.27"
   },
