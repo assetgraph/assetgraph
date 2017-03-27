@@ -270,4 +270,68 @@ describe('assets/JavaScript', function () {
         // This doesn't work because escodegen doesn't support JSX:
         // expect(javaScript.text, 'to equal', jsxText);
     });
+
+    it('should fall back to "script" mode when a parse error is encountered', function () {
+        var text = 'await = 123;';
+        var javaScript = new AssetGraph.JavaScript({
+            text: text
+        });
+        expect(javaScript.parseTree, 'to satisfy', {
+            type: 'Program',
+            body: [
+                {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'AssignmentExpression',
+                        operator: '=',
+                        left: { type: 'Identifier', name: 'await' },
+                        right: { type: 'Literal', value: 123 }
+                    }
+                }
+            ],
+            sourceType: 'script'
+        });
+        javaScript.markDirty();
+        expect(javaScript.text, 'to equal', text);
+    });
+
+    it('should emit an info event (and no warn events) when falling back to script mode', function () {
+        var errorSpy = sinon.spy().named('error');
+        var warnSpy = sinon.spy().named('warn');
+        var infoSpy = sinon.spy().named('info');
+        return new AssetGraph()
+            .on('error', errorSpy)
+            .on('warn', warnSpy)
+            .on('info', infoSpy)
+            .loadAssets(new AssetGraph.JavaScript({
+                url: 'http://example.com/script.js',
+                text: 'await = 123;'
+            }))
+            .populate()
+            .queue(function () {
+                expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', function () {
+                    infoSpy('Could not parse http://example.com/script.js as a module, falled back to script mode\nLine 1: Unexpected identifier');
+                });
+            });
+    });
+
+    it('should emit one warn event (and no other events) when neither module nor script mode works', function () {
+        var errorSpy = sinon.spy().named('error');
+        var warnSpy = sinon.spy().named('warn');
+        var infoSpy = sinon.spy().named('info');
+        return new AssetGraph()
+            .on('error', errorSpy)
+            .on('warn', warnSpy)
+            .on('info', infoSpy)
+            .loadAssets(new AssetGraph.JavaScript({
+                url: 'http://example.com/script.js',
+                text: 'qwvce)'
+            }))
+            .populate()
+            .queue(function () {
+                expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', function () {
+                    warnSpy('Parse error in http://example.com/script.js\nLine 1: Unexpected token ) (line 1)');
+                });
+            });
+    });
 });
