@@ -5,7 +5,6 @@ describe('bundleWebpack', function () {
     it('should create a bundle consisting of a single file', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/simple/'})
             .loadAssets('index.html')
-            .populate()
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
             .queue(function (assetGraph) {
@@ -25,7 +24,6 @@ describe('bundleWebpack', function () {
     it('should create a bundle consisting of a single file with a different publicPath', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/publicPath/'})
             .loadAssets('index.html')
-            .populate()
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
             .queue(function (assetGraph) {
@@ -45,7 +43,6 @@ describe('bundleWebpack', function () {
     it('should discover relations in the bundle', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/relationInBundle/'})
             .loadAssets('index.html')
-            .populate()
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
             .queue(function (assetGraph) {
@@ -57,7 +54,6 @@ describe('bundleWebpack', function () {
     it('should pick up source maps from webpack', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/sourceMaps/'})
             .loadAssets('index.html')
-            .populate()
             .bundleWebpack()
             .populate()
             .applySourceMaps()
@@ -97,7 +93,6 @@ describe('bundleWebpack', function () {
     it('should pick up CSS assets in the output bundles', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/css/'})
             .loadAssets('index.html')
-            .populate()
             .bundleWebpack()
             .applySourceMaps()
             .queue(function (assetGraph) {
