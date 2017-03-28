@@ -143,4 +143,17 @@ describe('bundleWebpack', function () {
                 expect(assetGraph.findAssets({fileName: 'bundle.main.js'})[0].text, 'to contain', "alert('dep!')");
             });
     });
+
+    it('should support code splitting via require.ensure', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/codeSplit/'})
+            .loadAssets('index.html')
+            .bundleWebpack()
+            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', { fileName: 'bundle.js'})
+                    .and('to contain asset', { fileName: '1.bundle.js'});
+                expect(assetGraph, 'to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'bundle.js' } })
+                    .and('to contain relation', { from: { fileName: 'bundle.js' }, to: { fileName: '1.bundle.js' } });
+            });
+    });
 });
