@@ -69,7 +69,7 @@
     "open": "0.0.5",
     "requirejs": "2.3.3",
     "sinon": "^2.0.0",
-    "style-loader": "0.13.1",
+    "style-loader": "0.16.1",
     "svgo": "0.7.2",
     "systemjs-asset-plugin": "3.0.0",
     "systemjs-builder": "^0.16.3",
