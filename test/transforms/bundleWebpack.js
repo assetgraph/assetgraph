@@ -111,4 +111,36 @@ describe('bundleWebpack', function () {
                     .and('to contain no asset', { fileName: 'bundle.unused.js' });
             });
     });
+
+    it('should work with the commons chunk plugin', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/commonschunk/'})
+            .loadAssets('index.html', 'secondary.html')
+            .bundleWebpack()
+            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'bundle.main.js' } })
+                    .and('to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'common.js' } });
+                expect(assetGraph, 'to contain relation', { from: { fileName: 'secondary.html' }, to: { fileName: 'bundle.secondary.js' } })
+                    .and('to contain relation', { from: { fileName: 'secondary.html' }, to: { fileName: 'common.js' } });
+                expect(assetGraph.findAssets({fileName: 'common.js'})[0].text, 'to contain', "alert('dep!')");
+            });
+    });
+
+    it('should work with the commons chunk plugin when only one bundle is built', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/commonschunk/'})
+            .loadAssets('index.html')
+            .bundleWebpack()
+            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'bundle.main.js' } })
+                    .and('to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'common.js' } });
+
+                // Note: When building the multi-entry point app with the commons chunk plugin one page at a time like this,
+                // we will end up with a common bundle that only contains the webpack loader. The common dependency ends
+                // up in the "main" bundle. This is expected -- if you'd like the commons chunk bundle to actually work
+                // as intended, build the entire app in one go:
+                expect(assetGraph, 'to contain asset', { fileName: 'common.js' });
+                expect(assetGraph.findAssets({fileName: 'bundle.main.js'})[0].text, 'to contain', "alert('dep!')");
+            });
+    });
 });
