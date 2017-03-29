@@ -150,10 +150,12 @@ describe('bundleWebpack', function () {
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
             .queue(function (assetGraph) {
+                // Webpack 1: 1.bundle.js
+                // Webpack 2: 0.bundle.js
                 expect(assetGraph, 'to contain asset', { fileName: 'bundle.js'})
-                    .and('to contain asset', { fileName: '1.bundle.js'});
+                    .and('to contain asset', { fileName: /^[01]\.bundle\.js$/});
                 expect(assetGraph, 'to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'bundle.js' } })
-                    .and('to contain relation', { from: { fileName: 'bundle.js' }, to: { fileName: '1.bundle.js' } });
+                    .and('to contain relation', { from: { fileName: 'bundle.js' }, to: { fileName: /^[01]\.bundle\.js$/ } });
             });
     });
 });
