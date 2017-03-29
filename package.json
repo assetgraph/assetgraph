@@ -3,7 +3,7 @@
   "tag": "beta",
   "description": "An auto discovery dependency graph based optimization framework for web pages and applications",
   "repository": "git://github.com/assetgraph/assetgraph.git",
-  "version": "3.0.0-47",
+  "version": "3.0.0-48",
   "license": "BSD-3-Clause",
   "maintainers": [
     {
