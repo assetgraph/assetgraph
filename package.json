@@ -57,7 +57,7 @@
     "closure-compiler": "^0.2.12",
     "coveralls": "^2.12.0",
     "css-loader": "^0.28.0",
-    "eslint": "3.18.0",
+    "eslint": "3.19.0",
     "eslint-config-onelint": "2.0.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.0",
