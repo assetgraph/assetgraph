@@ -1,3 +1,7 @@
 body {
     background-image: url(image.svg);
 }
+
+p {
+    background-image:  url(view.svg);
+}
