@@ -310,7 +310,7 @@ describe('assets/JavaScript', function () {
             .populate()
             .queue(function () {
                 expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', function () {
-                    infoSpy('Could not parse http://example.com/script.js as a module, falled back to script mode\nLine 1: Unexpected identifier');
+                    infoSpy('Could not parse http://example.com/script.js as a module, fall back to script mode\nLine 1: Unexpected identifier');
                 });
             });
     });
