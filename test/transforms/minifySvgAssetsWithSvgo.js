@@ -22,7 +22,7 @@ describe('transforms/minifySvgAssetsWithSvgo', function () {
     });
 
     it('should preserve the top-level attributes of an SVG island in HTML when minifying', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/minifySvgAssetsWithSvgo/svgIslandInHtml/'})
+        return new AssetGraph()
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -35,6 +35,29 @@ describe('transforms/minifySvgAssetsWithSvgo', function () {
                     assetGraph.findAssets({type: 'Html'})[0].text,
                     'to contain',
                     '<svg viewBox="0 0 250 250" role="img"'
+                );
+            });
+    });
+
+    it('should not throw away too much precision', function () {
+        return new AssetGraph()
+            .loadAssets({
+                url: 'http://example.com/dot.svg',
+                text:
+                    '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n' +
+                    '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\n' +
+                    '	 width="69.964px" height="11.535px" viewBox="0 0 69.964 11.535" enable-background="new 0 0 69.964 11.535" xml:space="preserve">\n' +
+                    '<path fill="#ffffff" d="M32.988,8.093c-0.587,0-1.062,0.478-1.062,1.06c0,0.586,0.475,1.059,1.062,1.059\n' +
+                    '		c0.584,0,1.058-0.473,1.058-1.059C34.045,8.57,33.572,8.093,32.988,8.093z"/>\n' +
+                    '</svg>'
+            })
+            .minifySvgAssetsWithSvgo({type: 'Svg'})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', {type: 'Svg'});
+                expect(
+                    assetGraph.findAssets({type: 'Svg'})[0].text,
+                    'to equal',
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="69.964" height="11.535" viewBox="0 0 69.964 11.535"><path fill="#fff" d="M32.988 8.093c-.587 0-1.062.478-1.062 1.06 0 .586.475 1.059 1.062 1.059.584 0 1.058-.473 1.058-1.059-.001-.583-.474-1.06-1.058-1.06z"/></svg>'
                 );
             });
     });
