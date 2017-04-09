@@ -382,7 +382,7 @@ describe('assets/Asset', function () {
 
                     expect(assetGraph, 'to contain assets', 'Png', 2);
                     assetGraph.findAssets({type: 'Css'}).forEach(function (cssAsset) {
-                        expect(assetGraph, 'to contain relations', {from: cssAsset, to: {isInline: true, isImage: true}}, 1);
+                        expect(assetGraph, 'to contain relation', {from: cssAsset, to: {isInline: true, isImage: true}});
                     });
                 })
                 .run(done);

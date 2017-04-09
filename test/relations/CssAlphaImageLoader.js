@@ -4,8 +4,8 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
 describe('relations/CssAlphaImageLoader', function () {
-    it('should handle a simple test case', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/CssAlphaImageLoader/'})
+    it('should handle a simple test case', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/CssAlphaImageLoader/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -27,7 +27,6 @@ describe('relations/CssAlphaImageLoader', function () {
 
                 expect(assetGraph.findAssets({type: 'Css'})[0].text, 'to contain', 'body {\n}')
                     .and('to contain', 'div {\n}');
-            })
-            .run(done);
+            });
     });
 });
