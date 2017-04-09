@@ -1,6 +1,5 @@
 {
   "name": "assetgraph",
-  "tag": "beta",
   "description": "An auto discovery dependency graph based optimization framework for web pages and applications",
   "repository": "git://github.com/assetgraph/assetgraph.git",
   "version": "3.0.0",
