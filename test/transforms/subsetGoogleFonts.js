@@ -372,5 +372,212 @@ describe('transforms/subsetGoogleFonts', function () {
                 });
             });
     });
+
+    it('should handle multiple font-weights and font-style', function () {
+        httpception([
+            {
+                request: 'GET https://fonts.googleapis.com/css?family=Roboto:300i',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: [
+                        '@font-face {',
+                        '  font-family: "Roboto";',
+                        '  font-style: italic;',
+                        '  font-weight: 300;',
+                        '  src: local("Roboto Light Italic"), local("Roboto-LightItalic"), url(https://fonts.gstatic.com/s/roboto/v15/7m8l7TlFO-S3VkhHuR0at4bN6UDyHWBl620a-IRfuBk.woff) format("woff");',
+                        '}'
+                    ].join ('\n')
+                }
+            },
+            {
+                request: 'GET https://fonts.googleapis.com/css?family=Roboto:400',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: [
+                        '@font-face {',
+                        '  font-family: "Roboto";',
+                        '  font-style: normal;',
+                        '  font-weight: 400;',
+                        '  src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff) format("woff");',
+                        '}'
+                    ].join ('\n')
+                }
+            },
+            {
+                request: 'GET https://fonts.googleapis.com/css?family=Roboto:500',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: [
+                        '@font-face {',
+                        '  font-family: "Roboto";',
+                        '  font-style: normal;',
+                        '  font-weight: 500;',
+                        '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/s/roboto/v15/RxZJdnzeo3R5zSexge8UUT8E0i7KZn-EPnyo3HZu7kw.woff) format("woff");',
+                        '}'
+                    ].join ('\n')
+                }
+            },
+
+
+            {
+                request: 'GET https://fonts.googleapis.com/css?family=Roboto:500&text=Helo',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: [
+                        '@font-face {',
+                        '  font-family: "Roboto";',
+                        '  font-style: normal;',
+                        '  font-weight: 500;',
+                        '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/l/font?kit=7r9VFx4x5d5pFr_tRoChT3Y_vlID40_xbxWXk1HqQcs&skey=ee881451c540fdec&v=v15) format("woff");',
+                        '}'
+                    ].join ('\n')
+                }
+            },
+
+
+            {
+                request: 'GET https://fonts.googleapis.com/css?family=Roboto:400&text=Dakr',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: [
+                        '@font-face {',
+                        '  font-family: "Roboto";',
+                        '  font-style: normal;',
+                        '  font-weight: 400;',
+                        '  src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/l/font?kit=mhx02Ar2NG4Af4ZMyWe7TTV8WDY78pkB0e3oe2-PKo4&skey=a0a0114a1dcab3ac&v=v15) format("woff");',
+                        '}'
+                    ].join ('\n')
+                }
+            },
+
+
+            {
+                request: 'GET https://fonts.googleapis.com/css?family=Roboto:300i&text=Celru',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: [
+                        '@font-face {',
+                        '  font-family: "Roboto";',
+                        '  font-style: italic;',
+                        '  font-weight: 300;',
+                        '  src: local("Roboto Light Italic"), local("Roboto-LightItalic"), url(https://fonts.gstatic.com/l/font?kit=iE8HhaRzdhPxC93dOdA05_vtLO2S9yBEqvyVXi2mRhg&skey=8f644060176e1f7e&v=v15) format("woff");',
+                        '}'
+                    ].join ('\n')
+                }
+            },
+
+            {
+                request: 'GET https://fonts.gstatic.com/l/font?kit=7r9VFx4x5d5pFr_tRoChT3Y_vlID40_xbxWXk1HqQcs&skey=ee881451c540fdec&v=v15',
+                response: {
+                    headers: {
+                        'Content-Type': 'font/woff'
+                    },
+                    body: new Buffer('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', 'base64')
+                }
+            },
+
+            {
+                request: 'GET https://fonts.gstatic.com/l/font?kit=mhx02Ar2NG4Af4ZMyWe7TTV8WDY78pkB0e3oe2-PKo4&skey=a0a0114a1dcab3ac&v=v15',
+                response: {
+                    headers: {
+                        'Content-Type': 'font/woff'
+                    },
+                    body: new Buffer('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', 'base64')
+                }
+            },
+
+            {
+                request: 'GET https://fonts.gstatic.com/l/font?kit=iE8HhaRzdhPxC93dOdA05_vtLO2S9yBEqvyVXi2mRhg&skey=8f644060176e1f7e&v=v15',
+                response: {
+                    headers: {
+                        'Content-Type': 'font/woff'
+                    },
+                    body: new Buffer('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', 'base64')
+                }
+            }
+        ]);
+
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/multi-weight/'})
+            .loadAssets('index.html')
+            .populate({
+                followRelations: {
+                    crossorigin: false
+                }
+            })
+            .subsetGoogleFonts()
+            .queue(function (assetGraph) {
+                expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
+                    {
+                        type: 'HtmlStyle',
+                        to: {
+                            type: 'Css',
+                            url: 'https://fonts.googleapis.com/css?family=Roboto:300i&text=Celru',
+                            isLoaded: true,
+                            outgoingRelations: [
+                                {
+                                    type: 'CssFontFaceSrc',
+                                    to: {
+                                        type: 'Asset',
+                                        url: 'https://fonts.gstatic.com/l/font?kit=iE8HhaRzdhPxC93dOdA05_vtLO2S9yBEqvyVXi2mRhg&skey=8f644060176e1f7e&v=v15',
+                                        isLoaded: true
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        type: 'HtmlStyle',
+                        to: {
+                            type: 'Css',
+                            url: 'https://fonts.googleapis.com/css?family=Roboto:400&text=Dakr',
+                            isLoaded: true,
+                            outgoingRelations: [
+                                {
+                                    type: 'CssFontFaceSrc',
+                                    to: {
+                                        type: 'Asset',
+                                        url: 'https://fonts.gstatic.com/l/font?kit=mhx02Ar2NG4Af4ZMyWe7TTV8WDY78pkB0e3oe2-PKo4&skey=a0a0114a1dcab3ac&v=v15',
+                                        isLoaded: true
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        type: 'HtmlStyle',
+                        to: {
+                            type: 'Css',
+                            url: 'https://fonts.googleapis.com/css?family=Roboto:500&text=Helo',
+                            isLoaded: true,
+                            outgoingRelations: [
+                                {
+                                    type: 'CssFontFaceSrc',
+                                    to: {
+                                        type: 'Asset',
+                                        url: 'https://fonts.gstatic.com/l/font?kit=7r9VFx4x5d5pFr_tRoChT3Y_vlID40_xbxWXk1HqQcs&skey=ee881451c540fdec&v=v15',
+                                        isLoaded: true
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    { type: 'HtmlStyle', to: { isInline: true }}
+                ]);
+
+
+            });
+    });
 });
 
