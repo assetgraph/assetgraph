@@ -69,6 +69,84 @@ describe('transforms/bundleRelations', function () {
                 .run(done);
         });
 
+        it('should insert a CSS bundle at the point of the first incoming relation', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/insertPoint/'})
+                .loadAssets('HtmlStyle.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets(), 'to satisfy', [
+                        {
+                            type: 'Html',
+                            text: '<style>h1 { color: red; }</style>\n<h1>Hello World</h1>\n<style>p { color: blue; }</style>\n'
+                        },
+                        {
+                            type: 'Css',
+                            isInline: true,
+                            text: 'h1 { color: red; }'
+                        },
+                        {
+                            type: 'Css',
+                            isInline: true,
+                            text: 'p { color: blue; }'
+                        }
+                    ]);
+                })
+                .bundleRelations({type: 'HtmlStyle'})
+                .inlineRelations()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets(), 'to satisfy', [
+                        {
+                            type: 'Html',
+                            text: '<style type="text/css">h1 { color: red; }p { color: blue; }</style>\n<h1>Hello World</h1>\n\n'
+                        },
+                        {
+                            type: 'Css',
+                            isInline: true,
+                            text: 'h1 { color: red; }p { color: blue; }'
+                        }
+                    ]);
+                });
+        });
+
+        it('should insert a JS bundle at the point of the last incoming relation', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/insertPoint/'})
+                .loadAssets('HtmlScript.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets(), 'to satisfy', [
+                        {
+                            type: 'Html',
+                            text: '<script>var foo = \'foo\'</script>\n<h1>Hello World</h1>\n<script>var bar = \'bar\'</script>\n'
+                        },
+                        {
+                            type: 'JavaScript',
+                            isInline: true,
+                            text: 'var foo = \'foo\''
+                        },
+                        {
+                            type: 'JavaScript',
+                            isInline: true,
+                            text: 'var bar = \'bar\''
+                        }
+                    ]);
+                })
+                .bundleRelations({type: 'HtmlScript'})
+                .inlineRelations()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets(), 'to satisfy', [
+                        {
+                            type: 'Html',
+                            text: '\n<h1>Hello World</h1>\n<script>var foo = \'foo\';\nvar bar = \'bar\';</script>\n'
+                        },
+                        {
+                            type: 'JavaScript',
+                            isInline: true,
+                            text: 'var foo = \'foo\';\nvar bar = \'bar\';'
+                        }
+                    ]);
+                });
+        });
+
         it('should bundle correctly in the presence of conditional comments', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'})
                 .loadAssets('index.html')
