@@ -825,4 +825,71 @@ describe('assets/Asset', function () {
                 expect(assetGraph, 'to contain relation', {href: '#selffragment'});
             });
     });
+
+    describe('#unload()', function () {
+        it('should clear inline assets from the graph', function () {
+            return new AssetGraph()
+                .loadAssets({
+                    url: 'file://' + process.cwd() + '/foo/bar.html',
+                    text:
+                        '<!DOCTYPE html>\n' +
+                        '<html>\n' +
+                        '<head>\n' +
+                        '<style>\n' +
+                        'body {\n' +
+                        '    background-image: url(data:image/svg+xml;base64,' +
+                            new Buffer(
+                                '<?xml version="1.0" encoding="UTF-8"?>\n' +
+                                '<svg>\n' +
+                                '<rect x="200" y="100" width="600" height="300" style="color: maroon"/>\n' +
+                                '<rect x="200" y="100" width="600" height="300" style="color: maroon"/>\n' +
+                                '</svg>'
+                            ).toString('base64') + ');\n' +
+                        '}\n' +
+                        '</style>\n' +
+                        '</head>\n' +
+                        '</html>'
+                })
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 5);
+                    assetGraph.findAssets({type: 'Html'})[0].unload();
+                    expect(assetGraph.findAssets({type: 'Html'})[0], 'to satisfy', { isPopulated: expect.it('to be falsy') });
+                    expect(assetGraph, 'to contain assets', 1);
+                });
+        });
+    });
+
+    describe('text setter', function () {
+        it('should clear inline assets when the text of an asset is overridden', function () {
+            return new AssetGraph()
+                .loadAssets({
+                    url: 'file://' + process.cwd() + '/foo/bar.html',
+                    text:
+                        '<!DOCTYPE html>\n' +
+                        '<html>\n' +
+                        '<head>\n' +
+                        '<style>\n' +
+                        'body {\n' +
+                        '    background-image: url(data:image/svg+xml;base64,' +
+                            new Buffer(
+                                '<?xml version="1.0" encoding="UTF-8"?>\n' +
+                                '<svg>\n' +
+                                '<rect x="200" y="100" width="600" height="300" style="color: maroon"/>\n' +
+                                '<rect x="200" y="100" width="600" height="300" style="color: maroon"/>\n' +
+                                '</svg>'
+                            ).toString('base64') + ');\n' +
+                        '}\n' +
+                        '</style>\n' +
+                        '</head>\n' +
+                        '</html>'
+                })
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain assets', 5);
+                    assetGraph.findAssets({type: 'Svg'})[0].text = '<?xml version="1.0" encoding="UTF-8"?>\n<svg></svg>';
+                    expect(assetGraph, 'to contain assets', 3);
+                });
+        });
+    });
 });
