@@ -74,35 +74,20 @@ describe('transforms/bundleRelations', function () {
                 .loadAssets('HtmlStyle.html')
                 .populate()
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets(), 'to satisfy', [
+                    expect(assetGraph.findAssets({type: 'Html'}), 'to satisfy', [
                         {
                             type: 'Html',
                             text: '<style>h1 { color: red; }</style>\n<h1>Hello World</h1>\n<style>p { color: blue; }</style>\n'
-                        },
-                        {
-                            type: 'Css',
-                            isInline: true,
-                            text: 'h1 { color: red; }'
-                        },
-                        {
-                            type: 'Css',
-                            isInline: true,
-                            text: 'p { color: blue; }'
                         }
                     ]);
                 })
                 .bundleRelations({type: 'HtmlStyle'})
                 .inlineRelations()
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets(), 'to satisfy', [
+                    expect(assetGraph.findAssets({type: 'Html'}), 'to satisfy', [
                         {
                             type: 'Html',
                             text: '<style type="text/css">h1 { color: red; }p { color: blue; }</style>\n<h1>Hello World</h1>\n\n'
-                        },
-                        {
-                            type: 'Css',
-                            isInline: true,
-                            text: 'h1 { color: red; }p { color: blue; }'
                         }
                     ]);
                 });
@@ -113,35 +98,20 @@ describe('transforms/bundleRelations', function () {
                 .loadAssets('HtmlScript.html')
                 .populate()
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets(), 'to satisfy', [
+                    expect(assetGraph.findAssets({type: 'Html'}), 'to satisfy', [
                         {
                             type: 'Html',
                             text: '<script>var foo = \'foo\'</script>\n<h1>Hello World</h1>\n<script>var bar = \'bar\'</script>\n'
-                        },
-                        {
-                            type: 'JavaScript',
-                            isInline: true,
-                            text: 'var foo = \'foo\''
-                        },
-                        {
-                            type: 'JavaScript',
-                            isInline: true,
-                            text: 'var bar = \'bar\''
                         }
                     ]);
                 })
                 .bundleRelations({type: 'HtmlScript'})
                 .inlineRelations()
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets(), 'to satisfy', [
+                    expect(assetGraph.findAssets({type: 'Html'}), 'to satisfy', [
                         {
                             type: 'Html',
                             text: '\n<h1>Hello World</h1>\n<script>var foo = \'foo\';\nvar bar = \'bar\';</script>\n'
-                        },
-                        {
-                            type: 'JavaScript',
-                            isInline: true,
-                            text: 'var foo = \'foo\';\nvar bar = \'bar\';'
                         }
                     ]);
                 });
