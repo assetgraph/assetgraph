@@ -69,6 +69,54 @@ describe('transforms/bundleRelations', function () {
                 .run(done);
         });
 
+        it('should insert a CSS bundle at the point of the first incoming relation', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/insertPoint/'})
+                .loadAssets('HtmlStyle.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'Html'}), 'to satisfy', [
+                        {
+                            type: 'Html',
+                            text: '<style>h1 { color: red; }</style>\n<h1>Hello World</h1>\n<style>p { color: blue; }</style>\n'
+                        }
+                    ]);
+                })
+                .bundleRelations({type: 'HtmlStyle'})
+                .inlineRelations()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'Html'}), 'to satisfy', [
+                        {
+                            type: 'Html',
+                            text: '<style type="text/css">h1 { color: red; }p { color: blue; }</style>\n<h1>Hello World</h1>\n\n'
+                        }
+                    ]);
+                });
+        });
+
+        it('should insert a JS bundle at the point of the last incoming relation', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/insertPoint/'})
+                .loadAssets('HtmlScript.html')
+                .populate()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'Html'}), 'to satisfy', [
+                        {
+                            type: 'Html',
+                            text: '<script>var foo = \'foo\'</script>\n<h1>Hello World</h1>\n<script>var bar = \'bar\'</script>\n'
+                        }
+                    ]);
+                })
+                .bundleRelations({type: 'HtmlScript'})
+                .inlineRelations()
+                .queue(function (assetGraph) {
+                    expect(assetGraph.findAssets({type: 'Html'}), 'to satisfy', [
+                        {
+                            type: 'Html',
+                            text: '\n<h1>Hello World</h1>\n<script>var foo = \'foo\';\nvar bar = \'bar\';</script>\n'
+                        }
+                    ]);
+                });
+        });
+
         it('should bundle correctly in the presence of conditional comments', function (done) {
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'})
                 .loadAssets('index.html')
