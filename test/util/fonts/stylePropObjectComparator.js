@@ -35,12 +35,12 @@ describe('utils/fonts/stylePropObjectComparator', function () {
         var a = {
             important: false,
             inlineStyle: false,
-            specificityArray: [0,0,1,0]
+            specificityArray: [0, 0, 1, 0]
         };
         var b = {
             important: false,
             inlineStyle: false,
-            specificityArray: [0,0,0,1]
+            specificityArray: [0, 0, 0, 1]
         };
 
         var compare = comparator([a, b]);
@@ -52,12 +52,12 @@ describe('utils/fonts/stylePropObjectComparator', function () {
         var a = {
             important: false,
             inlineStyle: false,
-            specificityArray: [0,0,0,1]
+            specificityArray: [0, 0, 0, 1]
         };
         var b = {
             important: false,
             inlineStyle: false,
-            specificityArray: [0,0,0,1]
+            specificityArray: [0, 0, 0, 1]
         };
 
         var compare = comparator([a, b]);
@@ -70,67 +70,67 @@ describe('utils/fonts/stylePropObjectComparator', function () {
             id: 'a',
             important: false,
             inlineStyle: false,
-            specificityArray: [0,0,0,1]
+            specificityArray: [0, 0, 0, 1]
         };
         var b = {
             id: 'b',
             important: false,
             inlineStyle: false,
-            specificityArray: [0,0,0,1]
+            specificityArray: [0, 0, 0, 1]
         };
         var c = {
             id: 'c',
             important: false,
             inlineStyle: false,
-            specificityArray: [0,1,0,1]
+            specificityArray: [0, 1, 0, 1]
         };
         var d = {
             id: 'd',
             important: false,
             inlineStyle: false,
-            specificityArray: [0,0,1,1]
+            specificityArray: [0, 0, 1, 1]
         };
         var e = {
             id: 'e',
             important: false,
             inlineStyle: false,
-            specificityArray: [0,1,0,1]
+            specificityArray: [0, 1, 0, 1]
         };
         var f = {
             id: 'f',
             important: false,
             inlineStyle: false,
-            specificityArray: [0,0,1,0]
+            specificityArray: [0, 0, 1, 0]
         };
         var g = {
             id: 'g',
             important: true,
             inlineStyle: false,
-            specificityArray: [0,0,0,1]
+            specificityArray: [0, 0, 0, 1]
         };
         var h = {
             id: 'h',
             important: false,
             inlineStyle: false,
-            specificityArray: [0,0,0,1]
+            specificityArray: [0, 0, 0, 1]
         };
         var i = {
             id: 'i',
             important: false,
             inlineStyle: true,
-            specificityArray: [0,0,0,1]
+            specificityArray: [0, 0, 0, 1]
         };
         var j = {
             id: 'j',
             important: true,
             inlineStyle: true,
-            specificityArray: [0,0,0,1]
+            specificityArray: [0, 0, 0, 1]
         };
         var k = {
             id: 'k',
             important: false,
             inlineStyle: false,
-            specificityArray: [1,0,0,1]
+            specificityArray: [1, 0, 0, 1]
         };
 
         var array = [a, b, c, d, e, f, g, h, i, j, k];
