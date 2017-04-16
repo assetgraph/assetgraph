@@ -47,6 +47,7 @@
     "semver": "^5.3.0",
     "source-map": "^0.5.6",
     "sourcemap-to-ast": "0.0.2",
+    "specificity": "0.3.0",
     "teepee": "^2.28.0",
     "uglify-js": "2.8.14",
     "urltools": "0.3.1",
