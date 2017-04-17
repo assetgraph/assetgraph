@@ -42,4 +42,39 @@ describe('utils/fonts/getCssRulesByProperty', function () {
             ]
         });
     });
+
+    it('should memoize the results of a call', function () {
+        getRules.cache.reset();
+
+        expect(getRules(['color'], 'h1 { color: red; }'), 'to exhaustively satisfy', {
+            color: [
+                {
+                    selector: 'h1',
+                    specificityArray: [0, 0, 0, 1],
+                    prop: 'color',
+                    value: 'red',
+                    inlineStyle: false,
+                    important: false
+                }
+            ]
+        });
+
+        expect(getRules.cache.values(), 'to satisfy', [
+            [
+                null,
+                {
+                    color: [
+                        {
+                            selector: 'h1',
+                            specificityArray: [0, 0, 0, 1],
+                            prop: 'color',
+                            value: 'red',
+                            inlineStyle: false,
+                            important: false
+                        }
+                    ]
+                }
+            ]
+        ]);
+    })
 });
