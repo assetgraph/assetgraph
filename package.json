@@ -37,6 +37,7 @@
     "imageinfo": "1.0.4",
     "jsdom": "9.12.0",
     "lodash": "^4.11.2",
+    "memoizesync": "1.0.0",
     "mkdirp": "^0.5.1",
     "normalizeurl": "1.0.0",
     "perfectionist": "2.4.0",
