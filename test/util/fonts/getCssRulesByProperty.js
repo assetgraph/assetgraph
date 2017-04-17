@@ -76,5 +76,5 @@ describe('utils/fonts/getCssRulesByProperty', function () {
                 }
             ]
         ]);
-    })
+    });
 });
