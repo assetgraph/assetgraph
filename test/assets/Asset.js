@@ -892,4 +892,12 @@ describe('assets/Asset', function () {
                 });
         });
     });
+
+    describe('#dataUrl getter', function () {
+        it('should not percent-encode the comma character', function () {
+            expect(new AssetGraph.Text({
+                text: 'foo,bar quux,baz'
+            }).dataUrl, 'to equal', 'data:text/plain,foo,bar%20quux,baz');
+        });
+    });
 });
