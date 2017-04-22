@@ -48,7 +48,7 @@ describe('utils/fonts/stylePropObjectComparator', function () {
         expect(compare(a, b), 'to be', -1);
     });
 
-    it('should maintain source order when all else is equal', function () {
+    it('should reverse source order when all else is equal (higher specificity first)', function () {
         var a = {
             important: false,
             inlineStyle: false,
@@ -62,7 +62,7 @@ describe('utils/fonts/stylePropObjectComparator', function () {
 
         var compare = comparator([a, b]);
 
-        expect(compare(a, b), 'to be', -1);
+        expect(compare(a, b), 'to be', 1);
     });
 
     it('should sort a big array of different cases correctly', function () {
@@ -136,7 +136,7 @@ describe('utils/fonts/stylePropObjectComparator', function () {
         var array = [a, b, c, d, e, f, g, h, i, j, k];
 
         expect(array.sort(comparator(array)), 'to satisfy', [
-            j, g, i, k, c, e, d, f, a, b, h
+            j, g, i, k, e, c, d, f, h, b, a
         ]);
     });
 });
