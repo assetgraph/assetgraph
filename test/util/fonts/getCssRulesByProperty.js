@@ -1,7 +1,7 @@
 var expect = require('unexpected');
 var getRules = require('../../../lib/util/fonts/getCssRulesByProperty');
 
-describe('utils/fonts/getCssRulesByProperty', function () {
+describe('util/fonts/getCssRulesByProperty', function () {
     it('should throw when not passing an array of properties as first argument', function () {
         expect(getRules, 'to throw', 'properties argument must be an array');
     });
@@ -28,7 +28,7 @@ describe('utils/fonts/getCssRulesByProperty', function () {
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'red',
-                    inlineStyle: false,
+                    styleAttribute: false,
                     important: false
                 },
                 {
@@ -36,7 +36,22 @@ describe('utils/fonts/getCssRulesByProperty', function () {
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'blue',
-                    inlineStyle: false,
+                    styleAttribute: false,
+                    important: false
+                }
+            ]
+        });
+    });
+
+    it('should handle linine styles through `bogusselector`-selector', function () {
+        expect(getRules(['color'], 'bogusselector { color: red; }'), 'to exhaustively satisfy', {
+            color: [
+                {
+                    selector: undefined,
+                    specificityArray: [0, 0, 0, 1],
+                    prop: 'color',
+                    value: 'red',
+                    styleAttribute: true,
                     important: false
                 }
             ]
@@ -53,7 +68,7 @@ describe('utils/fonts/getCssRulesByProperty', function () {
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'red',
-                    inlineStyle: false,
+                    styleAttribute: false,
                     important: false
                 }
             ]
@@ -69,7 +84,7 @@ describe('utils/fonts/getCssRulesByProperty', function () {
                             specificityArray: [0, 0, 0, 1],
                             prop: 'color',
                             value: 'red',
-                            inlineStyle: false,
+                            styleAttribute: false,
                             important: false
                         }
                     ]

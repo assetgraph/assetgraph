@@ -1,7 +1,7 @@
 var expect = require('unexpected');
 var comparator = require('../../../lib/util/fonts/stylePropObjectComparator');
 
-describe('utils/fonts/stylePropObjectComparator', function () {
+describe('util/fonts/stylePropObjectComparator', function () {
     it('should sort important objects before non-important objects', function () {
         var a = {
             important: true
@@ -15,14 +15,14 @@ describe('utils/fonts/stylePropObjectComparator', function () {
         expect(compare(a, b), 'to be', -1);
     });
 
-    it('should sort inlineStyle objects before non-inlineStyle', function () {
+    it('should sort styleAttribute objects before non-styleAttribute', function () {
         var a = {
             important: false,
-            inlineStyle: true
+            styleAttribute: true
         };
         var b = {
             important: false,
-            inlineStyle: false
+            styleAttribute: false
         };
 
         var compare = comparator([a, b]);
@@ -34,12 +34,12 @@ describe('utils/fonts/stylePropObjectComparator', function () {
     it('should sort higher specificity objects before lower specificity objects', function () {
         var a = {
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 0, 1, 0]
         };
         var b = {
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 0, 0, 1]
         };
 
@@ -51,12 +51,12 @@ describe('utils/fonts/stylePropObjectComparator', function () {
     it('should reverse source order when all else is equal (higher specificity first)', function () {
         var a = {
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 0, 0, 1]
         };
         var b = {
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 0, 0, 1]
         };
 
@@ -69,67 +69,67 @@ describe('utils/fonts/stylePropObjectComparator', function () {
         var a = {
             id: 'a',
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 0, 0, 1]
         };
         var b = {
             id: 'b',
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 0, 0, 1]
         };
         var c = {
             id: 'c',
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 1, 0, 1]
         };
         var d = {
             id: 'd',
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 0, 1, 1]
         };
         var e = {
             id: 'e',
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 1, 0, 1]
         };
         var f = {
             id: 'f',
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 0, 1, 0]
         };
         var g = {
             id: 'g',
             important: true,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 0, 0, 1]
         };
         var h = {
             id: 'h',
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [0, 0, 0, 1]
         };
         var i = {
             id: 'i',
             important: false,
-            inlineStyle: true,
+            styleAttribute: true,
             specificityArray: [0, 0, 0, 1]
         };
         var j = {
             id: 'j',
             important: true,
-            inlineStyle: true,
+            styleAttribute: true,
             specificityArray: [0, 0, 0, 1]
         };
         var k = {
             id: 'k',
             important: false,
-            inlineStyle: false,
+            styleAttribute: false,
             specificityArray: [1, 0, 0, 1]
         };
 
