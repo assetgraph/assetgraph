@@ -14,6 +14,23 @@ expect.addAssertion('<string> to [exhaustively] satisfy computed font properties
 });
 
 describe('util/fonts/getTextByFontProp', function () {
+    it('should strip empty text nodes', function () {
+        var htmlText = [
+            '  <div>div</div>   <span></span>  '
+        ].join('\n');
+
+        return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+            {
+                text: 'div',
+                props: {
+                    'font-family': undefined,
+                    'font-weight': undefined,
+                    'font-style': undefined
+                }
+            }
+        ]);
+    });
+
     it('should apply inline style attribute values', function () {
         var htmlText = [
             '<div style="font-weight: bold">div</div>'
