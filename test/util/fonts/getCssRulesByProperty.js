@@ -48,7 +48,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
             color: [
                 {
                     selector: undefined,
-                    specificityArray: [0, 0, 0, 1],
+                    specificityArray: undefined,
                     prop: 'color',
                     value: 'red',
                     styleAttribute: true,
