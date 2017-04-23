@@ -325,7 +325,8 @@ describe('util/fonts/getTextByFontProp', function () {
                 '<input type="time" value="type:time">',
                 '<input type="url" value="type:url">',
                 '<input type="week" value="type:week">',
-                '<input type="radio" value="type:radio">'
+                '<input type="radio" value="type:radio">',
+                '<input placeholder="placeholder">'
             ].join('\n');
 
             return expect(htmlText, 'to satisfy computed font properties', [
@@ -342,7 +343,8 @@ describe('util/fonts/getTextByFontProp', function () {
                 { props: { 'font-family': 'font1' }, text: 'type:text' },
                 { props: { 'font-family': 'font1' }, text: 'type:time' },
                 { props: { 'font-family': 'font1' }, text: 'type:url' },
-                { props: { 'font-family': 'font1' }, text: 'type:week' }
+                { props: { 'font-family': 'font1' }, text: 'type:week' },
+                { props: { 'font-family': 'font1' }, text: 'placeholder' }
             ]);
         });
     });
