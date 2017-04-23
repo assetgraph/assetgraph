@@ -28,7 +28,6 @@ describe('util/fonts/getCssRulesByProperty', function () {
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'red',
-                    styleAttribute: false,
                     important: false
                 },
                 {
@@ -36,7 +35,6 @@ describe('util/fonts/getCssRulesByProperty', function () {
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'blue',
-                    styleAttribute: false,
                     important: false
                 }
             ]
@@ -48,10 +46,9 @@ describe('util/fonts/getCssRulesByProperty', function () {
             color: [
                 {
                     selector: undefined,
-                    specificityArray: undefined,
+                    specificityArray: [1, 0, 0, 0],
                     prop: 'color',
                     value: 'red',
-                    styleAttribute: true,
                     important: false
                 }
             ]
@@ -68,7 +65,6 @@ describe('util/fonts/getCssRulesByProperty', function () {
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'red',
-                    styleAttribute: false,
                     important: false
                 }
             ]
@@ -84,7 +80,6 @@ describe('util/fonts/getCssRulesByProperty', function () {
                             specificityArray: [0, 0, 0, 1],
                             prop: 'color',
                             value: 'red',
-                            styleAttribute: false,
                             important: false
                         }
                     ]
