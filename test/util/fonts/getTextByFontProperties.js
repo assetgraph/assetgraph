@@ -295,20 +295,20 @@ describe('util/fonts/getTextByFontProp', function () {
             ].join('\n');
 
             return expect(htmlText, 'to satisfy computed font properties', [
-                { text: 'type:undefined', props: { 'font-family': 'font1' } },
-                { text: 'type:date', props: { 'font-family': 'font1' } },
-                { text: 'type:datetime-local', props: { 'font-family': 'font1' } },
-                { text: 'type:email', props: { 'font-family': 'font1' } },
-                { text: 'type:month', props: { 'font-family': 'font1' } },
-                { text: 'type:number', props: { 'font-family': 'font1' } },
-                { text: 'type:reset', props: { 'font-family': 'font1' } },
-                { text: 'type:search', props: { 'font-family': 'font1' } },
-                { text: 'type:submit', props: { 'font-family': 'font1' } },
-                { text: 'type:tel', props: { 'font-family': 'font1' } },
-                { text: 'type:text', props: { 'font-family': 'font1' } },
-                { text: 'type:time', props: { 'font-family': 'font1' } },
-                { text: 'type:url', props: { 'font-family': 'font1' } },
-                { text: 'type:week', props: { 'font-family': 'font1' } }
+                { props: { 'font-family': 'font1' }, text: 'type:undefined' },
+                { props: { 'font-family': 'font1' }, text: 'type:date' },
+                { props: { 'font-family': 'font1' }, text: 'type:datetime-local' },
+                { props: { 'font-family': 'font1' }, text: 'type:email' },
+                { props: { 'font-family': 'font1' }, text: 'type:month' },
+                { props: { 'font-family': 'font1' }, text: 'type:number' },
+                { props: { 'font-family': 'font1' }, text: 'type:reset' },
+                { props: { 'font-family': 'font1' }, text: 'type:search' },
+                { props: { 'font-family': 'font1' }, text: 'type:submit' },
+                { props: { 'font-family': 'font1' }, text: 'type:tel' },
+                { props: { 'font-family': 'font1' }, text: 'type:text' },
+                { props: { 'font-family': 'font1' }, text: 'type:time' },
+                { props: { 'font-family': 'font1' }, text: 'type:url' },
+                { props: { 'font-family': 'font1' }, text: 'type:week' }
             ]);
         });
     });
