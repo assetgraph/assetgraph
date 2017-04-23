@@ -245,6 +245,34 @@ describe('util/fonts/getTextByFontProp', function () {
         });
     });
 
+    describe('inheritance', function () {
+        it('should treat `inherit` values as undefined and traverse up to the parent', function () {
+            var htmlText = [
+                '<style>h1 { font-family: font1; } span { font-family: inherit; }</style>',
+                '<h1>foo <span>bar</span></h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 'bold',
+                        'font-style': undefined
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 'bold',
+                        'font-style': undefined
+                    }
+                }
+            ]);
+        });
+    });
+
     it('should take browser default stylesheet into account', function () {
         var htmlText = [
             '<style>h1 { font-family: font1; } span { font-family: font2; }</style>',
