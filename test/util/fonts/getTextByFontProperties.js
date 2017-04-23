@@ -271,6 +271,40 @@ describe('util/fonts/getTextByFontProp', function () {
                 }
             ]);
         });
+
+        it('default non-inheritance form elements should not inherit styles from parents', function () {
+            var htmlText = [
+                '<style>body { font-family: font1; }</style>',
+                '<button>button</button>',
+                '<option>option</option>',
+                '<textarea>textarea</textarea>',
+                '<input value="input">'
+            ].join('\n');
+
+            return expect(htmlText, 'to satisfy computed font properties', [
+                { props: { 'font-family': undefined, 'font-weight': undefined, 'font-style': undefined }, text: 'button' },
+                { props: { 'font-family': undefined, 'font-weight': 'normal', 'font-style': undefined }, text: 'option' },
+                { props: { 'font-family': undefined, 'font-weight': undefined, 'font-style': undefined }, text: 'textarea' },
+                { props: { 'font-family': undefined, 'font-weight': undefined, 'font-style': undefined }, text: 'input' }
+            ]);
+        });
+
+        it('default non-inheritance form elements should inherit styles for props with `inherit`-value', function () {
+            var htmlText = [
+                '<style>body { font-family: font1; font-style: italic } * { font-family: inherit } </style>',
+                '<button>button</button>',
+                '<select><option>option</option></select>',
+                '<textarea>textarea</textarea>',
+                '<input value="input">'
+            ].join('\n');
+
+            return expect(htmlText, 'to satisfy computed font properties', [
+                { props: { 'font-family': 'font1', 'font-style': undefined }, text: 'button' },
+                { props: { 'font-family': 'font1', 'font-style': undefined }, text: 'option' },
+                { props: { 'font-family': 'font1', 'font-style': undefined }, text: 'textarea' },
+                { props: { 'font-family': 'font1', 'font-style': undefined }, text: 'input' }
+            ]);
+        });
     });
 
     describe('non-textNode elements that show text', function () {
