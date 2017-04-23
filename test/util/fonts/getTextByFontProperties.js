@@ -273,6 +273,46 @@ describe('util/fonts/getTextByFontProp', function () {
         });
     });
 
+    describe('non-textNode elements that show text', function () {
+        it('should pick up <input> elements with visual values', function () {
+            var htmlText = [
+                '<style>input { font-family: font1; }</style>',
+                '<input value="type:undefined">',
+                '<input type="date" value="type:date">',
+                '<input type="datetime-local" value="type:datetime-local">',
+                '<input type="email" value="type:email">',
+                '<input type="month" value="type:month">',
+                '<input type="number" value="type:number">',
+                '<input type="reset" value="type:reset">',
+                '<input type="search" value="type:search">',
+                '<input type="submit" value="type:submit">',
+                '<input type="tel" value="type:tel">',
+                '<input type="text" value="type:text">',
+                '<input type="time" value="type:time">',
+                '<input type="url" value="type:url">',
+                '<input type="week" value="type:week">',
+                '<input type="radio" value="type:radio">'
+            ].join('\n');
+
+            return expect(htmlText, 'to satisfy computed font properties', [
+                { text: 'type:undefined', props: { 'font-family': 'font1' } },
+                { text: 'type:date', props: { 'font-family': 'font1' } },
+                { text: 'type:datetime-local', props: { 'font-family': 'font1' } },
+                { text: 'type:email', props: { 'font-family': 'font1' } },
+                { text: 'type:month', props: { 'font-family': 'font1' } },
+                { text: 'type:number', props: { 'font-family': 'font1' } },
+                { text: 'type:reset', props: { 'font-family': 'font1' } },
+                { text: 'type:search', props: { 'font-family': 'font1' } },
+                { text: 'type:submit', props: { 'font-family': 'font1' } },
+                { text: 'type:tel', props: { 'font-family': 'font1' } },
+                { text: 'type:text', props: { 'font-family': 'font1' } },
+                { text: 'type:time', props: { 'font-family': 'font1' } },
+                { text: 'type:url', props: { 'font-family': 'font1' } },
+                { text: 'type:week', props: { 'font-family': 'font1' } }
+            ]);
+        });
+    });
+
     it('should take browser default stylesheet into account', function () {
         var htmlText = [
             '<style>h1 { font-family: font1; } span { font-family: font2; }</style>',
