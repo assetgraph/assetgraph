@@ -24,8 +24,8 @@ describe('util/fonts/getTextByFontProp', function () {
                 text: 'div',
                 props: {
                     'font-family': undefined,
-                    'font-weight': undefined,
-                    'font-style': undefined
+                    'font-weight': 400,
+                    'font-style': 'normal'
                 }
             }
         ]);
@@ -41,8 +41,8 @@ describe('util/fonts/getTextByFontProp', function () {
                 text: 'div',
                 props: {
                     'font-family': undefined,
-                    'font-weight': 'bold',
-                    'font-style': undefined
+                    'font-weight': 700,
+                    'font-style': 'normal'
                 }
             }
         ]);
@@ -59,8 +59,8 @@ describe('util/fonts/getTextByFontProp', function () {
                 text: 'div',
                 props: {
                     'font-family': undefined,
-                    'font-weight': 'bold',
-                    'font-style': undefined
+                    'font-weight': 700,
+                    'font-style': 'normal'
                 }
             }
         ]);
@@ -76,23 +76,23 @@ describe('util/fonts/getTextByFontProp', function () {
                 text: 'div',
                 props: {
                     'font-family': undefined,
-                    'font-weight': undefined,
-                    'font-style': undefined
+                    'font-weight': 400,
+                    'font-style': 'normal'
                 }
             },
             {
                 text: 'strong',
                 props: {
                     'font-family': undefined,
-                    'font-weight': 'bold',
-                    'font-style': undefined
+                    'font-weight': 700,
+                    'font-style': 'normal'
                 }
             },
             {
                 text: 'em',
                 props: {
                     'font-family': undefined,
-                    'font-weight': undefined,
+                    'font-weight': 400,
                     'font-style': 'italic'
                 }
             }
@@ -111,8 +111,8 @@ describe('util/fonts/getTextByFontProp', function () {
                     text: 'h1',
                     props: {
                         'font-family': undefined,
-                        'font-weight': 'normal',
-                        'font-style': undefined
+                        'font-weight': 400,
+                        'font-style': 'normal'
                     }
                 }
             ]);
@@ -129,8 +129,8 @@ describe('util/fonts/getTextByFontProp', function () {
                     text: 'div',
                     props: {
                         'font-family': undefined,
-                        'font-weight': 'normal',
-                        'font-style': undefined
+                        'font-weight': 400,
+                        'font-style': 'normal'
                     }
                 }
             ]);
@@ -147,8 +147,8 @@ describe('util/fonts/getTextByFontProp', function () {
                     text: 'div',
                     props: {
                         'font-family': undefined,
-                        'font-weight': 'light',
-                        'font-style': undefined
+                        'font-weight': 300,
+                        'font-style': 'normal'
                     }
                 }
             ]);
@@ -165,8 +165,8 @@ describe('util/fonts/getTextByFontProp', function () {
                     text: 'div',
                     props: {
                         'font-family': undefined,
-                        'font-weight': 'light',
-                        'font-style': undefined
+                        'font-weight': 300,
+                        'font-style': 'normal'
                     }
                 }
             ]);
@@ -183,8 +183,8 @@ describe('util/fonts/getTextByFontProp', function () {
                     text: 'div',
                     props: {
                         'font-family': undefined,
-                        'font-weight': 'bold',
-                        'font-style': undefined
+                        'font-weight': 700,
+                        'font-style': 'normal'
                     }
                 }
             ]);
@@ -201,8 +201,8 @@ describe('util/fonts/getTextByFontProp', function () {
                     text: 'div',
                     props: {
                         'font-family': undefined,
-                        'font-weight': 'bold',
-                        'font-style': undefined
+                        'font-weight': 700,
+                        'font-style': 'normal'
                     }
                 }
             ]);
@@ -219,8 +219,8 @@ describe('util/fonts/getTextByFontProp', function () {
                     text: 'div',
                     props: {
                         'font-family': undefined,
-                        'font-weight': 'bold',
-                        'font-style': undefined
+                        'font-weight': 700,
+                        'font-style': 'normal'
                     }
                 }
             ]);
@@ -237,8 +237,8 @@ describe('util/fonts/getTextByFontProp', function () {
                     text: 'div',
                     props: {
                         'font-family': undefined,
-                        'font-weight': 'light',
-                        'font-style': undefined
+                        'font-weight': 300,
+                        'font-style': 'normal'
                     }
                 }
             ]);
@@ -257,16 +257,16 @@ describe('util/fonts/getTextByFontProp', function () {
                     text: 'foo',
                     props: {
                         'font-family': 'font1',
-                        'font-weight': 'bold',
-                        'font-style': undefined
+                        'font-weight': 700,
+                        'font-style': 'normal'
                     }
                 },
                 {
                     text: 'bar',
                     props: {
                         'font-family': 'font1',
-                        'font-weight': 'bold',
-                        'font-style': undefined
+                        'font-weight': 700,
+                        'font-style': 'normal'
                     }
                 }
             ]);
@@ -282,10 +282,10 @@ describe('util/fonts/getTextByFontProp', function () {
             ].join('\n');
 
             return expect(htmlText, 'to satisfy computed font properties', [
-                { props: { 'font-family': undefined, 'font-weight': undefined, 'font-style': undefined }, text: 'button' },
-                { props: { 'font-family': undefined, 'font-weight': 'normal', 'font-style': undefined }, text: 'option' },
-                { props: { 'font-family': undefined, 'font-weight': undefined, 'font-style': undefined }, text: 'textarea' },
-                { props: { 'font-family': undefined, 'font-weight': undefined, 'font-style': undefined }, text: 'input' }
+                { props: { 'font-family': undefined, 'font-weight': 400, 'font-style': 'normal' }, text: 'button' },
+                { props: { 'font-family': undefined, 'font-weight': 400, 'font-style': 'normal' }, text: 'option' },
+                { props: { 'font-family': undefined, 'font-weight': 400, 'font-style': 'normal' }, text: 'textarea' },
+                { props: { 'font-family': undefined, 'font-weight': 400, 'font-style': 'normal' }, text: 'input' }
             ]);
         });
 
@@ -299,10 +299,10 @@ describe('util/fonts/getTextByFontProp', function () {
             ].join('\n');
 
             return expect(htmlText, 'to satisfy computed font properties', [
-                { props: { 'font-family': 'font1', 'font-style': undefined }, text: 'button' },
-                { props: { 'font-family': 'font1', 'font-style': undefined }, text: 'option' },
-                { props: { 'font-family': 'font1', 'font-style': undefined }, text: 'textarea' },
-                { props: { 'font-family': 'font1', 'font-style': undefined }, text: 'input' }
+                { props: { 'font-family': 'font1', 'font-style': 'normal' }, text: 'button' },
+                { props: { 'font-family': 'font1', 'font-style': 'normal' }, text: 'option' },
+                { props: { 'font-family': 'font1', 'font-style': 'normal' }, text: 'textarea' },
+                { props: { 'font-family': 'font1', 'font-style': 'normal' }, text: 'input' }
             ]);
         });
     });
@@ -349,6 +349,27 @@ describe('util/fonts/getTextByFontProp', function () {
         });
     });
 
+    describe('`initial`-keyword', function () {
+        it('should set initial values even when inheritance set other values', function () {
+
+            var htmlText = [
+                '<style>.all {font-weight: 900} span { font-weight: initial; }</style>',
+                '<div class="all"><span>span</span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+    });
+
     it('should take browser default stylesheet into account', function () {
         var htmlText = [
             '<style>h1 { font-family: font1; } span { font-family: font2; }</style>',
@@ -360,16 +381,16 @@ describe('util/fonts/getTextByFontProp', function () {
                 text: 'foo',
                 props: {
                     'font-family': 'font1',
-                    'font-weight': 'bold',
-                    'font-style': undefined
+                    'font-weight': 700,
+                    'font-style': 'normal'
                 }
             },
             {
                 text: 'bar',
                 props: {
                     'font-family': 'font2',
-                    'font-weight': 'bold',
-                    'font-style': undefined
+                    'font-weight': 700,
+                    'font-style': 'normal'
                 }
             }
         ]);
