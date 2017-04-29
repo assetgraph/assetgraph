@@ -99,6 +99,42 @@ describe('util/fonts/getTextByFontProp', function () {
         ]);
     });
 
+    it('should unquote single quoted font-family', function () {
+        var htmlText = [
+            '<style>body { font-family: \'font 1\'; }</style>',
+            'text'
+        ].join('\n');
+
+        return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+            {
+                text: 'text',
+                props: {
+                    'font-family': 'font 1',
+                    'font-weight': 400,
+                    'font-style': 'normal'
+                }
+            }
+        ]);
+    });
+
+    it('should unquote double quoted font-family', function () {
+        var htmlText = [
+            '<style>body { font-family: "font 1"; }</style>',
+            'text'
+        ].join('\n');
+
+        return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+            {
+                text: 'text',
+                props: {
+                    'font-family': 'font 1',
+                    'font-weight': 400,
+                    'font-style': 'normal'
+                }
+            }
+        ]);
+    });
+
     describe('specificity', function () {
         it('stylesheets should override browser defaults', function () {
             var htmlText = [
