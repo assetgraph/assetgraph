@@ -26,6 +26,7 @@
     "chalk": "^1.1.3",
     "createerror": "^1.1.0",
     "css-font-weight-names": "0.2.1",
+    "css-list-helpers": "1.0.1",
     "cssnano": "^3.7.4",
     "esanimate": "^1.1.0",
     "escodegen": "^1.8.0",
