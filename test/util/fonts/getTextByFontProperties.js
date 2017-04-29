@@ -431,4 +431,32 @@ describe('util/fonts/getTextByFontProp', function () {
             }
         ]);
     });
+
+    describe('CSS pseudo elements', function () {
+        it.skip('should pick up distinct styles on :after pseudo-element', function () {
+            var htmlText = [
+                '<style>h1:after { content: "after"; font-family: font1; }</style>',
+                '<h1>h1</h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+    });
 });
