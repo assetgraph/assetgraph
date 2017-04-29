@@ -576,7 +576,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     { type: 'HtmlStyle', to: { isInline: true }}
                 ]);
 
-
+                expect(assetGraph.findAssets({type: 'Css', isInline: true})[0].text, 'to contain', 'font-family: Robosubset');
             });
     });
 });
