@@ -3,15 +3,15 @@ var resolveFontWeight = require('../../../lib/util/fonts/resolveFontWeight');
 
 describe('resolveFontWeight', function () {
     it('should return the input weight if it exists inthe available weights', function () {
-        expect(resolveFontWeight(100, [100]), 'to be', 100);
-        expect(resolveFontWeight(200, [200]), 'to be', 200);
-        expect(resolveFontWeight(300, [300]), 'to be', 300);
-        expect(resolveFontWeight(400, [400]), 'to be', 400);
-        expect(resolveFontWeight(500, [500]), 'to be', 500);
-        expect(resolveFontWeight(600, [600]), 'to be', 600);
-        expect(resolveFontWeight(700, [700]), 'to be', 700);
-        expect(resolveFontWeight(800, [800]), 'to be', 800);
-        expect(resolveFontWeight(900, [900]), 'to be', 900);
+        expect(resolveFontWeight(100, [100, 200, 300]), 'to be', 100);
+        expect(resolveFontWeight(200, [100, 200, 300]), 'to be', 200);
+        expect(resolveFontWeight(300, [200, 300, 400]), 'to be', 300);
+        expect(resolveFontWeight(400, [300, 400, 500]), 'to be', 400);
+        expect(resolveFontWeight(500, [400, 500, 600]), 'to be', 500);
+        expect(resolveFontWeight(600, [500, 600, 700]), 'to be', 600);
+        expect(resolveFontWeight(700, [600, 700, 800]), 'to be', 700);
+        expect(resolveFontWeight(800, [700, 800, 900]), 'to be', 800);
+        expect(resolveFontWeight(900, [700, 800, 900]), 'to be', 900);
     });
 
     describe('when desired weight is not available', function () {
