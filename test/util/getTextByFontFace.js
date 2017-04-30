@@ -3,7 +3,7 @@ var AssetGraph = require('../../lib');
 var getTextByFontFace = require('../../lib/util/getTextByFontFace');
 
 describe('util/getTextByFontFace', function () {
-    it('should take browser default stylesheet into account', function () {
+    it.skip('should take browser default stylesheet into account', function () {
         var htmlText = [
             '<style>@font-face { font-family: "font1"; font-style: normal; font-weight: 400; src: url(https://fonts.gstatic.com/s/notoserif/v4/Q47Ro23nlKqZrOLipd3-SwsYbbCjybiHxArTLjt7FRU.woff2) format("woff2");}</style>',
             '<style>@font-face { font-family: "font2"; font-style: normal; font-weight: 400; src: url(https://fonts.gstatic.com/s/notoserif/v4/Q47Ro23nlKqZrOLipd3-SwsYbbCjybiHxArTLjt7FRU.woff2) format("woff2");}</style>',
