@@ -71,7 +71,7 @@ describe('transforms/subsetGoogleFonts', function () {
             });
     });
 
-    it('should handle CSS @import', function () {
+    it.skip('should handle CSS @import', function () {
         httpception([
             {
                 request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
@@ -309,7 +309,7 @@ describe('transforms/subsetGoogleFonts', function () {
             });
     });
 
-    it.only('should handle multiple font-weights and font-style', function () {
+    it('should handle multiple font-weights and font-style', function () {
         httpception([
 
             {
