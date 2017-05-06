@@ -39,7 +39,7 @@
     "mkdirp": "^0.5.1",
     "normalizeurl": "^1.0.0",
     "perfectionist": "^2.4.0",
-    "postcss": "~5.2.16",
+    "postcss": "~6.0.0",
     "read-pkg-up": "^2.0.0",
     "repeat-string": "^1.5.4",
     "schemes": "^1.0.1",
