@@ -64,7 +64,11 @@ describe('tranforms/inlineCriticalCss', function () {
                     {
                         to: {
                             isInline: true,
-                            text: 'h1 {\n    color: red\n}\na {\n    color: rebeccapurple\n}'
+                            text: [
+                                'h1 { color: red; }',
+                                '',
+                                'a { color: rebeccapurple; }'
+                            ].join('\n')
                         },
                         node: function (node) {
                             return node && node.parentNode && node.parentNode.tagName === 'HEAD';
@@ -89,7 +93,7 @@ describe('tranforms/inlineCriticalCss', function () {
                     {
                         to: {
                             isInline: true,
-                            text: 'html {\n    color: red\n}'
+                            text: 'html {\n    color:red;\n}'
                         },
                         node: function (node) {
                             return node && node.parentNode && node.parentNode.tagName === 'HEAD';
@@ -114,7 +118,23 @@ describe('tranforms/inlineCriticalCss', function () {
                     {
                         to: {
                             isInline: true,
-                            text: '@media screen {\n    h1 {\n        color: red\n    }\n    p {\n        color: green\n    }\n}\n@media print {\n    h1 {\n        background: black\n    }\n}'
+                            text: [
+                                '@media screen {',
+                                '    h1 {',
+                                '        color: red;',
+                                '    }',
+                                '',
+                                '    p {',
+                                '        color: green;',
+                                '    }',
+                                '}',
+                                '',
+                                '@media print {',
+                                '    h1 {',
+                                '        background: black;',
+                                '    }',
+                                '}'
+                            ].join('\n')
                         },
                         node: function (node) {
                             return node && node.parentNode && node.parentNode.tagName === 'HEAD';
@@ -141,13 +161,15 @@ describe('tranforms/inlineCriticalCss', function () {
                             isInline: true,
                             text: [
                                 'h1:not(.non-existent) {',
-                                '    background: red',
+                                '    background: red;',
                                 '}',
+                                '',
                                 'h1:after {',
-                                '    border: 1px solid yellow',
+                                '    border: 1px solid yellow;',
                                 '}',
+                                '',
                                 'p:nth-child(2) {',
-                                '    background: hotpink',
+                                '    background: hotpink;',
                                 '}'
                             ].join('\n')
                         },
