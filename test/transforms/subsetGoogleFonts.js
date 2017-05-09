@@ -51,7 +51,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     },
                     to: {
                         type: 'Css',
-                        url: /\/google-font-subsets\/Open-Sans-400-Helo\.css$/,
+                        url: /\/google-font-subsets\/Open\+Sans:400-\d+\.css$/,
                         isLoaded: true
                     }
                 });
@@ -60,11 +60,11 @@ describe('transforms/subsetGoogleFonts', function () {
                     type: 'CssFontFaceSrc',
                     from: {
                         type: 'Css',
-                        url: /\/google-font-subsets\/Open-Sans-400-Helo\.css$/
+                        url: /\/google-font-subsets\/Open\+Sans:400-\d+\.css$/
                     },
                     to: {
                         type: 'Asset',
-                        url: /\/google-font-subsets\/Open-Sans-400-Helo.\d+\.woff$/,
+                        url: /\/google-font-subsets\/Open\+Sans:400-\d+\.woff$/,
                         isLoaded: true
                     }
                 });
@@ -245,7 +245,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     type: 'HtmlStyle',
                     to: {
                         type: 'Css',
-                        fileName: 'Jim-Nightshade-400-Helo.css',
+                        fileName: /Jim\+Nightshade:400-\d+\.css/,
                         isLoaded: true
                     }
                 });
@@ -254,7 +254,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     type: 'HtmlStyle',
                     to: {
                         type: 'Css',
-                        fileName: 'Montserrat-400-Dakr.css',
+                        fileName: /Montserrat:400-\d+\.css/,
                         isLoaded: true
                     }
                 });
@@ -263,7 +263,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     type: 'HtmlStyle',
                     to: {
                         type: 'Css',
-                        fileName: 'Space-Mono-400-Celru.css',
+                        fileName: /Space\+Mono:400-\d+\.css/,
                         isLoaded: true
                     }
                 });
@@ -272,11 +272,11 @@ describe('transforms/subsetGoogleFonts', function () {
                     type: 'CssFontFaceSrc',
                     from: {
                         type: 'Css',
-                        fileName: 'Jim-Nightshade-400-Helo.css'
+                        fileName: /Jim\+Nightshade:400-\d+\.css/
                     },
                     to: {
                         type: 'Asset',
-                        fileName: /Jim-Nightshade-400-Helo-\d+\.woff/,
+                        fileName: /Jim\+Nightshade:400-\d+\.woff/,
                         isLoaded: true
                     }
                 });
@@ -285,11 +285,11 @@ describe('transforms/subsetGoogleFonts', function () {
                     type: 'CssFontFaceSrc',
                     from: {
                         type: 'Css',
-                        fileName: 'Montserrat-400-Dakr.css'
+                        fileName: /Montserrat:400-\d+\.css/
                     },
                     to: {
                         type: 'Asset',
-                        fileName: /Montserrat-400-Dakr-\d+\.woff/,
+                        fileName: /Montserrat:400-\d+\.woff/,
                         isLoaded: true
                     }
                 });
@@ -298,11 +298,11 @@ describe('transforms/subsetGoogleFonts', function () {
                     type: 'CssFontFaceSrc',
                     from: {
                         type: 'Css',
-                        fileName: 'Space-Mono-400-Celru.css'
+                        fileName: /Space\+Mono:400-\d+\.css/
                     },
                     to: {
                         type: 'Asset',
-                        fileName: /Space-Mono-400-Celru-\d+\.woff/,
+                        fileName: /Space\+Mono:400-\d+\.woff/,
                         isLoaded: true
                     }
                 });
@@ -408,14 +408,14 @@ describe('transforms/subsetGoogleFonts', function () {
                         type: 'HtmlStyle',
                         to: {
                             type: 'Css',
-                            fileName: 'Roboto-500-Helo.css',
+                            fileName: /Roboto:500-\d+\.css/,
                             isLoaded: true,
                             outgoingRelations: [
                                 {
                                     type: 'CssFontFaceSrc',
                                     to: {
                                         type: 'Asset',
-                                        url: /Roboto-500-Helo-\d+\.woff/,
+                                        url: /Roboto:500-\d+\.woff/,
                                         isLoaded: true
                                     }
                                 }
@@ -426,14 +426,14 @@ describe('transforms/subsetGoogleFonts', function () {
                         type: 'HtmlStyle',
                         to: {
                             type: 'Css',
-                            fileName: 'Roboto-400-Dakr.css',
+                            fileName: /Roboto:400-\d+\.css/,
                             isLoaded: true,
                             outgoingRelations: [
                                 {
                                     type: 'CssFontFaceSrc',
                                     to: {
                                         type: 'Asset',
-                                        url: /Roboto-400-Dakr-\d+\.woff/,
+                                        url: /Roboto:400-\d+\.woff/,
                                         isLoaded: true
                                     }
                                 }
@@ -444,14 +444,14 @@ describe('transforms/subsetGoogleFonts', function () {
                         type: 'HtmlStyle',
                         to: {
                             type: 'Css',
-                            fileName: 'Roboto-300i-Celru.css',
+                            fileName: /Roboto:300i-\d+\.css/,
                             isLoaded: true,
                             outgoingRelations: [
                                 {
                                     type: 'CssFontFaceSrc',
                                     to: {
                                         type: 'Asset',
-                                        url: /Roboto-300i-Celru-\d+\.woff/,
+                                        url: /Roboto:300i-\d+\.woff/,
                                         isLoaded: true
                                     }
                                 }
