@@ -1,0 +1,22 @@
+<html>
+<head>
+  <link rel='stylesheet' href='style.css' />
+  <!--[if IE 6]>
+    Assets referred to in conditional comments targetting old IE versions (&lt;10)
+    shouldn't be added to the cache manifest:
+    <script src='fixIE6.js'></script>
+  <![endif]-->
+
+  <!--[if !IE]>-->
+    Whereas <script src='modernBrowsers.js'></script> should be added
+    because it will be read by modern browsers,
+    <a href='http://blogs.msdn.com/b/ie/archive/2011/07/06/html5-parsing-in-ie10.aspx'>including IE 10</a>,
+    which <a href='http://caniuse.com/#search=offline'>supports cache manifests</a>.
+  <!--<![endif]-->
+
+  <script src="notFound.js"></script>
+</head>
+<body>
+  <img src='foo.png'>
+</body>
+</html>
