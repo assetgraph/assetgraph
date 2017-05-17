@@ -170,16 +170,18 @@ describe('assets/Html', function () {
 
         it('should handle a non-templated HTML asset', function () {
             var asset = createAsset('<div></div>');
-
-            expect(asset.internalText, 'to equal', asset.text);
+            asset.parseTree; // Side effect: Populate asset._templateReplacement
+            expect(asset.text, 'to equal', '<div></div>');
+            expect(asset._templateReplacements, 'to equal', {});
+            asset.markDirty();
+            expect(asset.text, 'to equal', '<div></div>');
         });
 
         it('should handle an underscore template', function () {
             var asset = createAsset('<div><% foo %></div>');
 
-            expect(asset.internalText, 'not to equal', asset.text);
-            expect(asset.internalText, 'to equal', '<div>⋖5⋗</div>');
-            expect(asset._templateReplacements['⋖5⋗'], 'to equal', '<% foo %>');
+            asset.parseTree; // Side effect: Populate asset._templateReplacement
+            expect(asset._templateReplacements, 'to equal', {'⋖5⋗': '<% foo %>'});
             expect(asset.text, 'to equal', '<div><% foo %></div>');
 
             asset.parseTree.firstChild.removeChild(asset.parseTree.firstChild.firstChild);
@@ -187,27 +189,39 @@ describe('assets/Html', function () {
             expect(asset.text, 'to equal', '<div></div>');
 
             asset.text = '<div><% bar %></div>';
-            expect(asset.internalText, 'to equal', '<div>⋖5⋗</div>');
+            asset.parseTree; // Side effect: Populate asset._templateReplacement
+            expect(asset.parseTree.firstChild.firstChild.nodeValue, 'to equal', '⋖5⋗');
+
+            expect(asset._templateReplacements, 'to equal', {'⋖5⋗': '<% bar %>'});
             expect(asset.text, 'to equal', '<div><% bar %></div>');
         });
 
         it('should handle the PHP template syntax', function () {
             var asset = createAsset('<div><? foo ?></div>');
+            expect(asset.text, 'to equal', '<div><? foo ?></div>');
+            asset.parseTree; // Side effect: Populate asset._templateReplacement
+            expect(asset.parseTree.firstChild.firstChild.nodeValue, 'to equal', '⋖5⋗');
 
-            expect(asset.internalText, 'not to equal', asset.text);
-            expect(asset.internalText, 'to equal', '<div>⋖5⋗</div>');
             expect(asset._templateReplacements['⋖5⋗'], 'to equal', '<? foo ?>');
+            expect(asset.text, 'to equal', '<div><? foo ?></div>');
+            asset.markDirty();
             expect(asset.text, 'to equal', '<div><? foo ?></div>');
 
             asset.text = '<div><? bar ?></div>';
-            expect(asset.internalText, 'to equal', '<div>⋖5⋗</div>');
+            expect(asset.text, 'to equal', '<div><? bar ?></div>');
+            asset.parseTree;
+            asset.markDirty(); // Side effect: Populate asset._templateReplacement
             expect(asset.text, 'to equal', '<div><? bar ?></div>');
         });
 
         it('should handle a an underscore template with a PHP close tag inside the dynamic part', function () {
             var asset = createAsset('<div><% foo ?> %></div>');
 
-            expect(asset.internalText, 'to equal', '<div>⋖5⋗</div>');
+            asset.parseTree; // Side effect: Populate asset._templateReplacement
+            expect(asset.parseTree.firstChild.firstChild.nodeValue, 'to equal', '⋖5⋗');
+
+            expect(asset.text, 'to equal', '<div><% foo ?> %></div>');
+            asset.markDirty();
             expect(asset.text, 'to equal', '<div><% foo ?> %></div>');
         });
     });
