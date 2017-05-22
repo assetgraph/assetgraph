@@ -482,6 +482,28 @@ describe('assets/Html', function () {
             );
         });
 
+        // https://github.com/kangax/html-minifier/pull/813
+        it('should allow vetoing canTrimWhitespace', function () {
+            expect(
+                '<div>  foo  <span class="bar">  quux  </span>  baz  <pre>  </pre></div>',
+                'to minify to',
+                '<div>foo <span class=bar>  quux  </span>baz<pre>  </pre></div>',
+                function (htmlAsset) {
+                    htmlAsset.htmlMinifierOptions = {
+                        canTrimWhitespace: function customTrimmer(tagName, attrs, defaultFn) {
+                            if (attrs && attrs.some(function (attr) {
+                                return attr.name === 'class' && /\bbar\b/.test(attr.value);
+                            })) {
+                                return false;
+                            }
+                            return defaultFn(tagName, attrs);
+                        }
+                    };
+                }
+            );
+        });
+    });
+
     describe('#allowsPerCsp', function () {
         it('should support a non-camelCased directive name', function () {
             expect(new AssetGraph.Html({
