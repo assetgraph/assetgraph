@@ -1,7 +1,8 @@
 /*global describe, it*/
-var unexpected = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib'),
-    Promise = require('bluebird');
+var unexpected = require('../unexpected-with-plugins');
+var AssetGraph = require('../../lib');
+var Promise = require('bluebird');
+var mozilla = require('source-map');
 
 describe('assets/Html', function () {
     var expect = unexpected.clone().addAssertion('to minify to', function (expect, subject, value, manipulator) {
@@ -594,5 +595,76 @@ describe('assets/Html', function () {
         htmlAsset.parseTree;
         htmlAsset.markDirty();
         expect(htmlAsset.text, 'not to contain', '<foo></foo>');
+    });
+
+    it('should register the source location of inline scripts and stylesheets', function () {
+        return new AssetGraph({root: __dirname + '../../../testdata/assets/Html/sourceMapInlineAssets/'})
+            .loadAssets('index.html')
+            .populate()
+            .applySourceMaps()
+            .queue(function (assetGraph) {
+                // FIXME: Make sure that it's sufficient to mark the containing asset dirty:
+                assetGraph.findAssets({type: 'JavaScript'})[0].markDirty();
+                assetGraph.findAssets({type: 'Css'})[0].markDirty();
+            })
+            .externalizeRelations({type: ['HtmlStyle', 'HtmlScript']})
+            .minifyAssets({type: ['Css', 'JavaScript']})
+            .serializeSourceMaps()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'JavaScript');
+                expect(assetGraph, 'to contain asset', 'Css');
+                expect(assetGraph, 'to contain assets', 'SourceMap', 2);
+                var cssSourceMap = assetGraph.findRelations({type: 'CssSourceMappingUrl'})[0].to;
+                expect(cssSourceMap.parseTree, 'to satisfy', {
+                    sources: [ assetGraph.root + 'index.html' ]
+                });
+                var cssSourceMapConsumer = new mozilla.SourceMapConsumer(cssSourceMap.parseTree);
+
+                expect(cssSourceMapConsumer.generatedPositionFor({
+                    source: assetGraph.root + 'index.html',
+                    line: 6,
+                    column: 17
+                }), 'to equal', {
+                    line: 1,
+                    column: 5,
+                    lastColumn: null
+                });
+
+                expect(cssSourceMapConsumer.originalPositionFor({
+                    line: 1,
+                    column: 12
+                }), 'to equal', {
+                    source: assetGraph.root + 'index.html',
+                    line: 6,
+                    column: 16,
+                    name: null
+                });
+
+                var javaScriptSourceMap = assetGraph.findRelations({type: 'JavaScriptSourceMappingUrl'})[0].to;
+                expect(javaScriptSourceMap.parseTree, 'to satisfy', {
+                    sources: [ assetGraph.root + 'index.html' ]
+                });
+
+                var javaScriptSourceMapConsumer = new mozilla.SourceMapConsumer(javaScriptSourceMap.parseTree);
+                expect(javaScriptSourceMapConsumer.generatedPositionFor({
+                    source: assetGraph.root + 'index.html',
+                    line: 13,
+                    column: 16
+                }), 'to equal', {
+                    line: 1,
+                    column: 8,
+                    lastColumn: null
+                });
+
+                expect(javaScriptSourceMapConsumer.originalPositionFor({
+                    line: 1,
+                    column: 12
+                }), 'to equal', {
+                    source: assetGraph.root + 'index.html',
+                    line: 13,
+                    column: 16,
+                    name: 'alert'
+                });
+            });
     });
 });
