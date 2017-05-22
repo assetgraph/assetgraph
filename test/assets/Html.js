@@ -483,7 +483,17 @@ describe('assets/Html', function () {
                 '<!DOCTYPE html><html><head></head><body class=foo><script>foo();</script><input type=text disabled></body></html>'
             );
         });
-    });
+
+        it('should allow overriding the html-minifier options', function () {
+            expect(
+                '<div><!-- hey --></div>',
+                'to minify to',
+                '<div><!-- hey --></div>',
+                function (htmlAsset) {
+                    htmlAsset.htmlMinifierOptions = { removeComments: false };
+                }
+            );
+        });
 
     describe('#allowsPerCsp', function () {
         it('should support a non-camelCased directive name', function () {
