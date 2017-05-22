@@ -135,6 +135,25 @@ describe('util/fonts/getTextByFontProp', function () {
         ]);
     });
 
+
+    it('should return font-weight as a number', function () {
+        var htmlText = [
+            '<style>body { font-weight: 500; }</style>',
+            'text'
+        ].join('\n');
+
+        return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+            {
+                text: 'text',
+                props: {
+                    'font-family': undefined,
+                    'font-weight': 500,
+                    'font-style': 'normal'
+                }
+            }
+        ]);
+    });
+
     describe('specificity', function () {
         it('stylesheets should override browser defaults', function () {
             var htmlText = [
