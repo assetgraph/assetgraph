@@ -3,8 +3,8 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlPictureSourceSrcSet', function () {
-    it('should handle a test case with an existing <picture srcset="..."> element', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPictureSourceSrcSet/'})
+    it('should handle a test case with an existing <picture srcset="..."> element', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPictureSourceSrcSet/'})
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
@@ -24,7 +24,6 @@ describe('relations/HtmlPictureSourceSrcSet', function () {
                     '<source media="(min-width: 18em)" srcset="med-1.jpg 1x, reallyMed.jpg 2x">',
                     '<source srcset="small-1.jpg 1x, reallySmall.jpg 2x">'
                 ]);
-            })
-            .run(done);
+            });
     });
 });
