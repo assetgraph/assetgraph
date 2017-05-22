@@ -3,7 +3,7 @@ module.exports = {
         'onelint'
     ],
     env: {
-        es6: false
+        es6: true
     },
     parserOptions: null
 };
