@@ -452,9 +452,9 @@ describe('util/fonts/getTextByFontProp', function () {
     });
 
     describe('CSS pseudo elements', function () {
-        it.skip('should pick up distinct styles on :after pseudo-element', function () {
+        it('should pick up distinct styles on :after pseudo-element', function () {
             var htmlText = [
-                '<style>h1:after { content: "after"; font-family: font1; }</style>',
+                '<style>h1:after { content: "after"; font-family: font1 !important; }</style>',
                 '<h1>h1</h1>'
             ].join('\n');
 
@@ -472,6 +472,94 @@ describe('util/fonts/getTextByFontProp', function () {
                     props: {
                         'font-family': 'font1',
                         'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should pick up multiple :after pseudo-elements', function () {
+            var htmlText = [
+                '<style>h1:after { content: "after"; font-family: font1 !important; }</style>',
+                '<h1>h1</h1>',
+                '<h1>h1</h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should inherit from each distinct pseudo parent', function () {
+            var htmlText = [
+                '<style>.foo:after { content: "after"; font-family: font1 !important; }</style>',
+                '<style>p { font-weight: 200; }</style>',
+                '<style>article { font-weight: 600; }</style>',
+                '<p class="foo">p</p>',
+                '<article class="foo">article</atricle>',
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'p',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 200,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'article',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 600,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 200,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 600,
                         'font-style': 'normal'
                     }
                 }
