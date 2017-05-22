@@ -1,6 +1,6 @@
 /*global describe, it, beforeEach*/
 var unexpected = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/replaceSymbolsInJavaScript', function () {
     var assetGraph;

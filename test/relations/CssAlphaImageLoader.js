@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     _ = require('lodash'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/CssAlphaImageLoader', function () {
     it('should handle a simple test case', function () {

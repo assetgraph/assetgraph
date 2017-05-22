@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/inlineHtmlTemplates', function () {
     it('should handle a test case with a single Knockout.js template with a nested template loaded using the systemjs-tpl plugin', function () {

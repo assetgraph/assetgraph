@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('./unexpected-with-plugins'),
-    AssetGraph = require('../lib'),
+    AssetGraph = require('../lib/AssetGraph'),
     Promise = require('bluebird');
 
 AssetGraph.registerTransform(function pushItemToArraySync(item, array) {

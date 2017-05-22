@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/loadAssets', function () {
     it('should support a single url passed as a string', function () {

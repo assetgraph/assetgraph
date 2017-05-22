@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     _ = require('lodash'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/JavaScriptStaticUrl', function () {
     it('should handle root relative urls', function () {

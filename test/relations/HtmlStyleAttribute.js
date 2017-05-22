@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlStyleAttribute', function () {
     it('should handle a test case with existing <link rel="stylesheet"> and <style> elements', function (done) {

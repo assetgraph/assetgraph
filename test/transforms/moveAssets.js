@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/moveAssets', function () {
     it('should throw if mandatory second argument is missing', function () {

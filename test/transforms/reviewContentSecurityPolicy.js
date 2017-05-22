@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins');
 var sinon = require('sinon');
-var AssetGraph = require('../../lib/');
+var AssetGraph = require('../../lib/AssetGraph');
 var httpception = require('httpception');
 
 describe('transforms/reviewContentSecurityPolicy', function () {

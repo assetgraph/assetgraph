@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     _ = require('lodash'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlPictureSource test', function () {
     it('should handle a test case with an existing <picture><source src="..."></picture> construct', function (done) {

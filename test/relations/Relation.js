@@ -1,5 +1,5 @@
 /*global describe, it*/
-var AssetGraph = require('../../lib'),
+var AssetGraph = require('../../lib/AssetGraph'),
     expect = require('../unexpected-with-plugins'),
     _ = require('lodash');
 var pathModule = require('path');

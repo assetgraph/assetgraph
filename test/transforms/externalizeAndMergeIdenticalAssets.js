@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/externalizeRelations and transforms/mergeIdenticalAssets', function () {
     it('should handle a test case with multiple inline scripts then externalizing them', function (done) {

@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/SvgAnchor', function () {
     it('should handle a test case with <a xlink:href=...> referencing an external file', function () {

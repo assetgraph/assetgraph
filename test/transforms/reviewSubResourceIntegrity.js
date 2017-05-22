@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins');
 var sinon = require('sinon');
-var AssetGraph = require('../../lib/');
+var AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/reviewSubResourceIntegrity', function () {
     describe('in update mode', function () {

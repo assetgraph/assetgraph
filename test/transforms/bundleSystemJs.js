@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     estraverse = require('estraverse'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/bundleSystemJs', function () {
     it('should handle a simple test case', function () {

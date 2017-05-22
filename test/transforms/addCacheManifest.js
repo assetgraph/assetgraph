@@ -2,7 +2,7 @@
 var expect = require('../unexpected-with-plugins'),
     _ = require('lodash'),
     urlTools = require('urltools'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/addCacheManifest', function () {
     it('should handle a single page with an existing cache manifest', function (done) {

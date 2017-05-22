@@ -1,5 +1,5 @@
 var expect = require('../unexpected-with-plugins');
-var AssetGraph = require('../../lib/');
+var AssetGraph = require('../../lib/AssetGraph');
 
 describe('JavaScriptImportScripts', function () {
     it('should pick up importScripts() and self.importScripts as relations', function () {

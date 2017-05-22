@@ -1,5 +1,5 @@
 var expect = require('../unexpected-with-plugins');
-var AssetGraph = require('../../lib/');
+var AssetGraph = require('../../lib/AssetGraph');
 
 describe('updateAssets', function () {
     describe('without the deep flag', function () {

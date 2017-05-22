@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins');
 var sinon = require('sinon');
-var AssetGraph = require('../../lib');
+var AssetGraph = require('../../lib/AssetGraph');
 var errors = require('../../lib/errors');
 
 describe('transforms/compressJavaScript', function () {

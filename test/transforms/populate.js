@@ -2,7 +2,7 @@
 var expect = require('../unexpected-with-plugins'),
     _ = require('lodash'),
     urlTools = require('urltools'),
-    AssetGraph = require('../../lib'),
+    AssetGraph = require('../../lib/AssetGraph'),
     query = AssetGraph.query;
 
 describe('transforms/populate', function () {

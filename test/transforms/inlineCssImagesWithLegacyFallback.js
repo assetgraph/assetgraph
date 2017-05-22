@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/inlineCssImagesWithLegacyFallback', function () {
     it('should handle a test case with a single Html asset', function (done) {

@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     urlTools = require('urltools'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 // Helper for extracting all values of a specific property from a postcss rule
 function getPropertyValues(container, propertyName) {

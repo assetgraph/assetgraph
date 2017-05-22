@@ -2,7 +2,7 @@
 var expect = require('../unexpected-with-plugins');
 var _ = require('lodash');
 var fs = require('fs');
-var AssetGraph = require('../../lib');
+var AssetGraph = require('../../lib/AssetGraph');
 var mozilla = require('source-map');
 var requirejs = fs.readFileSync(__dirname + '/../../testdata/transforms/bundleRequireJs/almond/mixed/require.js', 'utf8');
 var almond = fs.readFileSync(__dirname + '/../../testdata/transforms/bundleRequireJs/almond/mixed/almond.js', 'utf8');

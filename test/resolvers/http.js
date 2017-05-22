@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins');
-var AssetGraph = require('../../lib');
+var AssetGraph = require('../../lib/AssetGraph');
 var http = require('http');
 var httpception = require('httpception');
 

@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('./unexpected-with-plugins'),
-    query = require('../lib').query;
+    query = require('../lib/AssetGraph').query;
 
 describe('query', function () {
     it('should throw on error conditions', function (done) {

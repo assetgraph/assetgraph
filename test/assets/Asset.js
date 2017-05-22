@@ -2,7 +2,7 @@
 var expect = require('../unexpected-with-plugins'),
     sinon = require('sinon'),
     urlTools = require('urltools'),
-    AssetGraph = require('../../lib'),
+    AssetGraph = require('../../lib/AssetGraph'),
     httpception = require('httpception'),
     fs = require('fs');
 

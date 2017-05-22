@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
     urlTools = require('urltools'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlEmbed', function () {
     it('should handle a test case with an existing <embed src="..."> element', function (done) {

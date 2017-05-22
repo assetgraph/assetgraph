@@ -1,7 +1,7 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins');
 var esprima = require('esprima');
-var AssetGraph = require('../../lib/');
+var AssetGraph = require('../../lib/AssetGraph');
 var _ = require('lodash');
 
 describe('transforms/serializeSourceMaps', function () {

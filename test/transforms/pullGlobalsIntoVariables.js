@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib'),
+    AssetGraph = require('../../lib/AssetGraph'),
     esprima = require('esprima'),
     escodegen = require('escodegen');
 

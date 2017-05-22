@@ -81,7 +81,7 @@
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
   },
-  "main": "lib",
+  "main": "lib/AssetGraph.js",
   "scripts": {
     "lint": "eslint .",
     "test": "npm run lint && mocha",

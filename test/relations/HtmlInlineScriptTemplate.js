@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlInlineScriptTemplate', function () {
     it('should handle a test case with an existing <script type="text/html"> element', function (done) {

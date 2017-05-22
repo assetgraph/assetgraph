@@ -1,5 +1,5 @@
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/MsApplicationConfig', function () {
     it('should handle a test case with an existing MsApplicationConfig asset', function (done) {

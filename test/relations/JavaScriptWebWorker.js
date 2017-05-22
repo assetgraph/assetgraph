@@ -1,5 +1,5 @@
 var expect = require('../unexpected-with-plugins');
-var AssetGraph = require('../../lib/');
+var AssetGraph = require('../../lib/AssetGraph');
 
 describe('JavaScriptWebWorker', function () {
     it('should pick up new Worker(...) as a relation', function () {

@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib'),
+    AssetGraph = require('../../lib/AssetGraph'),
     http = require('http');
 
 describe('relations/HttpRedirect', function () {

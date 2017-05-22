@@ -1,6 +1,6 @@
 var expect = require('../unexpected-with-plugins');
 var sinon = require('sinon');
-var AssetGraph = require('../../lib');
+var AssetGraph = require('../../lib/AssetGraph');
 
 describe('tranforms/inlineCriticalCss', function () {
     it('should not do anything on an empty page', function () {

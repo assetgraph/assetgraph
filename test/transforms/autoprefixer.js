@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms.autoprefixer', function () {
     it('should handle an unprefixed test case', function (done) {

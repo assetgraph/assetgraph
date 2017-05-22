@@ -2,7 +2,7 @@
 var expect = require('../unexpected-with-plugins'),
     sinon = require('sinon'),
     mozilla = require('source-map'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/Css', function () {
     it('should handle a test case with a parse error in an inline Css asset', function (done) {

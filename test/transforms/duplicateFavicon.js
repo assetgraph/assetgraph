@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/'),
+    AssetGraph = require('../../lib/AssetGraph'),
     urlTools = require('urltools');
 
 describe('transforms.duplicateFavicon', function () {

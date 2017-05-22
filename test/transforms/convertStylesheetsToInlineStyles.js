@@ -1,6 +1,6 @@
 /*global describe, it*/
 var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib');
+    AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/convertStylesheetsToInlineStyles', function () {
     it('should convert all stylesheets to inline styles', function (done) {
