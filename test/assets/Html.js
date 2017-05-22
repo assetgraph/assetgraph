@@ -222,6 +222,14 @@ describe('assets/Html', function () {
             );
         });
 
+        it('should strip a random, non-whitelisted HTML comment', function () {
+            expect(
+                '<!DOCTYPE html><html><head></head><body><!--bogus--></body></html>',
+                'to minify to',
+                '<!DOCTYPE html><html><head></head><body></body></html>'
+            );
+        });
+
         it('should leave SSI comment alone', function () {
             expect(
                 '<!DOCTYPE html><html><head></head><body><!--#echo "foo"--></body></html>',
@@ -230,11 +238,11 @@ describe('assets/Html', function () {
             );
         });
 
-        it('should preserve Knockout containerless binding comment, but remove its leading and trailing whitespace', function () {
+        it('should preserve Knockout containerless binding comment', function () {
             expect(
                 '<!DOCTYPE html><html><head></head><body><!-- ko foreach: blah --><div></div><!--/ko --></body></html>',
                 'to minify to',
-                '<!DOCTYPE html><html><head></head><body><!--ko foreach: blah--><div></div><!--/ko--></body></html>'
+                '<!DOCTYPE html><html><head></head><body><!-- ko foreach: blah --><div></div><!--/ko --></body></html>'
             );
         });
 
@@ -246,11 +254,11 @@ describe('assets/Html', function () {
             );
         });
 
-        it('should preserve Htmlizer containerless binding comment, but remove its leading and trailing whitespace', function () {
+        it('should preserve Htmlizer containerless binding comment', function () {
             expect(
                 '<!DOCTYPE html><html><head></head><body><!-- hz foreach: blah --><div></div><!--/hz --></body></html>',
                 'to minify to',
-                '<!DOCTYPE html><html><head></head><body><!--hz foreach: blah--><div></div><!--/hz--></body></html>'
+                '<!DOCTYPE html><html><head></head><body><!-- hz foreach: blah --><div></div><!--/hz --></body></html>'
             );
         });
 
@@ -399,11 +407,11 @@ describe('assets/Html', function () {
             );
         });
 
-        it('should trim trailing whitespace in an inline element followed by a text node with leading whitespace', function () {
+        it('should trim leading whitespace in an inline element followed by a text node with leading whitespace', function () {
             expect(
                 '<div><span>foo </span> bar</div>',
                 'to minify to',
-                '<div><span>foo</span> bar</div>' // I'm actually not sure that this one is perfectly safe
+                '<div><span>foo </span>bar</div>'
             );
         });
 
@@ -435,7 +443,7 @@ describe('assets/Html', function () {
             expect(
                 '<div><span></span> <!--# echo "foo" --> bar</div>',
                 'to minify to',
-                '<div><span></span> <!--# echo "foo" --> bar</div>'
+                '<div><span></span><!--# echo "foo" --> bar</div>'
             );
         });
 
@@ -460,6 +468,38 @@ describe('assets/Html', function () {
                 '<!DOCTYPE html>\n<html><head></head><body id=" " class="foo"><script type="text/javascript">foo();</script><input type="text" disabled="disabled"></body></html>',
                 'to minify to',
                 '<!DOCTYPE html><html><head></head><body class=foo><script>foo();</script><input type=text disabled></body></html>'
+            );
+        });
+
+        it('should allow overriding the html-minifier options', function () {
+            expect(
+                '<div><!-- hey --></div>',
+                'to minify to',
+                '<div><!-- hey --></div>',
+                function (htmlAsset) {
+                    htmlAsset.htmlMinifierOptions = { removeComments: false };
+                }
+            );
+        });
+
+        // https://github.com/kangax/html-minifier/pull/813
+        it('should allow vetoing canTrimWhitespace', function () {
+            expect(
+                '<div>  foo  <span class="bar">  quux  </span>  baz  <pre>  </pre></div>',
+                'to minify to',
+                '<div>foo <span class=bar>  quux  </span>baz<pre>  </pre></div>',
+                function (htmlAsset) {
+                    htmlAsset.htmlMinifierOptions = {
+                        canTrimWhitespace: function customTrimmer(tagName, attrs, defaultFn) {
+                            if (attrs && attrs.some(function (attr) {
+                                return attr.name === 'class' && /\bbar\b/.test(attr.value);
+                            })) {
+                                return false;
+                            }
+                            return defaultFn(tagName, attrs);
+                        }
+                    };
+                }
             );
         });
     });
