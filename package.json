@@ -73,7 +73,7 @@
     "systemjs-asset-plugin": "^3.0.0",
     "systemjs-builder": "^0.16.3",
     "unexpected": "^10.26.0",
-    "unexpected-dom": "^3.0.2",
+    "unexpected-dom": "^4.0.0",
     "unexpected-sinon": "^10.7.0",
     "webpack": "^2.3.1",
     "yui-compressor": "^0.1.3"
