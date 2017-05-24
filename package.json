@@ -32,7 +32,7 @@
     "estraverse": "^4.2.0",
     "gettemporaryfilepath": "^1.0.0",
     "glob": "^7.0.5",
-    "html-minifier": "^3.5.1",
+    "html-minifier-papandreou": "3.5.1-patch1",
     "imageinfo": "1.0.4",
     "jsdom": "11.0.0",
     "lodash": "^4.11.2",
