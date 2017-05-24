@@ -34,7 +34,7 @@
     "espurify": "^1.5.1",
     "estraverse": "^4.2.0",
     "glob": "^7.0.5",
-    "html-minifier": "^3.5.1",
+    "html-minifier-papandreou": "3.5.1-patch1",
     "imageinfo": "1.0.4",
     "jsdom-papandreou": "0.11.0-patch4",
     "lodash": "^4.11.2",
