@@ -478,6 +478,60 @@ describe('util/fonts/getTextByFontProp', function () {
             ]);
         });
 
+        it('should override re-definition of prop on :after pseudo-element', function () {
+            var htmlText = [
+                '<style>h1::after { content: "after"; font-family: font1; }</style>',
+                '<style>h1::after { content: "after"; font-family: font2; }</style>',
+                '<h1>h1</h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font2',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should take !important into account when re-defining prop on :after pseudo-element', function () {
+            var htmlText = [
+                '<style>h1:after { content: "after"; font-family: font1 !important; }</style>',
+                '<style>h1:after { content: "after"; font-family: font2; }</style>',
+                '<h1>h1</h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
         it('should pick up multiple :after pseudo-elements', function () {
             var htmlText = [
                 '<style>h1:after { content: "after"; font-family: font1 !important; }</style>',
