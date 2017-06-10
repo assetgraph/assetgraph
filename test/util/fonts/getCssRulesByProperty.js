@@ -112,7 +112,16 @@ describe('util/fonts/getCssRulesByProperty', function () {
     });
 
     describe('shorthand font-property', function () {
-        it('register the longhand value from a shorthand', function () {
+        it('should ignore invalid shorthands', function () {
+            var result = getRules(['font-family', 'font-size'], 'h1 { font: 15px; }');
+
+            expect(result, 'to exhaustively satisfy', {
+                'font-family': [],
+                'font-size': []
+            });
+        });
+
+        it('register the longhand value from a valid shorthand', function () {
             var result = getRules(['font-family', 'font-size'], 'h1 { font: 15px serif; }');
 
             expect(result, 'to exhaustively satisfy', {
