@@ -87,4 +87,136 @@ describe('util/fonts/getCssRulesByProperty', function () {
             ]
         ]);
     });
+
+    describe('overridden values', function () {
+        it('should return the last defined value', function () {
+            expect(getRules(['color'], 'h1 { color: red; color: blue; }'), 'to exhaustively satisfy', {
+                color: [
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'color',
+                        value: 'red',
+                        important: false
+                    },
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'color',
+                        value: 'blue',
+                        important: false
+                    }
+                ]
+            });
+        });
+    });
+
+    describe('shorthand font-property', function () {
+        it('register the longhand value from a shorthand', function () {
+            var result = getRules(['font-family', 'font-size'], 'h1 { font: 15px serif; }');
+
+            expect(result, 'to exhaustively satisfy', {
+                'font-family': [
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'font-family',
+                        value: 'serif',
+                        important: false
+                    }
+                ],
+                'font-size': [
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'font-size',
+                        value: '15px',
+                        important: false
+                    }
+                ]
+            });
+        });
+
+        it('should set initial values for requested properties which are not defined in shorthand', function () {
+            var result = getRules(['font-family', 'font-size', 'font-style', 'font-weight'], 'h1 { font: 15px serif; }');
+
+            expect(result, 'to exhaustively satisfy', {
+                'font-family': [
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'font-family',
+                        value: 'serif',
+                        important: false
+                    }
+                ],
+                'font-size': [
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'font-size',
+                        value: '15px',
+                        important: false
+                    }
+                ],
+                'font-style': [
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'font-style',
+                        value: 'normal',
+                        important: false
+                    }
+                ],
+                'font-weight': [
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'font-weight',
+                        value: 400,
+                        important: false
+                    }
+                ]
+            });
+        });
+
+        it('register the longhand value from a shorthand', function () {
+            var result = getRules(['font-family', 'font-size'], 'h1 { font-size: 10px; font: 15px serif; font-size: 20px }');
+
+            expect(result, 'to exhaustively satisfy', {
+                'font-family': [
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'font-family',
+                        value: 'serif',
+                        important: false
+                    }
+                ],
+                'font-size': [
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'font-size',
+                        value: '10px',
+                        important: false
+                    },
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'font-size',
+                        value: '15px',
+                        important: false
+                    },
+                    {
+                        selector: 'h1',
+                        specificityArray: [0, 0, 0, 1],
+                        prop: 'font-size',
+                        value: '20px',
+                        important: false
+                    }
+                ]
+            });
+        });
+    });
 });
