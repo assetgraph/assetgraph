@@ -158,4 +158,37 @@ describe('bundleWebpack', function () {
                     .and('to contain relation', { from: { fileName: 'bundle.js' }, to: { fileName: /^[01]\.bundle\.js$/ } });
             });
     });
+
+    it('should support code splitting via require.ensure and wildcards', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/wildcardCodeSplit/'})
+            .loadAssets('index.html')
+            .bundleWebpack()
+            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 4);
+                var mainBundle = assetGraph.findAssets({fileName: 'bundle.js'})[0];
+
+                expect(mainBundle.text, 'to contain', '\'/dist/1.bundle.js\'.toString(\'url\')')
+                    .and('to contain', '__webpack_require__.e(ids[1], ids[2]).then');
+            });
+    });
+
+    it('should support code splitting via require.ensure and wildcards when chunkFilename is used', function () {
+        // The presence of
+        //   { output: { ... chunkFilename: 'js/bundle.[name].[chunkhash:8].js' } }
+        // in the webpack config makes the dynamic loader come out as:
+        //   script.src = __webpack_require__.p + "js/bundle." + ({}[chunkId]||chunkId) + "." + {"0":"4939bbe4","1":"a614fb6c"}[chunkId] + ".js";
+        // instead of per usual:
+        //   script.src = __webpack_require__.p + "" + chunkId + ".bundle.js";
+
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/wildcardCodeSplitWithChunkfilename/'})
+            .loadAssets('index.html')
+            .bundleWebpack()
+            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}})
+            .queue(function (assetGraph) {
+                var mainBundle = assetGraph.findAssets({fileName: 'bundle.js'})[0];
+                expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 4);
+                expect(mainBundle.text, 'to contain',  '\'/dist/bundle.1.a614fb6c.js\'.toString(\'url\')');
+            });
+    });
 });
