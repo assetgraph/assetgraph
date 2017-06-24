@@ -5,5 +5,7 @@ module.exports = {
     env: {
         es6: true
     },
-    parserOptions: null
+    parserOptions: {
+        ecmaVersion: 2017
+    }
 };
