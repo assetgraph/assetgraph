@@ -110,6 +110,19 @@ describe('transforms/addPrecacheServiceWorker', function () {
                 });
         });
 
+        it('should only add one fragment to the service worker file name per unique basename', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/multiPage/'})
+                .loadAssets('*.html')
+                .populate()
+                .queue(assetGraph => {
+                    assetGraph.findAssets({fileName: 'otherpage.html'})[0].url = assetGraph.root + 'somewhereelse/index.html';
+                })
+                .addPrecacheServiceWorker({isInitial: true}, {single: true})
+                .queue(assetGraph => {
+                    expect(assetGraph, 'to contain asset', { url: assetGraph.root + 'index-precache-service-worker.js' });
+                });
+        });
+
         it('should put the service worker at a common path prefix', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/multiPageInDifferentDirectories/'})
                 .loadAssets('**/*.html')
@@ -126,9 +139,9 @@ describe('transforms/addPrecacheServiceWorker', function () {
                     expect(assetGraph, 'to contain relation', 'JavaScriptServiceWorkerRegistration', 2);
                     expect(assetGraph, 'to contain relation', 'JavaScriptStaticUrl');
                     expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
-                    expect(assetGraph, 'to contain asset', { url: assetGraph.root + 'path/to/index-index-precache-service-worker.js' });
+                    expect(assetGraph, 'to contain asset', { url: assetGraph.root + 'path/to/index-otherpage-precache-service-worker.js' });
                     expect(assetGraph, 'to contain relations', {
-                        to: { fileName: 'index-index-precache-service-worker.js' }
+                        to: { fileName: 'index-otherpage-precache-service-worker.js' }
                     }, 2);
                 });
         });
