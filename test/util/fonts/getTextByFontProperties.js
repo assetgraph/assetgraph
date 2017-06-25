@@ -621,6 +621,52 @@ describe('util/fonts/getTextByFontProp', function () {
         });
     });
 
+    describe('CSS pseudo selectors', function () {
+        it('should ignore the pseudo class when matching a node', function () {
+            var htmlText = [
+                '<style>div:hover { font-family: font1; font-weight: bold }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': undefined
+                    }
+                }
+            ]);
+        });
+
+        it('should include branch out to also include the possibility of the pseudo class selector not matching at all', function () {
+            var htmlText = [
+                '<style>div { font-family: font1; font-weight: 400 } div:hover { font-weight: 500 }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 500,
+                        'font-style': undefined
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': undefined
+                    }
+                }
+            ]);
+        });
+    });
+
     describe('font-shorthand property', function () {
         it('should have shorthand value override previous longhand value', function () {
             var htmlText = [
