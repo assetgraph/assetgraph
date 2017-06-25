@@ -620,4 +620,42 @@ describe('util/fonts/getTextByFontProp', function () {
             ]);
         });
     });
+
+    describe('font-shorthand property', function () {
+        it('should have shorthand value override previous longhand value', function () {
+            var htmlText = [
+                '<style>h1 { font-weight: normal; font: bold 10px "famfam"; }</style>',
+                '<h1>foo</h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'famfam',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should have longhand value override previous shorthand value', function () {
+            var htmlText = [
+                '<style>h1 { font: bold 10px "famfam"; font-weight: normal; }</style>',
+                '<h1>foo</h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'famfam',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+    });
 });
