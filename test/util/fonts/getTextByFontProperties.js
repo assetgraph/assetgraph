@@ -622,7 +622,41 @@ describe('util/fonts/getTextByFontProp', function () {
     });
 
     describe('CSS pseudo selectors', function () {
-        it('should ignore the pseudo class when matching a node', function () {
+        it('should handle stand alone pseudo selector', function () {
+            var htmlText = [
+                '<style>:hover > span { font-family: font1; }</style>',
+                '<div>foo<span>bar</span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should multiply the styles when a pseudo class matches', function () {
             var htmlText = [
                 '<style>div:hover { font-family: font1; font-weight: bold }</style>',
                 '<div>foo</div>'
@@ -664,7 +698,7 @@ describe('util/fonts/getTextByFontProp', function () {
             ]);
         });
 
-        it('should include branch out to also include the possibility of the pseudo class selector not matching at all', function () {
+        it('should inherit non-pseudo class values from the non-pseudo node', function () {
             var htmlText = [
                 '<style>div { font-family: font1; font-weight: 400 } div:hover { font-weight: 500 }</style>',
                 '<div>foo</div>'
