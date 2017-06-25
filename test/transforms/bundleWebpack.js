@@ -188,7 +188,7 @@ describe('bundleWebpack', function () {
             .queue(function (assetGraph) {
                 var mainBundle = assetGraph.findAssets({fileName: 'bundle.js'})[0];
                 expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 4);
-                expect(mainBundle.text, 'to contain',  '\'/dist/bundle.1.a614fb6c.js\'.toString(\'url\')');
+                expect(mainBundle.text, 'to match',  /'\/dist\/bundle\.1\.[a-f0-9]+\.js'\.toString\('url'\)/);
             });
     });
 });
