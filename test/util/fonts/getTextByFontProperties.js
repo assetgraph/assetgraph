@@ -640,6 +640,22 @@ describe('util/fonts/getTextByFontProp', function () {
                 {
                     text: 'foo',
                     props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
                         'font-family': undefined,
                         'font-weight': 400,
                         'font-style': 'normal'
@@ -660,7 +676,7 @@ describe('util/fonts/getTextByFontProp', function () {
                     props: {
                         'font-family': 'font1',
                         'font-weight': 500,
-                        'font-style': undefined
+                        'font-style': 'normal'
                     }
                 },
                 {
@@ -668,9 +684,51 @@ describe('util/fonts/getTextByFontProp', function () {
                     props: {
                         'font-family': 'font1',
                         'font-weight': 400,
-                        'font-style': undefined
+                        'font-style': 'normal'
                     }
                 }
+            ]);
+        });
+
+        it('should multiply pseudo class properties to children', function () {
+            var htmlText = [
+                '<style>div:hover { font-family: font1; }</style>',
+                '<div>foo<span>bar</span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
             ]);
         });
     });
