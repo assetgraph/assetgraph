@@ -8,7 +8,7 @@ expect.addAssertion('<string> to [exhaustively] satisfy computed font properties
             text: subject
         }))
         .populate({ followRelations: { crossorigin: false } })
-        .queue(function (assetGraph) {
+        .then(function (assetGraph) {
             expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0]), 'to [exhaustively] satisfy', result);
         });
 });
@@ -762,7 +762,7 @@ describe('util/fonts/getTextByFontProp', function () {
                         'font-weight': 400,
                         'font-style': 'normal'
                     }
-                },
+                }
             ]);
         });
     });
