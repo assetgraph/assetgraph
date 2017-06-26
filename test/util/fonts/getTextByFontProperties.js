@@ -677,22 +677,6 @@ describe('util/fonts/getTextByFontProp', function () {
                 {
                     text: 'foo',
                     props: {
-                        'font-family': 'font1',
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
-                {
-                    text: 'foo',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
-                    text: 'foo',
-                    props: {
                         'font-family': undefined,
                         'font-weight': 400,
                         'font-style': 'normal'
