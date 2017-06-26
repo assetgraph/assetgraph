@@ -581,7 +581,7 @@ describe('util/fonts/getTextByFontProp', function () {
                 '<style>p { font-weight: 200; }</style>',
                 '<style>article { font-weight: 600; }</style>',
                 '<p class="foo">p</p>',
-                '<article class="foo">article</atricle>',
+                '<article class="foo">article</atricle>'
             ].join('\n');
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
