@@ -64,9 +64,9 @@
     "file-loader": "^0.11.2",
     "httpception": "^0.5.0",
     "iconv-lite": "^0.4.15",
-    "istanbul": "^0.4.1",
     "less": "2.7.2",
     "mocha": "^3.0.0",
+    "nyc": "11.0.2",
     "open": "^0.0.5",
     "requirejs": "^2.3.3",
     "sinon": "^2.0.0",
@@ -88,6 +88,11 @@
     "lint": "eslint .",
     "test": "npm run lint && mocha",
     "travis": "npm run lint && npm run coverage",
-    "coverage": "NODE_ENV=development ./node_modules/.bin/istanbul cover -x '**/examples/**' -x '**/testdata/**' --include-all-sources ./node_modules/mocha/bin/_mocha -- --reporter dot && echo google-chrome coverage/lcov-report/index.html"
+    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text --all -- mocha --reporter dot && echo google-chrome coverage/lcov-report/index.html"
+  },
+  "nyc": {
+    "include": [
+      "lib/**"
+    ]
   }
 }
