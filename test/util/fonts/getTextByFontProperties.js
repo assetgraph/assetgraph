@@ -1,8 +1,11 @@
-var expect = require('unexpected').clone();
+var expect = require('../../unexpected-with-plugins').clone();
 var AssetGraph = require('../../../lib');
 var getTextByFontProp = require('../../../lib/util/fonts/getTextByFontProperties');
 
 expect.addAssertion('<string> to [exhaustively] satisfy computed font properties <array>', function (expect, subject, result) {
+    expect.subjectOutput = function (output) {
+        output.code(subject, 'text/html');
+    };
     return new AssetGraph({})
         .loadAssets(new AssetGraph.Html({
             text: subject
