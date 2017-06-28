@@ -754,6 +754,69 @@ describe('util/fonts/getTextByFontProp', function () {
         });
     });
 
+    describe('CSS @media queries', function () {
+        it('should include the possibility of the media query matching or not matching', function () {
+            var htmlText = [
+                '<style>div { font-family: font1; font-weight: 400 } @media (max-width: 600px) { div { font-weight: 500 } }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 500,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it.skip('should trace two levels of media queries with the media attribute is present', function () {
+            var htmlText = [
+                '<style>div { font-family: font1; font-weight: 400 }</style>',
+                '<style media="projection">div { font-family: font2; font-weight: 800 } @media (max-width: 600px) { div { font-weight: 500 } }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font2',
+                        'font-weight': 800,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font2',
+                        'font-weight': 500,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+    });
+
     describe('font-shorthand property', function () {
         it('should have shorthand value override previous longhand value', function () {
             var htmlText = [
