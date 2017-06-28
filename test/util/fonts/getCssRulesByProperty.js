@@ -10,21 +10,26 @@ describe('util/fonts/getCssRulesByProperty', function () {
         expect(function () { getRules(['padding']); }, 'to throw', 'cssSource argument must be a string containing valid CSS');
     });
 
+    it('should throw when not passing an incomingMedia array as the third argument', function () {
+        expect(function () { getRules(['padding'], 'body { color: maroon; }'); }, 'to throw', 'incomingMedia argument must be an array');
+    });
+
     it('should throw when not passing a valid CSS document in cssSource', function () {
         expect(function () { getRules(['padding'], 'sdkjlasjdlk'); }, 'to throw');
     });
 
     it('should return empty arrays when no properties apply', function () {
-        expect(getRules(['padding'], 'h1 { color: red; }'), 'to exhaustively satisfy', {
+        expect(getRules(['padding'], 'h1 { color: red; }', []), 'to exhaustively satisfy', {
             padding: []
         });
     });
 
     it('should return an array of matching property values', function () {
-        expect(getRules(['color'], 'h1 { color: red; } h2 { color: blue; }'), 'to exhaustively satisfy', {
+        expect(getRules(['color'], 'h1 { color: red; } h2 { color: blue; }', []), 'to exhaustively satisfy', {
             color: [
                 {
                     selector: 'h1',
+                    incomingMedia: [],
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'red',
@@ -32,6 +37,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 },
                 {
                     selector: 'h2',
+                    incomingMedia: [],
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'blue',
@@ -42,10 +48,11 @@ describe('util/fonts/getCssRulesByProperty', function () {
     });
 
     it('should handle linine styles through `bogusselector`-selector', function () {
-        expect(getRules(['color'], 'bogusselector { color: red; }'), 'to exhaustively satisfy', {
+        expect(getRules(['color'], 'bogusselector { color: red; }', []), 'to exhaustively satisfy', {
             color: [
                 {
                     selector: undefined,
+                    incomingMedia: [],
                     specificityArray: [1, 0, 0, 0],
                     prop: 'color',
                     value: 'red',
@@ -58,10 +65,11 @@ describe('util/fonts/getCssRulesByProperty', function () {
     it('should memoize the results of a call', function () {
         getRules.cache.reset();
 
-        expect(getRules(['color'], 'h1 { color: red; }'), 'to exhaustively satisfy', {
+        expect(getRules(['color'], 'h1 { color: red; }', []), 'to exhaustively satisfy', {
             color: [
                 {
                     selector: 'h1',
+                    incomingMedia: [],
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'red',
@@ -77,6 +85,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                     color: [
                         {
                             selector: 'h1',
+                            incomingMedia: [],
                             specificityArray: [0, 0, 0, 1],
                             prop: 'color',
                             value: 'red',
@@ -90,10 +99,11 @@ describe('util/fonts/getCssRulesByProperty', function () {
 
     describe('overridden values', function () {
         it('should return the last defined value', function () {
-            expect(getRules(['color'], 'h1 { color: red; color: blue; }'), 'to exhaustively satisfy', {
+            expect(getRules(['color'], 'h1 { color: red; color: blue; }', []), 'to exhaustively satisfy', {
                 color: [
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'color',
                         value: 'red',
@@ -101,6 +111,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                     },
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'color',
                         value: 'blue',
@@ -113,7 +124,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
 
     describe('shorthand font-property', function () {
         it('should ignore invalid shorthands', function () {
-            var result = getRules(['font-family', 'font-size'], 'h1 { font: 15px; }');
+            var result = getRules(['font-family', 'font-size'], 'h1 { font: 15px; }', []);
 
             expect(result, 'to exhaustively satisfy', {
                 'font-family': [],
@@ -122,12 +133,13 @@ describe('util/fonts/getCssRulesByProperty', function () {
         });
 
         it('register the longhand value from a valid shorthand', function () {
-            var result = getRules(['font-family', 'font-size'], 'h1 { font: 15px serif; }');
+            var result = getRules(['font-family', 'font-size'], 'h1 { font: 15px serif; }', []);
 
             expect(result, 'to exhaustively satisfy', {
                 'font-family': [
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-family',
                         value: 'serif',
@@ -137,6 +149,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-size': [
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-size',
                         value: '15px',
@@ -147,12 +160,13 @@ describe('util/fonts/getCssRulesByProperty', function () {
         });
 
         it('should set initial values for requested properties which are not defined in shorthand', function () {
-            var result = getRules(['font-family', 'font-size', 'font-style', 'font-weight'], 'h1 { font: 15px serif; }');
+            var result = getRules(['font-family', 'font-size', 'font-style', 'font-weight'], 'h1 { font: 15px serif; }', []);
 
             expect(result, 'to exhaustively satisfy', {
                 'font-family': [
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-family',
                         value: 'serif',
@@ -162,6 +176,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-size': [
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-size',
                         value: '15px',
@@ -171,6 +186,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-style': [
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-style',
                         value: 'normal',
@@ -180,6 +196,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-weight': [
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-weight',
                         value: 400,
@@ -190,12 +207,13 @@ describe('util/fonts/getCssRulesByProperty', function () {
         });
 
         it('register the longhand value from a shorthand', function () {
-            var result = getRules(['font-family', 'font-size'], 'h1 { font-size: 10px; font: 15px serif; font-size: 20px }');
+            var result = getRules(['font-family', 'font-size'], 'h1 { font-size: 10px; font: 15px serif; font-size: 20px }', []);
 
             expect(result, 'to exhaustively satisfy', {
                 'font-family': [
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-family',
                         value: 'serif',
@@ -205,6 +223,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-size': [
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-size',
                         value: '10px',
@@ -212,6 +231,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                     },
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-size',
                         value: '15px',
@@ -219,6 +239,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                     },
                     {
                         selector: 'h1',
+                        incomingMedia: [],
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-size',
                         value: '20px',
