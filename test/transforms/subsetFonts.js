@@ -1,7 +1,7 @@
 var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib');
 
-describe('transforms/subsetFonts', function () {
+describe.skip('transforms/subsetFonts', function () {
     it('should create a subsetted font', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/subsetableFont/'})
             .loadAssets('index.html')
