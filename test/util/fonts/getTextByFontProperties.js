@@ -1,7 +1,6 @@
 var expect = require('../../unexpected-with-plugins').clone();
 var AssetGraph = require('../../../lib');
 var getTextByFontProp = require('../../../lib/util/fonts/getTextByFontProperties');
-var getCssRulesByProperty = require('../../../lib/util/fonts/getCssRulesByProperty');
 
 expect.addAssertion('<string> to [exhaustively] satisfy computed font properties <array>', function (expect, subject, result) {
     expect.subjectOutput = function (output) {
@@ -13,7 +12,7 @@ expect.addAssertion('<string> to [exhaustively] satisfy computed font properties
         }))
         .populate({ followRelations: { crossorigin: false } })
         .then(function (assetGraph) {
-            expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0], undefined, getCssRulesByProperty), 'to [exhaustively] satisfy', result);
+            expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0]), 'to [exhaustively] satisfy', result);
         });
 });
 
@@ -828,7 +827,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 .loadAssets('index.html')
                 .populate()
                 .then(function (assetGraph) {
-                    expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0], undefined, getCssRulesByProperty), 'to exhaustively satisfy', [
+                    expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0]), 'to exhaustively satisfy', [
                         { text: 'foo', props: { 'font-family': undefined, 'font-weight': 500, 'font-style': 'normal' } },
                         { text: 'foo', props: { 'font-family': undefined, 'font-weight': 600, 'font-style': 'normal' } },
                         { text: 'foo', props: { 'font-family': undefined, 'font-weight': 700, 'font-style': 'normal' } }
