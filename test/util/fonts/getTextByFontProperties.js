@@ -1,8 +1,11 @@
-var expect = require('unexpected').clone();
+var expect = require('../../unexpected-with-plugins').clone();
 var AssetGraph = require('../../../lib');
 var getTextByFontProp = require('../../../lib/util/fonts/getTextByFontProperties');
 
 expect.addAssertion('<string> to [exhaustively] satisfy computed font properties <array>', function (expect, subject, result) {
+    expect.subjectOutput = function (output) {
+        output.code(subject, 'text/html');
+    };
     return new AssetGraph({})
         .loadAssets(new AssetGraph.Html({
             text: subject
@@ -674,22 +677,6 @@ describe('util/fonts/getTextByFontProp', function () {
                 {
                     text: 'foo',
                     props: {
-                        'font-family': 'font1',
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
-                {
-                    text: 'foo',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
-                    text: 'foo',
-                    props: {
                         'font-family': undefined,
                         'font-weight': 400,
                         'font-style': 'normal'
@@ -764,6 +751,88 @@ describe('util/fonts/getTextByFontProp', function () {
                     }
                 }
             ]);
+        });
+    });
+
+    describe('CSS @media queries', function () {
+        it('should include the possibility of the media query matching or not matching', function () {
+            var htmlText = [
+                '<style>div { font-family: font1; font-weight: 400 } @media (max-width: 600px) { div { font-weight: 500 } }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 500,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should include the possibility of a media attribute matching or not matching', function () {
+            var htmlText = [
+                '<style>div { font-family: font1; font-weight: 400 }</style>',
+                '<style media="projection">div { font-family: font2; font-weight: 800 }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font2',
+                        'font-weight': 800,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should trace two levels of media queries when a media attribute is present and the referenced stylesheet contains a @media rule', function () {
+            var htmlText = [
+                '<style>div { font-family: font1; font-weight: 400 }</style>',
+                '<style media="projection">div { font-family: font2; font-weight: 800 } @media (max-width: 600px) { div { font-weight: 500 } }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                { text: 'foo', props: { 'font-style': 'normal', 'font-weight': 800, 'font-family': 'font2' } },
+                { text: 'foo', props: { 'font-style': 'normal', 'font-weight': 500, 'font-family': 'font2' } },
+                { text: 'foo', props: { 'font-style': 'normal', 'font-weight': 400, 'font-family': 'font1' } }
+            ]);
+        });
+
+        it('should trace multiple levels of @import tagged with media lists', function () {
+            return new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/getTextByFontProperties/nestedCssImportWithMedia/'})
+                .loadAssets('index.html')
+                .populate()
+                .then(function (assetGraph) {
+                    expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0]), 'to exhaustively satisfy', [
+                        { text: 'foo', props: { 'font-family': undefined, 'font-weight': 500, 'font-style': 'normal' } },
+                        { text: 'foo', props: { 'font-family': undefined, 'font-weight': 600, 'font-style': 'normal' } },
+                        { text: 'foo', props: { 'font-family': undefined, 'font-weight': 700, 'font-style': 'normal' } }
+                    ]);
+                });
         });
     });
 

@@ -71,6 +71,7 @@
     "iconv-lite": "^0.4.15",
     "istanbul": "^0.4.1",
     "less": "2.7.2",
+    "magicpen-prism": "2.3.0",
     "mocha": "^3.0.0",
     "open": "0.0.5",
     "requirejs": "2.3.3",

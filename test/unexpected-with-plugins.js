@@ -1,5 +1,6 @@
 module.exports = require('unexpected')
     .clone()
-    .installPlugin(require('unexpected-sinon'))
-    .installPlugin(require('unexpected-dom'))
-    .installPlugin(require('./unexpectedAssetGraph'));
+    .use(require('unexpected-sinon'))
+    .use(require('unexpected-dom'))
+    .use(require('./unexpectedAssetGraph'))
+    .use(require('magicpen-prism'));
