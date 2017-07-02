@@ -16,7 +16,7 @@ expect.addAssertion('<string> to [exhaustively] satisfy computed font properties
         });
 });
 
-describe('util/fonts/getTextByFontProp', function () {
+describe('lib/util/fonts/getTextByFontProperties', function () {
     it('should strip empty text nodes', function () {
         var htmlText = [
             '  <div>div</div>   <span></span>  '
