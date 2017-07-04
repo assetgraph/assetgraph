@@ -31,4 +31,138 @@ describe('transforms/compressJavaScript', function () {
                 expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'var foo = `123`;');
             });
     });
+
+    describe('ie8 handling', function () {
+        it('should honor assetGraph.javaScriptSerializationOptions.ie8 === true', function () {
+            var warnSpy = sinon.spy();
+            return new AssetGraph()
+                .on('warn', warnSpy)
+                .queue(function (assetGraph) {
+                    assetGraph.javaScriptSerializationOptions = { ie8: true };
+                    assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+                })
+                .compressJavaScript({type: 'JavaScript'})
+                .queue(function (assetGraph) {
+                    expect(warnSpy, 'was not called');
+                    expect(assetGraph, 'to contain asset', 'JavaScript');
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'foo["catch"]=123;');
+                });
+        });
+
+        it('should honor assetGraph.javaScriptSerializationOptions.ie8 === false', function () {
+            var warnSpy = sinon.spy();
+            return new AssetGraph()
+                .on('warn', warnSpy)
+                .queue(function (assetGraph) {
+                    assetGraph.javaScriptSerializationOptions = { ie8: false };
+                    assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+                })
+                .compressJavaScript({type: 'JavaScript'})
+                .queue(function (assetGraph) {
+                    expect(warnSpy, 'was not called');
+                    expect(assetGraph, 'to contain asset', 'JavaScript');
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'foo.catch=123;');
+                });
+        });
+
+        it('should honor asset.serializationOptions.ie8 === true', function () {
+            var warnSpy = sinon.spy();
+            return new AssetGraph()
+                .on('warn', warnSpy)
+                .queue(function (assetGraph) {
+                    var asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
+                    asset.serializationOptions = { ie8: true };
+                    assetGraph.addAsset(asset);
+                })
+                .compressJavaScript({type: 'JavaScript'})
+                .queue(function (assetGraph) {
+                    expect(warnSpy, 'was not called');
+                    expect(assetGraph, 'to contain asset', 'JavaScript');
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'foo["catch"]=123;');
+                });
+        });
+
+        it('should honor asset.serializationOptions.ie8 === false', function () {
+            var warnSpy = sinon.spy();
+            return new AssetGraph()
+                .on('warn', warnSpy)
+                .queue(function (assetGraph) {
+                    var asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
+                    asset.serializationOptions = { ie8: false };
+                    assetGraph.addAsset(asset);
+                })
+                .compressJavaScript({type: 'JavaScript'})
+                .queue(function (assetGraph) {
+                    expect(warnSpy, 'was not called');
+                    expect(assetGraph, 'to contain asset', 'JavaScript');
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'foo.catch=123;');
+                });
+        });
+
+        it('should honor assetGraph.javaScriptSerializationOptions.screw_ie8 === false', function () {
+            var warnSpy = sinon.spy();
+            return new AssetGraph()
+                .on('warn', warnSpy)
+                .queue(function (assetGraph) {
+                    assetGraph.javaScriptSerializationOptions = { screw_ie8: false };
+                    assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+                })
+                .compressJavaScript({type: 'JavaScript'})
+                .queue(function (assetGraph) {
+                    expect(warnSpy, 'was not called');
+                    expect(assetGraph, 'to contain asset', 'JavaScript');
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'foo["catch"]=123;');
+                });
+        });
+
+        it('should honor assetGraph.javaScriptSerializationOptions.screw_ie8 === true', function () {
+            var warnSpy = sinon.spy();
+            return new AssetGraph()
+                .on('warn', warnSpy)
+                .queue(function (assetGraph) {
+                    assetGraph.javaScriptSerializationOptions = { screw_ie8: true };
+                    assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+                })
+                .compressJavaScript({type: 'JavaScript'})
+                .queue(function (assetGraph) {
+                    expect(warnSpy, 'was not called');
+                    expect(assetGraph, 'to contain asset', 'JavaScript');
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'foo.catch=123;');
+                });
+        });
+
+        it('should honor asset.serializationOptions.screw_ie8 === false', function () {
+            var warnSpy = sinon.spy();
+            return new AssetGraph()
+                .on('warn', warnSpy)
+                .queue(function (assetGraph) {
+                    var asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
+                    asset.serializationOptions = { screw_ie8: false };
+                    assetGraph.addAsset(asset);
+                })
+                .compressJavaScript({type: 'JavaScript'})
+                .queue(function (assetGraph) {
+                    expect(warnSpy, 'was not called');
+                    expect(assetGraph, 'to contain asset', 'JavaScript');
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'foo["catch"]=123;');
+                });
+        });
+
+        it('should honor asset.serializationOptions.screw_ie8 === true', function () {
+            var warnSpy = sinon.spy();
+            return new AssetGraph()
+                .on('warn', warnSpy)
+                .queue(function (assetGraph) {
+                    var asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
+                    asset.serializationOptions = { screw_ie8: true };
+                    assetGraph.addAsset(asset);
+                })
+                .compressJavaScript({type: 'JavaScript'})
+                .queue(function (assetGraph) {
+                    expect(warnSpy, 'was not called');
+                    expect(assetGraph, 'to contain asset', 'JavaScript');
+                    expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'foo.catch=123;');
+                });
+        });
+    });
 });
