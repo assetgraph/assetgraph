@@ -65,7 +65,7 @@ describe('assets/Image', function () {
 
         it('should set device pixel ratio as a side effect of url via constructor options', function () {
             var img = new AssetGraph.Image({
-                url: 'path/to/foo@3x.png'
+                url: 'file:///path/to/foo@3x.png'
             });
 
             expect(img.fileName, 'to be', 'foo@3x.png');
@@ -74,7 +74,7 @@ describe('assets/Image', function () {
 
         it('should be able to set device pixel ratio via setter', function () {
             var img = new AssetGraph.Image({
-                fileName: 'foo.png'
+                url: 'file:///path/fo/foo.png'
             });
 
             img.devicePixelRatio = 2;
@@ -85,7 +85,7 @@ describe('assets/Image', function () {
 
         it('should keep its device pixel ratio even when a filname changes to no longer contain the ratio', function () {
             var img = new AssetGraph.Image({
-                fileName: 'foo@4x.png'
+                url: 'file:///path/fo/foo@4x.png'
             });
 
             img.fileName = 'foo.png';
@@ -96,7 +96,7 @@ describe('assets/Image', function () {
 
         it('should update device pixel ratio when setting fileName', function () {
             var img = new AssetGraph.Image({
-                fileName: 'foo.png'
+                url: 'file:///path/fo/foo.png'
             });
 
             img.fileName = 'foo@2x.png';
@@ -107,7 +107,7 @@ describe('assets/Image', function () {
 
         it('should update device pixel ratio when setting url', function () {
             var img = new AssetGraph.Image({
-                url: 'path/to/foo.png'
+                url: 'file:///path/to/foo.png'
             });
 
             img.url = 'path/to/foo@2x.png';
@@ -118,19 +118,19 @@ describe('assets/Image', function () {
 
         it('should support using comma as decimal seperator in device pixel ratio in url', function () {
             var img = new AssetGraph.Image({
-                url: 'path/to/foo@2,5x.png'
+                url: 'file:///path/to/foo@2,5x.png'
             });
 
             expect(img.devicePixelRatio, 'to be', 2.5);
 
-            img.url = 'path/to/foo@2,3x.png';
+            img.url = 'file:///path/to/foo@2,3x.png';
 
             expect(img.devicePixelRatio, 'to be', 2.3);
         });
 
         it('should support using comma as decimal seperator in device pixel ratio in fileName', function () {
             var img = new AssetGraph.Image({
-                fileName: 'foo@2,5x.png'
+                url: 'file:///path/to/foo@2,5x.png'
             });
 
             expect(img.devicePixelRatio, 'to be', 2.5);
@@ -142,7 +142,7 @@ describe('assets/Image', function () {
 
         it('should throw if setting a non-number device pixel ratio', function () {
             var img = new AssetGraph.Image({
-                fileName: 'foo.png'
+                url: 'file:///path/to/foo.png'
             });
 
             expect(function () { img.devicePixelRatio = 4; }, 'not to throw');
