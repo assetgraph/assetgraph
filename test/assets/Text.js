@@ -9,17 +9,6 @@ describe('assets/Text', function () {
             expect(new AssetGraph.Text({rawSrc: new Buffer('Hello, world!\u263a')}).text, 'to equal', 'Hello, world!\u263a');
         });
 
-        it('should get text of AssetGraph.Text with rawSrcProxy', function () {
-            var asset = new AssetGraph.Text({
-                rawSrcProxy: function () {
-                    return Promise.resolve([new Buffer('Hello, world!\u263a')]);
-                }
-            });
-            return asset.load().then(function () {
-                expect(asset.text, 'to equal', 'Hello, world!\u263a');
-            });
-        });
-
         it('should get text of AssetGraph.Text with text property', function () {
             expect(new AssetGraph.Text({text: 'Hello, world!\u263a'}).text, 'to equal', 'Hello, world!\u263a');
         });
@@ -30,17 +19,6 @@ describe('assets/Text', function () {
             expect(new AssetGraph.Text({
                 rawSrc: new Buffer('Hello, world!\u263a', 'utf-8')
             }).rawSrc, 'to equal', new Buffer('Hello, world!\u263a', 'utf-8'));
-        });
-
-        it('should get rawSrc of AssetGraph.Text with rawSrcProxy', function () {
-            var asset = new AssetGraph.Text({
-                rawSrcProxy: function () {
-                    return Promise.resolve([new Buffer('Hello, world!\u263a', 'utf-8')]);
-                }
-            });
-            return asset.load().then(function () {
-                expect(asset.rawSrc, 'to equal', new Buffer('Hello, world!\u263a', 'utf-8'));
-            });
         });
 
         it('should get rawSrc of AssetGraph.Text with text property', function () {
