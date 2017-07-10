@@ -25,8 +25,8 @@ describe('transforms/populate', function () {
             .loadAssets('index.html')
             .populate({followRelations: {to: {type: query.not('Css')}}})
             .then(function (assetGraph) {
-                expect(assetGraph, 'to contain asset');
-                expect(assetGraph, 'to contain no relations');
+                expect(assetGraph, 'to contain assets', 5);
+                expect(assetGraph, 'to contain relations', 4);
 
                 var matches = assetGraph.findAssets({url: /\/index\.html$/})[0].text.match(/<a [^>]*?>/g);
                 expect(matches, 'not to be null');
