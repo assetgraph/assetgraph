@@ -1,7 +1,6 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    Promise = require('bluebird'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/Text', function () {
     describe('#text', function () {
