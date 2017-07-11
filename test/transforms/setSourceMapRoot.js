@@ -31,7 +31,7 @@ describe('transforms/setSourceMapRoot', function () {
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', {url: /\.less/, isLoaded: false});
+                    expect(assetGraph, 'to contain asset', {url: /\.less$/, isLoaded: true});
                 })
                 .setSourceMapRoot(null, 'somewhereElse')
                 .queue(function (assetGraph) {
@@ -59,14 +59,12 @@ describe('transforms/setSourceMapRoot', function () {
                 .loadAssets('index.html')
                 .populate({followRelations: {from: {type: AssetGraph.query.not('SourceMap')}}})
                 .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain no assets', {url: /\.less$/, isLoaded: true});
+                    expect(assetGraph, 'to contain no assets', {url: /\.less$/});
                 })
                 .setSourceMapRoot(null, 'theSources')
                 .populate({from: {type: 'SourceMap'}})
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain asset', {url: /\.less$/, isLoaded: true});
-                })
-                .queue(function (assetGraph) {
                     expect(assetGraph.findAssets({type: 'SourceMap'})[0].parseTree, 'to satisfy', {
                         sources: ['foo.less']
                     });
