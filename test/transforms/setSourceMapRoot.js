@@ -31,7 +31,7 @@ describe('transforms/setSourceMapRoot', function () {
                 .loadAssets('index.html')
                 .populate()
                 .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', {url: /\.less/, isLoaded: true});
+                    expect(assetGraph, 'to contain asset', {url: /\.less/, isLoaded: false});
                 })
                 .setSourceMapRoot(null, 'somewhereElse')
                 .queue(function (assetGraph) {
