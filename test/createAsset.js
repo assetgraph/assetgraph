@@ -29,19 +29,6 @@ describe('createAsset', function () {
         expect(asset.rawSrc, 'to equal', new Buffer('Hello, world!\n', 'utf-8'));
     });
 
-    it('should expand dir without trailing slash', async function () {
-        const asset = await createAsset('subdir');
-        await asset.load();
-        expect(asset.type, 'to equal', 'Html');
-        expect(asset.url, 'to equal', 'file://' + assetGraphRoot + 'subdir/index.html');
-    });
-
-    it('should expand dir with trailing slash', async function () {
-        const asset = await createAsset('subdir');
-        expect(asset.type, 'to equal', 'Html');
-        expect(asset.url, 'to equal', 'file://' + assetGraphRoot + 'subdir/index.html');
-    });
-
     it('should not loop infinitely when encountering non-resolvable urls', async function () {
         const assetGraph = new AssetGraph({root: assetGraphRoot});
         const warnSpy = sinon.spy().named('warn');
