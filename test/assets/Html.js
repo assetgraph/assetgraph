@@ -1,7 +1,6 @@
 /*global describe, it*/
 var unexpected = require('../unexpected-with-plugins');
 var AssetGraph = require('../../lib/AssetGraph');
-var Promise = require('bluebird');
 var mozilla = require('source-map');
 
 describe('assets/Html', function () {
