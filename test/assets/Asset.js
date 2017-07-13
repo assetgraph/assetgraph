@@ -13,6 +13,15 @@ describe('assets/Asset', function () {
 
             return expect(asset.load(), 'to be rejected');
         });
+
+        it('should autodetect the type of an asset with an unrecognizable file extension', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/autodetectTypeWhenExtensionIsUnknown/'})
+                .loadAssets('index.html')
+                .populate()
+                .then(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', 'Svg');
+                });
+        });
     });
 
     it('should handle an asset with an extensionless url', function () {
