@@ -69,7 +69,8 @@ describe('relations/HttpRedirect', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Html', 7);
-                expect(assetGraph, 'to contain assets', {isRedirect: true}, 4);
+                expect(assetGraph, 'to contain assets', { statusCode: 301 }, 2);
+                expect(assetGraph, 'to contain assets', { statusCode: 302 }, 2);
                 expect(assetGraph, 'to contain relations', 'HttpRedirect', 4);
                 expect(loopCount, 'to be', 1);
                 expect(infiniteloopCount, 'to be', 2);
