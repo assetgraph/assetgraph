@@ -10,7 +10,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
             .populate({followRelations: {to: {url: /^file:/}}})
             .queue(assetGraph => {
                 expect(assetGraph, 'to contain assets', 7);
-                expect(assetGraph, 'to contain relations', 7);
+                expect(assetGraph, 'to contain relations', 9);
                 expect(assetGraph, 'to contain asset', 'Png');
                 expect(assetGraph, 'to contain assets', 'Html', 2);
                 expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});

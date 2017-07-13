@@ -1,48 +1,44 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    _ = require('lodash'),
-    urlTools = require('urltools'),
-    AssetGraph = require('../../lib/AssetGraph'),
-    query = AssetGraph.query;
+const expect = require('../unexpected-with-plugins');
+const _ = require('lodash');
+const urlTools = require('urltools');
+const AssetGraph = require('../../lib/AssetGraph');
+const query = AssetGraph.query;
 
 describe('transforms/populate', function () {
-    it('should handle a test case with an Html asset and some stylesheets when told not to follow relations to Css', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/notToCss/'})
+    it('should handle a test case with an Html asset and some stylesheets when told not to follow relations to Css', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/notToCss/'})
             .loadAssets('index.html')
-            .populate({followRelations: {to: {type: query.not('Css')}}})
-            .queue(function (assetGraph) {
+            .populate({followRelations: {type: query.not('HtmlStyle')}})
+            .then(function (assetGraph) {
                 expect(assetGraph, 'to contain no assets', 'Css');
-                expect(assetGraph, 'to contain no relations', {type: 'HtmlStyle'});
 
-                var htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'}, true);
+                const htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'}, true);
                 expect(htmlStyles, 'to have length', 1);
-                expect(htmlStyles[0].to.isAsset, 'not to equal', true);
-                expect(htmlStyles[0].to.isResolved, 'to equal', true);
+                expect(htmlStyles[0].to.isLoaded, 'to equal', false);
                 expect(htmlStyles[0].to.url, 'to equal', urlTools.resolveUrl(assetGraph.root, 'style.css'));
-            })
-            .run(done);
+            });
     });
 
-    it('should handle a test case with custom protocols', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/customProtocols/'})
+    it('should handle a test case with custom protocols', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/customProtocols/'})
             .loadAssets('index.html')
             .populate({followRelations: {to: {type: query.not('Css')}}})
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain asset');
-                expect(assetGraph, 'to contain no relations');
+            .then(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', 5);
+                expect(assetGraph, 'to contain relations', 4);
 
                 var matches = assetGraph.findAssets({url: /\/index\.html$/})[0].text.match(/<a [^>]*?>/g);
                 expect(matches, 'not to be null');
                 expect(matches, 'to have length', 4);
-            })
-            .run(done);
+            });
     });
 
-    it('should populate a test case with protocol-relative urls from file:', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/protocolRelativeUrls/'})
+    it('should populate a test case with protocol-relative urls from file:', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/protocolRelativeUrls/'})
             .loadAssets('index.html')
             .populate({from: {url: /^file:/}})
-            .queue(function (assetGraph) {
+            .then(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 3);
                 expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
 
@@ -73,7 +69,6 @@ describe('transforms/populate', function () {
                     'src="http://cdn.example.com/jquery.min.js"',
                     'src="https://cdn.example.com/jquery.min.js"'
                 ]);
-            })
-            .run(done);
+            });
     });
 });
