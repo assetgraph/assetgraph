@@ -71,26 +71,10 @@ describe('transforms/subsetGoogleFonts', function () {
             });
     });
 
-    it.skip('should handle CSS @import', function () {
+    it('should handle CSS @import', function () {
         httpception([
             {
-                request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
-                response: {
-                    headers: {
-                        'Content-Type': 'text/css'
-                    },
-                    body: [
-                        '@font-face {',
-                        '  font-family: \'Open Sans\';',
-                        '  font-style: normal;',
-                        '  font-weight: 400;',
-                        '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/s/opensans/v13/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format(\'woff\');',
-                        '}'
-                    ].join('\n')
-                }
-            },
-            {
-                request: 'GET https://fonts.googleapis.com/css?family=Open+Sans&text=Helo',
+                request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
                 response: {
                     headers: {
                         'Content-Type': 'text/css'
@@ -126,28 +110,42 @@ describe('transforms/subsetGoogleFonts', function () {
             .subsetGoogleFonts()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', {
-                    type: 'CssImport',
-                    from: {
-                        type: 'Css',
-                        isInline: true
-                    },
+                    type: 'HtmlStyle',
                     to: {
                         type: 'Css',
-                        url: 'https://fonts.googleapis.com/css?family=Open+Sans&text=Helo',
+                        fileName: /Open\+Sans:400-\d+\.css/,
                         isLoaded: true
-                    }
+                    },
+                    crossorigin: false
                 });
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
                     from: {
                         type: 'Css',
-                        url: 'https://fonts.googleapis.com/css?family=Open+Sans&text=Helo'
+                        fileName: /Open\+Sans:400-\d+\.css/
                     },
                     to: {
                         type: 'Asset',
-                        url: 'https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                        fileName: /Open\+Sans:400-\d+\.woff/,
                         isLoaded: true
+                    }
+                });
+
+                expect(assetGraph, 'to contain no relation', {
+                    type: 'CssImport'
+                });
+
+                expect(assetGraph, 'to contain relation including unresolved', {
+                    type: 'JavaScriptStaticUrl',
+                    href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                });
+
+                expect(assetGraph, 'to contain relation including unresolved', {
+                    type: 'HtmlStyle',
+                    href: 'https://fonts.googleapis.com/css?family=Open+Sans',
+                    from: {
+                        type: 'Html'
                     }
                 });
             });
