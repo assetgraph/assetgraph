@@ -56,8 +56,8 @@ describe('transforms/addCacheManifest', function () {
                 expect(assetGraph, 'to contain assets', 'Html', 2);
                 expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});
                 expect(assetGraph, 'to contain asset', 'Css');
-                expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                expect(assetGraph, 'to contain asset', {type: 'JavaScript', isLoaded: false});
+                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
+                expect(assetGraph, 'to contain asset', {type: 'Asset', isLoaded: false, fileName: 'notFound.js'});
             })
             .addCacheManifest({isInitial: true})
             .queue(function (assetGraph) {
