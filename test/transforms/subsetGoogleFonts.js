@@ -462,5 +462,243 @@ describe('transforms/subsetGoogleFonts', function () {
                 expect(assetGraph.findAssets({type: 'Css', isInline: true})[0].text, 'to contain', 'font-family: Roboto__subset');
             });
     });
+
+    describe('when running on multiple pages with subsetPerPage:true', function () {
+
+        it('should have an individual subset for each page', function () {
+            httpception([
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=abotu',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=about) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=ehmo',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=home) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?text=about',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff'
+                        },
+                        body: new Buffer('about', 'base64')
+                    }
+                },
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?text=home',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff'
+                        },
+                        body: new Buffer('home', 'base64')
+                    }
+                }
+            ]);
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/multi-page/'})
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetGoogleFonts({
+                    subsetPerPage: true
+                })
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
+                    expect(assetGraph, 'to contain asset', { fileName: 'about.html' });
+
+                    var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+                    var about = assetGraph.findAssets({ fileName: 'about.html' })[0];
+
+                    var relations = assetGraph.findRelations(AssetGraph.query.or(
+                        {
+                            type: AssetGraph.query.not('HtmlAnchor'),
+                            to: {
+                                isInline: false
+                            }
+                        },
+                        { crossorigin: true }
+                    ), true);
+
+                    expect(relations, 'to satisfy', [
+                        {
+                            type: 'HtmlStyle',
+                            from: index,
+                            href: /\/google-font-subsets\/Open\+Sans:400-\d+\.css$/
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            from: about,
+                            href: /\/google-font-subsets\/Open\+Sans:400-\d+\.css$/
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            from: index,
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                        },
+                        {
+                            type: 'JavaScriptStaticUrl',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
+                            from: {
+                                nonInlineAncestor: index
+                            }
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            from: about,
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                        },
+                        {
+                            type: 'JavaScriptStaticUrl',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
+                            from: {
+                                nonInlineAncestor: about
+                            }
+                        },
+                        {
+                            type: 'CssFontFaceSrc',
+                            from: { 'fileName': /Open\+Sans:400-\d+\.css/ },
+                            href: /Open\+Sans:400-\d+\.woff/
+                        },
+                        {
+                            type: 'CssFontFaceSrc',
+                            from: { 'fileName': /Open\+Sans:400-\d+\.css/ },
+                            href: /Open\+Sans:400-\d+\.woff/
+                        }
+                    ]);
+                });
+        });
+    });
+
+    describe('when running on multiple pages with subsetPerPage:false', function () {
+        it('should share a common subset across pages', function () {
+            httpception([
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=abehmotu',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=abouthome) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?text=abouthome',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff'
+                        },
+                        body: new Buffer('abouthome', 'base64')
+                    }
+                }
+            ]);
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/multi-page/'})
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetGoogleFonts({
+                    subsetPerPage: false
+                })
+                .drawGraph('debug.svg')
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
+                    expect(assetGraph, 'to contain asset', { fileName: 'about.html' });
+
+                    var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+                    var about = assetGraph.findAssets({ fileName: 'about.html' })[0];
+
+                    var relations = assetGraph.findRelations(AssetGraph.query.or(
+                        {
+                            type: AssetGraph.query.not('HtmlAnchor'),
+                            to: {
+                                isInline: false
+                            }
+                        },
+                        { crossorigin: true }
+                    ), true);
+
+                    expect(relations, 'to satisfy', [
+                        {
+                            type: 'HtmlStyle',
+                            from: index,
+                            href: /\/google-font-subsets\/Open\+Sans:400-\d+\.css/
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            from: about,
+                            href: /\/google-font-subsets\/Open\+Sans:400-\d+\.css/
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            from: index,
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                        },
+                        {
+                            type: 'JavaScriptStaticUrl',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
+                            from: {
+                                nonInlineAncestor: index
+                            }
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            from: about,
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                        },
+                        {
+                            type: 'JavaScriptStaticUrl',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
+                            from: {
+                                nonInlineAncestor: about
+                            }
+                        },
+                        {
+                            type: 'CssFontFaceSrc',
+                            from: { 'fileName': /Open\+Sans:400-\d+\.css/ },
+                            href: /Open\+Sans:400-\d+\.woff/
+                        }
+                    ]);
+                });
+        });
+    });
+
+
 });
 
