@@ -34,7 +34,7 @@ describe('transforms/addDataVersionAttributeToHtmlElement', function () {
                 expect(
                     assetGraph.findAssets({url: 'http://example.com/index.html'})[0].text,
                     'to contain',
-                    '<!DOCTYPE html><html data-version="v'
+                    '<!DOCTYPE html><html data-version="'
                 );
             });
     });
