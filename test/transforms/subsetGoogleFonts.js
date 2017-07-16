@@ -41,7 +41,9 @@ describe('transforms/subsetGoogleFonts', function () {
                     crossorigin: false
                 }
             })
-            .subsetGoogleFonts()
+            .subsetGoogleFonts({
+                inlineSubsets: false
+            })
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', {
                     type: 'HtmlStyle',
@@ -107,7 +109,9 @@ describe('transforms/subsetGoogleFonts', function () {
                     crossorigin: false
                 }
             })
-            .subsetGoogleFonts()
+            .subsetGoogleFonts({
+                inlineSubsets: false
+            })
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', {
                     type: 'HtmlStyle',
@@ -237,7 +241,9 @@ describe('transforms/subsetGoogleFonts', function () {
                     crossorigin: false
                 }
             })
-            .subsetGoogleFonts()
+            .subsetGoogleFonts({
+                inlineSubsets: false
+            })
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', {
                     type: 'HtmlStyle',
@@ -399,7 +405,9 @@ describe('transforms/subsetGoogleFonts', function () {
                     crossorigin: false
                 }
             })
-            .subsetGoogleFonts()
+            .subsetGoogleFonts({
+                inlineSubsets: false
+            })
             .queue(function (assetGraph) {
                 expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
                     {
@@ -553,7 +561,7 @@ describe('transforms/subsetGoogleFonts', function () {
                                         to: {
                                             url: /Open\+Sans:400-\d+\.woff$/,
                                             isLoaded: true,
-                                            isInline: false,
+                                            isInline: false
                                         }
                                     }
                                 ]
@@ -573,7 +581,7 @@ describe('transforms/subsetGoogleFonts', function () {
                                         to: {
                                             url: /Open\+Sans:400-\d+\.woff$/,
                                             isLoaded: true,
-                                            isInline: false,
+                                            isInline: false
                                         }
                                     }
                                 ]
