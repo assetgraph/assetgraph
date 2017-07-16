@@ -537,27 +537,52 @@ describe('transforms/subsetGoogleFonts', function () {
                     var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
                     var about = assetGraph.findAssets({ fileName: 'about.html' })[0];
 
-                    var relations = assetGraph.findRelations(AssetGraph.query.or(
-                        {
-                            type: AssetGraph.query.not('HtmlAnchor'),
-                            to: {
-                                isInline: false
-                            }
-                        },
-                        { crossorigin: true }
-                    ), true);
-
-                    expect(relations, 'to satisfy', [
+                    // Subsets
+                    expect(assetGraph.findRelations({ type: 'HtmlStyle', crossorigin: false, to: { isInline: false }}), 'to satisfy', [
                         {
                             type: 'HtmlStyle',
                             from: index,
-                            href: /\/google-font-subsets\/Open\+Sans:400-\d+\.css$/
+                            to: {
+                                url: /\/google-font-subsets\/Open\+Sans:400-\d+\.css$/,
+                                isLoaded: true,
+                                isInline: false,
+                                outgoingRelations: [
+                                    {
+                                        type: 'CssFontFaceSrc',
+                                        hrefType: 'relative',
+                                        to: {
+                                            url: /Open\+Sans:400-\d+\.woff$/,
+                                            isLoaded: true,
+                                            isInline: false,
+                                        }
+                                    }
+                                ]
+                            }
                         },
                         {
                             type: 'HtmlStyle',
                             from: about,
-                            href: /\/google-font-subsets\/Open\+Sans:400-\d+\.css$/
-                        },
+                            to: {
+                                url: /\/google-font-subsets\/Open\+Sans:400-\d+\.css$/,
+                                isLoaded: true,
+                                isInline: false,
+                                outgoingRelations: [
+                                    {
+                                        type: 'CssFontFaceSrc',
+                                        hrefType: 'relative',
+                                        to: {
+                                            url: /Open\+Sans:400-\d+\.woff$/,
+                                            isLoaded: true,
+                                            isInline: false,
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]);
+
+                    // Filament group async css load of original google font css
+                    expect(assetGraph.findRelations({ crossorigin: true }, true), 'to satisfy', [
                         {
                             type: 'HtmlStyle',
                             from: index,
@@ -581,16 +606,6 @@ describe('transforms/subsetGoogleFonts', function () {
                             from: {
                                 nonInlineAncestor: about
                             }
-                        },
-                        {
-                            type: 'CssFontFaceSrc',
-                            from: { 'fileName': /Open\+Sans:400-\d+\.css/ },
-                            href: /Open\+Sans:400-\d+\.woff/
-                        },
-                        {
-                            type: 'CssFontFaceSrc',
-                            from: { 'fileName': /Open\+Sans:400-\d+\.css/ },
-                            href: /Open\+Sans:400-\d+\.woff/
                         }
                     ]);
                 });
