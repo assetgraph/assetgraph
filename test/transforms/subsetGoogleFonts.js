@@ -527,6 +527,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     }
                 })
                 .subsetGoogleFonts({
+                    inlineSubsets: false,
                     subsetPerPage: true
                 })
                 .queue(function (assetGraph) {
@@ -634,6 +635,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     }
                 })
                 .subsetGoogleFonts({
+                    inlineSubsets: false,
                     subsetPerPage: false
                 })
                 .drawGraph('debug.svg')
