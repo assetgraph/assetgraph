@@ -12,7 +12,7 @@ describe('relations/HtmlEdgeSideInclude', function () {
             })
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', 'Html', 2);
-                expect(assetGraph, 'to contain relation', 'HtmlEdgeSideInclude');
+                expect(assetGraph, 'to contain relations', 'HtmlEdgeSideInclude', 2);
                 expect(assetGraph, 'to contain relations including unresolved', 'HtmlEdgeSideInclude', 2);
                 assetGraph.findAssets({url: /\/index\.html/})[0].url = urlTools.resolveUrl(assetGraph.root, 'foo/index.html');
                 expect(
