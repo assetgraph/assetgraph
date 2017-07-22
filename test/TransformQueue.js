@@ -125,3 +125,33 @@ describe('TransformQueue', function () {
             });
     });
 });
+
+describe('error propagation', function () {
+    it('should fail the transform when an error is thrown in a transform', function () {
+        return expect(new AssetGraph().queue(() => {
+            throw new Error('foo');
+        }), 'to be rejected with', new Error('unnamed transform: foo'));
+    });
+
+    it('should fail the transform when an error is emitted in a transform', function () {
+        return expect(new AssetGraph().queue(assetGraph => {
+            assetGraph.emit('error', new Error('foo'));
+        }), 'to be rejected with', new Error('unnamed transform: foo'));
+    });
+
+    it('should fail the transform when an error is passed to the callback from an async transform', function () {
+        return expect(new AssetGraph().queue((assetGraph, cb) => {
+            setImmediate(() => cb(new Error('foo')));
+        }), 'to be rejected with', new Error('unnamed transform: foo'));
+    });
+
+    it('should fail the transform when an error is passed to the synchronously called callback from an async transform', function () {
+        return expect(new AssetGraph().queue((assetGraph, cb) => {
+            cb(new Error('foo'));
+        }), 'to be rejected with', new Error('unnamed transform: foo'));
+    });
+
+    it('should fail the transform when a rejected promise is returned from it', function () {
+        return expect(new AssetGraph().queue(() => Promise.reject(new Error('foo'))), 'to be rejected with', new Error('unnamed transform: foo'));
+    });
+});
