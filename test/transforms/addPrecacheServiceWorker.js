@@ -67,10 +67,9 @@ describe('transforms/addPrecacheServiceWorker', function () {
             });
     });
 
-    it('should give up when the target location of the service worker is clobbered', function () {
-        const errorSpy = sinon.spy();
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/singlePage/'})
-            .on('error', errorSpy)
+    it('should give up when the target location of the service worker is clobbered', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/singlePage/'});
+        await assetGraph
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: /^file:/}}})
             .queue(assetGraph => {
@@ -78,11 +77,12 @@ describe('transforms/addPrecacheServiceWorker', function () {
                     url: assetGraph.root + 'index-precache-service-worker.js',
                     text: 'alert("hello");'
                 }));
-            })
-            .addPrecacheServiceWorker({isInitial: true})
-            .then(assetGraph => expect(errorSpy, 'to have calls satisfying', () =>
-                errorSpy(new Error(`There is already a service worker at ${assetGraph.root}index-precache-service-worker.js -- giving up`))
-            ));
+            });
+        await expect(
+            async () => await assetGraph.addPrecacheServiceWorker({isInitial: true}),
+            'to be rejected with',
+            new Error(`addPrecacheServiceWorker transform: There is already a service worker at ${assetGraph.root}index-precache-service-worker.js -- giving up`)
+        );
     });
 
     describe('in single:true mode', function () {
