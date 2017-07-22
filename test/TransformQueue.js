@@ -1,7 +1,7 @@
 /*global describe, it*/
-var expect = require('./unexpected-with-plugins'),
-    AssetGraph = require('../lib/AssetGraph'),
-    Promise = require('bluebird');
+const expect = require('./unexpected-with-plugins');
+const AssetGraph = require('../lib/AssetGraph');
+const Promise = require('bluebird');
 
 AssetGraph.registerTransform(function pushItemToArraySync(item, array) {
     return function (assetGraph) {
@@ -31,27 +31,25 @@ AssetGraph.registerTransform(function returnPromiseDespiteBeingAsync() {
 });
 
 describe('TransformQueue', function () {
-    it('should propagate a thrown error asynchronously when an async transform throws synchronously', function (done) {
-        new AssetGraph()
+    it('should propagate a thrown error asynchronously when an async transform throws synchronously', function () {
+        return new AssetGraph()
             .throwErrorDespiteBeingAsync()
             .run(function (err) {
                 expect(err, 'to equal', new Error('unnamed transform: urgh'));
-                done();
             });
     });
 
-    it('should error out when an async transform returns a promise', function (done) {
-        new AssetGraph()
+    it('should error out when an async transform returns a promise', function () {
+        return new AssetGraph()
             .returnPromiseDespiteBeingAsync()
             .run(function (err) {
                 expect(err, 'to equal', new Error('unnamed transform: A transform cannot both take a callback and return a promise'));
-                done();
             });
     });
 
-    it('should support a sync (single parameter) transform returning a promise', function (done) {
+    it('should support a sync (single parameter) transform returning a promise', function () {
         var promiseFulfilled = false;
-        new AssetGraph()
+        return new AssetGraph()
             .queue(function (assetGraph) {
                 return new Promise(function (resolve, reject) {
                     setTimeout(function () {
@@ -62,13 +60,12 @@ describe('TransformQueue', function () {
             })
             .run(function () {
                 expect(promiseFulfilled, 'to be true');
-                done();
             });
     });
 
-    it('should support .then(...)', function (done) {
-        var workDone = false;
-        new AssetGraph()
+    it('should support .then(...)', function () {
+        let workDone = false;
+        return new AssetGraph()
             .queue(function (assetGraph, cb) {
                 setTimeout(function () {
                     workDone = true;
@@ -77,7 +74,6 @@ describe('TransformQueue', function () {
             })
             .then(function () {
                 expect(workDone, 'to be true');
-                done();
             });
     });
 
@@ -89,9 +85,9 @@ describe('TransformQueue', function () {
         );
     });
 
-    it('should handle multiple levels of nested transforms', function (done) {
+    it('should handle multiple levels of nested transforms', function () {
         var array = [];
-        new AssetGraph()
+        return new AssetGraph()
             .pushItemToArrayAsync('a', array)
             .pushItemToArraySync('b', array)
             .pushItemToArrayAsync('c', array)
@@ -126,7 +122,6 @@ describe('TransformQueue', function () {
             .pushItemToArrayAsync('t', array)
             .queue(function () {
                 expect(array, 'to equal', ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't']);
-            })
-            .run(done);
+            });
     });
 });
