@@ -48,7 +48,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
 
         expect([warnSpy, infoSpy], 'to have calls satisfying', () => {
             warnSpy(/^ENOENT.*notFound\.js/);
-            infoSpy(expect.it('to begin with', 'index-precache-service-worker.js: Total precache size is about'));
+            infoSpy(/^index-precache-service-worker\.js: Total precache size is about/);
         });
     });
 
