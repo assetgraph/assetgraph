@@ -1,6 +1,7 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
+const sinon = require('sinon');
 
 describe('relations/HtmlResourceHint', function () {
     function getHtmlAsset(htmlString) {
@@ -173,158 +174,173 @@ describe('relations/HtmlResourceHint', function () {
         });
 
         describe('when target asset is resolved', function () {
-            it('should handle images', function () {
-                var htmlAsset = getHtmlAsset('<body><img src="foo.png"></body>');
+            it('should handle images', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><img src="foo.png"></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[1]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'image');
-                    });
+                expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT/));
+
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[1]
+                });
+
+                expect(relation.as, 'to be', 'image');
             });
 
-            it('should handle script', function () {
-                var htmlAsset = getHtmlAsset('<body><script src="foo.js"></script></body>');
+            it('should handle script', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><script src="foo.js"></script></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[1]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'script');
-                    });
+                expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT/));
+
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[1]
+                });
+
+                expect(relation.as, 'to be', 'script');
             });
 
-            it('should handle style', function () {
-                var htmlAsset = getHtmlAsset('<body><link rel="stylesheet" href="foo.css"></body>');
+            it('should handle style', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><link rel="stylesheet" href="foo.css"></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[1]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'style');
-                    });
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[1]
+                });
+
+                expect(relation.as, 'to be', 'style');
             });
 
-            it('should handle style with unknown file extension', function () {
-                var htmlAsset = getHtmlAsset('<body><link rel="stylesheet" href="foo.scss"></body>');
+            it('should handle style with unknown file extension', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><link rel="stylesheet" href="foo.scss"></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[1]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'style');
-                    });
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[1]
+                });
+
+                expect(relation.as, 'to be', 'style');
             });
 
-            it('should handle an iframe', function () {
-                var htmlAsset = getHtmlAsset('<body><iframe src="foo.html"></iframe></body>');
+            it('should handle an iframe', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><iframe src="foo.html"></iframe></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[1]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'document');
-                    });
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[1]
+                });
+
+                expect(relation.as, 'to be', 'document');
             });
 
-            it.skip('should handle a frame', function () {
-                var htmlAsset = getHtmlAsset('<body><frameset><frame src="foo.html"></frameset></body>');
+            it.skip('should handle a frame', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><frameset><frame src="foo.html"></frameset></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[1]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'document');
-                    });
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[1]
+                });
+
+                expect(relation.as, 'to be', 'document');
             });
 
-            it('should handle audio', function () {
-                var htmlAsset = getHtmlAsset('<body><audio src="foo.wav"></body>');
+            it('should handle audio', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><audio src="foo.wav"></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[1]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'media');
-                    });
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[1]
+                });
+
+                expect(relation.as, 'to be', 'media');
             });
 
-            it('should handle video', function () {
-                var htmlAsset = getHtmlAsset('<body><video src="foo.wav"></body>');
+            it('should handle video', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><video src="foo.wav"></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[1]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'media');
-                    });
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[1]
+                });
+
+                expect(relation.as, 'to be', 'media');
             });
 
-            it('should handle css fonts', function () {
-                var htmlAsset = getHtmlAsset('<body><style>@font-face { font-family: "Noto Serif"; font-style: normal; font-weight: 400; src: url(foo.woff2) format("woff2"); }</style></body>');
+            it('should handle css fonts', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><style>@font-face { font-family: "Noto Serif"; font-style: normal; font-weight: 400; src: url(foo.woff2) format("woff2"); }</style></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[2]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'font');
-                    });
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[2]
+                });
+
+                expect(relation.as, 'to be', 'font');
             });
 
-            it('should handle embeds', function () {
-                var htmlAsset = getHtmlAsset('<body><embed src="foo.wav"></body>');
+            it('should handle embeds', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><embed src="foo.wav"></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[1]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'embed');
-                    });
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[1]
+                });
+
+                expect(relation.as, 'to be', 'embed');
             });
 
-            it('should handle objects', function () {
-                var htmlAsset = getHtmlAsset('<body><object data="foo.wav"></object></body>');
+            it('should handle objects', async function () {
+                const warnSpy = sinon.spy().named('warn');
+                const htmlAsset = getHtmlAsset('<body><object data="foo.wav"></object></body>');
 
-                return htmlAsset.assetGraph
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var relation = new AssetGraph.HtmlResourceHint({
-                            to: assetGraph.findAssets()[1]
-                        });
+                const assetGraph = await htmlAsset.assetGraph
+                    .on('warn', warnSpy)
+                    .populate();
 
-                        expect(relation.as, 'to be', 'object');
-                    });
+                const relation = new AssetGraph.HtmlResourceHint({
+                    to: assetGraph.findAssets()[1]
+                });
+
+                expect(relation.as, 'to be', 'object');
             });
         });
     });

@@ -179,24 +179,20 @@ describe('assets/Css', function () {
         expect(getParseTree, 'to throw');
     });
 
-    it('should emit an error on completely invalid CSS if the asset is part of an assetGraph', function () {
+    it('should emit a warn event on completely invalid CSS if the asset is part of an assetGraph', function () {
         var assetGraph = new AssetGraph();
         var asset = new AssetGraph.Css({
             text: 'body {}'
         });
-        function getParseTree() {
-            return asset.parseTree;
-        }
 
         assetGraph.addAsset(asset);
-        var emitter = sinon.spy(assetGraph, 'emit');
 
-        expect(getParseTree, 'not to throw');
-        expect(emitter, 'was not called');
+        const warnSpy = sinon.spy(assetGraph, 'warn');
+        assetGraph.on('warn', warnSpy);
 
-        asset.text = '}';
+        expect(() => asset.parseTree, 'not to throw');
 
-        expect(emitter, 'was called once');
+        expect(() => asset.text = '}', 'to throw');
     });
 
     it('should update the text of a Css asset when setting parseTree', function () {

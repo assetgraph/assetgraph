@@ -282,7 +282,7 @@ describe('transforms/bundleSystemJs', function () {
             it('should remove system.js and the configuration and not inject the bundle', function () {
                 return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/onlyLess/'})
                     .loadAssets('index.html')
-                    .populate()
+                    .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') } })
                     .queue(function (assetGraph) {
                         expect(assetGraph, 'to contain assets', 'Html', 1);
                         expect(assetGraph, 'to contain no assets', 'Css');

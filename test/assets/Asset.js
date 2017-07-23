@@ -578,20 +578,13 @@ describe('assets/Asset', function () {
             expect(() => new AssetGraph.Asset({}).rawSrc, 'to throw');
         });
 
-        it('should emit an error when getting a non-existing rawSrc from an asset in a graph', function () {
+        it('should throw when getting a non-existing rawSrc from an asset in a graph', function () {
             const assetGraph = new AssetGraph();
             const asset = new AssetGraph.Asset({});
-            const getRawSrc = function () {
-                return asset.rawSrc;
-            };
 
             assetGraph.addAsset(asset);
 
-            const emitSpy = sinon.spy(assetGraph, 'emit');
-
-            expect(getRawSrc, 'not to throw');
-            expect(emitSpy, 'was called once');
-            expect(getRawSrc(), 'to be undefined');
+            expect(() => asset.rawSrc, 'to throw', /Asset isn't loaded/);
         });
 
         it('should set the rawSrc of an asset correctly', function () {

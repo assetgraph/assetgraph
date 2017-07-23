@@ -1,14 +1,15 @@
 /*global describe, it, beforeEach*/
-var unexpected = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const unexpected = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
+const sinon = require('sinon');
 
 describe('transforms/replaceSymbolsInJavaScript', function () {
-    var assetGraph;
+    let assetGraph;
     beforeEach(function () {
         assetGraph = new AssetGraph();
     });
 
-    var expect = unexpected.clone().addAssertion('to come out as', function (expect, subject, value) {
+    const expect = unexpected.clone().addAssertion('to come out as', async function (expect, subject, value) {
         this.args.pop(); // Don't inspect the callback when the assertion fails
         // subject.code, subject.defines
         expect(subject, 'to be an object');
@@ -22,15 +23,12 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         } else if (Buffer.isBuffer(subject.rawSrc)) {
             assetConfig.rawSrc = subject.rawSrc;
         }
-        return assetGraph
+        await assetGraph
             .loadAssets(new AssetGraph.JavaScript(assetConfig))
-            .replaceSymbolsInJavaScript({type: 'JavaScript'}, subject.defines || {})
-            .queue(function (assetGraph) {
-                expect(assetGraph.findAssets({fileName: 'bogus.js'})[0], 'to have the same AST as', value);
-            })
-            .then(function () {
-                return assetGraph.findAssets()[0].parseTree;
-            });
+            .replaceSymbolsInJavaScript({type: 'JavaScript'}, subject.defines || {});
+
+        expect(assetGraph.findAssets({fileName: 'bogus.js'})[0], 'to have the same AST as', value);
+        return assetGraph.findAssets()[0].parseTree;
     });
 
     it('should replace a primitive value', function () {
@@ -58,8 +56,10 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         });
     });
 
-    it('should replace an undefined value in an object with undefined', function () {
-        return expect({
+    it('should replace an undefined value in an object with undefined', async function () {
+        const warnSpy = sinon.spy().named('warn');
+        assetGraph.on('warn', warnSpy);
+        await expect({
             text: 'var bar = FOO.BAR;',
             defines: {
                 FOO: {}
@@ -69,10 +69,13 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
             var bar = undefined;
             /* eslint-enable */
         });
+        expect(warnSpy, 'to have calls satisfying', () => warnSpy(new Error('Could not find a value for "FOO.BAR". Replacing with undefined.')));
     });
 
-    it('should replace an undefined value in a nested object with undefined', function () {
-        return expect({
+    it('should replace an undefined value in a nested object with undefined', async function () {
+        const warnSpy = sinon.spy().named('warn');
+        assetGraph.on('warn', warnSpy);
+        await expect({
             text: 'var bar = !BAZ.FOO.BAR;',
             defines: {
                 BAZ: {}
@@ -82,6 +85,7 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
             var bar = !undefined;
             /* eslint-enable */
         });
+        expect(warnSpy, 'to have calls satisfying', () => warnSpy(new Error('Could not find a value for "BAZ.FOO.BAR". Replacing with undefined.')));
     });
 
     it('should not replace the LHS of an assignment', function () {

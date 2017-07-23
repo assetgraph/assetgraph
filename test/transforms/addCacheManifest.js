@@ -1,8 +1,9 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    _ = require('lodash'),
-    urlTools = require('urltools'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const _ = require('lodash');
+const urlTools = require('urltools');
+const AssetGraph = require('../../lib/AssetGraph');
+const sinon = require('sinon');
 
 describe('transforms/addCacheManifest', function () {
     it('should handle a single page with an existing cache manifest', function (done) {
@@ -45,30 +46,32 @@ describe('transforms/addCacheManifest', function () {
             .run(done);
     });
 
-    it('should add a cache manifest to a page that does not already have one', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifest/'})
+    it('should add a cache manifest to a page that does not already have one', async function () {
+        const warnSpy = sinon.spy().named('warn');
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifest/'})
+            .on('warn', warnSpy)
             .loadAssets('index.html')
-            .populate({followRelations: {to: {url: /^file:/}}})
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 7);
-                expect(assetGraph, 'to contain relations', 9);
-                expect(assetGraph, 'to contain asset', 'Png');
-                expect(assetGraph, 'to contain assets', 'Html', 2);
-                expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});
-                expect(assetGraph, 'to contain asset', 'Css');
-                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-                expect(assetGraph, 'to contain asset', {type: 'Asset', isLoaded: false, fileName: 'notFound.js'});
-            })
-            .addCacheManifest({isInitial: true})
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain asset', 'CacheManifest');
-                expect(_.map(assetGraph.findRelations({from: {type: 'CacheManifest'}}), 'href'), 'to equal', [
-                    'foo.png',
-                    'style.css',
-                    'modernBrowsers.js'
-                ]);
-            })
-            .run(done);
+            .populate({followRelations: {to: {url: /^file:/}}});
+
+        expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*notFound\.js/));
+
+        expect(assetGraph, 'to contain assets', 7);
+        expect(assetGraph, 'to contain relations', 9);
+        expect(assetGraph, 'to contain asset', 'Png');
+        expect(assetGraph, 'to contain assets', 'Html', 2);
+        expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});
+        expect(assetGraph, 'to contain asset', 'Css');
+        expect(assetGraph, 'to contain assets', 'JavaScript', 2);
+        expect(assetGraph, 'to contain asset', {type: 'Asset', isLoaded: false, fileName: 'notFound.js'});
+
+        await assetGraph.addCacheManifest({isInitial: true});
+
+        expect(assetGraph, 'to contain asset', 'CacheManifest');
+        expect(_.map(assetGraph.findRelations({from: {type: 'CacheManifest'}}), 'href'), 'to equal', [
+            'foo.png',
+            'style.css',
+            'modernBrowsers.js'
+        ]);
     });
 
     it('should add cache manifest to multiple pages', function (done) {

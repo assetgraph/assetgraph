@@ -1,6 +1,7 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
+const sinon = require('sinon');
 
 describe('transforms/setSourceMapRoot', function () {
     it('should be able to modify source root', function (done) {
@@ -54,21 +55,20 @@ describe('transforms/setSourceMapRoot', function () {
                 });
         });
 
-        it('should allow fixing up a wrong sourceRoot before continuing population', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/setSourceMapRoot/wrongSourceRoot/'})
+        it('should allow fixing up a wrong sourceRoot before continuing population', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/setSourceMapRoot/wrongSourceRoot/'})
                 .loadAssets('index.html')
-                .populate({followRelations: {from: {type: AssetGraph.query.not('SourceMap')}}})
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain no assets', {url: /\.less$/});
-                })
-                .setSourceMapRoot(null, 'theSources')
-                .populate({from: {type: 'SourceMap'}})
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', {url: /\.less$/, isLoaded: true});
-                    expect(assetGraph.findAssets({type: 'SourceMap'})[0].parseTree, 'to satisfy', {
-                        sources: ['foo.less']
-                    });
-                });
+                .populate({followRelations: {from: {type: AssetGraph.query.not('SourceMap')}}});
+
+            expect(assetGraph, 'to contain no assets', {url: /\.less$/});
+
+            await assetGraph.setSourceMapRoot(null, 'theSources')
+                .populate({from: {type: 'SourceMap'}});
+
+            expect(assetGraph, 'to contain asset', {url: /\.less$/, isLoaded: true});
+            expect(assetGraph.findAssets({type: 'SourceMap'})[0].parseTree, 'to satisfy', {
+                sources: ['foo.less']
+            });
         });
     });
 });

@@ -1,6 +1,7 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
+const sinon = require('sinon');
 
 describe('relations/JavaScriptSourceMappingUrl', function () {
     it('should handle a test case with a JavaScript asset that has @sourceMappingURL directive', function () {
@@ -21,20 +22,23 @@ describe('relations/JavaScriptSourceMappingUrl', function () {
             });
     });
 
-    it('should handle another test case with a JavaScript asset that has @sourceMappingURL directive', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap2/'})
+    it('should handle another test case with a JavaScript asset that has @sourceMappingURL directive', async function () {
+        const warnSpy = sinon.spy().named('warn');
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap2/'})
+            .on('warn', warnSpy)
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'JavaScriptSourceMappingUrl');
-                expect(assetGraph, 'to contain relation', 'SourceMapSource');
-            })
-            .applySourceMaps()
-            .queue(function (assetGraph) {
-                expect(assetGraph.findAssets({type: 'JavaScript'})[0].parseTree.body[0].expression.argument.loc, 'to satisfy', {
-                    start: { line: 15, column: 1 },
-                    source: assetGraph.root + 'jquery-1.11.3.js'
-                });
-            });
+            .populate();
+
+        expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*jquery-1.11.3.js/));
+
+        expect(assetGraph, 'to contain relation', 'JavaScriptSourceMappingUrl');
+        expect(assetGraph, 'to contain relation', 'SourceMapSource');
+
+        await assetGraph.applySourceMaps();
+
+        expect(assetGraph.findAssets({type: 'JavaScript'})[0].parseTree.body[0].expression.argument.loc, 'to satisfy', {
+            start: { line: 15, column: 1 },
+            source: assetGraph.root + 'jquery-1.11.3.js'
+        });
     });
 });
