@@ -1,7 +1,6 @@
 /*global describe, it*/
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
-const sinon = require('sinon');
 
 describe('transforms/setSourceMapRoot', function () {
     it('should be able to modify source root', function (done) {
