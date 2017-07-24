@@ -6,7 +6,7 @@ describe('AssetGraph#add', function () {
     describe('with an array', function () {
         it('should add all the asset configs to the graph and return the created instances', function () {
             const assetGraph = new AssetGraph();
-            expect(assetGraph.addAsset([
+            expect(assetGraph.add([
                 {
                     type: 'Css',
                     url: 'https://example.com/styles.css',
@@ -32,7 +32,7 @@ describe('AssetGraph#add', function () {
     describe('with a glob pattern', function () {
         it('should add all the matched assets to the graph', function () {
             const assetGraph = new AssetGraph({ root: __dirname + '/../testdata/add/glob/'});
-            expect(assetGraph.addAsset('*.html'), 'to satisfy', [
+            expect(assetGraph.add('*.html'), 'to satisfy', [
                 { isAsset: true, fileName: 'index1.html' },
                 { isAsset: true, fileName: 'index2.html' }
             ]);
@@ -51,7 +51,7 @@ describe('AssetGraph#add', function () {
     describe('with an asset config that includes the body', function () {
         it('should add the targets of all external outgoing relations as unloaded Asset instances', function () {
             const assetGraph = new AssetGraph();
-            assetGraph.addAsset({
+            assetGraph.add({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { background-image: url(https://example.com/foo.png); }'
@@ -67,7 +67,7 @@ describe('AssetGraph#add', function () {
     describe('with an asset config that does not include the body', function () {
         it('should add the targets of all external outgoing relations as unloaded Asset instances once the asset is loaded', async function () {
             const assetGraph = new AssetGraph();
-            const [ cssAsset ] = assetGraph.addAsset({
+            const [ cssAsset ] = assetGraph.add({
                 type: 'Css',
                 url: 'https://example.com/styles.css'
             });
@@ -95,7 +95,7 @@ describe('AssetGraph#add', function () {
     describe('when the url already exists in the graph', function () {
         it('should return the existing instance', function () {
             const assetGraph = new AssetGraph();
-            const [ cssAsset ] = assetGraph.addAsset({
+            const [ cssAsset ] = assetGraph.add({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { color: teal; }'
@@ -103,7 +103,7 @@ describe('AssetGraph#add', function () {
             expect(cssAsset, 'to be a', AssetGraph.Css)
                 .and('to satisfy', { text: 'body { color: teal; }' });
 
-            const cssAsset2 = assetGraph.addAsset({
+            const [ cssAsset2 ] = assetGraph.add({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { color: teal; }'
