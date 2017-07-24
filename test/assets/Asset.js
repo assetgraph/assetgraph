@@ -527,8 +527,6 @@ describe('assets/Asset', function () {
 
             expect(assetGraph, 'to contain relation', 'HtmlAnchor');
 
-            expect(assetGraph.findRelations({type: 'CssImage'}, true).length - assetGraph.findRelations({type: 'CssImage'}).length, 'to equal', 1);
-
             const fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0];
             fooHtml.text = '<!DOCTYPE html>\n<html><head></head><body><a href="baz.html">Another link text</a></body></html>';
 

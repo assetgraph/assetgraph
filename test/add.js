@@ -67,7 +67,7 @@ describe('AssetGraph#add', function () {
     describe('with an asset config that does not include the body', function () {
         it('should add the targets of all external outgoing relations as unloaded Asset instances once the asset is loaded', async function () {
             const assetGraph = new AssetGraph();
-            const cssAsset = assetGraph.addAsset({
+            const [ cssAsset ] = assetGraph.addAsset({
                 type: 'Css',
                 url: 'https://example.com/styles.css'
             });
@@ -95,7 +95,7 @@ describe('AssetGraph#add', function () {
     describe('when the url already exists in the graph', function () {
         it('should return the existing instance', function () {
             const assetGraph = new AssetGraph();
-            const cssAsset = assetGraph.addAsset({
+            const [ cssAsset ] = assetGraph.addAsset({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { color: teal; }'
