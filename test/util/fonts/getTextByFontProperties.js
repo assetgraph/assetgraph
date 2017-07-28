@@ -481,6 +481,24 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
+        it('should support :after without content', function () {
+            var htmlText = [
+                '<style>h1:after { font-family: font1 !important; }</style>',
+                '<h1></h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: '',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
         it('should override re-definition of prop on :after pseudo-element', function () {
             var htmlText = [
                 '<style>h1::after { content: "after"; font-family: font1; }</style>',
@@ -617,6 +635,24 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     props: {
                         'font-family': 'font1',
                         'font-weight': 600,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should support content: attr(...)', function () {
+            var htmlText = [
+                '<style>div:after { content: attr(data-foo); font-family: font1; }</style>',
+                '<div data-foo="bar"></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
                         'font-style': 'normal'
                     }
                 }
