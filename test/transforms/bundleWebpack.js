@@ -8,7 +8,7 @@ describe('bundleWebpack', function () {
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
-        expect(assetGraph, 'to contain asset', 'JavaScript');
+        expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 1);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
@@ -26,7 +26,7 @@ describe('bundleWebpack', function () {
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
-        expect(assetGraph, 'to contain asset', 'JavaScript');
+        expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 1);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
@@ -44,7 +44,7 @@ describe('bundleWebpack', function () {
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
-        expect(assetGraph, 'to contain asset', 'Json');
+        expect(assetGraph, 'to contain assets', 'Json', 2);
         expect(assetGraph, 'to contain relation', { type: 'JavaScriptStaticUrl', to: { fileName: /^[a-f0-9]{32}\.json$/ } });
     });
 

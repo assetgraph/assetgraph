@@ -1,6 +1,7 @@
 const expect = require('./unexpected-with-plugins');
 const AssetGraph = require('../');
 const httpception = require('httpception');
+const sinon = require('sinon');
 
 describe('AssetGraph#add', function () {
     describe('with an array', function () {
@@ -114,6 +115,74 @@ describe('AssetGraph#add', function () {
     });
 
     describe('when more information arrives about an existing asset', function () {
-        it('should upgrade from Xml to Atom');
+        it.skip('should upgrade from Xml to Atom', async function () {
+            const assetGraph = new AssetGraph();
+            const [ xmlAsset ] = assetGraph.add({
+                url: 'http://example.com/feed.xml',
+                text: `
+                    <?xml version="1.0" encoding="utf-8"?>
+                    <feed xmlns="http://www.w3.org/2005/Atom">
+                      <title>Example blog</title>
+                      <updated>2014-08-29T00:11:13+02:00</updated>
+                      <id>http://example.com/</id>
+                      <entry>
+                        <title>Karma Generator Rewrite 0.8.0</title>
+                        <link href="http://example.com/blog/article/"/>
+                        <updated>2014-05-12T00:00:00+02:00</updated>
+                        <id>http://example.com/blog/article/</id>
+                        <content type="html">This contains an image: &lt;img src=&quot;foo.png&quot;&gt; and a &lt;a href=&quot;bar.html&quot;&gt;relative link&lt;/a&gt;</content>
+                      </entry>
+                    </feed>
+                `
+            });
+
+            await xmlAsset.load();
+
+            expect(assetGraph, 'to contain no assets', 'Png');
+
+            const infoSpy = sinon.spy().named('info');
+            assetGraph.on('info', infoSpy);
+
+            assetGraph.add({
+                url: 'http://example.com/feed.xml',
+                contentType: 'application/atom+xml'
+            });
+
+            expect(assetGraph, 'to contain asset', 'Atom');
+            expect(assetGraph, 'to contain asset', 'Png');
+            expect(assetGraph, 'to no contain asset', 'Xml');
+        });
+
+        it('should upgrade an unloaded asset with text', async function () {
+            const assetGraph = new AssetGraph();
+            assetGraph.add({
+                type: 'Css',
+                url: 'http://example.com/styles.css',
+                text: '@import "more.css";'
+            });
+            expect(assetGraph, 'to contain asset', {
+                url: 'http://example.com/more.css'
+            });
+            await assetGraph.add({
+                type: 'Css',
+                url: 'http://example.com/more.css',
+                text: 'body { color: teal; }'
+            })[0].load();
+
+            expect(assetGraph, 'to contain asset', {
+                url: 'http://example.com/more.css',
+                text: 'body { color: teal; }'
+            });
+            expect(assetGraph, 'to contain assets', 2);
+            expect(assetGraph, 'to contain relation', {
+                type: 'CssImport',
+                from: {
+                    url: 'http://example.com/styles.css'
+                },
+                to: {
+                    url: 'http://example.com/more.css'
+                }
+            });
+        });
     });
 });
