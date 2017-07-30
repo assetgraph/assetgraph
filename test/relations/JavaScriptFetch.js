@@ -51,9 +51,9 @@ describe('relations/JavaScriptFetch', function () {
         new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'})
             .loadAssets('fetch.js')
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'JavaScriptFetch', 1);
+                expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
 
-                var relation = assetGraph.findRelations({ type: 'JavaScriptFetch' }, true)[0];
+                var relation = assetGraph.findRelations({ type: 'JavaScriptFetch' })[0];
 
                 expect(relation, 'to satisfy', {
                     href: 'b.js'
@@ -69,7 +69,7 @@ describe('relations/JavaScriptFetch', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
 
-                var relation = assetGraph.findRelations({ type: 'JavaScriptFetch' }, true)[0];
+                var relation = assetGraph.findRelations({ type: 'JavaScriptFetch' })[0];
 
                 expect(relation, 'to satisfy', {
                     href: 'b.js',

@@ -12,12 +12,12 @@ describe('relations/HtmlPictureSource test', function () {
                 followRelations: () => false
             });
 
-        expect(assetGraph, 'to contain relations including unresolved', 'HtmlPictureSource', 2);
+        expect(assetGraph, 'to contain relations', 'HtmlPictureSource', 2);
         assetGraph.findAssets({type: 'Html'})[0].url = 'http://example.com/foo/bar.html';
-        assetGraph.findRelations({}, true).forEach(function (relation) {
+        assetGraph.findRelations().forEach(function (relation) {
             relation.hrefType = 'relative';
         });
-        expect(_.map(assetGraph.findRelations({}, true), 'href'), 'to equal', [
+        expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
             '../image.png',
             '../otherImage.jpg'
         ]);

@@ -8,7 +8,7 @@ describe('transforms/addRelNoopenerToBlankTargetAnchors', function () {
         return new AssetGraph({ root: __dirname + '/../../testdata/transforms/addRelNoopenerToBlankTargetAnchors/' })
             .loadAssets('index.html')
             .queue(function (assetGraph) {
-                var anchorRels = assetGraph.findRelations({}, true).map(function (relation) {
+                var anchorRels = assetGraph.findRelations().map(function (relation) {
                     return relation.node.getAttribute('rel');
                 });
 
@@ -26,7 +26,7 @@ describe('transforms/addRelNoopenerToBlankTargetAnchors', function () {
             })
             .addRelNoopenerToBlankTargetAnchors()
             .queue(function (assetGraph) {
-                var anchorRels = assetGraph.findRelations({}, true).map(function (relation) {
+                var anchorRels = assetGraph.findRelations().map(function (relation) {
                     return relation.node.getAttribute('rel');
                 });
 

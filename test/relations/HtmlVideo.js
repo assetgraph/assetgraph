@@ -12,15 +12,15 @@ describe('relations/HtmlVideo', function () {
                 followRelations: () => false
             });
 
-        expect(assetGraph, 'to contain relations including unresolved', 'HtmlVideo', 4);
-        expect(assetGraph, 'to contain relations including unresolved', 'HtmlVideoPoster', 2);
+        expect(assetGraph, 'to contain relations', 'HtmlVideo', 4);
+        expect(assetGraph, 'to contain relations', 'HtmlVideoPoster', 2);
 
         assetGraph.findAssets({type: 'Html'})[0].url = 'http://example.com/foo/bar.html';
-        assetGraph.findRelations({}, true).forEach(function (relation) {
+        assetGraph.findRelations().forEach(function (relation) {
             relation.hrefType = 'relative';
         });
 
-        expect(_.map(assetGraph.findRelations({}, true), 'href'), 'to equal', [
+        expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
             '../movie1.mp4',
             '../movie1.jpg',
             '../movie2.png',

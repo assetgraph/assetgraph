@@ -8,9 +8,9 @@ describe('relations/HtmlPictureSourceSrcSet', function () {
             .loadAssets('index.html')
             .populate()
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'HtmlPictureSourceSrcSet', 3);
+                expect(assetGraph, 'to contain relations', 'HtmlPictureSourceSrcSet', 3);
                 expect(assetGraph, 'to contain assets', 'SrcSet', 3);
-                expect(assetGraph, 'to contain relations including unresolved', 'SrcSetEntry', 6);
+                expect(assetGraph, 'to contain relations', 'SrcSetEntry', 6);
                 expect(assetGraph, 'to contain assets', 'Jpeg', 6);
 
                 assetGraph.findAssets({fileName: 'large-2.jpg'})[0].fileName = 'reallyLarge.jpg';

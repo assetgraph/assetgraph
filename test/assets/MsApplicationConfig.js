@@ -11,7 +11,7 @@ describe('assets/MsApplicationConfig', function () {
                     text: expect.it('to begin with', '<?xml version="1.0" encoding="utf-8"?>')
                 });
 
-                expect(assetGraph.findRelations({}, true), 'to satisfy', [
+                expect(assetGraph.findRelations(), 'to satisfy', [
                     { type: 'HtmlMsApplicationConfig' },
                     { type: 'MsApplicationConfigImage', href: '/tile/TileImage.png' },
                     { type: 'MsApplicationConfigImage', href: '/tile/square70x70logo.png' },

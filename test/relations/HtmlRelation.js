@@ -25,7 +25,7 @@ describe('relations/HtmlRelation', function () {
         }
 
         function findRelation(asset, query) {
-            return asset.assetGraph.findRelations(query, true)[0];
+            return asset.assetGraph.findRelations(query)[0];
         }
 
         describe('api', function () {

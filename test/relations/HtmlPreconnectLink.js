@@ -29,16 +29,16 @@ describe('relations/HtmlPreconnectLink', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPreconnectLink/'})
             .loadAssets('index.html');
 
-        expect(assetGraph, 'to contain relation including unresolved', 'HtmlPreconnectLink');
+        expect(assetGraph, 'to contain relation', 'HtmlPreconnectLink');
     });
 
     it('should update the href', async function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPreconnectLink/'})
             .loadAssets('index.html');
 
-        expect(assetGraph, 'to contain relation including unresolved', 'HtmlPreconnectLink');
+        expect(assetGraph, 'to contain relation', 'HtmlPreconnectLink');
 
-        const link = assetGraph.findRelations({ type: 'HtmlPreconnectLink' }, true)[0];
+        const link = assetGraph.findRelations({ type: 'HtmlPreconnectLink' })[0];
 
         link.hrefType = 'relative';
         link.to.url = assetGraph.root + 'foo.bar';

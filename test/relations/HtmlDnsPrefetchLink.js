@@ -29,7 +29,7 @@ describe('relations/HtmlDnsPrefetchLink', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDnsPrefetchLink/'})
             .loadAssets('index.html')
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation including unresolved', 'HtmlDnsPrefetchLink');
+                expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');
             });
     });
 
@@ -39,7 +39,7 @@ describe('relations/HtmlDnsPrefetchLink', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');
 
-                const link = assetGraph.findRelations({ type: 'HtmlDnsPrefetchLink' }, true)[0];
+                const link = assetGraph.findRelations({ type: 'HtmlDnsPrefetchLink' })[0];
                 link.hrefType = 'relative';
                 link.to.url = assetGraph.root + 'foo.bar';
 

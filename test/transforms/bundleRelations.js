@@ -422,7 +422,7 @@ describe('transforms/bundleRelations', function () {
                     strategyName: 'oneBundlePerIncludingAsset'
                 });
 
-            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
             expect(htmlScripts, 'to have length', 3);
 
             expect((htmlScripts[0].href || '').substr(0, 4), 'not to equal', 'http');
@@ -458,7 +458,7 @@ describe('transforms/bundleRelations', function () {
                     strategyName: 'oneBundlePerIncludingAsset'
                 });
 
-            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
             expect(htmlScripts, 'to have length', 2);
             expect(htmlScripts[0].node.parentNode.tagName, 'to equal', 'HEAD');
             expect(htmlScripts[1].node.parentNode.tagName, 'to equal', 'BODY');
@@ -484,7 +484,7 @@ describe('transforms/bundleRelations', function () {
                     strategyName: 'oneBundlePerIncludingAsset'
                 });
 
-            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
             expect(htmlScripts, 'to have length', 4);
             expect(assetGraph._infos, 'to have length', 2);
         });
@@ -503,7 +503,7 @@ describe('transforms/bundleRelations', function () {
                     strategyName: 'oneBundlePerIncludingAsset'
                 });
 
-            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
             expect(htmlScripts, 'to have length', 2);
         });
 

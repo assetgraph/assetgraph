@@ -14,10 +14,10 @@ describe('relations/HtmlEdgeSideInclude', function () {
 
         expect(assetGraph, 'to contain assets', 'Html', 2);
         expect(assetGraph, 'to contain relations', 'HtmlEdgeSideInclude', 2);
-        expect(assetGraph, 'to contain relations including unresolved', 'HtmlEdgeSideInclude', 2);
+        expect(assetGraph, 'to contain relations', 'HtmlEdgeSideInclude', 2);
         assetGraph.findAssets({url: /\/index\.html/})[0].url = urlTools.resolveUrl(assetGraph.root, 'foo/index.html');
         expect(
-            assetGraph.findRelations({to: {url: /\.php$/}, type: 'HtmlEdgeSideInclude'}, true)[0].href,
+            assetGraph.findRelations({to: {url: /\.php$/}, type: 'HtmlEdgeSideInclude'})[0].href,
             'to equal',
             '../dynamicStuff/metaTags.php'
         );

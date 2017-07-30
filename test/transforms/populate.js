@@ -16,7 +16,7 @@ describe('transforms/populate', function () {
 
         expect(assetGraph, 'to contain no assets', 'Css');
 
-        const htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'}, true);
+        const htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'});
         expect(htmlStyles, 'to have length', 1);
         expect(htmlStyles[0].to.isLoaded, 'to equal', false);
         expect(htmlStyles[0].to.url, 'to equal', urlTools.resolveUrl(assetGraph.root, 'style.css'));

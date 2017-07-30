@@ -29,7 +29,7 @@ describe('relations/HtmlOpenGraph', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'})
             .loadAssets('index.html')
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation including unresolved', 'HtmlOpenGraph', 10);
+                expect(assetGraph, 'to contain relation', 'HtmlOpenGraph', 10);
             });
     });
 
@@ -37,9 +37,9 @@ describe('relations/HtmlOpenGraph', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'})
             .loadAssets('index.html');
 
-        expect(assetGraph, 'to contain relation including unresolved', 'HtmlOpenGraph', 10);
+        expect(assetGraph, 'to contain relation', 'HtmlOpenGraph', 10);
 
-        const link = assetGraph.findRelations({ type: 'HtmlOpenGraph' }, true)[0];
+        const link = assetGraph.findRelations({ type: 'HtmlOpenGraph' })[0];
 
         link.hrefType = 'relative';
         link.to.url = assetGraph.root + 'foo.bar';

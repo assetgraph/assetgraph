@@ -15,11 +15,11 @@ describe('relations/HtmlAudio', function () {
                 expect(assetGraph, 'to contain relations', 'HtmlAudio', 4);
 
                 assetGraph.findAssets({type: 'Html'})[0].url = 'http://example.com/foo/bar.html';
-                assetGraph.findRelations({}, true).forEach(function (relation) {
+                assetGraph.findRelations().forEach(function (relation) {
                     relation.hrefType = 'relative';
                 });
 
-                expect(_.map(assetGraph.findRelations({}, true), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
                     '../sound.mp3',
                     '../sound.wav',
                     '../sound.wma',

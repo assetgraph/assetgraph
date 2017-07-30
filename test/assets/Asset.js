@@ -307,13 +307,13 @@ describe('assets/Asset', function () {
 
         assetGraph.addAsset(fooHtml);
         assetGraph.addAsset(barHtml);
-        assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].to = barHtml;
+        assetGraph.findRelations({type: 'HtmlAnchor'})[0].to = barHtml;
 
         barHtml.url = 'http://example.com/subdir/quux.html';
-        expect(assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].href, 'to equal', 'http://example.com/subdir/quux.html');
+        expect(assetGraph.findRelations({type: 'HtmlAnchor'})[0].href, 'to equal', 'http://example.com/subdir/quux.html');
         expect(assetGraph.findAssets({type: 'Html', url: /\/subdir\/quux\.html$/})[0].isLoaded, 'to be false');
-        assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].hrefType = 'relative';
-        expect(assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].href, 'to equal', 'subdir/quux.html');
+        assetGraph.findRelations({type: 'HtmlAnchor'})[0].hrefType = 'relative';
+        expect(assetGraph.findRelations({type: 'HtmlAnchor'})[0].href, 'to equal', 'subdir/quux.html');
         expect(assetGraph.findAssets({type: 'Html', url: /\/subdir\/quux\.html$/})[0].isLoaded, 'to be false');
     });
 

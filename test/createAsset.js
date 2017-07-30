@@ -74,7 +74,7 @@ describe('createAsset', function () {
             .loadAssets('index.html')
             .populate()
             .then(function (assetGraph) {
-                expect(assetGraph.findRelations({}, true), 'to satisfy', [
+                expect(assetGraph.findRelations(), 'to satisfy', [
                     { to: { url: 'mailto:foo@bar.com' } },
                     { to: { url: 'tel:9876543' } },
                     { to: { url: 'sms:9876543' } },

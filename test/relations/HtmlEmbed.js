@@ -11,9 +11,9 @@ describe('relations/HtmlEmbed', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'HtmlEmbed');
                 expect(assetGraph, 'to contain asset', 'Flash');
-                expect(assetGraph, 'to contain relation including unresolved', {type: 'HtmlEmbed', href: 'foo.swf'});
+                expect(assetGraph, 'to contain relation', {type: 'HtmlEmbed', href: 'foo.swf'});
                 assetGraph.findAssets({type: 'Html'})[0].url = urlTools.resolveUrl(assetGraph.root, 'foo/index.html');
-                expect(assetGraph, 'to contain relation including unresolved', {type: 'HtmlEmbed', href: '../foo.swf'});
+                expect(assetGraph, 'to contain relation', {type: 'HtmlEmbed', href: '../foo.swf'});
             })
             .run(done);
     });

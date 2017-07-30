@@ -60,7 +60,7 @@ describe('relations/HtmlMsApplicationConfig', function () {
 
                     relation.attach(htmlAsset, 'before', previousRelation);
 
-                    expect(assetGraph.findRelations({}, true), 'to satisfy', [
+                    expect(assetGraph.findRelations(), 'to satisfy', [
                         {
                             type: 'HtmlMsApplicationConfig',
                             href: 'foo.xml'
