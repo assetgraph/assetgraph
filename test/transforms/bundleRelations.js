@@ -32,8 +32,8 @@ describe('transforms/bundleRelations', function () {
             expect(assetGraph, 'to contain relation', 'HtmlStyle');
             expect(assetGraph, 'to contain asset', 'Css');
             expect(assetGraph.findAssets({type: 'Css'})[0]._lastKnownByteLength, 'to be a number');
-            var cssBackgroundImages = assetGraph.findRelations({type: 'CssImage'}),
-                bundle = assetGraph.findAssets({type: 'Css'})[0];
+            const cssBackgroundImages = assetGraph.findRelations({type: 'CssImage'});
+            const bundle = assetGraph.findAssets({type: 'Css'})[0];
             expect(cssBackgroundImages, 'to have length', 4);
             cssBackgroundImages.forEach(function (cssBackgroundImage) {
                 expect(cssBackgroundImage.from.id, 'to equal', bundle.id);
@@ -51,7 +51,7 @@ describe('transforms/bundleRelations', function () {
             await assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'});
 
             expect(assetGraph, 'to contain assets', 'Css', 2);
-            var cssRules = assetGraph.findAssets({type: 'Css', incoming: {from: {url: /\/1\.html$/}}})[0].parseTree.nodes;
+            let cssRules = assetGraph.findAssets({type: 'Css', incoming: {from: {url: /\/1\.html$/}}})[0].parseTree.nodes;
             expect(cssRules, 'to have length', 5);
             expect(getPropertyValues(cssRules[0], 'color'), 'to equal', [ 'azure' ]);
             expect(getPropertyValues(cssRules[1], 'color'), 'to equal', [ 'beige' ]);
@@ -253,7 +253,7 @@ describe('transforms/bundleRelations', function () {
             await assetGraph.bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'});
 
             expect(assetGraph, 'to contain relations', 'HtmlScript', 6);
-            var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
+            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
             expect(htmlScripts[0].to.text, 'to equal', 'alert(\'a\');\nalert(\'b\');\nalert(\'c\');');
             expect(htmlScripts[1].node.getAttribute('data-foo'), 'to equal', 'bar');
             expect(htmlScripts[1].to.text, 'to equal', 'alert(\'d\');');
@@ -308,114 +308,105 @@ describe('transforms/bundleRelations', function () {
             expect(htmlStyles[4].to.text, 'to equal', 'body {color: #777;}body {color: #888;}');
         });
 
-        it('should ignore the nonce attribute when bundling', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/nonceAttribute'})
+        it('should ignore the nonce attribute when bundling', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/nonceAttribute'})
                 .loadAssets('index.html')
                 .populate()
-                .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'})
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain relations', 'HtmlStyle', 1);
-                    expect(assetGraph.findRelations({type: 'HtmlStyle'})[0].to.text, 'to equal', 'body {color: #000;}body {color: #111;}');
+                .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'});
 
-                    expect(assetGraph, 'to contain relations', 'HtmlScript', 1);
-                    expect(assetGraph.findRelations({type: 'HtmlScript'})[0].to.text, 'to equal', "alert('a');\nalert('b');");
-                });
+            expect(assetGraph, 'to contain relations', 'HtmlStyle', 1);
+            expect(assetGraph.findRelations({type: 'HtmlStyle'})[0].to.text, 'to equal', 'body {color: #000;}body {color: #111;}');
+
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 1);
+            expect(assetGraph.findRelations({type: 'HtmlScript'})[0].to.text, 'to equal', "alert('a');\nalert('b');");
         });
 
         describe('when all nonces of the bundled relations match', function () {
-            it('should reattach the nonce value to the bundle relation', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/matchingNonceAttributes'})
+            it('should reattach the nonce value to the bundle relation', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/matchingNonceAttributes'})
                     .loadAssets('index.html')
                     .populate()
-                    .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'})
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', 'nonce="foo"');
-                    });
+                    .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'});
+
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', 'nonce="foo"');
             });
         });
 
         describe('when the nonces of the bundled relations mismatch', function () {
-            it('should reattach the nonce value to the bundle relation', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/mismatchingNonceAttributes'})
+            it('should reattach the nonce value to the bundle relation', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/mismatchingNonceAttributes'})
                     .loadAssets('index.html')
                     .populate()
-                    .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'})
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'nonce=');
-                    });
+                    .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'});
+
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'nonce=');
             });
         });
 
-        it('should handle 5 HtmlStyles in a Html asset, two of which are in a conditional comment', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'})
+        it('should handle 5 HtmlStyles in a Html asset, two of which are in a conditional comment', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'})
                 .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain relations', 'HtmlStyle', 5);
-                    expect(assetGraph, 'to contain relations', 'HtmlConditionalComment', 2);
-                })
-                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'})
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
-                    expect(assetGraph, 'to contain relations', {type: 'HtmlStyle', from: {url: /\/index\.html$/}}, 2);
-                    var cssRules = assetGraph.findRelations({from: {url: /\/index\.html$/}})[0].to.parseTree.nodes;
-                    expect(cssRules, 'to have length', 2);
-                    expect(getPropertyValues(cssRules[0], 'color'), 'to equal', [ '#aaaaaa' ]);
-                    expect(getPropertyValues(cssRules[1], 'color'), 'to equal', [ '#bbbbbb' ]);
+                .populate();
 
-                    var cssAsset = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[1].to;
-                    expect(cssAsset.url, 'to match', /\/e\.css$/);
-                    expect(cssAsset.parseTree.nodes, 'to have length', 1);
-                    expect(getPropertyValues(cssAsset.parseTree.nodes[0], 'color'), 'to equal', [ '#eeeeee' ]);
+            expect(assetGraph, 'to contain relations', 'HtmlStyle', 5);
+            expect(assetGraph, 'to contain relations', 'HtmlConditionalComment', 2);
 
-                    var conditionalCommentBody = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlConditionalComment'})[1].to,
-                        htmlStyles = assetGraph.findRelations({from: conditionalCommentBody});
-                    expect(htmlStyles, 'to have length', 1);
-                    expect(htmlStyles[0].to.parseTree.nodes, 'to have length', 2);
-                    expect(getPropertyValues(htmlStyles[0].to.parseTree.nodes[0], 'color'), 'to equal', [ '#cccccc' ]);
-                    expect(getPropertyValues(htmlStyles[0].to.parseTree.nodes[1], 'color'), 'to equal', [ '#dddddd' ]);
-                })
-                .run(done);
+            await assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'});
+
+            expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
+            expect(assetGraph, 'to contain relations', {type: 'HtmlStyle', from: {url: /\/index\.html$/}}, 2);
+            const cssRules = assetGraph.findRelations({from: {url: /\/index\.html$/}})[0].to.parseTree.nodes;
+            expect(cssRules, 'to have length', 2);
+            expect(getPropertyValues(cssRules[0], 'color'), 'to equal', [ '#aaaaaa' ]);
+            expect(getPropertyValues(cssRules[1], 'color'), 'to equal', [ '#bbbbbb' ]);
+
+            const cssAsset = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'})[1].to;
+            expect(cssAsset.url, 'to match', /\/e\.css$/);
+            expect(cssAsset.parseTree.nodes, 'to have length', 1);
+            expect(getPropertyValues(cssAsset.parseTree.nodes[0], 'color'), 'to equal', [ '#eeeeee' ]);
+
+            const conditionalCommentBody = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlConditionalComment'})[1].to;
+            const htmlStyles = assetGraph.findRelations({from: conditionalCommentBody});
+            expect(htmlStyles, 'to have length', 1);
+            expect(htmlStyles[0].to.parseTree.nodes, 'to have length', 2);
+            expect(getPropertyValues(htmlStyles[0].to.parseTree.nodes[0], 'color'), 'to equal', [ '#cccccc' ]);
+            expect(getPropertyValues(htmlStyles[0].to.parseTree.nodes[1], 'color'), 'to equal', [ '#dddddd' ]);
         });
 
-        it('should handle an @import in a second stylesheet', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/importRules/'})
+        it('should handle an @import in a second stylesheet', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/importRules/'})
                 .loadAssets('index.html')
                 .populate()
-                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'})
-                .queue(function (assetGraph) {
-                    var htmlStyles = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'});
+                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'});
 
-                    expect(htmlStyles, 'to have length', 1);
-                    expect(htmlStyles[0].hrefType, 'to equal', 'relative');
+            const htmlStyles = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'});
 
-                    var cssAsset = htmlStyles[0].to,
-                        cssRules = cssAsset.parseTree.nodes;
-                    expect(cssRules, 'to have length', 5);
-                    expect(cssRules[0].params, 'to equal', '"imported.css"');
-                    expect(cssRules[1].params, 'to equal', '"otherImported.css"');
-                    expect(getPropertyValues(cssRules[2], 'color'), 'to equal', [ 'red' ]);
-                    expect(getPropertyValues(cssRules[3], 'color'), 'to equal', [ 'blue' ]);
-                    expect(getPropertyValues(cssRules[4], 'color'), 'to equal', [ 'yellow' ]);
-                })
-                .run(done);
+            expect(htmlStyles, 'to have length', 1);
+            expect(htmlStyles[0].hrefType, 'to equal', 'relative');
+
+            const cssAsset = htmlStyles[0].to;
+            const cssRules = cssAsset.parseTree.nodes;
+            expect(cssRules, 'to have length', 5);
+            expect(cssRules[0].params, 'to equal', '"imported.css"');
+            expect(cssRules[1].params, 'to equal', '"otherImported.css"');
+            expect(getPropertyValues(cssRules[2], 'color'), 'to equal', [ 'red' ]);
+            expect(getPropertyValues(cssRules[3], 'color'), 'to equal', [ 'blue' ]);
+            expect(getPropertyValues(cssRules[4], 'color'), 'to equal', [ 'yellow' ]);
         });
 
-        it('should handle multiple stylesheets, one of which is referred to with a root-relative url', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/rootRelative/'})
+        it('should handle multiple stylesheets, one of which is referred to with a root-relative url', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/rootRelative/'})
                 .loadAssets('index.html')
                 .populate()
-                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'})
-                .queue(function (assetGraph) {
-                    var htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'});
-                    expect(htmlStyles, 'to have length', 1);
-                    expect(htmlStyles[0].hrefType, 'to equal', 'rootRelative');
-                })
-                .run(done);
+                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'});
+
+            const htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'});
+            expect(htmlStyles, 'to have length', 1);
+            expect(htmlStyles[0].hrefType, 'to equal', 'rootRelative');
         });
 
-        it('should handle script tags interrupted by an external script inclusion', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptExternal/'})
+        it('should handle script tags interrupted by an external script inclusion', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptExternal/'})
                 .loadAssets('index.html')
                 .populate({
                     followRelations: {href: query.not(/^https?:/)}
@@ -428,36 +419,32 @@ describe('transforms/bundleRelations', function () {
                     }
                 }, {
                     strategyName: 'oneBundlePerIncludingAsset'
-                })
-                .queue(function (assetGraph) {
-                    var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
-                    expect(htmlScripts, 'to have length', 3);
+                });
 
-                    expect((htmlScripts[0].href || '').substr(0, 4), 'not to equal', 'http');
+            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            expect(htmlScripts, 'to have length', 3);
 
-                    expect(htmlScripts[1].href.substr(0, 4), 'to equal', 'http');
+            expect((htmlScripts[0].href || '').substr(0, 4), 'not to equal', 'http');
 
-                    expect((htmlScripts[2].href || '').substr(0, 4), 'not to equal', 'http');
-                })
-                .run(done);
+            expect(htmlScripts[1].href.substr(0, 4), 'to equal', 'http');
+
+            expect((htmlScripts[2].href || '').substr(0, 4), 'not to equal', 'http');
         });
 
-        it('should handle script tags interrupted by an unloaded script', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/unloadedScript/'})
+        it('should handle script tags interrupted by an unloaded script', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/unloadedScript/'})
                 .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    assetGraph.findAssets({fileName: 'b.js'})[0].unload();
-                })
-                .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-                })
-                .run(done);
+                .populate();
+
+            assetGraph.findAssets({fileName: 'b.js'})[0].unload();
+
+            await assetGraph.bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'});
+
+            expect(assetGraph, 'to contain assets', 'JavaScript', 2);
         });
 
-        it('should handle script tags in both <head> and <body>', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptsInHead/'})
+        it('should handle script tags in both <head> and <body>', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptsInHead/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleRelations({
@@ -468,18 +455,16 @@ describe('transforms/bundleRelations', function () {
                     }
                 }, {
                     strategyName: 'oneBundlePerIncludingAsset'
-                })
-                .queue(function (assetGraph) {
-                    var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
-                    expect(htmlScripts, 'to have length', 2);
-                    expect(htmlScripts[0].node.parentNode.tagName, 'to equal', 'HEAD');
-                    expect(htmlScripts[1].node.parentNode.tagName, 'to equal', 'BODY');
-                })
-                .run(done);
+                });
+
+            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            expect(htmlScripts, 'to have length', 2);
+            expect(htmlScripts[0].node.parentNode.tagName, 'to equal', 'HEAD');
+            expect(htmlScripts[1].node.parentNode.tagName, 'to equal', 'BODY');
         });
 
-        it('should handle script tags in alternating strict mode', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/strictScripts/'})
+        it('should handle script tags in alternating strict mode', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/strictScripts/'})
                 .on('info', function (e) {
                     if (!this._infos) {
                         this._infos = [];
@@ -496,17 +481,15 @@ describe('transforms/bundleRelations', function () {
                     }
                 }, {
                     strategyName: 'oneBundlePerIncludingAsset'
-                })
-                .queue(function (assetGraph) {
-                    var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
-                    expect(htmlScripts, 'to have length', 4);
-                    expect(assetGraph._infos, 'to have length', 2);
-                })
-                .run(done);
+                });
+
+            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            expect(htmlScripts, 'to have length', 4);
+            expect(assetGraph._infos, 'to have length', 2);
         });
 
-        it('should handle named bundles', function (done) {
-            new AssetGraph({ root: __dirname + '/../../testdata/transforms/bundleRelations/namedBundles/'})
+        it('should handle named bundles', async function () {
+            const assetGraph = await new AssetGraph({ root: __dirname + '/../../testdata/transforms/bundleRelations/namedBundles/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleRelations({
@@ -517,12 +500,10 @@ describe('transforms/bundleRelations', function () {
                     }
                 }, {
                     strategyName: 'oneBundlePerIncludingAsset'
-                })
-                .queue(function (assetGraph) {
-                    var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
-                    expect(htmlScripts, 'to have length', 2);
-                })
-                .run(done);
+                });
+
+            const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'}, true);
+            expect(htmlScripts, 'to have length', 2);
         });
 
         it('should propagate source map information correctly', async function () {
@@ -535,7 +516,7 @@ describe('transforms/bundleRelations', function () {
 
             expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*to\.css/));
 
-            var sourceMaps = assetGraph.findAssets({ type: 'SourceMap' });
+            const sourceMaps = assetGraph.findAssets({ type: 'SourceMap' });
             sourceMaps.sort(function (a, b) {
                 a = a.parseTree.sources[0];
                 b = b.parseTree.sources[0];
