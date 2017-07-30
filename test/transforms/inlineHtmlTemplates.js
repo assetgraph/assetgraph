@@ -6,9 +6,15 @@ describe('transforms/inlineHtmlTemplates', function () {
     it('should handle a test case with a single Knockout.js template with a nested template loaded using the systemjs-tpl plugin', async function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineHtmlTemplates/withNested/'})
             .loadAssets('index.html')
-            .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') } })
+            .populate({
+                startAssets: { isInitial: true },
+                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+            })
             .bundleSystemJs()
-            .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') } })
+            .populate({
+                startAssets: { isInitial: true },
+                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+            })
             .inlineHtmlTemplates();
 
         expect(assetGraph, 'to contain relations', 'HtmlInlineScriptTemplate', 2);
@@ -24,9 +30,15 @@ describe('transforms/inlineHtmlTemplates', function () {
     it('should handle a test case with several Knockout.js templates loaded using the systemjs-tpl plugin', async function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineHtmlTemplates/multiple/'})
             .loadAssets('index.html')
-            .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') } })
+            .populate({
+                startAssets: { isInitial: true },
+                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+            })
             .bundleSystemJs()
-            .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') } })
+            .populate({
+                startAssets: { isInitial: true },
+                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+            })
             .inlineHtmlTemplates();
 
         expect(assetGraph, 'to contain relations', 'HtmlInlineScriptTemplate', 6);
@@ -52,9 +64,15 @@ describe('transforms/inlineHtmlTemplates', function () {
     it('should handle a test case with the same Knockout.js being loaded using the systemjs-tpl plugin in multiple .html pages', async function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineHtmlTemplates/multipleInMultipleHtmlPages/'})
             .loadAssets(['index1.html', 'index2.html'])
-            .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') } })
+            .populate({
+                startAssets: { isInitial: true },
+                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+            })
             .bundleSystemJs()
-            .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') } })
+            .populate({
+                startAssets: { isInitial: true },
+                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+            })
             .inlineHtmlTemplates();
 
         expect(assetGraph, 'to contain relations', 'HtmlInlineScriptTemplate', 12);
