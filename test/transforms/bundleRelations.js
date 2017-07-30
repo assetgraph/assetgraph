@@ -553,7 +553,7 @@ describe('transforms/bundleRelations', function () {
             }, {
                 strategyName: 'oneBundlePerIncludingAsset'
             })
-            .serializeSourceMaps();
+                .serializeSourceMaps();
 
             expect(assetGraph, 'to contain asset', 'SourceMap');
             expect(assetGraph.findAssets({ type: 'SourceMap' })[0].parseTree.sources, 'to equal', [

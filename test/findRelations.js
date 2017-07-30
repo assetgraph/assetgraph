@@ -6,14 +6,14 @@ const query = AssetGraph.query;
 describe('AssetGraph.findRelations', function () {
     it('should handle a simple test case', async function () {
         const assetGraph = await new AssetGraph()
-        .loadAssets(
-            new AssetGraph.Html({url: 'a', text: 'a', foo: 'bar'}),
-            new AssetGraph.Html({url: 'b', text: 'b', foo: 'bar'}),
-            new AssetGraph.Html({url: 'c', text: 'c', foo: 'quux'}),
-            new AssetGraph.Css({url: 'd', text: 'body { color: #ddd; }', foo: 'baz'}),
-            new AssetGraph.Css({url: 'e', text: 'body { color: #eee; }'}),
-            new AssetGraph.Png({url: 'f', rawSrc: new Buffer('f'), foo: 'baz'})
-        );
+            .loadAssets(
+                new AssetGraph.Html({url: 'a', text: 'a', foo: 'bar'}),
+                new AssetGraph.Html({url: 'b', text: 'b', foo: 'bar'}),
+                new AssetGraph.Html({url: 'c', text: 'c', foo: 'quux'}),
+                new AssetGraph.Css({url: 'd', text: 'body { color: #ddd; }', foo: 'baz'}),
+                new AssetGraph.Css({url: 'e', text: 'body { color: #eee; }'}),
+                new AssetGraph.Png({url: 'f', rawSrc: new Buffer('f'), foo: 'baz'})
+            );
 
         assetGraph.findAssets({text: 'a'})[0].addRelation(new AssetGraph.HtmlStyle({
             to: assetGraph.findAssets({text: 'body { color: #ddd; }'})[0]

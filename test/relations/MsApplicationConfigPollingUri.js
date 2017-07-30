@@ -13,7 +13,7 @@ describe('relations/MsApplicationConfigPollingUri', function () {
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*polling-target/));
 
         expect(assetGraph.findRelations(), 'to satisfy', [
-           { type: 'MsApplicationConfigPollingUri' }
+            { type: 'MsApplicationConfigPollingUri' }
         ]);
 
         expect(assetGraph.findAssets(), 'to satisfy', [

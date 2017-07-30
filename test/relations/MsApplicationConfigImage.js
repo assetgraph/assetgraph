@@ -9,7 +9,7 @@ describe('relations/MsApplicationConfigImage', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph.findRelations(), 'to satisfy', [
-                   { type: 'MsApplicationConfigImage' }
+                    { type: 'MsApplicationConfigImage' }
                 ]);
 
                 expect(assetGraph.findAssets(), 'to satisfy', [

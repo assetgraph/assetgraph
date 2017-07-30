@@ -18,7 +18,7 @@ describe('relations/HtmlEdgeSideInclude', function () {
                 expect(
                     assetGraph.findRelations({to: {url: /\.php$/}, type: 'HtmlEdgeSideInclude'}, true)[0].href,
                     'to equal',
-                     '../dynamicStuff/metaTags.php'
+                    '../dynamicStuff/metaTags.php'
                 );
             })
             .run(done);

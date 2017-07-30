@@ -35,7 +35,7 @@ describe('transforms/convertCssImportsToHtmlStyles', function () {
                 expect(
                     assetGraph.findAssets({type: 'Html'})[0].text.match(/href=\"([^\'\"]+)\"/g),
                     'to equal',
-                     ['href="foo2.css"', 'href="foo.css"', 'href="/bar.css"']
+                    ['href="foo2.css"', 'href="foo.css"', 'href="/bar.css"']
                 );
             })
             .bundleRelations({type: 'HtmlStyle'})
