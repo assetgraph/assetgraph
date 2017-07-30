@@ -6,69 +6,69 @@ const AssetGraph = require('../../lib/AssetGraph');
 const query = AssetGraph.query;
 
 describe('transforms/populate', function () {
-    it('should handle a test case with an Html asset and some stylesheets when told not to follow relations to Css', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/notToCss/'})
+    it('should handle a test case with an Html asset and some stylesheets when told not to follow relations to Css', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/notToCss/'})
             .loadAssets('index.html')
-            .populate({followRelations: {type: query.not('HtmlStyle')}})
-            .then(function (assetGraph) {
-                expect(assetGraph, 'to contain no assets', 'Css');
-
-                const htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'}, true);
-                expect(htmlStyles, 'to have length', 1);
-                expect(htmlStyles[0].to.isLoaded, 'to equal', false);
-                expect(htmlStyles[0].to.url, 'to equal', urlTools.resolveUrl(assetGraph.root, 'style.css'));
+            .populate({
+                startAssets: { isInitial: true },
+                followRelations: {type: query.not('HtmlStyle')}
             });
+
+        expect(assetGraph, 'to contain no assets', 'Css');
+
+        const htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'}, true);
+        expect(htmlStyles, 'to have length', 1);
+        expect(htmlStyles[0].to.isLoaded, 'to equal', false);
+        expect(htmlStyles[0].to.url, 'to equal', urlTools.resolveUrl(assetGraph.root, 'style.css'));
     });
 
-    it('should handle a test case with custom protocols', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/customProtocols/'})
+    it('should handle a test case with custom protocols', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/customProtocols/'})
             .loadAssets('index.html')
-            .populate({followRelations: {to: {type: query.not('Css')}}})
-            .then(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 5);
-                expect(assetGraph, 'to contain relations', 4);
+            .populate({followRelations: {to: {type: query.not('Css')}}});
 
-                var matches = assetGraph.findAssets({url: /\/index\.html$/})[0].text.match(/<a [^>]*?>/g);
-                expect(matches, 'not to be null');
-                expect(matches, 'to have length', 4);
-            });
+        expect(assetGraph, 'to contain assets', 5);
+        expect(assetGraph, 'to contain relations', 4);
+
+        const matches = assetGraph.findAssets({url: /\/index\.html$/})[0].text.match(/<a [^>]*?>/g);
+        expect(matches, 'not to be null');
+        expect(matches, 'to have length', 4);
     });
 
-    it('should populate a test case with protocol-relative urls from file:', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/protocolRelativeUrls/'})
+    it('should populate a test case with protocol-relative urls from file:', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/protocolRelativeUrls/'})
             .loadAssets('index.html')
-            .populate({from: {url: /^file:/}})
-            .then(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 3);
-                expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+            .populate({from: {url: /^file:/}});
 
-                expect(_.map(assetGraph.findRelations({type: 'HtmlScript'}), 'href'), 'to equal', [
-                    '//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
-                    'http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
-                    'https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'
-                ]);
+        expect(assetGraph, 'to contain assets', 3);
+        expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
 
-                expect(
-                    assetGraph.findRelations({type: 'HtmlScript', href: /^\/\//})[0].to,
-                    'to be',
-                    assetGraph.findRelations({type: 'HtmlScript', href: /^http:\/\//})[0].to
-                );
+        expect(_.map(assetGraph.findRelations({type: 'HtmlScript'}), 'href'), 'to equal', [
+            '//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
+            'https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'
+        ]);
 
-                assetGraph.findAssets({type: 'JavaScript'}).forEach(function (javaScript) {
-                    javaScript.url = javaScript.url.match(/^(https?:)/)[1] + '//cdn.example.com/' + javaScript.fileName;
-                });
+        expect(
+            assetGraph.findRelations({type: 'HtmlScript', href: /^\/\//})[0].to,
+            'to be',
+            assetGraph.findRelations({type: 'HtmlScript', href: /^http:\/\//})[0].to
+        );
 
-                expect(_.map(assetGraph.findRelations({type: 'HtmlScript'}), 'hrefType'), 'to equal', [
-                    'protocolRelative',
-                    'absolute',
-                    'absolute'
-                ]);
+        assetGraph.findAssets({type: 'JavaScript'}).forEach(function (javaScript) {
+            javaScript.url = javaScript.url.match(/^(https?:)/)[1] + '//cdn.example.com/' + javaScript.fileName;
+        });
 
-                expect(assetGraph.findAssets({url: /\/index\.html$/})[0].text.match(/src="(.*?)"/g), 'to equal', [
-                    'src="//cdn.example.com/jquery.min.js"',
-                    'src="http://cdn.example.com/jquery.min.js"',
-                    'src="https://cdn.example.com/jquery.min.js"'
-                ]);
-            });
+        expect(_.map(assetGraph.findRelations({type: 'HtmlScript'}), 'hrefType'), 'to equal', [
+            'protocolRelative',
+            'absolute',
+            'absolute'
+        ]);
+
+        expect(assetGraph.findAssets({url: /\/index\.html$/})[0].text.match(/src="(.*?)"/g), 'to equal', [
+            'src="//cdn.example.com/jquery.min.js"',
+            'src="http://cdn.example.com/jquery.min.js"',
+            'src="https://cdn.example.com/jquery.min.js"'
+        ]);
     });
 });
