@@ -51,9 +51,11 @@ describe('transforms/setSourceMapRoot', function () {
         it('should allow fixing up a wrong sourceRoot before continuing population', async function () {
             const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/setSourceMapRoot/wrongSourceRoot/'})
                 .loadAssets('index.html')
-                .populate({followRelations: {from: {type: AssetGraph.query.not('SourceMap')}}});
+                .populate({
+                    followRelations: {from: {type: AssetGraph.query.not('SourceMap')}}
+                });
 
-            expect(assetGraph, 'to contain no assets', {url: /\.less$/});
+            expect(assetGraph, 'to contain no assets', {url: /\.less$/, isLoaded: true});
 
             await assetGraph.setSourceMapRoot(null, 'theSources')
                 .populate({from: {type: 'SourceMap'}});
