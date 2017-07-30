@@ -154,7 +154,10 @@ describe('bundleWebpack', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/wildcardCodeSplit/'})
             .loadAssets('index.html')
             .bundleWebpack()
-            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
+            .populate({
+                startAssets: { isInitial: true },
+                followRelations: {type: AssetGraph.query.not('SourceMapSource')}
+            });
 
         expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 4);
 
@@ -174,7 +177,10 @@ describe('bundleWebpack', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/wildcardCodeSplitWithChunkfilename/'})
             .loadAssets('index.html')
             .bundleWebpack()
-            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
+            .populate({
+                startAssets: { isInitial: true },
+                followRelations: {type: AssetGraph.query.not('SourceMapSource')}
+            });
 
         expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 4);
 
