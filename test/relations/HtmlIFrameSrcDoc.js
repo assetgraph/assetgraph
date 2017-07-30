@@ -7,6 +7,7 @@ describe('relations/HtmlIFrameSrcDoc', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlIFrameSrcDoc/'})
             .loadAssets('index.html')
             .populate({
+                startAssets: { isInitial: true },
                 followRelations: {to: {url: /^file:/}}
             })
             .then(function (assetGraph) {
