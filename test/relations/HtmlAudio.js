@@ -1,17 +1,18 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    _ = require('lodash'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const _ = require('lodash');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlAudio', function () {
     it('should handle a test case with existing <audio> tags', function (done) {
         new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlAudio/'})
             .loadAssets('index.html')
             .populate({
-                followRelations: function () {return false;}
+                startAssets: { type: 'Html' },
+                followRelations: () => false
             })
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'HtmlAudio', 4);
+                expect(assetGraph, 'to contain relations', 'HtmlAudio', 4);
 
                 assetGraph.findAssets({type: 'Html'})[0].url = 'http://example.com/foo/bar.html';
                 assetGraph.findRelations({}, true).forEach(function (relation) {
