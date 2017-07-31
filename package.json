@@ -48,7 +48,7 @@
     "source-map": "^0.5.6",
     "sourcemap-to-ast": "^0.0.2",
     "sw-precache": "^5.2.0",
-    "teepee": "^2.28.0",
+    "teepee": "^2.31.1",
     "uglify-js": "^3.0.3",
     "urltools": "^0.3.1",
     "xmldom": "^0.1.27"
