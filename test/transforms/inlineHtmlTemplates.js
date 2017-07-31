@@ -7,12 +7,10 @@ describe('transforms/inlineHtmlTemplates', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineHtmlTemplates/withNested/'})
             .loadAssets('index.html')
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
             })
             .bundleSystemJs()
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
             })
             .inlineHtmlTemplates();
@@ -31,12 +29,10 @@ describe('transforms/inlineHtmlTemplates', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineHtmlTemplates/multiple/'})
             .loadAssets('index.html')
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
             })
             .bundleSystemJs()
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
             })
             .inlineHtmlTemplates();
@@ -65,12 +61,10 @@ describe('transforms/inlineHtmlTemplates', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineHtmlTemplates/multipleInMultipleHtmlPages/'})
             .loadAssets(['index1.html', 'index2.html'])
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
             })
             .bundleSystemJs()
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
             })
             .inlineHtmlTemplates();

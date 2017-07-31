@@ -10,7 +10,6 @@ describe('transforms/populate', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/notToCss/'})
             .loadAssets('index.html')
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: {type: query.not('HtmlStyle')}
             });
 

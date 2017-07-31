@@ -8,7 +8,6 @@ describe('relations/HtmlVideo', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlVideo/'})
             .loadAssets('index.html')
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: () => false
             });
 

@@ -8,7 +8,6 @@ describe('relations/HtmlPictureSource test', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPictureSource/'})
             .loadAssets('index.html')
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: () => false
             });
 

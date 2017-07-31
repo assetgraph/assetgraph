@@ -10,7 +10,6 @@ describe('transforms/addPrecacheServiceWorker', function () {
             .on('warn', warnSpy)
             .loadAssets('index.html')
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: {to: {url: /^file:/}}
             });
 

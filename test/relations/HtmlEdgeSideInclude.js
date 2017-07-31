@@ -8,7 +8,6 @@ describe('relations/HtmlEdgeSideInclude', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlEdgeSideInclude/'})
             .loadAssets('index.html')
             .populate({
-                startAssets: { isInitial: true },
                 followRelations: {to: {url: /\.html$/}}
             });
 

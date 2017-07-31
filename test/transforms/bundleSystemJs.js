@@ -283,7 +283,6 @@ describe('transforms/bundleSystemJs', function () {
                 return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/onlyLess/'})
                     .loadAssets('index.html')
                     .populate({
-                        startAssets: { isInitial: true },
                         followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
                     })
                     .queue(function (assetGraph) {
@@ -292,7 +291,6 @@ describe('transforms/bundleSystemJs', function () {
                     })
                     .bundleSystemJs()
                     .populate({
-                        startAssets: { isInitial: true },
                         followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
                     })
                     .queue(function (assetGraph) {
