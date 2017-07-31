@@ -487,16 +487,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 '<h1></h1>'
             ].join('\n');
 
-            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
-                {
-                    text: '',
-                    props: {
-                        'font-family': 'font1',
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                }
-            ]);
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', []);
         });
 
         it('should override re-definition of prop on :after pseudo-element', function () {
