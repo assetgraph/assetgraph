@@ -186,16 +186,26 @@ describe('tranforms/inlineCriticalCss', function () {
             });
     });
 
-    it('should combine with other CSS transforms without throwing', function () {
-        return new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
+    it('should combine with other CSS transforms without throwing', async function () {
+        const assetGraph = await new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
             .loadAssets('simple.html')
-            .populate()
-            .minifyAssets({isLoaded: true, isInline: false})
+            .populate();
+
+        for (const asset of assetGraph.findAssets({isLoaded: true, isInline: false})) {
+            asset.minify();
+        }
+
+        await assetGraph
             .inlineHtmlTemplates()
             .bundleRelations({type: 'HtmlStyle', to: {type: 'Css', isLoaded: true}, node: function (node) {return !node.hasAttribute('nobundle');}})
             .inlineCriticalCss()
-            .mergeIdenticalAssets({isLoaded: true, isInline: false, type: ['JavaScript', 'Css']}) // The bundling might produce several identical files, especially the 'oneBundlePerIncludingAsset' strategy.
-            .minifyAssets({isLoaded: true})
+            .mergeIdenticalAssets({isLoaded: true, isInline: false, type: ['JavaScript', 'Css']}); // The bundling might produce several identical files, especially the 'oneBundlePerIncludingAsset' strategy.
+
+        for (const asset of assetGraph.findAssets({isLoaded: true})) {
+            asset.minify();
+        }
+
+        assetGraph
             .queue(function (assetGraph) {
                 expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
                     {
