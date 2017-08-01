@@ -24,6 +24,91 @@ describe('assets/Asset', function () {
         });
     });
 
+    describe('#addRelation()', function () {
+        it('should implicitly create a non-inline target asset and add it to the graph', function () {
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.add({
+                url: 'http://example.com/',
+                type: 'Html',
+                text: ''
+            });
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                to: {
+                    url: 'http://example.com/script.js',
+                    type: 'JavaScript',
+                    text: 'alert("foo")'
+                }
+            }, 'last');
+            expect(assetGraph, 'to contain asset', {
+                isLoaded: true,
+                url: 'http://example.com/script.js'
+            });
+        });
+
+        it('should implicitly create an inline target asset and add it to the graph', function () {
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.add({
+                url: 'http://example.com/',
+                type: 'Html',
+                text: ''
+            });
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                to: {
+                    type: 'JavaScript',
+                    text: 'alert("foo")'
+                }
+            }, 'last');
+            expect(assetGraph, 'to contain asset', {
+                type: 'JavaScript',
+                isInline: true,
+                text: 'alert("foo")'
+            });
+            // FIXME: Can work when hrefType: 'inline' has been sorted out:
+            // expect(htmlAsset.text, 'to equal', '<script>alert("foo");</script>');
+        });
+
+        it('should add and attach a relation that does not already have a node', function () {
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.add({
+                url: 'http://example.com/',
+                type: 'Html',
+                text: ''
+            });
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                to: {
+                    url: 'http://example.com/script.js',
+                    type: 'JavaScript',
+                    text: 'alert("foo")'
+                }
+            }, 'last');
+            expect(htmlAsset.text, 'to equal', '<script src="script.js"></script>');
+        });
+
+        it('should use the passed node instead of creating a new one', function () {
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.add({
+                url: 'http://example.com/',
+                type: 'Html',
+                text: '<div>foobar</div>'
+            });
+            const node = htmlAsset.parseTree.createElement('script');
+            htmlAsset.parseTree.querySelector('div').appendChild(node);
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                node,
+                to: {
+                    url: 'http://example.com/script.js',
+                    type: 'JavaScript',
+                    text: 'alert("foo")'
+                }
+            }, 'last');
+            expect(htmlAsset.text, 'to equal', '<div>foobar<script src="script.js"></script></div>');
+        });
+    });
+
     it('should handle an asset with an extensionless url', function () {
         var htmlAsset = new AssetGraph.Html({
             text: 'foo',
