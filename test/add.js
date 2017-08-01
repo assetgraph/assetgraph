@@ -5,58 +5,26 @@ const sinon = require('sinon');
 
 describe('AssetGraph#add', function () {
     describe('with an array', function () {
-        it('should add all the asset configs to the graph and return the created instances', function () {
-            const assetGraph = new AssetGraph();
-            expect(assetGraph.add([
-                {
-                    type: 'Css',
-                    url: 'https://example.com/styles.css',
-                    text: 'body { color: teal; }'
-                },
-                {
-                    type: 'Css',
-                    url: 'https://example.com/moreStyles.css',
-                    text: 'body { color: teal; }'
-                }
-            ]), 'to satisfy', [
-                { isAsset: true, url: 'https://example.com/styles.css' },
-                { isAsset: true, url: 'https://example.com/moreStyles.css' }
-            ]);
-            expect(assetGraph, 'to contain asset', {
-                url: 'https://example.com/styles.css'
-            }).and('to contain asset', {
-                url: 'https://example.com/moreStyles.css'
-            });;
+        it('should throw', function () {
+            expect(() => new AssetGraph().add([]), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try AssetGraph#addAll'));
         });
     });
 
     describe('with a glob pattern', function () {
-        it('should add all the matched assets to the graph', function () {
-            const assetGraph = new AssetGraph({ root: __dirname + '/../testdata/add/glob/'});
-            expect(assetGraph.add('*.html'), 'to satisfy', [
-                { isAsset: true, fileName: 'index1.html' },
-                { isAsset: true, fileName: 'index2.html' }
-            ]);
-            expect(assetGraph, 'to contain asset', {
-                type: 'Asset',
-                fileName: 'index1.html',
-                isLoaded: false
-            }).and('to contain asset', {
-                type: 'Asset',
-                fileName: 'index2.html',
-                isLoaded: false
-            });;
+        it('should throw', function () {
+            expect(() => new AssetGraph().add('*.html'), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try AssetGraph#addAll'));
         });
     });
 
     describe('with an asset config that includes the body', function () {
         it('should add the targets of all external outgoing relations as unloaded Asset instances', function () {
             const assetGraph = new AssetGraph();
-            assetGraph.add({
+            const asset = assetGraph.add({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { background-image: url(https://example.com/foo.png); }'
             });
+            expect(asset, 'to be an', AssetGraph.Css);
             expect(assetGraph, 'to contain asset', {
                 type: 'Asset',
                 url: 'https://example.com/foo.png',
@@ -68,7 +36,7 @@ describe('AssetGraph#add', function () {
     describe('with an asset config that does not include the body', function () {
         it('should add the targets of all external outgoing relations as unloaded Asset instances once the asset is loaded', async function () {
             const assetGraph = new AssetGraph();
-            const [ cssAsset ] = assetGraph.add({
+            const cssAsset = assetGraph.add({
                 type: 'Css',
                 url: 'https://example.com/styles.css'
             });
@@ -96,7 +64,7 @@ describe('AssetGraph#add', function () {
     describe('when the url already exists in the graph', function () {
         it('should return the existing instance', function () {
             const assetGraph = new AssetGraph();
-            const [ cssAsset ] = assetGraph.add({
+            const cssAsset = assetGraph.add({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { color: teal; }'
@@ -104,7 +72,7 @@ describe('AssetGraph#add', function () {
             expect(cssAsset, 'to be a', AssetGraph.Css)
                 .and('to satisfy', { text: 'body { color: teal; }' });
 
-            const [ cssAsset2 ] = assetGraph.add({
+            const cssAsset2 = assetGraph.add({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { color: teal; }'
@@ -117,7 +85,7 @@ describe('AssetGraph#add', function () {
     describe('when more information arrives about an existing asset', function () {
         it('should upgrade from Xml to Atom (more specific)', async function () {
             const assetGraph = new AssetGraph();
-            const [ xmlAsset ] = assetGraph.add({
+            const xmlAsset = assetGraph.add({
                 url: 'http://example.com/feed.xml',
                 text: `
                     <?xml version="1.0" encoding="utf-8"?>
@@ -143,7 +111,7 @@ describe('AssetGraph#add', function () {
             const infoSpy = sinon.spy().named('info');
             assetGraph.on('info', infoSpy);
 
-            const [ atomAsset ] = assetGraph.add({
+            const atomAsset = assetGraph.add({
                 url: 'http://example.com/feed.xml',
                 contentType: 'application/atom+xml'
             });
@@ -159,7 +127,7 @@ describe('AssetGraph#add', function () {
 
         it('should not downgrade from Atom to Xml (less specific)', async function () {
             const assetGraph = new AssetGraph();
-            const [ atomAsset ] = assetGraph.add({
+            const atomAsset = assetGraph.add({
                 type: 'Atom',
                 url: 'http://example.com/feed.xml',
                 text: `
@@ -207,7 +175,7 @@ describe('AssetGraph#add', function () {
                 type: 'Css',
                 url: 'http://example.com/more.css',
                 text: 'body { color: teal; }'
-            })[0].load();
+            }).load();
 
             expect(assetGraph, 'to contain asset', {
                 url: 'http://example.com/more.css',
