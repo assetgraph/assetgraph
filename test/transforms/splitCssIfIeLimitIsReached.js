@@ -154,7 +154,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     });
 
     it('should handle a test case with an inline stylesheet that has rules in media queries', function () {
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'})
             .loadAssets('inlineWithMedia.html')
             .populate()
             .queue(assetGraph => {
