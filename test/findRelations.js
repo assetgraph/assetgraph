@@ -15,32 +15,60 @@ describe('AssetGraph.findRelations', function () {
                 new AssetGraph.Png({url: 'f', rawSrc: new Buffer('f'), foo: 'baz'})
             );
 
-        assetGraph.findAssets({text: 'a'})[0].addRelation(new AssetGraph.HtmlStyle({
+        const aHtml = assetGraph.findAssets({text: 'a'})[0];
+        const bHtml = assetGraph.findAssets({text: 'b'})[0];
+        aHtml.addRelation({
+            type: 'HtmlStyle',
             to: assetGraph.findAssets({text: 'body { color: #ddd; }'})[0]
-        }));
-        assetGraph.findAssets({text: 'a'})[0].addRelation(new AssetGraph.HtmlAnchor({
-            to: assetGraph.findAssets({text: 'b'})[0]
-        }));
-        assetGraph.findAssets({text: 'a'})[0].addRelation(new AssetGraph.HtmlAnchor({
-            to: assetGraph.findAssets({text: 'c'})[0]
-        }));
-        assetGraph.findAssets({text: 'b'})[0].addRelation(new AssetGraph.HtmlAnchor({
-            to: assetGraph.findAssets({text: 'c'})[0]
-        }));
-        assetGraph.findAssets({text: 'b'})[0].addRelation(new AssetGraph.HtmlStyle({
+        }, 'last');
+        aHtml.addRelation({
+            type: 'HtmlAnchor',
+            to: bHtml,
+            node: aHtml.parseTree.createElement('a')
+        }, 'last');
+        aHtml.addRelation({
+            type: 'HtmlAnchor',
+            to: assetGraph.findAssets({text: 'c'})[0],
+            node: aHtml.parseTree.createElement('a')
+        }, 'last');
+        bHtml.addRelation({
+            type: 'HtmlAnchor',
+            to: assetGraph.findAssets({text: 'c'})[0],
+            node: aHtml.parseTree.createElement('a')
+        }, 'last');
+        bHtml.addRelation({
+            type: 'HtmlStyle',
             to: assetGraph.findAssets({text: 'body { color: #eee; }'})[0]
-        }));
-        assetGraph.findAssets({text: 'body { color: #ddd; }'})[0].addRelation(new AssetGraph.CssImage({
-            to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0]
-        }));
-        assetGraph.findAssets({text: 'body { color: #eee; }'})[0].addRelation(new AssetGraph.CssImage({
-            to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0]
-        }));
+        }, 'last');
+
+        const dCss = assetGraph.findAssets({text: 'body { color: #ddd; }'})[0];
+        const dCssNode = dCss.parseTree.nodes[0].append('background-image: url(...)');
+        const dCssPropertyNode = dCssNode.nodes[dCssNode.nodes.length - 1];
+        dCss.markDirty();
+        dCss.addRelation({
+            type: 'CssImage',
+            to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0],
+            parentNode: dCss.parseTree,
+            propertyNode: dCssPropertyNode,
+            node: dCssNode
+        }, 'last');
+
+        const eCss = assetGraph.findAssets({text: 'body { color: #eee; }'})[0];
+        const eCssNode = eCss.parseTree.nodes[0].append('background-image: url(...)');
+        const eCssPropertyNode = eCssNode.nodes[dCssNode.nodes.length - 1];
+        dCss.markDirty();
+        assetGraph.findAssets({text: 'body { color: #eee; }'})[0].addRelation({
+            type: 'CssImage',
+            to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0],
+            parentNode: eCss.parseTree,
+            propertyNode: eCssPropertyNode,
+            node: eCssNode
+        }, 'last');
 
         expect(assetGraph, 'to contain relations', 'CssImage', 2);
         expect(assetGraph, 'to contain relations', {
             type: 'HtmlAnchor',
-            from: assetGraph.findAssets({text: 'a'})[0]
+            from: aHtml
         }, 2);
         expect(assetGraph, 'to contain relations', {
             type: 'HtmlAnchor',
@@ -52,7 +80,7 @@ describe('AssetGraph.findRelations', function () {
         expect(assetGraph, 'to contain relations', {
             type: ['HtmlAnchor', 'HtmlStyle'],
             from: {
-                text: ['a', 'b']
+                text: [aHtml.text, bHtml.text]
             },
             to: {
                 type: ['Html', 'Css']
@@ -67,13 +95,13 @@ describe('AssetGraph.findRelations', function () {
         expect(assetGraph, 'to contain relations', {
             type: /Style/,
             from: {
-                text: /^a$/
+                text: /^a<link rel=/
             }
         }, 1);
         expect(assetGraph, 'to contain relations', {
             type: query.not('CssImage'),
             from: {
-                text: query.not('a')
+                text: query.not(/^a<link rel=/)
             }
         }, 2);
         expect(assetGraph, 'to contain relations', {
