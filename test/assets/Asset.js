@@ -617,7 +617,12 @@ describe('assets/Asset', function () {
 
             expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: assetGraph.findAssets({type: 'Html', url: /\/baz\.html$/})});
 
-            new AssetGraph.HtmlAnchor({to: assetGraph.findAssets({url: /\/quux\.html$/})[0]}).attach(fooHtml, 'after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
+            // new AssetGraph.HtmlAnchor({to: assetGraph.findAssets({url: /\/quux\.html$/})[0]}).attach(fooHtml, 'after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
+
+            fooHtml.addRelation({
+                type: 'HtmlAnchor',
+                to: assetGraph.findAssets({url: /\/quux\.html$/})[0]
+            }, 'after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
 
             expect(fooHtml.text, 'to match', /baz\.html/);
             expect(fooHtml.text, 'to match', /quux\.html/);
