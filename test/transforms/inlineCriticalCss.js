@@ -21,37 +21,25 @@ describe('tranforms/inlineCriticalCss', function () {
             });
     });
 
-    it('should emit a warning when encountering broken html', function () {
-        var relations;
-        var assets;
+    it('should emit a warning when encountering broken html', async function () {
+        const warnSpy = sinon.spy();
 
-        var graph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
-        var spy = sinon.spy();
-
-        graph.on('warn', spy);
-
-        return graph
+        const assetGraph = await new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
+            .on('warn', warnSpy)
             .loadAssets('missing-structure.html')
-            .populate()
-            .queue(function (assetGraph) {
-                relations = assetGraph.findRelations();
-                assets = assetGraph.findAssets();
-            })
-            .inlineCriticalCss()
-            .queue(function (assetGraph) {
-                expect(assetGraph.findRelations(), 'to satisfy', relations);
-                expect(assetGraph.findAssets(), 'to satisfy', assets);
+            .populate();
 
-                expect(spy, 'to have calls satisfying', [
-                    {
-                        args: [
-                            {
-                                message: /Missing <html> and <head>/
-                            }
-                        ]
-                    }
-                ]);
-            });
+        const relations = assetGraph.findRelations();
+        const assets = assetGraph.findAssets();
+
+        await assetGraph.inlineCriticalCss();
+
+        expect(assetGraph.findRelations(), 'to satisfy', relations);
+        expect(assetGraph.findAssets(), 'to satisfy', assets);
+
+        expect(warnSpy, 'to have calls satisfying', () => {
+            warnSpy({ message: /the page does not have an <html> element/ });
+        });
     });
 
     it('should inline the heading style of a simple test case', function () {
@@ -60,26 +48,24 @@ describe('tranforms/inlineCriticalCss', function () {
             .populate()
             .inlineCriticalCss()
             .queue(function (assetGraph) {
-                expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
-                    {
-                        to: {
-                            isInline: true,
-                            text: [
-                                'h1 { color: red; }',
-                                '',
-                                'a { color: rebeccapurple; }'
-                            ].join('\n')
-                        },
-                        node: function (node) {
-                            return node && node.parentNode && node.parentNode.tagName === 'HEAD';
-                        }
-                    },
-                    {
-                        to: {
-                            fileName: 'simple.css'
-                        }
+                expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
+                expect(assetGraph, 'to contain relation', {
+                    to: {
+                        fileName: 'simple.css'
                     }
-                ]);
+                });
+
+                expect(assetGraph, 'to contain relation', {
+                    to: {
+                        isInline: true,
+                        text: [
+                            'h1 { color: red; }',
+                            '',
+                            'a { color: rebeccapurple; }'
+                        ].join('\n')
+                    },
+                    node: node => node && node.parentNode && node.parentNode.tagName === 'HEAD'
+                });
             });
     });
 
@@ -89,22 +75,20 @@ describe('tranforms/inlineCriticalCss', function () {
             .populate()
             .inlineCriticalCss()
             .queue(function (assetGraph) {
-                expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
-                    {
-                        to: {
-                            isInline: true,
-                            text: 'html {\n    color:red;\n}'
-                        },
-                        node: function (node) {
-                            return node && node.parentNode && node.parentNode.tagName === 'HEAD';
-                        }
-                    },
-                    {
-                        to: {
-                            fileName: 'htmlnode.css'
-                        }
+                expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
+                expect(assetGraph, 'to contain relation', {
+                    type: 'HtmlStyle',
+                    to: {
+                        fileName: 'htmlnode.css'
                     }
-                ]);
+                });
+                expect(assetGraph, 'to contain relation', {
+                    to: {
+                        isInline: true,
+                        text: 'html {\n    color:red;\n}'
+                    },
+                    node: node => node && node.parentNode && node.parentNode.tagName === 'HEAD'
+                });
             });
     });
 
@@ -114,38 +98,37 @@ describe('tranforms/inlineCriticalCss', function () {
             .populate()
             .inlineCriticalCss()
             .queue(function (assetGraph) {
-                expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
-                    {
-                        to: {
-                            isInline: true,
-                            text: [
-                                '@media screen {',
-                                '    h1 {',
-                                '        color: red;',
-                                '    }',
-                                '',
-                                '    p {',
-                                '        color: green;',
-                                '    }',
-                                '}',
-                                '',
-                                '@media print {',
-                                '    h1 {',
-                                '        background: black;',
-                                '    }',
-                                '}'
-                            ].join('\n')
-                        },
-                        node: function (node) {
-                            return node && node.parentNode && node.parentNode.tagName === 'HEAD';
-                        }
+                expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
+                expect(assetGraph, 'to contain relation', {
+                    type: 'HtmlStyle',
+                    to: {
+                        isInline: true,
+                        text: [
+                            '@media screen {',
+                            '    h1 {',
+                            '        color: red;',
+                            '    }',
+                            '',
+                            '    p {',
+                            '        color: green;',
+                            '    }',
+                            '}',
+                            '',
+                            '@media print {',
+                            '    h1 {',
+                            '        background: black;',
+                            '    }',
+                            '}'
+                        ].join('\n')
                     },
-                    {
-                        to: {
-                            fileName: 'media.css'
-                        }
+                    node: node => node && node.parentNode && node.parentNode.tagName === 'HEAD'
+                });
+                expect(assetGraph, 'to contain relation', {
+                    type: 'HtmlStyle',
+                    to: {
+                        fileName: 'media.css'
                     }
-                ]);
+                });
             });
     });
 
@@ -155,34 +138,33 @@ describe('tranforms/inlineCriticalCss', function () {
             .populate()
             .inlineCriticalCss()
             .queue(function (assetGraph) {
-                expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
-                    {
-                        to: {
-                            isInline: true,
-                            text: [
-                                'h1:not(.non-existent) {',
-                                '    background: red;',
-                                '}',
-                                '',
-                                'h1:after {',
-                                '    border: 1px solid yellow;',
-                                '}',
-                                '',
-                                'p:nth-child(2) {',
-                                '    background: hotpink;',
-                                '}'
-                            ].join('\n')
-                        },
-                        node: function (node) {
-                            return node && node.parentNode && node.parentNode.tagName === 'HEAD';
-                        }
+                expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
+                expect(assetGraph, 'to contain relation', {
+                    type: 'HtmlStyle',
+                    to: {
+                        isInline: true,
+                        text: [
+                            'h1:not(.non-existent) {',
+                            '    background: red;',
+                            '}',
+                            '',
+                            'h1:after {',
+                            '    border: 1px solid yellow;',
+                            '}',
+                            '',
+                            'p:nth-child(2) {',
+                            '    background: hotpink;',
+                            '}'
+                        ].join('\n')
                     },
-                    {
-                        to: {
-                            fileName: 'pseudo.css'
-                        }
+                    node: node => node && node.parentNode && node.parentNode.tagName === 'HEAD'
+                });
+                expect(assetGraph, 'to contain relation', {
+                    type: 'HtmlStyle',
+                    to: {
+                        fileName: 'pseudo.css'
                     }
-                ]);
+                });
             });
     });
 
