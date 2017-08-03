@@ -12,9 +12,7 @@ describe('transforms/bundleSystemJs', function () {
         expect(assetGraph, 'to contain assets', 'JavaScript', 3);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 3);
 
-        await assetGraph
-            .bundleSystemJs()
-            .populate();
+        await assetGraph.bundleSystemJs();
 
         expect(assetGraph, 'to contain assets', 'JavaScript', 4);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 4);
@@ -37,8 +35,7 @@ describe('transforms/bundleSystemJs', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simple/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs()
-            .populate();
+            .bundleSystemJs();
 
         let numNodesWithCorrectLoc = 0;
         estraverse.traverse(assetGraph.findAssets({
@@ -86,9 +83,7 @@ describe('transforms/bundleSystemJs', function () {
         expect(assetGraph, 'to contain assets', 'JavaScript', 4);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 4);
 
-        await assetGraph
-            .bundleSystemJs()
-            .populate();
+        await assetGraph.bundleSystemJs();
 
         expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/ } }, 5);
@@ -112,9 +107,7 @@ describe('transforms/bundleSystemJs', function () {
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 3);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 3);
 
-        await assetGraph
-            .bundleSystemJs()
-            .populate();
+        await assetGraph.bundleSystemJs();
 
         expect(assetGraph, 'to contain assets', 'JavaScript', 5);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 4);
@@ -154,9 +147,7 @@ describe('transforms/bundleSystemJs', function () {
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 3);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 3);
 
-        await assetGraph
-            .bundleSystemJs()
-            .populate();
+        await assetGraph.bundleSystemJs();
 
         expect(assetGraph, 'to contain assets', 'JavaScript', 6);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 4);
@@ -185,8 +176,7 @@ describe('transforms/bundleSystemJs', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/sameAssetListEntryTwice/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs()
-            .populate();
+            .bundleSystemJs();
 
         expect(assetGraph, 'to contain asset', {isFragment: true});
     });
@@ -195,8 +185,7 @@ describe('transforms/bundleSystemJs', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/template/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs()
-            .populate();
+            .bundleSystemJs();
 
         expect(assetGraph, 'to contain asset', {fileName: 'foo.html', type: 'Html', isFragment: true});
         expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 1);
@@ -207,8 +196,7 @@ describe('transforms/bundleSystemJs', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/conditionalTemplate/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs()
-            .populate();
+            .bundleSystemJs();
 
         expect(assetGraph, 'to contain assets', {type: 'Html', isFragment: true}, 2);
         expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 2);
