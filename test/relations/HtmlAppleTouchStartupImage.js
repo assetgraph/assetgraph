@@ -13,15 +13,14 @@ describe('relations/HtmlAppleTouchStartupImage', function () {
                 var htmlAsset = assetGraph.findAssets({type: 'Html'})[0],
                     pngAsset = assetGraph.findAssets({type: 'Png'})[0],
                     existingHtmlAppleTouchStartupImageRelation = assetGraph.findRelations({type: 'HtmlAppleTouchStartupImage'})[0];
-                new AssetGraph.HtmlAppleTouchStartupImage({
-                    from: htmlAsset,
+                htmlAsset.addRelation({
+                    type: 'HtmlAppleTouchStartupImage',
                     to: pngAsset
-                }).attach(htmlAsset, 'after', existingHtmlAppleTouchStartupImageRelation);
-                new AssetGraph.HtmlAppleTouchStartupImage({
-                    from: htmlAsset,
+                }, 'after', existingHtmlAppleTouchStartupImageRelation);
+                htmlAsset.addRelation({
+                    type: 'HtmlAppleTouchStartupImage',
                     to: pngAsset
-                }).attach(htmlAsset, 'before', existingHtmlAppleTouchStartupImageRelation);
-
+                }, 'before', existingHtmlAppleTouchStartupImageRelation);
 
                 expect(assetGraph, 'to contain relations', 'HtmlAppleTouchStartupImage', 3);
 
