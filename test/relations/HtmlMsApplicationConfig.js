@@ -1,82 +1,71 @@
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlMsApplicationConfig', function () {
 
     function getHtmlAsset(htmlString) {
-        var graph = new AssetGraph({ root: __dirname });
-        var htmlAsset = new AssetGraph.Html({
+        return new AssetGraph({ root: __dirname }).add({
+            type: 'Html',
             text: htmlString || '<!doctype html><html><head></head><body></body></html>',
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
-
-        graph.addAsset(htmlAsset);
-
-        return htmlAsset;
     }
 
-    it('should handle a test case with an existing <meta name="msapplication-config" content="..."> element', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'})
+    it('should handle a test case with an existing <meta name="msapplication-config" content="..."> element', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'})
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlMsApplicationConfig');
-                expect(assetGraph, 'to contain asset', { fileName: 'IEconfig.xml' });
-            })
-            .run(done);
+            .populate();
+
+        expect(assetGraph, 'to contain relation', 'HtmlMsApplicationConfig');
+        expect(assetGraph, 'to contain asset', { fileName: 'IEconfig.xml' });
     });
 
-    it('should update the href', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'})
+    it('should update the href', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'})
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlMsApplicationConfig');
+            .populate();
 
-                var relation = assetGraph.findRelations({ type: 'HtmlMsApplicationConfig' })[0];
+        expect(assetGraph, 'to contain relation', 'HtmlMsApplicationConfig');
 
-                relation.to.url = 'foo.bar';
+        const relation = assetGraph.findRelations({ type: 'HtmlMsApplicationConfig' })[0];
 
-                expect(relation, 'to satisfy', {
-                    href: 'foo.bar'
-                });
-            });
+        relation.to.url = 'foo.bar';
+
+        expect(relation, 'to satisfy', { href: 'foo.bar' });
     });
 
     describe('when programmatically adding a relation', function () {
-        it('should register a relation when using attach', function () {
-
-            return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'})
+        it('should register a relation when using attach', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'})
                 .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    var previousRelation = assetGraph.findRelations({ type: 'HtmlMsApplicationConfig' })[0];
+                .populate();
 
-                    previousRelation.from.addRelation({
-                        type: 'HtmlMsApplicationConfig',
-                        to: {
-                            type: 'Xml',
-                            url: 'foo.xml',
-                            text: '<?xml version="1.0" encoding="utf-8"?><browserconfig />'
-                        }
-                    }, 'before', previousRelation);
+            const previousRelation = assetGraph.findRelations({ type: 'HtmlMsApplicationConfig' })[0];
 
-                    expect(assetGraph.findRelations(), 'to satisfy', [
-                        {
-                            type: 'HtmlMsApplicationConfig',
-                            href: 'foo.xml'
-                        },
-                        {
-                            type: 'HtmlMsApplicationConfig',
-                            href: 'IEconfig.xml'
-                        }
-                    ]);
-                });
+            previousRelation.from.addRelation({
+                type: 'HtmlMsApplicationConfig',
+                to: {
+                    type: 'Xml',
+                    url: 'foo.xml',
+                    text: '<?xml version="1.0" encoding="utf-8"?><browserconfig />'
+                }
+            }, 'before', previousRelation);
+
+            expect(assetGraph.findRelations(), 'to satisfy', [
+                {
+                    type: 'HtmlMsApplicationConfig',
+                    href: 'foo.xml'
+                },
+                {
+                    type: 'HtmlMsApplicationConfig',
+                    href: 'IEconfig.xml'
+                }
+            ]);
         });
 
         it('should attach a link node in <head> when using attachToHead', function () {
-            var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlMsApplicationConfig({
+            const htmlAsset = getHtmlAsset();
+            const relation = new AssetGraph.HtmlMsApplicationConfig({
                 to: new AssetGraph.Xml({ text: '', url: 'foo.xml' })
             });
 
