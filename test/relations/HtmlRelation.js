@@ -86,12 +86,6 @@ describe('relations/HtmlRelation', function () {
             });
         }
 
-        function getPreloadLink() {
-            return new AssetGraph.HtmlPreloadLink({
-                to: new AssetGraph.JavaScript({ text: '"use strict"', url: 'foo.js' })
-            });
-        }
-
         function findRelation(asset, query) {
             return asset.assetGraph.findRelations(query)[0];
         }
@@ -173,13 +167,14 @@ describe('relations/HtmlRelation', function () {
 
                 it('should append relation node to <head> when using "first"-position', function () {
                     const htmlAsset = getHtmlAsset(html);
+                    expect(htmlAsset.outgoingRelations, 'to satisfy', []);
+
+                    expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', []);
+
                     const relation = htmlAsset.addRelation({
                         type: 'HtmlPreloadLink',
                         to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
                     });
-
-                    expect(htmlAsset.outgoingRelations, 'to satisfy', []);
-                    expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', []);
 
                     relation.attachToHead(htmlAsset, 'first');
 
@@ -193,14 +188,14 @@ describe('relations/HtmlRelation', function () {
 
                 it('should append relation node to <head> when using "last"-position', function () {
                     const htmlAsset = getHtmlAsset(html);
-                    const relation = htmlAsset.addRelation({
-                        type: 'HtmlPreloadLink',
-                        to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
-                    });
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', []);
                     expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', []);
 
+                    const relation = htmlAsset.addRelation({
+                        type: 'HtmlPreloadLink',
+                        to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
+                    });
                     relation.attachToHead(htmlAsset, 'last');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -217,10 +212,6 @@ describe('relations/HtmlRelation', function () {
 
                 it('should append relation node to <head> when using "first"-position', function () {
                     const htmlAsset = getHtmlAsset(html);
-                    const relation = htmlAsset.addRelation({
-                        type: 'HtmlPreloadLink',
-                        to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
-                    });
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
                         expect.it('to be', findRelation(htmlAsset, {
@@ -231,6 +222,10 @@ describe('relations/HtmlRelation', function () {
 
                     expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', []);
 
+                    const relation = htmlAsset.addRelation({
+                        type: 'HtmlPreloadLink',
+                        to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
+                    });
                     relation.attachToHead(htmlAsset, 'first');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -248,10 +243,6 @@ describe('relations/HtmlRelation', function () {
 
                 it('should append relation node to <head> when using "last"-position', function () {
                     const htmlAsset = getHtmlAsset(html);
-                    const relation = htmlAsset.addRelation({
-                        type: 'HtmlPreloadLink',
-                        to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
-                    });
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
                         {
@@ -259,9 +250,12 @@ describe('relations/HtmlRelation', function () {
                             href: 'bundle.js'
                         }
                     ]);
-
                     expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', []);
 
+                    const relation = htmlAsset.addRelation({
+                        type: 'HtmlPreloadLink',
+                        to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
+                    });
                     relation.attachToHead(htmlAsset, 'last');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -291,7 +285,6 @@ describe('relations/HtmlRelation', function () {
 
             it('should append relation node first in <head> when using "first"-position', function () {
                 var htmlAsset = getHtmlAsset(html);
-                var relation = getPreloadLink();
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -316,6 +309,10 @@ describe('relations/HtmlRelation', function () {
                     expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
                 ]);
 
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
+                    to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+                });
                 relation.attachToHead(htmlAsset, 'first');
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -346,7 +343,6 @@ describe('relations/HtmlRelation', function () {
 
             it('should append relation node last in <head> when using "last"-position', function () {
                 var htmlAsset = getHtmlAsset(html);
-                var relation = getPreloadLink();
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -371,6 +367,10 @@ describe('relations/HtmlRelation', function () {
                     expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
                 ]);
 
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
+                    to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+                });
                 relation.attachToHead(htmlAsset, 'last');
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -401,7 +401,6 @@ describe('relations/HtmlRelation', function () {
 
             it('should append relation node before <link id="tag2" rel="shortcut icon" href="/favicon.ico">', function () {
                 var htmlAsset = getHtmlAsset(html);
-                var relation = getPreloadLink();
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -426,6 +425,10 @@ describe('relations/HtmlRelation', function () {
                     expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
                 ]);
 
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
+                    to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+                });
                 relation.attachToHead(htmlAsset, 'before', htmlAsset.parseTree.querySelector('#tag2'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -456,7 +459,6 @@ describe('relations/HtmlRelation', function () {
 
             it('should append relation node after <meta id="tag1" charset="utf-8">', function () {
                 var htmlAsset = getHtmlAsset(html);
-                var relation = getPreloadLink();
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -481,6 +483,10 @@ describe('relations/HtmlRelation', function () {
                     expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
                 ]);
 
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
+                    to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+                });
                 relation.attachToHead(htmlAsset, 'after', htmlAsset.parseTree.querySelector('#tag1'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -511,7 +517,6 @@ describe('relations/HtmlRelation', function () {
 
             it('should append relation node before <meta id="tag3" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">', function () {
                 var htmlAsset = getHtmlAsset(html);
-                var relation = getPreloadLink();
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -536,6 +541,10 @@ describe('relations/HtmlRelation', function () {
                     expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
                 ]);
 
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
+                    to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+                });
                 relation.attachToHead(htmlAsset, 'before', htmlAsset.parseTree.querySelector('#tag3'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -566,7 +575,6 @@ describe('relations/HtmlRelation', function () {
 
             it('should append relation node after <meta id="tag3" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">', function () {
                 var htmlAsset = getHtmlAsset(html);
-                var relation = getPreloadLink();
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -591,6 +599,10 @@ describe('relations/HtmlRelation', function () {
                     expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
                 ]);
 
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
+                    to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+                });
                 relation.attachToHead(htmlAsset, 'after', htmlAsset.parseTree.querySelector('#tag3'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -621,7 +633,6 @@ describe('relations/HtmlRelation', function () {
 
             it('should append relation node before <meta id="tag5" name="description" content="content description">', function () {
                 var htmlAsset = getHtmlAsset(html);
-                var relation = getPreloadLink();
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -646,6 +657,10 @@ describe('relations/HtmlRelation', function () {
                     expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
                 ]);
 
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
+                    to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+                });
                 relation.attachToHead(htmlAsset, 'before', htmlAsset.parseTree.querySelector('#tag5'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -676,7 +691,6 @@ describe('relations/HtmlRelation', function () {
 
             it('should append relation node after <link id="tag4" rel="shortcut icon" href="/favicon.svg">', function () {
                 var htmlAsset = getHtmlAsset(html);
-                var relation = getPreloadLink();
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -701,6 +715,10 @@ describe('relations/HtmlRelation', function () {
                     expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
                 ]);
 
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
+                    to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+                });
                 relation.attachToHead(htmlAsset, 'after', htmlAsset.parseTree.querySelector('#tag4'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
