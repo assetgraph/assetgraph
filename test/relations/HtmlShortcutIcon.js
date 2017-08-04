@@ -15,14 +15,14 @@ describe('relations/HtmlShortcutIcon', function () {
         const pngAsset = assetGraph.findAssets({type: 'Png'})[0];
         const firstExistingHtmlShortcutIconRelation = assetGraph.findRelations({type: 'HtmlShortcutIcon'})[0];
 
-        new AssetGraph.HtmlShortcutIcon({
-            from: htmlAsset,
+        htmlAsset.addRelation({
+            type: 'HtmlShortcutIcon',
             to: pngAsset
-        }).attach(htmlAsset, 'after', firstExistingHtmlShortcutIconRelation);
-        new AssetGraph.HtmlShortcutIcon({
-            from: htmlAsset,
+        }, 'after', firstExistingHtmlShortcutIconRelation);
+        htmlAsset.addRelation({
+            type: 'HtmlShortcutIcon',
             to: pngAsset
-        }).attach(htmlAsset, 'before', firstExistingHtmlShortcutIconRelation);
+        }, 'before', firstExistingHtmlShortcutIconRelation);
 
         expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 9);
 
