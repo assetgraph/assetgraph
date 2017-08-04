@@ -3,6 +3,78 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlRelation', function () {
+    describe.skip('#attach', function () {
+        let htmlAsset;
+        beforeEach(function () {
+            htmlAsset = new AssetGraph().add({
+                type: 'Html',
+                text:
+                    '<!DOCTYPE html>' +
+                    '<html>' +
+                    '<head><link rel="stylesheet" href="existingheadstyles.css"></head>' +
+                    '<body><link rel="stylesheet" href="existingbodystyles.css"></body>' +
+                    '</html>'
+            });
+        });
+
+        it('should support a position of firstInHead', function () {
+            const relation = htmlAsset.addRelation({
+                type: 'HtmlStyle',
+                to: { url: 'newstyles.css' }
+            }, 'firstInHead');
+            expect(htmlAsset.outgoingRelations, 'to have length', 3)
+                .and('to satisfy', { 0: relation });
+            expect(
+                htmlAsset.text,
+                'to contain',
+                '<head><link rel="stylesheet" href="newstyles.css"><link rel="stylesheet" href="existingheadstyles.css">'
+            );
+        });
+
+        it('should support a position of lastInHead', function () {
+            const relation = htmlAsset.addRelation({
+                type: 'HtmlStyle',
+                to: { url: 'newstyles.css' }
+            }, 'lastInHead');
+            expect(htmlAsset.outgoingRelations, 'to have length', 3)
+                .and('to satisfy', { 1: relation });
+            expect(
+                htmlAsset.text,
+                'to contain',
+                '<head><link rel="stylesheet" href="existingheadstyles.css"><link rel="stylesheet" href="newstyles.css"></head>'
+            );
+        });
+
+        it('should support a position of firstInBody', function () {
+            const relation = htmlAsset.addRelation({
+                type: 'HtmlStyle',
+                to: { url: 'newstyles.css' }
+            }, 'firstInBody');
+            expect(htmlAsset.outgoingRelations, 'to have length', 3)
+                .and('to satisfy', { 1: relation });
+            expect(
+                htmlAsset.text,
+                'to contain',
+                '</head><body><link rel="stylesheet" href="newstyles.css"><link rel="stylesheet" href="existingbodystyles.css"></body>'
+            );
+        });
+
+        it('should support a position of lastInBody', function () {
+            const relation = htmlAsset.addRelation({
+                type: 'HtmlStyle',
+                to: { url: 'newstyles.css' }
+            }, 'firstInBody');
+            expect(htmlAsset.outgoingRelations, 'to have length', 3)
+                .and('to satisfy', { 2: relation });
+            expect(
+                htmlAsset.text,
+                'to contain',
+                '</head><body><link rel="stylesheet" href="existingbodystyles.css"><link rel="stylesheet" href="newstyles.css"></body>'
+            );
+        });
+    });
+
+
     describe('#attachToHead', function () {
         const attachToHead = AssetGraph.HtmlRelation.prototype.attachToHead;
 
