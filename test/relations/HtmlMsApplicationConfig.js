@@ -52,13 +52,14 @@ describe('relations/HtmlMsApplicationConfig', function () {
                 .queue(function (assetGraph) {
                     var previousRelation = assetGraph.findRelations({ type: 'HtmlMsApplicationConfig' })[0];
 
-                    var relation = new AssetGraph.HtmlMsApplicationConfig({
-                        to: new AssetGraph.Xml({ text: '', url: 'foo.xml' })
-                    });
-
-                    var htmlAsset = previousRelation.from;
-
-                    relation.attach(htmlAsset, 'before', previousRelation);
+                    previousRelation.from.addRelation({
+                        type: 'HtmlMsApplicationConfig',
+                        to: {
+                            type: 'Xml',
+                            url: 'foo.xml',
+                            text: '<?xml version="1.0" encoding="utf-8"?><browserconfig />'
+                        }
+                    }, 'before', previousRelation);
 
                     expect(assetGraph.findRelations(), 'to satisfy', [
                         {
