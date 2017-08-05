@@ -69,6 +69,23 @@ describe('assets/Asset', function () {
             // expect(htmlAsset.text, 'to equal', '<script>alert("foo");</script>');
         });
 
+        it('should implicitly create an inline target asset with outgoing relations and add it to the graph', function () {
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.add({
+                url: 'http://example.com/',
+                type: 'Html',
+                text: ''
+            });
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                to: {
+                    type: 'JavaScript',
+                    text: 'alert("/thatimage.gif".toString("url"))'
+                }
+            }, 'last');
+            expect(assetGraph, 'to contain asset', { fileName: 'thatimage.gif' });
+        });
+
         it('should add and attach a relation that does not already have a node', function () {
             const assetGraph = new AssetGraph();
             const htmlAsset = assetGraph.add({
