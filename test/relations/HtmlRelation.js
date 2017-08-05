@@ -175,7 +175,7 @@ describe('relations/HtmlRelation', function () {
                         type: 'HtmlPreloadLink',
                         to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
                     });
-
+                    relation.detach();
                     relation.attachToHead(htmlAsset, 'first');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -196,6 +196,7 @@ describe('relations/HtmlRelation', function () {
                         type: 'HtmlPreloadLink',
                         to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
                     });
+                    relation.detach();
                     relation.attachToHead(htmlAsset, 'last');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -226,6 +227,7 @@ describe('relations/HtmlRelation', function () {
                         type: 'HtmlPreloadLink',
                         to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
                     });
+                    relation.detach();
                     relation.attachToHead(htmlAsset, 'first');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -256,6 +258,7 @@ describe('relations/HtmlRelation', function () {
                         type: 'HtmlPreloadLink',
                         to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
                     });
+                    relation.detach();
                     relation.attachToHead(htmlAsset, 'last');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -313,6 +316,7 @@ describe('relations/HtmlRelation', function () {
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
                 });
+                relation.detach();
                 relation.attachToHead(htmlAsset, 'first');
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -371,6 +375,7 @@ describe('relations/HtmlRelation', function () {
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
                 });
+                relation.detach();
                 relation.attachToHead(htmlAsset, 'last');
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -429,6 +434,7 @@ describe('relations/HtmlRelation', function () {
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
                 });
+                relation.detach();
                 relation.attachToHead(htmlAsset, 'before', htmlAsset.parseTree.querySelector('#tag2'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -487,6 +493,7 @@ describe('relations/HtmlRelation', function () {
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
                 });
+                relation.detach();
                 relation.attachToHead(htmlAsset, 'after', htmlAsset.parseTree.querySelector('#tag1'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -545,6 +552,7 @@ describe('relations/HtmlRelation', function () {
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
                 });
+                relation.detach();
                 relation.attachToHead(htmlAsset, 'before', htmlAsset.parseTree.querySelector('#tag3'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -603,6 +611,7 @@ describe('relations/HtmlRelation', function () {
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
                 });
+                relation.detach();
                 relation.attachToHead(htmlAsset, 'after', htmlAsset.parseTree.querySelector('#tag3'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -661,6 +670,7 @@ describe('relations/HtmlRelation', function () {
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
                 });
+                relation.detach();
                 relation.attachToHead(htmlAsset, 'before', htmlAsset.parseTree.querySelector('#tag5'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -719,6 +729,7 @@ describe('relations/HtmlRelation', function () {
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
                 });
+                relation.detach();
                 relation.attachToHead(htmlAsset, 'after', htmlAsset.parseTree.querySelector('#tag4'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
