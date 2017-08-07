@@ -591,7 +591,10 @@ describe('assets/Asset', function () {
 
     describe('#outgoingRelations', function () {
         it('should handle a combo test case', function () {
-            var htmlAsset = new AssetGraph.Html({
+            const assetGraph = new AssetGraph({root: 'http://example.com/'});
+
+            var htmlAsset = assetGraph.add({
+                type: 'Html',
                 url: 'http://example.com/foo.html',
                 text:
                     '<!DOCTYPE html>\n' +
@@ -608,22 +611,22 @@ describe('assets/Asset', function () {
 
             expect(htmlAsset.outgoingRelations[0].to.outgoingRelations, 'to have length', 1);
             expect(htmlAsset.outgoingRelations[0].to.outgoingRelations[0].type, 'to equal', 'CssImage');
-            expect(htmlAsset.outgoingRelations[0].to.outgoingRelations[0].to.isResolved, 'to be falsy');
+            expect(htmlAsset.outgoingRelations[0].to.outgoingRelations[0].to.isResolved, 'to be true');
 
-            expect(htmlAsset.outgoingRelations[1].to.isResolved, 'to be falsy');
+            expect(htmlAsset.outgoingRelations[1].to.isResolved, 'to be true');
 
-            const assetGraph = new AssetGraph({root: 'http://example.com/'});
-            assetGraph.addAsset(new AssetGraph.Html({
+            assetGraph.add({
+                type: 'Html',
                 url: 'http://example.com/quux.html',
                 text: '<!DOCTYPE html>\n<html><head><title>Boring document</title></head></html>'
-            }));
-            assetGraph.addAsset(new AssetGraph.Html({
+            });
+            assetGraph.add({
+                type: 'Html',
                 url: 'http://example.com/baz.html',
                 text: '<!DOCTYPE html>\n<html><head><title>Another boring document</title></head></html>'
-            }));
-            assetGraph.addAsset(htmlAsset);
+            });
 
-            expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: assetGraph.findAssets({url: /\/quux\.html$/})[0]});
+            expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: assetGraph.findAssets({fileName: 'quux.html'})[0]});
 
             expect(assetGraph, 'to contain relation', 'HtmlStyle');
 
