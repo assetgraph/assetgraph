@@ -2,6 +2,7 @@ const expect = require('./unexpected-with-plugins');
 const AssetGraph = require('../');
 const httpception = require('httpception');
 const sinon = require('sinon');
+const pathModule = require('path');
 
 describe('AssetGraph#add', function () {
     describe('with an array', function () {
@@ -14,6 +15,88 @@ describe('AssetGraph#add', function () {
         it('should throw', function () {
             expect(() => new AssetGraph().add('*.html'), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try AssetGraph#addAll'));
         });
+    });
+
+    it('should handle a relative path', async function () {
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '..', 'testdata', 'add', 'relativeUrl') + '/'});
+        const asset = assetGraph.add('foo.png', assetGraph.root);
+        assetGraph.addAsset(asset);
+        await asset.load();
+        expect(asset.type, 'to equal', 'Png');
+    });
+
+    it('should handle an http: url', async function () {
+        httpception({
+            request: 'GET http://www.example.com/foo.gif',
+            response: {
+                statusCode: 200,
+                body: new Buffer('GIF')
+            }
+        });
+
+        const assetGraph = new AssetGraph();
+        const asset = assetGraph.add('http://www.example.com/foo.gif', assetGraph.root);
+        assetGraph.addAsset(asset);
+        await asset.load();
+        expect(asset, 'to be an object');
+        expect(asset.url, 'to equal', 'http://www.example.com/foo.gif');
+        expect(asset.type, 'to equal', 'Gif');
+    });
+
+    it('should handle a data: url', async function () {
+        const assetGraph = new AssetGraph();
+        const asset = assetGraph.add('data:text/html;base64,SGVsbG8sIHdvcmxkIQo=', assetGraph.root);
+        assetGraph.addAsset(asset);
+        await asset.load();
+        expect(asset, 'to be an object');
+        expect(asset.rawSrc, 'to equal', new Buffer('Hello, world!\n', 'utf-8'));
+    });
+
+    it('should not loop infinitely when encountering non-resolvable urls', async function () {
+        const assetGraph = new AssetGraph();
+        const warnSpy = sinon.spy().named('warn');
+        assetGraph.on('warn', warnSpy);
+
+        const asset = assetGraph.add('my-funky.scheme://www.example.com/', assetGraph.root);
+        assetGraph.addAsset(asset);
+
+        await asset.load();
+        expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^No resolver found for protocol: my-funky.scheme/));
+    });
+
+    it('should accept `-` as part of the protocol', async function () {
+        const assetGraph = new AssetGraph();
+        const warnSpy = sinon.spy().named('warn');
+
+        assetGraph.on('warn', warnSpy);
+
+        const asset = assetGraph.add('android-app://www.example.com/');
+        await asset.load();
+        expect(asset, 'to satisfy', { url: 'android-app://www.example.com/' });
+        expect(warnSpy, 'was not called');
+    });
+
+    it('should only warn about unknown unsupported protocols', function () {
+        const warnSpy = sinon.spy().named('warn');
+
+        return new AssetGraph({root: __dirname + '/../testdata/unsupportedProtocols/'})
+            .on('warn', warnSpy)
+            .loadAssets('index.html')
+            .populate()
+            .then(function (assetGraph) {
+                expect(assetGraph.findRelations(), 'to satisfy', [
+                    { to: { url: 'mailto:foo@bar.com' } },
+                    { to: { url: 'tel:9876543' } },
+                    { to: { url: 'sms:9876543' } },
+                    { to: { url: 'fax:9876543' } },
+                    { to: { url: 'httpz://foo.com/' } }
+
+                ]);
+
+                expect(warnSpy, 'to have calls satisfying', () =>
+                    warnSpy(new Error('No resolver found for protocol: httpz\n\tIf you think this protocol should exist, please contribute it here:\n\thttps://github.com/Munter/schemes#contributing'))
+                );
+            });
     });
 
     describe('with an asset config that includes the body', function () {
