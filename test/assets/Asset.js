@@ -999,6 +999,51 @@ describe('assets/Asset', function () {
         });
     });
 
+    describe('#baseName', function () {
+        describe('when invoked as a getter', function () {
+            it('should retrieve the base name from the url', function () {
+                expect(new AssetGraph().add({
+                    url: 'https://example.com/foobar.html'
+                }).baseName, 'to equal', 'foobar');
+            });
+
+            it('should return undefined when there is no file name', function () {
+                expect(new AssetGraph().add({
+                    url: 'https://example.com/'
+                }).baseName, 'to be undefined');
+            });
+        });
+
+        describe('when invoked as a setter', function () {
+            it('should update the base name of the url', function () {
+                const asset = new AssetGraph().add({
+                    url: 'https://example.com/foobar.html'
+                });
+
+                asset.baseName = 'yadda';
+
+                expect(asset.url, 'to equal', 'https://example.com/yadda.html');
+            });
+
+            it('should preserve the extension', function () {
+                const asset = new AssetGraph().add({
+                    url: 'https://example.com/foobar.html'
+                });
+
+                asset.extension = '.foo';
+                asset.baseName = 'yadda';
+
+                expect(asset.url, 'to equal', 'https://example.com/yadda.foo');
+            });
+
+            it('should return undefined when there is no file name', function () {
+                expect(new AssetGraph().add({
+                    url: 'https://example.com/'
+                }).baseName, 'to be undefined');
+            });
+        });
+    });
+
     describe('#dataUrl getter', function () {
         it('should not percent-encode the comma character', function () {
             expect(new AssetGraph.Text({
