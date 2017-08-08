@@ -12,7 +12,7 @@ describe('relations/HtmlStyle', function () {
             url: assetGraph.root + 'injected.css',
             text: 'div{color:red}'
         });
-        assetGraph.addAsset(cssAsset);
+        assetGraph.add(cssAsset);
         relationToInject = new AssetGraph.HtmlStyle({from: htmlAsset, to: cssAsset});
     });
 
@@ -21,7 +21,7 @@ describe('relations/HtmlStyle', function () {
             url: assetGraph.root + 'index.html',
             text: html
         });
-        assetGraph.addAsset(htmlAsset);
+        assetGraph.add(htmlAsset);
     }
 
     describe('#media', function () {

@@ -10,7 +10,7 @@ describe('relations/HtmlPreloadLink', function () {
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
 
-        graph.addAsset(htmlAsset);
+        graph.add(htmlAsset);
 
         return htmlAsset;
     }

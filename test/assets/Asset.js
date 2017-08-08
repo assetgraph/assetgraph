@@ -407,8 +407,8 @@ describe('assets/Asset', function () {
                 url: 'http://example.com/bar.html'
             });
 
-        assetGraph.addAsset(fooHtml);
-        assetGraph.addAsset(barHtml);
+        assetGraph.add(fooHtml);
+        assetGraph.add(barHtml);
         assetGraph.findRelations({type: 'HtmlAnchor'})[0].to = barHtml;
 
         barHtml.url = 'http://example.com/subdir/quux.html';
@@ -572,7 +572,7 @@ describe('assets/Asset', function () {
             const graph = new AssetGraph();
             const asset = new AssetGraph.Asset({});
 
-            graph.addAsset(asset);
+            graph.add(asset);
 
             expect(function () { return asset.replaceWith(); }, 'to throw');
         });
@@ -582,8 +582,8 @@ describe('assets/Asset', function () {
             const asset = new AssetGraph.Asset({});
             const newAsset = new AssetGraph.Asset({});
 
-            graph.addAsset(asset);
-            graph.addAsset(newAsset);
+            graph.add(asset);
+            graph.add(newAsset);
 
             expect(function () { return asset.replaceWith(newAsset); }, 'to throw');
         });
@@ -656,7 +656,7 @@ describe('assets/Asset', function () {
 
             expect(assetGraph, 'to contain no relations', 'HtmlAnchor');
 
-            assetGraph.addAsset(fooHtml);
+            assetGraph.add(fooHtml);
 
             expect(assetGraph, 'to contain relations', 'HtmlAnchor', 2);
 
@@ -690,7 +690,7 @@ describe('assets/Asset', function () {
             const assetGraph = new AssetGraph();
             const asset = new AssetGraph.Asset({});
 
-            assetGraph.addAsset(asset);
+            assetGraph.add(asset);
 
             expect(() => asset.rawSrc, 'to throw', /Asset isn't loaded/);
         });
@@ -704,8 +704,8 @@ describe('assets/Asset', function () {
             });
 
             const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/assets/Asset/rawSrc/' });
-            assetGraph.addAsset(original);
-            assetGraph.addAsset(clone);
+            assetGraph.add(original);
+            assetGraph.add(clone);
 
             const unloadSpy = sinon.spy(clone, 'unload');
             const markDirtySpy = sinon.spy(clone, 'markDirty');
