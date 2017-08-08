@@ -419,4 +419,17 @@ describe('relations/Relation', function () {
                 });
         });
     });
+
+    describe('#inline', function () {
+        describe('on a non-inline relation', function () {
+            it('should update the href of all outgoing relations of the target asset', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/inlineExternalRelation/'})
+                    .loadAssets('index.html')
+                    .populate();
+
+                assetGraph.findAssets({type: 'Html'})[0].outgoingRelations[0].inline();
+                expect(assetGraph.findRelations({type: 'CssImage'})[0].href, 'to equal', 'styles/foo.png');
+            });
+        });
+    });
 });
