@@ -556,7 +556,7 @@ describe('transforms/bundleRelations', function () {
                 'to equal',
                 "console.log('foo');\nconsole.log('bar');\nconsole.log('quux');"
             );
-            expect(assetGraph.findAssets({fileName: 'worker.js'})[0].text, 'to match', /^importScripts\('bundle-\d+\.js'\);$/);
+            expect(assetGraph.findAssets({fileName: 'worker.js'})[0].text, 'to match', /^importScripts\('bundle(-\d+)?\.js'\);$/);
         });
     });
 
