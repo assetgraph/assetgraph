@@ -430,6 +430,16 @@ describe('relations/Relation', function () {
                 assetGraph.findAssets({type: 'Html'})[0].outgoingRelations[0].inline();
                 expect(assetGraph.findRelations({type: 'CssImage'})[0].href, 'to equal', 'styles/foo.png');
             });
+
+            it('should set the incomingInlineRelation property of the target asset', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/inlineExternalRelation/'})
+                    .loadAssets('index.html')
+                    .populate();
+
+                const cssImage = assetGraph.findRelations({type: 'CssImage'})[0];
+                cssImage.inline();
+                expect(cssImage.to.incomingInlineRelation, 'to be', cssImage);
+            });
         });
     });
 });

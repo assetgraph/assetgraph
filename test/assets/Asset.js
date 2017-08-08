@@ -831,7 +831,19 @@ describe('assets/Asset', function () {
 
             expect(() => asset.url = 'foo', 'to throw');
         });
+
+        it('should remove the incomingInlineRelation property when un-inlining', function () {
+            var asset = new AssetGraph().add({
+                type: 'Html',
+                text: '<!DOCTYPE html><html><head><style>/*foo*/</style></head></html>'
+            });
+            const htmlStyle = asset.outgoingRelations[0];
+            expect(htmlStyle.to.incomingInlineRelation, 'to be', htmlStyle);
+            htmlStyle.to.url = 'http://example.com/styles.css';
+            expect(htmlStyle.to.incomingInlineRelation, 'to be undefined');
+        });
     });
+
 
     it('should handle an inline asset with an empty url (should resolve to the url of the containing asset)', function () {
         return new AssetGraph({root: 'file:///foo/bar/quux'})
