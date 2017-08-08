@@ -104,5 +104,40 @@ describe('relations/HtmlStyle', function () {
                 });
             });
         });
+
+        it('should support the media property when adding an inline stylesheet', function () {
+            const htmlAsset = new AssetGraph().add({
+                type: 'Html',
+                url: 'http://example.com/',
+                text: '<!DOCTYPE html><html><head></head><body></body></html>'
+            });
+            htmlAsset.addRelation({
+                type: 'HtmlStyle',
+                media: 'projection',
+                to: {
+                    type: 'Css',
+                    text: 'body { color: maroon; }'
+                }
+            }, 'first').inline(); // FIXME: Implement support for hrefType: 'inline' so this isn't necessary
+            expect(htmlAsset.text, 'to contain', '<style media="projection">body { color: maroon; }</style>');
+        });
+
+        it('should support the media property when adding an external stylesheet', function () {
+            const htmlAsset = new AssetGraph().add({
+                type: 'Html',
+                url: assetGraph.root + 'index.html',
+                text: '<!DOCTYPE html><html><head></head><body></body></html>'
+            });
+            htmlAsset.addRelation({
+                type: 'HtmlStyle',
+                media: 'projection',
+                to: {
+                    type: 'Css',
+                    url: 'http://example.com/styles.css',
+                    text: 'body { color: maroon; }'
+                }
+            }, 'first');
+            expect(htmlAsset.text, 'to contain', '<link rel="stylesheet" media="projection" href="http://example.com/styles.css">');
+        });
     });
 });
