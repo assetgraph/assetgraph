@@ -163,4 +163,26 @@ describe('relations/HtmlStyle', function () {
             expect(htmlAsset.text, 'to contain', '<link rel="stylesheet" media="projection" href="http://example.com/styles.css">');
         });
     });
+
+    describe('#attachToHead', function () {
+        it('should support the media property when reattaching', function () {
+            const htmlAsset = new AssetGraph().add({
+                type: 'Html',
+                url: assetGraph.root + 'index.html',
+                text: '<!DOCTYPE html><html><head></head><body></body></html>'
+            });
+            const htmlStyle = htmlAsset.addRelation({
+                type: 'HtmlStyle',
+                media: 'projection',
+                to: {
+                    type: 'Css',
+                    url: 'http://example.com/styles.css',
+                    text: 'body { color: maroon; }'
+                }
+            }, 'first');
+            htmlStyle.detach();
+            htmlStyle.attachToHead(htmlAsset, 'first');
+            expect(htmlAsset.text, 'to contain', '<link rel="stylesheet" media="projection" href="http://example.com/styles.css">');
+        });
+    });
 });
