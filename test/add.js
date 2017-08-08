@@ -19,8 +19,8 @@ describe('AssetGraph#add', function () {
 
     it('should handle a relative path', async function () {
         const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '..', 'testdata', 'add', 'relativeUrl') + '/'});
-        const asset = assetGraph.add('foo.png', assetGraph.root);
-        assetGraph.addAsset(asset);
+        const asset = assetGraph.add('foo.png');
+        assetGraph.add(asset);
         await asset.load();
         expect(asset.type, 'to equal', 'Png');
     });
@@ -35,8 +35,8 @@ describe('AssetGraph#add', function () {
         });
 
         const assetGraph = new AssetGraph();
-        const asset = assetGraph.add('http://www.example.com/foo.gif', assetGraph.root);
-        assetGraph.addAsset(asset);
+        const asset = assetGraph.add('http://www.example.com/foo.gif');
+        assetGraph.add(asset);
         await asset.load();
         expect(asset, 'to be an object');
         expect(asset.url, 'to equal', 'http://www.example.com/foo.gif');
@@ -45,8 +45,8 @@ describe('AssetGraph#add', function () {
 
     it('should handle a data: url', async function () {
         const assetGraph = new AssetGraph();
-        const asset = assetGraph.add('data:text/html;base64,SGVsbG8sIHdvcmxkIQo=', assetGraph.root);
-        assetGraph.addAsset(asset);
+        const asset = assetGraph.add('data:text/html;base64,SGVsbG8sIHdvcmxkIQo=');
+        assetGraph.add(asset);
         await asset.load();
         expect(asset, 'to be an object');
         expect(asset.rawSrc, 'to equal', new Buffer('Hello, world!\n', 'utf-8'));
@@ -57,8 +57,8 @@ describe('AssetGraph#add', function () {
         const warnSpy = sinon.spy().named('warn');
         assetGraph.on('warn', warnSpy);
 
-        const asset = assetGraph.add('my-funky.scheme://www.example.com/', assetGraph.root);
-        assetGraph.addAsset(asset);
+        const asset = assetGraph.add('my-funky.scheme://www.example.com/');
+        assetGraph.add(asset);
 
         await asset.load();
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^No resolver found for protocol: my-funky.scheme/));
