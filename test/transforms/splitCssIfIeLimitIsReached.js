@@ -147,9 +147,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                     ]
                 );
                 const htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
-                const matchInlineStylesheets = htmlAsset.text.match(/<style type="text\/css">/g);
-                expect(matchInlineStylesheets, 'to be ok');
-                expect(matchInlineStylesheets, 'to have length', 3);
+                expect(htmlAsset.text.match(/<style>/g), 'to have length', 3);
             });
     });
 
@@ -176,9 +174,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
                 );
 
                 const htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
-                const matchInlineStylesheets = htmlAsset.text.match(/<style type="text\/css">/g);
-                expect(matchInlineStylesheets, 'to be ok');
-                expect(matchInlineStylesheets, 'to have length', 4);
+                expect(htmlAsset.text.match(/<style>/g), 'to have length', 4);
             });
     });
 
@@ -187,7 +183,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
             .loadAssets({
                 type: 'Html',
                 url: 'http://example.com/foo.html',
-                text: '<!DOCTYPE html><html><body><style type="text/css">' + new Array(5000).join('body {color: red;}') + '</style></body></html>'
+                text: '<!DOCTYPE html><html><body><style>' + new Array(5000).join('body {color: red;}') + '</style></body></html>'
             })
             .populate()
             .queue(assetGraph => {
@@ -206,7 +202,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
             .loadAssets({
                 type: 'Html',
                 url: 'http://example.com/foo.html',
-                text: '<!DOCTYPE html><html><body><style type="text/css">' + new Array(65536).join('body {color: red;}') + '</style></body></html>'
+                text: '<!DOCTYPE html><html><body><style>' + new Array(65536).join('body {color: red;}') + '</style></body></html>'
             })
             .populate()
             .queue(assetGraph => {
@@ -225,7 +221,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
             .loadAssets({
                 type: 'Html',
                 url: 'http://example.com/foo.html',
-                text: '<!DOCTYPE html><html><body><style type="text/css">' + new Array(65536).join('body {color: red;}') + '</style></body></html>'
+                text: '<!DOCTYPE html><html><body><style>' + new Array(65536).join('body {color: red;}') + '</style></body></html>'
             })
             .populate()
             .queue(assetGraph => {
@@ -244,7 +240,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
             .loadAssets({
                 type: 'Html',
                 url: 'http://example.com/foo.html',
-                text: '<!DOCTYPE html><html><body><style type="text/css">' + new Array(5000).join('body {color: red;}') + '</style></body></html>'
+                text: '<!DOCTYPE html><html><body><style>' + new Array(5000).join('body {color: red;}') + '</style></body></html>'
             })
             .populate()
             .queue(assetGraph => {

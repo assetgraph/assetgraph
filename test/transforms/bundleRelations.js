@@ -85,7 +85,7 @@ describe('transforms/bundleRelations', function () {
             expect(assetGraph.findAssets({type: 'Html'}), 'to satisfy', [
                 {
                     type: 'Html',
-                    text: '<style type="text/css">h1 { color: red; }p { color: blue; }</style>\n<h1>Hello World</h1>\n\n'
+                    text: '<style>h1 { color: red; }p { color: blue; }</style>\n<h1>Hello World</h1>\n\n'
                 }
             ]);
         });
