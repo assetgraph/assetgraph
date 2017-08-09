@@ -3,81 +3,81 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlRelation', function () {
-    describe.skip('#attach', function () {
-        let htmlAsset;
-        beforeEach(function () {
-            htmlAsset = new AssetGraph().add({
-                type: 'Html',
-                text:
-                    '<!DOCTYPE html>' +
-                    '<html>' +
-                    '<head><link rel="stylesheet" href="existingheadstyles.css"></head>' +
-                    '<body><link rel="stylesheet" href="existingbodystyles.css"></body>' +
-                    '</html>'
+    describe('#attach', function () {
+        describe('when there is an existing relation in both <head> and <body>', function () {
+            let htmlAsset;
+            beforeEach(function () {
+                htmlAsset = new AssetGraph().add({
+                    type: 'Html',
+                    text:
+                        '<!DOCTYPE html>' +
+                        '<html>' +
+                        '<head><link rel="stylesheet" href="existingheadstyles.css"></head>' +
+                        '<body><div><link rel="stylesheet" href="existingbodystyles.css"></div></body>' +
+                        '</html>'
+                });
             });
-        });
 
-        it('should support a position of firstInHead', function () {
-            const relation = htmlAsset.addRelation({
-                type: 'HtmlStyle',
-                to: { url: 'newstyles.css' }
-            }, 'firstInHead');
-            expect(htmlAsset.outgoingRelations, 'to have length', 3)
-                .and('to satisfy', { 0: relation });
-            expect(
-                htmlAsset.text,
-                'to contain',
-                '<head><link rel="stylesheet" href="newstyles.css"><link rel="stylesheet" href="existingheadstyles.css">'
-            );
-        });
+            it('should support a position of firstInHead', function () {
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlStyle',
+                    to: { url: 'newstyles.css' }
+                }, 'firstInHead');
+                expect(htmlAsset.outgoingRelations, 'to have length', 3)
+                    .and('to satisfy', { 0: relation });
+                expect(
+                    htmlAsset.text,
+                    'to contain',
+                    '<head><link rel="stylesheet" href="newstyles.css"><link rel="stylesheet" href="existingheadstyles.css">'
+                );
+            });
 
-        it('should support a position of lastInHead', function () {
-            const relation = htmlAsset.addRelation({
-                type: 'HtmlStyle',
-                to: { url: 'newstyles.css' }
-            }, 'lastInHead');
-            expect(htmlAsset.outgoingRelations, 'to have length', 3)
-                .and('to satisfy', { 1: relation });
-            expect(
-                htmlAsset.text,
-                'to contain',
-                '<head><link rel="stylesheet" href="existingheadstyles.css"><link rel="stylesheet" href="newstyles.css"></head>'
-            );
-        });
+            it('should support a position of lastInHead', function () {
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlStyle',
+                    to: { url: 'newstyles.css' }
+                }, 'lastInHead');
+                expect(htmlAsset.outgoingRelations, 'to have length', 3)
+                    .and('to satisfy', { 1: relation });
+                expect(
+                    htmlAsset.text,
+                    'to contain',
+                    '<head><link rel="stylesheet" href="existingheadstyles.css"><link rel="stylesheet" href="newstyles.css"></head>'
+                );
+            });
 
-        it('should support a position of firstInBody', function () {
-            const relation = htmlAsset.addRelation({
-                type: 'HtmlStyle',
-                to: { url: 'newstyles.css' }
-            }, 'firstInBody');
-            expect(htmlAsset.outgoingRelations, 'to have length', 3)
-                .and('to satisfy', { 1: relation });
-            expect(
-                htmlAsset.text,
-                'to contain',
-                '</head><body><link rel="stylesheet" href="newstyles.css"><link rel="stylesheet" href="existingbodystyles.css"></body>'
-            );
-        });
+            it('should support a position of firstInBody', function () {
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlStyle',
+                    to: { url: 'newstyles.css' }
+                }, 'firstInBody');
+                expect(htmlAsset.outgoingRelations, 'to have length', 3)
+                    .and('to satisfy', { 1: relation });
+                expect(
+                    htmlAsset.text,
+                    'to contain',
+                    '</head><body><link rel="stylesheet" href="newstyles.css"><div><link rel="stylesheet" href="existingbodystyles.css"></div></body>'
+                );
+            });
 
-        it('should support a position of lastInBody', function () {
-            const relation = htmlAsset.addRelation({
-                type: 'HtmlStyle',
-                to: { url: 'newstyles.css' }
-            }, 'firstInBody');
-            expect(htmlAsset.outgoingRelations, 'to have length', 3)
-                .and('to satisfy', { 2: relation });
-            expect(
-                htmlAsset.text,
-                'to contain',
-                '</head><body><link rel="stylesheet" href="existingbodystyles.css"><link rel="stylesheet" href="newstyles.css"></body>'
-            );
+            it('should support a position of lastInBody', function () {
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlStyle',
+                    to: { url: 'newstyles.css' }
+                }, 'lastInBody');
+                expect(htmlAsset.outgoingRelations, 'to have length', 3)
+                    .and('to satisfy', { 2: relation });
+                expect(
+                    htmlAsset.text,
+                    'to contain',
+                    '</head><body><div><link rel="stylesheet" href="existingbodystyles.css"></div><link rel="stylesheet" href="newstyles.css"></body>'
+                );
+            });
         });
     });
 
 
-    describe('#attachToHead', function () {
-        const attachToHead = AssetGraph.HtmlRelation.prototype.attachToHead;
-
+    describe('attaching to <head>', function () {
         function getHtmlAsset(htmlString) {
             return new AssetGraph({ root: __dirname }).add({
                 type: 'Html',
@@ -90,58 +90,6 @@ describe('relations/HtmlRelation', function () {
             return asset.assetGraph.findRelations(query)[0];
         }
 
-        describe('api', function () {
-            it('should throw when not passing an asset parameter', function () {
-                return expect(function () {
-                    attachToHead.call(null);
-                }, 'to throw', /must be an Html asset/);
-            });
-
-            it('should throw when not passing an asset parameter of the wrong type', function () {
-                return expect(function () {
-                    attachToHead.call(null, { isAsset: true, type: 'JavaScript'});
-                }, 'to throw', /must be an Html asset/);
-            });
-
-            it('should throw when not passing a position parameter', function () {
-                return expect(function () {
-                    attachToHead.call(null, { isAsset: true, type: 'Html'});
-                }, 'to throw', /The "position" parameter must be either "first", "last", "before" or "after"/);
-            });
-
-            it('should throw when passing a wrong position parameter', function () {
-                return expect(function () {
-                    attachToHead.call(null, { isAsset: true, type: 'Html'}, 'foo');
-                }, 'to throw', /The "position" parameter must be either "first", "last", "before" or "after"/);
-            });
-
-            it('should throw when not passing an adjacentNode parameter with a "before" position', function () {
-                return expect(function () {
-                    attachToHead.call(null, { isAsset: true, type: 'Html'}, 'before');
-                }, 'to throw', /The "adjacentNode" parameter must be a DOM node if "position" parameter is "before" or "after"/);
-            });
-
-            it('should throw when not passing an adjacentNode parameter with a "after" position', function () {
-                return expect(function () {
-                    attachToHead.call(null, { isAsset: true, type: 'Html'}, 'after');
-                }, 'to throw', /The "adjacentNode" parameter must be a DOM node if "position" parameter is "before" or "after"/);
-            });
-
-            it('should throw when not passing an adjacentNode that is not a child of <head>', function () {
-                const htmlAsset = getHtmlAsset();
-
-                return expect(function () {
-                    attachToHead.call(null, htmlAsset, 'after', htmlAsset.parseTree.body);
-                }, 'to throw', /The "adjacentNode" parameter must be a DOM node inside <head>/);
-            });
-
-            it('should throw when not defining a HTML element node on the calling scope', function () {
-                return expect(function () {
-                    attachToHead.call(null, { isAsset: true, type: 'Html'}, 'first');
-                }, 'to throw', /must be a HTML element/);
-            });
-        });
-
         describe('with no <head> tag', function () {
             it('should create a <head> tag', function () {
                 const htmlAsset = getHtmlAsset('<html></html>');
@@ -151,8 +99,7 @@ describe('relations/HtmlRelation', function () {
                 const relation = htmlAsset.addRelation({
                     type: 'HtmlPreloadLink',
                     to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
-                });
-                relation.attachToHead(htmlAsset, 'first');
+                }, 'firstInHead');
 
                 expect(htmlAsset.parseTree.head, 'not to be null');
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -174,9 +121,7 @@ describe('relations/HtmlRelation', function () {
                     const relation = htmlAsset.addRelation({
                         type: 'HtmlPreloadLink',
                         to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
-                    });
-                    relation.detach();
-                    relation.attachToHead(htmlAsset, 'first');
+                    }, 'firstInHead');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
                         expect.it('to be', relation)
@@ -195,9 +140,7 @@ describe('relations/HtmlRelation', function () {
                     const relation = htmlAsset.addRelation({
                         type: 'HtmlPreloadLink',
                         to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
-                    });
-                    relation.detach();
-                    relation.attachToHead(htmlAsset, 'last');
+                    }, 'lastInHead');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
                         expect.it('to be', relation)
@@ -226,9 +169,7 @@ describe('relations/HtmlRelation', function () {
                     const relation = htmlAsset.addRelation({
                         type: 'HtmlPreloadLink',
                         to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
-                    });
-                    relation.detach();
-                    relation.attachToHead(htmlAsset, 'first');
+                    }, 'firstInHead');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
                         expect.it('to be', relation),
@@ -257,9 +198,7 @@ describe('relations/HtmlRelation', function () {
                     const relation = htmlAsset.addRelation({
                         type: 'HtmlPreloadLink',
                         to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
-                    });
-                    relation.detach();
-                    relation.attachToHead(htmlAsset, 'last');
+                    }, 'lastInHead');
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
                         expect.it('to be', relation),
@@ -315,9 +254,7 @@ describe('relations/HtmlRelation', function () {
                 const relation = htmlAsset.addRelation({
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
-                });
-                relation.detach();
-                relation.attachToHead(htmlAsset, 'first');
+                }, 'firstInHead');
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     relation,
@@ -374,9 +311,7 @@ describe('relations/HtmlRelation', function () {
                 const relation = htmlAsset.addRelation({
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
-                });
-                relation.detach();
-                relation.attachToHead(htmlAsset, 'last');
+                }, 'lastInHead');
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -433,9 +368,7 @@ describe('relations/HtmlRelation', function () {
                 const relation = htmlAsset.addRelation({
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
-                });
-                relation.detach();
-                relation.attachToHead(htmlAsset, 'before', htmlAsset.parseTree.querySelector('#tag2'));
+                }, 'before', htmlAsset.parseTree.querySelector('#tag2'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', relation),
@@ -492,9 +425,7 @@ describe('relations/HtmlRelation', function () {
                 const relation = htmlAsset.addRelation({
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
-                });
-                relation.detach();
-                relation.attachToHead(htmlAsset, 'after', htmlAsset.parseTree.querySelector('#tag1'));
+                }, 'after', htmlAsset.parseTree.querySelector('#tag1'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', relation),
@@ -551,9 +482,7 @@ describe('relations/HtmlRelation', function () {
                 const relation = htmlAsset.addRelation({
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
-                });
-                relation.detach();
-                relation.attachToHead(htmlAsset, 'before', htmlAsset.parseTree.querySelector('#tag3'));
+                }, 'before', htmlAsset.parseTree.querySelector('#tag3'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -610,9 +539,7 @@ describe('relations/HtmlRelation', function () {
                 const relation = htmlAsset.addRelation({
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
-                });
-                relation.detach();
-                relation.attachToHead(htmlAsset, 'after', htmlAsset.parseTree.querySelector('#tag3'));
+                }, 'after', htmlAsset.parseTree.querySelector('#tag3'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -669,9 +596,7 @@ describe('relations/HtmlRelation', function () {
                 const relation = htmlAsset.addRelation({
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
-                });
-                relation.detach();
-                relation.attachToHead(htmlAsset, 'before', htmlAsset.parseTree.querySelector('#tag5'));
+                }, 'before', htmlAsset.parseTree.querySelector('#tag5'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -728,9 +653,7 @@ describe('relations/HtmlRelation', function () {
                 const relation = htmlAsset.addRelation({
                     type: 'HtmlPreloadLink',
                     to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
-                });
-                relation.detach();
-                relation.attachToHead(htmlAsset, 'after', htmlAsset.parseTree.querySelector('#tag4'));
+                }, 'after', htmlAsset.parseTree.querySelector('#tag4'));
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {

@@ -50,14 +50,11 @@ describe('relations/HtmlOpenGraph', function () {
     describe('when programmatically adding a relation', function () {
         it('should handle crossorigin url', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlOpenGraph({
-                to: {
-                    url: 'http://assetgraph.org'
-                },
+            htmlAsset.addRelation({
+                type: 'HtmlOpenGraph',
+                href: 'http://assetgraph.org',
                 ogProperty: 'og:image'
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<meta property="og:image" content="http://assetgraph.org/">');
         });

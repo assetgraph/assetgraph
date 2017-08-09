@@ -49,11 +49,10 @@ describe('relations/HtmlPreconnectLink', function () {
     describe('when programmatically adding a relation', function () {
         it('should handle crossorigin url', function () {
             const htmlAsset = getHtmlAsset();
-            const relation = new AssetGraph.HtmlPreconnectLink({
+            htmlAsset.addRelation({
+                type: 'HtmlPreconnectLink',
                 to: { url: 'http://assetgraph.org' }
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preconnect" href="http://assetgraph.org/">');
         });

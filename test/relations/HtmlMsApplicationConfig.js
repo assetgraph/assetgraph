@@ -63,13 +63,16 @@ describe('relations/HtmlMsApplicationConfig', function () {
             ]);
         });
 
-        it('should attach a link node in <head> when using attachToHead', function () {
+        it('should attach a link node in <head>', function () {
             const htmlAsset = getHtmlAsset();
-            const relation = new AssetGraph.HtmlMsApplicationConfig({
-                to: new AssetGraph.Xml({ text: '', url: 'foo.xml' })
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            htmlAsset.addRelation({
+                type: 'HtmlMsApplicationConfig',
+                to: {
+                    type: 'Xml',
+                    text: '<?xml version="1.0" encoding="utf-8"?><browserconfig />',
+                    url: 'foo.xml'
+                }
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<meta name="msapplication-config" content="foo.xml">');
         });

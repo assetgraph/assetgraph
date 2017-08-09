@@ -45,47 +45,74 @@ describe('relations/HtmlPreloadLink', function () {
     describe('when programmatically adding a relation', function () {
         it('should attach a link node in <head>', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlPreloadLink({
-                to: new AssetGraph.JavaScript({ text: '"use strict"', url: 'foo.js' })
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            htmlAsset.addRelation({
+                type: 'HtmlPreloadLink',
+                to: {
+                    type: 'JavaScript',
+                    text: '"use strict"',
+                    url: 'foo.js'
+                }
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preload" href="foo.js" as="script" type="application/javascript">');
         });
 
         it('should set the `as` property passed in the constructor', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlPreloadLink({
-                to: new AssetGraph.JavaScript({ text: '"use strict"', url: 'foo.js' }),
+            htmlAsset.addRelation({
+                type: 'HtmlPreloadLink',
+                to: {
+                    type: 'JavaScript',
+                    text: '"use strict"',
+                    url: 'foo.js'
+                },
                 as: 'object'
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preload" href="foo.js" type="application/javascript" as="object">');
         });
 
         it('should add the `crossorigin` attribute when the relation is loaded as a font', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlPreloadLink({
-                to: new AssetGraph.JavaScript({ text: '"use strict"', url: 'foo.js' }),
+            htmlAsset.addRelation({
+                type: 'HtmlPreloadLink',
+                to: {
+                    type: 'JavaScript',
+                    text: '"use strict"',
+                    url: 'foo.js'
+                },
                 as: 'font'
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preload" href="foo.js" type="application/javascript" as="font" crossorigin="crossorigin">');
         });
 
+        it('should not add the `crossorigin` attribute when the relation is not as a font and the target is not cross origin', function () {
+            var htmlAsset = getHtmlAsset();
+            htmlAsset.addRelation({
+                type: 'HtmlPreloadLink',
+                to: {
+                    type: 'JavaScript',
+                    text: '"use strict"',
+                    url: 'foo.js'
+                },
+                as: 'script'
+            }, 'firstInHead');
+
+            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preload" href="foo.js" type="application/javascript" as="script">');
+        });
+
         it('should add the `crossorigin` attribute when the relation is crossorigin', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlPreloadLink({
-                to: new AssetGraph.JavaScript({ text: '"use strict"', url: 'http://fisk.dk/foo.js' }),
+            htmlAsset.addRelation({
+                type: 'HtmlPreloadLink',
+                to: {
+                    type: 'JavaScript',
+                    text: '"use strict"',
+                    url: 'http://fisk.dk/foo.js'
+                },
                 as: 'script'
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preload" href="http://fisk.dk/foo.js" type="application/javascript" as="script" crossorigin="crossorigin">');
         });

@@ -3,17 +3,16 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlStyle', function () {
-    var htmlAsset;
-    var relationToInject;
-    var assetGraph;
+    let htmlAsset;
+    let cssAsset;
+    let assetGraph;
     beforeEach(function () {
         assetGraph = new AssetGraph({root: __dirname});
-        var cssAsset = new AssetGraph.Css({
+        cssAsset = assetGraph.add({
+            type: 'Css',
             url: assetGraph.root + 'injected.css',
             text: 'div{color:red}'
         });
-        assetGraph.add(cssAsset);
-        relationToInject = new AssetGraph.HtmlStyle({from: htmlAsset, to: cssAsset});
     });
 
     function initial(html) {
@@ -55,14 +54,20 @@ describe('relations/HtmlStyle', function () {
 
             describe('with position=first', function () {
                 it('should attach the relation before the first HtmlStyle in <head>', function () {
-                    relationToInject.attach(htmlAsset, 'first');
+                    htmlAsset.addRelation({
+                        type: 'HtmlStyle',
+                        to: cssAsset
+                    }, 'first');
                     expect(htmlAsset.text, 'to contain', '<link rel="stylesheet" href="injected.css"><style>body{color:#000};</style>');
                 });
             });
 
             describe('with position=last', function () {
                 it('should attach the relation after the last HtmlStyle in <head>', function () {
-                    relationToInject.attach(htmlAsset, 'last');
+                    htmlAsset.addRelation({
+                        type: 'HtmlStyle',
+                        to: cssAsset
+                    }, 'last');
                     expect(htmlAsset.text, 'to contain', '<style>body{color:#111};</style><link rel="stylesheet" href="injected.css">');
                 });
             });
@@ -75,14 +80,20 @@ describe('relations/HtmlStyle', function () {
 
             describe('with position=first', function () {
                 it('should attach the relation before the first HtmlStyle in <head>', function () {
-                    relationToInject.attach(htmlAsset, 'first');
+                    htmlAsset.addRelation({
+                        type: 'HtmlStyle',
+                        to: cssAsset
+                    }, 'first');
                     expect(htmlAsset.text, 'to contain', '<link rel="stylesheet" href="injected.css"><style>body{color:#000};</style>');
                 });
             });
 
             describe('with position=last', function () {
                 it('should attach the relation after the last HtmlStyle in <body>', function () {
-                    relationToInject.attach(htmlAsset, 'last');
+                    htmlAsset.addRelation({
+                        type: 'HtmlStyle',
+                        to: cssAsset
+                    }, 'last');
                     expect(htmlAsset.text, 'to contain', '<style>body{color:#333};</style><link rel="stylesheet" href="injected.css">');
                 });
             });
@@ -95,14 +106,20 @@ describe('relations/HtmlStyle', function () {
 
             describe('with position=first', function () {
                 it('should attach the relation before the first HtmlStyle in <body>', function () {
-                    relationToInject.attach(htmlAsset, 'first');
+                    htmlAsset.addRelation({
+                        type: 'HtmlStyle',
+                        to: cssAsset
+                    }, 'first');
                     expect(htmlAsset.text, 'to contain', '<link rel="stylesheet" href="injected.css"><style>body{color:#222};</style>');
                 });
             });
 
             describe('with position=last', function () {
                 it('should attach the relation after the last HtmlStyle in <body>', function () {
-                    relationToInject.attach(htmlAsset, 'last');
+                    htmlAsset.addRelation({
+                        type: 'HtmlStyle',
+                        to: cssAsset
+                    }, 'last');
                     expect(htmlAsset.text, 'to contain', '<style>body{color:#333};</style><link rel="stylesheet" href="injected.css">');
                 });
             });
@@ -115,14 +132,20 @@ describe('relations/HtmlStyle', function () {
 
             describe('with position=first', function () {
                 it('should attach the relation to the end of <head>', function () {
-                    relationToInject.attach(htmlAsset, 'first');
+                    htmlAsset.addRelation({
+                        type: 'HtmlStyle',
+                        to: cssAsset
+                    }, 'first');
                     expect(htmlAsset.text, 'to contain', '<meta foo="bar"><link rel="stylesheet" href="injected.css">');
                 });
             });
 
             describe('with position=last', function () {
                 it('should attach the relation to the end of <head>', function () {
-                    relationToInject.attach(htmlAsset, 'last');
+                    htmlAsset.addRelation({
+                        type: 'HtmlStyle',
+                        to: cssAsset
+                    }, 'last');
                     expect(htmlAsset.text, 'to contain', '<meta foo="bar"><link rel="stylesheet" href="injected.css">');
                 });
             });
@@ -160,28 +183,6 @@ describe('relations/HtmlStyle', function () {
                     text: 'body { color: maroon; }'
                 }
             }, 'first');
-            expect(htmlAsset.text, 'to contain', '<link rel="stylesheet" media="projection" href="http://example.com/styles.css">');
-        });
-    });
-
-    describe('#attachToHead', function () {
-        it('should support the media property when reattaching', function () {
-            const htmlAsset = new AssetGraph().add({
-                type: 'Html',
-                url: assetGraph.root + 'index.html',
-                text: '<!DOCTYPE html><html><head></head><body></body></html>'
-            });
-            const htmlStyle = htmlAsset.addRelation({
-                type: 'HtmlStyle',
-                media: 'projection',
-                to: {
-                    type: 'Css',
-                    url: 'http://example.com/styles.css',
-                    text: 'body { color: maroon; }'
-                }
-            }, 'first');
-            htmlStyle.detach();
-            htmlStyle.attachToHead(htmlAsset, 'first');
             expect(htmlAsset.text, 'to contain', '<link rel="stylesheet" media="projection" href="http://example.com/styles.css">');
         });
     });

@@ -91,11 +91,11 @@ describe('relations/SvgScript', function () {
 
                 expect(svgEl.childNodes[0] === originalRelation.node, 'to be true');
 
-                var clonedRelation = new AssetGraph.SvgScript({
+                const clonedRelation = svg.addRelation({
+                    type: 'SvgScript',
                     to: originalRelation.to.clone()
-                });
+                }, 'first');
 
-                clonedRelation.attach(svg, 'first');
                 expect(svgEl.childNodes[0] === clonedRelation.node, 'to be true');
 
                 clonedRelation.attach(svg, 'after', originalRelation);

@@ -4,15 +4,11 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlDnsPrefetchLink', function () {
     function getHtmlAsset(htmlString) {
-        const graph = new AssetGraph({ root: __dirname });
-        const htmlAsset = new AssetGraph.Html({
+        return new AssetGraph({ root: __dirname }).add({
+            type: 'Html',
             text: htmlString || '<!doctype html><html><head></head><body></body></html>',
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
-
-        graph.add(htmlAsset);
-
-        return htmlAsset;
     }
 
     describe('#inline', function () {
@@ -21,7 +17,7 @@ describe('relations/HtmlDnsPrefetchLink', function () {
                 to: { url: 'index.html' }
             });
 
-            expect(relation.inline, 'to throw', /Inlining of resource hints is not allowed/);
+            expect(() => relation.inline(), 'to throw', /Inlining of resource hints is not allowed/);
         });
     });
 
@@ -50,11 +46,10 @@ describe('relations/HtmlDnsPrefetchLink', function () {
     describe('when programmatically adding a relation', function () {
         it('should handle crossorigin url', function () {
             const htmlAsset = getHtmlAsset();
-            const relation = new AssetGraph.HtmlDnsPrefetchLink({
-                to: { url: 'http://assetgraph.org' }
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            htmlAsset.addRelation({
+                type: 'HtmlDnsPrefetchLink',
+                href: 'http://assetgraph.org'
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="dns-prefetch" href="http://assetgraph.org/">');
         });

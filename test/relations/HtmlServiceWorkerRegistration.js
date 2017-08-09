@@ -55,27 +55,21 @@ describe('relations/HtmlServiceWorkerRegistration', function () {
     describe('when programmatically adding a relation', function () {
         it('should attach to <head>', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlServiceWorkerRegistration({
-                to: {
-                    url: 'sw.js'
-                }
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            var relation = htmlAsset.addRelation({
+                type: 'HtmlServiceWorkerRegistration',
+                href: 'sw.js'
+            }, 'firstInHead');
 
             expect(relation.node, 'to exhaustively satisfy', '<link rel="serviceworker" href="sw.js">');
         });
 
         it('should add a scope attribute', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlServiceWorkerRegistration({
-                to: {
-                    url: 'sw.js'
-                },
+            const relation = htmlAsset.addRelation({
+                type: 'HtmlServiceWorkerRegistration',
+                href: 'sw.js',
                 scope: '/'
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(relation.node, 'to exhaustively satisfy', '<link rel="serviceworker" href="sw.js" scope="/">');
         });
