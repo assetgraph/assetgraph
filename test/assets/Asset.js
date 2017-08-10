@@ -1051,4 +1051,68 @@ describe('assets/Asset', function () {
             }).dataUrl, 'to equal', 'data:text/plain,foo,bar%20quux,baz');
         });
     });
+
+    it('should allow specifying outgoingRelations when instantiating', function () {
+        const assetGraph = new AssetGraph();
+        const page1 = assetGraph.add({
+            url: 'http://example.com/page1.html',
+            type: 'Html',
+            text: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <link rel="stylesheet" href="a.css">
+                    <link rel="stylesheet" href="b.css">
+                </head>
+                </html>`
+        });
+
+        const parseTree = page1.parseTree;
+        const outgoingRelations = page1.outgoingRelations;
+
+        const page2 = assetGraph.add({
+            type: 'Html',
+            parseTree,
+            outgoingRelations
+        });
+
+        expect(page2.outgoingRelations, 'to satisfy', [
+            { from: page2 },
+            { from: page2 }
+        ]);
+    });
+
+    it('should allow specifying incomingRelations when instantiating', function () {
+        const assetGraph = new AssetGraph();
+        const page1 = assetGraph.add({
+            url: 'https://example.com/page1.html',
+            type: 'Html',
+            text: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <a href="a.html"></a>
+                    <iframe src="b.html"></iframe>
+                </head>
+                </html>`
+        });
+
+        const parseTree = page1.parseTree;
+        const incomingRelations = page1.outgoingRelations;
+
+        const page2 = assetGraph.add({
+            type: 'Html',
+            url: 'https://example.com/somewhere/page2.html',
+            parseTree,
+            incomingRelations
+        });
+
+        expect(page1.outgoingRelations, 'to satisfy', [
+            { to: page2 },
+            { to: page2 }
+        ]);
+
+        expect(page1.text, 'to contain', '<a href="somewhere/page2.html">')
+            .and('to contain', '<iframe src="somewhere/page2.html">');
+    });
 });
