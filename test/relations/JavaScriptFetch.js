@@ -134,7 +134,7 @@ describe('relations/JavaScriptFetch', function () {
                 var relation = assetGraph.findRelations({ type: 'JavaScriptFetch' })[0];
 
                 expect(function () {
-                    relation.attach(relation.from, 'before', relation);
+                    relation.attach('before', relation);
                 }, 'to throw', 'JavaScriptFetch.attach(): Not implemented');
             })
             .run(done);

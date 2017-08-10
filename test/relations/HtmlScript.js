@@ -63,7 +63,7 @@ describe('relations/HtmlScript', function () {
 
                 // Test attaching 'first' with first existing script in head
                 document.head.appendChild(firstScript.node);
-                relation.attach(html, 'first');
+                relation.attach('first');
 
                 expect(relation.node.parentNode, 'not to be', document.body);
                 expect(relation.node.parentNode, 'to be', document.head);

@@ -50,7 +50,7 @@ describe('relations/SvgStyle', function () {
                 expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[1], 'to be', cloneSvgStyle.node);
 
                 // Attach relation after other node
-                svgStyle.attach(svg, 'after', cloneSvgStyle);
+                svgStyle.attach('after', cloneSvgStyle);
 
                 expect(assetGraph, 'to contain assets', 'Svg', 1);
                 expect(assetGraph, 'to contain relations', 'XmlStylesheet', 1);
@@ -60,7 +60,7 @@ describe('relations/SvgStyle', function () {
                 expect(svg.parseTree.getElementsByTagName('svg')[0].childNodes[1], 'to be', svgStyle.node);
 
                 // Attach relation before other node
-                svgStyle.attach(svg, 'before', cloneSvgStyle);
+                svgStyle.attach('before', cloneSvgStyle);
 
                 expect(assetGraph, 'to contain assets', 'Svg', 1);
                 expect(assetGraph, 'to contain relations', 'XmlStylesheet', 1);

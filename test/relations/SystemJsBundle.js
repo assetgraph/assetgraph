@@ -24,8 +24,9 @@ describe('relations/SystemJsBundle', function () {
 
         expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'not to contain', '//');
 
-        new AssetGraph.SystemJsBundle({
+        assetGraph.findAssets({type: 'JavaScript'})[0].addRelation({
+            type: 'SystemJsBundle',
             to: assetGraph.findAssets({fileName: 'bar.js'})[0]
-        }).attach(assetGraph.findAssets({type: 'JavaScript'})[0], 'last');
+        }, 'last');
     });
 });

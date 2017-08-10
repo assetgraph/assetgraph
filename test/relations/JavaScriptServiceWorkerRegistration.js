@@ -90,7 +90,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
 
 
                 expect(function () {
-                    relation.attach(relation.from, 'before', relation);
+                    relation.attach('before', relation);
                 }, 'to throw', 'JavaScriptServiceWorkerRegistration.attach(): Not implemented');
             })
             .run(done);

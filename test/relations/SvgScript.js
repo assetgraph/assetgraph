@@ -87,7 +87,7 @@ describe('relations/SvgScript', function () {
                 var originalRelation = assetGraph.findRelations()[0];
                 expect(svgEl.childNodes[0] === originalRelation.node, 'to be false');
 
-                originalRelation.attach(svg, 'first');
+                originalRelation.attach('first');
 
                 expect(svgEl.childNodes[0] === originalRelation.node, 'to be true');
 
@@ -98,10 +98,10 @@ describe('relations/SvgScript', function () {
 
                 expect(svgEl.childNodes[0] === clonedRelation.node, 'to be true');
 
-                clonedRelation.attach(svg, 'after', originalRelation);
+                clonedRelation.attach('after', originalRelation);
                 expect(svgEl.childNodes[1] === clonedRelation.node, 'to be true');
 
-                clonedRelation.attach(svg, 'before', originalRelation);
+                clonedRelation.attach('before', originalRelation);
                 expect(svgEl.childNodes[0] === clonedRelation.node, 'to be true');
             });
     });
