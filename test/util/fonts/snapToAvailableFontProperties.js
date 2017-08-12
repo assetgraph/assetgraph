@@ -479,6 +479,235 @@ describe('snapToAvailableFontProperties', function () {
     });
 
     describe('font-weight', function () {
+        describe('relative font-weights', function () {
+            it('should snap to the exact value', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 400 },
+                        { 'font-family': 'foo', 'font-weight': 500 },
+                        { 'font-family': 'foo', 'font-weight': 600 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '500'
+                    }
+                );
 
+                expect(snapped, 'to satisfy', { 'font-weight': 500 });
+            });
+
+            it('should snap to the best available lighter value', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 100 },
+                        { 'font-family': 'foo', 'font-weight': 200 },
+                        { 'font-family': 'foo', 'font-weight': 500 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '300'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 200 });
+            });
+
+            it('should snap to the best available bolder value', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 500 },
+                        { 'font-family': 'foo', 'font-weight': 700 },
+                        { 'font-family': 'foo', 'font-weight': 800 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '600'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 700 });
+            });
+
+
+            it('should snap to the exact value plus 1 lighter', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 500 },
+                        { 'font-family': 'foo', 'font-weight': 700 },
+                        { 'font-family': 'foo', 'font-weight': 800 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '700+lighter'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 500 });
+            });
+
+            it('should snap to the exact value plus 2 lighter', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 500 },
+                        { 'font-family': 'foo', 'font-weight': 700 },
+                        { 'font-family': 'foo', 'font-weight': 800 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '800+lighter+lighter'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 500 });
+            });
+
+            it('should snap to the best available value plus 1 lighter', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 500 },
+                        { 'font-family': 'foo', 'font-weight': 700 },
+                        { 'font-family': 'foo', 'font-weight': 800 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '900+lighter'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 700 });
+            });
+
+            it('should snap to the best available value plus 2 lighter', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 500 },
+                        { 'font-family': 'foo', 'font-weight': 700 },
+                        { 'font-family': 'foo', 'font-weight': 800 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '900+lighter+lighter'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 500 });
+            });
+
+
+            it('should not snap to a lighter weight than what is available', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 200 },
+                        { 'font-family': 'foo', 'font-weight': 300 },
+                        { 'font-family': 'foo', 'font-weight': 400 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '300+lighter+lighter'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 200 });
+            });
+
+
+            it('should snap to the exact value plus 1 bolder', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 200 },
+                        { 'font-family': 'foo', 'font-weight': 300 },
+                        { 'font-family': 'foo', 'font-weight': 400 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '300+bolder'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 400 });
+            });
+
+            it('should snap to the exact value plus 2 bolder', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 200 },
+                        { 'font-family': 'foo', 'font-weight': 300 },
+                        { 'font-family': 'foo', 'font-weight': 400 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '200+bolder+bolder'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 400 });
+            });
+
+            it('should snap to best available value plus 1 bolder', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 200 },
+                        { 'font-family': 'foo', 'font-weight': 300 },
+                        { 'font-family': 'foo', 'font-weight': 400 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '100+bolder'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 300 });
+            });
+
+            it('should snap to best available value plus 2 bolder', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 200 },
+                        { 'font-family': 'foo', 'font-weight': 300 },
+                        { 'font-family': 'foo', 'font-weight': 400 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '100+bolder+bolder'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 400 });
+            });
+
+            it('should not snap to a bolder weight than what is available', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 200 },
+                        { 'font-family': 'foo', 'font-weight': 300 },
+                        { 'font-family': 'foo', 'font-weight': 400 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '300+bolder+bolder'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 400 });
+            });
+
+
+            it('should snap to the corect value given both lighter and bolder modifications', function () {
+                var snapped = snap(
+                    [
+                        { 'font-family': 'foo', 'font-weight': 200 },
+                        { 'font-family': 'foo', 'font-weight': 300 },
+                        { 'font-family': 'foo', 'font-weight': 400 }
+                    ],
+                    {
+                        'font-family': 'foo',
+                        'font-weight': '300+bolder+lighter'
+                    }
+                );
+
+                expect(snapped, 'to satisfy', { 'font-weight': 300 });
+            });
+
+        });
     });
 });
