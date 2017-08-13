@@ -845,17 +845,16 @@ describe('assets/Asset', function () {
     });
 
 
-    it('should handle an inline asset with an empty url (should resolve to the url of the containing asset)', function () {
-        return new AssetGraph({root: 'file:///foo/bar/quux'})
+    it('should handle an inline asset with an empty url (should resolve to the url of the containing asset)', async function () {
+        const assetGraph = await new AssetGraph({root: 'file:///foo/bar/quux'})
             .loadAssets({
                 type: 'Html',
                 url: 'file:///foo/bar/quux/baz/index.html',
-                text: '<!DOCTYPE html><html><head><style type="text/css">body{background:url()}</style></head><body></body></html>'
-            })
-            .then(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', {from: {url: 'file:///foo/bar/quux/baz/index.html'}, to: {type: 'Css', isInline: true}});
-                expect(assetGraph, 'to contain relation', {from: {type: 'Css'}, to: {url: 'file:///foo/bar/quux/baz/index.html'}});
+                text: '<!DOCTYPE html><html><head><script>const foo = "".toString("url")</script></head><body></body></html>'
             });
+
+        expect(assetGraph, 'to contain relation', {from: {url: 'file:///foo/bar/quux/baz/index.html'}, to: {type: 'JavaScript', isInline: true}});
+        expect(assetGraph, 'to contain relation', {from: {type: 'JavaScript'}, to: {url: 'file:///foo/bar/quux/baz/index.html'}});
     });
 
     describe('#extension', function () {
