@@ -64,7 +64,7 @@ describe('AssetGraph.findAssets', function () {
             node: false
         }, 'last');
         assetGraph.findAssets({text: 'body { color: #eee; }'})[0].addRelation({
-            type: 'CssImage',
+            type: 'CssBehavior',
             to: assetGraph.findAssets({text: 'f'})[0],
             node: false
         }, 'last');
