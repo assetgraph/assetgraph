@@ -1114,4 +1114,22 @@ describe('assets/Asset', function () {
         expect(page1.text, 'to contain', '<a href="somewhere/page2.html">')
             .and('to contain', '<iframe src="somewhere/page2.html">');
     });
+
+    describe('#_isCompatibleWith', function () {
+        it('should consider Css compatible with Asset', function () {
+            expect(new AssetGraph().addAsset({type: 'Css', text: ''})._isCompatibleWith('Asset'), 'to be true');
+        });
+
+        it('should consider Atom compatible with Xml', function () {
+            expect(new AssetGraph().addAsset({type: 'Atom', text: '<?xml version="1.0" encoding="utf-8"?>'})._isCompatibleWith('Xml'), 'to be true');
+        });
+
+        it('should consider Xml compatible with Atom', function () {
+            expect(new AssetGraph().addAsset({type: 'Xml', text: '<?xml version="1.0" encoding="utf-8"?>'})._isCompatibleWith('Atom'), 'to be true');
+        });
+
+        it('should consider Css incompatible with JavaScript', function () {
+            expect(new AssetGraph().addAsset({type: 'Css', text: ''})._isCompatibleWith('JavaScript'), 'to be false');
+        });
+    });
 });

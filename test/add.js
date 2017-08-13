@@ -244,6 +244,90 @@ describe('AssetGraph#add', function () {
             expect(assetGraph, 'to contain no assets', 'Xml');
         });
 
+        it('should upgrade based on the type of an incoming relation being added later', async function () {
+            const assetGraph = new AssetGraph();
+
+            const undetectableAsset = await assetGraph.add({
+                url: 'http://example.com/undetectable',
+                text: '/* foo */'
+            });
+            await undetectableAsset.load();
+
+            await assetGraph.add({
+                type: 'Html',
+                url: 'http://example.com/',
+                text: `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <link rel="stylesheet" href="undetectable">
+                    </head>
+                    </html>
+                `
+            }).load();
+            await undetectableAsset.load();
+
+            expect(assetGraph, 'to contain asset', 'Css');
+        });
+
+        it('should upgrade based on the type of an existing incoming relation', async function () {
+            const assetGraph = new AssetGraph();
+
+            await assetGraph.add({
+                type: 'Html',
+                url: 'http://example.com/',
+                text: `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <link rel="stylesheet" href="undetectable">
+                    </head>
+                    </html>
+                `
+            }).load();
+
+            await assetGraph.add({
+                url: 'http://example.com/undetectable',
+                text: '/* foo */'
+            }).load();
+
+            expect(assetGraph, 'to contain asset', 'Css');
+        });
+
+        it('should warn if an asset is being used in incompatible contexts', async function () {
+            const assetGraph = new AssetGraph();
+
+            const warnSpy = sinon.spy().named('warn');
+            assetGraph.on('warn', warnSpy);
+
+            const undetectableAsset = assetGraph.add({
+                url: 'http://example.com/undetectable',
+                text: '/* foo */'
+            });
+
+            assetGraph.add({
+                type: 'Html',
+                url: 'http://example.com/',
+                text: `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <link rel="stylesheet" href="undetectable">
+                    </head>
+                    <body>
+                        <script src="undetectable"></script>
+                    </body>
+                    </html>
+                `
+            });
+
+            await undetectableAsset.load();
+
+            expect(warnSpy, 'to have calls satisfying', () => {
+                warnSpy(new Error('http://example.com/undetectable used as both Css and JavaScript'));
+            });
+        });
+
         it('should upgrade an unloaded asset with text', async function () {
             const assetGraph = new AssetGraph();
             assetGraph.add({
