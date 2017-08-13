@@ -835,6 +835,35 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 }
             ]);
         });
+
+        it.only('should apply inherited pseudo-element properties from lower specificity selectors', function () {
+
+            var htmlText = [
+                '<style>div:after { content: "foo"; }</style>',
+                '<style>.myClass:after { font-family: "myClass" }</style>',
+                '<style>#myId:after { font-weight: 900 }</style>',
+                '<div id="myId" class="myClass">text</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'text',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'myClass',
+                        'font-weight': 900,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
     });
 
     describe('CSS pseudo selectors', function () {
