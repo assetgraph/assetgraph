@@ -428,6 +428,192 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
         });
     });
 
+    describe('`lighter`-keyword', function () {
+        it('should return initial value with `lighter` modification', function () {
+            var htmlText = [
+                '<style>span { font-weight: lighter; }</style>',
+                '<div><span>span</span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '400+lighter',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should return inherited value with `lighter` modification', function () {
+            var htmlText = [
+                '<style>div { font-weight: 600; }</style>',
+                '<style>span { font-weight: lighter; }</style>',
+                '<div><span>span</span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '600+lighter',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should return inherited value with multiple `lighter` modifications', function () {
+            var htmlText = [
+                '<style>div { font-weight: 900; }</style>',
+                '<style>span { font-weight: lighter; }</style>',
+                '<div><span><span>span</span></span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '900+lighter+lighter',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+    });
+
+    describe('`bolder`-keyword', function () {
+        it('should return initial value with `bolder` modification', function () {
+            var htmlText = [
+                '<style>span { font-weight: bolder; }</style>',
+                '<div><span>span</span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '400+bolder',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should return inherited value with `bolder` modification', function () {
+            var htmlText = [
+                '<style>div { font-weight: 600; }</style>',
+                '<style>span { font-weight: bolder; }</style>',
+                '<div><span>span</span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '600+bolder',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should return inherited value with multiple `bolder` modifications', function () {
+            var htmlText = [
+                '<style>div { font-weight: 200; }</style>',
+                '<style>span { font-weight: bolder; }</style>',
+                '<div><span><span>span</span></span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '200+bolder+bolder',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+    });
+
+    describe('`lighter` and `bolder` combinations', function () {
+        it('should return inherited value with `bolder` and `lighter` modification', function () {
+            var htmlText = [
+                '<style>div { font-weight: 200; }</style>',
+                '<style>span { font-weight: bolder; }</style>',
+                '<style>.inner { font-weight: lighter; }</style>',
+                '<div><span><span class="inner">span</span></span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '200+bolder+lighter',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should return inherited value with `lighter` and `bolder` modification', function () {
+            var htmlText = [
+                '<style>div { font-weight: 200; }</style>',
+                '<style>span { font-weight: lighter; }</style>',
+                '<style>.inner { font-weight: bolder; }</style>',
+                '<div><span><span class="inner">span</span></span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '200+lighter+bolder',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should handle `lighter` with a pseudo class', function () {
+            var htmlText = [
+                '<style>div { font-weight: 200; }</style>',
+                '<style>span { font-weight: lighter; }</style>',
+                '<style>.inner:hover { font-weight: bolder; }</style>',
+                '<div><span><span class="inner">span</span></span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '200+lighter+bolder',
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '200+lighter+lighter',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+    });
+
     it('should take browser default stylesheet into account', function () {
         var htmlText = [
             '<style>h1 { font-family: font1; } span { font-family: font2; }</style>',
