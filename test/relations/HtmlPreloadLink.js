@@ -21,7 +21,7 @@ describe('relations/HtmlPreloadLink', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
-                expect(assetGraph, 'to contain asset', 'Asset');
+                expect(assetGraph, 'to contain asset', 'Woff');
             });
     });
 
