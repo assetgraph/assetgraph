@@ -562,30 +562,84 @@ describe('assets/Asset', function () {
     });
 
     describe('#replaceWith()', function () {
-        it('should throw when replacing an asset that is not in a graph', function () {
-            const asset = new AssetGraph.Asset({});
+        describe('when passed an asset config object', function () {
+            it('should update the incoming relations of the existing asset', async function () {
+                const htmlAsset = new AssetGraph().add({
+                    type: 'Html',
+                    url: 'https://www.example.com/',
+                    text: `
+                        <!DOCTYPE html>
+                        <html>
+                            <head></head>
+                            <body>
+                                <script src="foo.js"></script>
+                            </body>
+                        </html>
+                    `
+                });
 
-            expect(function () { return asset.replaceWith(new AssetGraph.Asset({})); }, 'to throw');
+                httpception({
+                    request: 'GET https://www.example.com/foo.js',
+                    response: {
+                        headers: {
+                            'Content-Type': 'application/javascript'
+                        },
+                        body: 'alert("foo");'
+                    }
+                });
+
+                const javaScriptAsset = htmlAsset.outgoingRelations[0].to;
+
+                await javaScriptAsset.load();
+
+                const replacementJavaScript = javaScriptAsset.replaceWith({
+                    type: 'JavaScript',
+                    text: 'alert("bar");'
+                });
+
+                expect(replacementJavaScript, 'to satisfy', {
+                    type: 'JavaScript',
+                    url: 'https://www.example.com/foo.js',
+                    text: 'alert("bar");',
+                    incomingRelations: [
+                        { from: { url: 'https://www.example.com/' } }
+                    ]
+                });
+            });
         });
 
-        it('should throw when replacing an asset with a non-asset', function () {
-            const graph = new AssetGraph();
-            const asset = new AssetGraph.Asset({});
+        describe('when passed an existing asset', function () {
+            it('should foo', async function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.add({
+                    type: 'Html',
+                    url: 'https://www.example.com/',
+                    text: `
+                        <!DOCTYPE html>
+                        <html>
+                            <head></head>
+                            <body>
+                                <a href="hey.html">Look here</a>
+                            </body>
+                        </html>
+                    `
+                });
 
-            graph.add(asset);
+                const replacementHtmlAsset = assetGraph.add({
+                    TYPE: 'Html',
+                    type: 'Html',
+                    url: 'https://www.example.com/somewhere/else/page.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="look/here.html">indeed</a></body></html>'
+                });
 
-            expect(function () { return asset.replaceWith(); }, 'to throw');
-        });
+                htmlAsset.replaceWith(replacementHtmlAsset);
 
-        it('should throw when replacing an asset with an asset that is already in the graph', function () {
-            const graph = new AssetGraph();
-            const asset = new AssetGraph.Asset({});
-            const newAsset = new AssetGraph.Asset({});
-
-            graph.add(asset);
-            graph.add(newAsset);
-
-            expect(function () { return asset.replaceWith(newAsset); }, 'to throw');
+                expect(replacementHtmlAsset, 'to satisfy', {
+                    type: 'Html',
+                    url: 'https://www.example.com/',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="somewhere/else/look/here.html">indeed</a></body></html>'
+                });
+            });
         });
     });
 
