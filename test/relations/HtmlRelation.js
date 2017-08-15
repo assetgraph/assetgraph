@@ -73,9 +73,40 @@ describe('relations/HtmlRelation', function () {
                     '</head><body><div><link rel="stylesheet" href="existingbodystyles.css"></div><link rel="stylesheet" href="newstyles.css"></body>'
                 );
             });
+
+            describe('with position=first', function () {
+                it('should honor the preferredPosition of the relation type when adding the first relation of its kind, even when other relation types are present', function () {
+                    const relation = htmlAsset.addRelation({
+                        type: 'HtmlScript',
+                        to: { url: 'script.js', type: 'JavaScript' }
+                    }, 'first');
+                    expect(htmlAsset.outgoingRelations, 'to have length', 3)
+                        .and('to satisfy', { 2: relation });
+                    expect(
+                        htmlAsset.text,
+                        'to contain',
+                        '</head><body><div><link rel="stylesheet" href="existingbodystyles.css"></div><script src="script.js"></script></body>'
+                    );
+                });
+            });
+
+            describe('with position=last', function () {
+                it('should honor the preferredPosition of the relation type when adding the first relation of its kind, even when other relation types are present', function () {
+                    const relation = htmlAsset.addRelation({
+                        type: 'HtmlScript',
+                        to: { url: 'script.js', type: 'JavaScript' }
+                    }, 'last');
+                    expect(htmlAsset.outgoingRelations, 'to have length', 3)
+                        .and('to satisfy', { 2: relation });
+                    expect(
+                        htmlAsset.text,
+                        'to contain',
+                        '</head><body><div><link rel="stylesheet" href="existingbodystyles.css"></div><script src="script.js"></script></body>'
+                    );
+                });
+            });
         });
     });
-
 
     describe('attaching to <head>', function () {
         function getHtmlAsset(htmlString) {
