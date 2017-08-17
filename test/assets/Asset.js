@@ -398,17 +398,17 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an AssetGraph with a loaded asset that has a link to an unloaded asset when the asset is moved', function () {
-        var assetGraph = new AssetGraph(),
-            fooHtml = new AssetGraph.Html({
-                url: 'http://example.com/foo.html',
-                text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/bar.html">link text</a></body></html>'
-            }),
-            barHtml = new AssetGraph.Html({ // Not yet loaded
-                url: 'http://example.com/bar.html'
-            });
+        var assetGraph = new AssetGraph();
 
-        assetGraph.add(fooHtml);
-        assetGraph.add(barHtml);
+        assetGraph.add({
+            type: 'Html',
+            url: 'http://example.com/foo.html',
+            text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/bar.html">link text</a></body></html>'
+        });
+        const barHtml = assetGraph.add({ // Not yet loaded
+            type: 'Html',
+            url: 'http://example.com/bar.html'
+        });
         assetGraph.findRelations({type: 'HtmlAnchor'})[0].to = barHtml;
 
         barHtml.url = 'http://example.com/subdir/quux.html';
@@ -424,20 +424,6 @@ describe('assets/Asset', function () {
             var asset = new AssetGraph.Asset({});
 
             expect(asset.clone.bind(asset, true), 'to throw', /incomingRelations not supported because asset/);
-        });
-
-        it('should preserve the assets original url when preserveUrl argument is true', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'})
-                .loadAssets('index.css')
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'Css', 1);
-
-                    var original = assetGraph.findAssets({type: 'Css'})[0];
-                    var clone = original.clone(undefined, true);
-
-                    expect(assetGraph, 'to contain assets', 'Css', 2);
-                    expect(clone.url, 'to be', original.url);
-                });
         });
 
         it('should throw when cloning an asset with invalid incoming relations', function () {
@@ -798,6 +784,19 @@ describe('assets/Asset', function () {
     });
 
     describe('#url', function () {
+        it('should throw if an existing asset occupies the same url', function () {
+            const assetGraph = new AssetGraph();
+            assetGraph.add({
+                type: 'Text',
+                url: 'https://example.com/foo.txt'
+            });
+            const barTxt = assetGraph.add({
+                type: 'Text',
+                url: 'https://example.com/bar.txt'
+            });
+            expect(() => barTxt.url = 'https://example.com/foo.txt', 'to throw', 'https://example.com/foo.txt already exists in the graph, cannot update url');
+        });
+
         it('should handle a test case with 3 assets', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/simple/'})
                 .loadAssets('index.html')
