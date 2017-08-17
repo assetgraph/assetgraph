@@ -77,7 +77,7 @@ describe('relations/Relation', function () {
             const indexHtml = assetGraph.findAssets({ fileName: 'index.html' })[0];
             const relation = assetGraph.findRelations({ from: indexHtml, to: { fileName: 'relative.html' } })[0];
 
-            await relation.to.load();
+            await relation.to.loadAsync();
 
             relation.hrefType = 'inline';
 

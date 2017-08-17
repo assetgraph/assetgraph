@@ -11,7 +11,7 @@ describe('assets/Asset', function () {
         it('should error when there is no file handle and the asset is not in a graph', function () {
             var asset = new AssetGraph.Asset({});
 
-            return expect(asset.load(), 'to be rejected');
+            return expect(asset.loadAsync(), 'to be rejected');
         });
 
         it('should autodetect the type of an asset with an unrecognizable file extension', function () {
@@ -590,7 +590,7 @@ describe('assets/Asset', function () {
 
                 const javaScriptAsset = htmlAsset.outgoingRelations[0].to;
 
-                await javaScriptAsset.load();
+                await javaScriptAsset.loadAsync();
 
                 const replacementJavaScript = javaScriptAsset.replaceWith({
                     type: 'JavaScript',
