@@ -381,8 +381,9 @@ describe('transforms/bundleRelations', function () {
 
             const htmlStyles = assetGraph.findRelations({from: {url: /\/index\.html$/}, type: 'HtmlStyle'});
 
-            expect(htmlStyles, 'to have length', 1);
-            expect(htmlStyles[0].hrefType, 'to equal', 'relative');
+            expect(htmlStyles, 'to satisfy', [
+                { hrefType: 'relative' }
+            ]);
 
             const cssAsset = htmlStyles[0].to;
             const cssRules = cssAsset.parseTree.nodes;

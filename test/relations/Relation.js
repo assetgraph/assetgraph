@@ -6,64 +6,92 @@ var pathModule = require('path');
 var httpception = require('httpception');
 
 describe('relations/Relation', function () {
-    describe('#href', function () {
-        it('should handle a test case with urls with different hrefTypes', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
-                .loadAssets('index.html')
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', 'Html');
+    describe('#hrefType', function () {
+        it('should handle a test case with urls with different hrefTypes', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
+                .loadAssets('index.html');
 
-                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'href'), 'to equal', [
-                        'relative.html',
-                        '/rootRelative.html',
-                        'http://canonical.com/canonical.html',
-                        '//example.com/protocolRelative.html',
-                        'http://example.com/absolute.html'
-                    ]);
+            expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false });
 
-                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'hrefType'), 'to equal', [
-                        'relative',
-                        'rootRelative',
-                        'absolute',
-                        'protocolRelative',
-                        'absolute'
-                    ]);
+            expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'href'), 'to satisfy', [
+                'relative.html',
+                '/rootRelative.html',
+                'http://canonical.com/canonical.html',
+                '//example.com/protocolRelative.html',
+                'http://example.com/absolute.html',
+                /^data:/
+            ]);
 
-                    assetGraph.findRelations({type: 'HtmlAnchor'}).forEach(function (htmlAnchor) {
-                        htmlAnchor.to.url = htmlAnchor.to.url.replace(/\.html$/, '2.html');
-                        htmlAnchor.refreshHref();
-                    });
+            expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'hrefType'), 'to equal', [
+                'relative',
+                'rootRelative',
+                'absolute',
+                'protocolRelative',
+                'absolute',
+                'inline'
+            ]);
 
-                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'href'), 'to equal', [
-                        'relative2.html',
-                        '/rootRelative2.html',
-                        'http://canonical.com/canonical2.html',
-                        '//example.com/protocolRelative2.html',
-                        'http://example.com/absolute2.html'
-                    ]);
-                })
-                .run(done);
+            assetGraph.findRelations({type: 'HtmlAnchor'}).forEach(function (htmlAnchor) {
+                if (htmlAnchor.hrefType === 'inline') {
+                    htmlAnchor.to.url = 'https://example.com/noLongerInline.html';
+                } else {
+                    htmlAnchor.to.url = htmlAnchor.to.url.replace(/\.html$/, '2.html');
+                    htmlAnchor.refreshHref();
+                }
+            });
+
+            expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'href'), 'to equal', [
+                'relative2.html',
+                '/rootRelative2.html',
+                'http://canonical.com/canonical2.html',
+                '//example.com/protocolRelative2.html',
+                'http://example.com/absolute2.html',
+                'https://example.com/noLongerInline.html'
+            ]);
         });
 
-        it('should handle a test case with urls with different hrefTypes, where hrefs have leading white space', function (done)  {
-            new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
-                .loadAssets('index.html')
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', 'Html');
+        it('should handle a test case with urls with different hrefTypes, where hrefs have leading white space', async function ()  {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
+                .loadAssets('index.html');
 
-                    assetGraph.findAssets({ type: 'Html' }).forEach(function (asset) {
-                        asset.text = asset.text.replace(/href="/g, 'href=" ');
-                    });
+            expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false });
 
-                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'hrefType'), 'to equal', [
-                        'relative',
-                        'rootRelative',
-                        'absolute',
-                        'protocolRelative',
-                        'absolute'
-                    ]);
-                })
-                .run(done);
+            assetGraph.findAssets({ type: 'Html' }).forEach(function (asset) {
+                asset.text = asset.text.replace(/href="/g, 'href=" ');
+            });
+
+            expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'hrefType'), 'to equal', [
+                'relative',
+                'rootRelative',
+                'absolute',
+                'protocolRelative',
+                'absolute',
+                'inline'
+            ]);
+        });
+
+        it('should inline a relation when its hrefType is changed to inline', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
+                .loadAssets('index.html');
+
+            const indexHtml = assetGraph.findAssets({ fileName: 'index.html' })[0];
+            const relation = assetGraph.findRelations({ from: indexHtml, to: { fileName: 'relative.html' } })[0];
+
+            await relation.to.load();
+
+            relation.hrefType = 'inline';
+
+            expect(indexHtml.text, 'not to contain', 'relative.html')
+                .and('to contain', '<a data-theone="true" href="data:');
+
+            expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'hrefType'), 'to equal', [
+                'inline',
+                'rootRelative',
+                'absolute',
+                'protocolRelative',
+                'absolute',
+                'inline'
+            ]);
         });
     });
 

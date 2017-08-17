@@ -48,31 +48,23 @@ describe('AssetGraph.findAssets', function () {
         // The test sidestepped this problem before by not calling
         // Relation#attach, but that's now a side effect of Asset#addRelation
         // if the relation does not have a node property already.
-        assetGraph.findAssets({text: 'a'})[0].addRelation({
+        const aHtml = assetGraph.findAssets({text: 'a'})[0];
+        aHtml.addRelation({
             type: 'HtmlAnchor',
-            to: assetGraph.findAssets({text: 'b'})[0],
-            node: false
+            to: assetGraph.findAssets({text: 'b'})[0]
         }, 'last');
-        assetGraph.findAssets({text: 'a'})[0].addRelation({ // Identical to the first
+        aHtml.addRelation({ // Identical to the first
             type: 'HtmlAnchor',
-            to: assetGraph.findAssets({text: 'b'})[0],
-            node: false
+            to: assetGraph.findAssets({text: 'b'})[0]
         }, 'last');
-        assetGraph.findAssets({text: 'a'})[0].addRelation({
+        aHtml.addRelation({
             type: 'HtmlAnchor',
-            to: assetGraph.findAssets({text: 'c'})[0],
-            node: false
-        }, 'last');
-        assetGraph.findAssets({text: 'body { color: #eee; }'})[0].addRelation({
-            type: 'CssBehavior',
-            to: assetGraph.findAssets({text: 'f'})[0],
-            node: false
+            to: assetGraph.findAssets({text: 'c'})[0]
         }, 'last');
 
         expect(assetGraph, 'to contain assets', {type: 'Html', incoming: {type: 'HtmlAnchor'}}, 2);
         expect(assetGraph, 'to contain assets', {incoming: {type: 'HtmlAnchor'}}, 2);
 
         expect(assetGraph, 'to contain asset', {outgoing: {type: 'HtmlAnchor'}});
-        expect(assetGraph, 'to contain asset', {outgoing: {to: {text: 'f'}}});
     });
 });
