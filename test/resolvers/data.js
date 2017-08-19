@@ -26,7 +26,7 @@ describe('resolvers/data', function () {
             .loadAssets('unparsableDataUrl.html')
             .populate();
 
-        expect(assetGraph, 'to contain asset', { type: 'Asset', url: 'data:foo' });
+        expect(assetGraph, 'to contain asset', { type: 'Image', url: 'data:foo' });
 
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^Cannot parse data url: data/));
     });

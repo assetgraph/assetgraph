@@ -1,33 +1,31 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    _ = require('lodash'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const _ = require('lodash');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlVideo', function () {
-    it('should handle a test case with existing <video> tags', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlVideo/'})
+    it('should handle a test case with existing <video> tags', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlVideo/'})
             .loadAssets('index.html')
             .populate({
-                followRelations: function () {return false;}
-            })
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'HtmlVideo', 4);
-                expect(assetGraph, 'to contain relations including unresolved', 'HtmlVideoPoster', 2);
+                followRelations: () => false
+            });
 
-                assetGraph.findAssets({type: 'Html'})[0].url = 'http://example.com/foo/bar.html';
-                assetGraph.findRelations({}, true).forEach(function (relation) {
-                    relation.hrefType = 'relative';
-                });
+        expect(assetGraph, 'to contain relations', 'HtmlVideo', 4);
+        expect(assetGraph, 'to contain relations', 'HtmlVideoPoster', 2);
 
-                expect(_.map(assetGraph.findRelations({}, true), 'href'), 'to equal', [
-                    '../movie1.mp4',
-                    '../movie1.jpg',
-                    '../movie2.png',
-                    '../movie2.mov',
-                    '../movie2.wmv',
-                    '../movie2.flc'
-                ]);
-            })
-            .run(done);
+        assetGraph.findAssets({type: 'Html'})[0].url = 'http://example.com/foo/bar.html';
+        assetGraph.findRelations().forEach(function (relation) {
+            relation.hrefType = 'relative';
+        });
+
+        expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
+            '../movie1.mp4',
+            '../movie1.jpg',
+            '../movie2.png',
+            '../movie2.mov',
+            '../movie2.wmv',
+            '../movie2.flc'
+        ]);
     });
 });

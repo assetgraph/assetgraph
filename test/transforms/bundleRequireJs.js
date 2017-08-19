@@ -641,7 +641,7 @@ describe('transforms/bundleRequireJs', function () {
                 .bundleRequireJs()
                 .populate();
 
-            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 2);
             expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
 
             expect(assetGraph.findAssets({url: /almond.js$/})[0].text, 'to equal', almond);

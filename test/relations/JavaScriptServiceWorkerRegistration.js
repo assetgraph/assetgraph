@@ -18,9 +18,9 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
         new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'})
             .loadAssets('index.html')
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'JavaScriptServiceWorkerRegistration', 1);
+                expect(assetGraph, 'to contain relations', 'JavaScriptServiceWorkerRegistration', 1);
 
-                var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' }, true)[0];
+                var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
 
                 expect(relation, 'to satisfy', {
                     href: 'sw.js'
@@ -36,7 +36,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptServiceWorkerRegistration', 1);
 
-                var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' }, true)[0];
+                var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
 
                 expect(relation, 'to satisfy', {
                     href: 'sw.js',
@@ -90,7 +90,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
 
 
                 expect(function () {
-                    relation.attach(relation.from, 'before', relation);
+                    relation.attach('before', relation);
                 }, 'to throw', 'JavaScriptServiceWorkerRegistration.attach(): Not implemented');
             })
             .run(done);

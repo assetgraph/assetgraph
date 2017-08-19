@@ -1,230 +1,213 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    estraverse = require('estraverse'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const estraverse = require('estraverse');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/bundleSystemJs', function () {
-    it('should handle a simple test case', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simple/'})
+    it('should handle a simple test case', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simple/'})
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 3);
-            })
-            .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 4);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 4);
-                expect(assetGraph, 'to contain asset', {
-                    type: 'JavaScript',
-                    fileName: /bundle/
-                });
-                expect(assetGraph.findRelations({ from: { url: /index\.html$/} })[2].to.text, 'to contain', 'alert(\'main!\');');
-                expect(assetGraph.findRelations({
-                    from: { url: /index\.html$/ },
-                    to: { fileName: /bundle/ }
-                })[0].to.text, 'to contain', 'alert(\'main!\');');
-            })
-            .bundleRelations()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 1);
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 3);
+
+        await assetGraph.bundleSystemJs();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 4);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 4);
+        expect(assetGraph, 'to contain asset', {
+            type: 'JavaScript',
+            fileName: /bundle/
+        });
+        expect(assetGraph.findRelations({ from: { url: /index\.html$/} })[2].to.text, 'to contain', 'alert(\'main!\');');
+        expect(assetGraph.findRelations({
+            from: { url: /index\.html$/ },
+            to: { fileName: /bundle/ }
+        })[0].to.text, 'to contain', 'alert(\'main!\');');
+
+        await assetGraph.bundleRelations();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 1);
     });
 
-    it('should pick up the source map information', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simple/'})
+    it('should pick up the source map information', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simple/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                var numNodesWithCorrectLoc = 0;
-                estraverse.traverse(assetGraph.findAssets({
-                    type: 'JavaScript',
-                    fileName: /bundle/
-                })[0].parseTree, {
-                    enter: function (node) {
-                        if (node.loc && node.loc.source === assetGraph.root + 'main.js') {
-                            numNodesWithCorrectLoc += 1;
-                        }
-                    }
-                });
-                expect(numNodesWithCorrectLoc, 'to be greater than or equal to', 1);
-            });
+            .bundleSystemJs();
+
+        let numNodesWithCorrectLoc = 0;
+        estraverse.traverse(assetGraph.findAssets({
+            type: 'JavaScript',
+            fileName: /bundle/
+        })[0].parseTree, {
+            enter(node) {
+                if (node.loc && node.loc.source === assetGraph.root + 'main.js') {
+                    numNodesWithCorrectLoc += 1;
+                }
+            }
+        });
+        expect(numNodesWithCorrectLoc, 'to be greater than or equal to', 1);
     });
 
-    it('should handle a simple test case with an extra System.config call', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simpleWithExtraConfigCall/'})
+    it('should handle a simple test case with an extra System.config call', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/simpleWithExtraConfigCall/'})
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain no relation', 'JavaScriptSystemImport');
-                expect(assetGraph, 'to contain assets', 'JavaScript', 4);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 4);
-            })
-            .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 5);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 5);
-                expect(assetGraph, 'to contain asset', {
-                    type: 'JavaScript',
-                    fileName: /bundle/
-                });
-            })
-            .bundleRelations()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 1);
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain no relation', 'JavaScriptSystemImport');
+        expect(assetGraph, 'to contain assets', 'JavaScript', 4);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 4);
+
+        await assetGraph.bundleSystemJs()
+            .populate();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 5);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 5);
+        expect(assetGraph, 'to contain asset', {
+            type: 'JavaScript',
+            fileName: /bundle/
+        });
+
+        await assetGraph.bundleRelations();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 1);
     });
 
-    it('should handle a complex test case', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/test-tree/'})
+    it('should handle a complex test case', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/test-tree/'})
             .loadAssets('index.html')
-            .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSystemImport') } })
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 4);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 4);
-            })
-            .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 5);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/ } }, 5);
-                expect(assetGraph, 'to contain asset', {
-                    type: 'JavaScript',
-                    fileName: /bundle/
-                });
-            })
-            .bundleRelations()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 1);
-            });
+            .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSystemImport') } });
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 4);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 4);
+
+        await assetGraph.bundleSystemJs();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 5);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/ } }, 5);
+        expect(assetGraph, 'to contain asset', {
+            type: 'JavaScript',
+            fileName: /bundle/
+        });
+
+        await assetGraph.bundleRelations();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 1);
     });
 
-    it('should handle a multi-page test case with one System.import call per page importing the same thing', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageOneSystemImportEach/'})
+    it('should handle a multi-page test case with one System.import call per page importing the same thing', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageOneSystemImportEach/'})
             .loadAssets('*.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'Html', 2);
-                expect(assetGraph, 'to contain assets', 'JavaScript', 4);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 3);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 3);
-            })
-            .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 5);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 4);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 4);
-                expect(assetGraph, 'to contain asset', {
-                    type: 'JavaScript',
-                    fileName: /bundle/
-                });
-                expect(assetGraph.findRelations({
-                    from: { url: /page1\.html$/ },
-                    to: { fileName: /bundle/ }
-                })[0].to.text, 'to contain', 'alert(\'main!\');');
-                expect(assetGraph.findRelations({
-                    from: { url: /page2\.html$/ },
-                    to: { fileName: /bundle/ }
-                })[0].to.text, 'to contain', 'alert(\'main!\');');
-            })
-            .bundleRelations()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain assets', 'Html', 2);
+        expect(assetGraph, 'to contain assets', 'JavaScript', 4);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 3);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 3);
+
+        await assetGraph.bundleSystemJs();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 5);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 4);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 4);
+        expect(assetGraph, 'to contain asset', {
+            type: 'JavaScript',
+            fileName: /bundle/
+        });
+        expect(assetGraph.findRelations({
+            from: { url: /page1\.html$/ },
+            to: { fileName: /bundle/ }
+        })[0].to.text, 'to contain', 'alert(\'main!\');');
+        expect(assetGraph.findRelations({
+            from: { url: /page2\.html$/ },
+            to: { fileName: /bundle/ }
+        })[0].to.text, 'to contain', 'alert(\'main!\');');
+
+        await assetGraph.bundleRelations();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 2);
     });
 
-    it('should handle a multi-page test case with one System.import call per page importing different modules with nothing in common, one of them using a condition', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageNothingInCommon/'})
+    it('should handle a multi-page test case with one System.import call per page importing different modules with nothing in common, one of them using a condition', async function () {
+        await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageNothingInCommon/'})
             .loadAssets('*.html')
             .populate()
             .bundleSystemJs();
     });
 
-    it('should handle a multi-page test case with one System.import call per page importing different things', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageDifferentSystemImports/'})
+    it('should handle a multi-page test case with one System.import call per page importing different things', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageDifferentSystemImports/'})
             .loadAssets('*.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'Html', 2);
-                expect(assetGraph, 'to contain assets', 'JavaScript', 4);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 3);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 3);
-            })
-            .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 6);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 4);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 4);
-                expect(assetGraph, 'to contain assets', {
-                    type: 'JavaScript',
-                    fileName: /bundle/
-                }, 2);
-                expect(assetGraph.findRelations({
-                    from: { url: /page1\.html$/ },
-                    to: { fileName: /bundle/ }
-                })[0].to.text, 'to contain', 'alert(\'main!\');');
-                expect(assetGraph.findRelations({
-                    from: { url: /page2\.html$/ },
-                    to: { fileName: /bundle/ }
-                })[0].to.text, 'to contain', 'alert(\'otherMain!\');');
-            })
-            .bundleRelations()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain assets', 'Html', 2);
+        expect(assetGraph, 'to contain assets', 'JavaScript', 4);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 3);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 3);
+
+        await assetGraph.bundleSystemJs();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 6);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 4);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 4);
+        expect(assetGraph, 'to contain assets', {
+            type: 'JavaScript',
+            fileName: /bundle/
+        }, 2);
+        expect(assetGraph.findRelations({
+            from: { url: /page1\.html$/ },
+            to: { fileName: /bundle/ }
+        })[0].to.text, 'to contain', 'alert(\'main!\');');
+        expect(assetGraph.findRelations({
+            from: { url: /page2\.html$/ },
+            to: { fileName: /bundle/ }
+        })[0].to.text, 'to contain', 'alert(\'otherMain!\');');
+
+        await assetGraph.bundleRelations();
+
+        expect(assetGraph, 'to contain assets', 'JavaScript', 2);
     });
 
-    it('should only deduplicate asset list entries (as determined by the url)', function () {
+    it('should only deduplicate asset list entries (as determined by the url)', async function () {
         // The tpl.js in this test has been tweaked to list each template twice
         // in the asset list
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/sameAssetListEntryTwice/'})
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/sameAssetListEntryTwice/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain asset', {isFragment: true});
-            });
+            .bundleSystemJs();
+
+        expect(assetGraph, 'to contain asset', {isFragment: true});
     });
 
-    it('should add a SystemJsBundle relation to a non-Css entry in the asset list', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/template/'})
+    it('should add a SystemJsBundle relation to a non-Css entry in the asset list', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/template/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain asset', {fileName: 'foo.html', type: 'Html', isFragment: true});
-                expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 1);
-                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', '//# SystemJsBundle=/foo.html');
-            });
+            .bundleSystemJs();
+
+        expect(assetGraph, 'to contain asset', {fileName: 'foo.html', type: 'Html', isFragment: true});
+        expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 1);
+        expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', '//# SystemJsBundle=/foo.html');
     });
 
-    it('should add a SystemJsBundle relation to a conditional non-Css entry in the asset list', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/conditionalTemplate/'})
+    it('should add a SystemJsBundle relation to a conditional non-Css entry in the asset list', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/conditionalTemplate/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', {type: 'Html', isFragment: true}, 2);
-                expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 2);
-                expect(assetGraph.findAssets({fileName: 'bundle-main-sunny.js'})[0].text, 'to contain', '//# SystemJsBundle=/foo-sunny.html')
-                    .and('not to contain', 'rainy');
-                expect(assetGraph.findAssets({fileName: 'bundle-main-rainy.js'})[0].text, 'to contain', '//# SystemJsBundle=/foo-rainy.html')
-                    .and('not to contain', 'sunny');
-            });
+            .bundleSystemJs();
+
+        expect(assetGraph, 'to contain assets', {type: 'Html', isFragment: true}, 2);
+        expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 2);
+        expect(assetGraph.findAssets({fileName: 'bundle-main-sunny.js'})[0].text, 'to contain', '//# SystemJsBundle=/foo-sunny.html')
+            .and('not to contain', 'rainy');
+        expect(assetGraph.findAssets({fileName: 'bundle-main-rainy.js'})[0].text, 'to contain', '//# SystemJsBundle=/foo-rainy.html')
+            .and('not to contain', 'sunny');
     });
 
-    it('should add a SystemJsBundle relation to a conditional non-Css entry in the asset list in a multi-page setting', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/multiPageConditionalTemplate/'})
+    it('should add a SystemJsBundle relation to a conditional non-Css entry in the asset list in a multi-page setting', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetList/multiPageConditionalTemplate/'})
             .loadAssets(['index1.html', 'index2.html'])
             .populate()
             .bundleSystemJs({
@@ -232,74 +215,77 @@ describe('transforms/bundleSystemJs', function () {
                     weather: ['rainy', 'sunny']
                 }
             })
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', {type: 'Html', isFragment: true}, 3);
-                expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 4);
-            })
-            .inlineHtmlTemplates({type: 'Html'})
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate'}, 6);
-                expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 0);
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain assets', {type: 'Html', isFragment: true}, 3);
+        expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 4);
+
+        await assetGraph.inlineHtmlTemplates({type: 'Html'});
+
+        expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate'}, 6);
+        expect(assetGraph, 'to contain relations', {type: 'SystemJsBundle'}, 0);
     });
 
-    it('should handle a test case with a css plugin', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/cssPlugin/'})
+    it('should handle a test case with a css plugin', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/cssPlugin/'})
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'Html', 1);
-                expect(assetGraph, 'to contain no assets', 'Css');
-            })
+            .populate();
+
+        expect(assetGraph, 'to contain assets', 'Html', 1);
+        expect(assetGraph, 'to contain no assets', 'Css');
+
+        await assetGraph
             .bundleSystemJs()
-            .populate({startAssets: {type: 'JavaScript'}})
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain asset', 'Css');
-                expect(assetGraph, 'to contain no relations', 'SystemJsBundle');
-                expect(assetGraph, 'to contain relation', 'HtmlStyle');
-            });
+            .populate({startAssets: {type: 'JavaScript'}});
+
+        expect(assetGraph, 'to contain asset', 'Css');
+        expect(assetGraph, 'to contain no relations', 'SystemJsBundle');
+        expect(assetGraph, 'to contain relation', 'HtmlStyle');
     });
 
-    it('should handle a test case with a less plugin', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/lessPlugin/'})
+    it('should handle a test case with a less plugin', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/lessPlugin/'})
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'Html', 1);
-                expect(assetGraph, 'to contain no assets', 'Css');
-            })
+            .populate();
+
+        expect(assetGraph, 'to contain assets', 'Html', 1);
+        expect(assetGraph, 'to contain no assets', 'Css');
+
+        await assetGraph
             .bundleSystemJs()
-            .populate({startAssets: {type: 'JavaScript'}})
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain asset', 'Css');
-                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/styles.less">');
-            });
+            .populate({startAssets: {type: 'JavaScript'}});
+
+        expect(assetGraph, 'to contain asset', 'Css');
+        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/styles.less">');
     });
 
     describe('with systemjs-plugin-less', function () {
         describe('and all JavaScript assets marked for removal via data-systemjs-remove', function () {
-            it('should remove system.js and the configuration and not inject the bundle', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/onlyLess/'})
+            it('should remove system.js and the configuration and not inject the bundle', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/onlyLess/'})
                     .loadAssets('index.html')
-                    .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') } })
-                    .queue(function (assetGraph) {
-                        expect(assetGraph, 'to contain assets', 'Html', 1);
-                        expect(assetGraph, 'to contain no assets', 'Css');
-                    })
-                    .bundleSystemJs()
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/styles.less">');
-                        expect(assetGraph, 'to contain no asset', 'JavaScript');
-                        expect(assetGraph, 'to contain asset', 'Css');
+                    .populate({
+                        followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
                     });
+
+                expect(assetGraph, 'to contain assets', 'Html', 1);
+                expect(assetGraph, 'to contain no assets', 'Css');
+
+                await assetGraph
+                    .bundleSystemJs()
+                    .populate({
+                        followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+                    });
+
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/styles.less">');
+                expect(assetGraph, 'to contain no asset', 'JavaScript');
+                expect(assetGraph, 'to contain asset', 'Css');
             });
         });
     });
 
-    it('should error out if two pages include the same System.config assets in different orders', function () {
-        return expect(
+    it('should error out if two pages include the same System.config assets in different orders', async function () {
+        await expect(
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs/'})
                 .loadAssets('page*.html')
                 .populate()
@@ -308,8 +294,8 @@ describe('transforms/bundleSystemJs', function () {
         );
     });
 
-    it('should error out if two pages include the same System.config assets in different orders, second scenario', function () {
-        return expect(
+    it('should error out if two pages include the same System.config assets in different orders, second scenario', async function () {
+        await expect(
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs2/'})
                 .loadAssets('page*.html')
                 .populate()
@@ -318,8 +304,8 @@ describe('transforms/bundleSystemJs', function () {
         );
     });
 
-    it('should error out if two pages include conflicting System.js configs', function () {
-        return expect(
+    it('should error out if two pages include conflicting System.js configs', async function () {
+        await expect(
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs3/'})
                 .loadAssets('page*.html')
                 .populate()
@@ -328,125 +314,118 @@ describe('transforms/bundleSystemJs', function () {
         );
     });
 
-    it('should handle a lazy import System.import case', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/lazySystemImport/'})
+    it('should handle a lazy import System.import case', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/lazySystemImport/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs({ deferredImports: true })
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'SystemJsLazyBundle');
-            });
+            .bundleSystemJs({ deferredImports: true });
+
+        expect(assetGraph, 'to contain relation', 'SystemJsLazyBundle');
     });
 
-    it('should handle a multi-page lazy import System.import case', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageLazySystemImport/'})
+    it('should handle a multi-page lazy import System.import case', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/multiPageLazySystemImport/'})
             .loadAssets('*.html')
             .populate()
-            .bundleSystemJs({ deferredImports: true })
-            .queue(function (assetGraph) {
-                expect(
-                    assetGraph.findAssets({ url: /\/page1\.html$/})[0].text,
-                    'to contain',
-                    'System.config({ bundles:'
-                );
-                expect(
-                    assetGraph.findAssets({ url: /\/page1\.html$/})[0].text,
-                    'to contain',
-                    '<script src="/bundle-page1.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
-                );
-                expect(
-                    assetGraph.findAssets({ url: /\/page2\.html$/})[0].text,
-                    'to contain',
-                    '<script src="/bundle-page2.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
-                );
-                expect(assetGraph, 'to contain relation', 'SystemJsLazyBundle', 2);
-            })
-            .moveAssetsInOrder({ type: 'JavaScript' }, function (asset, assetGraph) {
-                if (assetGraph.findRelations({ type: 'SystemJsLazyBundle', to: asset }).length > 0) {
-                    return assetGraph.root + 'static/foobar-' + asset.fileName;
-                }
-            })
-            .queue(function (assetGraph) {
-                expect(
-                    assetGraph.findAssets({ url: /\/page1\.html$/})[0].text,
-                    'to contain',
-                    'System.config({ bundles: { \'static/'
-                );
-                expect(
-                    assetGraph.findAssets({ url: /\/page2\.html$/})[0].text,
-                    'to contain',
-                    'System.config({ bundles: { \'static/'
-                );
-            });
+            .bundleSystemJs({ deferredImports: true });
+
+        expect(
+            assetGraph.findAssets({ url: /\/page1\.html$/})[0].text,
+            'to contain',
+            'System.config({ bundles:'
+        );
+        expect(
+            assetGraph.findAssets({ url: /\/page1\.html$/})[0].text,
+            'to contain',
+            '<script src="/bundle-page1.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
+        );
+        expect(
+            assetGraph.findAssets({ url: /\/page2\.html$/})[0].text,
+            'to contain',
+            '<script src="/bundle-page2.js"></script><script>System.config({ bundles: { \'bundle-lazyrequired.js\': [\'lazyRequired.js\'] } });</script><script>'
+        );
+        expect(assetGraph, 'to contain relation', 'SystemJsLazyBundle', 2);
+
+        await assetGraph.moveAssetsInOrder({ type: 'JavaScript' }, function (asset, assetGraph) {
+            if (assetGraph.findRelations({ type: 'SystemJsLazyBundle', to: asset }).length > 0) {
+                return assetGraph.root + 'static/foobar-' + asset.fileName;
+            }
+        });
+
+        expect(
+            assetGraph.findAssets({ url: /\/page1\.html$/})[0].text,
+            'to contain',
+            'System.config({ bundles: { \'static/'
+        );
+        expect(
+            assetGraph.findAssets({ url: /\/page2\.html$/})[0].text,
+            'to contain',
+            'System.config({ bundles: { \'static/'
+        );
     });
 
-    it('should handle the use of system.js in a web worker', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/webWorker/'})
+    it('should handle the use of system.js in a web worker', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/webWorker/'})
             .loadAssets('*.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 2);
-            })
-            .bundleSystemJs()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 3);
-                expect(assetGraph.findAssets({fileName: 'worker.js'})[0].text, 'to contain', "importScripts('system.js', 'config.js', '/common-bundle.js')");
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 2);
+
+        await assetGraph.bundleSystemJs();
+
+        expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 3);
+        expect(assetGraph.findAssets({fileName: 'worker.js'})[0].text, 'to contain', "importScripts('system.js', 'config.js', '/common-bundle.js')");
     });
 
-    it('should handle the use of system.js in a service worker registered via <link rel="serviceworker" href=...>', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/HtmlServiceWorkerRegistration/'})
+    it('should handle the use of system.js in a service worker registered via <link rel="serviceworker" href=...>', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/HtmlServiceWorkerRegistration/'})
             .loadAssets('*.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 2);
-            })
-            .bundleSystemJs()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 3);
-                expect(assetGraph.findAssets({fileName: 'sw.js'})[0].text, 'to contain', "importScripts('system.js', 'config.js', '/common-bundle.js')");
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 2);
+
+        await assetGraph.bundleSystemJs();
+
+        expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 3);
+        expect(assetGraph.findAssets({fileName: 'sw.js'})[0].text, 'to contain', "importScripts('system.js', 'config.js', '/common-bundle.js')");
     });
 
-    it('should handle the use of system.js in a service worker registered via navigator.serviceWorker.register(...)', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/JavaScriptServiceWorkerRegistration/'})
+    it('should handle the use of system.js in a service worker registered via navigator.serviceWorker.register(...)', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/JavaScriptServiceWorkerRegistration/'})
             .loadAssets('*.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 2);
-            })
-            .bundleSystemJs()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 3);
-                expect(assetGraph.findAssets({fileName: 'sw.js'})[0].text, 'to contain', "importScripts('system.js', 'config.js', '/common-bundle.js')");
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 2);
+
+        await assetGraph.bundleSystemJs();
+
+        expect(assetGraph, 'to contain relations', 'JavaScriptImportScripts', 3);
+        expect(assetGraph.findAssets({fileName: 'sw.js'})[0].text, 'to contain', "importScripts('system.js', 'config.js', '/common-bundle.js')");
     });
 
-    it('should handle a System.import test case with a manual bundle', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/manualBundle/'})
+    it('should handle a System.import test case with a manual bundle', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/manualBundle/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs({ deferredImports: true })
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain asset', {fileName: 'foo.js'});
-                expect(assetGraph.findAssets({fileName: 'foo.js'})[0].text, 'to contain', 'a.js').and('to contain', 'b.js');
+            .bundleSystemJs({ deferredImports: true });
 
-                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'not to contain', 'a.js').and('not to contain', 'b.js');
-            });
+        expect(assetGraph, 'to contain asset', {fileName: 'foo.js'});
+        expect(assetGraph.findAssets({fileName: 'foo.js'})[0].text, 'to contain', 'a.js').and('to contain', 'b.js');
+
+        expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'not to contain', 'a.js').and('not to contain', 'b.js');
     });
 
-    it('should allow multiple identical definitions of the same manual bundle', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/duplicateManualBundle/'})
+    it('should allow multiple identical definitions of the same manual bundle', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/duplicateManualBundle/'})
             .loadAssets('index.html')
             .populate()
-            .bundleSystemJs({ deferredImports: true })
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain asset', {fileName: 'foo.js'});
-                expect(assetGraph.findAssets({fileName: 'foo.js'})[0].text, 'to contain', 'a.js').and('to contain', 'b.js');
-            });
+            .bundleSystemJs({ deferredImports: true });
+
+        expect(assetGraph, 'to contain asset', {fileName: 'foo.js'});
+        expect(assetGraph.findAssets({fileName: 'foo.js'})[0].text, 'to contain', 'a.js').and('to contain', 'b.js');
     });
 
-    it('should error out if the same manual bundle is defined multiple times', function () {
+    it('should error out if the same manual bundle is defined multiple times', async function () {
         return expect(
             new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conflictingManualBundles/'})
                 .loadAssets('index.html')
@@ -458,209 +437,203 @@ describe('transforms/bundleSystemJs', function () {
     });
 
     describe('with a data-systemjs-polyfill attribute', function () {
-        it('should remove the data-systemjs-polyfill attribute', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/polyfill/simple/'})
+        it('should remove the data-systemjs-polyfill attribute', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/polyfill/simple/'})
                 .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'Html', 1);
-                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                })
+                .populate();
+
+            expect(assetGraph, 'to contain assets', 'Html', 1);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+
+            await assetGraph
                 .bundleSystemJs()
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                    expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
-                    expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'data-systemjs-polyfill');
-                });
+                .populate();
+
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+            expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
+            expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'data-systemjs-polyfill');
         });
 
-        it('should polyfill system.js when instructed to', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/polyfill/simple/'})
+        it('should polyfill system.js when instructed to', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/polyfill/simple/'})
                 .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'Html', 1);
-                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                })
+                .populate();
+
+            expect(assetGraph, 'to contain assets', 'Html', 1);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+
+            await assetGraph
                 .bundleSystemJs({ polyfill: true })
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'JavaScript', 4);
-                    expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
-                    expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
-                });
+                .populate();
+
+            expect(assetGraph, 'to contain assets', 'JavaScript', 4);
+            expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
         });
 
         describe('that has no value', function () {
-            it('should polyfill system.js', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/polyfill/noValue/'})
+            it('should polyfill system.js', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/polyfill/noValue/'})
                     .loadAssets('index.html')
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph, 'to contain assets', 'Html', 1);
-                        expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                        expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                    })
+                    .populate();
+
+                expect(assetGraph, 'to contain assets', 'Html', 1);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+                expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+
+                await assetGraph
                     .bundleSystemJs({ polyfill: true })
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph, 'to contain assets', 'JavaScript', 4);
-                        expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
-                        expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
-                    });
+                    .populate();
+
+                expect(assetGraph, 'to contain assets', 'JavaScript', 4);
+                expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
+                expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
             });
         });
     });
 
     describe('with a data-systemjs-csp-production attribute', function () {
-        it('should remove the data-systemjs-csp-production attribute', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/replacement/simple/'})
+        it('should remove the data-systemjs-csp-production attribute', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/replacement/simple/'})
                 .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'Html', 1);
-                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                })
+                .populate();
+
+            expect(assetGraph, 'to contain assets', 'Html', 1);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+
+            await assetGraph
                 .bundleSystemJs()
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                    expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
-                    expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'data-system-csp-production');
-                    expect(assetGraph, 'to contain no assets', { fileName: 'system.js' });
-                });
+                .populate();
+
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+            expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
+            expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'data-system-csp-production');
+            expect(assetGraph, 'to contain no assets', { fileName: 'system.js' });
         });
 
-        it('should replace system.js with the referenced asset', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/replacement/simple/'})
+        it('should replace system.js with the referenced asset', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/replacement/simple/'})
                 .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'Html', 1);
-                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                })
+                .populate();
+
+            expect(assetGraph, 'to contain assets', 'Html', 1);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+
+            await assetGraph
                 .bundleSystemJs()
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                    expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
-                    expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                    expect(assetGraph, 'to contain asset', {fileName: 'system-csp-production.js'});
-                });
+                .populate();
+
+            expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+            expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
+            expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+            expect(assetGraph, 'to contain asset', {fileName: 'system-csp-production.js'});
         });
 
         describe('that has no value', function () {
-            it('should replace system.js with the default system-csp-production.js', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/replacement/noValue/'})
+            it('should replace system.js with the default system-csp-production.js', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/replacement/noValue/'})
                     .loadAssets('index.html')
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph, 'to contain assets', 'Html', 1);
-                        expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                        expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                    })
+                    .populate();
+
+                expect(assetGraph, 'to contain assets', 'Html', 1);
+                expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+                expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+
+                await assetGraph
                     .bundleSystemJs()
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                        expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
-                        expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
-                        expect(assetGraph, 'to contain asset', {fileName: 'system-csp-production.js'});
-                    });
+                    .populate();
+
+                expect(assetGraph, 'to contain assets', 'JavaScript', 3);
+                expect(assetGraph, 'to contain relations', {type: 'HtmlScript', to: { isInline: true }}, 2);
+                expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
+                expect(assetGraph, 'to contain asset', {fileName: 'system-csp-production.js'});
             });
         });
     });
 
-    it('should pick up assets referenced via an asset plugin', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetPlugin/'})
+    it('should pick up assets referenced via an asset plugin', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetPlugin/'})
             .loadAssets('index.html')
             .populate()
             .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'Text', 2);
-                expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 2);
-                assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
-                expect(assetGraph.findAssets({fileName: 'bundle-main-foo.js'})[0].text, 'to contain', "'/somethingElse.txt'.toString('url')")
-                    .and('not to contain', "'/test-foo.txt'.toString('url')");
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain assets', 'Text', 2);
+        expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 2);
+        assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
+        expect(assetGraph.findAssets({fileName: 'bundle-main-foo.js'})[0].text, 'to contain', "'/somethingElse.txt'.toString('url')")
+            .and('not to contain', "'/test-foo.txt'.toString('url')");
     });
 
-    it('should pick up assets referenced via an asset plugin using a wildcard', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetPluginWithWildcard/'})
+    it('should pick up assets referenced via an asset plugin using a wildcard', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/assetPluginWithWildcard/'})
             .loadAssets('index.html')
             .populate()
             .bundleSystemJs()
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'Text', 2);
-                expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 2);
-                assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
-                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "'/somethingElse.txt'.toString('url')")
-                    .and('not to contain', "'/test-foo.txt'.toString('url')")
-                    .and('to contain', "System.registerDynamic('test-*.txt!systemjs-asset-plugin/asset-plugin.js'");
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain assets', 'Text', 2);
+        expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 2);
+        assetGraph.findAssets({fileName: 'test-foo.txt'})[0].fileName = 'somethingElse.txt';
+        expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "'/somethingElse.txt'.toString('url')")
+            .and('not to contain', "'/test-foo.txt'.toString('url')")
+            .and('to contain', "System.registerDynamic('test-*.txt!systemjs-asset-plugin/asset-plugin.js'");
     });
 
     describe('with a buildConfig property in a System.config({...})', function () {
-        it('should apply the build config during the build', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfig/'})
+        it('should apply the build config during the build', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfig/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleSystemJs()
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', {fileName: 'styles.css'});
-                });
+                .populate();
+
+            expect(assetGraph, 'to contain asset', {fileName: 'styles.css'});
         });
 
-        it('should remove the buildConfig and testConfig properties after building', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfig/'})
+        it('should remove the buildConfig and testConfig properties after building', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfig/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleSystemJs()
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets({fileName: 'build-config.js'})[0].text, 'not to contain', 'buildConfig')
-                        .and('not to contain', 'testConfig');
-                });
+                .populate();
+
+            expect(assetGraph.findAssets({fileName: 'build-config.js'})[0].text, 'not to contain', 'buildConfig')
+                .and('not to contain', 'testConfig');
         });
 
-        it('should remove the System.config call if there is no other properties after removing the buildConfig property', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfigWithNothingElse/'})
+        it('should remove the System.config call if there is no other properties after removing the buildConfig property', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfigWithNothingElse/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleSystemJs()
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets({fileName: 'build-config.js'})[0].text, 'not to contain', 'System.config');
-                });
+                .populate();
+
+            expect(assetGraph.findAssets({fileName: 'build-config.js'})[0].text, 'not to contain', 'System.config');
         });
 
-        it('should remove the System.config call in a SequenceExpression if there is no other properties after removing the buildConfig property', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfigWithNothingElseInASequenceExpression/'})
+        it('should remove the System.config call in a SequenceExpression if there is no other properties after removing the buildConfig property', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/buildConfigWithNothingElseInASequenceExpression/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleSystemJs()
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets({fileName: 'build-config.js'})[0].text, 'not to contain', 'System.config')
-                        .and('to contain', 'console.log');
-                });
+                .populate();
+
+            expect(assetGraph.findAssets({fileName: 'build-config.js'})[0].text, 'not to contain', 'System.config')
+                .and('to contain', 'console.log');
         });
     });
 
-    describe('with conditionals', function () {
-        describe('when specifying a single value of the a conditional up front', function () {
-            it('should exclude the unneeded branches from the created bundle', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/exclude/'})
+    describe('with conditionals', async function () {
+        describe('when specifying a single value of the a conditional up front', async function () {
+            it('should exclude the unneeded branches from the created bundle', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/exclude/'})
                     .loadAssets('index.html')
                     .populate()
                     .bundleSystemJs({
@@ -668,22 +641,21 @@ describe('transforms/bundleSystemJs', function () {
                             lang: 'en_us'
                         }
                     })
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var bundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
-                        expect(bundleAsset.text, 'to contain', 'American English')
-                            .and('not to contain', 'Danish')
-                            .and('to contain', 'neededInAllLanguages')
-                            .and('to contain', 'neededInAmericanEnglish')
-                            .and('not to contain', 'neededInDanish')
-                            .and('not to contain', 'Math.random');
-                    });
+                    .populate();
+
+                const bundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                expect(bundleAsset.text, 'to contain', 'American English')
+                    .and('not to contain', 'Danish')
+                    .and('to contain', 'neededInAllLanguages')
+                    .and('to contain', 'neededInAmericanEnglish')
+                    .and('not to contain', 'neededInDanish')
+                    .and('not to contain', 'Math.random');
             });
         });
 
-        describe('when specifying multiple values of a conditional up front', function () {
-            it('should trace the provided values of the conditional (and only those)', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/multipleValuesGiven/'})
+        describe('when specifying multiple values of a conditional up front', async function () {
+            it('should trace the provided values of the conditional (and only those)', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/multipleValuesGiven/'})
                     .loadAssets('index.html')
                     .populate()
                     .bundleSystemJs({
@@ -691,36 +663,35 @@ describe('transforms/bundleSystemJs', function () {
                             'whichTest.js': ['foo', 'quux']
                         }
                     })
-                    .populate()
-                    .queue(function (assetGraph) {
-                        var commonBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
-                        expect(commonBundleAsset.text, 'to contain', 'foo')
-                            .and('not to contain', 'quux')
-                            .and('not to contain', 'bar');
+                    .populate();
 
-                        var fooBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-foo.js'})[0];
-                        expect(fooBundleAsset.text, 'to contain', "alert('foo')")
-                            .and('not to contain', "alert('bar');")
-                            .and('not to contain', "alert('quux');");
+                const commonBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                expect(commonBundleAsset.text, 'to contain', 'foo')
+                    .and('not to contain', 'quux')
+                    .and('not to contain', 'bar');
 
-                        var quuxBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-quux.js'})[0];
-                        expect(quuxBundleAsset.text, 'to contain', "alert('quux')")
-                            .and('not to contain', "alert('bar');")
-                            .and('not to contain', "alert('foo');");
+                const fooBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-foo.js'})[0];
+                expect(fooBundleAsset.text, 'to contain', "alert('foo')")
+                    .and('not to contain', "alert('bar');")
+                    .and('not to contain', "alert('quux');");
 
-                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
-                            '<script src="system.js">',
-                            '<script src="config.js">',
-                            '<script src="/common-bundle.js">',
-                            '<script src="/bundle-main-foo.js" data-assetgraph-conditions="\'whichTest.js|default\': \'foo\'">',
-                            '<script src="/bundle-main-quux.js" data-assetgraph-conditions="\'whichTest.js|default\': \'quux\'">'
-                        ]);
-                    });
+                const quuxBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-quux.js'})[0];
+                expect(quuxBundleAsset.text, 'to contain', "alert('quux')")
+                    .and('not to contain', "alert('bar');")
+                    .and('not to contain', "alert('foo');");
+
+                expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                    '<script src="system.js">',
+                    '<script src="config.js">',
+                    '<script src="/common-bundle.js">',
+                    '<script src="/bundle-main-foo.js" data-assetgraph-conditions="\'whichTest.js|default\': \'foo\'">',
+                    '<script src="/bundle-main-quux.js" data-assetgraph-conditions="\'whichTest.js|default\': \'quux\'">'
+                ]);
             });
 
-            describe('with a plugin providing a value based on the conditional', function () {
-                it('should trace the provided values of the conditional', function () {
-                    return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/pluginAndMultipleValuesGiven/'})
+            describe('with a plugin providing a value based on the conditional', async function () {
+                it('should trace the provided values of the conditional', async function () {
+                    const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/pluginAndMultipleValuesGiven/'})
                         .loadAssets('index.html')
                         .populate()
                         .bundleSystemJs({
@@ -728,147 +699,140 @@ describe('transforms/bundleSystemJs', function () {
                                 'locale.js': ['en_us', 'da']
                             }
                         })
-                        .populate()
-                        .queue(function (assetGraph) {
-                            expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
-                                '<script src="system.js">',
-                                '<script src="config.js">',
-                                '<script src="/common-bundle.js">',
-                                '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'locale.js|default\': \'en_us\'">',
-                                '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'locale.js|default\': \'da\'">'
-                            ]);
-                            var commonBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
-                            expect(commonBundleAsset.text, 'not to contain', "alert('en_us')").and('not to contain', "alert('da');");
+                        .populate();
 
-                            var americanEnglishBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-en_us.js'})[0];
-                            expect(americanEnglishBundleAsset.text, 'to contain', "alert('en_us')").and('not to contain', "alert('da');");
+                    expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                        '<script src="system.js">',
+                        '<script src="config.js">',
+                        '<script src="/common-bundle.js">',
+                        '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'locale.js|default\': \'en_us\'">',
+                        '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'locale.js|default\': \'da\'">'
+                    ]);
+                    const commonBundleAsset = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                    expect(commonBundleAsset.text, 'not to contain', "alert('en_us')").and('not to contain', "alert('da');");
 
-                            var danishBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-da.js'})[0];
-                            expect(danishBundleAsset.text, 'to contain', "alert('da')").and('not to contain', "alert('en_us');");
-                        });
+                    const americanEnglishBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-en_us.js'})[0];
+                    expect(americanEnglishBundleAsset.text, 'to contain', "alert('en_us')").and('not to contain', "alert('da');");
+
+                    const danishBundleAsset = assetGraph.findAssets({fileName: 'bundle-main-da.js'})[0];
+                    expect(danishBundleAsset.text, 'to contain', "alert('da')").and('not to contain', "alert('en_us');");
                 });
             });
         });
 
-        describe('with unspecified conditionals', function () {
-            it('should create separate bundles per variant', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/oneBundlePerVariant/'})
+        describe('with unspecified conditionals', async function () {
+            it('should create separate bundles per variant', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/oneBundlePerVariant/'})
                     .loadAssets('index.html')
                     .populate()
                     .bundleSystemJs()
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
-                            '<script src="system.js">',
-                            '<script src="config.js">',
-                            '<script src="/common-bundle.js">',
-                            '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
-                        ]);
-                        expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', 'System.registerDynamic(\'lang.js');
-                    });
+                    .populate();
+
+                expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                    '<script src="system.js">',
+                    '<script src="config.js">',
+                    '<script src="/common-bundle.js">',
+                    '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
+                    '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
+                ]);
+                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', 'System.registerDynamic(\'lang.js');
             });
 
-            it('should support independent conditionals', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/twoIndependentConditionals/'})
+            it('should support independent conditionals', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/twoIndependentConditionals/'})
                     .loadAssets('index.html')
                     .populate()
                     .bundleSystemJs()
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
-                            '<script src="system.js">',
-                            '<script src="config.js">',
-                            '<script src="/common-bundle.js">',
-                            '<script src="/bundle-main-rainy.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\'">',
-                            '<script src="/bundle-main-sunny.js" data-assetgraph-conditions="\'weather.js|default\': \'sunny\'">',
-                            '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
-                        ]);
-                        var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
-                        expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
-                            .and('not to contain', 'neededInAmericanEnglish')
-                            .and('not to contain', 'neededInDanish');
-                    });
+                    .populate();
+
+                expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                    '<script src="system.js">',
+                    '<script src="config.js">',
+                    '<script src="/common-bundle.js">',
+                    '<script src="/bundle-main-rainy.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\'">',
+                    '<script src="/bundle-main-sunny.js" data-assetgraph-conditions="\'weather.js|default\': \'sunny\'">',
+                    '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
+                    '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
+                ]);
+                const commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
+                    .and('not to contain', 'neededInAmericanEnglish')
+                    .and('not to contain', 'neededInDanish');
             });
 
-            it('should support independent conditionals with one of the conditions provided up front', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/twoIndependentConditionals/'})
+            it('should support independent conditionals with one of the conditions provided up front', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/twoIndependentConditionals/'})
                     .loadAssets('index.html')
                     .populate()
                     .bundleSystemJs({
                         conditions: { 'weather.js': 'sunny' }
                     })
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
-                            '<script src="system.js">',
-                            '<script src="config.js">',
-                            '<script src="/common-bundle.js">',
-                            '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
-                        ]);
-                        var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
-                        expect(commonBundle.text, 'not to contain', 'rainy');
-                        expect(commonBundle.text, 'not to contain', '#{weather.js');
-                    });
+                    .populate();
+
+                expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                    '<script src="system.js">',
+                    '<script src="config.js">',
+                    '<script src="/common-bundle.js">',
+                    '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
+                    '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
+                ]);
+                var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                expect(commonBundle.text, 'not to contain', 'rainy')
+                    .and('not to contain', '#{weather.js');
             });
 
-            it('should support dependent conditionals', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/twoDependentConditionals/'})
+            it('should support dependent conditionals', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/twoDependentConditionals/'})
                     .loadAssets('index.html')
                     .populate()
                     .bundleSystemJs()
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
-                            '<script src="system.js">',
-                            '<script src="config.js">',
-                            '<script src="/common-bundle.js">',
-                            '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">',
-                            '<script src="/bundle-main-rainy-da.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-rainy-en_us.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'en_us\'">',
-                            '<script src="/bundle-main-sunny-da.js" data-assetgraph-conditions="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'da\'">',
-                            '<script src="/bundle-main-sunny-en_us.js" data-assetgraph-conditions="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'en_us\'">'
-                        ]);
-                        var commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
-                        expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
-                            .and('not to contain', 'neededInAmericanEnglish')
-                            .and('not to contain', 'neededInDanish');
-                    });
+                    .populate();
+
+                expect(assetGraph.findAssets({type: 'Html'})[0].text.match(/<script src="[^"]+"[^>]*>/g), 'to equal', [
+                    '<script src="system.js">',
+                    '<script src="config.js">',
+                    '<script src="/common-bundle.js">',
+                    '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
+                    '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">',
+                    '<script src="/bundle-main-rainy-da.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'da\'">',
+                    '<script src="/bundle-main-rainy-en_us.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\', \'lang.js|default\': \'en_us\'">',
+                    '<script src="/bundle-main-sunny-da.js" data-assetgraph-conditions="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'da\'">',
+                    '<script src="/bundle-main-sunny-en_us.js" data-assetgraph-conditions="\'weather.js|default\': \'sunny\', \'lang.js|default\': \'en_us\'">'
+                ]);
+                const commonBundle = assetGraph.findAssets({fileName: 'common-bundle.js'})[0];
+                expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
+                    .and('not to contain', 'neededInAmericanEnglish')
+                    .and('not to contain', 'neededInDanish');
             });
 
-            it('should create separate stylesheets per variant', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/stylesheet/'})
+            it('should create separate stylesheets per variant', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/stylesheet/'})
                     .loadAssets('index.html')
                     .populate()
                     .bundleSystemJs()
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
-                        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain',
-                            '<link rel="stylesheet" href="/styles.da.css" data-assetgraph-conditions="\'lang.js|default\': \'da\'">'
-                        ).and('to contain', '<link rel="stylesheet" href="/styles.en_us.css" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">');
-                    });
+                    .populate();
+
+                expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
+                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain',
+                    '<link rel="stylesheet" href="/styles.da.css" data-assetgraph-conditions="\'lang.js|default\': \'da\'">'
+                ).and('to contain', '<link rel="stylesheet" href="/styles.en_us.css" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">');
             });
 
-            it('should work when combined with the asset list plugin', function () {
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/combinedWithAssetPlugin/'})
+            it('should work when combined with the asset list plugin', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/combinedWithAssetPlugin/'})
                     .loadAssets('index.html')
                     .populate()
                     .bundleSystemJs()
-                    .populate()
-                    .queue(function (assetGraph) {
-                        expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain',
-                            "System.registerDynamic('main.js', ['test-*.txt!systemjs-asset-plugin/asset-plugin.js'"
-                        );
-                    });
+                    .populate();
+
+                expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain',
+                    "System.registerDynamic('main.js', ['test-*.txt!systemjs-asset-plugin/asset-plugin.js'"
+                );
             });
         });
 
-        it('should support a combination of paths aliases and conditions', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/specfiedAndUnspecified/'})
+        it('should support a combination of paths aliases and conditions', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/conditionals/specfiedAndUnspecified/'})
                 .loadAssets('index.html')
                 .populate()
                 .bundleSystemJs({
@@ -877,11 +841,10 @@ describe('transforms/bundleSystemJs', function () {
                         environment: ['development', 'production']
                     }
                 })
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "System.registerDynamic('environment'")
-                        .and('to contain', "System.registerDynamic('main.js', ['virtual-#{environment|default}.configjson', 'virtual-#{locale|default}.i18n', 'actual-#{locale|default}.js']");
-                });
+                .populate();
+
+            expect(assetGraph.findAssets({fileName: 'common-bundle.js'})[0].text, 'to contain', "System.registerDynamic('environment'")
+                .and('to contain', "System.registerDynamic('main.js', ['virtual-#{environment|default}.configjson', 'virtual-#{locale|default}.i18n', 'actual-#{locale|default}.js']");
         });
     });
 });

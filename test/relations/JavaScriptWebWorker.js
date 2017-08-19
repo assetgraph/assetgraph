@@ -26,7 +26,7 @@ describe('JavaScriptWebWorker', function () {
                 }, 'to throw', /Not supported/);
 
                 expect(function () {
-                    javaScriptWebWorker.attach(javaScriptWebWorker.from, 'first');
+                    javaScriptWebWorker.attach('first');
                 }, 'to throw', /Not supported/);
             });
     });

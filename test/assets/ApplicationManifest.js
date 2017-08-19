@@ -15,7 +15,7 @@ describe('assets/ApplicationManifest', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/assets/ApplicationManifest/'})
             .loadAssets('related_applications.webmanifest')
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'JsonUrl', 2);
+                expect(assetGraph, 'to contain relations', 'JsonUrl', 2);
             });
     });
 
@@ -23,7 +23,7 @@ describe('assets/ApplicationManifest', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/assets/ApplicationManifest/'})
             .loadAssets('splash_screens.webmanifest')
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'JsonUrl', 2);
+                expect(assetGraph, 'to contain relations', 'JsonUrl', 2);
             })
             .populate()
             .queue(function (assetGraph) {
@@ -37,7 +37,7 @@ describe('assets/ApplicationManifest', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/assets/ApplicationManifest/'})
             .loadAssets('icons.webmanifest')
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'JsonUrl', 2);
+                expect(assetGraph, 'to contain relations', 'JsonUrl', 2);
             })
             .populate()
             .queue(function (assetGraph) {
@@ -51,7 +51,7 @@ describe('assets/ApplicationManifest', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/assets/ApplicationManifest/'})
             .loadAssets('start_url.webmanifest')
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations including unresolved', 'JsonUrl', 1);
+                expect(assetGraph, 'to contain relations', 'JsonUrl', 1);
                 expect(assetGraph, 'to contain assets', 'Html', 0);
             })
             .populate()

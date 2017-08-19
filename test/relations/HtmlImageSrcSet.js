@@ -32,7 +32,7 @@ describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', f
                 expect(assetGraph, 'to contain assets', 4);
                 expect(assetGraph, 'to contain relation', 'HtmlImageSrcSet');
                 expect(assetGraph, 'to contain asset', 'SrcSet');
-                expect(assetGraph, 'to contain relations including unresolved', 'SrcSetEntry', 2);
+                expect(assetGraph, 'to contain relations', 'SrcSetEntry', 2);
                 expect(assetGraph, 'to contain relations', 'SrcSetEntry', 2);
 
                 expect(assetGraph, 'to contain asset', {fileName: 'banner-phone.jpeg'});

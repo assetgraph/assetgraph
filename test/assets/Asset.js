@@ -11,7 +11,7 @@ describe('assets/Asset', function () {
         it('should error when there is no file handle and the asset is not in a graph', function () {
             var asset = new AssetGraph.Asset({});
 
-            return expect(asset.load(), 'to be rejected');
+            return expect(asset.loadAsync(), 'to be rejected');
         });
 
         it('should autodetect the type of an asset with an unrecognizable file extension', function () {
@@ -21,6 +21,108 @@ describe('assets/Asset', function () {
                 .then(function (assetGraph) {
                     expect(assetGraph, 'to contain asset', 'Svg');
                 });
+        });
+    });
+
+    describe('#addRelation()', function () {
+        it('should implicitly create a non-inline target asset and add it to the graph', function () {
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.add({
+                url: 'http://example.com/',
+                type: 'Html',
+                text: ''
+            });
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                to: {
+                    url: 'http://example.com/script.js',
+                    type: 'JavaScript',
+                    text: 'alert("foo")'
+                }
+            }, 'last');
+            expect(assetGraph, 'to contain asset', {
+                isLoaded: true,
+                url: 'http://example.com/script.js'
+            });
+        });
+
+        it('should implicitly create an inline target asset and add it to the graph', function () {
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.add({
+                url: 'http://example.com/',
+                type: 'Html',
+                text: ''
+            });
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                to: {
+                    type: 'JavaScript',
+                    text: 'alert("foo")'
+                }
+            }, 'last');
+            expect(assetGraph, 'to contain asset', {
+                type: 'JavaScript',
+                isInline: true,
+                text: 'alert("foo")'
+            });
+            // FIXME: Can work when hrefType: 'inline' has been sorted out:
+            // expect(htmlAsset.text, 'to equal', '<script>alert("foo");</script>');
+        });
+
+        it('should implicitly create an inline target asset with outgoing relations and add it to the graph', function () {
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.add({
+                url: 'http://example.com/',
+                type: 'Html',
+                text: ''
+            });
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                to: {
+                    type: 'JavaScript',
+                    text: 'alert("/thatimage.gif".toString("url"))'
+                }
+            }, 'last');
+            expect(assetGraph, 'to contain asset', { fileName: 'thatimage.gif' });
+        });
+
+        it('should add and attach a relation that does not already have a node', function () {
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.add({
+                url: 'http://example.com/',
+                type: 'Html',
+                text: ''
+            });
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                to: {
+                    url: 'http://example.com/script.js',
+                    type: 'JavaScript',
+                    text: 'alert("foo")'
+                }
+            }, 'last');
+            expect(htmlAsset.text, 'to equal', '<script src="script.js"></script>');
+        });
+
+        it('should use the passed node instead of creating a new one', function () {
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.add({
+                url: 'http://example.com/',
+                type: 'Html',
+                text: '<div>foobar</div>'
+            });
+            const node = htmlAsset.parseTree.createElement('script');
+            htmlAsset.parseTree.querySelector('div').appendChild(node);
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                node,
+                to: {
+                    url: 'http://example.com/script.js',
+                    type: 'JavaScript',
+                    text: 'alert("foo")'
+                }
+            }, 'last');
+            expect(htmlAsset.text, 'to equal', '<div>foobar<script src="script.js"></script></div>');
         });
     });
 
@@ -296,24 +398,24 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an AssetGraph with a loaded asset that has a link to an unloaded asset when the asset is moved', function () {
-        var assetGraph = new AssetGraph(),
-            fooHtml = new AssetGraph.Html({
-                url: 'http://example.com/foo.html',
-                text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/bar.html">link text</a></body></html>'
-            }),
-            barHtml = new AssetGraph.Html({ // Not yet loaded
-                url: 'http://example.com/bar.html'
-            });
+        var assetGraph = new AssetGraph();
 
-        assetGraph.addAsset(fooHtml);
-        assetGraph.addAsset(barHtml);
-        assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].to = barHtml;
+        assetGraph.add({
+            type: 'Html',
+            url: 'http://example.com/foo.html',
+            text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/bar.html">link text</a></body></html>'
+        });
+        const barHtml = assetGraph.add({ // Not yet loaded
+            type: 'Html',
+            url: 'http://example.com/bar.html'
+        });
+        assetGraph.findRelations({type: 'HtmlAnchor'})[0].to = barHtml;
 
         barHtml.url = 'http://example.com/subdir/quux.html';
-        expect(assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].href, 'to equal', 'http://example.com/subdir/quux.html');
+        expect(assetGraph.findRelations({type: 'HtmlAnchor'})[0].href, 'to equal', 'http://example.com/subdir/quux.html');
         expect(assetGraph.findAssets({type: 'Html', url: /\/subdir\/quux\.html$/})[0].isLoaded, 'to be false');
-        assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].hrefType = 'relative';
-        expect(assetGraph.findRelations({type: 'HtmlAnchor'}, true)[0].href, 'to equal', 'subdir/quux.html');
+        assetGraph.findRelations({type: 'HtmlAnchor'})[0].hrefType = 'relative';
+        expect(assetGraph.findRelations({type: 'HtmlAnchor'})[0].href, 'to equal', 'subdir/quux.html');
         expect(assetGraph.findAssets({type: 'Html', url: /\/subdir\/quux\.html$/})[0].isLoaded, 'to be false');
     });
 
@@ -322,20 +424,6 @@ describe('assets/Asset', function () {
             var asset = new AssetGraph.Asset({});
 
             expect(asset.clone.bind(asset, true), 'to throw', /incomingRelations not supported because asset/);
-        });
-
-        it('should preserve the assets original url when preserveUrl argument is true', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'})
-                .loadAssets('index.css')
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'Css', 1);
-
-                    var original = assetGraph.findAssets({type: 'Css'})[0];
-                    var clone = original.clone(undefined, true);
-
-                    expect(assetGraph, 'to contain assets', 'Css', 2);
-                    expect(clone.url, 'to be', original.url);
-                });
         });
 
         it('should throw when cloning an asset with invalid incoming relations', function () {
@@ -460,36 +548,93 @@ describe('assets/Asset', function () {
     });
 
     describe('#replaceWith()', function () {
-        it('should throw when replacing an asset that is not in a graph', function () {
-            const asset = new AssetGraph.Asset({});
+        describe('when passed an asset config object', function () {
+            it('should update the incoming relations of the existing asset', async function () {
+                const htmlAsset = new AssetGraph().add({
+                    type: 'Html',
+                    url: 'https://www.example.com/',
+                    text: `
+                        <!DOCTYPE html>
+                        <html>
+                            <head></head>
+                            <body>
+                                <script src="foo.js"></script>
+                            </body>
+                        </html>
+                    `
+                });
 
-            expect(function () { return asset.replaceWith(new AssetGraph.Asset({})); }, 'to throw');
+                httpception({
+                    request: 'GET https://www.example.com/foo.js',
+                    response: {
+                        headers: {
+                            'Content-Type': 'application/javascript'
+                        },
+                        body: 'alert("foo");'
+                    }
+                });
+
+                const javaScriptAsset = htmlAsset.outgoingRelations[0].to;
+
+                await javaScriptAsset.loadAsync();
+
+                const replacementJavaScript = javaScriptAsset.replaceWith({
+                    type: 'JavaScript',
+                    text: 'alert("bar");'
+                });
+
+                expect(replacementJavaScript, 'to satisfy', {
+                    type: 'JavaScript',
+                    url: 'https://www.example.com/foo.js',
+                    text: 'alert("bar");',
+                    incomingRelations: [
+                        { from: { url: 'https://www.example.com/' } }
+                    ]
+                });
+            });
         });
 
-        it('should throw when replacing an asset with a non-asset', function () {
-            const graph = new AssetGraph();
-            const asset = new AssetGraph.Asset({});
+        describe('when passed an existing asset', function () {
+            it('should foo', async function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.add({
+                    type: 'Html',
+                    url: 'https://www.example.com/',
+                    text: `
+                        <!DOCTYPE html>
+                        <html>
+                            <head></head>
+                            <body>
+                                <a href="hey.html">Look here</a>
+                            </body>
+                        </html>
+                    `
+                });
 
-            graph.addAsset(asset);
+                const replacementHtmlAsset = assetGraph.add({
+                    TYPE: 'Html',
+                    type: 'Html',
+                    url: 'https://www.example.com/somewhere/else/page.html',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="look/here.html">indeed</a></body></html>'
+                });
 
-            expect(function () { return asset.replaceWith(); }, 'to throw');
-        });
+                htmlAsset.replaceWith(replacementHtmlAsset);
 
-        it('should throw when replacing an asset with an asset that is already in the graph', function () {
-            const graph = new AssetGraph();
-            const asset = new AssetGraph.Asset({});
-            const newAsset = new AssetGraph.Asset({});
-
-            graph.addAsset(asset);
-            graph.addAsset(newAsset);
-
-            expect(function () { return asset.replaceWith(newAsset); }, 'to throw');
+                expect(replacementHtmlAsset, 'to satisfy', {
+                    type: 'Html',
+                    url: 'https://www.example.com/',
+                    text: '<!DOCTYPE html><html><head></head><body><a href="somewhere/else/look/here.html">indeed</a></body></html>'
+                });
+            });
         });
     });
 
     describe('#outgoingRelations', function () {
         it('should handle a combo test case', function () {
-            var htmlAsset = new AssetGraph.Html({
+            const assetGraph = new AssetGraph({root: 'http://example.com/'});
+
+            var htmlAsset = assetGraph.add({
+                type: 'Html',
                 url: 'http://example.com/foo.html',
                 text:
                     '<!DOCTYPE html>\n' +
@@ -506,35 +651,38 @@ describe('assets/Asset', function () {
 
             expect(htmlAsset.outgoingRelations[0].to.outgoingRelations, 'to have length', 1);
             expect(htmlAsset.outgoingRelations[0].to.outgoingRelations[0].type, 'to equal', 'CssImage');
-            expect(htmlAsset.outgoingRelations[0].to.outgoingRelations[0].to.isResolved, 'to be falsy');
+            expect(htmlAsset.outgoingRelations[0].to.outgoingRelations[0].to.isResolved, 'to be true');
 
-            expect(htmlAsset.outgoingRelations[1].to.isResolved, 'to be falsy');
+            expect(htmlAsset.outgoingRelations[1].to.isResolved, 'to be true');
 
-            const assetGraph = new AssetGraph({root: 'http://example.com/'});
-            assetGraph.addAsset(new AssetGraph.Html({
+            assetGraph.add({
+                type: 'Html',
                 url: 'http://example.com/quux.html',
                 text: '<!DOCTYPE html>\n<html><head><title>Boring document</title></head></html>'
-            }));
-            assetGraph.addAsset(new AssetGraph.Html({
+            });
+            assetGraph.add({
+                type: 'Html',
                 url: 'http://example.com/baz.html',
                 text: '<!DOCTYPE html>\n<html><head><title>Another boring document</title></head></html>'
-            }));
-            assetGraph.addAsset(htmlAsset);
+            });
 
-            expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: assetGraph.findAssets({url: /\/quux\.html$/})[0]});
+            expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: assetGraph.findAssets({fileName: 'quux.html'})[0]});
 
             expect(assetGraph, 'to contain relation', 'HtmlStyle');
 
             expect(assetGraph, 'to contain relation', 'HtmlAnchor');
-
-            expect(assetGraph.findRelations({type: 'CssImage'}, true).length - assetGraph.findRelations({type: 'CssImage'}).length, 'to equal', 1);
 
             const fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0];
             fooHtml.text = '<!DOCTYPE html>\n<html><head></head><body><a href="baz.html">Another link text</a></body></html>';
 
             expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: assetGraph.findAssets({type: 'Html', url: /\/baz\.html$/})});
 
-            new AssetGraph.HtmlAnchor({to: assetGraph.findAssets({url: /\/quux\.html$/})[0]}).attach(fooHtml, 'after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
+            // new AssetGraph.HtmlAnchor({to: assetGraph.findAssets({url: /\/quux\.html$/})[0]}).attach('after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
+
+            fooHtml.addRelation({
+                type: 'HtmlAnchor',
+                to: assetGraph.findAssets({url: /\/quux\.html$/})[0]
+            }, 'after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
 
             expect(fooHtml.text, 'to match', /baz\.html/);
             expect(fooHtml.text, 'to match', /quux\.html/);
@@ -548,7 +696,7 @@ describe('assets/Asset', function () {
 
             expect(assetGraph, 'to contain no relations', 'HtmlAnchor');
 
-            assetGraph.addAsset(fooHtml);
+            assetGraph.add(fooHtml);
 
             expect(assetGraph, 'to contain relations', 'HtmlAnchor', 2);
 
@@ -582,7 +730,7 @@ describe('assets/Asset', function () {
             const assetGraph = new AssetGraph();
             const asset = new AssetGraph.Asset({});
 
-            assetGraph.addAsset(asset);
+            assetGraph.add(asset);
 
             expect(() => asset.rawSrc, 'to throw', /Asset isn't loaded/);
         });
@@ -596,8 +744,8 @@ describe('assets/Asset', function () {
             });
 
             const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/assets/Asset/rawSrc/' });
-            assetGraph.addAsset(original);
-            assetGraph.addAsset(clone);
+            assetGraph.add(original);
+            assetGraph.add(clone);
 
             const unloadSpy = sinon.spy(clone, 'unload');
             const markDirtySpy = sinon.spy(clone, 'markDirty');
@@ -636,6 +784,19 @@ describe('assets/Asset', function () {
     });
 
     describe('#url', function () {
+        it('should throw if an existing asset occupies the same url', function () {
+            const assetGraph = new AssetGraph();
+            assetGraph.add({
+                type: 'Text',
+                url: 'https://example.com/foo.txt'
+            });
+            const barTxt = assetGraph.add({
+                type: 'Text',
+                url: 'https://example.com/bar.txt'
+            });
+            expect(() => barTxt.url = 'https://example.com/foo.txt', 'to throw', 'https://example.com/foo.txt already exists in the graph, cannot update url');
+        });
+
         it('should handle a test case with 3 assets', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/simple/'})
                 .loadAssets('index.html')
@@ -723,18 +884,30 @@ describe('assets/Asset', function () {
 
             expect(() => asset.url = 'foo', 'to throw');
         });
+
+        it('should remove the incomingInlineRelation property when un-inlining', function () {
+            var asset = new AssetGraph().add({
+                type: 'Html',
+                text: '<!DOCTYPE html><html><head><style>/*foo*/</style></head></html>'
+            });
+            const htmlStyle = asset.outgoingRelations[0];
+            expect(htmlStyle.to.incomingInlineRelation, 'to be', htmlStyle);
+            htmlStyle.to.url = 'http://example.com/styles.css';
+            expect(htmlStyle.to.incomingInlineRelation, 'to be undefined');
+        });
     });
 
-    it('should handle an inline asset with an empty url (should resolve to the url of the containing asset)', function () {
-        return new AssetGraph({root: 'file:///foo/bar/quux'})
-            .loadAssets(new AssetGraph.Html({
+
+    it('should handle an inline asset with an empty url (should resolve to the url of the containing asset)', async function () {
+        const assetGraph = await new AssetGraph({root: 'file:///foo/bar/quux'})
+            .loadAssets({
+                type: 'Html',
                 url: 'file:///foo/bar/quux/baz/index.html',
-                text: '<!DOCTYPE html><html><head><style type="text/css">body{background:url()}</style></head><body></body></html>'
-            }))
-            .then(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', {from: {url: 'file:///foo/bar/quux/baz/index.html'}, to: {type: 'Css', isInline: true}});
-                expect(assetGraph, 'to contain relation', {from: {type: 'Css'}, to: {url: 'file:///foo/bar/quux/baz/index.html'}});
+                text: '<!DOCTYPE html><html><head><script>const foo = "".toString("url")</script></head><body></body></html>'
             });
+
+        expect(assetGraph, 'to contain relation', {from: {url: 'file:///foo/bar/quux/baz/index.html'}, to: {type: 'JavaScript', isInline: true}});
+        expect(assetGraph, 'to contain relation', {from: {type: 'JavaScript'}, to: {url: 'file:///foo/bar/quux/baz/index.html'}});
     });
 
     describe('#extension', function () {
@@ -878,11 +1051,138 @@ describe('assets/Asset', function () {
         });
     });
 
+    describe('#baseName', function () {
+        describe('when invoked as a getter', function () {
+            it('should retrieve the base name from the url', function () {
+                expect(new AssetGraph().add({
+                    url: 'https://example.com/foobar.html'
+                }).baseName, 'to equal', 'foobar');
+            });
+
+            it('should return undefined when there is no file name', function () {
+                expect(new AssetGraph().add({
+                    url: 'https://example.com/'
+                }).baseName, 'to be undefined');
+            });
+        });
+
+        describe('when invoked as a setter', function () {
+            it('should update the base name of the url', function () {
+                const asset = new AssetGraph().add({
+                    url: 'https://example.com/foobar.html'
+                });
+
+                asset.baseName = 'yadda';
+
+                expect(asset.url, 'to equal', 'https://example.com/yadda.html');
+            });
+
+            it('should preserve the extension', function () {
+                const asset = new AssetGraph().add({
+                    url: 'https://example.com/foobar.html'
+                });
+
+                asset.extension = '.foo';
+                asset.baseName = 'yadda';
+
+                expect(asset.url, 'to equal', 'https://example.com/yadda.foo');
+            });
+
+            it('should return undefined when there is no file name', function () {
+                expect(new AssetGraph().add({
+                    url: 'https://example.com/'
+                }).baseName, 'to be undefined');
+            });
+        });
+    });
+
     describe('#dataUrl getter', function () {
         it('should not percent-encode the comma character', function () {
             expect(new AssetGraph.Text({
                 text: 'foo,bar quux,baz'
             }).dataUrl, 'to equal', 'data:text/plain,foo,bar%20quux,baz');
+        });
+    });
+
+    it('should allow specifying outgoingRelations when instantiating', function () {
+        const assetGraph = new AssetGraph();
+        const page1 = assetGraph.add({
+            url: 'http://example.com/page1.html',
+            type: 'Html',
+            text: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <link rel="stylesheet" href="a.css">
+                    <link rel="stylesheet" href="b.css">
+                </head>
+                </html>`
+        });
+
+        const parseTree = page1.parseTree;
+        const outgoingRelations = page1.outgoingRelations;
+
+        const page2 = assetGraph.add({
+            type: 'Html',
+            parseTree,
+            outgoingRelations
+        });
+
+        expect(page2.outgoingRelations, 'to satisfy', [
+            { from: page2 },
+            { from: page2 }
+        ]);
+    });
+
+    it('should allow specifying incomingRelations when instantiating', function () {
+        const assetGraph = new AssetGraph();
+        const page1 = assetGraph.add({
+            url: 'https://example.com/page1.html',
+            type: 'Html',
+            text: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <a href="a.html"></a>
+                    <iframe src="b.html"></iframe>
+                </head>
+                </html>`
+        });
+
+        const parseTree = page1.parseTree;
+        const incomingRelations = page1.outgoingRelations;
+
+        const page2 = assetGraph.add({
+            type: 'Html',
+            url: 'https://example.com/somewhere/page2.html',
+            parseTree,
+            incomingRelations
+        });
+
+        expect(page1.outgoingRelations, 'to satisfy', [
+            { to: page2 },
+            { to: page2 }
+        ]);
+
+        expect(page1.text, 'to contain', '<a href="somewhere/page2.html">')
+            .and('to contain', '<iframe src="somewhere/page2.html">');
+    });
+
+    describe('#_isCompatibleWith', function () {
+        it('should consider Css compatible with Asset', function () {
+            expect(new AssetGraph().addAsset({type: 'Css', text: ''})._isCompatibleWith('Asset'), 'to be true');
+        });
+
+        it('should consider Atom compatible with Xml', function () {
+            expect(new AssetGraph().addAsset({type: 'Atom', text: '<?xml version="1.0" encoding="utf-8"?>'})._isCompatibleWith('Xml'), 'to be true');
+        });
+
+        it('should consider Xml compatible with Atom', function () {
+            expect(new AssetGraph().addAsset({type: 'Xml', text: '<?xml version="1.0" encoding="utf-8"?>'})._isCompatibleWith('Atom'), 'to be true');
+        });
+
+        it('should consider Css incompatible with JavaScript', function () {
+            expect(new AssetGraph().addAsset({type: 'Css', text: ''})._isCompatibleWith('JavaScript'), 'to be false');
         });
     });
 });

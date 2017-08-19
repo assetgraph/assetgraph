@@ -10,7 +10,7 @@ describe('relations/HtmlPrefetchLink', function () {
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
 
-        graph.addAsset(htmlAsset);
+        graph.add(htmlAsset);
 
         return htmlAsset;
     }
@@ -21,7 +21,7 @@ describe('relations/HtmlPrefetchLink', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'HtmlPrefetchLink');
-                expect(assetGraph, 'to contain asset', 'Asset');
+                expect(assetGraph, 'to contain asset', 'Woff');
             });
     });
 
@@ -45,47 +45,43 @@ describe('relations/HtmlPrefetchLink', function () {
     describe('when programmatically adding a relation', function () {
         it('should attach a link node in <head>', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlPrefetchLink({
-                to: new AssetGraph.JavaScript({ text: '"use strict"', url: 'foo.js' })
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            htmlAsset.addRelation({
+                type: 'HtmlPrefetchLink',
+                to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="foo.js" as="script">');
         });
 
         it('should set the `as` property passed in the constructor', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlPrefetchLink({
-                to: new AssetGraph.JavaScript({ text: '"use strict"', url: 'foo.js' }),
+            htmlAsset.addRelation({
+                type: 'HtmlPrefetchLink',
+                to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
                 as: 'object'
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="foo.js" as="object">');
         });
 
         it('should add the `crossorigin` attribute when the relation is loaded as a font', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlPrefetchLink({
-                to: new AssetGraph.JavaScript({ text: '"use strict"', url: 'foo.js' }),
+            htmlAsset.addRelation({
+                type: 'HtmlPrefetchLink',
+                to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
                 as: 'font'
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="foo.js" as="font">');
         });
 
         it('should add the `crossorigin` attribute when the relation is crossorigin', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlPrefetchLink({
+            htmlAsset.addRelation({
+                type: 'HtmlPrefetchLink',
                 to: new AssetGraph.JavaScript({ text: '"use strict"', url: 'http://fisk.dk/foo.js' }),
                 as: 'script'
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="http://fisk.dk/foo.js" as="script">');
         });

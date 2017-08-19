@@ -47,11 +47,13 @@ describe('transforms/addCacheManifest', function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifest/'})
             .on('warn', warnSpy)
             .loadAssets('index.html')
-            .populate({followRelations: {to: {url: /^file:/}}});
+            .populate({
+                followRelations: {to: {url: /^file:/}}
+            });
 
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*notFound\.js/));
 
-        expect(assetGraph, 'to contain assets', 7);
+        expect(assetGraph, 'to contain assets', 9);
         expect(assetGraph, 'to contain relations', 9);
         expect(assetGraph, 'to contain asset', 'Png');
         expect(assetGraph, 'to contain assets', 'Html', 2);

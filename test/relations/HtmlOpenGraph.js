@@ -1,6 +1,6 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlOpenGraph', function () {
     function getHtmlAsset(htmlString) {
@@ -10,7 +10,7 @@ describe('relations/HtmlOpenGraph', function () {
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
 
-        graph.addAsset(htmlAsset);
+        graph.add(htmlAsset);
 
         return htmlAsset;
     }
@@ -29,40 +29,32 @@ describe('relations/HtmlOpenGraph', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'})
             .loadAssets('index.html')
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation including unresolved', 'HtmlOpenGraph', 10);
+                expect(assetGraph, 'to contain relation', 'HtmlOpenGraph', 10);
             });
     });
 
-    it('should update the href', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'})
-            .loadAssets('index.html')
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation including unresolved', 'HtmlOpenGraph', 10);
+    it('should update the href', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'})
+            .loadAssets('index.html');
 
-                var link = assetGraph.findRelations({ type: 'HtmlOpenGraph' }, true)[0];
+        expect(assetGraph, 'to contain relation', 'HtmlOpenGraph', 10);
 
-                link.to.url = 'foo.bar';
-                // This is necessary because link.to is an asset config object, not a real asset that will
-                // propagate url changes:
-                link.refreshHref();
+        const link = assetGraph.findRelations({ type: 'HtmlOpenGraph' })[0];
 
-                expect(link, 'to satisfy', {
-                    href: 'foo.bar'
-                });
-            });
+        link.hrefType = 'relative';
+        link.to.url = assetGraph.root + 'foo.bar';
+
+        expect(link, 'to satisfy', { href: 'foo.bar' });
     });
 
     describe('when programmatically adding a relation', function () {
         it('should handle crossorigin url', function () {
             var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlOpenGraph({
-                to: {
-                    url: 'http://assetgraph.org'
-                },
+            htmlAsset.addRelation({
+                type: 'HtmlOpenGraph',
+                href: 'http://assetgraph.org',
                 ogProperty: 'og:image'
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<meta property="og:image" content="http://assetgraph.org/">');
         });

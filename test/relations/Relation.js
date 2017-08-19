@@ -6,64 +6,92 @@ var pathModule = require('path');
 var httpception = require('httpception');
 
 describe('relations/Relation', function () {
-    describe('#href', function () {
-        it('should handle a test case with urls with different hrefTypes', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
-                .loadAssets('index.html')
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', 'Html');
+    describe('#hrefType', function () {
+        it('should handle a test case with urls with different hrefTypes', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
+                .loadAssets('index.html');
 
-                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), 'to equal', [
-                        'relative.html',
-                        '/rootRelative.html',
-                        'http://canonical.com/canonical.html',
-                        '//example.com/protocolRelative.html',
-                        'http://example.com/absolute.html'
-                    ]);
+            expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false });
 
-                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), 'to equal', [
-                        'relative',
-                        'rootRelative',
-                        'absolute',
-                        'protocolRelative',
-                        'absolute'
-                    ]);
+            expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'href'), 'to satisfy', [
+                'relative.html',
+                '/rootRelative.html',
+                'http://canonical.com/canonical.html',
+                '//example.com/protocolRelative.html',
+                'http://example.com/absolute.html',
+                /^data:/
+            ]);
 
-                    assetGraph.findRelations({type: 'HtmlAnchor'}, true).forEach(function (htmlAnchor) {
-                        htmlAnchor.to.url = htmlAnchor.to.url.replace(/\.html$/, '2.html');
-                        htmlAnchor.refreshHref();
-                    });
+            expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'hrefType'), 'to equal', [
+                'relative',
+                'rootRelative',
+                'absolute',
+                'protocolRelative',
+                'absolute',
+                'inline'
+            ]);
 
-                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'href'), 'to equal', [
-                        'relative2.html',
-                        '/rootRelative2.html',
-                        'http://canonical.com/canonical2.html',
-                        '//example.com/protocolRelative2.html',
-                        'http://example.com/absolute2.html'
-                    ]);
-                })
-                .run(done);
+            assetGraph.findRelations({type: 'HtmlAnchor'}).forEach(function (htmlAnchor) {
+                if (htmlAnchor.hrefType === 'inline') {
+                    htmlAnchor.to.url = 'https://example.com/noLongerInline.html';
+                } else {
+                    htmlAnchor.to.url = htmlAnchor.to.url.replace(/\.html$/, '2.html');
+                    htmlAnchor.refreshHref();
+                }
+            });
+
+            expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'href'), 'to equal', [
+                'relative2.html',
+                '/rootRelative2.html',
+                'http://canonical.com/canonical2.html',
+                '//example.com/protocolRelative2.html',
+                'http://example.com/absolute2.html',
+                'https://example.com/noLongerInline.html'
+            ]);
         });
 
-        it('should handle a test case with urls with different hrefTypes, where hrefs have leading white space', function (done)  {
-            new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
-                .loadAssets('index.html')
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', 'Html');
+        it('should handle a test case with urls with different hrefTypes, where hrefs have leading white space', async function ()  {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
+                .loadAssets('index.html');
 
-                    assetGraph.findAssets({ type: 'Html' }).forEach(function (asset) {
-                        asset.text = asset.text.replace(/href="/g, 'href=" ');
-                    });
+            expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false });
 
-                    expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}, true), 'hrefType'), 'to equal', [
-                        'relative',
-                        'rootRelative',
-                        'absolute',
-                        'protocolRelative',
-                        'absolute'
-                    ]);
-                })
-                .run(done);
+            assetGraph.findAssets({ type: 'Html' }).forEach(function (asset) {
+                asset.text = asset.text.replace(/href="/g, 'href=" ');
+            });
+
+            expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'hrefType'), 'to equal', [
+                'relative',
+                'rootRelative',
+                'absolute',
+                'protocolRelative',
+                'absolute',
+                'inline'
+            ]);
+        });
+
+        it('should inline a relation when its hrefType is changed to inline', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
+                .loadAssets('index.html');
+
+            const indexHtml = assetGraph.findAssets({ fileName: 'index.html' })[0];
+            const relation = assetGraph.findRelations({ from: indexHtml, to: { fileName: 'relative.html' } })[0];
+
+            await relation.to.loadAsync();
+
+            relation.hrefType = 'inline';
+
+            expect(indexHtml.text, 'not to contain', 'relative.html')
+                .and('to contain', '<a data-theone="true" href="data:');
+
+            expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'hrefType'), 'to equal', [
+                'inline',
+                'rootRelative',
+                'absolute',
+                'protocolRelative',
+                'absolute',
+                'inline'
+            ]);
         });
     });
 
@@ -104,7 +132,7 @@ describe('relations/Relation', function () {
                 .loadAssets('canonical.html')
                 .populate()
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true), 'to satisfy', [
+                    expect(assetGraph.findRelations(), 'to satisfy', [
                         {
                             hrefType: 'absolute',
                             canonical: true,
@@ -249,7 +277,7 @@ describe('relations/Relation', function () {
                 .loadAssets('mailto.html')
                 .populate()
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true), 'to satisfy', [
+                    expect(assetGraph.findRelations(), 'to satisfy', [
                         {
                             canonical: false
                         }
@@ -319,7 +347,7 @@ describe('relations/Relation', function () {
                     text: '<!DOCTYPE html><html><head></head><body><a href="other.html">Link</a></body></html>'
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
                 });
         });
 
@@ -331,7 +359,7 @@ describe('relations/Relation', function () {
                     text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/">Link</a></body></html>'
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be true');
+                    expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
                 });
         });
 
@@ -343,7 +371,7 @@ describe('relations/Relation', function () {
                     text: '<!DOCTYPE html><html><head></head><body><a href="http://anotherexample.com/">Link</a></body></html>'
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be true');
+                    expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
                 });
         });
 
@@ -355,7 +383,7 @@ describe('relations/Relation', function () {
                     text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>'
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
                 });
         });
 
@@ -367,7 +395,7 @@ describe('relations/Relation', function () {
                     text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com:1338/other.html">Link</a></body></html>'
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be true');
+                    expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
                 });
         });
 
@@ -379,7 +407,7 @@ describe('relations/Relation', function () {
                     text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com:80/other.html">Link</a></body></html>'
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
                 });
         });
 
@@ -391,7 +419,7 @@ describe('relations/Relation', function () {
                     text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>'
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
                 });
         });
 
@@ -403,7 +431,7 @@ describe('relations/Relation', function () {
                     text: '<!DOCTYPE html><html><head></head><body><a href="https://example.com:443/other.html">Link</a></body></html>'
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
                 });
         });
 
@@ -415,8 +443,31 @@ describe('relations/Relation', function () {
                     text: '<!DOCTYPE html><html><head></head><body><a href="https://example.com/other.html">Link</a></body></html>'
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({}, true)[0].crossorigin, 'to be false');
+                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
                 });
+        });
+    });
+
+    describe('#inline', function () {
+        describe('on a non-inline relation', function () {
+            it('should update the href of all outgoing relations of the target asset', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/inlineExternalRelation/'})
+                    .loadAssets('index.html')
+                    .populate();
+
+                assetGraph.findAssets({type: 'Html'})[0].outgoingRelations[0].inline();
+                expect(assetGraph.findRelations({type: 'CssImage'})[0].href, 'to equal', 'styles/foo.png');
+            });
+
+            it('should set the incomingInlineRelation property of the target asset', async function () {
+                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/inlineExternalRelation/'})
+                    .loadAssets('index.html')
+                    .populate();
+
+                const cssImage = assetGraph.findRelations({type: 'CssImage'})[0];
+                cssImage.inline();
+                expect(cssImage.to.incomingInlineRelation, 'to be', cssImage);
+            });
         });
     });
 });

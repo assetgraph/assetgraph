@@ -6,7 +6,7 @@ describe('transforms/addDataVersionAttributeToHtmlElement', function () {
     it('should add the specified data-version tag', function () {
         return new AssetGraph()
             .queue(assetGraph => {
-                assetGraph.addAsset(new AssetGraph.Html({
+                assetGraph.add(new AssetGraph.Html({
                     url: 'http://example.com/index.html',
                     text: '<!DOCTYPE html><html><head></head><body></body></html>'
                 }));
@@ -24,7 +24,7 @@ describe('transforms/addDataVersionAttributeToHtmlElement', function () {
     it('should use git-describe to retrieve a suitable version tag if none is given', function () {
         return new AssetGraph()
             .queue(assetGraph => {
-                assetGraph.addAsset(new AssetGraph.Html({
+                assetGraph.add(new AssetGraph.Html({
                     url: 'http://example.com/index.html',
                     text: '<!DOCTYPE html><html><head></head><body></body></html>'
                 }));

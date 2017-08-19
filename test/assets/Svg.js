@@ -26,9 +26,9 @@ describe('assets/Svg', function () {
 
         const svgImage = assetGraph.findRelations({type: 'SvgImage'})[0];
         expect(svgImage.href, 'to equal', 'foo.png');
-        svgImage.to.url = assetGraph.resolveUrl(assetGraph.root, 'bar.png');
+        svgImage.to.url = assetGraph.resolveUrl(assetGraph.root, 'quux.png');
         const svg = assetGraph.findAssets({type: 'Svg'})[0];
-        expect(svg.text, 'to match', /<image[^>]* xlink:href="bar\.png"\/>/);
+        expect(svg.text, 'to match', /<image[^>]* xlink:href="quux\.png"\/>/);
 
         const svgScript = assetGraph.findRelations({type: 'SvgScript'})[0];
         svgScript.to.url = assetGraph.resolveUrl(assetGraph.root, 'hey.js');

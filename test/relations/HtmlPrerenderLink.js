@@ -1,23 +1,19 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlPrerenderLink', function () {
     function getHtmlAsset(htmlString) {
-        var graph = new AssetGraph({ root: __dirname });
-        var htmlAsset = new AssetGraph.Html({
+        return new AssetGraph({ root: __dirname }).add({
+            type: 'Html',
             text: htmlString || '<!doctype html><html><head></head><body></body></html>',
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
-
-        graph.addAsset(htmlAsset);
-
-        return htmlAsset;
     }
 
     describe('#inline', function () {
         it('should throw', function () {
-            var relation = new AssetGraph.HtmlPrerenderLink({
+            const relation = new AssetGraph.HtmlPrerenderLink({
                 to: { url: 'index.html' }
             });
 
@@ -42,7 +38,7 @@ describe('relations/HtmlPrerenderLink', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relation', 'HtmlPrerenderLink');
 
-                var prerenderLink = assetGraph.findRelations({ type: 'HtmlPrerenderLink' })[0];
+                const prerenderLink = assetGraph.findRelations({ type: 'HtmlPrerenderLink' })[0];
 
                 prerenderLink.to.url = 'foo.bar';
 
@@ -54,24 +50,21 @@ describe('relations/HtmlPrerenderLink', function () {
 
     describe('when programmatically adding a relation', function () {
         it('should attach a link node in <head>', function () {
-            var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlPrerenderLink({
-                to: new AssetGraph.Html({ text: '<!doctype html><html><head></head><body></body></html>', url: 'index.html' })
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
-
-            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prerender" href="index.html">');
+            const htmlAsset = getHtmlAsset();
+            htmlAsset.addRelation({
+                type: 'HtmlPrerenderLink',
+                href: 'https://example.com/'
+            }, 'firstInHead');
+            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prerender" href="https://example.com/">');
         });
 
         it('should handle crossorigin url the same', function () {
-            var htmlAsset = getHtmlAsset();
-            var relation = new AssetGraph.HtmlPrerenderLink({
+            const htmlAsset = getHtmlAsset();
+            htmlAsset.addRelation({
+                type: 'HtmlPrerenderLink',
                 to: new AssetGraph.Html({ text: '<!doctype html><html><head></head><body></body></html>', url: 'http://fisk.dk/index.html' }),
                 as: 'script'
-            });
-
-            relation.attachToHead(htmlAsset, 'first');
+            }, 'firstInHead');
 
             expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prerender" href="http://fisk.dk/index.html">');
         });

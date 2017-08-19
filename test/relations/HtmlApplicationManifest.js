@@ -1,97 +1,77 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
+const sinon = require('sinon');
 
 describe('relations/HtmlApplicationManifest', function () {
-    it('should handle a test case with an existing <link rel="manifest">', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
+    it('should handle a test case with an existing <link rel="manifest">', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'HtmlApplicationManifest', 1);
-                expect(assetGraph, 'to contain assets', 'ApplicationManifest', 1);
-            })
-            .run(done);
+            .populate();
+
+        expect(assetGraph, 'to contain relations', 'HtmlApplicationManifest', 1);
+        expect(assetGraph, 'to contain assets', 'ApplicationManifest', 1);
     });
 
-    it('should read the link href correctly', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
+    it('should read the link href correctly', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                var relation = assetGraph.findRelations({ type: 'HtmlApplicationManifest' })[0];
+            .populate();
 
-                expect(relation, 'to satisfy', {
-                    href: 'manifest.json'
-                });
-            })
-            .run(done);
+        const relation = assetGraph.findRelations({ type: 'HtmlApplicationManifest' })[0];
+
+        expect(relation, 'to satisfy', { href: 'manifest.json' });
     });
 
-    it('should write the link href correctly', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
+    it('should write the link href correctly', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                var relation = assetGraph.findRelations({ type: 'HtmlApplicationManifest' })[0];
+            .populate();
 
-                relation.to.url = 'foo.json';
+        const relation = assetGraph.findRelations({ type: 'HtmlApplicationManifest' })[0];
 
-                expect(relation, 'to satisfy', {
-                    href: 'foo.json'
-                });
+        relation.to.url = 'foo.json';
 
-                relation.href = 'bar.json';
+        expect(relation, 'to satisfy', { href: 'foo.json' });
 
-                expect(relation, 'to satisfy', {
-                    href: 'bar.json'
-                });
-            })
-            .run(done);
+        relation.href = 'bar.json';
+
+        expect(relation, 'to satisfy', { href: 'bar.json' });
     });
 
-    it('should append <link rel="manifest"> to a containing document', function (done) {
-        var relation = new AssetGraph.HtmlApplicationManifest({
-            to: new AssetGraph.ApplicationManifest({
+    it('should append <link rel="manifest"> to a containing document', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
+            .loadAssets('index.html')
+            .populate();
+
+        const html = assetGraph.findAssets({ type: 'Html' })[0];
+        const adjacentRelation = assetGraph.findRelations({ type: 'HtmlApplicationManifest' })[0];
+
+        html.addRelation({
+            type: 'HtmlApplicationManifest',
+            to: {
+                type: 'ApplicationManifest',
                 url: 'attach.json',
-                text: '{"name":"attach"}'
-            })
-        });
+                parseTree: { name: 'attach' }
+            }
+        }, 'before', adjacentRelation);
 
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                var html = assetGraph.findAssets({ type: 'Html' })[0];
-                var adjacentRelation = assetGraph.findRelations({ type: 'HtmlApplicationManifest' })[0];
-
-                relation.attach(html, 'before', adjacentRelation);
-
-                expect(assetGraph, 'to contain relations', 'HtmlApplicationManifest', 2);
-            })
-            .run(done);
+        expect(assetGraph, 'to contain relations', 'HtmlApplicationManifest', 2);
     });
 
-    it('should warn when there are multiple application manifests linked from the same document', function (done) {
-        var html = new AssetGraph.Html({
-            text: '<html><head><link rel="manifest" href="manifest.json"><link rel="manifest" href="manifest.json"></head><body></body></html>'
+    it('should warn when there are multiple application manifests linked from the same document', async function () {
+        const warnSpy = sinon.spy().named('warn');
+
+        await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
+            .on('warn', warnSpy)
+            .loadAssets({
+                type: 'Html',
+                text: '<html><head><link rel="manifest" href="manifest.json"><link rel="manifest" href="manifest.json"></head><body></body></html>'
+            })
+            .populate();
+
+        expect(warnSpy, 'to have calls satisfying', () => {
+            warnSpy({message: /^Multiple ApplicationManifest relations/});
         });
-
-        var warns = [];
-
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
-            .on('warn', function (warning) {
-                warns.push(warning);
-            })
-            .loadAssets(html)
-            .populate()
-            .queue(function (assetGraph) {
-                expect(warns, 'to satisfy', [
-                    {
-                        message: /^Multiple ApplicationManifest relations/
-                    }
-                ]);
-            })
-            .run(done);
     });
 });

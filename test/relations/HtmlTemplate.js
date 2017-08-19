@@ -1,32 +1,30 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlTemplate', function () {
-    it('should handle a test case with an existing <template> element', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlTemplate/'})
+    it('should handle a test case with an existing <template> element', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlTemplate/'})
             .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'HtmlImage', 3);
-                expect(assetGraph, 'to contain relation', 'HtmlTemplate');
-                expect(assetGraph, 'to contain relation', 'HtmlStyle');
-                expect(assetGraph, 'to contain relation', {
-                    type: 'HtmlImage',
-                    from: {
-                        type: 'Html',
-                        isFragment: false
-                    }
-                });
+            .populate();
 
-                expect(assetGraph, 'to contain relations', {
-                    type: 'HtmlImage',
-                    from: {
-                        type: 'Html',
-                        isFragment: true
-                    }
-                }, 2);
-            })
-            .run(done);
+        expect(assetGraph, 'to contain relations', 'HtmlImage', 3);
+        expect(assetGraph, 'to contain relation', 'HtmlTemplate');
+        expect(assetGraph, 'to contain relation', 'HtmlStyle');
+        expect(assetGraph, 'to contain relation', {
+            type: 'HtmlImage',
+            from: {
+                type: 'Html',
+                isFragment: false
+            }
+        });
+
+        expect(assetGraph, 'to contain relations', {
+            type: 'HtmlImage',
+            from: {
+                type: 'Html',
+                isFragment: true
+            }
+        }, 2);
     });
 });

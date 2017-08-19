@@ -89,7 +89,7 @@ module.exports = {
             });
         });
 
-        expect.addAssertion('<AssetGraph> to contain [no] (relation|relations) [including unresolved] <string|object|number?>', function (expect, subject, queryObj) {
+        expect.addAssertion('<AssetGraph> to contain [no] (relation|relations) <string|object|number?>', function (expect, subject, queryObj) {
             var number;
             if (typeof queryObj === 'string') {
                 queryObj = {type: queryObj};
@@ -103,7 +103,7 @@ module.exports = {
                 number = 1;
             }
             this.errorMode = 'nested';
-            expect(subject.findRelations(queryObj, this.flags['including unresolved']), 'to have length', number);
+            expect(subject.findRelations(queryObj), 'to have length', number);
         });
 
         expect.addAssertion('<AssetGraph> to contain [no] (relation|relations) [including unresolved] <string|object|number> <number?>', function (expect, subject, queryObj, number) {
