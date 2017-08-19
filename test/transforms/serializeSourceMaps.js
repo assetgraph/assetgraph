@@ -120,7 +120,7 @@ describe('transforms/serializeSourceMaps', function () {
                         source: assetGraph.root + 'bogus.js'
                     }).body[0]);
                     myScript.markDirty();
-                    var clonedMyScript = myScript.clone();
+                    var clonedMyScript = myScript.clone(myScript.incomingRelations);
                     assetGraph.removeAsset(myScript);
                     clonedMyScript.url = assetGraph.root + 'clonedMyScript.js';
                 })
