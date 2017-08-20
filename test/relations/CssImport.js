@@ -17,7 +17,7 @@ describe('relations/CssImport', function () {
     });
 
     it('should support the media property when attaching a new relation', function () {
-        const cssAsset = new AssetGraph().add({
+        const cssAsset = new AssetGraph().addAsset({
             type: 'Css',
             url: 'http://example.com/styles.css',
             text: 'body { color: maroon; }'

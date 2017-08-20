@@ -189,7 +189,7 @@ describe('assets/Css', function () {
             text: 'body {}'
         });
 
-        assetGraph.add(asset);
+        assetGraph.addAsset(asset);
 
         const warnSpy = sinon.spy(assetGraph, 'warn');
         assetGraph.on('warn', warnSpy);

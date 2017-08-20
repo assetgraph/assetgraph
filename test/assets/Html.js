@@ -463,7 +463,7 @@ describe('assets/Html', function () {
         });
 
         it('should support a non-camelCased directive name', function () {
-            expect(assetGraph.add({
+            expect(assetGraph.addAsset({
                 type: 'Html',
                 text:
                     '<!DOCTYPE html><html><head>' +
@@ -473,7 +473,7 @@ describe('assets/Html', function () {
         });
 
         it('should support a camelCased directive name', function () {
-            expect(assetGraph.add({
+            expect(assetGraph.addAsset({
                 type: 'Html',
                 url: 'http://example.com/index.html',
                 text:
@@ -485,7 +485,7 @@ describe('assets/Html', function () {
 
         describe('with no CSPs', function () {
             it('should allow an http: url for any directive', function () {
-                expect(assetGraph.add({
+                expect(assetGraph.addAsset({
                     type: 'Html',
                     url: 'http://example.com/index.html',
                     text: '<!DOCTYPE html><html><head></head><body></body></html>'
@@ -493,7 +493,7 @@ describe('assets/Html', function () {
             });
 
             it('should allow a data: url for any directive', function () {
-                expect(assetGraph.add({
+                expect(assetGraph.addAsset({
                     type: 'Html',
                     url: 'http://example.com/index.html',
                     text: '<!DOCTYPE html><html><head></head><body></body></html>'
@@ -504,7 +504,7 @@ describe('assets/Html', function () {
         describe('with multiple CSPs in effect', function () {
             describe('when both policies have the given directive', function () {
                 it('should allow a url if both policies allow it', function () {
-                    expect(assetGraph.add({
+                    expect(assetGraph.addAsset({
                         type: 'Html',
                         text:
                             '<!DOCTYPE html><html><head>' +
@@ -515,7 +515,7 @@ describe('assets/Html', function () {
                 });
 
                 it('should disallow a url when one of the policies has \'none\' for that directive', function () {
-                    expect(assetGraph.add({
+                    expect(assetGraph.addAsset({
                         type: 'Html',
                         text:
                             '<!DOCTYPE html><html><head>' +
@@ -528,7 +528,7 @@ describe('assets/Html', function () {
 
             describe('when one of the policies does not list that directive, but has a default-src directive', function () {
                 it('should disallow the url when the default-src says \'none\'', function () {
-                    expect(assetGraph.add({
+                    expect(assetGraph.addAsset({
                         type: 'Html',
                         text:
                             '<!DOCTYPE html><html><head>' +
@@ -539,7 +539,7 @@ describe('assets/Html', function () {
                 });
 
                 it('should disallow the url when the default-src disallows it', function () {
-                    expect(assetGraph.add({
+                    expect(assetGraph.addAsset({
                         type: 'Html',
                         text:
                             '<!DOCTYPE html><html><head>' +

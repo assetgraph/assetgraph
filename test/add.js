@@ -7,20 +7,20 @@ const pathModule = require('path');
 describe('AssetGraph#add', function () {
     describe('with an array', function () {
         it('should throw', function () {
-            expect(() => new AssetGraph().add([]), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try the loadAssets transform'));
+            expect(() => new AssetGraph().addAsset([]), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try the loadAssets transform'));
         });
     });
 
     describe('with a glob pattern', function () {
         it('should throw', function () {
-            expect(() => new AssetGraph().add('*.html'), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try the loadAssets transform'));
+            expect(() => new AssetGraph().addAsset('*.html'), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try the loadAssets transform'));
         });
     });
 
     it('should handle a relative path', async function () {
         const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '..', 'testdata', 'add', 'relativeUrl') + '/'});
-        const asset = assetGraph.add('foo.png');
-        assetGraph.add(asset);
+        const asset = assetGraph.addAsset('foo.png');
+        assetGraph.addAsset(asset);
         await asset.loadAsync();
         expect(asset.type, 'to equal', 'Png');
     });
@@ -35,8 +35,8 @@ describe('AssetGraph#add', function () {
         });
 
         const assetGraph = new AssetGraph();
-        const asset = assetGraph.add('http://www.example.com/foo.gif');
-        assetGraph.add(asset);
+        const asset = assetGraph.addAsset('http://www.example.com/foo.gif');
+        assetGraph.addAsset(asset);
         await asset.loadAsync();
         expect(asset, 'to be an object');
         expect(asset.url, 'to equal', 'http://www.example.com/foo.gif');
@@ -45,8 +45,8 @@ describe('AssetGraph#add', function () {
 
     it('should handle a data: url', async function () {
         const assetGraph = new AssetGraph();
-        const asset = assetGraph.add('data:text/html;base64,SGVsbG8sIHdvcmxkIQo=');
-        assetGraph.add(asset);
+        const asset = assetGraph.addAsset('data:text/html;base64,SGVsbG8sIHdvcmxkIQo=');
+        assetGraph.addAsset(asset);
         await asset.loadAsync();
         expect(asset, 'to be an object');
         expect(asset.rawSrc, 'to equal', new Buffer('Hello, world!\n', 'utf-8'));
@@ -57,8 +57,8 @@ describe('AssetGraph#add', function () {
         const warnSpy = sinon.spy().named('warn');
         assetGraph.on('warn', warnSpy);
 
-        const asset = assetGraph.add('my-funky.scheme://www.example.com/');
-        assetGraph.add(asset);
+        const asset = assetGraph.addAsset('my-funky.scheme://www.example.com/');
+        assetGraph.addAsset(asset);
 
         await asset.loadAsync();
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^No resolver found for protocol: my-funky.scheme/));
@@ -70,7 +70,7 @@ describe('AssetGraph#add', function () {
 
         assetGraph.on('warn', warnSpy);
 
-        const asset = assetGraph.add('android-app://www.example.com/');
+        const asset = assetGraph.addAsset('android-app://www.example.com/');
         await asset.loadAsync();
         expect(asset, 'to satisfy', { url: 'android-app://www.example.com/' });
         expect(warnSpy, 'was not called');
@@ -102,7 +102,7 @@ describe('AssetGraph#add', function () {
     describe('with an asset config that includes the body', function () {
         it('should add the targets of all external outgoing relations as unloaded Asset instances', function () {
             const assetGraph = new AssetGraph();
-            const asset = assetGraph.add({
+            const asset = assetGraph.addAsset({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { background-image: url(https://example.com/foo.png); }'
@@ -119,7 +119,7 @@ describe('AssetGraph#add', function () {
     describe('with an asset config that does not include the body', function () {
         it('should add the targets of all external outgoing relations as unloaded Asset instances once the asset is loaded', async function () {
             const assetGraph = new AssetGraph();
-            const cssAsset = assetGraph.add({
+            const cssAsset = assetGraph.addAsset({
                 type: 'Css',
                 url: 'https://example.com/styles.css'
             });
@@ -147,7 +147,7 @@ describe('AssetGraph#add', function () {
     describe('when the url already exists in the graph', function () {
         it('should return the existing instance', function () {
             const assetGraph = new AssetGraph();
-            const cssAsset = assetGraph.add({
+            const cssAsset = assetGraph.addAsset({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { color: teal; }'
@@ -155,7 +155,7 @@ describe('AssetGraph#add', function () {
             expect(cssAsset, 'to be a', AssetGraph.Css)
                 .and('to satisfy', { text: 'body { color: teal; }' });
 
-            const cssAsset2 = assetGraph.add({
+            const cssAsset2 = assetGraph.addAsset({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { color: teal; }'
@@ -168,7 +168,7 @@ describe('AssetGraph#add', function () {
     describe('when more information arrives about an existing asset', function () {
         it('should upgrade from Xml to Atom (more specific)', async function () {
             const assetGraph = new AssetGraph();
-            const xmlAsset = assetGraph.add({
+            const xmlAsset = assetGraph.addAsset({
                 url: 'http://example.com/feed.xml',
                 text: `
                     <?xml version="1.0" encoding="utf-8"?>
@@ -194,7 +194,7 @@ describe('AssetGraph#add', function () {
             const infoSpy = sinon.spy().named('info');
             assetGraph.on('info', infoSpy);
 
-            const atomAsset = assetGraph.add({
+            const atomAsset = assetGraph.addAsset({
                 url: 'http://example.com/feed.xml',
                 contentType: 'application/atom+xml'
             });
@@ -210,7 +210,7 @@ describe('AssetGraph#add', function () {
 
         it('should not downgrade from Atom to Xml (less specific)', async function () {
             const assetGraph = new AssetGraph();
-            const atomAsset = assetGraph.add({
+            const atomAsset = assetGraph.addAsset({
                 type: 'Atom',
                 url: 'http://example.com/feed.xml',
                 text: `
@@ -237,7 +237,7 @@ describe('AssetGraph#add', function () {
             const infoSpy = sinon.spy().named('info');
             assetGraph.on('info', infoSpy);
 
-            assetGraph.add({ url: 'http://example.com/feed.xml', contentType: 'application/xml' });
+            assetGraph.addAsset({ url: 'http://example.com/feed.xml', contentType: 'application/xml' });
 
             expect(assetGraph, 'to contain asset', 'Atom');
             expect(assetGraph, 'to contain asset', { fileName: 'foo.png' });
@@ -247,13 +247,13 @@ describe('AssetGraph#add', function () {
         it('should upgrade based on the type of an incoming relation being added later', async function () {
             const assetGraph = new AssetGraph();
 
-            const undetectableAsset = await assetGraph.add({
+            const undetectableAsset = await assetGraph.addAsset({
                 url: 'http://example.com/undetectable',
                 text: '/* foo */'
             });
             await undetectableAsset.loadAsync();
 
-            await assetGraph.add({
+            await assetGraph.addAsset({
                 type: 'Html',
                 url: 'http://example.com/',
                 text: `
@@ -273,7 +273,7 @@ describe('AssetGraph#add', function () {
         it('should upgrade based on the type of an existing incoming relation', async function () {
             const assetGraph = new AssetGraph();
 
-            await assetGraph.add({
+            await assetGraph.addAsset({
                 type: 'Html',
                 url: 'http://example.com/',
                 text: `
@@ -286,7 +286,7 @@ describe('AssetGraph#add', function () {
                 `
             }).loadAsync();
 
-            await assetGraph.add({
+            await assetGraph.addAsset({
                 url: 'http://example.com/undetectable',
                 text: '/* foo */'
             }).loadAsync();
@@ -300,12 +300,12 @@ describe('AssetGraph#add', function () {
             const warnSpy = sinon.spy().named('warn');
             assetGraph.on('warn', warnSpy);
 
-            const undetectableAsset = assetGraph.add({
+            const undetectableAsset = assetGraph.addAsset({
                 url: 'http://example.com/undetectable',
                 text: '/* foo */'
             });
 
-            assetGraph.add({
+            assetGraph.addAsset({
                 type: 'Html',
                 url: 'http://example.com/',
                 text: `
@@ -330,7 +330,7 @@ describe('AssetGraph#add', function () {
 
         it('should upgrade an unloaded asset with text', async function () {
             const assetGraph = new AssetGraph();
-            assetGraph.add({
+            assetGraph.addAsset({
                 type: 'Css',
                 url: 'http://example.com/styles.css',
                 text: '@import "more.css";'
@@ -338,7 +338,7 @@ describe('AssetGraph#add', function () {
             expect(assetGraph, 'to contain asset', {
                 url: 'http://example.com/more.css'
             });
-            await assetGraph.add({
+            await assetGraph.addAsset({
                 type: 'Css',
                 url: 'http://example.com/more.css',
                 text: 'body { color: teal; }'

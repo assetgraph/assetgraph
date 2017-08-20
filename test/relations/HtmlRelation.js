@@ -7,7 +7,7 @@ describe('relations/HtmlRelation', function () {
         describe('when there is an existing relation in both <head> and <body>', function () {
             let htmlAsset;
             beforeEach(function () {
-                htmlAsset = new AssetGraph().add({
+                htmlAsset = new AssetGraph().addAsset({
                     type: 'Html',
                     text:
                         '<!DOCTYPE html>' +
@@ -110,7 +110,7 @@ describe('relations/HtmlRelation', function () {
 
     describe('attaching to <head>', function () {
         function getHtmlAsset(htmlString) {
-            return new AssetGraph({ root: __dirname }).add({
+            return new AssetGraph({ root: __dirname }).addAsset({
                 type: 'Html',
                 text: htmlString || '<!doctype html><html><head></head><body></body></html>',
                 url: 'doesntmatter.html'

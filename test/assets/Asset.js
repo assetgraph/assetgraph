@@ -27,7 +27,7 @@ describe('assets/Asset', function () {
     describe('#addRelation()', function () {
         it('should implicitly create a non-inline target asset and add it to the graph', function () {
             const assetGraph = new AssetGraph();
-            const htmlAsset = assetGraph.add({
+            const htmlAsset = assetGraph.addAsset({
                 url: 'http://example.com/',
                 type: 'Html',
                 text: ''
@@ -48,7 +48,7 @@ describe('assets/Asset', function () {
 
         it('should implicitly create an inline target asset and add it to the graph', function () {
             const assetGraph = new AssetGraph();
-            const htmlAsset = assetGraph.add({
+            const htmlAsset = assetGraph.addAsset({
                 url: 'http://example.com/',
                 type: 'Html',
                 text: ''
@@ -71,7 +71,7 @@ describe('assets/Asset', function () {
 
         it('should implicitly create an inline target asset with outgoing relations and add it to the graph', function () {
             const assetGraph = new AssetGraph();
-            const htmlAsset = assetGraph.add({
+            const htmlAsset = assetGraph.addAsset({
                 url: 'http://example.com/',
                 type: 'Html',
                 text: ''
@@ -88,7 +88,7 @@ describe('assets/Asset', function () {
 
         it('should add and attach a relation that does not already have a node', function () {
             const assetGraph = new AssetGraph();
-            const htmlAsset = assetGraph.add({
+            const htmlAsset = assetGraph.addAsset({
                 url: 'http://example.com/',
                 type: 'Html',
                 text: ''
@@ -106,7 +106,7 @@ describe('assets/Asset', function () {
 
         it('should use the passed node instead of creating a new one', function () {
             const assetGraph = new AssetGraph();
-            const htmlAsset = assetGraph.add({
+            const htmlAsset = assetGraph.addAsset({
                 url: 'http://example.com/',
                 type: 'Html',
                 text: '<div>foobar</div>'
@@ -400,12 +400,12 @@ describe('assets/Asset', function () {
     it('should handle an AssetGraph with a loaded asset that has a link to an unloaded asset when the asset is moved', function () {
         var assetGraph = new AssetGraph();
 
-        assetGraph.add({
+        assetGraph.addAsset({
             type: 'Html',
             url: 'http://example.com/foo.html',
             text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/bar.html">link text</a></body></html>'
         });
-        const barHtml = assetGraph.add({ // Not yet loaded
+        const barHtml = assetGraph.addAsset({ // Not yet loaded
             type: 'Html',
             url: 'http://example.com/bar.html'
         });
@@ -550,7 +550,7 @@ describe('assets/Asset', function () {
     describe('#replaceWith()', function () {
         describe('when passed an asset config object', function () {
             it('should update the incoming relations of the existing asset', async function () {
-                const htmlAsset = new AssetGraph().add({
+                const htmlAsset = new AssetGraph().addAsset({
                     type: 'Html',
                     url: 'https://www.example.com/',
                     text: `
@@ -597,7 +597,7 @@ describe('assets/Asset', function () {
         describe('when passed an existing asset', function () {
             it('should foo', async function () {
                 const assetGraph = new AssetGraph();
-                const htmlAsset = assetGraph.add({
+                const htmlAsset = assetGraph.addAsset({
                     type: 'Html',
                     url: 'https://www.example.com/',
                     text: `
@@ -611,7 +611,7 @@ describe('assets/Asset', function () {
                     `
                 });
 
-                const replacementHtmlAsset = assetGraph.add({
+                const replacementHtmlAsset = assetGraph.addAsset({
                     TYPE: 'Html',
                     type: 'Html',
                     url: 'https://www.example.com/somewhere/else/page.html',
@@ -633,7 +633,7 @@ describe('assets/Asset', function () {
         it('should handle a combo test case', function () {
             const assetGraph = new AssetGraph({root: 'http://example.com/'});
 
-            var htmlAsset = assetGraph.add({
+            var htmlAsset = assetGraph.addAsset({
                 type: 'Html',
                 url: 'http://example.com/foo.html',
                 text:
@@ -655,12 +655,12 @@ describe('assets/Asset', function () {
 
             expect(htmlAsset.outgoingRelations[1].to.isResolved, 'to be true');
 
-            assetGraph.add({
+            assetGraph.addAsset({
                 type: 'Html',
                 url: 'http://example.com/quux.html',
                 text: '<!DOCTYPE html>\n<html><head><title>Boring document</title></head></html>'
             });
-            assetGraph.add({
+            assetGraph.addAsset({
                 type: 'Html',
                 url: 'http://example.com/baz.html',
                 text: '<!DOCTYPE html>\n<html><head><title>Another boring document</title></head></html>'
@@ -696,7 +696,7 @@ describe('assets/Asset', function () {
 
             expect(assetGraph, 'to contain no relations', 'HtmlAnchor');
 
-            assetGraph.add(fooHtml);
+            assetGraph.addAsset(fooHtml);
 
             expect(assetGraph, 'to contain relations', 'HtmlAnchor', 2);
 
@@ -730,7 +730,7 @@ describe('assets/Asset', function () {
             const assetGraph = new AssetGraph();
             const asset = new AssetGraph.Asset({});
 
-            assetGraph.add(asset);
+            assetGraph.addAsset(asset);
 
             expect(() => asset.rawSrc, 'to throw', /Asset isn't loaded/);
         });
@@ -744,8 +744,8 @@ describe('assets/Asset', function () {
             });
 
             const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/assets/Asset/rawSrc/' });
-            assetGraph.add(original);
-            assetGraph.add(clone);
+            assetGraph.addAsset(original);
+            assetGraph.addAsset(clone);
 
             const unloadSpy = sinon.spy(clone, 'unload');
             const markDirtySpy = sinon.spy(clone, 'markDirty');
@@ -786,11 +786,11 @@ describe('assets/Asset', function () {
     describe('#url', function () {
         it('should throw if an existing asset occupies the same url', function () {
             const assetGraph = new AssetGraph();
-            assetGraph.add({
+            assetGraph.addAsset({
                 type: 'Text',
                 url: 'https://example.com/foo.txt'
             });
-            const barTxt = assetGraph.add({
+            const barTxt = assetGraph.addAsset({
                 type: 'Text',
                 url: 'https://example.com/bar.txt'
             });
@@ -886,7 +886,7 @@ describe('assets/Asset', function () {
         });
 
         it('should remove the incomingInlineRelation property when un-inlining', function () {
-            var asset = new AssetGraph().add({
+            var asset = new AssetGraph().addAsset({
                 type: 'Html',
                 text: '<!DOCTYPE html><html><head><style>/*foo*/</style></head></html>'
             });
@@ -1054,13 +1054,13 @@ describe('assets/Asset', function () {
     describe('#baseName', function () {
         describe('when invoked as a getter', function () {
             it('should retrieve the base name from the url', function () {
-                expect(new AssetGraph().add({
+                expect(new AssetGraph().addAsset({
                     url: 'https://example.com/foobar.html'
                 }).baseName, 'to equal', 'foobar');
             });
 
             it('should return undefined when there is no file name', function () {
-                expect(new AssetGraph().add({
+                expect(new AssetGraph().addAsset({
                     url: 'https://example.com/'
                 }).baseName, 'to be undefined');
             });
@@ -1068,7 +1068,7 @@ describe('assets/Asset', function () {
 
         describe('when invoked as a setter', function () {
             it('should update the base name of the url', function () {
-                const asset = new AssetGraph().add({
+                const asset = new AssetGraph().addAsset({
                     url: 'https://example.com/foobar.html'
                 });
 
@@ -1078,7 +1078,7 @@ describe('assets/Asset', function () {
             });
 
             it('should preserve the extension', function () {
-                const asset = new AssetGraph().add({
+                const asset = new AssetGraph().addAsset({
                     url: 'https://example.com/foobar.html'
                 });
 
@@ -1089,7 +1089,7 @@ describe('assets/Asset', function () {
             });
 
             it('should return undefined when there is no file name', function () {
-                expect(new AssetGraph().add({
+                expect(new AssetGraph().addAsset({
                     url: 'https://example.com/'
                 }).baseName, 'to be undefined');
             });
@@ -1106,7 +1106,7 @@ describe('assets/Asset', function () {
 
     it('should allow specifying outgoingRelations when instantiating', function () {
         const assetGraph = new AssetGraph();
-        const page1 = assetGraph.add({
+        const page1 = assetGraph.addAsset({
             url: 'http://example.com/page1.html',
             type: 'Html',
             text: `
@@ -1122,7 +1122,7 @@ describe('assets/Asset', function () {
         const parseTree = page1.parseTree;
         const outgoingRelations = page1.outgoingRelations;
 
-        const page2 = assetGraph.add({
+        const page2 = assetGraph.addAsset({
             type: 'Html',
             parseTree,
             outgoingRelations
@@ -1136,7 +1136,7 @@ describe('assets/Asset', function () {
 
     it('should allow specifying incomingRelations when instantiating', function () {
         const assetGraph = new AssetGraph();
-        const page1 = assetGraph.add({
+        const page1 = assetGraph.addAsset({
             url: 'https://example.com/page1.html',
             type: 'Html',
             text: `
@@ -1152,7 +1152,7 @@ describe('assets/Asset', function () {
         const parseTree = page1.parseTree;
         const incomingRelations = page1.outgoingRelations;
 
-        const page2 = assetGraph.add({
+        const page2 = assetGraph.addAsset({
             type: 'Html',
             url: 'https://example.com/somewhere/page2.html',
             parseTree,

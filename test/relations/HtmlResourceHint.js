@@ -11,7 +11,7 @@ describe('relations/HtmlResourceHint', function () {
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
 
-        graph.add(htmlAsset);
+        graph.addAsset(htmlAsset);
 
         return htmlAsset;
     }

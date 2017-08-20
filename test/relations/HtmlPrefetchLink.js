@@ -10,7 +10,7 @@ describe('relations/HtmlPrefetchLink', function () {
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
 
-        graph.add(htmlAsset);
+        graph.addAsset(htmlAsset);
 
         return htmlAsset;
     }

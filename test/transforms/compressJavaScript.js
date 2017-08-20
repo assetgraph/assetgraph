@@ -39,7 +39,7 @@ describe('transforms/compressJavaScript', function () {
                 .on('warn', warnSpy)
                 .queue(function (assetGraph) {
                     assetGraph.javaScriptSerializationOptions = { ie8: true };
-                    assetGraph.add(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+                    assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
                 })
                 .compressJavaScript({type: 'JavaScript'})
                 .queue(function (assetGraph) {
@@ -55,7 +55,7 @@ describe('transforms/compressJavaScript', function () {
                 .on('warn', warnSpy)
                 .queue(function (assetGraph) {
                     assetGraph.javaScriptSerializationOptions = { ie8: false };
-                    assetGraph.add(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+                    assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
                 })
                 .compressJavaScript({type: 'JavaScript'})
                 .queue(function (assetGraph) {
@@ -72,7 +72,7 @@ describe('transforms/compressJavaScript', function () {
                 .queue(function (assetGraph) {
                     var asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
                     asset.serializationOptions = { ie8: true };
-                    assetGraph.add(asset);
+                    assetGraph.addAsset(asset);
                 })
                 .compressJavaScript({type: 'JavaScript'})
                 .queue(function (assetGraph) {
@@ -89,7 +89,7 @@ describe('transforms/compressJavaScript', function () {
                 .queue(function (assetGraph) {
                     var asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
                     asset.serializationOptions = { ie8: false };
-                    assetGraph.add(asset);
+                    assetGraph.addAsset(asset);
                 })
                 .compressJavaScript({type: 'JavaScript'})
                 .queue(function (assetGraph) {
@@ -105,7 +105,7 @@ describe('transforms/compressJavaScript', function () {
                 .on('warn', warnSpy)
                 .queue(function (assetGraph) {
                     assetGraph.javaScriptSerializationOptions = { screw_ie8: false };
-                    assetGraph.add(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+                    assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
                 })
                 .compressJavaScript({type: 'JavaScript'})
                 .queue(function (assetGraph) {
@@ -121,7 +121,7 @@ describe('transforms/compressJavaScript', function () {
                 .on('warn', warnSpy)
                 .queue(function (assetGraph) {
                     assetGraph.javaScriptSerializationOptions = { screw_ie8: true };
-                    assetGraph.add(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+                    assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
                 })
                 .compressJavaScript({type: 'JavaScript'})
                 .queue(function (assetGraph) {
@@ -138,7 +138,7 @@ describe('transforms/compressJavaScript', function () {
                 .queue(function (assetGraph) {
                     var asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
                     asset.serializationOptions = { screw_ie8: false };
-                    assetGraph.add(asset);
+                    assetGraph.addAsset(asset);
                 })
                 .compressJavaScript({type: 'JavaScript'})
                 .queue(function (assetGraph) {
@@ -155,7 +155,7 @@ describe('transforms/compressJavaScript', function () {
                 .queue(function (assetGraph) {
                     var asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
                     asset.serializationOptions = { screw_ie8: true };
-                    assetGraph.add(asset);
+                    assetGraph.addAsset(asset);
                 })
                 .compressJavaScript({type: 'JavaScript'})
                 .queue(function (assetGraph) {
