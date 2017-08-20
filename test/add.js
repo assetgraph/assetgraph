@@ -7,13 +7,13 @@ const pathModule = require('path');
 describe('AssetGraph#add', function () {
     describe('with an array', function () {
         it('should throw', function () {
-            expect(() => new AssetGraph().add([]), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try AssetGraph#addAll'));
+            expect(() => new AssetGraph().add([]), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try the loadAssets transform'));
         });
     });
 
     describe('with a glob pattern', function () {
         it('should throw', function () {
-            expect(() => new AssetGraph().add('*.html'), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try AssetGraph#addAll'));
+            expect(() => new AssetGraph().add('*.html'), 'to throw', new Error('AssetGraph#add does not accept an array or glob patterns, try the loadAssets transform'));
         });
     });
 
