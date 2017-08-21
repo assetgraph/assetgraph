@@ -88,6 +88,73 @@ describe('snapToAvailableFontProperties', function () {
     });
 
     describe('font-family', function () {
+        it('should return an exact match', function () {
+            var snapped = snap(
+                [
+                    {
+                        'font-family': 'foo'
+                    }
+                ],
+                {
+                    'font-family': 'foo'
+                }
+            );
+
+            expect(snapped, 'to satisfy', {
+                'font-family': 'foo'
+            });
+        });
+
+        it('should unquote quoted values', function () {
+            var snapped = snap(
+                [
+                    {
+                        'font-family': 'foo font'
+                    }
+                ],
+                {
+                    'font-family': '"foo font"'
+                }
+            );
+
+            expect(snapped, 'to satisfy', {
+                'font-family': 'foo font'
+            });
+        });
+
+        it('should match the first font in a multiple value assignment', function () {
+            var snapped = snap(
+                [
+                    {
+                        'font-family': 'foo'
+                    }
+                ],
+                {
+                    'font-family': 'foo, bar, baz'
+                }
+            );
+
+            expect(snapped, 'to satisfy', {
+                'font-family': 'foo'
+            });
+        });
+
+        it('should not match the subsequent fonts in a multiple value assignment', function () {
+            var snapped = snap(
+                [
+                    {
+                        'font-family': 'foo'
+                    }
+                ],
+                {
+                    'font-family': 'bar, foo, baz'
+                }
+            );
+
+            expect(snapped, 'to satisfy', {
+                'font-family': 'bar, foo, baz'
+            });
+        });
     });
 
     describe('font-stretch', function () {
