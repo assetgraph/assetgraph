@@ -15,7 +15,7 @@ describe('snapToAvailableFontProperties', function () {
         }, 'to throw', new TypeError('propsToSnap must be an object'));
     });
 
-    it('should return input values when no @font-face declarations are provided', function () {
+    it('should return undefined when no @font-face declarations are provided', function () {
         var snapped = snap([], {
             'font-family': 'Tahoma',
             'font-stretch': 'normal',
@@ -23,27 +23,18 @@ describe('snapToAvailableFontProperties', function () {
             'font-weight': 400
         });
 
-        expect(snapped, 'to satisfy', {
-            'font-family': 'Tahoma',
-            'font-stretch': 'normal',
-            'font-style': 'normal',
-            'font-weight': 400
-        });
-    });
-
-    it('should fill in missing font-family property', function () {
-        var snapped = snap([], {});
-
-        expect(snapped, 'to satisfy', {
-            'font-family': undefined,
-            'font-stretch': 'normal',
-            'font-style': 'normal',
-            'font-weight': 400
-        });
+        expect(snapped, 'to be undefined');
     });
 
     it('should fill in missing font-stretch property', function () {
-        var snapped = snap([], {
+        var snapped = snap([
+            {
+                'font-family': 'Tahoma',
+                'font-stretch': 'normal',
+                'font-style': 'normal',
+                'font-weight': 400
+            }
+        ], {
             'font-family': 'Tahoma',
             'font-style': 'normal',
             'font-weight': 400
@@ -58,7 +49,14 @@ describe('snapToAvailableFontProperties', function () {
     });
 
     it('should fill in missing font-style property', function () {
-        var snapped = snap([], {
+        var snapped = snap([
+            {
+                'font-family': 'Tahoma',
+                'font-stretch': 'normal',
+                'font-style': 'normal',
+                'font-weight': 400
+            }
+        ], {
             'font-family': 'Tahoma',
             'font-stretch': 'normal',
             'font-weight': 400
@@ -73,7 +71,14 @@ describe('snapToAvailableFontProperties', function () {
     });
 
     it('should fill in missing font-weight property', function () {
-        var snapped = snap([], {
+        var snapped = snap([
+            {
+                'font-family': 'Tahoma',
+                'font-stretch': 'normal',
+                'font-style': 'normal',
+                'font-weight': 400
+            }
+        ], {
             'font-family': 'Tahoma',
             'font-stretch': 'normal',
             'font-style': 'normal'
@@ -151,9 +156,7 @@ describe('snapToAvailableFontProperties', function () {
                 }
             );
 
-            expect(snapped, 'to satisfy', {
-                'font-family': 'bar, foo, baz'
-            });
+            expect(snapped, 'to be undefined');
         });
     });
 
