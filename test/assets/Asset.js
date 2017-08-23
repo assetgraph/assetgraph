@@ -15,6 +15,26 @@ describe('assets/Asset', function () {
         });
     });
 
+    describe('#fileName', function () {
+        it('should come out as undefined when the url ends with a slash initially', function () {
+            expect(new AssetGraph.Html({
+                text: 'foo',
+                url: 'https://example.com/'
+            }).fileName, 'to be undefined');
+        });
+
+        it('should come out as undefined when an inline asset is externalized to a url that ends with a slash', function () {
+            var assetGraph = new AssetGraph();
+            assetGraph.addAsset(new AssetGraph.Html({
+                url: 'https://example.com/',
+                text: '<style>/**/</style>'
+            }));
+            var cssAsset = assetGraph.findAssets({type: 'Css'})[0];
+            cssAsset.url = 'https://example.com/styles/';
+            expect(cssAsset.fileName, 'to be undefined');
+        });
+    });
+
     it('should handle an asset with an extensionless url', function () {
         var htmlAsset = new AssetGraph.Html({
             text: 'foo',
