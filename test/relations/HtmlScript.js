@@ -162,4 +162,76 @@ describe('relations/HtmlScript', function () {
         expect(relation.node.parentNode, 'to be', document.head);
         expect(relation.node, 'to be', firstScript.node.nextSibling);
     });
+
+    describe('#async', function () {
+        it('should support the async attribute when creating a relation', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'});
+
+            const htmlAsset = assetGraph.addAsset({
+                type: 'Html',
+                url: 'https://example.com/index.html',
+                text: '<!DOCTYPE html><html><head></head><body></body></html>'
+            });
+
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                async: true,
+                href: 'https://example.com/script.js'
+            }, 'first');
+
+            expect(
+                htmlAsset.text,
+                'to equal',
+                '<!DOCTYPE html><html><head></head><body><script async="async" src="script.js"></script></body></html>'
+            );
+        });
+
+        it('should support retrieving the async attribute from an attached relation', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'});
+
+            const htmlAsset = assetGraph.addAsset({
+                type: 'Html',
+                url: 'https://example.com/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><script async src="script.js"></script></body></html>'
+            });
+
+            expect(htmlAsset.outgoingRelations, 'to satisfy', [ { async: true } ]);
+        });
+    });
+
+    describe('#defer', function () {
+        it('should support the defer attribute when creating a relation', function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'});
+
+            const htmlAsset = assetGraph.addAsset({
+                type: 'Html',
+                url: 'https://example.com/index.html',
+                text: '<!DOCTYPE html><html><head></head><body></body></html>'
+            });
+
+            htmlAsset.addRelation({
+                type: 'HtmlScript',
+                defer: true,
+                href: 'https://example.com/script.js'
+            }, 'first');
+
+            expect(
+                htmlAsset.text,
+                'to equal',
+                '<!DOCTYPE html><html><head></head><body><script defer="defer" src="script.js"></script></body></html>'
+            );
+        });
+
+        it('should support retrieving the defer attribute from an attached relation', function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'});
+
+            const htmlAsset = assetGraph.addAsset({
+                type: 'Html',
+                url: 'https://example.com/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><script defer src="script.js"></script></body></html>'
+            });
+
+            expect(htmlAsset.outgoingRelations, 'to satisfy', [ { defer: true } ]);
+        });
+    });
 });
