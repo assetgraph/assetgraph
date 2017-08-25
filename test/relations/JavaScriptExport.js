@@ -95,6 +95,7 @@ describe('JavaScriptExport', function () {
                     url: 'https://example.com/',
                     text: `
                         export { foo } from 'bar/quux.js';
+                        alert('foo');
                     `
                 });
 
@@ -103,7 +104,31 @@ describe('JavaScriptExport', function () {
                     to: 'http://blabla.com/lib.js'
                 }, 'last');
                 expect(javaScript.outgoingRelations, 'to satisfy', { 1: newRelation });
-                expect(javaScript.text, 'to end with', 'export * from \'http://blabla.com/lib.js\';');
+                expect(javaScript.text, 'to equal', `
+                    export {
+                        foo
+                    } from 'bar/quux.js';
+                    export * from 'http://blabla.com/lib.js';
+                    alert('foo');`.replace(/^\n/, '').replace(/^ {20}/mg, ''));
+            });
+
+            it('should attach at the top when there are no existing exports', function () {
+                const javaScript = new AssetGraph().addAsset({
+                    type: 'JavaScript',
+                    url: 'https://example.com/',
+                    text: `
+                        alert('foo');
+                    `
+                });
+
+                const newRelation = javaScript.addRelation({
+                    type: 'JavaScriptExport',
+                    to: 'http://blabla.com/lib.js'
+                }, 'last');
+                expect(javaScript.outgoingRelations, 'to equal', [ newRelation ]);
+                expect(javaScript.text, 'to equal', `
+                    export * from 'http://blabla.com/lib.js';
+                    alert('foo');`.replace(/^\s+/mg, ''));
             });
         });
 

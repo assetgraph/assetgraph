@@ -57,6 +57,7 @@ describe('JavaScriptImport', function () {
                     url: 'https://example.com/',
                     text: `
                         import foo from 'bar/quux.js';
+                        alert('foo');
                     `
                 });
 
@@ -65,7 +66,29 @@ describe('JavaScriptImport', function () {
                     to: 'http://blabla.com/lib.js'
                 }, 'last');
                 expect(javaScript.outgoingRelations, 'to satisfy', { 1: newRelation });
-                expect(javaScript.text, 'to end with', 'import \'http://blabla.com/lib.js\';');
+                expect(javaScript.text, 'to equal', `
+                    import foo from 'bar/quux.js';
+                    import 'http://blabla.com/lib.js';
+                    alert('foo');`.replace(/^\s+/mg, ''));
+            });
+
+            it('should attach at the top when there are no existing imports', function () {
+                const javaScript = new AssetGraph().addAsset({
+                    type: 'JavaScript',
+                    url: 'https://example.com/',
+                    text: `
+                        alert('foo');
+                    `
+                });
+
+                const newRelation = javaScript.addRelation({
+                    type: 'JavaScriptImport',
+                    to: 'http://blabla.com/lib.js'
+                }, 'last');
+                expect(javaScript.outgoingRelations, 'to equal', [ newRelation ]);
+                expect(javaScript.text, 'to equal', `
+                    import 'http://blabla.com/lib.js';
+                    alert('foo');`.replace(/^\s+/mg, ''));
             });
         });
 
