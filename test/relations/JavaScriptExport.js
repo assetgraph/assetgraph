@@ -30,6 +30,30 @@ describe('JavaScriptExport', function () {
         ]);
     });
 
+    it('should ignore an ExportNamedDeclaration node without a source', function () {
+        const javaScript = new AssetGraph().addAsset({
+            type: 'JavaScript',
+            url: 'https://example.com/',
+            text: `
+                export function foo () {};
+            `
+        });
+
+        expect(javaScript.outgoingRelations, 'to equal', []);
+    });
+
+    it('should ignore an ExportDefaultDeclaration node without a source', function () {
+        const javaScript = new AssetGraph().addAsset({
+            type: 'JavaScript',
+            url: 'https://example.com/',
+            text: `
+                export default 123;
+            `
+        });
+
+        expect(javaScript.outgoingRelations, 'to equal', []);
+    });
+
     it('should update the href of a relation', function () {
         const javaScript = new AssetGraph().addAsset({
             type: 'JavaScript',
