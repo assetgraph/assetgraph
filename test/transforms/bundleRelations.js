@@ -270,8 +270,8 @@ describe('transforms/bundleRelations', function () {
                 .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'});
 
             expect(assetGraph.findAssets({fileName: 'index.html'})[0].text, 'not to contain', 'alert')
-                .and('to match', /<script src="[^"]+" async="async">/)
-                .and('to match', /<script src="[^"]+" defer="defer">/);
+                .and('to match', /<script async="async" src="[^"]+">/)
+                .and('to match', /<script defer="defer" src="[^"]+">/);
             expect(assetGraph, 'to contain assets', {type: 'JavaScript', isInline: false, text: /alert/}, 2);
         });
 
