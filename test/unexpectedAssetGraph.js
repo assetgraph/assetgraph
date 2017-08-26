@@ -73,7 +73,13 @@ module.exports = {
             } else if (typeof number === 'undefined') {
                 number = 1;
             }
-            expect(subject.findAssets(value), 'to have length', number);
+            const foundAssets = subject.findAssets(value);
+            expect(foundAssets, 'to have length', number);
+            if (number === 1) {
+                return foundAssets[0];
+            } else {
+                return foundAssets;
+            }
         });
 
         expect.addAssertion('<AssetGraph> to contain (url|urls) <string|array?>', function (expect, subject, urls) {
@@ -103,7 +109,13 @@ module.exports = {
                 number = 1;
             }
             this.errorMode = 'nested';
-            expect(subject.findRelations(queryObj), 'to have length', number);
+            const foundRelations = subject.findRelations(queryObj);
+            expect(foundRelations, 'to have length', number);
+            if (number === 1) {
+                return foundRelations[0];
+            } else {
+                return foundRelations;
+            }
         });
 
         expect.addAssertion('<AssetGraph> to contain [no] (relation|relations) [including unresolved] <string|object|number> <number?>', function (expect, subject, queryObj, number) {
