@@ -1,81 +1,82 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    sinon = require('sinon'),
-    mozilla = require('source-map'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const sinon = require('sinon');
+const mozilla = require('source-map');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/Css', function () {
-    it('should handle a test case with a parse error in an inline Css asset', function (done) {
-        var err;
-        new AssetGraph({root: __dirname + '/../../testdata/assets/Css/parseErrors/'})
-            .on('warn', function (_err) {
-                err = _err;
-            })
-            .loadAssets('parseErrorInInlineCss.html')
-            .queue(function () {
-                expect(err, 'to be an', Error);
-                expect(err.message, 'to match', /parseErrorInInlineCss\.html/);
-            })
-            .run(done);
+    let sandbox;
+    beforeEach(function () {
+        sandbox = sinon.sandbox.create();
     });
 
-    it('should handle a test case with a parse error in an external Css asset', function (done) {
-        var err;
-        new AssetGraph({root: __dirname + '/../../testdata/assets/Css/parseErrors/'})
-            .on('warn', function (_err) {
-                err = _err;
-            })
+    afterEach(function () {
+        sandbox.restore();
+    });
+
+    it('should handle a test case with a parse error in an inline Css asset', async function () {
+        const warnSpy = sandbox.spy().named('warn');
+        await new AssetGraph({root: __dirname + '/../../testdata/assets/Css/parseErrors/'})
+            .on('warn', warnSpy)
+            .loadAssets('parseErrorInInlineCss.html');
+
+        expect(warnSpy, 'to have calls satisfying', () => {
+            warnSpy(/parseErrorInInlineCss\.html/);
+        });
+    });
+
+    it('should handle a test case with a parse error in an external Css asset', async function () {
+        const warnSpy = sandbox.spy().named('warn');
+        await new AssetGraph({root: __dirname + '/../../testdata/assets/Css/parseErrors/'})
+            .on('warn', warnSpy)
             .loadAssets('parseErrorInExternalCss.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(err, 'to be an', Error);
-                expect(err.message, 'to match', /parseError\.css/);
-            })
-            .run(done);
+            .populate();
+
+        expect(warnSpy, 'to have calls satisfying', () => {
+            warnSpy(/parseError\.css/);
+        });
     });
 
-    it('should handle a test case that has multiple neighbour @font-face rules', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/assets/Css/multipleFontFaceRules/'})
+    it('should handle a test case that has multiple neighbour @font-face rules', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Css/multipleFontFaceRules/'})
             .loadAssets('index.css')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain asset', 'Css');
-                expect(assetGraph.findAssets({type: 'Css'})[0].text.match(/@font-face/g), 'to have length', 3);
+            .populate();
 
-                assetGraph.findAssets({type: 'Css'})[0].markDirty();
-                expect(assetGraph.findAssets({type: 'Css'})[0].text.match(/@font-face/g), 'to have length', 3);
-            })
-            .run(done);
+        const cssAsset = await expect(assetGraph, 'to contain asset', 'Css');
+        expect(cssAsset.text.match(/@font-face/g), 'to have length', 3);
+
+        cssAsset.markDirty();
+        expect(cssAsset.text.match(/@font-face/g), 'to have length', 3);
     });
 
     it('should get the default encoding when there is no other way to determine encoding', function () {
-        var asset = new AssetGraph.Css({});
+        const asset = new AssetGraph.Css({});
 
         expect(asset.encoding, 'to be', AssetGraph.Text.prototype.defaultEncoding);
     });
 
     it('should get set a new encoding correctly', function () {
-        var asset = new AssetGraph.Css({
+        const asset = new AssetGraph.Css({
             encoding: 'utf-8',
             text: 'body:before { content: "🐮"; }'
         });
 
-        var markDirtySpy = sinon.spy(asset, 'markDirty');
+        sandbox.spy(asset, 'markDirty');
 
         asset.encoding = 'iso-8859-1';
 
-        expect(markDirtySpy, 'was called once');
+        expect(asset.markDirty, 'to have calls satisfying', () => {
+            asset.markDirty();
+        });
         expect(asset.encoding, 'to be', 'iso-8859-1');
     });
 
     describe('#minify', function () {
         it('should minify the Css text', function () {
-            var cssText = 'body {\n    background: red;\n}\n';
-            var asset = new AssetGraph.Css({
-                text: cssText
-            });
+            const text = 'body {\n    background: red;\n}\n';
+            const asset = new AssetGraph.Css({ text });
 
-            expect(asset.text, 'to be', cssText);
+            expect(asset.text, 'to be', text);
 
             asset.minify();
             expect(asset.text, 'to be', 'body{background:red}');
@@ -122,7 +123,7 @@ describe('assets/Css', function () {
             const asset = new AssetGraph.Css({
                 text: '.foo {\n  background-image: url(foo.png);\n}.foo {\n  background-image: url(foo.png);\n}'
             });
-            var relations = asset.outgoingRelations;
+            const relations = asset.outgoingRelations;
             asset.minify();
             asset.text;
             asset.prettyPrint();
@@ -169,7 +170,7 @@ describe('assets/Css', function () {
     });
 
     it('should throw an error on completely invalid CSS', function () {
-        var asset = new AssetGraph.Css({
+        const asset = new AssetGraph.Css({
             text: 'body {}'
         });
         function getParseTree() {
@@ -184,14 +185,14 @@ describe('assets/Css', function () {
     });
 
     it('should emit a warn event on completely invalid CSS if the asset is part of an assetGraph', function () {
-        var assetGraph = new AssetGraph();
-        var asset = new AssetGraph.Css({
+        const assetGraph = new AssetGraph();
+        const asset = new AssetGraph.Css({
             text: 'body {}'
         });
 
         assetGraph.addAsset(asset);
 
-        const warnSpy = sinon.spy(assetGraph, 'warn');
+        const warnSpy = sandbox.spy(assetGraph, 'warn');
         assetGraph.on('warn', warnSpy);
 
         expect(() => asset.parseTree, 'not to throw');
@@ -200,28 +201,30 @@ describe('assets/Css', function () {
     });
 
     it('should update the text of a Css asset when setting parseTree', function () {
-        var cssText = 'h1{color:hotpink}';
-        var first = new AssetGraph.Css({
+        const cssText = 'h1{color:hotpink}';
+        const first = new AssetGraph.Css({
             text: 'h1{color:red}'
         });
-        var second = new AssetGraph.Css({
+        const second = new AssetGraph.Css({
             text: cssText
         });
 
-        var unloadSpy = sinon.spy(first, 'unload');
-        var markDirtySpy = sinon.spy(first, 'markDirty');
+        sandbox.spy(first, 'unload');
+        sandbox.spy(first, 'markDirty');
 
         first.parseTree = second.parseTree;
 
-        expect(unloadSpy, 'was called once');
-        expect(markDirtySpy, 'was called once');
+        expect([first.unload, first.markDirty], 'to have calls satisfying', () => {
+            first.unload();
+            first.markDirty();
+        });
 
         expect(first.text, 'to be', cssText);
     });
 
     // https://github.com/ben-eb/postcss-merge-longhand/issues/21
     it('should not convert long hand properties to short hand ones', function () {
-        var cssAsset = new AssetGraph.Css({
+        const cssAsset = new AssetGraph.Css({
             text:
                 'div{\n' +
                 'border-top-width: 5px;\n' +
