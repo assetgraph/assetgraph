@@ -470,4 +470,73 @@ describe('relations/Relation', function () {
             });
         });
     });
+
+    describe('#to', function () {
+        describe('when used as a setter', function () {
+            describe('when an asset config is passed', function () {
+                it('should add the target asset to the graph', function () {
+                    const assetGraph = new AssetGraph();
+                    const htmlAsset = assetGraph.addAsset({
+                        type: 'Html',
+                        url: 'https://example.com/',
+                        text: `
+                            <!DOCTYPE html>
+                            <html>
+                                <head></head>
+                                <body>
+                                    <a href="https://example.com/other.html">Link</a>
+                                </body>
+                            </html>
+                        `
+                    });
+
+                    htmlAsset.outgoingRelations[0].to = 'https://blah.com/whataboutthis/';
+
+                    expect(htmlAsset.text, 'to contain', '<a href="https://blah.com/whataboutthis/">');
+
+                    expect(assetGraph, 'to contain asset', {
+                        type: 'Asset',
+                        url: 'https://blah.com/whataboutthis/'
+                    });
+
+                    htmlAsset.outgoingRelations[0].to = {
+                        url: 'https://whatdoyouknow.com/whataboutthis/'
+                    };
+
+                    expect(assetGraph, 'to contain asset', {
+                        type: 'Asset',
+                        url: 'https://whatdoyouknow.com/whataboutthis/'
+                    });
+                });
+            });
+
+            describe('when an existing asset is passed', function () {
+                it('should automatically refresh the href of the relation', function () {
+                    const assetGraph = new AssetGraph();
+                    const htmlAsset = assetGraph.addAsset({
+                        type: 'Html',
+                        url: 'https://example.com/',
+                        text: `
+                            <!DOCTYPE html>
+                            <html>
+                                <head></head>
+                                <body>
+                                    <a href="https://example.com/other.html">Link</a>
+                                </body>
+                            </html>
+                        `
+                    });
+
+                    const imageAsset = assetGraph.addAsset({
+                        type: 'Png',
+                        url: 'https://example.com/images/foo.png'
+                    });
+
+                    htmlAsset.outgoingRelations[0].to = imageAsset;
+
+                    expect(htmlAsset.text, 'to contain', '<a href="https://example.com/images/foo.png">');
+                });
+            });
+        });
+    });
 });
