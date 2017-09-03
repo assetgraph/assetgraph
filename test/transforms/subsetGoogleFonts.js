@@ -551,6 +551,30 @@ describe('transforms/subsetGoogleFonts', function () {
                     // Filament group async css load of original google font css
                     expect(assetGraph.findRelations({ crossorigin: true }, true), 'to satisfy', [
                         {
+                            type: 'HtmlPrefetchLink',
+                            from: index,
+                            hrefType: 'absolute',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                        },
+                        {
+                            type: 'HtmlPreconnectLink',
+                            from: index,
+                            hrefType: 'absolute',
+                            href: 'https://fonts.gstatic.com'
+                        },
+                        {
+                            type: 'HtmlPrefetchLink',
+                            from: about,
+                            hrefType: 'absolute',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                        },
+                        {
+                            type: 'HtmlPreconnectLink',
+                            from: about,
+                            hrefType: 'absolute',
+                            href: 'https://fonts.gstatic.com'
+                        },
+                        {
                             type: 'HtmlStyle',
                             from: index,
                             href: 'https://fonts.googleapis.com/css?family=Open+Sans'
@@ -648,6 +672,16 @@ describe('transforms/subsetGoogleFonts', function () {
                             }
                         },
                         {
+                            type: 'HtmlPrefetchLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                        },
+                        {
+                            type: 'HtmlPreconnectLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.gstatic.com'
+                        },
+                        {
                             type: 'HtmlStyle',
                             to: { isInline: true }
                         },
@@ -694,6 +728,16 @@ describe('transforms/subsetGoogleFonts', function () {
                                 .and('to end with', '.css')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: sharedFontStyles
+                        },
+                        {
+                            type: 'HtmlPrefetchLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                        },
+                        {
+                            type: 'HtmlPreconnectLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.gstatic.com'
                         },
                         {
                             type: 'HtmlStyle',
