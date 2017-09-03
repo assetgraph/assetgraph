@@ -686,6 +686,99 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             return expect(htmlText, 'to exhaustively satisfy computed font properties', []);
         });
 
+        describe('with quotes', function () {
+            it('should include all start quote characters when open-quote is part of the content value', function () {
+                var htmlText = [
+                    '<style>div:after { quotes: "<" ">"; }</style>',
+                    '<style>div:after { content: open-quote; font-family: font1 !important; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: '<',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should include all end quote characters when close-quote is part of the content value', function () {
+                var htmlText = [
+                    '<style>div:after { quotes: "<" ">" "[" "]"; }</style>',
+                    '<style>div:after { content: close-quote; font-family: font1 !important; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: '>]',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should handle hypothetical values of quotes', function () {
+                var htmlText = [
+                    '<style>div:after { quotes: "<" ">"; }</style>',
+                    '<style>@media 3dglasses { div:after { quotes: "(" ")"; } }</style>',
+                    '<style>div:after { content: open-quote; font-family: font1 !important; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: '(',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: '<',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should assume a conservative set of the most common quote characters when the quotes property is not explicitly given', function () {
+                var htmlText = [
+                    '<q></q>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: '«‹‘\'"',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: '»›’\'"',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+        });
+
         it('should override re-definition of prop on :after pseudo-element', function () {
             var htmlText = [
                 '<style>h1::after { content: "after"; font-family: font1; }</style>',
