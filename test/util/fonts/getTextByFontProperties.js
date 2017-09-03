@@ -676,6 +676,16 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             return expect(htmlText, 'to exhaustively satisfy computed font properties', []);
         });
 
+        it('should not inherit the content property', function () {
+            var htmlText = [
+                '<style>h1 { content: "foo" }</style>',
+                '<style>h1:after { font-family: font1 !important; }</style>',
+                '<h1></h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', []);
+        });
+
         it('should override re-definition of prop on :after pseudo-element', function () {
             var htmlText = [
                 '<style>h1::after { content: "after"; font-family: font1; }</style>',
@@ -827,6 +837,24 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
                     text: 'bar',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should support content: attr(...) mixes with quoted strings', function () {
+            var htmlText = [
+                '<style>div:after { content: "baz" attr(data-foo) "yadda"; font-family: font1; }</style>',
+                '<div data-foo="bar"></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'bazbaryadda',
                     props: {
                         'font-family': 'font1',
                         'font-weight': 400,
