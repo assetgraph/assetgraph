@@ -939,7 +939,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
-        it('should support content: attr(...) mixes with quoted strings', function () {
+        it('should support content: attr(...) mixed with quoted strings', function () {
             var htmlText = [
                 '<style>div:after { content: "baz" attr(data-foo) "yadda"; font-family: font1; }</style>',
                 '<div data-foo="bar"></div>'
