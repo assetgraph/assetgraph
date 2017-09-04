@@ -932,6 +932,41 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 }
             ]);
         });
+
+        it('should not confuse :before and :after properties', function () {
+            var htmlText = [
+                '<style>.after:after { content: "after"; font-family: font1 !important; }</style>',
+                '<style>h1:before { content: "before"; font-family: font2; }</style>',
+                '<h1 class="after">h1</h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'before',
+                    props: {
+                        'font-family': 'font2',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
     });
 
     describe('CSS pseudo selectors', function () {
