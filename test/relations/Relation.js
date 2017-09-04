@@ -571,6 +571,20 @@ describe('relations/Relation', function () {
             var svgAsset = assetGraph.findAssets({ type: 'Svg' })[0];
             svgAsset.url = 'https://example.com/somewhereelse/image.svg';
             expect(svgAsset.text, 'to contain', '<use xlink:href="#path-1"></use>');
+
+            assetGraph.addAsset({
+                type: 'Html',
+                url: 'https://example.com/index.html',
+                text: '<img src="image.svg">'
+            });
+
+            var htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
+
+            htmlAsset.outgoingRelations[0].to = svgAsset;
+
+            htmlAsset.outgoingRelations[0].inline();
+
+            expect(svgAsset.text, 'to contain', '<use xlink:href="#path-1"></use>');
         });
     });
 });
