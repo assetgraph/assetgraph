@@ -897,6 +897,76 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 }
             ]);
         });
+
+        it('should support a combination of pseudo elements and media queries', function () {
+            var htmlText = [
+                '<style>h1:after { content: "foo"; font-family: font1 !important; }</style>',
+                '<style>@media 3dglasses { h1:after { content: "bar"; font-family: font1 !important; } }</style>',
+                '<h1>h1</h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should not confuse :before and :after properties', function () {
+            var htmlText = [
+                '<style>.after:after { content: "after"; font-family: font1 !important; }</style>',
+                '<style>h1:before { content: "before"; font-family: font2; }</style>',
+                '<h1 class="after">h1</h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'before',
+                    props: {
+                        'font-family': 'font2',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
     });
 
     describe('CSS pseudo selectors', function () {
