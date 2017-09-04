@@ -543,7 +543,7 @@ describe('relations/Relation', function () {
     describe('#refreshHref', function () {
         it('should preserve (and not double) the fragment identifier when the target asset is unresolved', function () {
             const assetGraph = new AssetGraph();
-            assetGraph.addAsset({
+            const svgAsset = assetGraph.addAsset({
                 type: 'Svg',
                 url: 'https://example.com/image.svg',
                 text:
@@ -568,19 +568,15 @@ describe('relations/Relation', function () {
                     '    </g>\n' +
                     '</svg>'
             });
-            var svgAsset = assetGraph.findAssets({ type: 'Svg' })[0];
+
             svgAsset.url = 'https://example.com/somewhereelse/image.svg';
             expect(svgAsset.text, 'to contain', '<use xlink:href="#path-1"></use>');
 
-            assetGraph.addAsset({
+            const htmlAsset = assetGraph.addAsset({
                 type: 'Html',
                 url: 'https://example.com/index.html',
-                text: '<img src="image.svg">'
+                text: '<img src="somewhereelse/image.svg">'
             });
-
-            var htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
-
-            htmlAsset.outgoingRelations[0].to = svgAsset;
 
             htmlAsset.outgoingRelations[0].inline();
 
