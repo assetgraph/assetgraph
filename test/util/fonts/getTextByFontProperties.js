@@ -1090,6 +1090,111 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
         });
     });
 
+    describe('with display:list-item', function () {
+        it('should include the default list indicators in the subset', function () {
+            var htmlText = [
+                '<ol><li>foo</li></ol>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: '0123456789',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should include the indicators when display:list-item and list-style-type are applied to an element', function () {
+            var htmlText = [
+                '<style>div { display: list-item; list-style-type: upper-roman; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should support list-style-type provided as a string', function () {
+            var htmlText = [
+                '<style>div { display: list-item; list-style-type: \'yeah\'; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'yeah',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should include the indicators when display:list-item and list-style are applied to an element', function () {
+            var htmlText = [
+                '<style>div { display: list-item; list-style: upper-roman inside; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+    });
+
     describe('CSS pseudo selectors', function () {
         it('should handle stand alone pseudo selector', function () {
             var htmlText = [
