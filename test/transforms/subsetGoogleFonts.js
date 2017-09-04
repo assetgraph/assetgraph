@@ -548,54 +548,119 @@ describe('transforms/subsetGoogleFonts', function () {
                         }
                     ]);
 
-                    // Filament group async css load of original google font css
-                    expect(assetGraph.findRelations({ crossorigin: true }, true), 'to satisfy', [
+                    expect(index.outgoingRelations, 'to satisfy', [
                         {
-                            type: 'HtmlPrefetchLink',
-                            from: index,
-                            hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
-                        },
-                        {
-                            type: 'HtmlPreconnectLink',
-                            from: index,
-                            hrefType: 'absolute',
-                            href: 'https://fonts.gstatic.com'
-                        },
-                        {
-                            type: 'HtmlPrefetchLink',
-                            from: about,
-                            hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
-                        },
-                        {
-                            type: 'HtmlPreconnectLink',
-                            from: about,
-                            hrefType: 'absolute',
-                            href: 'https://fonts.gstatic.com'
-                        },
-                        {
-                            type: 'HtmlStyle',
-                            from: index,
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
-                        },
-                        {
-                            type: 'JavaScriptStaticUrl',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                            from: {
-                                nonInlineAncestor: index
+                            type: 'HtmlPreloadLink',
+                            hrefType: 'rootRelative',
+                            href: expect.it('to begin with', '/google-font-subsets/Open+Sans_400-')
+                                .and('to end with', '.woff')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: {
+                                isLoaded: true
                             }
                         },
                         {
                             type: 'HtmlStyle',
-                            from: about,
+                            href: expect.it('to begin with', '/google-font-subsets/fonts-')
+                                .and('to end with', '.css')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: {
+                                isLoaded: true
+                            }
+                        },
+                        {
+                            type: 'HtmlPrefetchLink',
+                            hrefType: 'absolute',
                             href: 'https://fonts.googleapis.com/css?family=Open+Sans'
                         },
                         {
-                            type: 'JavaScriptStaticUrl',
+                            type: 'HtmlPreconnectLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.gstatic.com'
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            to: { isInline: true }
+                        },
+                        {
+                            type: 'HtmlAnchor',
+                            href: 'about.html'
+                        },
+                        {
+                            type: 'HtmlScript',
+                            to: {
+                                isInline: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            type: 'HtmlStyle',
                             href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                            from: {
-                                nonInlineAncestor: about
+                            node: function (node) {
+                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                            }
+                        }
+                    ]);
+
+                    var indexFontStyle = index.outgoingRelations[1].to;
+                    var indexFont = index.outgoingRelations[0].to;
+
+                    expect(about.outgoingRelations, 'to satisfy', [
+                        {
+                            type: 'HtmlPreloadLink',
+                            hrefType: 'rootRelative',
+                            href: expect.it('to begin with', '/google-font-subsets/Open+Sans_400-')
+                                .and('to end with', '.woff')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: expect.it('not to be', indexFont)
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            href: expect.it('to begin with', '/google-font-subsets/fonts-')
+                                .and('to end with', '.css')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: expect.it('not to be', indexFontStyle)
+                        },
+                        {
+                            type: 'HtmlPrefetchLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                        },
+                        {
+                            type: 'HtmlPreconnectLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.gstatic.com'
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            to: { isInline: true }
+                        },
+                        {
+                            type: 'HtmlAnchor',
+                            href: 'index.html'
+                        },
+                        {
+                            type: 'HtmlScript',
+                            to: {
+                                isInline: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
+                            node: function (node) {
+                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
                             }
                         }
                     ]);
