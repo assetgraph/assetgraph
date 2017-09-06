@@ -1193,6 +1193,49 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 }
             ]);
         });
+
+        it('should combine with conditionals', function () {
+            var htmlText = [
+                '<style>li { list-style-type: decimal; font-weight: 400 }</style>',
+                '<style>@media 3dglasses { li { list-style-type: upper-roman; } } </style>',
+                '<li>Hello</li>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'Hello',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'Hello',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: '0123456789',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
     });
 
     describe('CSS pseudo selectors', function () {
