@@ -850,22 +850,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'h1',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
-                    text: 'after',
-                    props: {
-                        'font-family': 'font1',
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'after',
                     props: {
                         'font-family': 'font1',
@@ -968,22 +952,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ].join('\n');
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
-                {
-                    text: 'text',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
-                {
-                    text: 'text',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
                 {
                     text: 'text',
                     props: {
@@ -1194,6 +1162,24 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
+        it('should include the indicators even with the display:list-item does not have text', function () {
+            var htmlText = [
+                '<style>div { display: list-item; list-style: upper-roman inside; }</style>',
+                '<div></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
         it('should combine with conditionals', function () {
             var htmlText = [
                 '<style>li { list-style-type: decimal; font-weight: 400 }</style>',
@@ -1202,14 +1188,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ].join('\n');
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
-                {
-                    text: 'Hello',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
                 {
                     text: 'Hello',
                     props: {
