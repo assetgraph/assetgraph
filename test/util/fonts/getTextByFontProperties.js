@@ -923,6 +923,32 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
+        it('should support content: counter() with an explicit list-style', function () {
+            var htmlText = [
+                '<style>div:after { content: counter(section, upper-roman); font-family: font1; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
         it('should support content: attr(...) mixed with quoted strings', function () {
             var htmlText = [
                 '<style>div:after { content: "baz" attr(data-foo) "yadda"; font-family: font1; }</style>',
