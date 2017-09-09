@@ -20,12 +20,14 @@ describe('util/fonts/getCssRulesByProperty', function () {
 
     it('should return empty arrays when no properties apply', function () {
         expect(getRules(['padding'], 'h1 { color: red; }', []), 'to exhaustively satisfy', {
+            counterStyles: [],
             padding: []
         });
     });
 
     it('should return an array of matching property values', function () {
         expect(getRules(['color'], 'h1 { color: red; } h2 { color: blue; }', []), 'to exhaustively satisfy', {
+            counterStyles: [],
             color: [
                 {
                     selector: 'h1',
@@ -49,6 +51,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
 
     it('should handle inline styles through `bogusselector`-selector', function () {
         expect(getRules(['color'], 'bogusselector { color: red; }', []), 'to exhaustively satisfy', {
+            counterStyles: [],
             color: [
                 {
                     selector: undefined,
@@ -65,6 +68,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
     describe('overridden values', function () {
         it('should return the last defined value', function () {
             expect(getRules(['color'], 'h1 { color: red; color: blue; }', []), 'to exhaustively satisfy', {
+                counterStyles: [],
                 color: [
                     {
                         selector: 'h1',
@@ -92,6 +96,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
             var result = getRules(['font-family', 'font-size'], 'h1 { font: 15px; }', []);
 
             expect(result, 'to exhaustively satisfy', {
+                counterStyles: [],
                 'font-family': [],
                 'font-size': []
             });
@@ -101,6 +106,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
             var result = getRules(['font-family', 'font-size'], 'h1 { font: 15px serif; }', []);
 
             expect(result, 'to exhaustively satisfy', {
+                counterStyles: [],
                 'font-family': [
                     {
                         selector: 'h1',
@@ -128,6 +134,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
             var result = getRules(['font-family', 'font-size', 'font-style', 'font-weight'], 'h1 { font: 15px serif; }', []);
 
             expect(result, 'to exhaustively satisfy', {
+                counterStyles: [],
                 'font-family': [
                     {
                         selector: 'h1',
@@ -175,6 +182,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
             var result = getRules(['font-family', 'font-size'], 'h1 { font-size: 10px; font: 15px serif; font-size: 20px }', []);
 
             expect(result, 'to exhaustively satisfy', {
+                counterStyles: [],
                 'font-family': [
                     {
                         selector: 'h1',

@@ -949,6 +949,35 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
+        describe('with a custom @counter-style', function () {
+            it('include all the symbols of the counter when it is referenced', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
+                    '<style>div { font-family: font1; display: list-item; list-style-type: circled-alpha; }</style>',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'ⒶⒷⒸ',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+        });
+
         it('should support content: attr(...) mixed with quoted strings', function () {
             var htmlText = [
                 '<style>div:after { content: "baz" attr(data-foo) "yadda"; font-family: font1; }</style>',
