@@ -949,8 +949,8 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
-        describe('with a custom @counter-style', function () {
-            it('include all the symbols of the counter when it is referenced', function () {
+        describe('with @counter-style rules', function () {
+            it('should include all the symbols of the counter when it is referenced by a list-style-type declaration', function () {
                 var htmlText = [
                     '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
                     '<style>div { font-family: font1; display: list-item; list-style-type: circled-alpha; }</style>',
@@ -970,6 +970,82 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                         text: 'ⒶⒷⒸ',
                         props: {
                             'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should include all characters of the fallback counter, if given', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: upper-roman }</style>',
+                    '<style>div { font-family: font1; display: list-item; list-style-type: circled-alpha; }</style>',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'ⒶⒷⒸIVXLCDMↁↂↇↈ',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace conditional @counter-style declarations', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
+                    '<style>@media 3dglasses { @counter-style circled-alpha { system: fixed; symbols: Ⓓ Ⓔ Ⓕ } }</style>',
+                    '<style>li { font-family: font1; list-style-type: circled-alpha; }</style>',
+                    '<ol><li></li></ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'ⒶⒷⒸⒹⒺⒻ',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it.skip('should exclude impossible combinations when tracing conditional @counter-style declarations', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
+                    '<style>li { font-family: font1; list-style-type: circled-alpha; }</style>',
+                    '<style>@media 3dglasses { @c<ounter-style circled-alpha { system: fixed; symbols: Ⓓ Ⓔ Ⓕ } }</style>',
+                    '<style>@media 3dglasses { li { font-family: font2; list-style-type: circled-alpha; } }</style>',
+                    '<ol><li></li></ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'ⒶⒷⒸ',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'ⒹⒺⒻ',
+                        props: {
+                            'font-family': 'font2',
                             'font-weight': 400,
                             'font-style': 'normal'
                         }
