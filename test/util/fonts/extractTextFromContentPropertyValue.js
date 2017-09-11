@@ -1,10 +1,16 @@
 var extractTextFromContentPropertyValue = require('../../../lib/util/fonts/extractTextFromContentPropertyValue');
 var sinon = require('sinon');
 var expect = require('../../unexpected-with-plugins').clone()
-    .addAssertion('<array> to come out as <string>', function (expect, subject, value) {
-        expect(extractTextFromContentPropertyValue(subject[0], subject[1]), 'to equal', value);
+    .addAssertion('<array> to come out as <string|array>', function (expect, subject, value) {
+        expect.errorMode = 'nested';
+        var result = extractTextFromContentPropertyValue(subject[0], subject[1]);
+        if (typeof value === 'string') {
+            expect(result, 'to satisfy', [{value: value}]);
+        } else {
+            expect(result, 'to equal', value);
+        }
     })
-    .addAssertion('<string> to come out as <string>', function (expect, subject, value) {
+    .addAssertion('<string> to come out as <string|array>', function (expect, subject, value) {
         expect([subject], 'to come out as', value);
     });
 

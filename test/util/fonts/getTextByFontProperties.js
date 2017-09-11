@@ -1014,27 +1014,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
                 return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                     {
-                        text: 'ⒶⒷⒸⒹⒺⒻ',
-                        props: {
-                            'font-family': 'font1',
-                            'font-weight': 400,
-                            'font-style': 'normal'
-                        }
-                    }
-                ]);
-            });
-
-            it.skip('should exclude impossible combinations when tracing conditional @counter-style declarations', function () {
-                var htmlText = [
-                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
-                    '<style>li { font-family: font1; list-style-type: circled-alpha; }</style>',
-                    '<style>@media 3dglasses { @c<ounter-style circled-alpha { system: fixed; symbols: Ⓓ Ⓔ Ⓕ } }</style>',
-                    '<style>@media 3dglasses { li { font-family: font2; list-style-type: circled-alpha; } }</style>',
-                    '<ol><li></li></ol>'
-                ].join('\n');
-
-                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
-                    {
                         text: 'ⒶⒷⒸ',
                         props: {
                             'font-family': 'font1',
@@ -1045,7 +1024,46 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     {
                         text: 'ⒹⒺⒻ',
                         props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should exclude impossible combinations when tracing conditional @counter-style declarations', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
+                    '<style>li { font-family: font1; list-style-type: circled-alpha; }</style>',
+                    '<style>@media 3dglasses { @counter-style circled-alpha { system: fixed; symbols: Ⓓ Ⓔ Ⓕ } }</style>',
+                    '<style>@media 3dglasses { li { font-family: font2; list-style-type: circled-alpha; } }</style>',
+                    '<ol><li></li></ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    // Would be nice to avoid this first one, since all the @media 3dglasses {...} will
+                    // kick in together, but that would require a more advanced predicate handling:
+                    {
+                        text: 'ⒶⒷⒸ',
+                        props: {
                             'font-family': 'font2',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'ⒹⒺⒻ',
+                        props: {
+                            'font-family': 'font2',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'ⒶⒷⒸ',
+                        props: {
+                            'font-family': 'font1',
                             'font-weight': 400,
                             'font-style': 'normal'
                         }
