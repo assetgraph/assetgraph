@@ -408,7 +408,7 @@ describe('assets/Html', function () {
         });
 
         it('should preserve a no-break space', function () {
-             expect(
+            expect(
                 '<p>no-break space</p>',
                 'to minify to',
                 '<p>no-break space</p>'
@@ -416,7 +416,7 @@ describe('assets/Html', function () {
         });
 
         it('should preserve a no-break space encoded as a HTML entity', function () {
-             expect(
+            expect(
                 '<p>no-break&#160;space</p>',
                 'to minify to',
                 '<p>no-break&nbsp;space</p>'
@@ -424,7 +424,7 @@ describe('assets/Html', function () {
         });
 
         it('should preserve an en space', function () {
-             expect(
+            expect(
                 '<p>en space</p>',
                 'to minify to',
                 '<p>en space</p>'
@@ -432,7 +432,7 @@ describe('assets/Html', function () {
         });
 
         it('should preserve an en space encoded as a HTML entity', function () {
-             expect(
+            expect(
                 '<p>en&#8194;space</p>',
                 'to minify to',
                 '<p>en space</p>'
@@ -440,7 +440,7 @@ describe('assets/Html', function () {
         });
 
         it('should preserve an em space', function () {
-             expect(
+            expect(
                 '<p>em space</p>',
                 'to minify to',
                 '<p>em space</p>'
@@ -448,7 +448,7 @@ describe('assets/Html', function () {
         });
 
         it('should preserve an em space encoded as a HTML entity', function () {
-             expect(
+            expect(
                 '<p>em&#8195;space</p>',
                 'to minify to',
                 '<p>em space</p>'
@@ -456,7 +456,7 @@ describe('assets/Html', function () {
         });
 
         it('should preserve a zero-width space', function () {
-             expect(
+            expect(
                 '<p>zero-width​space</p>',
                 'to minify to',
                 '<p>zero-width​space</p>'
@@ -464,7 +464,7 @@ describe('assets/Html', function () {
         });
 
         it('should preserve a zero-width space encoded as a HTML entity', function () {
-             expect(
+            expect(
                 '<p>zero-width&#8203;space</p>',
                 'to minify to',
                 '<p>zero-width​space</p>'
