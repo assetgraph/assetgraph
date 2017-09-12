@@ -21,7 +21,10 @@ module.exports = {
                 );
             },
             inspect: function (asset, depth, output) {
-                return output.text('Asset(').text(asset.urlOrDescription).text(')');
+                return output.text(asset.type + '(').text(asset.urlOrDescription).text(')');
+            },
+            getKeys: function (value) {
+                return ['type', 'url', 'isLoaded', 'isInline', 'isRedirect'];
             }
         });
 
@@ -53,7 +56,10 @@ module.exports = {
                 return a === b;
             },
             inspect: function (relation, depth, output) {
-                return output.text('Relation(').text(relation.toString()).text(')');
+                return output.text(relation.type + '(').text(relation.toString()).text(')');
+            },
+            getKeys: function (value) {
+                return ['type', 'hrefType', 'href', 'crossorigin', 'canonical'];
             }
         });
 

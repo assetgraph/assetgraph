@@ -2,3 +2,4 @@
 --timeout 60000
 --recursive
 --check-leaks
+--globals requirejsVars
