@@ -148,9 +148,11 @@ describe('transforms/subsetGoogleFonts', function () {
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'HtmlStyle',
-                    href: 'https://fonts.googleapis.com/css?family=Open+Sans',
                     from: {
                         type: 'Html'
+                    },
+                    to: {
+                        url: 'https://fonts.googleapis.com/css?family=Open+Sans'
                     }
                 });
             });
@@ -423,7 +425,13 @@ describe('transforms/subsetGoogleFonts', function () {
                             ]
                         }
                     },
-                    { type: 'HtmlStyle', to: { isInline: true }}
+                    { type: 'HtmlStyle', to: { isInline: true, text: /font-family: Roboto__subset, 'Roboto'/ }},
+                    {
+                        type: 'HtmlStyle',
+                        node(node) {
+                            return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                        }
+                    }
                 ]);
 
                 expect(assetGraph.findAssets({type: 'Css', isInline: true})[0].text, 'to contain', 'font-family: Roboto__subset');
@@ -595,15 +603,15 @@ describe('transforms/subsetGoogleFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlAnchor',
-                            href: 'about.html'
-                        },
-                        {
                             type: 'HtmlStyle',
                             href: 'https://fonts.googleapis.com/css?family=Open+Sans',
                             node: function (node) {
                                 return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
                             }
+                        },
+                        {
+                            type: 'HtmlAnchor',
+                            href: 'about.html'
                         }
                     ]);
 
@@ -641,10 +649,6 @@ describe('transforms/subsetGoogleFonts', function () {
                             to: { isInline: true }
                         },
                         {
-                            type: 'HtmlAnchor',
-                            href: 'index.html'
-                        },
-                        {
                             type: 'HtmlScript',
                             to: {
                                 isInline: true,
@@ -662,6 +666,10 @@ describe('transforms/subsetGoogleFonts', function () {
                             node: function (node) {
                                 return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
                             }
+                        },
+                        {
+                            type: 'HtmlAnchor',
+                            href: 'index.html'
                         }
                     ]);
                 });
@@ -763,15 +771,15 @@ describe('transforms/subsetGoogleFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlAnchor',
-                            href: 'about.html'
-                        },
-                        {
                             type: 'HtmlStyle',
                             href: 'https://fonts.googleapis.com/css?family=Open+Sans',
                             node: function (node) {
                                 return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
                             }
+                        },
+                        {
+                            type: 'HtmlAnchor',
+                            href: 'about.html'
                         }
                     ]);
 
@@ -809,10 +817,6 @@ describe('transforms/subsetGoogleFonts', function () {
                             to: { isInline: true }
                         },
                         {
-                            type: 'HtmlAnchor',
-                            href: 'index.html'
-                        },
-                        {
                             type: 'HtmlScript',
                             to: {
                                 isInline: true,
@@ -830,6 +834,10 @@ describe('transforms/subsetGoogleFonts', function () {
                             node: function (node) {
                                 return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
                             }
+                        },
+                        {
+                            type: 'HtmlAnchor',
+                            href: 'index.html'
                         }
                     ]);
                 });
