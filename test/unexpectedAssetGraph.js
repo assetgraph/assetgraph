@@ -10,7 +10,7 @@ module.exports = {
             name: 'AssetGraph.asset',
             base: 'object',
             identify: function (obj) {
-                return obj && obj.isAsset;
+                return obj && obj.isAsset && obj.constructor !== Object;
             },
             equal: function (a, b) {
                 return (
@@ -32,7 +32,7 @@ module.exports = {
             name: 'AssetGraph',
             base: 'object',
             identify: function (obj) {
-                return obj && obj.isAssetGraph;
+                return obj && obj.isAssetGraph && obj.constructor !== Object;
             },
             inspect: function (assetGraph, depth, output) {
                 output
@@ -50,7 +50,7 @@ module.exports = {
             name: 'AssetGraph.relation',
             base: 'object',
             identify: function (obj) {
-                return obj && obj.isRelation;
+                return obj && obj.isRelation && obj.constructor !== Object;
             },
             equal: function (a, b) {
                 return a === b;
