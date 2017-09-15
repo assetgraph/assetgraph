@@ -1,9 +1,10 @@
-var gatherStylesheetsWithIncomingMedia = require('../../../lib/util/fonts/gatherStylesheetsWithIncomingMedia');
-var expect = require('../../unexpected-with-plugins');
-var AssetGraph = require('../../../');
+const gatherStylesheetsWithIncomingMedia = require('../../../lib/util/fonts/gatherStylesheetsWithIncomingMedia');
+const unexpected = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../');
+const sinon = require('sinon');
 
 describe('gatherStylesheetsWithIncomingMedia', function () {
-    expect = expect.clone().addAssertion('<string> to produce result satisfying <array>', function (expect, subject, value) {
+    const expect = unexpected.clone().addAssertion('<string> to produce result satisfying <array>', function (expect, subject, value) {
         return new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithIncomingMedia/' + subject + '/'})
             .loadAssets('index.html')
             .populate()
@@ -60,13 +61,23 @@ describe('gatherStylesheetsWithIncomingMedia', function () {
 
     it('should not break when there is a cyclic CssImport', function () {
         return expect('cyclicCssImport', 'to produce result satisfying', [
-            { text: '@import "";\n\n.a { font-weight: 600; }\n', incomingMedia: [] }
+            { text: '@import "a.css";\n\n.a { font-weight: 600; }\n', incomingMedia: [] }
         ]);
     });
 
-    it('should not break when there are unloaded Css assets', function () {
-        return expect('unloadedCssAssets', 'to produce result satisfying', [
+    it('should not break when there are unloaded Css assets', async function () {
+        const warnSpy = sinon.spy().named('warn');
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithIncomingMedia/unloadedCssAssets/'})
+            .on('warn', warnSpy)
+            .loadAssets('index.html')
+            .populate();
+
+        expect(gatherStylesheetsWithIncomingMedia(assetGraph, assetGraph.findAssets({type: 'Html'})[0]), 'to satisfy', [
             { text: '@import "notfoundeither.css";\n', incomingMedia: [] }
         ]);
+        expect(warnSpy, 'to have calls satisfying', () => {
+            warnSpy(/ENOENT.*notFound\.css/);
+            warnSpy(/ENOENT.*notfoundeither\.css/);
+        });
     });
 });
