@@ -583,10 +583,6 @@ describe('transforms/subsetGoogleFonts', function () {
                             to: { isInline: true }
                         },
                         {
-                            type: 'HtmlAnchor',
-                            href: 'about.html'
-                        },
-                        {
                             type: 'HtmlScript',
                             to: {
                                 isInline: true,
@@ -597,6 +593,10 @@ describe('transforms/subsetGoogleFonts', function () {
                                     }
                                 ]
                             }
+                        },
+                        {
+                            type: 'HtmlAnchor',
+                            href: 'about.html'
                         },
                         {
                             type: 'HtmlStyle',
@@ -751,10 +751,6 @@ describe('transforms/subsetGoogleFonts', function () {
                             to: { isInline: true }
                         },
                         {
-                            type: 'HtmlAnchor',
-                            href: 'about.html'
-                        },
-                        {
                             type: 'HtmlScript',
                             to: {
                                 isInline: true,
@@ -765,6 +761,10 @@ describe('transforms/subsetGoogleFonts', function () {
                                     }
                                 ]
                             }
+                        },
+                        {
+                            type: 'HtmlAnchor',
+                            href: 'about.html'
                         },
                         {
                             type: 'HtmlStyle',
