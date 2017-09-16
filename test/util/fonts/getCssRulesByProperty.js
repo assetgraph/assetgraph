@@ -31,7 +31,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
             color: [
                 {
                     selector: 'h1',
-                    incomingMedia: [],
+                    predicates: {},
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'red',
@@ -39,7 +39,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 },
                 {
                     selector: 'h2',
-                    incomingMedia: [],
+                    predicates: {},
                     specificityArray: [0, 0, 0, 1],
                     prop: 'color',
                     value: 'blue',
@@ -55,7 +55,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
             color: [
                 {
                     selector: undefined,
-                    incomingMedia: [],
+                    predicates: {},
                     specificityArray: [1, 0, 0, 0],
                     prop: 'color',
                     value: 'red',
@@ -72,7 +72,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 color: [
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'color',
                         value: 'red',
@@ -80,7 +80,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                     },
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'color',
                         value: 'blue',
@@ -110,7 +110,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-family': [
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-family',
                         value: 'serif',
@@ -120,7 +120,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-size': [
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-size',
                         value: '15px',
@@ -138,7 +138,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-family': [
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-family',
                         value: 'serif',
@@ -148,7 +148,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-size': [
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-size',
                         value: '15px',
@@ -158,7 +158,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-style': [
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-style',
                         value: 'normal',
@@ -168,7 +168,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-weight': [
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-weight',
                         value: 400,
@@ -186,7 +186,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-family': [
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-family',
                         value: 'serif',
@@ -196,7 +196,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                 'font-size': [
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-size',
                         value: '10px',
@@ -204,7 +204,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                     },
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-size',
                         value: '15px',
@@ -212,7 +212,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
                     },
                     {
                         selector: 'h1',
-                        incomingMedia: [],
+                        predicates: {},
                         specificityArray: [0, 0, 0, 1],
                         prop: 'font-size',
                         value: '20px',
