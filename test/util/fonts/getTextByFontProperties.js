@@ -977,6 +977,25 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 ]);
             });
 
+            it('should support the full syntax of the symbols property', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: \'a\' b "c" url(foo.svg) "\\64" "\\"" \'\\\'\'; }</style>',
+                    '<style>li { font-family: font1; display: list-item; list-style-type: circled-alpha; }</style>',
+                    '<ol><li></li></ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'abcd"\'',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
             it('should include all characters of the fallback counter, if given', function () {
                 var htmlText = [
                     '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: upper-roman }</style>',
