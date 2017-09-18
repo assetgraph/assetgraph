@@ -949,6 +949,83 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
+        describe('with content: counters()', function () {
+            it('should support the 2 argument form without an explicit counter style', function () {
+                var htmlText = [
+                    '<style>div:after { content: counters(section, "."); font-family: font1; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: '0123456789.',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should support the 3 argument form with a built-in counter-style', function () {
+                var htmlText = [
+                    '<style>div:after { content: counters(section, ".", upper-roman); font-family: font1; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'IVXLCDMↁↂↇↈ.',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should support the 3 argument form with a custom @counter-style', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
+                    '<style>div:after { content: counters(section, ".", circled-alpha); font-family: font1; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'ⒶⒷⒸ.',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should support the 3 argument form with a custom @counter-style that references other counters', function () {
+                var htmlText = [
+                    '<style>@counter-style foobar { system: fixed; symbols: "foo" "bar" }</style>',
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: foobar }</style>',
+                    '<style>div:after { content: counters(section, ".", circled-alpha); font-family: font1; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'ⒶⒷⒸ.',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+        });
+
         describe('with @counter-style rules', function () {
             it('should include all the symbols of the counter when it is referenced by a list-style-type declaration', function () {
                 var htmlText = [
