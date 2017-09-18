@@ -84,7 +84,7 @@ describe('relations/HtmlPreloadLink', function () {
                 as: 'font'
             }, 'firstInHead');
 
-            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preload" href="foo.js" type="application/javascript" as="font" crossorigin="crossorigin">');
+            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preload" href="foo.js" type="application/javascript" as="font" crossorigin="anonymous">');
         });
 
         it('should not add the `crossorigin` attribute when the relation is not as a font and the target is not cross origin', function () {
@@ -114,7 +114,7 @@ describe('relations/HtmlPreloadLink', function () {
                 as: 'script'
             }, 'firstInHead');
 
-            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preload" href="http://fisk.dk/foo.js" type="application/javascript" as="script" crossorigin="crossorigin">');
+            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="preload" href="http://fisk.dk/foo.js" type="application/javascript" as="script" crossorigin="anonymous">');
         });
     });
 
@@ -172,7 +172,7 @@ describe('relations/HtmlPreloadLink', function () {
             });
         });
 
-        describe('with resolved knwon targets', function () {
+        describe('with resolved known targets', function () {
             it('should handle JavaScript', function () {
 
                 var relation = new AssetGraph.HtmlPreloadLink({

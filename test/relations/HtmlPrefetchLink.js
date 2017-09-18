@@ -50,14 +50,14 @@ describe('relations/HtmlPrefetchLink', function () {
                 to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
             }, 'firstInHead');
 
-            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="foo.js" as="script">');
+            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="foo.js" type="application/javascript" as="script">');
         });
 
         it('should set the `as` property passed in the constructor', function () {
             var htmlAsset = getHtmlAsset();
             htmlAsset.addRelation({
                 type: 'HtmlPrefetchLink',
-                to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
+                href: 'foo.js',
                 as: 'object'
             }, 'firstInHead');
 
@@ -68,11 +68,14 @@ describe('relations/HtmlPrefetchLink', function () {
             var htmlAsset = getHtmlAsset();
             htmlAsset.addRelation({
                 type: 'HtmlPrefetchLink',
-                to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
+                to: {
+                    type: 'Woff',
+                    url: 'foo.woff'
+                },
                 as: 'font'
             }, 'firstInHead');
 
-            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="foo.js" as="font">');
+            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="foo.woff" as="font" type="font/woff" crossorigin="anonymous">');
         });
 
         it('should add the `crossorigin` attribute when the relation is crossorigin', function () {
@@ -83,7 +86,7 @@ describe('relations/HtmlPrefetchLink', function () {
                 as: 'script'
             }, 'firstInHead');
 
-            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="http://fisk.dk/foo.js" as="script">');
+            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="http://fisk.dk/foo.js" as="script" type="application/javascript" crossorigin="anonymous">');
         });
     });
 });

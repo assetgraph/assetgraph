@@ -100,6 +100,18 @@ describe('assets/Html', function () {
         });
     });
 
+    describe('#findOutgoingRelationsInParseTree', function () {
+        it('should add Css type to HtmlStyle relation targets that have no .css file extension', async function () {
+            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Html/cssWithoutExtension/'})
+                .loadAssets('index.html')
+                .populate();
+
+            const htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
+
+            expect(htmlAsset.outgoingRelations[0].to, 'to satisfy', {type: 'Css'});
+        });
+    });
+
     describe('template escaping', function () {
         function createAsset(inputHtml) {
             return new AssetGraph.Html({

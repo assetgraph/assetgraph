@@ -40,7 +40,9 @@ describe('assets/Css', function () {
     it('should handle a test case that has multiple neighbour @font-face rules', async function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Css/multipleFontFaceRules/'})
             .loadAssets('index.css')
-            .populate();
+            .populate({
+                followRelations: { crossdomain: false }
+            });
 
         const cssAsset = await expect(assetGraph, 'to contain asset', 'Css');
         expect(cssAsset.text.match(/@font-face/g), 'to have length', 3);

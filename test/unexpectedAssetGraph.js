@@ -10,7 +10,7 @@ module.exports = {
             name: 'AssetGraph.asset',
             base: 'object',
             identify: function (obj) {
-                return obj && obj.isAsset;
+                return obj && obj.isAsset && obj.constructor !== Object;
             },
             equal: function (a, b) {
                 return (
@@ -21,7 +21,10 @@ module.exports = {
                 );
             },
             inspect: function (asset, depth, output) {
-                return output.text('Asset(').text(asset.urlOrDescription).text(')');
+                return output.text(asset.type + '(').text(asset.urlOrDescription).text(')');
+            },
+            getKeys: function (value) {
+                return ['type', 'url', 'isLoaded', 'isInline', 'isRedirect'];
             }
         });
 
@@ -29,7 +32,7 @@ module.exports = {
             name: 'AssetGraph',
             base: 'object',
             identify: function (obj) {
-                return obj && obj.isAssetGraph;
+                return obj && obj.isAssetGraph && obj.constructor !== Object;
             },
             inspect: function (assetGraph, depth, output) {
                 output
@@ -47,13 +50,16 @@ module.exports = {
             name: 'AssetGraph.relation',
             base: 'object',
             identify: function (obj) {
-                return obj && obj.isRelation;
+                return obj && obj.isRelation && obj.constructor !== Object;
             },
             equal: function (a, b) {
                 return a === b;
             },
             inspect: function (relation, depth, output) {
-                return output.text('Relation(').text(relation.toString()).text(')');
+                return output.text(relation.type + '(').text(relation.toString()).text(')');
+            },
+            getKeys: function (value) {
+                return ['type', 'hrefType', 'href', 'crossorigin', 'canonical'];
             }
         });
 
