@@ -996,6 +996,25 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 ]);
             });
 
+            it('should pickup the text from all @counter-style properties', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; additive-symbols: 3 url(symbol.png), 2 "0"; prefix: "p"; suffix: "s"; pad: 5 "q"; }</style>',
+                    '<style>li { font-family: font1; list-style-type: circled-alpha; }</style>',
+                    '<ol><li></li></ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'ⒶⒷⒸps0q',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
             it('should include all characters of the fallback counter, if given', function () {
                 var htmlText = [
                     '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: upper-roman }</style>',
