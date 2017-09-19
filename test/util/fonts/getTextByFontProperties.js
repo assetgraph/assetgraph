@@ -1008,15 +1008,36 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             it('should support the 3 argument form with a custom @counter-style that references other counters', function () {
                 var htmlText = [
-                    '<style>@counter-style foobar { system: fixed; symbols: "foo" "bar" }</style>',
-                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: foobar }</style>',
+                    '<style>@counter-style foobar { system: fixed; symbols: "foo" "bar"; }</style>',
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: foobar; }</style>',
                     '<style>div:after { content: counters(section, ".", circled-alpha); font-family: font1; }</style>',
                     '<div></div>'
                 ].join('\n');
 
                 return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                     {
-                        text: 'ⒶⒷⒸ.',
+                        text: 'ⒶⒷⒸfoobar.',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should support the 3 argument form with a custom @counter-style that references a chain of other counters', function () {
+                var htmlText = [
+                    '<style>@counter-style foo { system: fixed; symbols: "foo"; fallback: decimal; }</style>',
+                    '<style>@counter-style bar { system: fixed; symbols: "bar"; fallback: foo; }</style>',
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: bar; }</style>',
+                    '<style>div:after { content: counters(section, ".", circled-alpha); font-family: font1; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'ⒶⒷⒸbarfoo0123456789.',
                         props: {
                             'font-family': 'font1',
                             'font-weight': 400,
