@@ -56,12 +56,14 @@ describe('transforms/subsetGoogleFonts', function () {
                     to: {
                         type: 'Css',
                         url: fontCssUrlRegExp,
-                        isLoaded: true
+                        isLoaded: true,
+                        isMinified: true
                     }
                 });
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
+                    hrefType: 'relative',
                     from: {
                         type: 'Css',
                         url: fontCssUrlRegExp
@@ -119,13 +121,15 @@ describe('transforms/subsetGoogleFonts', function () {
                     to: {
                         type: 'Css',
                         url: fontCssUrlRegExp,
-                        isLoaded: true
+                        isLoaded: true,
+                        isMinified: true
                     },
                     crossorigin: false
                 });
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
+                    hrefType: 'relative',
                     from: {
                         type: 'Css',
                         url: fontCssUrlRegExp
@@ -251,12 +255,14 @@ describe('transforms/subsetGoogleFonts', function () {
                     to: {
                         type: 'Css',
                         url: fontCssUrlRegExp,
-                        isLoaded: true
+                        isLoaded: true,
+                        isMinified: true
                     }
                 });
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
+                    hrefType: 'relative',
                     from: {
                         type: 'Css',
                         url: fontCssUrlRegExp
@@ -269,6 +275,7 @@ describe('transforms/subsetGoogleFonts', function () {
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
+                    hrefType: 'relative',
                     from: {
                         type: 'Css',
                         url: fontCssUrlRegExp
@@ -281,6 +288,7 @@ describe('transforms/subsetGoogleFonts', function () {
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
+                    hrefType: 'relative',
                     from: {
                         type: 'Css',
                         url: fontCssUrlRegExp
@@ -395,9 +403,11 @@ describe('transforms/subsetGoogleFonts', function () {
                             type: 'Css',
                             url: fontCssUrlRegExp,
                             isLoaded: true,
+                            isMinified: true,
                             outgoingRelations: [
                                 {
                                     type: 'CssFontFaceSrc',
+                                    hrefType: 'relative',
                                     to: {
                                         type: 'Asset',
                                         url: /Roboto_500-[a-z0-9]{10}\.woff/,
@@ -406,6 +416,7 @@ describe('transforms/subsetGoogleFonts', function () {
                                 },
                                 {
                                     type: 'CssFontFaceSrc',
+                                    hrefType: 'relative',
                                     to: {
                                         type: 'Asset',
                                         url: /Roboto_400-[a-z0-9]{10}\.woff/,
@@ -414,6 +425,7 @@ describe('transforms/subsetGoogleFonts', function () {
                                 },
                                 {
                                     type: 'CssFontFaceSrc',
+                                    hrefType: 'relative',
                                     to: {
                                         type: 'Asset',
                                         url: /Roboto_300i-[a-z0-9]{10}\.woff/,
@@ -510,9 +522,11 @@ describe('transforms/subsetGoogleFonts', function () {
                             type: 'HtmlStyle',
                             from: index,
                             to: {
+                                type: 'Css',
                                 url: fontCssUrlRegExp,
                                 isLoaded: true,
                                 isInline: false,
+                                isMinified: true,
                                 outgoingRelations: [
                                     {
                                         type: 'CssFontFaceSrc',
@@ -530,9 +544,11 @@ describe('transforms/subsetGoogleFonts', function () {
                             type: 'HtmlStyle',
                             from: about,
                             to: {
+                                type: 'Css',
                                 url: fontCssUrlRegExp,
                                 isLoaded: true,
                                 isInline: false,
+                                isMinified: true,
                                 outgoingRelations: [
                                     {
                                         type: 'CssFontFaceSrc',
@@ -733,7 +749,8 @@ describe('transforms/subsetGoogleFonts', function () {
                                 .and('to end with', '.css')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
-                                isLoaded: true
+                                isLoaded: true,
+                                isMinified: true
                             }
                         },
                         {
