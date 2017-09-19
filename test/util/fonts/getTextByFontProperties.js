@@ -851,22 +851,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'h1',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
-                    text: 'after',
-                    props: {
-                        'font-family': 'font1',
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'after',
                     props: {
                         'font-family': 'font1',
@@ -940,6 +924,270 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
+        it('should support content: counter() with an explicit list-style', function () {
+            var htmlText = [
+                '<style>div:after { content: counter(section, upper-roman); font-family: font1; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        describe('with content: counters()', function () {
+            it('should support the 2 argument form without an explicit counter style', function () {
+                var htmlText = [
+                    '<style>div:after { content: counters(section, "."); font-family: font1; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: '0123456789.',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should support the 3 argument form with a built-in counter-style', function () {
+                var htmlText = [
+                    '<style>div:after { content: counters(section, ".", upper-roman); font-family: font1; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'IVXLCDMↁↂↇↈ.',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should support the 3 argument form with a custom @counter-style', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
+                    '<style>div:after { content: counters(section, ".", circled-alpha); font-family: font1; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'ⒶⒷⒸ.',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should support the 3 argument form with a custom @counter-style that references other counters', function () {
+                var htmlText = [
+                    '<style>@counter-style foobar { system: fixed; symbols: "foo" "bar" }</style>',
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: foobar }</style>',
+                    '<style>div:after { content: counters(section, ".", circled-alpha); font-family: font1; }</style>',
+                    '<div></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'ⒶⒷⒸ.',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+        });
+
+        describe('with @counter-style rules', function () {
+            it('should include all the symbols of the counter when it is referenced by a list-style-type declaration', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
+                    '<style>div { font-family: font1; display: list-item; list-style-type: circled-alpha; }</style>',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'ⒶⒷⒸ',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should support the full syntax of the symbols property', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: \'a\' b "c" url(foo.svg) "\\64" "\\"" \'\\\'\'; }</style>',
+                    '<style>li { font-family: font1; display: list-item; list-style-type: circled-alpha; }</style>',
+                    '<ol><li></li></ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'abcd"\'',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should pickup the text from all @counter-style properties', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; additive-symbols: 3 url(symbol.png), 2 "0"; prefix: "p"; suffix: "s"; pad: 5 "q"; }</style>',
+                    '<style>li { font-family: font1; list-style-type: circled-alpha; }</style>',
+                    '<ol><li></li></ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'ⒶⒷⒸps0q',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should include all characters of the fallback counter, if given', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: upper-roman }</style>',
+                    '<style>div { font-family: font1; display: list-item; list-style-type: circled-alpha; }</style>',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'ⒶⒷⒸIVXLCDMↁↂↇↈ',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace conditional @counter-style declarations', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
+                    '<style>@media 3dglasses { @counter-style circled-alpha { system: fixed; symbols: Ⓓ Ⓔ Ⓕ } }</style>',
+                    '<style>li { font-family: font1; list-style-type: circled-alpha; }</style>',
+                    '<ol><li></li></ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'ⒶⒷⒸ',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'ⒹⒺⒻ',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should exclude impossible combinations when tracing conditional @counter-style declarations', function () {
+                var htmlText = [
+                    '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
+                    '<style>li { font-family: font1; list-style-type: circled-alpha; }</style>',
+                    '<style>@media 3dglasses { @counter-style circled-alpha { system: fixed; symbols: Ⓓ Ⓔ Ⓕ } }</style>',
+                    '<style>@media 3dglasses { li { font-family: font2; list-style-type: circled-alpha; } }</style>',
+                    '<ol><li></li></ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    // Would be nice to avoid this first one, since all the @media 3dglasses {...} will
+                    // kick in together, but that would require a more advanced predicate handling:
+                    {
+                        text: 'ⒶⒷⒸ',
+                        props: {
+                            'font-family': 'font2',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'ⒹⒺⒻ',
+                        props: {
+                            'font-family': 'font2',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'ⒶⒷⒸ',
+                        props: {
+                            'font-family': 'font1',
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+        });
+
         it('should support content: attr(...) mixed with quoted strings', function () {
             var htmlText = [
                 '<style>div:after { content: "baz" attr(data-foo) "yadda"; font-family: font1; }</style>',
@@ -969,22 +1217,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ].join('\n');
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
-                {
-                    text: 'text',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
-                {
-                    text: 'text',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
                 {
                     text: 'text',
                     props: {
@@ -1084,6 +1316,164 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     props: {
                         'font-family': 'font1',
                         'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+    });
+
+    describe('with display:list-item', function () {
+        it('should include the default list indicators in the subset', function () {
+            var htmlText = [
+                '<ol><li>foo</li></ol>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: '0123456789',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should include the indicators when display:list-item and list-style-type are applied to an element', function () {
+            var htmlText = [
+                '<style>div { display: list-item; list-style-type: upper-roman; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should support list-style-type provided as a string', function () {
+            var htmlText = [
+                '<style>div { display: list-item; list-style-type: \'yeah\'; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'yeah',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should include the indicators when display:list-item and list-style are applied to an element', function () {
+            var htmlText = [
+                '<style>div { display: list-item; list-style: upper-roman inside; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should include the indicators even with the display:list-item does not have text', function () {
+            var htmlText = [
+                '<style>div { display: list-item; list-style: upper-roman inside; }</style>',
+                '<div></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should combine with conditionals', function () {
+            var htmlText = [
+                '<style>li { list-style-type: decimal; font-weight: 400 }</style>',
+                '<style>@media 3dglasses { li { list-style-type: upper-roman; } } </style>',
+                '<li>Hello</li>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'Hello',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: '0123456789',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
                         'font-style': 'normal'
                     }
                 }
