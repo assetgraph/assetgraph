@@ -21,6 +21,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
     it('should return empty arrays when no properties apply', function () {
         expect(getRules(['padding'], 'h1 { color: red; }', []), 'to exhaustively satisfy', {
             counterStyles: [],
+            keyframes: [],
             padding: []
         });
     });
@@ -28,6 +29,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
     it('should return an array of matching property values', function () {
         expect(getRules(['color'], 'h1 { color: red; } h2 { color: blue; }', []), 'to exhaustively satisfy', {
             counterStyles: [],
+            keyframes: [],
             color: [
                 {
                     selector: 'h1',
@@ -52,6 +54,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
     it('should handle inline styles through `bogusselector`-selector', function () {
         expect(getRules(['color'], 'bogusselector { color: red; }', []), 'to exhaustively satisfy', {
             counterStyles: [],
+            keyframes: [],
             color: [
                 {
                     selector: undefined,
@@ -69,6 +72,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
         it('should return the last defined value', function () {
             expect(getRules(['color'], 'h1 { color: red; color: blue; }', []), 'to exhaustively satisfy', {
                 counterStyles: [],
+                keyframes: [],
                 color: [
                     {
                         selector: 'h1',
@@ -97,6 +101,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
 
             expect(result, 'to exhaustively satisfy', {
                 counterStyles: [],
+                keyframes: [],
                 'font-family': [],
                 'font-size': []
             });
@@ -107,6 +112,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
 
             expect(result, 'to exhaustively satisfy', {
                 counterStyles: [],
+                keyframes: [],
                 'font-family': [
                     {
                         selector: 'h1',
@@ -135,6 +141,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
 
             expect(result, 'to exhaustively satisfy', {
                 counterStyles: [],
+                keyframes: [],
                 'font-family': [
                     {
                         selector: 'h1',
@@ -183,6 +190,7 @@ describe('util/fonts/getCssRulesByProperty', function () {
 
             expect(result, 'to exhaustively satisfy', {
                 counterStyles: [],
+                keyframes: [],
                 'font-family': [
                     {
                         selector: 'h1',
