@@ -56,12 +56,14 @@ describe('transforms/subsetGoogleFonts', function () {
                     to: {
                         type: 'Css',
                         url: fontCssUrlRegExp,
-                        isLoaded: true
+                        isLoaded: true,
+                        isMinified: true
                     }
                 });
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
+                    hrefType: 'relative',
                     from: {
                         type: 'Css',
                         url: fontCssUrlRegExp
@@ -72,6 +74,95 @@ describe('transforms/subsetGoogleFonts', function () {
                     }
                 });
             });
+    });
+
+    describe('with `inlineCss: true`', function () {
+
+        it('should inline the font Css and change outgoing relations to rootRelative', function () {
+            httpception([
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff'
+                        },
+                        body: new Buffer('foo', 'base64')
+                    }
+                }
+            ]);
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetGoogleFonts({
+                    inlineSubsets: false,
+                    inlineCss: true
+                })
+                .queue(function (assetGraph) {
+                    var htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
+
+                    expect(htmlAsset.outgoingRelations, 'to satisfy', [
+                        { type: 'HtmlPreloadLink', href: '/google-font-subsets/Open+Sans_400-b023bb8045.woff' },
+                        {
+                            type: 'HtmlStyle',
+                            to: {
+                                type: 'Css',
+                                isInline: true,
+                                isMinified: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'CssFontFaceSrc',
+                                        hrefType: 'rootRelative'
+                                    }
+                                ]
+                            }
+                        },
+
+                        { type: 'HtmlPrefetchLink', href: 'https://fonts.googleapis.com/css?family=Open+Sans' },
+                        { type: 'HtmlPreconnectLink', href: 'https://fonts.gstatic.com' },
+                        { type: 'HtmlStyle' }, // Page styles
+                        {
+                            type: 'HtmlScript',
+                            to: {
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
+                            node: function (node) {
+                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                            }
+                        }
+
+                    ]);
+                });
+        });
     });
 
     it('should handle CSS @import', function () {
@@ -119,13 +210,15 @@ describe('transforms/subsetGoogleFonts', function () {
                     to: {
                         type: 'Css',
                         url: fontCssUrlRegExp,
-                        isLoaded: true
+                        isLoaded: true,
+                        isMinified: true
                     },
                     crossorigin: false
                 });
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
+                    hrefType: 'relative',
                     from: {
                         type: 'Css',
                         url: fontCssUrlRegExp
@@ -253,12 +346,14 @@ describe('transforms/subsetGoogleFonts', function () {
                     to: {
                         type: 'Css',
                         url: fontCssUrlRegExp,
-                        isLoaded: true
+                        isLoaded: true,
+                        isMinified: true
                     }
                 });
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
+                    hrefType: 'relative',
                     from: {
                         type: 'Css',
                         url: fontCssUrlRegExp
@@ -271,6 +366,7 @@ describe('transforms/subsetGoogleFonts', function () {
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
+                    hrefType: 'relative',
                     from: {
                         type: 'Css',
                         url: fontCssUrlRegExp
@@ -283,6 +379,7 @@ describe('transforms/subsetGoogleFonts', function () {
 
                 expect(assetGraph, 'to contain relation', {
                     type: 'CssFontFaceSrc',
+                    hrefType: 'relative',
                     from: {
                         type: 'Css',
                         url: fontCssUrlRegExp
@@ -397,9 +494,11 @@ describe('transforms/subsetGoogleFonts', function () {
                             type: 'Css',
                             url: fontCssUrlRegExp,
                             isLoaded: true,
+                            isMinified: true,
                             outgoingRelations: [
                                 {
                                     type: 'CssFontFaceSrc',
+                                    hrefType: 'relative',
                                     to: {
                                         type: 'Woff',
                                         url: /Roboto_500-[a-z0-9]{10}\.woff/,
@@ -408,6 +507,7 @@ describe('transforms/subsetGoogleFonts', function () {
                                 },
                                 {
                                     type: 'CssFontFaceSrc',
+                                    hrefType: 'relative',
                                     to: {
                                         type: 'Woff',
                                         url: /Roboto_400-[a-z0-9]{10}\.woff/,
@@ -416,6 +516,7 @@ describe('transforms/subsetGoogleFonts', function () {
                                 },
                                 {
                                     type: 'CssFontFaceSrc',
+                                    hrefType: 'relative',
                                     to: {
                                         type: 'Woff',
                                         url: /Roboto_300i-[a-z0-9]{10}\.woff/,
@@ -518,9 +619,11 @@ describe('transforms/subsetGoogleFonts', function () {
                             type: 'HtmlStyle',
                             from: index,
                             to: {
+                                type: 'Css',
                                 url: fontCssUrlRegExp,
                                 isLoaded: true,
                                 isInline: false,
+                                isMinified: true,
                                 outgoingRelations: [
                                     {
                                         type: 'CssFontFaceSrc',
@@ -538,9 +641,11 @@ describe('transforms/subsetGoogleFonts', function () {
                             type: 'HtmlStyle',
                             from: about,
                             to: {
+                                type: 'Css',
                                 url: fontCssUrlRegExp,
                                 isLoaded: true,
                                 isInline: false,
+                                isMinified: true,
                                 outgoingRelations: [
                                     {
                                         type: 'CssFontFaceSrc',
@@ -741,7 +846,8 @@ describe('transforms/subsetGoogleFonts', function () {
                                 .and('to end with', '.css')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
-                                isLoaded: true
+                                isLoaded: true,
+                                isMinified: true
                             }
                         },
                         {
