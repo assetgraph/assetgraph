@@ -1772,7 +1772,23 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     text: 'bar',
                     props: {
                         'font-family': undefined,
-                        'font-weight': '100-400',
+                        'font-weight': 200,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 300,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
                         'font-style': 'normal'
                     }
                 }
@@ -1877,7 +1893,23 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     text: 'bar',
                     props: {
                         'font-family': undefined,
-                        'font-weight': '100-400',
+                        'font-weight': 200,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 300,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
                         'font-style': 'normal'
                     }
                 }
@@ -1933,7 +1965,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     text: 'bar',
                     props: {
                         'font-family': undefined,
-                        'font-weight': '100-400',
+                        'font-weight': 100,
                         'font-style': 'normal'
                     }
                 },
@@ -1941,7 +1973,39 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     text: 'bar',
                     props: {
                         'font-family': undefined,
-                        'font-weight': '400-700',
+                        'font-weight': 200,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 300,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 500,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 600,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
                         'font-style': 'normal'
                     }
                 }
