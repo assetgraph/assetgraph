@@ -1884,6 +1884,34 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
+        // This doesn't really make sense, but it works in browsers
+        it('should support animating the content attribute', function () {
+            var htmlText = [
+                '<style>@keyframes foo { 100% { content: "bar"; } }</style>',
+                '<style>div:before { content: "foo"; animation: 3s ease-in 1s 2 reverse both paused foo; }</style>',
+                '<div></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
         it('should handle conditional animations', function () {
             var htmlText = [
                 '<style>@media 3dglasses { @keyframes foo { from { font-weight: 100; } to { font-weight: 400; } } }</style>',
