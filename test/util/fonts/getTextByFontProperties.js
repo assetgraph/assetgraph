@@ -649,17 +649,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'h1',
+                    text: 'after',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font1',
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'after',
+                    text: 'h1',
                     props: {
-                        'font-family': 'font1',
+                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -788,17 +788,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'h1',
+                    text: 'after',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font2',
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'after',
+                    text: 'h1',
                     props: {
-                        'font-family': 'font2',
+                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -815,17 +815,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'h1',
+                    text: 'after',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font1',
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'after',
+                    text: 'h1',
                     props: {
-                        'font-family': 'font1',
+                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -842,17 +842,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'h1',
+                    text: 'after',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font1',
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'after',
+                    text: 'h1',
                     props: {
-                        'font-family': 'font1',
+                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -871,6 +871,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 200,
+                        'font-style': 'normal'
+                    }
+                },
+                {
                     text: 'p',
                     props: {
                         'font-family': undefined,
@@ -879,25 +887,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'article',
+                    text: 'after',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font1',
                         'font-weight': 600,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'after',
+                    text: 'article',
                     props: {
-                        'font-family': 'font1',
-                        'font-weight': 200,
-                        'font-style': 'normal'
-                    }
-                },
-                {
-                    text: 'after',
-                    props: {
-                        'font-family': 'font1',
+                        'font-family': undefined,
                         'font-weight': 600,
                         'font-style': 'normal'
                     }
@@ -931,17 +931,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'foo',
+                    text: 'IVXLCDMↁↂↇↈ',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font1',
                         'font-weight': 400,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'IVXLCDMↁↂↇↈ',
+                    text: 'foo',
                     props: {
-                        'font-family': 'font1',
+                        'font-family': undefined,
                         'font-weight': 400,
                         'font-style': 'normal'
                     }
@@ -1057,7 +1057,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
                 return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                     {
-                        text: 'foo',
+                        text: 'ⒶⒷⒸ',
                         props: {
                             'font-family': 'font1',
                             'font-weight': 400,
@@ -1065,7 +1065,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                         }
                     },
                     {
-                        text: 'ⒶⒷⒸ',
+                        text: 'foo',
                         props: {
                             'font-family': 'font1',
                             'font-weight': 400,
@@ -1122,7 +1122,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
                 return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                     {
-                        text: 'foo',
+                        text: 'ⒶⒷⒸIVXLCDMↁↂↇↈ',
                         props: {
                             'font-family': 'font1',
                             'font-weight': 400,
@@ -1130,7 +1130,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                         }
                     },
                     {
-                        text: 'ⒶⒷⒸIVXLCDMↁↂↇↈ',
+                        text: 'foo',
                         props: {
                             'font-family': 'font1',
                             'font-weight': 400,
@@ -1238,18 +1238,18 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'text',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'foo',
                     props: {
                         'font-family': 'myClass',
                         'font-weight': 900,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'text',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
                         'font-style': 'normal'
                     }
                 },
@@ -1281,14 +1281,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'h1',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'bar',
                     props: {
                         'font-family': 'font1',
@@ -1300,6 +1292,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     text: 'foo',
                     props: {
                         'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -1316,14 +1316,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'h1',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'before',
                     props: {
                         'font-family': 'font2',
@@ -1335,6 +1327,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     text: 'after',
                     props: {
                         'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -1351,7 +1351,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'foo',
+                    text: '0123456789',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1359,7 +1359,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: '0123456789',
+                    text: 'foo',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1377,7 +1377,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'foo',
+                    text: 'IVXLCDMↁↂↇↈ',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1385,7 +1385,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'IVXLCDMↁↂↇↈ',
+                    text: 'foo',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1429,7 +1429,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'foo',
+                    text: 'yeah',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1437,7 +1437,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'yeah',
+                    text: 'foo',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1455,7 +1455,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'foo',
+                    text: 'IVXLCDMↁↂↇↈ',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1463,7 +1463,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'IVXLCDMↁↂↇↈ',
+                    text: 'foo',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1500,14 +1500,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'Hello',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'IVXLCDMↁↂↇↈ',
                     props: {
                         'font-family': undefined,
@@ -1517,6 +1509,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 },
                 {
                     text: '0123456789',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'Hello',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1865,14 +1865,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'bar',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'quux',
                     props: {
                         'font-family': undefined,
@@ -1890,6 +1882,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 },
                 {
                     text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
