@@ -526,6 +526,35 @@ describe('transforms/bundleRequireJs', function () {
         });
     });
 
+    // https://github.com/assetgraph/assetgraph-builder/issues/542
+    it('should support the wrap option', async function () {
+        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/wrap/'})
+            .loadAssets('index.html')
+            .populate()
+            .bundleRequireJs();
+
+        const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
+        expect(htmlScripts, 'to have length', 3);
+        expect(htmlScripts[1].to.url, 'to match', /\/require\.js$/);
+
+        expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function () {
+            /* eslint-disable */
+            (function () {
+                define('theLibrary', [], function () {
+                    return 'the contents of theLibrary';
+                });
+                require([
+                    'theLibrary'
+                ], function (theLibrary) {
+                    alert('Got the library: ' + theLibrary);
+                });
+                define('main', function () {
+                });
+            }());
+            /* eslint-enable */
+        });
+    });
+
     it('should handle a test case with a data-main that only contains a define (#127)', async function () {
         const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/issue127/'})
             .loadAssets('index.html')

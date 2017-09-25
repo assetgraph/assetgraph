@@ -1396,6 +1396,32 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
+        it('should recognize "display: list-item block;" as a list item', function () {
+            var htmlText = [
+                '<style>div { display: list-item block; list-style-type: upper-roman; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'IVXLCDMↁↂↇↈ',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
         it('should support list-style-type provided as a string', function () {
             var htmlText = [
                 '<style>div { display: list-item; list-style-type: \'yeah\'; }</style>',
