@@ -122,7 +122,11 @@ describe('transforms/subsetGoogleFonts', function () {
                     var htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
 
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
-                        { type: 'HtmlPreloadLink', href: '/google-font-subsets/Open+Sans_400-b023bb8045.woff' },
+                        {
+                            type: 'HtmlPreloadLink',
+                            href: '/google-font-subsets/Open+Sans_400-b023bb8045.woff',
+                            as: 'font'
+                        },
                         {
                             type: 'HtmlStyle',
                             to: {
@@ -662,7 +666,8 @@ describe('transforms/subsetGoogleFonts', function () {
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
                                 isLoaded: true
-                            }
+                            },
+                            as: 'font'
                         },
                         {
                             type: 'HtmlStyle',
@@ -722,7 +727,8 @@ describe('transforms/subsetGoogleFonts', function () {
                             href: expect.it('to begin with', '/google-font-subsets/Open+Sans_400-')
                                 .and('to end with', '.woff')
                                 .and('to match', /[a-z0-9]{10}/),
-                            to: expect.it('not to be', indexFont)
+                            to: expect.it('not to be', indexFont),
+                            as: 'font'
                         },
                         {
                             type: 'HtmlStyle',
@@ -830,7 +836,8 @@ describe('transforms/subsetGoogleFonts', function () {
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
                                 isLoaded: true
-                            }
+                            },
+                            as: 'font'
                         },
                         {
                             type: 'HtmlStyle',
@@ -891,7 +898,8 @@ describe('transforms/subsetGoogleFonts', function () {
                             href: expect.it('to begin with', '/google-font-subsets/Open+Sans_400-')
                                 .and('to end with', '.woff')
                                 .and('to match', /[a-z0-9]{10}/),
-                            to: sharedFont
+                            to: sharedFont,
+                            as: 'font'
                         },
                         {
                             type: 'HtmlStyle',
