@@ -942,6 +942,196 @@ describe('transforms/subsetGoogleFonts', function () {
         });
     });
 
+    describe('fontDisplay option', function () {
+        it('should not add a font-display property when no fontDisplay is defined', function () {
+            httpception([
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff'
+                        },
+                        body: new Buffer('foo', 'base64')
+                    }
+                }
+            ]);
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetGoogleFonts({
+                    inlineSubsets: false
+                })
+                .queue(function (assetGraph) {
+                    var cssAsset = assetGraph.findAssets({ type: 'Css', fileName: /fonts-/ })[0];
+
+                    expect(cssAsset.text, 'not to contain', 'font-display');
+                });
+        });
+
+        it('should not add a font-display property when an invalid font-display value is provided', function () {
+            httpception([
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff'
+                        },
+                        body: new Buffer('foo', 'base64')
+                    }
+                }
+            ]);
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetGoogleFonts({
+                    inlineSubsets: false,
+                    fontDisplay: 'foo'
+                })
+                .queue(function (assetGraph) {
+                    var cssAsset = assetGraph.findAssets({ type: 'Css', fileName: /fonts-/ })[0];
+
+                    expect(cssAsset.text, 'not to contain', 'font-display');
+                });
+        });
+
+        it('should add a font-display property', function () {
+            httpception([
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff'
+                        },
+                        body: new Buffer('foo', 'base64')
+                    }
+                }
+            ]);
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetGoogleFonts({
+                    inlineSubsets: false,
+                    fontDisplay: 'block'
+                })
+                .queue(function (assetGraph) {
+                    var cssAsset = assetGraph.findAssets({ type: 'Css', fileName: /fonts-/ })[0];
+
+                    expect(cssAsset.text, 'to contain', '@font-face{font-display:block');
+                });
+        });
+
+        it('should update an existing font-display property', function () {
+            httpception([
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  font-display: swap;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff'
+                        },
+                        body: new Buffer('foo', 'base64')
+                    }
+                }
+            ]);
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetGoogleFonts({
+                    inlineSubsets: false,
+                    fontDisplay: 'fallback'
+                })
+                .queue(function (assetGraph) {
+                    var cssAsset = assetGraph.findAssets({ type: 'Css', fileName: /fonts-/ })[0];
+
+                    expect(cssAsset.text, 'to contain', 'font-weight:400;font-display:fallback');
+                });
+        });
+    });
+
 
 });
 
