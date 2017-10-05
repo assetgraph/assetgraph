@@ -2039,4 +2039,166 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
     });
+
+    describe('with CSS transitions', function () {
+        describe('with the transition shorthand', function () {
+            it('should trace all intermediate values of font-weight', function () {
+                var htmlText = [
+                    '<style>h1 { font-weight: 400; transition: width 2s, height 2s, font-weight 2s, transform 2s; }</style>',
+                    '<style>h1:hover { font-weight: 700; }</style>',
+                    '<h1>bar</h1>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 500,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 600,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+        });
+
+        describe('with transition-property passed separately', function () {
+            it('should trace all intermediate values of font-weight when explicitly passed', function () {
+                var htmlText = [
+                    '<style>h1 { font-weight: 400; transition-property: font-weight; transition-duration: 4s; }</style>',
+                    '<style>h1:hover { font-weight: 700; }</style>',
+                    '<h1>bar</h1>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 500,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 600,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace all intermediate values of font-weight when `all` is passed', function () {
+                var htmlText = [
+                    '<style>h1 { font-weight: 400; transition-property: all; transition-duration: 4s; }</style>',
+                    '<style>h1:hover { font-weight: 700; }</style>',
+                    '<h1>bar</h1>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 500,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 600,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should not trace intermediate values of font-weight when neither `all` nor `font-weight` is passed', function () {
+                var htmlText = [
+                    '<style>h1 { font-weight: 400; transition-property: color; }</style>',
+                    '<style>h1:hover { font-weight: 700; }</style>',
+                    '<h1>bar</h1>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'bar',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+        });
+    });
 });
