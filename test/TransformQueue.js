@@ -124,6 +124,32 @@ describe('TransformQueue', function () {
                 expect(array, 'to equal', ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't']);
             });
     });
+
+    describe('when the transform returns a value', function () {
+        it('should return a promise that is fulfilled with that value', async function () {
+            const fulfillmentValue = await new AssetGraph()
+                .queue(() => 'foo');
+            expect(fulfillmentValue, 'to equal', 'foo');
+        });
+    });
+
+    describe('when the transform returns a promise', function () {
+        it('should return a promise that is fulfilled with the same value', async function () {
+            const fulfillmentValue = await new AssetGraph()
+                .queue(async () => 'foo');
+            expect(fulfillmentValue, 'to equal', 'foo');
+        });
+    });
+
+    describe('when the transform takes a callback', function () {
+        it('should return a promise that is fulfilled with the value passed to the callback', async function () {
+            const fulfillmentValue = await new AssetGraph()
+                .queue((assetGraph, cb) => {
+                    setImmediate(() => cb(null, 'foo'));
+                });
+            expect(fulfillmentValue, 'to equal', 'foo');
+        });
+    });
 });
 
 describe('error propagation', function () {
