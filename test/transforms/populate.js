@@ -77,16 +77,16 @@ describe('transforms/populate', function () {
             httpception();
 
             var assetGraph = new AssetGraph();
-            var htmlAsset = new AssetGraph.Html({
+            assetGraph.addAsset({
+                type: 'Html',
                 url: 'https://example.com/',
                 text: '<script src="foo.js"></script><script src="bar.js"></script>'
             });
-            assetGraph.addAsset(htmlAsset);
             return assetGraph.populate({
                 followRelations: []
             }).then(function () {
-                expect(assetGraph, 'to contain no asset', { url: 'https://example.com/foo.js' })
-                    .and('to contain no asset', { url: 'https://example.com/bar.js' });
+                expect(assetGraph, 'to contain no asset', { url: 'https://example.com/foo.js', isLoaded: true })
+                    .and('to contain asset', { url: 'https://example.com/bar.js', isLoaded: false });
             });
         });
 
@@ -99,15 +99,14 @@ describe('transforms/populate', function () {
             });
 
             var assetGraph = new AssetGraph();
-            var htmlAsset = new AssetGraph.Html({
+            var htmlAsset = assetGraph.addAsset({
                 url: 'https://example.com/',
                 text: '<script src="foo.js"></script>'
             });
-            assetGraph.addAsset(htmlAsset);
             return assetGraph.populate({
                 followRelations: [ htmlAsset.outgoingRelations[0] ]
             }).then(function () {
-                expect(assetGraph, 'to contain asset', { url: 'https://example.com/foo.js' });
+                expect(assetGraph, 'to contain asset', { url: 'https://example.com/foo.js', isLoaded: true });
             });
         });
 
@@ -128,17 +127,17 @@ describe('transforms/populate', function () {
             ]);
 
             var assetGraph = new AssetGraph();
-            var htmlAsset = new AssetGraph.Html({
+            var htmlAsset = assetGraph.addAsset({
+                type: 'Html',
                 url: 'https://example.com/',
                 text: '<script src="foo.js"></script><script src="bar.js"></script><script src="quux.js"></script>'
             });
-            assetGraph.addAsset(htmlAsset);
             return assetGraph.populate({
                 followRelations: htmlAsset.outgoingRelations.slice(0, 2)
             }).then(function () {
-                expect(assetGraph, 'to contain asset', { url: 'https://example.com/foo.js' })
-                    .and('to contain asset', { url: 'https://example.com/bar.js' })
-                    .and('to contain no asset', { url: 'https://example.com/quux.js' });
+                expect(assetGraph, 'to contain asset', { url: 'https://example.com/foo.js', isLoaded: true })
+                    .and('to contain asset', { url: 'https://example.com/bar.js', isLoaded: true })
+                    .and('to contain asset', { url: 'https://example.com/quux.js', isLoaded: false });
             });
         });
     });
