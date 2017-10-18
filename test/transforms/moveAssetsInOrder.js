@@ -24,16 +24,13 @@ describe('transforms/moveAssetsInOrder', function () {
             .run(done);
     });
 
-    it('should throw an error when encountering circular references', function (done) {
-        new AssetGraph({root: 'testdata/transforms/moveAssetsInOrder/'})
+    it('should throw an error when encountering circular references', async function () {
+        const assetGraph = new AssetGraph({root: 'testdata/transforms/moveAssetsInOrder/'});
+
+        await assetGraph
             .loadAssets('circular.html')
-            .populate()
-            .run(function (error, assetGraph) {
+            .populate();
 
-                expect(assetGraph.moveAssetsInOrder({ type: 'Css' }, '/css/').run, 'to throw');
-
-                done();
-            });
-
+        expect(assetGraph.moveAssetsInOrder({ type: 'Css' }, '/css/').run, 'to throw');
     });
 });

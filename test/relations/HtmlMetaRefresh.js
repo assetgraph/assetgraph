@@ -4,7 +4,7 @@ var expect = require('../unexpected-with-plugins'),
     http = require('http');
 
 describe('relations/HtmlMetaRefresh', function () {
-    it('should handle a basic test case', function () {
+    it('should handle a basic test case', async function () {
         let serverAddress;
         let rootUrl;
         const server = http.createServer(function (req, res) {
@@ -27,13 +27,14 @@ describe('relations/HtmlMetaRefresh', function () {
         serverAddress = server.address();
         rootUrl = 'http://' + (serverAddress.address === '::' ? 'localhost' : serverAddress.address) + ':' + serverAddress.port + '/';
 
-        return new AssetGraph({root: rootUrl})
+        const assetGraph = new AssetGraph({root: rootUrl});
+
+        await assetGraph
             .loadAssets('/metaRefresh')
-            .populate()
-            .then(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'Html', 2);
-                expect(assetGraph, 'to contain relations', 'HtmlMetaRefresh', 1);
-                server.close();
-            });
+            .populate();
+
+        expect(assetGraph, 'to contain assets', 'Html', 2);
+        expect(assetGraph, 'to contain relations', 'HtmlMetaRefresh', 1);
+        server.close();
     });
 });

@@ -14,13 +14,14 @@ describe('assets/Asset', function () {
             return expect(asset.loadAsync(), 'to be rejected');
         });
 
-        it('should autodetect the type of an asset with an unrecognizable file extension', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/autodetectTypeWhenExtensionIsUnknown/'})
+        it('should autodetect the type of an asset with an unrecognizable file extension', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/autodetectTypeWhenExtensionIsUnknown/'});
+
+            await assetGraph
                 .loadAssets('index.html')
-                .populate()
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', 'Svg');
-                });
+                .populate();
+
+            expect(assetGraph, 'to contain asset', 'Svg');
         });
     });
 
@@ -447,108 +448,113 @@ describe('assets/Asset', function () {
             expect(asset.clone.bind(asset, true), 'to throw', /incomingRelations not supported because asset/);
         });
 
-        it('should throw when cloning an asset with invalid incoming relations', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'})
-                .loadAssets('index.css')
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'Css', 1);
+        it('should throw when cloning an asset with invalid incoming relations', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'});
 
-                    var original = assetGraph.findAssets({type: 'Css'})[0];
+            await assetGraph.loadAssets('index.css');
 
-                    expect(original.clone.bind(original, [{}]), 'to throw', /Incoming relation is not a relation/);
-                });
+            expect(assetGraph, 'to contain assets', 'Css', 1);
+
+            var original = assetGraph.findAssets({type: 'Css'})[0];
+
+            expect(original.clone.bind(original, [{}]), 'to throw', /Incoming relation is not a relation/);
         });
 
-        it('should handle a test case with multiple Html assets', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/multipleHtmls/'})
+        it('should handle a test case with multiple Html assets', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/multipleHtmls/'});
+
+            await assetGraph
                 .loadAssets('index.html')
-                .populate()
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'Html', 3);
-                    expect(assetGraph, 'to contain asset', 'Png');
-                    expect(assetGraph, 'to contain asset', {type: 'Css', isInline: true});
+                .populate();
 
-                    var indexHtml = assetGraph.findAssets({type: 'Html'})[0],
-                        assetClone = indexHtml.clone();
-                    assetClone.url = indexHtml.url.replace(/\.html$/, '.clone.html');
+            expect(assetGraph, 'to contain assets', 'Html', 3);
+            expect(assetGraph, 'to contain asset', 'Png');
+            expect(assetGraph, 'to contain asset', {type: 'Css', isInline: true});
 
-                    expect(assetGraph, 'to contain asset', {url: /\/index\.clone\.html$/});
-                    expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {url: /\/anotherpage\.html$/}});
-                    expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {url: /\/yetanotherpage\.html$/}});
-                    expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {type: 'Css'}});
-                    expect(assetGraph, 'to contain asset', 'Png');
-                    expect(assetGraph, 'to contain assets', {type: 'Css', isInline: true}, 2);
+            const indexHtml = assetGraph.findAssets({type: 'Html'})[0];
+            const assetClone = indexHtml.clone();
+            assetClone.url = indexHtml.url.replace(/\.html$/, '.clone.html');
 
-                    var originalAndCloned = assetGraph.findAssets({url: /\/index(?:\.clone)?.html/});
-                    expect(originalAndCloned[0].text, 'to equal', originalAndCloned[1].text);
-                });
+            expect(assetGraph, 'to contain asset', {url: /\/index\.clone\.html$/});
+            expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {url: /\/anotherpage\.html$/}});
+            expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {url: /\/yetanotherpage\.html$/}});
+            expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {type: 'Css'}});
+            expect(assetGraph, 'to contain asset', 'Png');
+            expect(assetGraph, 'to contain assets', {type: 'Css', isInline: true}, 2);
+
+            const originalAndCloned = assetGraph.findAssets({url: /\/index(?:\.clone)?.html/});
+            expect(originalAndCloned[0].text, 'to equal', originalAndCloned[1].text);
         });
 
-        it('should handle a test case with a Css asset with an inline image', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'})
+        it('should handle a test case with a Css asset with an inline image', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'});
+
+            await assetGraph
                 .loadAssets('index.css')
-                .populate()
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 2);
+                .populate();
 
-                    assetGraph.findAssets({type: 'Css'})[0].clone();
+            expect(assetGraph, 'to contain assets', 2);
 
-                    expect(assetGraph, 'to contain assets', 'Css', 2);
+            assetGraph.findAssets({type: 'Css'})[0].clone();
 
-                    expect(assetGraph, 'to contain assets', 'Png', 2);
-                    assetGraph.findAssets({type: 'Css'}).forEach(function (cssAsset) {
-                        expect(assetGraph, 'to contain relation', {from: cssAsset, to: {isInline: true, isImage: true}});
-                    });
-                });
+            expect(assetGraph, 'to contain assets', 'Css', 2);
+
+            expect(assetGraph, 'to contain assets', 'Png', 2);
+            assetGraph.findAssets({type: 'Css'}).forEach(function (cssAsset) {
+                expect(assetGraph, 'to contain relation', {from: cssAsset, to: {isInline: true, isImage: true}});
+            });
         });
     });
 
-    it('should handle a test case with Html assets with meta tags specifying iso-8859-1', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/encoding/'})
-            .loadAssets('iso-8859-1.html', 'iso-8859-1-simple-meta.html')
-            .populate()
-            .then(function (assetGraph) {
-                assetGraph.findAssets().forEach(function (asset) {
-                    expect(asset.text, 'to contain', 'æøåÆØÅ');
-                });
+    it('should handle a test case with Html assets with meta tags specifying iso-8859-1', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/encoding/'});
 
-                expect(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'to begin with', 'æøåÆØÅ');
-                expect(assetGraph.findAssets()[0].rawSrc.toString('binary'), 'to contain', '\u00e6\u00f8\u00e5\u00c6\u00d8\u00c5');
-            });
+        await assetGraph
+            .loadAssets('iso-8859-1.html', 'iso-8859-1-simple-meta.html')
+            .populate();
+
+        assetGraph.findAssets().forEach(function (asset) {
+            expect(asset.text, 'to contain', 'æøåÆØÅ');
+        });
+
+        expect(assetGraph.findAssets()[0].parseTree.body.firstChild.nodeValue, 'to begin with', 'æøåÆØÅ');
+        expect(assetGraph.findAssets()[0].rawSrc.toString('binary'), 'to contain', '\u00e6\u00f8\u00e5\u00c6\u00d8\u00c5');
     });
 
-    it('should handle a Css asset with @charset declaration of iso-8859-1', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/encoding/'})
+    it('should handle a Css asset with @charset declaration of iso-8859-1', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/encoding/'});
+
+        await assetGraph
             .loadAssets('iso-8859-1.css')
-            .populate()
-            .then(function (assetGraph) {
-                expect(assetGraph.findAssets()[0].text, 'to contain', 'æøå');
-                expect(assetGraph.findAssets({})[0].parseTree.nodes[3].nodes, 'to satisfy', { 0: { prop: 'foo', value: 'æøå' } });
-            });
+            .populate();
+
+        expect(assetGraph.findAssets()[0].text, 'to contain', 'æøå');
+        expect(assetGraph.findAssets({})[0].parseTree.nodes[3].nodes, 'to satisfy', { 0: { prop: 'foo', value: 'æøå' } });
     });
 
     describe('#inline()', function () {
-        it('should handle a test case with an Html asset that has an external Css asset in a conditional comment', function () {
-            new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/inline/'})
+        it('should handle a test case with an Html asset that has an external Css asset in a conditional comment', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/inline/'});
+
+            await assetGraph
                 .loadAssets('index.html')
-                .populate()
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 4);
-                    expect(assetGraph, 'to contain assets', 'Html', 2);
-                    expect(assetGraph, 'to contain asset', 'Css');
-                    expect(assetGraph, 'to contain asset', 'Png');
+                .populate();
 
-                    assetGraph.findRelations({type: 'HtmlStyle'})[0].inline();
+            expect(assetGraph, 'to contain assets', 4);
+            expect(assetGraph, 'to contain assets', 'Html', 2);
+            expect(assetGraph, 'to contain asset', 'Css');
+            expect(assetGraph, 'to contain asset', 'Png');
 
-                    expect(assetGraph, 'to contain asset', {type: 'Css', isInline: true});
-                    expect(assetGraph.findRelations({type: 'CssImage'})[0].href, 'to equal', 'some/directory/foo.png');
+            assetGraph.findRelations({type: 'HtmlStyle'})[0].inline();
 
-                    var text = assetGraph.findAssets({type: 'Html'})[0].text,
-                        matches = text.match(/url\((.*?foo\.png)\)/g);
-                    expect(matches, 'to be an array');
-                    expect(matches[1], 'to equal', 'url(some\/directory\/foo.png)');
-                    expect(matches, 'to have length', 2);
-                });
+            expect(assetGraph, 'to contain asset', {type: 'Css', isInline: true});
+            expect(assetGraph.findRelations({type: 'CssImage'})[0].href, 'to equal', 'some/directory/foo.png');
+
+            const text = assetGraph.findAssets({type: 'Html'})[0].text;
+            const matches = text.match(/url\((.*?foo\.png)\)/g);
+            expect(matches, 'to be an array');
+            expect(matches[1], 'to equal', 'url(some\/directory\/foo.png)');
+            expect(matches, 'to have length', 2);
         });
     });
 
@@ -818,78 +824,80 @@ describe('assets/Asset', function () {
             expect(() => barTxt.url = 'https://example.com/foo.txt', 'to throw', 'https://example.com/foo.txt already exists in the graph, cannot update url');
         });
 
-        it('should handle a test case with 3 assets', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/simple/'})
+        it('should handle a test case with 3 assets', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/simple/'});
+
+            await assetGraph
                 .loadAssets('index.html')
-                .populate()
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 3);
-                    expect(assetGraph, 'to contain assets', 'Html', 2);
-                    expect(assetGraph, 'to contain asset', 'Png');
+                .populate();
 
-                    const initialHtml = assetGraph.findAssets({type: 'Html'})[0];
-                    initialHtml.url = urlTools.resolveUrl(assetGraph.root, 'bogus/index.html');
+            expect(assetGraph, 'to contain assets', 3);
+            expect(assetGraph, 'to contain assets', 'Html', 2);
+            expect(assetGraph, 'to contain asset', 'Png');
 
-                    let relativeUrl = assetGraph.findRelations({type: 'HtmlAnchor'})[0].node.getAttribute('href');
-                    expect(relativeUrl, 'to equal', '../otherpage.html');
+            const initialHtml = assetGraph.findAssets({type: 'Html'})[0];
+            initialHtml.url = urlTools.resolveUrl(assetGraph.root, 'bogus/index.html');
 
-                    const otherHtml = assetGraph.findAssets({type: 'Html'})[1];
-                    otherHtml.url = urlTools.resolveUrl(assetGraph.root, 'fluff/otherpage.html');
+            let relativeUrl = assetGraph.findRelations({type: 'HtmlAnchor'})[0].node.getAttribute('href');
+            expect(relativeUrl, 'to equal', '../otherpage.html');
 
-                    relativeUrl = assetGraph.findRelations({type: 'HtmlAnchor'})[0].node.getAttribute('href');
-                    expect(relativeUrl, 'to equal', '../fluff/otherpage.html');
+            const otherHtml = assetGraph.findAssets({type: 'Html'})[1];
+            otherHtml.url = urlTools.resolveUrl(assetGraph.root, 'fluff/otherpage.html');
 
-                    relativeUrl = assetGraph.findRelations({type: 'HtmlImage'})[0].node.getAttribute('src');
-                    expect(relativeUrl, 'to equal', '../foo.png');
-                });
+            relativeUrl = assetGraph.findRelations({type: 'HtmlAnchor'})[0].node.getAttribute('href');
+            expect(relativeUrl, 'to equal', '../fluff/otherpage.html');
+
+            relativeUrl = assetGraph.findRelations({type: 'HtmlImage'})[0].node.getAttribute('src');
+            expect(relativeUrl, 'to equal', '../foo.png');
         });
 
-        it('should handle a test case with an Html asset that has multiple levels of inline assets', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/multipleLevelsOfInline/'})
+        it('should handle a test case with an Html asset that has multiple levels of inline assets', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/multipleLevelsOfInline/'});
+
+            await assetGraph
                 .loadAssets('index.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain asset', 'Css');
-                    expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});
-                    expect(assetGraph, 'to contain asset', {type: 'Html', isInline: false});
-                })
-                .moveAssets({type: 'Html', isInline: false}, function (asset, assetGraph) {
-                    return urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
-                })
-                .then(function (assetGraph) {
-                    expect(assetGraph.findRelations({type: 'CssImage'})[0].propertyNode.value, 'to equal', 'url(../foo.png)');
-                });
+                .populate();
+
+            expect(assetGraph, 'to contain asset', 'Css');
+            expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});
+            expect(assetGraph, 'to contain asset', {type: 'Html', isInline: false});
+
+            await assetGraph.moveAssets({type: 'Html', isInline: false}, function (asset, assetGraph) {
+                return urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
+            });
+
+            expect(assetGraph.findRelations({type: 'CssImage'})[0].propertyNode.value, 'to equal', 'url(../foo.png)');
         });
 
-        it('should handle a test case with a single Html file', function () {
-            return new AssetGraph({root: 'file:///foo/bar/quux'})
-                .loadAssets(new AssetGraph.Html({
-                    url: 'file:///foo/bar/quux/baz/index.html',
-                    text: '<!DOCTYPE html><html></html>'
-                }))
-                .then(function (assetGraph) {
-                    assetGraph.findAssets()[0].url = 'otherdir/index.html';
-                    expect(assetGraph.findAssets()[0].url, 'to equal', 'file:///foo/bar/quux/baz/otherdir/index.html');
+        it('should handle a test case with a single Html file', async function () {
+            const assetGraph = new AssetGraph({root: 'file:///foo/bar/quux'});
 
-                    assetGraph.findAssets()[0].url = '/hey/index.html';
-                    expect(assetGraph.findAssets()[0].url, 'to equal', 'file:///foo/bar/quux/hey/index.html');
+            await assetGraph.loadAssets(new AssetGraph.Html({
+                url: 'file:///foo/bar/quux/baz/index.html',
+                text: '<!DOCTYPE html><html></html>'
+            }));
 
-                    assetGraph.findAssets()[0].url = '//hey.com/there/index.html';
-                    expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/there/index.html');
+            assetGraph.findAssets()[0].url = 'otherdir/index.html';
+            expect(assetGraph.findAssets()[0].url, 'to equal', 'file:///foo/bar/quux/baz/otherdir/index.html');
 
-                    assetGraph.findAssets()[0].url = 'you/go/index.html';
-                    expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/there/you/go/index.html');
+            assetGraph.findAssets()[0].url = '/hey/index.html';
+            expect(assetGraph.findAssets()[0].url, 'to equal', 'file:///foo/bar/quux/hey/index.html');
 
-                    assetGraph.findAssets()[0].url = '/and/then/here.html';
-                    expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/and/then/here.html');
+            assetGraph.findAssets()[0].url = '//hey.com/there/index.html';
+            expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/there/index.html');
 
-                    assetGraph.findAssets()[0].url = '//example.com/then/here.html';
-                    expect(assetGraph.findAssets()[0].url, 'to equal', 'http://example.com/then/here.html');
+            assetGraph.findAssets()[0].url = 'you/go/index.html';
+            expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/there/you/go/index.html');
 
-                    assetGraph.findAssets()[0].url = 'https://example2.com/then/here.html';
-                    assetGraph.findAssets()[0].url = '//example.com/then/here.html';
-                    expect(assetGraph.findAssets()[0].url, 'to equal', 'https://example.com/then/here.html');
-                });
+            assetGraph.findAssets()[0].url = '/and/then/here.html';
+            expect(assetGraph.findAssets()[0].url, 'to equal', 'http://hey.com/and/then/here.html');
+
+            assetGraph.findAssets()[0].url = '//example.com/then/here.html';
+            expect(assetGraph.findAssets()[0].url, 'to equal', 'http://example.com/then/here.html');
+
+            assetGraph.findAssets()[0].url = 'https://example2.com/then/here.html';
+            assetGraph.findAssets()[0].url = '//example.com/then/here.html';
+            expect(assetGraph.findAssets()[0].url, 'to equal', 'https://example.com/then/here.html');
         });
 
         it('should throw when trying to set an url on a non-externalizable asset', function () {
@@ -983,31 +991,34 @@ describe('assets/Asset', function () {
         });
     });
 
-    it('should consider a fragment part of the relation href, not the asset url', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/fragment/'})
+    it('should consider a fragment part of the relation href, not the asset url', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/fragment/'});
+
+        await assetGraph
             .loadAssets('index.html')
-            .populate()
-            .then(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 2);
-                expect(assetGraph, 'to contain asset', {url: /\/otherpage\.html$/});
-                expect(assetGraph, 'to contain relation', {href: 'otherpage.html#fragment1'});
-                expect(assetGraph, 'to contain relation', {href: 'otherpage.html#fragment2'});
+            .populate();
 
-                expect(assetGraph, 'to contain relation', {href: '#selffragment'});
+        expect(assetGraph, 'to contain assets', 2);
+        expect(assetGraph, 'to contain asset', {url: /\/otherpage\.html$/});
+        expect(assetGraph, 'to contain relation', {href: 'otherpage.html#fragment1'});
+        expect(assetGraph, 'to contain relation', {href: 'otherpage.html#fragment2'});
 
-                assetGraph.findAssets({fileName: 'otherpage.html'})[0].url = 'http://example.com/';
+        expect(assetGraph, 'to contain relation', {href: '#selffragment'});
 
-                expect(assetGraph, 'to contain relation', {href: 'http://example.com/#fragment1'});
-                expect(assetGraph, 'to contain relation', {href: 'http://example.com/#fragment2'});
+        assetGraph.findAssets({fileName: 'otherpage.html'})[0].url = 'http://example.com/';
 
-                assetGraph.findAssets({fileName: 'index.html'})[0].url = 'http://example.com/yaddayadda.html';
-                expect(assetGraph, 'to contain relation', {href: '#selffragment'});
-            });
+        expect(assetGraph, 'to contain relation', {href: 'http://example.com/#fragment1'});
+        expect(assetGraph, 'to contain relation', {href: 'http://example.com/#fragment2'});
+
+        assetGraph.findAssets({fileName: 'index.html'})[0].url = 'http://example.com/yaddayadda.html';
+        expect(assetGraph, 'to contain relation', {href: '#selffragment'});
     });
 
     describe('#unload()', function () {
-        it('should clear inline assets from the graph', function () {
-            return new AssetGraph()
+        it('should clear inline assets from the graph', async function () {
+            const assetGraph = new AssetGraph();
+
+            await assetGraph
                 .loadAssets({
                     url: 'file://' + process.cwd() + '/foo/bar.html',
                     text:
@@ -1029,19 +1040,20 @@ describe('assets/Asset', function () {
                         '</head>\n' +
                         '</html>'
                 })
-                .populate()
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 5);
-                    assetGraph.findAssets({type: 'Html'})[0].unload();
-                    expect(assetGraph.findAssets({type: 'Html'})[0], 'to satisfy', { isPopulated: expect.it('to be falsy') });
-                    expect(assetGraph, 'to contain assets', 1);
-                });
+                .populate();
+
+            expect(assetGraph, 'to contain assets', 5);
+            assetGraph.findAssets({type: 'Html'})[0].unload();
+            expect(assetGraph.findAssets({type: 'Html'})[0], 'to satisfy', { isPopulated: expect.it('to be falsy') });
+            expect(assetGraph, 'to contain assets', 1);
         });
     });
 
     describe('text setter', function () {
-        it('should clear inline assets when the text of an asset is overridden', function () {
-            return new AssetGraph()
+        it('should clear inline assets when the text of an asset is overridden', async function () {
+            const assetGraph = new AssetGraph();
+
+            await assetGraph
                 .loadAssets({
                     url: 'file://' + process.cwd() + '/foo/bar.html',
                     text:
@@ -1063,12 +1075,11 @@ describe('assets/Asset', function () {
                         '</head>\n' +
                         '</html>'
                 })
-                .populate()
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 5);
-                    assetGraph.findAssets({type: 'Svg'})[0].text = '<?xml version="1.0" encoding="UTF-8"?>\n<svg></svg>';
-                    expect(assetGraph, 'to contain assets', 3);
-                });
+                .populate();
+
+            expect(assetGraph, 'to contain assets', 5);
+            assetGraph.findAssets({type: 'Svg'})[0].text = '<?xml version="1.0" encoding="UTF-8"?>\n<svg></svg>';
+            expect(assetGraph, 'to contain assets', 3);
         });
     });
 

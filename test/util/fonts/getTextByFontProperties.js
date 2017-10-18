@@ -2,19 +2,20 @@ var expect = require('../../unexpected-with-plugins').clone();
 var AssetGraph = require('../../../');
 var getTextByFontProp = require('../../../lib/util/fonts/getTextByFontProperties');
 
-expect.addAssertion('<string> to [exhaustively] satisfy computed font properties <array>', function (expect, subject, result) {
+expect.addAssertion('<string> to [exhaustively] satisfy computed font properties <array>', async function (expect, subject, result) {
     expect.subjectOutput = function (output) {
         output.code(subject, 'text/html');
     };
-    return new AssetGraph({})
+    const assetGraph = new AssetGraph();
+
+    await assetGraph
         .loadAssets({
             type: 'Html',
             text: subject
         })
-        .populate({ followRelations: { crossorigin: false } })
-        .then(function (assetGraph) {
-            expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0]), 'to [exhaustively] satisfy', result);
-        });
+        .populate({ followRelations: { crossorigin: false } });
+
+    expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0]), 'to [exhaustively] satisfy', result);
 });
 
 describe('lib/util/fonts/getTextByFontProperties', function () {
@@ -1885,17 +1886,18 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
-        it('should trace multiple levels of @import tagged with media lists', function () {
-            return new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/getTextByFontProperties/nestedCssImportWithMedia/'})
+        it('should trace multiple levels of @import tagged with media lists', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/getTextByFontProperties/nestedCssImportWithMedia/'});
+
+            await assetGraph
                 .loadAssets('index.html')
-                .populate()
-                .then(function (assetGraph) {
-                    expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0]), 'to exhaustively satisfy', [
-                        { text: 'foo', props: { 'font-family': undefined, 'font-weight': 500, 'font-style': 'normal' } },
-                        { text: 'foo', props: { 'font-family': undefined, 'font-weight': 600, 'font-style': 'normal' } },
-                        { text: 'foo', props: { 'font-family': undefined, 'font-weight': 700, 'font-style': 'normal' } }
-                    ]);
-                });
+                .populate();
+
+            expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0]), 'to exhaustively satisfy', [
+                { text: 'foo', props: { 'font-family': undefined, 'font-weight': 500, 'font-style': 'normal' } },
+                { text: 'foo', props: { 'font-family': undefined, 'font-weight': 600, 'font-style': 'normal' } },
+                { text: 'foo', props: { 'font-family': undefined, 'font-weight': 700, 'font-style': 'normal' } }
+            ]);
         });
     });
 
