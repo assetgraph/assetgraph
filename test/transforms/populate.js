@@ -4,6 +4,7 @@ const _ = require('lodash');
 const urlTools = require('urltools');
 const AssetGraph = require('../../lib/AssetGraph');
 const query = AssetGraph.query;
+const httpception = require('httpception');
 
 describe('transforms/populate', function () {
     it('should handle a test case with an Html asset and some stylesheets when told not to follow relations to Css', async function () {
@@ -69,5 +70,76 @@ describe('transforms/populate', function () {
             'src="http://cdn.example.com/jquery.min.js"',
             'src="https://cdn.example.com/jquery.min.js"'
         ]);
+    });
+
+    describe('when followRelations is specified as an array of relation instances', function () {
+        it('should support an empty array', function () {
+            httpception();
+
+            var assetGraph = new AssetGraph();
+            var htmlAsset = new AssetGraph.Html({
+                url: 'https://example.com/',
+                text: '<script src="foo.js"></script><script src="bar.js"></script>'
+            });
+            assetGraph.addAsset(htmlAsset);
+            return assetGraph.populate({
+                followRelations: []
+            }).then(function () {
+                expect(assetGraph, 'to contain no asset', { url: 'https://example.com/foo.js' })
+                    .and('to contain no asset', { url: 'https://example.com/bar.js' });
+            });
+        });
+
+        it('should support an array with one item', function () {
+            httpception({
+                request: 'GET https://example.com/foo.js',
+                response: {
+                    body: 'alert("foo");'
+                }
+            });
+
+            var assetGraph = new AssetGraph();
+            var htmlAsset = new AssetGraph.Html({
+                url: 'https://example.com/',
+                text: '<script src="foo.js"></script>'
+            });
+            assetGraph.addAsset(htmlAsset);
+            return assetGraph.populate({
+                followRelations: [ htmlAsset.outgoingRelations[0] ]
+            }).then(function () {
+                expect(assetGraph, 'to contain asset', { url: 'https://example.com/foo.js' });
+            });
+        });
+
+        it('should support an array with multiple items', function () {
+            httpception([
+                {
+                    request: 'GET https://example.com/foo.js',
+                    response: {
+                        body: 'alert("foo");'
+                    }
+                },
+                {
+                    request: 'GET https://example.com/bar.js',
+                    response: {
+                        body: 'alert("bar");'
+                    }
+                }
+            ]);
+
+            var assetGraph = new AssetGraph();
+            var htmlAsset = new AssetGraph.Html({
+                url: 'https://example.com/',
+                text: '<script src="foo.js"></script><script src="bar.js"></script><script src="quux.js"></script>'
+            });
+            assetGraph.addAsset(htmlAsset);
+            return assetGraph.populate({
+                followRelations: htmlAsset.outgoingRelations.slice(0, 2)
+            }).then(function () {
+                expect(assetGraph, 'to contain asset', { url: 'https://example.com/foo.js' })
+                    .and('to contain asset', { url: 'https://example.com/bar.js' })
+                    .and('to contain no asset', { url: 'https://example.com/quux.js' });
+            });
+        });
     });
 });
