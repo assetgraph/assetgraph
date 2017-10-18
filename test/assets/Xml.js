@@ -4,8 +4,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/Xml', function () {
     it('should handle a test case with an existing Xml asset', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Xml/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Xml/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain assets', 2);

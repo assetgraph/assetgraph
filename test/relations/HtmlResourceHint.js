@@ -178,8 +178,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><img src="foo.png"></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT/));
@@ -195,8 +195,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><script src="foo.js"></script></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT/));
@@ -212,8 +212,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><link rel="stylesheet" href="foo.css"></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 const relation = new AssetGraph.HtmlResourceHint({
@@ -227,8 +227,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><link rel="stylesheet" href="foo.scss"></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 const relation = new AssetGraph.HtmlResourceHint({
@@ -242,8 +242,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><iframe src="foo.html"></iframe></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 const relation = new AssetGraph.HtmlResourceHint({
@@ -257,8 +257,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><frameset><frame src="foo.html"></frameset></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 const relation = new AssetGraph.HtmlResourceHint({
@@ -272,8 +272,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><audio src="foo.wav"></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 const relation = new AssetGraph.HtmlResourceHint({
@@ -287,8 +287,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><video src="foo.wav"></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 const relation = new AssetGraph.HtmlResourceHint({
@@ -302,8 +302,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><style>@font-face { font-family: "Noto Serif"; font-style: normal; font-weight: 400; src: url(foo.woff2) format("woff2"); }</style></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 const relation = new AssetGraph.HtmlResourceHint({
@@ -317,8 +317,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><embed src="foo.wav"></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 const relation = new AssetGraph.HtmlResourceHint({
@@ -332,8 +332,8 @@ describe('relations/HtmlResourceHint', function () {
                 const warnSpy = sinon.spy().named('warn');
                 const htmlAsset = getHtmlAsset('<body><object data="foo.wav"></object></body>');
 
-                const assetGraph = await htmlAsset.assetGraph
-                    .on('warn', warnSpy)
+                const assetGraph = htmlAsset.assetGraph;
+                await assetGraph.on('warn', warnSpy)
                     .populate();
 
                 const relation = new AssetGraph.HtmlResourceHint({

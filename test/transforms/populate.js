@@ -8,8 +8,8 @@ const httpception = require('httpception');
 
 describe('transforms/populate', function () {
     it('should handle a test case with an Html asset and some stylesheets when told not to follow relations to Css', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/notToCss/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/notToCss/'});
+        await assetGraph.loadAssets('index.html')
             .populate({
                 followRelations: {type: query.not('HtmlStyle')}
             });
@@ -23,8 +23,8 @@ describe('transforms/populate', function () {
     });
 
     it('should handle a test case with custom protocols', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/customProtocols/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/customProtocols/'});
+        await assetGraph.loadAssets('index.html')
             .populate({followRelations: {to: {type: query.not('Css')}}});
 
         expect(assetGraph, 'to contain assets', 5);
@@ -36,8 +36,8 @@ describe('transforms/populate', function () {
     });
 
     it('should populate a test case with protocol-relative urls from file:', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/protocolRelativeUrls/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/protocolRelativeUrls/'});
+        await assetGraph.loadAssets('index.html')
             .populate({from: {url: /^file:/}});
 
         expect(assetGraph, 'to contain assets', 3);

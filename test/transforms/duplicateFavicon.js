@@ -5,8 +5,8 @@ const urlTools = require('urltools');
 
 describe('transforms.duplicateFavicon', function () {
     it('should handle a referenced favicon.ico', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/duplicateFavicon/referencedFavicon'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/duplicateFavicon/referencedFavicon'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 1);
@@ -29,8 +29,8 @@ describe('transforms.duplicateFavicon', function () {
     });
 
     it('should handle an unreferenced favicon.ico', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/duplicateFavicon/unreferencedFavicon'})
-            .loadAssets('index.html', 'noHead.html', 'favicon.ico')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/duplicateFavicon/unreferencedFavicon'});
+        await assetGraph.loadAssets('index.html', 'noHead.html', 'favicon.ico')
             .populate();
 
         expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 0);

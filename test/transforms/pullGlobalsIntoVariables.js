@@ -10,12 +10,12 @@ function getFunctionBodySource(fn) {
 
 describe('transforms/pullGlobalsIntoVariables', function () {
     it('should handle a test case with a single JavaScript asset', async function () {
-        const assetGraph = await new AssetGraph()
-            .loadAssets({
-                type: 'JavaScript',
-                url: 'file:///foo.js',
-                text: getFunctionBodySource(function () {
-                    /* eslint-disable */
+        const assetGraph = new AssetGraph();
+        await assetGraph.loadAssets({
+            type: 'JavaScript',
+            url: 'file:///foo.js',
+            text: getFunctionBodySource(function () {
+                /* eslint-disable */
                     var MATHMIN = 2;
                     var parseInt = function () {
                         return 99;
@@ -31,8 +31,8 @@ describe('transforms/pullGlobalsIntoVariables', function () {
                         setTimeout(foo, 100);
                     }, 100);
                     /* eslint-enable */
-                })
             })
+        })
             .pullGlobalsIntoVariables({type: 'JavaScript'}, {globalNames: ['foo.bar.quux', 'setTimeout', 'Math', 'Math.max', 'Math.floor', 'Math.min', 'isFinite', 'parseFloat', 'parseInt']});
 
         for (const asset of assetGraph.findAssets()) {
@@ -66,14 +66,14 @@ describe('transforms/pullGlobalsIntoVariables', function () {
     });
 
     it('should handle a case with a single JavaScript when run with wrapInFunction:true', async function () {
-        const assetGraph = await new AssetGraph()
-            .loadAssets({
-                type: 'JavaScript',
-                url: 'file:///foo.js',
-                text: getFunctionBodySource(function () {
-                    alert(Math.floor(10.8) + Math.floor(20.4) + Math.min(3, 5));
-                })
+        const assetGraph = new AssetGraph();
+        await assetGraph.loadAssets({
+            type: 'JavaScript',
+            url: 'file:///foo.js',
+            text: getFunctionBodySource(function () {
+                alert(Math.floor(10.8) + Math.floor(20.4) + Math.min(3, 5));
             })
+        })
             .pullGlobalsIntoVariables({type: 'JavaScript'}, {wrapInFunction: true});
 
         for (const asset of assetGraph.findAssets()) {
@@ -90,18 +90,18 @@ describe('transforms/pullGlobalsIntoVariables', function () {
     });
 
     it('should handle a test case with a single JavaScript asset when run with stringLiterals:true', async function () {
-        const assetGraph = await new AssetGraph()
-            .loadAssets({
-                type: 'JavaScript',
-                url: 'file:///foo.js',
-                text: getFunctionBodySource(function () {
-                    /* eslint-disable */
+        const assetGraph = new AssetGraph();
+        await assetGraph.loadAssets({
+            type: 'JavaScript',
+            url: 'file:///foo.js',
+            text: getFunctionBodySource(function () {
+                /* eslint-disable */
                     var a = 'foobarquux',
                         b = 'foobarquux';
                     f.foobarquux();
                     /* eslint-enable */
-                })
             })
+        })
             .pullGlobalsIntoVariables({type: 'JavaScript'}, {stringLiterals: true});
 
         for (const asset of assetGraph.findAssets()) {

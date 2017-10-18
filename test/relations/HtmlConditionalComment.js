@@ -5,8 +5,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlConditionalComment', function () {
     it('should handle a test case with some existing conditional comments', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlConditionalComment/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlConditionalComment/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain assets', 9);
@@ -33,8 +33,8 @@ describe('relations/HtmlConditionalComment', function () {
     });
 
     it('should handle a test case with the HTML5 boilerplate conditional comments', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlConditionalComment/'})
-            .loadAssets('html5Boilerplate.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlConditionalComment/'});
+        await assetGraph.loadAssets('html5Boilerplate.html')
             .populate();
 
         expect(assetGraph, 'to contain relations', 'HtmlConditionalComment', 3);

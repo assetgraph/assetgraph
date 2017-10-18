@@ -5,8 +5,8 @@ const sinon = require('sinon');
 describe('relations/MsApplicationConfigPollingUri', function () {
     it('should handle a test case with an existing <TileImage/> element', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'})
-            .on('warn', warnSpy)
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'});
+        await assetGraph.on('warn', warnSpy)
             .loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'})
             .populate();
 
@@ -24,8 +24,8 @@ describe('relations/MsApplicationConfigPollingUri', function () {
 
     it('should update the href', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'})
-            .on('warn', warnSpy)
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'});
+        await assetGraph.on('warn', warnSpy)
             .loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'})
             .populate();
 
@@ -61,8 +61,8 @@ describe('relations/MsApplicationConfigPollingUri', function () {
     describe('when programmatically detaching a relation', function () {
         it('should remove the relation and clean up', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'})
-                .on('warn', warnSpy)
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'});
+            await assetGraph.on('warn', warnSpy)
                 .loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'})
                 .populate();
 

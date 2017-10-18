@@ -72,8 +72,8 @@ describe('assets/JavaScript', function () {
     });
 
     it('should preserve the copyright notice in a JavaScript asset', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
-            .loadAssets('copyrightNotice.js');
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'});
+        await assetGraph.loadAssets('copyrightNotice.js');
 
         const javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
         javaScript.parseTree.body.push({
@@ -96,8 +96,8 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with JavaScript assets that have regular comments as the first non-whitespace tokens', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
-            .loadAssets('initialComment*.js');
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'});
+        await assetGraph.loadAssets('initialComment*.js');
 
         for (const javaScript of assetGraph.findAssets({type: 'JavaScript'})) {
             javaScript.parseTree.body.push({
@@ -123,8 +123,8 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with a JavaScript asset that has comments right before EOF, then marking it as dirty', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
-            .loadAssets('commentsBeforeEof.js')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'});
+        await assetGraph.loadAssets('commentsBeforeEof.js')
             .populate();
 
         const javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
@@ -143,8 +143,8 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with conditional compilation (@cc_on)', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
-            .loadAssets('conditionalCompilation.js');
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'});
+        await assetGraph.loadAssets('conditionalCompilation.js');
 
         for (const javaScript of assetGraph.findAssets({type: 'JavaScript'})) {
             javaScript.markDirty();
@@ -159,8 +159,8 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with global strict mode', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
-            .loadAssets('globalstrict.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'});
+        await assetGraph.loadAssets('globalstrict.html')
             .populate();
 
         expect(assetGraph.findAssets({fileName: 'globalstrict.js'})[0].strict, 'to equal', true);

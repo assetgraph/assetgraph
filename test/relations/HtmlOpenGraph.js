@@ -34,8 +34,8 @@ describe('relations/HtmlOpenGraph', function () {
     });
 
     it('should update the href', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'})
-            .loadAssets('index.html');
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'});
+        await assetGraph.loadAssets('index.html');
 
         expect(assetGraph, 'to contain relation', 'HtmlOpenGraph', 10);
 

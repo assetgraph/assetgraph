@@ -5,8 +5,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlEdgeSideInclude', function () {
     it('should handle a test case with existing <esi ...> elements', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlEdgeSideInclude/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlEdgeSideInclude/'});
+        await assetGraph.loadAssets('index.html')
             .populate({
                 followRelations: {to: {url: /\.html$/}}
             });

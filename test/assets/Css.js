@@ -38,8 +38,8 @@ describe('assets/Css', function () {
     });
 
     it('should handle a test case that has multiple neighbour @font-face rules', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Css/multipleFontFaceRules/'})
-            .loadAssets('index.css')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Css/multipleFontFaceRules/'});
+        await assetGraph.loadAssets('index.css')
             .populate({
                 followRelations: { crossdomain: false }
             });
@@ -85,8 +85,8 @@ describe('assets/Css', function () {
         });
 
         it('should propagate source map source map information', async function () {
-            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Css/minifyWithSourceMap/'})
-                .loadAssets('index.css');
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Css/minifyWithSourceMap/'});
+            await assetGraph.loadAssets('index.css');
 
             for (const asset of assetGraph.findAssets()) {
                 asset.minify();
@@ -147,8 +147,8 @@ describe('assets/Css', function () {
     });
 
     it('should propagate source map source map information when pretty-printing', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Css/prettyPrintWithSourceMap/'})
-            .loadAssets('index.css');
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Css/prettyPrintWithSourceMap/'});
+        await assetGraph.loadAssets('index.css');
 
         for (const asset of assetGraph.findAssets()) {
             asset.prettyPrint();

@@ -4,8 +4,8 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/SystemJsBundle', function () {
     it('should handle a test case with a JavaScript asset that has a #SystemJsBundle directive', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/SystemJsBundle/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/SystemJsBundle/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain assets', 3);

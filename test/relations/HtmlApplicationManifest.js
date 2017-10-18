@@ -5,8 +5,8 @@ const sinon = require('sinon');
 
 describe('relations/HtmlApplicationManifest', function () {
     it('should handle a test case with an existing <link rel="manifest">', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain relations', 'HtmlApplicationManifest', 1);
@@ -14,8 +14,8 @@ describe('relations/HtmlApplicationManifest', function () {
     });
 
     it('should read the link href correctly', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         const relation = assetGraph.findRelations({ type: 'HtmlApplicationManifest' })[0];
@@ -24,8 +24,8 @@ describe('relations/HtmlApplicationManifest', function () {
     });
 
     it('should write the link href correctly', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         const relation = assetGraph.findRelations({ type: 'HtmlApplicationManifest' })[0];
@@ -40,8 +40,8 @@ describe('relations/HtmlApplicationManifest', function () {
     });
 
     it('should append <link rel="manifest"> to a containing document', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         const html = assetGraph.findAssets({ type: 'Html' })[0];

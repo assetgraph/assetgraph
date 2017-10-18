@@ -3,8 +3,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('bundleWebpack', function () {
     it('should create a bundle consisting of a single file', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/simple/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/simple/'});
+        await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
@@ -21,8 +21,8 @@ describe('bundleWebpack', function () {
     });
 
     it('should create a bundle consisting of a single file with a different publicPath', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/publicPath/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/publicPath/'});
+        await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
@@ -39,8 +39,8 @@ describe('bundleWebpack', function () {
     });
 
     it('should discover relations in the bundle', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/relationInBundle/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/relationInBundle/'});
+        await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
@@ -49,8 +49,8 @@ describe('bundleWebpack', function () {
     });
 
     it('should pick up source maps from webpack', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/sourceMaps/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/sourceMaps/'});
+        await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .populate()
             .applySourceMaps();
@@ -87,8 +87,8 @@ describe('bundleWebpack', function () {
     });
 
     it('should pick up CSS assets in the output bundles', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/css/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/css/'});
+        await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .applySourceMaps();
 
@@ -98,8 +98,8 @@ describe('bundleWebpack', function () {
     });
 
     it('should not build unused bundles', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/namedUnusedBundles/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/namedUnusedBundles/'});
+        await assetGraph.loadAssets('index.html')
             .bundleWebpack();
 
         expect(assetGraph, 'to contain asset', { fileName: 'bundle.main.js', isLoaded: true })
@@ -107,8 +107,8 @@ describe('bundleWebpack', function () {
     });
 
     it('should work with the commons chunk plugin', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/commonschunk/'})
-            .loadAssets('index.html', 'secondary.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/commonschunk/'});
+        await assetGraph.loadAssets('index.html', 'secondary.html')
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
@@ -120,8 +120,8 @@ describe('bundleWebpack', function () {
     });
 
     it('should work with the commons chunk plugin when only one bundle is built', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/commonschunk/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/commonschunk/'});
+        await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
@@ -137,8 +137,8 @@ describe('bundleWebpack', function () {
     });
 
     it('should support code splitting via require.ensure', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/codeSplit/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/codeSplit/'});
+        await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
@@ -151,8 +151,8 @@ describe('bundleWebpack', function () {
     });
 
     it('should support code splitting via require.ensure and wildcards', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/wildcardCodeSplit/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/wildcardCodeSplit/'});
+        await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .populate({
                 followRelations: {type: AssetGraph.query.not('SourceMapSource')}
@@ -173,8 +173,8 @@ describe('bundleWebpack', function () {
         // instead of per usual:
         //   script.src = __webpack_require__.p + "" + chunkId + ".bundle.js";
 
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/wildcardCodeSplitWithChunkfilename/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/wildcardCodeSplitWithChunkfilename/'});
+        await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .populate({
                 followRelations: {type: AssetGraph.query.not('SourceMapSource')}

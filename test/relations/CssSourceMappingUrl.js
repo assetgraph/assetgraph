@@ -4,8 +4,8 @@ var expect = require('../unexpected-with-plugins'),
 
 describe('relations/CssSourceMappingUrl', function () {
     it('should handle a test case with a Css asset that has @sourceMappingURL directive', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/CssSourceMappingUrl/existingExternalSourceMap/'})
-            .loadAssets('index.html', 'someMore.css')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/CssSourceMappingUrl/existingExternalSourceMap/'});
+        await assetGraph.loadAssets('index.html', 'someMore.css')
             .populate();
 
         expect(assetGraph, 'to contain assets', 5);

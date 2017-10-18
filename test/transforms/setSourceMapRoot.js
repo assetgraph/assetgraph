@@ -4,8 +4,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/setSourceMapRoot', function () {
     it('should be able to modify source root', async function () {
-        const assetGraph = await new AssetGraph()
-            .loadAssets(new AssetGraph.SourceMap({text: '{"sourceRoot":"rootFolder"}'}))
+        const assetGraph = new AssetGraph();
+        await assetGraph.loadAssets(new AssetGraph.SourceMap({text: '{"sourceRoot":"rootFolder"}'}))
             .setSourceMapRoot(null, 'otherFolder');
 
         expect(assetGraph, 'to contain asset', 'SourceMap');
@@ -13,8 +13,8 @@ describe('transforms/setSourceMapRoot', function () {
     });
 
     it('should be able to delete source root', async function () {
-        const assetGraph = await new AssetGraph()
-            .loadAssets(new AssetGraph.SourceMap({text: '{"sourceRoot":"rootFolder"}'}))
+        const assetGraph = new AssetGraph();
+        await assetGraph.loadAssets(new AssetGraph.SourceMap({text: '{"sourceRoot":"rootFolder"}'}))
             .setSourceMapRoot(null, null);
 
         expect(assetGraph, 'to contain asset', 'SourceMap');
@@ -23,8 +23,8 @@ describe('transforms/setSourceMapRoot', function () {
 
     describe('with a source map that has an existing sourceRoot', function () {
         it('should update relative references in sources', async function () {
-            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/setSourceMapRoot/existingSourceRoot/'})
-                .loadAssets('index.html')
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/setSourceMapRoot/existingSourceRoot/'});
+            await assetGraph.loadAssets('index.html')
                 .populate();
 
             expect(assetGraph, 'to contain asset', {url: /\.less$/, isLoaded: true});
@@ -37,8 +37,8 @@ describe('transforms/setSourceMapRoot', function () {
         });
 
         it('should take the new sourceRoot into consideration when an asset is moved', async function () {
-            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/setSourceMapRoot/existingSourceRoot/'})
-                .loadAssets('index.html')
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/setSourceMapRoot/existingSourceRoot/'});
+            await assetGraph.loadAssets('index.html')
                 .populate()
                 .setSourceMapRoot(null, 'somewhereElse');
 
@@ -49,8 +49,8 @@ describe('transforms/setSourceMapRoot', function () {
         });
 
         it('should allow fixing up a wrong sourceRoot before continuing population', async function () {
-            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/setSourceMapRoot/wrongSourceRoot/'})
-                .loadAssets('index.html')
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/setSourceMapRoot/wrongSourceRoot/'});
+            await assetGraph.loadAssets('index.html')
                 .populate({
                     followRelations: {from: {type: AssetGraph.query.not('SourceMap')}}
                 });

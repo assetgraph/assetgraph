@@ -5,8 +5,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlVideo', function () {
     it('should handle a test case with existing <video> tags', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlVideo/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlVideo/'});
+        await assetGraph.loadAssets('index.html')
             .populate({
                 followRelations: () => false
             });

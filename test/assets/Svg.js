@@ -4,8 +4,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/Svg', function () {
     it('should handle a combo test case with an Svg asset', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Svg/combo/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Svg/combo/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain assets', 11);
@@ -48,8 +48,8 @@ describe('assets/Svg', function () {
     });
 
     it('should inline an Svg asset as a non-base64 data: url', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Svg/inline/'})
-            .loadAssets('index.css')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Svg/inline/'});
+        await assetGraph.loadAssets('index.css')
             .populate()
             .inlineRelations({type: 'CssImage'});
 

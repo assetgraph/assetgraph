@@ -4,8 +4,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlTemplate', function () {
     it('should handle a test case with an existing <template> element', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlTemplate/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlTemplate/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain relations', 'HtmlImage', 3);

@@ -67,8 +67,8 @@ describe('gatherStylesheetsWithIncomingMedia', function () {
 
     it('should not break when there are unloaded Css assets', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithIncomingMedia/unloadedCssAssets/'})
-            .on('warn', warnSpy)
+        const assetGraph = new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithIncomingMedia/unloadedCssAssets/'});
+        await assetGraph.on('warn', warnSpy)
             .loadAssets('index.html')
             .populate();
 

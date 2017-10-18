@@ -102,8 +102,8 @@ describe('assets/Html', function () {
 
     describe('#findOutgoingRelationsInParseTree', function () {
         it('should add Css type to HtmlStyle relation targets that have no .css file extension', async function () {
-            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Html/cssWithoutExtension/'})
-                .loadAssets('index.html')
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Html/cssWithoutExtension/'});
+            await assetGraph.loadAssets('index.html')
                 .populate();
 
             const htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
@@ -654,8 +654,8 @@ describe('assets/Html', function () {
     });
 
     it('should register the source location of inline scripts and stylesheets', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '../../../testdata/assets/Html/sourceMapInlineAssets/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '../../../testdata/assets/Html/sourceMapInlineAssets/'});
+        await assetGraph.loadAssets('index.html')
             .populate()
             .applySourceMaps();
 

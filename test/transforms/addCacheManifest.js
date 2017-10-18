@@ -7,8 +7,8 @@ const sinon = require('sinon');
 
 describe('transforms/addCacheManifest', function () {
     it('should handle a single page with an existing cache manifest', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/existingCacheManifest/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/existingCacheManifest/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain relations', 4);
@@ -44,8 +44,8 @@ describe('transforms/addCacheManifest', function () {
 
     it('should add a cache manifest to a page that does not already have one', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifest/'})
-            .on('warn', warnSpy)
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifest/'});
+        await assetGraph.on('warn', warnSpy)
             .loadAssets('index.html')
             .populate({
                 followRelations: {to: {url: /^file:/}}
@@ -73,8 +73,8 @@ describe('transforms/addCacheManifest', function () {
     });
 
     it('should add cache manifest to multiple pages', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifestMultiPage/'})
-            .loadAssets('*.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifestMultiPage/'});
+        await assetGraph.loadAssets('*.html')
             .populate();
 
         expect(assetGraph, 'to contain assets', 3);
@@ -99,8 +99,8 @@ describe('transforms/addCacheManifest', function () {
     });
 
     it('should add a cache manifest and update the existing one in a multi-page test case with one existing manifest', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/existingCacheManifestMultiPage/'})
-            .loadAssets('*.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/existingCacheManifestMultiPage/'});
+        await assetGraph.loadAssets('*.html')
             .populate();
 
         expect(assetGraph, 'to contain assets', 'Html', 2);

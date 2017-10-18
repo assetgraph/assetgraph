@@ -26,15 +26,15 @@ describe('relations/HtmlPreconnectLink', function () {
     });
 
     it('should handle a test case with an existing <link rel="preconnect"> element', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPreconnectLink/'})
-            .loadAssets('index.html');
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPreconnectLink/'});
+        await assetGraph.loadAssets('index.html');
 
         expect(assetGraph, 'to contain relation', 'HtmlPreconnectLink');
     });
 
     it('should update the href', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPreconnectLink/'})
-            .loadAssets('index.html');
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPreconnectLink/'});
+        await assetGraph.loadAssets('index.html');
 
         expect(assetGraph, 'to contain relation', 'HtmlPreconnectLink');
 

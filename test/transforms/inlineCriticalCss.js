@@ -24,8 +24,8 @@ describe('tranforms/inlineCriticalCss', function () {
     it('should emit a warning when encountering broken html', async function () {
         const warnSpy = sinon.spy();
 
-        const assetGraph = await new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
-            .on('warn', warnSpy)
+        const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
+        await assetGraph.on('warn', warnSpy)
             .loadAssets('missing-structure.html')
             .populate();
 
@@ -169,8 +169,8 @@ describe('tranforms/inlineCriticalCss', function () {
     });
 
     it('should combine with other CSS transforms without throwing', async function () {
-        const assetGraph = await new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' })
-            .loadAssets('simple.html')
+        const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
+        await assetGraph.loadAssets('simple.html')
             .populate();
 
         for (const asset of assetGraph.findAssets({isLoaded: true, isInline: false})) {

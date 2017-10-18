@@ -4,8 +4,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/Rss', function () {
     it('should find an Rss asset', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/assets/Rss/'})
-            .loadAssets('feed.rss')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Rss/'});
+        await assetGraph.loadAssets('feed.rss')
             .populate();
 
         expect(assetGraph, 'to contain asset', 'Rss');

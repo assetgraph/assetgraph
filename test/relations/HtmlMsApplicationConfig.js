@@ -12,8 +12,8 @@ describe('relations/HtmlMsApplicationConfig', function () {
     }
 
     it('should handle a test case with an existing <meta name="msapplication-config" content="..."> element', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain relation', 'HtmlMsApplicationConfig');
@@ -21,8 +21,8 @@ describe('relations/HtmlMsApplicationConfig', function () {
     });
 
     it('should update the href', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain relation', 'HtmlMsApplicationConfig');
@@ -36,8 +36,8 @@ describe('relations/HtmlMsApplicationConfig', function () {
 
     describe('when programmatically adding a relation', function () {
         it('should register a relation when using attach', async function () {
-            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'})
-                .loadAssets('index.html')
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlMsApplicationConfig/'});
+            await assetGraph.loadAssets('index.html')
                 .populate();
 
             const previousRelation = assetGraph.findRelations({ type: 'HtmlMsApplicationConfig' })[0];

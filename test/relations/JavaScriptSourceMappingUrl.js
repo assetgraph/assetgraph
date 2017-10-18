@@ -24,8 +24,8 @@ describe('relations/JavaScriptSourceMappingUrl', function () {
 
     it('should handle another test case with a JavaScript asset that has @sourceMappingURL directive', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap2/'})
-            .on('warn', warnSpy)
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap2/'});
+        await assetGraph.on('warn', warnSpy)
             .loadAssets('index.html')
             .populate();
 

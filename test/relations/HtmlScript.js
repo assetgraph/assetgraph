@@ -5,8 +5,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlScript', function () {
     it('should handle a test case with existing <script> elements', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
@@ -19,8 +19,8 @@ describe('relations/HtmlScript', function () {
     });
 
     it('should attach script node after another when using the `after` position', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         const firstScript = assetGraph.findRelations({ type: 'HtmlScript' })[0];
@@ -34,8 +34,8 @@ describe('relations/HtmlScript', function () {
     });
 
     it('should attach script node before the first existing script node when using the `first` position', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'})
-            .loadAssets('index.html')
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'});
+        await assetGraph.loadAssets('index.html')
             .populate();
 
         const html = assetGraph.findAssets({ type: 'Html' })[0];
@@ -67,11 +67,11 @@ describe('relations/HtmlScript', function () {
     });
 
     it('should attach script node as the last node in document.body if no other scripts exist when using the `first` position', async function () {
-        const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'})
-            .loadAssets(new AssetGraph.Html({
-                url: 'index.html',
-                text: '<html><head></head><body><h1>Hello world</h1></body></html>'
-            }));
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'});
+        await assetGraph.loadAssets(new AssetGraph.Html({
+            url: 'index.html',
+            text: '<html><head></head><body><h1>Hello world</h1></body></html>'
+        }));
 
         const html = assetGraph.findAssets({ type: 'Html' })[0];
         const document = html.parseTree;

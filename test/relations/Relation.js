@@ -8,8 +8,8 @@ var httpception = require('httpception');
 describe('relations/Relation', function () {
     describe('#hrefType', function () {
         it('should handle a test case with urls with different hrefTypes', async function () {
-            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
-                .loadAssets('index.html');
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'});
+            await assetGraph.loadAssets('index.html');
 
             expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false });
 
@@ -51,8 +51,8 @@ describe('relations/Relation', function () {
         });
 
         it('should handle a test case with urls with different hrefTypes, where hrefs have leading white space', async function ()  {
-            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
-                .loadAssets('index.html');
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'});
+            await assetGraph.loadAssets('index.html');
 
             expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false });
 
@@ -71,8 +71,8 @@ describe('relations/Relation', function () {
         });
 
         it('should inline a relation when its hrefType is changed to inline', async function () {
-            const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'})
-                .loadAssets('index.html');
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'});
+            await assetGraph.loadAssets('index.html');
 
             const indexHtml = assetGraph.findAssets({ fileName: 'index.html' })[0];
             const relation = assetGraph.findRelations({ from: indexHtml, to: { fileName: 'relative.html' } })[0];
@@ -451,8 +451,8 @@ describe('relations/Relation', function () {
     describe('#inline', function () {
         describe('on a non-inline relation', function () {
             it('should update the href of all outgoing relations of the target asset', async function () {
-                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/inlineExternalRelation/'})
-                    .loadAssets('index.html')
+                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/inlineExternalRelation/'});
+                await assetGraph.loadAssets('index.html')
                     .populate();
 
                 assetGraph.findAssets({type: 'Html'})[0].outgoingRelations[0].inline();
@@ -460,8 +460,8 @@ describe('relations/Relation', function () {
             });
 
             it('should set the incomingInlineRelation property of the target asset', async function () {
-                const assetGraph = await new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/inlineExternalRelation/'})
-                    .loadAssets('index.html')
+                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/inlineExternalRelation/'});
+                await assetGraph.loadAssets('index.html')
                     .populate();
 
                 const cssImage = assetGraph.findRelations({type: 'CssImage'})[0];
