@@ -4,13 +4,14 @@ const AssetGraph = require('../../../');
 const sinon = require('sinon');
 
 describe('gatherStylesheetsWithIncomingMedia', function () {
-    const expect = unexpected.clone().addAssertion('<string> to produce result satisfying <array>', function (expect, subject, value) {
-        return new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithIncomingMedia/' + subject + '/'})
+    const expect = unexpected.clone().addAssertion('<string> to produce result satisfying <array>', async (expect, subject, value) => {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithIncomingMedia/' + subject + '/'});
+
+        await assetGraph
             .loadAssets('index.html')
-            .populate()
-            .then(function (assetGraph) {
-                return expect(gatherStylesheetsWithIncomingMedia(assetGraph, assetGraph.findAssets({type: 'Html'})[0]), 'to satisfy', value);
-            });
+            .populate();
+
+        return expect(gatherStylesheetsWithIncomingMedia(assetGraph, assetGraph.findAssets({type: 'Html'})[0]), 'to satisfy', value);
     });
 
     it('should follow inline HtmlStyle relations', function () {

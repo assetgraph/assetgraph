@@ -76,27 +76,28 @@ describe('AssetGraph#addAsset', function () {
         expect(warnSpy, 'was not called');
     });
 
-    it('should only warn about unknown unsupported protocols', function () {
+    it('should only warn about unknown unsupported protocols', async function () {
         const warnSpy = sinon.spy().named('warn');
 
-        return new AssetGraph({root: __dirname + '/../testdata/unsupportedProtocols/'})
-            .on('warn', warnSpy)
+        const assetGraph = new AssetGraph({root: __dirname + '/../testdata/unsupportedProtocols/'});
+        assetGraph.on('warn', warnSpy);
+
+        await assetGraph
             .loadAssets('index.html')
-            .populate()
-            .then(function (assetGraph) {
-                expect(assetGraph.findRelations(), 'to satisfy', [
-                    { to: { url: 'mailto:foo@bar.com' } },
-                    { to: { url: 'tel:9876543' } },
-                    { to: { url: 'sms:9876543' } },
-                    { to: { url: 'fax:9876543' } },
-                    { to: { url: 'httpz://foo.com/' } }
+            .populate();
 
-                ]);
+        expect(assetGraph.findRelations(), 'to satisfy', [
+            { to: { url: 'mailto:foo@bar.com' } },
+            { to: { url: 'tel:9876543' } },
+            { to: { url: 'sms:9876543' } },
+            { to: { url: 'fax:9876543' } },
+            { to: { url: 'httpz://foo.com/' } }
 
-                expect(warnSpy, 'to have calls satisfying', () =>
-                    warnSpy(new Error('No resolver found for protocol: httpz\n\tIf you think this protocol should exist, please contribute it here:\n\thttps://github.com/Munter/schemes#contributing'))
-                );
-            });
+        ]);
+
+        expect(warnSpy, 'to have calls satisfying', () =>
+            warnSpy(new Error('No resolver found for protocol: httpz\n\tIf you think this protocol should exist, please contribute it here:\n\thttps://github.com/Munter/schemes#contributing'))
+        );
     });
 
     describe('with an asset config that includes the body', function () {
