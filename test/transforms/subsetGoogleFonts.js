@@ -63,32 +63,66 @@ describe('transforms/subsetGoogleFonts', function () {
                 inlineSubsets: false
             })
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', {
-                    type: 'HtmlStyle',
-                    from: {
-                        type: 'Html',
-                        fileName: 'index.html'
-                    },
-                    to: {
-                        type: 'Css',
-                        url: fontCssUrlRegExp,
-                        isLoaded: true,
-                        isMinified: true
-                    }
-                });
+                expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-                expect(assetGraph, 'to contain relation', {
-                    type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
-                    from: {
-                        type: 'Css',
-                        url: fontCssUrlRegExp
+                var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+
+                expect(index.outgoingRelations, 'to satisfy', [
+                    {
+                        type: 'HtmlPreloadLink',
+                        hrefType: 'rootRelative',
+                        href: expect.it('to begin with', '/subfont/Open+Sans_400-')
+                            .and('to end with', '.woff')
+                            .and('to match', /[a-z0-9]{10}/),
+                        to: {
+                            isLoaded: true
+                        },
+                        as: 'font'
                     },
-                    to: {
-                        isLoaded: true,
-                        fileName: /Open\+Sans_400-[a-z0-9]{10}\.woff$/
+                    {
+                        type: 'HtmlStyle',
+                        href: expect.it('to begin with', '/subfont/fonts-')
+                            .and('to end with', '.css')
+                            .and('to match', /[a-z0-9]{10}/),
+                        to: {
+                            isLoaded: true,
+                            isMinified: true
+                        }
+                    },
+                    {
+                        type: 'HtmlPrefetchLink',
+                        hrefType: 'absolute',
+                        href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                    },
+                    {
+                        type: 'HtmlPreconnectLink',
+                        hrefType: 'absolute',
+                        href: 'https://fonts.gstatic.com'
+                    },
+                    {
+                        type: 'HtmlStyle',
+                        to: { isInline: true }
+                    },
+                    {
+                        type: 'HtmlScript',
+                        to: {
+                            isInline: true,
+                            outgoingRelations: [
+                                {
+                                    type: 'JavaScriptStaticUrl',
+                                    href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        type: 'HtmlStyle',
+                        href: 'https://fonts.googleapis.com/css?family=Open+Sans',
+                        node: function (node) {
+                            return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                        }
                     }
-                });
+                ]);
             });
     });
 
