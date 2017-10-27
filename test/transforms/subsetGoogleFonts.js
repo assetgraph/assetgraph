@@ -3,12 +3,28 @@ var AssetGraph = require('../../lib');
 
 var httpception = require('httpception');
 
-var fontCssUrlRegExp = /\/google-font-subsets\/fonts-[a-z0-9]{10}\.css$/;
+var fontCssUrlRegExp = /\/subfont\/fonts-[a-z0-9]{10}\.css$/;
 
 describe('transforms/subsetGoogleFonts', function () {
 
     it('should handle HTML <link rel=stylesheet>', function () {
         httpception([
+            {
+                request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: [
+                        '@font-face {',
+                        '  font-family: \'Open Sans\';',
+                        '  font-style: normal;',
+                        '  font-weight: 400;',
+                        '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400) format(\'woff\');',
+                        '}'
+                    ].join('\n')
+                }
+            },
             {
                 request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
                 response: {
@@ -47,32 +63,66 @@ describe('transforms/subsetGoogleFonts', function () {
                 inlineSubsets: false
             })
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', {
-                    type: 'HtmlStyle',
-                    from: {
-                        type: 'Html',
-                        fileName: 'index.html'
-                    },
-                    to: {
-                        type: 'Css',
-                        url: fontCssUrlRegExp,
-                        isLoaded: true,
-                        isMinified: true
-                    }
-                });
+                expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-                expect(assetGraph, 'to contain relation', {
-                    type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
-                    from: {
-                        type: 'Css',
-                        url: fontCssUrlRegExp
+                var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+
+                expect(index.outgoingRelations, 'to satisfy', [
+                    {
+                        type: 'HtmlPreloadLink',
+                        hrefType: 'rootRelative',
+                        href: expect.it('to begin with', '/subfont/Open+Sans_400-')
+                            .and('to end with', '.woff')
+                            .and('to match', /[a-z0-9]{10}/),
+                        to: {
+                            isLoaded: true
+                        },
+                        as: 'font'
                     },
-                    to: {
-                        isLoaded: true,
-                        fileName: /Open\+Sans_400-[a-z0-9]{10}\.woff$/
+                    {
+                        type: 'HtmlStyle',
+                        href: expect.it('to begin with', '/subfont/fonts-')
+                            .and('to end with', '.css')
+                            .and('to match', /[a-z0-9]{10}/),
+                        to: {
+                            isLoaded: true,
+                            isMinified: true
+                        }
+                    },
+                    {
+                        type: 'HtmlPrefetchLink',
+                        hrefType: 'absolute',
+                        href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                    },
+                    {
+                        type: 'HtmlPreconnectLink',
+                        hrefType: 'absolute',
+                        href: 'https://fonts.gstatic.com'
+                    },
+                    {
+                        type: 'HtmlStyle',
+                        to: { isInline: true }
+                    },
+                    {
+                        type: 'HtmlScript',
+                        to: {
+                            isInline: true,
+                            outgoingRelations: [
+                                {
+                                    type: 'JavaScriptStaticUrl',
+                                    href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        type: 'HtmlStyle',
+                        href: 'https://fonts.googleapis.com/css?family=Open+Sans',
+                        node: function (node) {
+                            return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                        }
                     }
-                });
+                ]);
             });
     });
 
@@ -80,6 +130,22 @@ describe('transforms/subsetGoogleFonts', function () {
 
         it('should inline the font Css and change outgoing relations to rootRelative', function () {
             httpception([
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
                 {
                     request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
                     response: {
@@ -124,7 +190,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     expect(htmlAsset.outgoingRelations, 'to satisfy', [
                         {
                             type: 'HtmlPreloadLink',
-                            href: '/google-font-subsets/Open+Sans_400-b023bb8045.woff',
+                            href: '/subfont/Open+Sans_400-b023bb8045.woff',
                             as: 'font'
                         },
                         {
@@ -172,6 +238,22 @@ describe('transforms/subsetGoogleFonts', function () {
     it('should handle CSS @import', function () {
         httpception([
             {
+                request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: [
+                        '@font-face {',
+                        '  font-family: \'Open Sans\';',
+                        '  font-style: normal;',
+                        '  font-weight: 400;',
+                        '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400) format(\'woff\');',
+                        '}'
+                    ].join('\n')
+                }
+            },
+            {
                 request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
                 response: {
                     headers: {
@@ -209,52 +291,101 @@ describe('transforms/subsetGoogleFonts', function () {
                 inlineSubsets: false
             })
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', {
-                    type: 'HtmlStyle',
-                    to: {
-                        type: 'Css',
-                        url: fontCssUrlRegExp,
-                        isLoaded: true,
-                        isMinified: true
+                expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
+
+                var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+
+                expect(index.outgoingRelations, 'to satisfy', [
+                    {
+                        type: 'HtmlPreloadLink',
+                        hrefType: 'rootRelative',
+                        href: expect.it('to begin with', '/subfont/Open+Sans_400-')
+                            .and('to end with', '.woff')
+                            .and('to match', /[a-z0-9]{10}/),
+                        to: {
+                            isLoaded: true
+                        },
+                        as: 'font'
                     },
-                    crossorigin: false
-                });
-
-                expect(assetGraph, 'to contain relation', {
-                    type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
-                    from: {
-                        type: 'Css',
-                        url: fontCssUrlRegExp
+                    {
+                        type: 'HtmlStyle',
+                        href: expect.it('to begin with', '/subfont/fonts-')
+                            .and('to end with', '.css')
+                            .and('to match', /[a-z0-9]{10}/),
+                        to: {
+                            isLoaded: true,
+                            isMinified: true
+                        }
                     },
-                    to: {
-                        type: 'Asset',
-                        fileName: /Open\+Sans_400-[a-z0-9]{10}\.woff/,
-                        isLoaded: true
+                    {
+                        type: 'HtmlPrefetchLink',
+                        hrefType: 'absolute',
+                        href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                    },
+                    {
+                        type: 'HtmlPreconnectLink',
+                        hrefType: 'absolute',
+                        href: 'https://fonts.gstatic.com'
+                    },
+                    {
+                        type: 'HtmlStyle',
+                        to: { isInline: true }
+                    },
+                    {
+                        type: 'HtmlScript',
+                        to: {
+                            isInline: true,
+                            outgoingRelations: [
+                                {
+                                    type: 'JavaScriptStaticUrl',
+                                    href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        type: 'HtmlStyle',
+                        href: 'https://fonts.googleapis.com/css?family=Open+Sans',
+                        node: function (node) {
+                            return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                        }
                     }
-                });
-
-                expect(assetGraph, 'to contain no relation', {
-                    type: 'CssImport'
-                });
-
-                expect(assetGraph, 'to contain relation including unresolved', {
-                    type: 'JavaScriptStaticUrl',
-                    href: 'https://fonts.googleapis.com/css?family=Open+Sans'
-                });
-
-                expect(assetGraph, 'to contain relation including unresolved', {
-                    type: 'HtmlStyle',
-                    href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                    from: {
-                        type: 'Html'
-                    }
-                });
+                ]);
             });
     });
 
     it('should handle multiple font-families', function () {
         httpception([
+            {
+                request: 'GET https://fonts.googleapis.com/css?family=Jim+Nightshade|Montserrat|Space+Mono',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: [
+                        '@font-face {',
+                        '  font-family: "Jim Nightshade";',
+                        '  font-style: normal;',
+                        '  font-weight: 400;',
+                        '  src: local("Jim Nightshade"), local("JimNightshade-Regular"), url(https://fonts.gstatic.com/l/font?kit=Jim+Nightshade:400) format("woff");',
+                        '}',
+
+                        '@font-face {',
+                        '  font-family: "Montserrat";',
+                        '  font-style: normal;',
+                        '  font-weight: 400;',
+                        '  src: local("Montserrat Regular"), local("Montserrat-Regular"), url(https://fonts.gstatic.com/l/font?kit=Montserrat:400) format("woff");',
+                        '}',
+
+                        '@font-face {',
+                        '  font-family: "Space Mono";',
+                        '  font-style: normal;',
+                        '  font-weight: 400;',
+                        '  src: local("Space Mono"), local("SpaceMono-Regular"), url(https://fonts.gstatic.com/l/font?kit=Space+Mono:400) format("woff");',
+                        '}'
+                    ].join('\n')
+                }
+            },
             {
                 request: 'GET https://fonts.googleapis.com/css?family=Jim+Nightshade:400&text=Helo',
                 response: {
@@ -396,6 +527,37 @@ describe('transforms/subsetGoogleFonts', function () {
 
     it('should handle multiple font-weights and font-style', function () {
         httpception([
+            {
+                request: 'GET https://fonts.googleapis.com/css?family=Roboto:300i,400,500',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: [
+                        '@font-face {',
+                        '  font-family: "Roboto";',
+                        '  font-style: italic;',
+                        '  font-weight: 300;',
+                        '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/l/font?kit=Roboto:300i) format("woff");',
+                        '}',
+
+                        '@font-face {',
+                        '  font-family: "Roboto";',
+                        '  font-style: normal;',
+                        '  font-weight: 400;',
+                        '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/l/font?kit=Roboto:400) format("woff");',
+                        '}',
+
+                        '@font-face {',
+                        '  font-family: "Roboto";',
+                        '  font-style: normal;',
+                        '  font-weight: 500;',
+                        '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/l/font?kit=Roboto:500) format("woff");',
+                        '}'
+                    ].join ('\n')
+                }
+            },
+
             {
                 request: 'GET https://fonts.googleapis.com/css?family=Roboto:500&text=Helo',
                 response: {
@@ -540,6 +702,22 @@ describe('transforms/subsetGoogleFonts', function () {
         it('should have an individual subset for each page', function () {
             httpception([
                 {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=*) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+                {
                     request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=abotu',
                     response: {
                         headers: {
@@ -661,7 +839,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         {
                             type: 'HtmlPreloadLink',
                             hrefType: 'rootRelative',
-                            href: expect.it('to begin with', '/google-font-subsets/Open+Sans_400-')
+                            href: expect.it('to begin with', '/subfont/Open+Sans_400-')
                                 .and('to end with', '.woff')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
@@ -671,7 +849,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         },
                         {
                             type: 'HtmlStyle',
-                            href: expect.it('to begin with', '/google-font-subsets/fonts-')
+                            href: expect.it('to begin with', '/subfont/fonts-')
                                 .and('to end with', '.css')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
@@ -724,7 +902,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         {
                             type: 'HtmlPreloadLink',
                             hrefType: 'rootRelative',
-                            href: expect.it('to begin with', '/google-font-subsets/Open+Sans_400-')
+                            href: expect.it('to begin with', '/subfont/Open+Sans_400-')
                                 .and('to end with', '.woff')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: expect.it('not to be', indexFont),
@@ -732,7 +910,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         },
                         {
                             type: 'HtmlStyle',
-                            href: expect.it('to begin with', '/google-font-subsets/fonts-')
+                            href: expect.it('to begin with', '/subfont/fonts-')
                                 .and('to end with', '.css')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: expect.it('not to be', indexFontStyle)
@@ -783,6 +961,23 @@ describe('transforms/subsetGoogleFonts', function () {
         it('should share a common subset across pages', function () {
             httpception([
                 {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=*) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+
+                {
                     request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=abehmotu',
                     response: {
                         headers: {
@@ -831,7 +1026,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         {
                             type: 'HtmlPreloadLink',
                             hrefType: 'rootRelative',
-                            href: expect.it('to begin with', '/google-font-subsets/Open+Sans_400-')
+                            href: expect.it('to begin with', '/subfont/Open+Sans_400-')
                                 .and('to end with', '.woff')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
@@ -841,7 +1036,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         },
                         {
                             type: 'HtmlStyle',
-                            href: expect.it('to begin with', '/google-font-subsets/fonts-')
+                            href: expect.it('to begin with', '/subfont/fonts-')
                                 .and('to end with', '.css')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
@@ -895,7 +1090,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         {
                             type: 'HtmlPreloadLink',
                             hrefType: 'rootRelative',
-                            href: expect.it('to begin with', '/google-font-subsets/Open+Sans_400-')
+                            href: expect.it('to begin with', '/subfont/Open+Sans_400-')
                                 .and('to end with', '.woff')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: sharedFont,
@@ -903,7 +1098,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         },
                         {
                             type: 'HtmlStyle',
-                            href: expect.it('to begin with', '/google-font-subsets/fonts-')
+                            href: expect.it('to begin with', '/subfont/fonts-')
                                 .and('to end with', '.css')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: sharedFontStyles
@@ -954,6 +1149,23 @@ describe('transforms/subsetGoogleFonts', function () {
         it('should not add a font-display property when no fontDisplay is defined', function () {
             httpception([
                 {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=fake) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+
+                {
                     request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
                     response: {
                         headers: {
@@ -999,6 +1211,23 @@ describe('transforms/subsetGoogleFonts', function () {
 
         it('should not add a font-display property when an invalid font-display value is provided', function () {
             httpception([
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=fake) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+
                 {
                     request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
                     response: {
@@ -1047,6 +1276,23 @@ describe('transforms/subsetGoogleFonts', function () {
         it('should add a font-display property', function () {
             httpception([
                 {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=fake) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+
+                {
                     request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
                     response: {
                         headers: {
@@ -1093,6 +1339,24 @@ describe('transforms/subsetGoogleFonts', function () {
 
         it('should update an existing font-display property', function () {
             httpception([
+                {
+                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: \'Open Sans\';',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  font-display: swap;',
+                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=fake) format(\'woff\');',
+                            '}'
+                        ].join('\n')
+                    }
+                },
+
                 {
                     request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
                     response: {
