@@ -73,6 +73,7 @@
     "magicpen-prism": "2.3.0",
     "mocha": "^3.0.0",
     "open": "^0.0.5",
+    "proxyquire": "1.8.0",
     "requirejs": "^2.3.3",
     "sinon": "^2.0.0",
     "style-loader": "^0.17.0",
