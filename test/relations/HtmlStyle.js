@@ -159,12 +159,13 @@ describe('relations/HtmlStyle', function () {
             });
             htmlAsset.addRelation({
                 type: 'HtmlStyle',
+                hrefType: 'inline',
                 media: 'projection',
                 to: {
                     type: 'Css',
                     text: 'body { color: maroon; }'
                 }
-            }, 'first').inline(); // FIXME: Implement support for hrefType: 'inline' so this isn't necessary
+            });
             expect(htmlAsset.text, 'to contain', '<style media="projection">body { color: maroon; }</style>');
         });
 
