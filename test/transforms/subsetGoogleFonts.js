@@ -123,14 +123,17 @@ describe('transforms/subsetGoogleFonts', function () {
                         },
                         {
                             type: 'HtmlStyle',
+                            hrefType: 'rootRelative',
                             href: expect.it('to begin with', '/subfont/fonts-')
                                 .and('to end with', '.css')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
                                 isLoaded: true,
                                 isMinified: true,
+                                text: expect.it('to contain', 'Open Sans__subset'),
                                 outgoingRelations: [
                                     {
+                                        hrefType: 'relative',
                                         to: {
                                             contentType: 'font/woff2',
                                             extension: '.woff2'
@@ -138,6 +141,7 @@ describe('transforms/subsetGoogleFonts', function () {
                                     },
 
                                     {
+                                        hrefType: 'relative',
                                         to: {
                                             contentType: 'font/woff',
                                             extension: '.woff'
@@ -158,7 +162,10 @@ describe('transforms/subsetGoogleFonts', function () {
                         },
                         {
                             type: 'HtmlStyle',
-                            to: { isInline: true }
+                            to: {
+                                isInline: true,
+                                text: expect.it('to contain', 'Open Sans__subset')
+                            }
                         },
                         {
                             type: 'HtmlScript',
@@ -204,7 +211,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         }
                     },
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -214,18 +221,43 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('Open+Sans:400&text=Helo&format=woff2', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('foo', 'base64')
+                            body: new Buffer('Open+Sans:400&text=Helo&format=woff', 'base64')
                         }
                     }
                 ]);
@@ -242,35 +274,68 @@ describe('transforms/subsetGoogleFonts', function () {
                         inlineCss: true
                     })
                     .queue(function (assetGraph) {
-                        var htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
+                        expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-                        expect(htmlAsset.outgoingRelations, 'to satisfy', [
+                        var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+
+                        expect(index.outgoingRelations, 'to satisfy', [
                             {
                                 type: 'HtmlPreloadLink',
-                                href: '/subfont/Open+Sans_400-b023bb8045.woff',
+                                hrefType: 'rootRelative',
+                                href: '/subfont/Open_Sans-400-66c13a38fa.woff2',
+                                to: {
+                                    isLoaded: true
+                                },
                                 as: 'font'
                             },
                             {
                                 type: 'HtmlStyle',
+                                href: undefined,
                                 to: {
-                                    type: 'Css',
-                                    isInline: true,
+                                    isLoaded: true,
                                     isMinified: true,
+                                    isInline: true,
+                                    text: expect.it('to contain', 'Open Sans__subset'),
                                     outgoingRelations: [
                                         {
-                                            type: 'CssFontFaceSrc',
-                                            hrefType: 'rootRelative'
+                                            hrefType: 'rootRelative',
+                                            to: {
+                                                contentType: 'font/woff2',
+                                                extension: '.woff2'
+                                            }
+                                        },
+
+                                        {
+                                            hrefType: 'rootRelative',
+                                            to: {
+                                                contentType: 'font/woff',
+                                                extension: '.woff'
+                                            }
                                         }
                                     ]
                                 }
                             },
-
-                            { type: 'HtmlPrefetchLink', href: 'https://fonts.googleapis.com/css?family=Open+Sans' },
-                            { type: 'HtmlPreconnectLink', href: 'https://fonts.gstatic.com' },
-                            { type: 'HtmlStyle' }, // Page styles
+                            {
+                                type: 'HtmlPrefetchLink',
+                                hrefType: 'absolute',
+                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                            },
+                            {
+                                type: 'HtmlPreconnectLink',
+                                hrefType: 'absolute',
+                                href: 'https://fonts.gstatic.com'
+                            },
+                            {
+                                type: 'HtmlStyle',
+                                to: {
+                                    isInline: true,
+                                    text: expect.it('to contain', 'Open Sans__subset')
+                                }
+                            },
                             {
                                 type: 'HtmlScript',
                                 to: {
+                                    isInline: true,
                                     outgoingRelations: [
                                         {
                                             type: 'JavaScriptStaticUrl',
@@ -286,7 +351,6 @@ describe('transforms/subsetGoogleFonts', function () {
                                     return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
                                 }
                             }
-
                         ]);
                     });
             });
@@ -397,8 +461,10 @@ describe('transforms/subsetGoogleFonts', function () {
                             to: {
                                 isLoaded: true,
                                 isMinified: true,
+                                text: expect.it('to contain', 'Open Sans__subset'),
                                 outgoingRelations: [
                                     {
+                                        hrefType: 'relative',
                                         to: {
                                             contentType: 'font/woff2',
                                             extension: '.woff2'
@@ -406,6 +472,7 @@ describe('transforms/subsetGoogleFonts', function () {
                                     },
 
                                     {
+                                        hrefType: 'relative',
                                         to: {
                                             contentType: 'font/woff',
                                             extension: '.woff'
@@ -426,7 +493,10 @@ describe('transforms/subsetGoogleFonts', function () {
                         },
                         {
                             type: 'HtmlStyle',
-                            to: { isInline: true }
+                            to: {
+                                isInline: true,
+                                text: expect.it('to contain', 'Open Sans__subset')
+                            }
                         },
                         {
                             type: 'HtmlScript',
@@ -646,54 +716,145 @@ describe('transforms/subsetGoogleFonts', function () {
                     inlineSubsets: false
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain relation', {
-                        type: 'HtmlStyle',
-                        to: {
-                            type: 'Css',
-                            url: fontCssUrlRegExp,
-                            isLoaded: true,
-                            isMinified: true
-                        }
-                    });
+                    expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-                    expect(assetGraph, 'to contain relation', {
-                        type: 'CssFontFaceSrc',
-                        hrefType: 'relative',
-                        from: {
-                            type: 'Css',
-                            url: fontCssUrlRegExp
-                        },
-                        to: {
-                            fileName: /Jim\+Nightshade_400-[a-z0-9]{10}\.woff/,
-                            isLoaded: true
-                        }
-                    });
+                    var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
 
-                    expect(assetGraph, 'to contain relation', {
-                        type: 'CssFontFaceSrc',
-                        hrefType: 'relative',
-                        from: {
-                            type: 'Css',
-                            url: fontCssUrlRegExp
+                    expect(index.outgoingRelations, 'to satisfy', [
+                        {
+                            type: 'HtmlPreloadLink',
+                            hrefType: 'rootRelative',
+                            href: expect.it('to begin with', '/subfont/Jim_Nightshade-400-')
+                                .and('to end with', '.woff2')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: {
+                                isLoaded: true
+                            },
+                            as: 'font'
                         },
-                        to: {
-                            fileName: /Montserrat_400-[a-z0-9]{10}\.woff/,
-                            isLoaded: true
-                        }
-                    });
+                        {
+                            type: 'HtmlPreloadLink',
+                            hrefType: 'rootRelative',
+                            href: expect.it('to begin with', '/subfont/Montserrat-400-')
+                                .and('to end with', '.woff2')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: {
+                                isLoaded: true
+                            },
+                            as: 'font'
+                        },
+                        {
+                            type: 'HtmlPreloadLink',
+                            hrefType: 'rootRelative',
+                            href: expect.it('to begin with', '/subfont/Space_Mono-400-')
+                                .and('to end with', '.woff2')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: {
+                                isLoaded: true
+                            },
+                            as: 'font'
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            href: expect.it('to begin with', '/subfont/fonts-')
+                                .and('to end with', '.css')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: {
+                                isLoaded: true,
+                                isMinified: true,
+                                text: expect.it('to contain', 'Jim Nightshade__subset')
+                                    .and('to contain', 'Montserrat__subset')
+                                    .and('to contain', 'Space Mono__subset'),
+                                outgoingRelations: [
+                                    {
+                                        hrefType: 'relative',
+                                        to: {
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
 
-                    expect(assetGraph, 'to contain relation', {
-                        type: 'CssFontFaceSrc',
-                        hrefType: 'relative',
-                        from: {
-                            type: 'Css',
-                            url: fontCssUrlRegExp
+                                    {
+                                        hrefType: 'relative',
+                                        to: {
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    },
+
+                                    {
+                                        hrefType: 'relative',
+                                        to: {
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        hrefType: 'relative',
+                                        to: {
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    },
+
+                                    {
+                                        hrefType: 'relative',
+                                        to: {
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        hrefType: 'relative',
+                                        to: {
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    }
+                                ]
+                            }
                         },
-                        to: {
-                            fileName: /Space\+Mono_400-[a-z0-9]{10}\.woff/,
-                            isLoaded: true
+                        {
+                            type: 'HtmlPrefetchLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.googleapis.com/css?family=Jim+Nightshade|Montserrat|Space+Mono'
+                        },
+                        {
+                            type: 'HtmlPreconnectLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.gstatic.com'
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            to: {
+                                isInline: true,
+                                text: expect.it('to contain', 'Jim Nightshade__subset')
+                                    .and('to contain', 'Montserrat__subset')
+                                    .and('to contain', 'Space Mono__subset')
+                            }
+                        },
+                        {
+                            type: 'HtmlScript',
+                            to: {
+                                isInline: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        href: 'https://fonts.googleapis.com/css?family=Jim+Nightshade|Montserrat|Space+Mono'
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            href: 'https://fonts.googleapis.com/css?family=Jim+Nightshade|Montserrat|Space+Mono',
+                            node: function (node) {
+                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                            }
                         }
-                    });
+                    ]);
                 });
         });
 
@@ -731,7 +892,7 @@ describe('transforms/subsetGoogleFonts', function () {
                 },
 
                 {
-                    request: 'GET https://fonts.googleapis.com/css?family=Roboto:500&text=Helo',
+                    request: 'GET https://fonts.googleapis.com/css?family=Roboto:500&text=Helo&format=woff2',
                     response: {
                         headers: {
                             'Content-Type': 'text/css'
@@ -741,14 +902,14 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-family: "Roboto";',
                             '  font-style: normal;',
                             '  font-weight: 500;',
-                            '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/l/font?kit=7r9VFx4x5d5pFr_tRoChT3Y_vlID40_xbxWXk1HqQcs&skey=ee881451c540fdec&v=v15) format("woff");',
+                            '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/l/font?kit=Roboto:500&text=Helo&format=woff2) format("woff2");',
                             '}'
                         ].join ('\n')
                     }
                 },
 
                 {
-                    request: 'GET https://fonts.googleapis.com/css?family=Roboto:400&text=Dakr',
+                    request: 'GET https://fonts.googleapis.com/css?family=Roboto:400&text=Dakr&format=woff2',
                     response: {
                         headers: {
                             'Content-Type': 'text/css'
@@ -758,14 +919,14 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-family: "Roboto";',
                             '  font-style: normal;',
                             '  font-weight: 400;',
-                            '  src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/l/font?kit=mhx02Ar2NG4Af4ZMyWe7TTV8WDY78pkB0e3oe2-PKo4&skey=a0a0114a1dcab3ac&v=v15) format("woff");',
+                            '  src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/l/font?kit=Roboto:400&text=Dakr&format=woff2) format("woff2");',
                             '}'
                         ].join ('\n')
                     }
                 },
 
                 {
-                    request: 'GET https://fonts.googleapis.com/css?family=Roboto:300i&text=Celru',
+                    request: 'GET https://fonts.googleapis.com/css?family=Roboto:300i&text=Celru&format=woff2',
                     response: {
                         headers: {
                             'Content-Type': 'text/css'
@@ -775,39 +936,120 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-family: "Roboto";',
                             '  font-style: italic;',
                             '  font-weight: 300;',
-                            '  src: local("Roboto Light Italic"), local("Roboto-LightItalic"), url(https://fonts.gstatic.com/l/font?kit=iE8HhaRzdhPxC93dOdA05_vtLO2S9yBEqvyVXi2mRhg&skey=8f644060176e1f7e&v=v15) format("woff");',
+                            '  src: local("Roboto Light Italic"), local("Roboto-LightItalic"), url(https://fonts.gstatic.com/l/font?kit=Roboto:300i&text=Celru&format=woff2) format("woff2");',
                             '}'
                         ].join ('\n')
                     }
                 },
 
                 {
-                    request: 'GET https://fonts.gstatic.com/l/font?kit=7r9VFx4x5d5pFr_tRoChT3Y_vlID40_xbxWXk1HqQcs&skey=ee881451c540fdec&v=v15',
+                    request: 'GET https://fonts.googleapis.com/css?family=Roboto:500&text=Helo&format=woff',
                     response: {
                         headers: {
-                            'Content-Type': 'font/woff'
+                            'Content-Type': 'text/css'
                         },
-                        body: new Buffer('foo', 'base64')
+                        body: [
+                            '@font-face {',
+                            '  font-family: "Roboto";',
+                            '  font-style: normal;',
+                            '  font-weight: 500;',
+                            '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/l/font?kit=Roboto:500&text=Helo&format=woff) format("woff");',
+                            '}'
+                        ].join ('\n')
                     }
                 },
 
                 {
-                    request: 'GET https://fonts.gstatic.com/l/font?kit=mhx02Ar2NG4Af4ZMyWe7TTV8WDY78pkB0e3oe2-PKo4&skey=a0a0114a1dcab3ac&v=v15',
+                    request: 'GET https://fonts.googleapis.com/css?family=Roboto:400&text=Dakr&format=woff',
                     response: {
                         headers: {
-                            'Content-Type': 'font/woff'
+                            'Content-Type': 'text/css'
                         },
-                        body: new Buffer('bar', 'base64')
+                        body: [
+                            '@font-face {',
+                            '  font-family: "Roboto";',
+                            '  font-style: normal;',
+                            '  font-weight: 400;',
+                            '  src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/l/font?kit=Roboto:400&text=Dakr&format=woff) format("woff");',
+                            '}'
+                        ].join ('\n')
                     }
                 },
 
                 {
-                    request: 'GET https://fonts.gstatic.com/l/font?kit=iE8HhaRzdhPxC93dOdA05_vtLO2S9yBEqvyVXi2mRhg&skey=8f644060176e1f7e&v=v15',
+                    request: 'GET https://fonts.googleapis.com/css?family=Roboto:300i&text=Celru&format=woff',
+                    response: {
+                        headers: {
+                            'Content-Type': 'text/css'
+                        },
+                        body: [
+                            '@font-face {',
+                            '  font-family: "Roboto";',
+                            '  font-style: italic;',
+                            '  font-weight: 300;',
+                            '  src: local("Roboto Light Italic"), local("Roboto-LightItalic"), url(https://fonts.gstatic.com/l/font?kit=Roboto:300i&text=Celru&format=woff) format("woff");',
+                            '}'
+                        ].join ('\n')
+                    }
+                },
+
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=Roboto:500&text=Helo&format=woff2',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff2'
+                        },
+                        body: new Buffer('Roboto:500&text=Helo&format=woff2', 'base64')
+                    }
+                },
+
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=Roboto:400&text=Dakr&format=woff2',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff2'
+                        },
+                        body: new Buffer('Roboto:400&text=Dakr&format=woff2', 'base64')
+                    }
+                },
+
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=Roboto:300i&text=Celru&format=woff2',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff2'
+                        },
+                        body: new Buffer('Roboto:300i&text=Celru&format=woff2', 'base64')
+                    }
+                },
+
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=Roboto:500&text=Helo&format=woff',
                     response: {
                         headers: {
                             'Content-Type': 'font/woff'
                         },
-                        body: new Buffer('baz', 'base64')
+                        body: new Buffer('Roboto:500&text=Helo&format=woff', 'base64')
+                    }
+                },
+
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=Roboto:400&text=Dakr&format=woff',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff'
+                        },
+                        body: new Buffer('Roboto:400&text=Dakr&format=woff', 'base64')
+                    }
+                },
+
+                {
+                    request: 'GET https://fonts.gstatic.com/l/font?kit=Roboto:300i&text=Celru&format=woff',
+                    response: {
+                        headers: {
+                            'Content-Type': 'font/woff'
+                        },
+                        body: new Buffer('Roboto:300i&text=Celru&format=woff', 'base64')
                     }
                 }
             ]);
@@ -823,49 +1065,142 @@ describe('transforms/subsetGoogleFonts', function () {
                     inlineSubsets: false
                 })
                 .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
+
+                    expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
+
+                    var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+
+                    expect(index.outgoingRelations, 'to satisfy', [
+                        {
+                            type: 'HtmlPreloadLink',
+                            hrefType: 'rootRelative',
+                            href: expect.it('to begin with', '/subfont/Roboto-500-')
+                                .and('to end with', '.woff2')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: {
+                                isLoaded: true
+                            },
+                            as: 'font'
+                        },
+                        {
+                            type: 'HtmlPreloadLink',
+                            hrefType: 'rootRelative',
+                            href: expect.it('to begin with', '/subfont/Roboto-400-')
+                                .and('to end with', '.woff2')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: {
+                                isLoaded: true
+                            },
+                            as: 'font'
+                        },
+                        {
+                            type: 'HtmlPreloadLink',
+                            hrefType: 'rootRelative',
+                            href: expect.it('to begin with', '/subfont/Roboto-300i-')
+                                .and('to end with', '.woff2')
+                                .and('to match', /[a-z0-9]{10}/),
+                            to: {
+                                isLoaded: true
+                            },
+                            as: 'font'
+                        },
                         {
                             type: 'HtmlStyle',
+                            href: expect.it('to begin with', '/subfont/fonts-')
+                                .and('to end with', '.css')
+                                .and('to match', /[a-z0-9]{10}/),
                             to: {
-                                type: 'Css',
-                                url: fontCssUrlRegExp,
                                 isLoaded: true,
                                 isMinified: true,
+                                text: expect.it('to contain', 'Roboto__subset'),
                                 outgoingRelations: [
                                     {
-                                        type: 'CssFontFaceSrc',
                                         hrefType: 'relative',
                                         to: {
-                                            type: 'Asset',
-                                            url: /Roboto_500-[a-z0-9]{10}\.woff/,
-                                            isLoaded: true
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
                                         }
                                     },
+
                                     {
-                                        type: 'CssFontFaceSrc',
                                         hrefType: 'relative',
                                         to: {
-                                            type: 'Asset',
-                                            url: /Roboto_400-[a-z0-9]{10}\.woff/,
-                                            isLoaded: true
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
                                         }
                                     },
+
                                     {
-                                        type: 'CssFontFaceSrc',
                                         hrefType: 'relative',
                                         to: {
-                                            type: 'Asset',
-                                            url: /Roboto_300i-[a-z0-9]{10}\.woff/,
-                                            isLoaded: true
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        hrefType: 'relative',
+                                        to: {
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    },
+
+                                    {
+                                        hrefType: 'relative',
+                                        to: {
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        hrefType: 'relative',
+                                        to: {
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
                                         }
                                     }
                                 ]
                             }
                         },
-                        { type: 'HtmlStyle', to: { isInline: true }}
+                        {
+                            type: 'HtmlPrefetchLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.googleapis.com/css?family=Roboto:300i,400,500'
+                        },
+                        {
+                            type: 'HtmlPreconnectLink',
+                            hrefType: 'absolute',
+                            href: 'https://fonts.gstatic.com'
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            to: {
+                                isInline: true,
+                                text: expect.it('to contain', 'Roboto__subset')
+                            }
+                        },
+                        {
+                            type: 'HtmlScript',
+                            to: {
+                                isInline: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        href: 'https://fonts.googleapis.com/css?family=Roboto:300i,400,500'
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            href: 'https://fonts.googleapis.com/css?family=Roboto:300i,400,500',
+                            node: function (node) {
+                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                            }
+                        }
                     ]);
-
-                    expect(assetGraph.findAssets({type: 'Css', isInline: true})[0].text, 'to contain', 'font-family: Roboto__subset');
                 });
         });
 
@@ -890,7 +1225,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         }
                     },
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=abotu',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=abotu&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -900,13 +1235,13 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=about) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=about&format=woff2) format(\'woff2\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=ehmo',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=ehmo&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -916,27 +1251,77 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=home) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=home&format=woff2) format(\'woff2\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?text=about',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=abotu&format=woff',
                         response: {
                             headers: {
-                                'Content-Type': 'font/woff'
+                                'Content-Type': 'text/css'
                             },
-                            body: new Buffer('about', 'base64')
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=about&format=woff) format(\'woff\');',
+                                '}'
+                            ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?text=home',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=ehmo&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=home&format=woff) format(\'woff\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?text=about&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('YWJvdXQmZm9ybWF0PXdvZmYyCg==', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?text=home&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('aG9tZSZmb3JtYXQ9d29mZjIK', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?text=about&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('home', 'base64')
+                            body: new Buffer('YWJvdXQmZm9ybWF0PXdvZmYK', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?text=home&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff'
+                            },
+                            body: new Buffer('aG9tZSZmb3JtYXQ9d29mZgo=', 'base64')
                         }
                     }
                 ]);
@@ -975,7 +1360,16 @@ describe('transforms/subsetGoogleFonts', function () {
                                             type: 'CssFontFaceSrc',
                                             hrefType: 'relative',
                                             to: {
-                                                fileName: 'Open+Sans_400-359ee209b2.woff',
+                                                fileName: 'Open_Sans-400-0585f4b130.woff2',
+                                                isLoaded: true,
+                                                isInline: false
+                                            }
+                                        },
+                                        {
+                                            type: 'CssFontFaceSrc',
+                                            hrefType: 'relative',
+                                            to: {
+                                                fileName: 'Open_Sans-400-a74a8f6457.woff',
                                                 isLoaded: true,
                                                 isInline: false
                                             }
@@ -997,7 +1391,16 @@ describe('transforms/subsetGoogleFonts', function () {
                                             type: 'CssFontFaceSrc',
                                             hrefType: 'relative',
                                             to: {
-                                                fileName: 'Open+Sans_400-ab6f5fb5c0.woff',
+                                                fileName: 'Open_Sans-400-a92122b2f9.woff2',
+                                                isLoaded: true,
+                                                isInline: false
+                                            }
+                                        },
+                                        {
+                                            type: 'CssFontFaceSrc',
+                                            hrefType: 'relative',
+                                            to: {
+                                                fileName: 'Open_Sans-400-054b06c88d.woff',
                                                 isLoaded: true,
                                                 isInline: false
                                             }
@@ -1011,9 +1414,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             {
                                 type: 'HtmlPreloadLink',
                                 hrefType: 'rootRelative',
-                                href: expect.it('to begin with', '/subfont/Open+Sans_400-')
-                                    .and('to end with', '.woff')
-                                    .and('to match', /[a-z0-9]{10}/),
+                                href: '/subfont/Open_Sans-400-0585f4b130.woff2',
                                 to: {
                                     isLoaded: true
                                 },
@@ -1074,9 +1475,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             {
                                 type: 'HtmlPreloadLink',
                                 hrefType: 'rootRelative',
-                                href: expect.it('to begin with', '/subfont/Open+Sans_400-')
-                                    .and('to end with', '.woff')
-                                    .and('to match', /[a-z0-9]{10}/),
+                                href: '/subfont/Open_Sans-400-a92122b2f9.woff2',
                                 to: expect.it('not to be', indexFont),
                                 as: 'font'
                             },
@@ -1719,7 +2118,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         }
                     },
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -1729,18 +2128,43 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('Open+Sans:400&text=Helo&format=woff2', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('foo', 'base64')
+                            body: new Buffer('Open+Sans:400&text=Helo&format=woff', 'base64')
                         }
                     }
                 ]);
