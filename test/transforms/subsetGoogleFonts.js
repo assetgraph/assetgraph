@@ -1549,7 +1549,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     },
 
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=abehmotu',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=abehmotu&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -1559,18 +1559,44 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?text=abouthome) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=abehmotu&format=woff2) format(\'woff2\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+
+                    {
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=abehmotu&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=abehmotu&format=woff) format(\'woff\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?text=abouthome',
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=abehmotu&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('T3BlbitTYW5zOjQwMCZ0ZXh0PWFiZWhtb3R1JmZvcm1hdD13b2ZmMgo=', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=abehmotu&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('abouthome', 'base64')
+                            body: new Buffer('T3BlbitTYW5zOjQwMCZ0ZXh0PWFiZWhtb3R1JmZvcm1hdD13b2ZmCg==', 'base64')
                         }
                     }
                 ]);
@@ -1597,9 +1623,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             {
                                 type: 'HtmlPreloadLink',
                                 hrefType: 'rootRelative',
-                                href: expect.it('to begin with', '/subfont/Open+Sans_400-')
-                                    .and('to end with', '.woff')
-                                    .and('to match', /[a-z0-9]{10}/),
+                                href: '/subfont/Open_Sans-400-5c45d9271a.woff2',
                                 to: {
                                     isLoaded: true
                                 },
@@ -1661,9 +1685,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             {
                                 type: 'HtmlPreloadLink',
                                 hrefType: 'rootRelative',
-                                href: expect.it('to begin with', '/subfont/Open+Sans_400-')
-                                    .and('to end with', '.woff')
-                                    .and('to match', /[a-z0-9]{10}/),
+                                href: '/subfont/Open_Sans-400-5c45d9271a.woff2',
                                 to: sharedFont,
                                 as: 'font'
                             },
@@ -1737,7 +1759,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     },
 
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -1747,18 +1769,44 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+
+                    {
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('helowoff2', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('foo', 'base64')
+                            body: new Buffer('helowoff', 'base64')
                         }
                     }
                 ]);
@@ -1800,7 +1848,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     },
 
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -1810,18 +1858,44 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+
+                    {
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('helowoff2', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('foo', 'base64')
+                            body: new Buffer('helowoff', 'base64')
                         }
                     }
                 ]);
@@ -1864,7 +1938,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     },
 
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -1874,18 +1948,44 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+
+                    {
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('helowoff2', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('foo', 'base64')
+                            body: new Buffer('helowoff', 'base64')
                         }
                     }
                 ]);
@@ -1929,7 +2029,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     },
 
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -1940,18 +2040,45 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
                                 '  font-display: swap;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+
+                    {
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  font-display: swap;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('helowoff2', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('foo', 'base64')
+                            body: new Buffer('helowoff', 'base64')
                         }
                     }
                 ]);
@@ -1970,7 +2097,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     .queue(function (assetGraph) {
                         var cssAsset = assetGraph.findAssets({ type: 'Css', fileName: /fonts-/ })[0];
 
-                        expect(cssAsset.text, 'to contain', 'font-weight:400;font-display:fallback');
+                        expect(cssAsset.text, 'to contain', 'font-display:fallback;');
                     });
             });
         });
@@ -1991,6 +2118,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-family: \'Open Sans\';',
                             '  font-style: normal;',
                             '  font-weight: 400;',
+                            '  font-display: swap;',
                             '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400) format(\'woff\');',
                             '}'
                         ].join('\n')
@@ -2007,6 +2135,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-family: \'Open Sans\';',
                             '  font-style: normal;',
                             '  font-weight: 400;',
+                            '  font-display: swap;',
                             '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
                             '}'
                         ].join('\n')
@@ -3162,7 +3291,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     },
 
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -3172,18 +3301,44 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+
+                    {
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('helowoff2', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('foo', 'base64')
+                            body: new Buffer('helowoff', 'base64')
                         }
                     }
                 ]);
@@ -3225,7 +3380,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     },
 
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -3235,18 +3390,44 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+
+                    {
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('helowoff2', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('foo', 'base64')
+                            body: new Buffer('helowoff', 'base64')
                         }
                     }
                 ]);
@@ -3289,7 +3470,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     },
 
                     {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo',
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
                         response: {
                             headers: {
                                 'Content-Type': 'text/css'
@@ -3299,18 +3480,44 @@ describe('transforms/subsetGoogleFonts', function () {
                                 '  font-family: \'Open Sans\';',
                                 '  font-style: normal;',
                                 '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13) format(\'woff\');',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
+                                '}'
+                            ].join('\n')
+                        }
+                    },
+
+                    {
+                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
+                        response: {
+                            headers: {
+                                'Content-Type': 'text/css'
+                            },
+                            body: [
+                                '@font-face {',
+                                '  font-family: \'Open Sans\';',
+                                '  font-style: normal;',
+                                '  font-weight: 400;',
+                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
                                 '}'
                             ].join('\n')
                         }
                     },
                     {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=ZC3Pxff5o11SVa40-M1YDXY_vlID40_xbxWXk1HqQcs&skey=62c1cbfccc78b4b2&v=v13',
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
+                        response: {
+                            headers: {
+                                'Content-Type': 'font/woff2'
+                            },
+                            body: new Buffer('helowoff2', 'base64')
+                        }
+                    },
+                    {
+                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
                         response: {
                             headers: {
                                 'Content-Type': 'font/woff'
                             },
-                            body: new Buffer('foo', 'base64')
+                            body: new Buffer('helowoff', 'base64')
                         }
                     }
                 ]);
