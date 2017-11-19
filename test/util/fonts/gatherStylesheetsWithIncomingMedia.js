@@ -14,59 +14,59 @@ describe('gatherStylesheetsWithIncomingMedia', function () {
 
     it('should follow inline HtmlStyle relations', function () {
         return expect('inlineHtmlStyle', 'to produce result satisfying', [
-            { text: '\n        .a { font-weight: 500; }\n    ', incomingMedia: [] }
+            { text: '\n        .a { font-weight: 500; }\n    ', predicates: {} }
         ]);
     });
 
     it('should support the media attribute when following an inline HtmlStyle', function () {
         return expect('inlineHtmlStyleWithMediaAttribute', 'to produce result satisfying', [
-            { text: '\n        .a { font-weight: 500; }\n    ', incomingMedia: [ '3d-glasses' ] }
+            { text: '\n        .a { font-weight: 500; }\n    ', predicates: { 'mediaQuery:3d-glasses': true } }
         ]);
     });
 
     it('should follow non-inline HtmlStyle relations', function () {
         return expect('htmlStyle', 'to produce result satisfying', [
-            { text: '.a { font-weight: 500; }\n', incomingMedia: [] }
+            { text: '.a { font-weight: 500; }\n', predicates: {} }
         ]);
     });
 
     it('should support the media attribute when following a non-inline HtmlStyle', function () {
         return expect('htmlStyleWithMediaAttribute', 'to produce result satisfying', [
-            { text: '.a { font-weight: 500; }\n', incomingMedia: [ '3d-glasses' ] }
+            { text: '.a { font-weight: 500; }\n', predicates: { 'mediaQuery:3d-glasses': true } }
         ]);
     });
 
     it('should list a stylesheet twice when it is being included multiple times', function () {
         return expect('sameStylesheetIncludedTwice', 'to produce result satisfying', [
-            { text: '.a { font-weight: 600; }\n', incomingMedia: [] },
-            { text: '.b { font-weight: 500; }\n', incomingMedia: [] },
-            { text: '.a { font-weight: 600; }\n', incomingMedia: [ '3d-glasses' ] }
+            { text: '.a { font-weight: 600; }\n', predicates: {} },
+            { text: '.b { font-weight: 500; }\n', predicates: {} },
+            { text: '.a { font-weight: 600; }\n', predicates: { 'mediaQuery:3d-glasses': true } }
         ]);
     });
 
     it('should pick up a media list attached to a CssImport', function () {
         return expect('cssImportWithMedia', 'to produce result satisfying', [
-            { text: '.a { font-weight: 600; }\n', incomingMedia: [ 'projection' ] },
-            { text: '\n        @import "a.css" projection;\n    ', incomingMedia: [] }
+            { text: '.a { font-weight: 600; }\n', predicates: { 'mediaQuery:projection': true } },
+            { text: '\n        @import "a.css" projection;\n    ', predicates: {} }
         ]);
     });
 
     it('should stack up the incoming media following HtmlStyle -> CssImport', function () {
         return expect('cssImportWithMediaWithExistingIncomingMedia', 'to produce result satisfying', [
-            { text: '.a { font-weight: 600; }\n', incomingMedia: [ '3d-glasses', 'projection' ] },
-            { text: '\n        @import "a.css" projection;\n    ', incomingMedia: [ '3d-glasses' ] }
+            { text: '.a { font-weight: 600; }\n', predicates: { 'mediaQuery:3d-glasses': true, 'mediaQuery:projection': true } },
+            { text: '\n        @import "a.css" projection;\n    ', predicates: { 'mediaQuery:3d-glasses': true } }
         ]);
     });
 
     it('should not break when there is a cyclic CssImport', function () {
         return expect('cyclicCssImport', 'to produce result satisfying', [
-            { text: '@import "";\n\n.a { font-weight: 600; }\n', incomingMedia: [] }
+            { text: '@import "";\n\n.a { font-weight: 600; }\n', predicates: {} }
         ]);
     });
 
     it('should not break when there are unloaded Css assets', function () {
         return expect('unloadedCssAssets', 'to produce result satisfying', [
-            { text: '@import "notfoundeither.css";\n', incomingMedia: [] }
+            { text: '@import "notfoundeither.css";\n', predicates: {} }
         ]);
     });
 });

@@ -865,7 +865,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 '<style>.foo:after { content: "after"; font-family: font1 !important; }</style>',
                 '<style>p { font-weight: 200; }</style>',
                 '<style>article { font-weight: 600; }</style>',
-                '<p class="foo">p</p>',
+                '<p class="foo">p</section>',
                 '<article class="foo">article</atricle>'
             ].join('\n');
 
@@ -1884,6 +1884,20 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
+        it('should support nested @media queries', function () {
+            var htmlText = [
+                '<style>div { font-family: font1; font-weight: 400 }</style>',
+                '<style>@media projection { div { font-family: font2; font-weight: 800 } @media (max-width: 600px) { div { font-weight: 500 } } }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                { text: 'foo', props: { 'font-style': 'normal', 'font-weight': 800, 'font-family': 'font2' } },
+                { text: 'foo', props: { 'font-style': 'normal', 'font-weight': 500, 'font-family': 'font2' } },
+                { text: 'foo', props: { 'font-style': 'normal', 'font-weight': 400, 'font-family': 'font1' } }
+            ]);
+        });
+
         it('should trace multiple levels of @import tagged with media lists', function () {
             return new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/getTextByFontProperties/nestedCssImportWithMedia/'})
                 .loadAssets('index.html')
@@ -2357,6 +2371,378 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 ]);
             });
+        });
+    });
+
+    describe('with conditional comments', function () {
+        describe('of the "if IE" kind where the contained HTML is technically part of the comment node', function () {
+            it('should trace text inside the conditional comment', function () {
+                var htmlText = [
+                    '<style>div { font-weight: 700; }</style>',
+                    '<div>',
+                    '  <!--[if IE]>',
+                    '    foo',
+                    '  <![endif]-->',
+                    '</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace the DOM nodes inside the conditional comment', function () {
+                var htmlText = [
+                    '<!--[if IE]>',
+                    '  <div>foo</div>',
+                    '<![endif]-->'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace the DOM nodes inside the conditional comment in the context of the containing document', function () {
+                var htmlText = [
+                    '<style>section div { font-weight: 700 }</style>',
+                    '<section>',
+                    '  <!--[if IE]>',
+                    '    <div>foo</div>',
+                    '  <![endif]-->',
+                    '</section>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace the DOM nodes inside the conditional comment as conditional irt. the number of list items', function () {
+                var htmlText = [
+                    '<ol>',
+                    '  <!--[if IE]>',
+                    '    <li></li>',
+                    '  <![endif]-->',
+                    '  <li style="list-style-type: upper-roman"></li>',
+                    '</ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: '1.',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'I.II.',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should treat contained stylesheets as conditionals', function () {
+                var htmlText = [
+                    '<!--[if IE]>',
+                    '  <style>div { font-weight: 700; }</style>',
+                    '<![endif]-->',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace stylesheets in multiple conditional comments with the same condition together', function () {
+                var htmlText = [
+                    '<!--[if IE]>',
+                    '  <style>div { font-weight: 700; }</style>',
+                    '<![endif]-->',
+                    '<!--[if IE]>',
+                    '  <style>div { font-style: italic }</style>',
+                    '<![endif]-->',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'italic'
+                        }
+                    },
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace stylesheets in multiple conditional comments with different conditions separately', function () {
+                var htmlText = [
+                    '<!--[if IE > 6]>',
+                    '  <style>div { font-weight: 700; }</style>',
+                    '<![endif]-->',
+                    '<!--[if IE > 7]>',
+                    '  <style>div { font-style: italic }</style>',
+                    '<![endif]-->',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'italic'
+                        }
+                    },
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'italic'
+                        }
+                    },
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+        });
+
+        describe('of the "if !IE" kind where the contained HTML is technically part of the containing document', function () {
+            it('should trace text inside the conditional comment', function () {
+                var htmlText = [
+                    '<style>div { font-weight: 700; }</style>',
+                    '<div><!--[if !IE]>-->foo<!--<![endif]--></div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace the DOM nodes inside the conditional comment', function () {
+                var htmlText = [
+                    '<!--[if !IE]>--><div>foo</div><!--<![endif]-->'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace the DOM nodes inside the conditional comment in the context of the containing document', function () {
+                var htmlText = [
+                    '<style>section div { font-weight: 700 }</style>',
+                    '<section>',
+                    '  <!--[if !IE]>-->',
+                    '    <div>foo</div>',
+                    '  <!--<![endif]-->',
+                    '</section>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace the DOM nodes inside the conditional comment as conditional irt. the number of list items', function () {
+                var htmlText = [
+                    '<ol>',
+                    '  <!--[if !IE]>-->',
+                    '    <li></li>',
+                    '  <!--<![endif]-->',
+                    '  <li style="list-style-type: upper-roman"></li>',
+                    '</ol>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: '1.',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'I.II.',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should treat contained stylesheets as conditionals', function () {
+                var htmlText = [
+                    '<!--[if !IE]>--><style>div { font-weight: 700; }</style><!--<![endif]-->',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'normal'
+                        }
+                    },
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+
+            it('should trace stylesheets in multiple conditional comments with the same condition together', function () {
+                var htmlText = [
+                    '<!--[if !IE]>--><style>div { font-weight: 700; }</style><!--<![endif]-->',
+                    '<!--[if !IE]>--><style>div { font-style: italic }</style><!--<![endif]-->',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 700,
+                            'font-style': 'italic'
+                        }
+                    },
+                    {
+                        text: 'foo',
+                        props: {
+                            'font-family': undefined,
+                            'font-weight': 400,
+                            'font-style': 'normal'
+                        }
+                    }
+                ]);
+            });
+        });
+
+        it('should treat !IE and IE as an impossible combination that should not generate all possible combinations', function () {
+            var htmlText = [
+                '<!--[if IE]><style>div { font-style: italic; }</style><![endif]-->',
+                '<!--[if !IE]>--><style>div { font-weight: 700; }</style><!--<![endif]-->',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'italic'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
         });
     });
 });
