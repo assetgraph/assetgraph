@@ -2717,5 +2717,32 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 ]);
             });
         });
+
+        it('should treat !IE and IE as an impossible combination that should not generate all possible combinations', function () {
+            var htmlText = [
+                '<!--[if IE]><style>div { font-style: italic; }</style><![endif]-->',
+                '<!--[if !IE]>--><style>div { font-weight: 700; }</style><!--<![endif]-->',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'italic'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
     });
 });
