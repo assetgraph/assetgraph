@@ -95,7 +95,30 @@ describe('transforms/subsetGoogleFonts', function () {
             });
         });
 
-        it('should');
+        it('should emit a warning about font subsetting tool not being available', function () {
+            httpception(defaultHttpceptionMock);
+
+            var warnings = [];
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                .on('warn', function (warning) {
+                    warnings.push(warning);
+                })
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetGoogleFonts({
+                    inlineSubsets: false
+                })
+                .queue(function () {
+                    expect(warnings, 'to satisfy', [
+                        expect.it('to be an', Error) // Can't get the right type of error due to limited mocking abilities
+                    ]);
+                });
+        });
 
         it('should handle HTML <link rel=stylesheet>', function () {
             httpception(defaultHttpceptionMock);
