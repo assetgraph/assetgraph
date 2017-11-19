@@ -20,7 +20,7 @@ describe('gatherStylesheetsWithIncomingMedia', function () {
 
     it('should support the media attribute when following an inline HtmlStyle', function () {
         return expect('inlineHtmlStyleWithMediaAttribute', 'to produce result satisfying', [
-            { text: '\n        .a { font-weight: 500; }\n    ', predicates: { 'incomingMedia:3d-glasses': true } }
+            { text: '\n        .a { font-weight: 500; }\n    ', predicates: { 'mediaQuery:3d-glasses': true } }
         ]);
     });
 
@@ -32,7 +32,7 @@ describe('gatherStylesheetsWithIncomingMedia', function () {
 
     it('should support the media attribute when following a non-inline HtmlStyle', function () {
         return expect('htmlStyleWithMediaAttribute', 'to produce result satisfying', [
-            { text: '.a { font-weight: 500; }\n', predicates: { 'incomingMedia:3d-glasses': true } }
+            { text: '.a { font-weight: 500; }\n', predicates: { 'mediaQuery:3d-glasses': true } }
         ]);
     });
 
@@ -40,21 +40,21 @@ describe('gatherStylesheetsWithIncomingMedia', function () {
         return expect('sameStylesheetIncludedTwice', 'to produce result satisfying', [
             { text: '.a { font-weight: 600; }\n', predicates: {} },
             { text: '.b { font-weight: 500; }\n', predicates: {} },
-            { text: '.a { font-weight: 600; }\n', predicates: { 'incomingMedia:3d-glasses': true } }
+            { text: '.a { font-weight: 600; }\n', predicates: { 'mediaQuery:3d-glasses': true } }
         ]);
     });
 
     it('should pick up a media list attached to a CssImport', function () {
         return expect('cssImportWithMedia', 'to produce result satisfying', [
-            { text: '.a { font-weight: 600; }\n', predicates: { 'incomingMedia:projection': true } },
+            { text: '.a { font-weight: 600; }\n', predicates: { 'mediaQuery:projection': true } },
             { text: '\n        @import "a.css" projection;\n    ', predicates: {} }
         ]);
     });
 
     it('should stack up the incoming media following HtmlStyle -> CssImport', function () {
         return expect('cssImportWithMediaWithExistingIncomingMedia', 'to produce result satisfying', [
-            { text: '.a { font-weight: 600; }\n', predicates: { 'incomingMedia:3d-glasses': true, 'incomingMedia:projection': true } },
-            { text: '\n        @import "a.css" projection;\n    ', predicates: { 'incomingMedia:3d-glasses': true } }
+            { text: '.a { font-weight: 600; }\n', predicates: { 'mediaQuery:3d-glasses': true, 'mediaQuery:projection': true } },
+            { text: '\n        @import "a.css" projection;\n    ', predicates: { 'mediaQuery:3d-glasses': true } }
         ]);
     });
 
