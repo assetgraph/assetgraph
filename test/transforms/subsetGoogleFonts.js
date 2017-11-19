@@ -6,6 +6,77 @@ var httpception = require('httpception');
 
 var fontCssUrlRegExp = /\/subfont\/fonts-[a-z0-9]{10}\.css$/;
 
+
+var defaultHttpceptionMock = [
+    {
+        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
+        response: {
+            headers: {
+                'Content-Type': 'text/css'
+            },
+            body: [
+                '@font-face {',
+                '  font-family: \'Open Sans\';',
+                '  font-style: normal;',
+                '  font-weight: 400;',
+                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400) format(\'woff\');',
+                '}'
+            ].join('\n')
+        }
+    },
+    {
+        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
+        response: {
+            headers: {
+                'Content-Type': 'text/css'
+            },
+            body: [
+                '@font-face {',
+                '  font-family: \'Open Sans\';',
+                '  font-style: normal;',
+                '  font-weight: 400;',
+                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
+                '}'
+            ].join('\n')
+        }
+    },
+    {
+        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
+        response: {
+            headers: {
+                'Content-Type': 'text/css'
+            },
+            body: [
+                '@font-face {',
+                '  font-family: \'Open Sans\';',
+                '  font-style: normal;',
+                '  font-weight: 400;',
+                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
+                '}'
+            ].join('\n')
+        }
+    },
+    {
+        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
+        response: {
+            headers: {
+                'Content-Type': 'font/woff2'
+            },
+            body: new Buffer('Open+Sans:400&text=Helo&format=woff2', 'base64')
+        }
+    },
+    {
+        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
+        response: {
+            headers: {
+                'Content-Type': 'font/woff'
+            },
+            body: new Buffer('Open+Sans:400&text=Helo&format=woff', 'base64')
+        }
+    }
+];
+
+
 describe('transforms/subsetGoogleFonts', function () {
 
     describe('without fonttools installed', function () {
@@ -24,75 +95,10 @@ describe('transforms/subsetGoogleFonts', function () {
             });
         });
 
+        it('should');
+
         it('should handle HTML <link rel=stylesheet>', function () {
-            httpception([
-                {
-                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
-                    response: {
-                        headers: {
-                            'Content-Type': 'text/css'
-                        },
-                        body: [
-                            '@font-face {',
-                            '  font-family: \'Open Sans\';',
-                            '  font-style: normal;',
-                            '  font-weight: 400;',
-                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400) format(\'woff\');',
-                            '}'
-                        ].join('\n')
-                    }
-                },
-                {
-                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
-                    response: {
-                        headers: {
-                            'Content-Type': 'text/css'
-                        },
-                        body: [
-                            '@font-face {',
-                            '  font-family: \'Open Sans\';',
-                            '  font-style: normal;',
-                            '  font-weight: 400;',
-                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans&format=woff2) format(\'woff2\');',
-                            '}'
-                        ].join('\n')
-                    }
-                },
-                {
-                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
-                    response: {
-                        headers: {
-                            'Content-Type': 'text/css'
-                        },
-                        body: [
-                            '@font-face {',
-                            '  font-family: \'Open Sans\';',
-                            '  font-style: normal;',
-                            '  font-weight: 400;',
-                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans&format=woff) format(\'woff\');',
-                            '}'
-                        ].join('\n')
-                    }
-                },
-                {
-                    request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans&format=woff2',
-                    response: {
-                        headers: {
-                            'Content-Type': 'font/woff2'
-                        },
-                        body: new Buffer('Open Sans woff2', 'base64')
-                    }
-                },
-                {
-                    request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans&format=woff',
-                    response: {
-                        headers: {
-                            'Content-Type': 'font/woff'
-                        },
-                        body: new Buffer('Open Sans woff', 'base64')
-                    }
-                }
-            ]);
+            httpception(defaultHttpceptionMock);
 
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
                 .loadAssets('index.html')
@@ -193,74 +199,7 @@ describe('transforms/subsetGoogleFonts', function () {
         describe('with `inlineCss: true`', function () {
 
             it('should inline the font Css and change outgoing relations to rootRelative', function () {
-                httpception([
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400) format(\'woff\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-                    {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
-                        response: {
-                            headers: {
-                                'Content-Type': 'font/woff2'
-                            },
-                            body: new Buffer('Open+Sans:400&text=Helo&format=woff2', 'base64')
-                        }
-                    },
-                    {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
-                        response: {
-                            headers: {
-                                'Content-Type': 'font/woff'
-                            },
-                            body: new Buffer('Open+Sans:400&text=Helo&format=woff', 'base64')
-                        }
-                    }
-                ]);
+                httpception(defaultHttpceptionMock);
 
                 return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
                     .loadAssets('index.html')
@@ -282,7 +221,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             {
                                 type: 'HtmlPreloadLink',
                                 hrefType: 'rootRelative',
-                                href: '/subfont/Open_Sans-400-66c13a38fa.woff2',
+                                href: '/subfont/Open_Sans-400-7e4f7435c9.woff2',
                                 to: {
                                     isLoaded: true
                                 },
@@ -357,74 +296,7 @@ describe('transforms/subsetGoogleFonts', function () {
         });
 
         it('should handle CSS @import', function () {
-            httpception([
-                {
-                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
-                    response: {
-                        headers: {
-                            'Content-Type': 'text/css'
-                        },
-                        body: [
-                            '@font-face {',
-                            '  font-family: \'Open Sans\';',
-                            '  font-style: normal;',
-                            '  font-weight: 400;',
-                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400) format(\'woff\');',
-                            '}'
-                        ].join('\n')
-                    }
-                },
-                {
-                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
-                    response: {
-                        headers: {
-                            'Content-Type': 'text/css'
-                        },
-                        body: [
-                            '@font-face {',
-                            '  font-family: \'Open Sans\';',
-                            '  font-style: normal;',
-                            '  font-weight: 400;',
-                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans&format=woff2) format(\'woff2\');',
-                            '}'
-                        ].join('\n')
-                    }
-                },
-                {
-                    request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
-                    response: {
-                        headers: {
-                            'Content-Type': 'text/css'
-                        },
-                        body: [
-                            '@font-face {',
-                            '  font-family: \'Open Sans\';',
-                            '  font-style: normal;',
-                            '  font-weight: 400;',
-                            '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans&format=woff) format(\'woff\');',
-                            '}'
-                        ].join('\n')
-                    }
-                },
-                {
-                    request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans&format=woff2',
-                    response: {
-                        headers: {
-                            'Content-Type': 'font/woff2'
-                        },
-                        body: new Buffer('Open Sans woff2', 'base64')
-                    }
-                },
-                {
-                    request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans&format=woff',
-                    response: {
-                        headers: {
-                            'Content-Type': 'font/woff'
-                        },
-                        body: new Buffer('Open Sans woff', 'base64')
-                    }
-                }
-            ]);
+            httpception(defaultHttpceptionMock);
 
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/css-import/'})
                 .loadAssets('index.html')
@@ -1740,76 +1612,7 @@ describe('transforms/subsetGoogleFonts', function () {
 
         describe('fontDisplay option', function () {
             it('should not add a font-display property when no fontDisplay is defined', function () {
-                httpception([
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=fake) format(\'woff\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-                    {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
-                        response: {
-                            headers: {
-                                'Content-Type': 'font/woff2'
-                            },
-                            body: new Buffer('helowoff2', 'base64')
-                        }
-                    },
-                    {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
-                        response: {
-                            headers: {
-                                'Content-Type': 'font/woff'
-                            },
-                            body: new Buffer('helowoff', 'base64')
-                        }
-                    }
-                ]);
+                httpception(defaultHttpceptionMock);
 
                 return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
                     .loadAssets('index.html')
@@ -1829,76 +1632,7 @@ describe('transforms/subsetGoogleFonts', function () {
             });
 
             it('should not add a font-display property when an invalid font-display value is provided', function () {
-                httpception([
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=fake) format(\'woff\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-                    {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
-                        response: {
-                            headers: {
-                                'Content-Type': 'font/woff2'
-                            },
-                            body: new Buffer('helowoff2', 'base64')
-                        }
-                    },
-                    {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
-                        response: {
-                            headers: {
-                                'Content-Type': 'font/woff'
-                            },
-                            body: new Buffer('helowoff', 'base64')
-                        }
-                    }
-                ]);
+                httpception(defaultHttpceptionMock);
 
                 return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
                     .loadAssets('index.html')
@@ -1919,76 +1653,7 @@ describe('transforms/subsetGoogleFonts', function () {
             });
 
             it('should add a font-display property', function () {
-                httpception([
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=fake) format(\'woff\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff2',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2) format(\'woff2\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-
-                    {
-                        request: 'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=Helo&format=woff',
-                        response: {
-                            headers: {
-                                'Content-Type': 'text/css'
-                            },
-                            body: [
-                                '@font-face {',
-                                '  font-family: \'Open Sans\';',
-                                '  font-style: normal;',
-                                '  font-weight: 400;',
-                                '  src: local(\'Open Sans\'), local(\'OpenSans\'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff) format(\'woff\');',
-                                '}'
-                            ].join('\n')
-                        }
-                    },
-                    {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff2',
-                        response: {
-                            headers: {
-                                'Content-Type': 'font/woff2'
-                            },
-                            body: new Buffer('helowoff2', 'base64')
-                        }
-                    },
-                    {
-                        request: 'GET https://fonts.gstatic.com/l/font?kit=Open+Sans:400&text=Helo&format=woff',
-                        response: {
-                            headers: {
-                                'Content-Type': 'font/woff'
-                            },
-                            body: new Buffer('helowoff', 'base64')
-                        }
-                    }
-                ]);
+                httpception(defaultHttpceptionMock);
 
                 return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
                     .loadAssets('index.html')
