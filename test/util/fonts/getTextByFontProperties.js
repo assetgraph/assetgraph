@@ -2745,4 +2745,147 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
     });
+
+    // TODO: Unskip once merged to master where HtmlNoscript is available
+    describe.skip('with <noscript>', function () {
+        it('should trace text inside the element', function () {
+            var htmlText = [
+                '<style>div { font-weight: 700; }</style>',
+                '<div><noscript>foo</noscript></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should trace the DOM nodes inside the element', function () {
+            var htmlText = [
+                '<noscript><div>foo</div></noscript>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should trace the DOM nodes inside the element in the context of the containing document', function () {
+            var htmlText = [
+                '<style>section noscript div { font-weight: 700 }</style>',
+                '<section>',
+                '  <noscript>',
+                '    <div>foo</div>',
+                '  </noscript>',
+                '</section>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should trace the DOM nodes inside the element as conditional irt. the number of list items', function () {
+            var htmlText = [
+                '<ol>',
+                '  <noscript>',
+                '    <li></li>',
+                '  </noscript>',
+                '  <li style="list-style-type: upper-roman"></li>',
+                '</ol>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: '1.',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'I.II.',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should treat contained stylesheets as conditionals', function () {
+            var htmlText = [
+                '<noscript><style>div { font-weight: 700; }</style></noscript>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should trace stylesheets in multiple <noscript> elements together', function () {
+            var htmlText = [
+                '<noscript><style>div { font-weight: 700; }</style></noscript>',
+                '<noscript><style>div { font-style: italic }</style></noscript>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'italic'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+    });
 });
