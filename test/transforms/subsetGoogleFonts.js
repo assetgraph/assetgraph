@@ -120,6 +120,51 @@ describe('transforms/subsetGoogleFonts', function () {
                 });
         });
 
+        it('should preload local fonts that it could not subset', function () {
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/local-single/'})
+                .loadAssets('index.html')
+                .populate()
+                .subsetGoogleFonts({
+                    inlineSubsets: false
+                })
+                .drawGraph('debug.svg')
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
+
+                    var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+
+                    expect(index.outgoingRelations, 'to satisfy', [
+                        {
+                            type: 'HtmlPreloadLink',
+                            hrefType: 'rootRelative',
+                            href: '/OpenSans.ttf',
+                            to: {
+                                isLoaded: true
+                            },
+                            as: 'font',
+                            contentType: 'font/ttf'
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            to: {
+                                isLoaded: true,
+                                isInline: true,
+                                text: expect.it('to contain', 'Open Sans'),
+                                outgoingRelations: [
+                                    {
+                                        hrefType: 'relative',
+                                        href: 'OpenSans.ttf',
+                                        to: {
+                                            isLoaded: true
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]);
+                });
+        });
+
         it('should handle HTML <link rel=stylesheet>', function () {
             httpception(defaultHttpceptionMock);
 
