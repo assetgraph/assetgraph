@@ -127,7 +127,6 @@ describe('transforms/subsetGoogleFonts', function () {
                 .subsetGoogleFonts({
                     inlineSubsets: false
                 })
-                .drawGraph('debug.svg')
                 .queue(function (assetGraph) {
                     expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
