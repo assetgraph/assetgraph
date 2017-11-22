@@ -2746,8 +2746,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
         });
     });
 
-    // TODO: Unskip once merged to master where HtmlNoscript is available
-    describe.skip('with <noscript>', function () {
+    describe('with <noscript>', function () {
         it('should trace text inside the element', function () {
             var htmlText = [
                 '<style>div { font-weight: 700; }</style>',
