@@ -855,7 +855,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-weight: 500;',
                             '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/l/font?kit=Roboto:500) format("woff");',
                             '}'
-                        ].join ('\n')
+                        ].join('\n')
                     }
                 },
 
@@ -872,7 +872,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-weight: 500;',
                             '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/l/font?kit=Roboto:500&text=Helo&format=woff2) format("woff2");',
                             '}'
-                        ].join ('\n')
+                        ].join('\n')
                     }
                 },
 
@@ -889,7 +889,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-weight: 400;',
                             '  src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/l/font?kit=Roboto:400&text=Dakr&format=woff2) format("woff2");',
                             '}'
-                        ].join ('\n')
+                        ].join('\n')
                     }
                 },
 
@@ -906,7 +906,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-weight: 300;',
                             '  src: local("Roboto Light Italic"), local("Roboto-LightItalic"), url(https://fonts.gstatic.com/l/font?kit=Roboto:300i&text=Celru&format=woff2) format("woff2");',
                             '}'
-                        ].join ('\n')
+                        ].join('\n')
                     }
                 },
 
@@ -923,7 +923,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-weight: 500;',
                             '  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/l/font?kit=Roboto:500&text=Helo&format=woff) format("woff");',
                             '}'
-                        ].join ('\n')
+                        ].join('\n')
                     }
                 },
 
@@ -940,7 +940,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-weight: 400;',
                             '  src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/l/font?kit=Roboto:400&text=Dakr&format=woff) format("woff");',
                             '}'
-                        ].join ('\n')
+                        ].join('\n')
                     }
                 },
 
@@ -957,7 +957,7 @@ describe('transforms/subsetGoogleFonts', function () {
                             '  font-weight: 300;',
                             '  src: local("Roboto Light Italic"), local("Roboto-LightItalic"), url(https://fonts.gstatic.com/l/font?kit=Roboto:300i&text=Celru&format=woff) format("woff");',
                             '}'
-                        ].join ('\n')
+                        ].join('\n')
                     }
                 },
 
