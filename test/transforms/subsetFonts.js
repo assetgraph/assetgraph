@@ -106,12 +106,12 @@ var defaultLocalSubsetMock = [
 ];
 
 
-describe('transforms/subsetGoogleFonts', function () {
+describe('transforms/subsetFonts', function () {
 
     describe('without fonttools installed', function () {
         before(function () {
             // Mock on
-            proxyquire('../../lib/transforms/subsetGoogleFonts', {
+            proxyquire('../../lib/transforms/subsetFonts', {
                 '../util/fonts/subsetLocalFont': null
             });
         });
@@ -119,7 +119,7 @@ describe('transforms/subsetGoogleFonts', function () {
         after(function () {
             // Mock off
             proxyquire.noPreserveCache();
-            proxyquire('../../lib/transforms/subsetGoogleFonts', {
+            proxyquire('../../lib/transforms/subsetFonts', {
                 '../util/fonts/subsetLocalFont': require('../../lib/util/fonts/subsetLocalFont')
             });
         });
@@ -129,7 +129,7 @@ describe('transforms/subsetGoogleFonts', function () {
 
             var warnings = [];
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/local-single/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-single/'})
                 .on('warn', function (warning) {
                     warnings.push(warning);
                 })
@@ -139,7 +139,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         crossorigin: false
                     }
                 })
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(function () {
@@ -150,10 +150,10 @@ describe('transforms/subsetGoogleFonts', function () {
         });
 
         it('should preload local fonts that it could not subset', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/local-single/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-single/'})
                 .loadAssets('index.html')
                 .populate()
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(function (assetGraph) {
@@ -196,14 +196,14 @@ describe('transforms/subsetGoogleFonts', function () {
         it('should handle HTML <link rel=stylesheet>', function () {
             httpception(defaultGoogleFontSubsetMock);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
                 .loadAssets('index.html')
                 .populate({
                     followRelations: {
                         crossorigin: false
                     }
                 })
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(function (assetGraph) {
@@ -297,14 +297,14 @@ describe('transforms/subsetGoogleFonts', function () {
             it('should inline the font Css and change outgoing relations to rootRelative', function () {
                 httpception(defaultGoogleFontSubsetMock);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
                     .loadAssets('index.html')
                     .populate({
                         followRelations: {
                             crossorigin: false
                         }
                     })
-                    .subsetGoogleFonts({
+                    .subsetFonts({
                         inlineSubsets: false,
                         inlineCss: true
                     })
@@ -394,14 +394,14 @@ describe('transforms/subsetGoogleFonts', function () {
         it('should handle CSS @import', function () {
             httpception(defaultGoogleFontSubsetMock);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/css-import/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/css-import/'})
                 .loadAssets('index.html')
                 .populate({
                     followRelations: {
                         crossorigin: false
                     }
                 })
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(function (assetGraph) {
@@ -673,14 +673,14 @@ describe('transforms/subsetGoogleFonts', function () {
                 }
             ]);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/multi-family/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/multi-family/'})
                 .loadAssets('index.html')
                 .populate({
                     followRelations: {
                         crossorigin: false
                     }
                 })
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(function (assetGraph) {
@@ -1022,14 +1022,14 @@ describe('transforms/subsetGoogleFonts', function () {
                 }
             ]);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/multi-weight/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/multi-weight/'})
                 .loadAssets('index.html')
                 .populate({
                     followRelations: {
                         crossorigin: false
                     }
                 })
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(function (assetGraph) {
@@ -1294,14 +1294,14 @@ describe('transforms/subsetGoogleFonts', function () {
                     }
                 ]);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/multi-page/'})
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/multi-page/'})
                     .loadAssets('index.html')
                     .populate({
                         followRelations: {
                             crossorigin: false
                         }
                     })
-                    .subsetGoogleFonts({
+                    .subsetFonts({
                         inlineSubsets: false,
                         subsetPerPage: true
                     })
@@ -1569,14 +1569,14 @@ describe('transforms/subsetGoogleFonts', function () {
                     }
                 ]);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/multi-page/'})
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/multi-page/'})
                     .loadAssets('index.html')
                     .populate({
                         followRelations: {
                             crossorigin: false
                         }
                     })
-                    .subsetGoogleFonts({
+                    .subsetFonts({
                         inlineSubsets: false,
                         subsetPerPage: false
                     })
@@ -1710,14 +1710,14 @@ describe('transforms/subsetGoogleFonts', function () {
             it('should not add a font-display property when no fontDisplay is defined', function () {
                 httpception(defaultGoogleFontSubsetMock);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
                     .loadAssets('index.html')
                     .populate({
                         followRelations: {
                             crossorigin: false
                         }
                     })
-                    .subsetGoogleFonts({
+                    .subsetFonts({
                         inlineSubsets: false
                     })
                     .queue(function (assetGraph) {
@@ -1730,14 +1730,14 @@ describe('transforms/subsetGoogleFonts', function () {
             it('should not add a font-display property when an invalid font-display value is provided', function () {
                 httpception(defaultGoogleFontSubsetMock);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
                     .loadAssets('index.html')
                     .populate({
                         followRelations: {
                             crossorigin: false
                         }
                     })
-                    .subsetGoogleFonts({
+                    .subsetFonts({
                         inlineSubsets: false,
                         fontDisplay: 'foo'
                     })
@@ -1751,14 +1751,14 @@ describe('transforms/subsetGoogleFonts', function () {
             it('should add a font-display property', function () {
                 httpception(defaultGoogleFontSubsetMock);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
                     .loadAssets('index.html')
                     .populate({
                         followRelations: {
                             crossorigin: false
                         }
                     })
-                    .subsetGoogleFonts({
+                    .subsetFonts({
                         inlineSubsets: false,
                         fontDisplay: 'block'
                     })
@@ -1844,14 +1844,14 @@ describe('transforms/subsetGoogleFonts', function () {
                     }
                 ]);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
                     .loadAssets('index.html')
                     .populate({
                         followRelations: {
                             crossorigin: false
                         }
                     })
-                    .subsetGoogleFonts({
+                    .subsetFonts({
                         inlineSubsets: false,
                         fontDisplay: 'fallback'
                     })
@@ -1870,7 +1870,7 @@ describe('transforms/subsetGoogleFonts', function () {
 
             var warnings = [];
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/local-single/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-single/'})
                 .on('warn', function (warning) {
                     warnings.push(warning);
                 })
@@ -1880,7 +1880,7 @@ describe('transforms/subsetGoogleFonts', function () {
                         crossorigin: false
                     }
                 })
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(function () {
@@ -1893,11 +1893,11 @@ describe('transforms/subsetGoogleFonts', function () {
 
             var warnings = [];
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/local-invalid/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-invalid/'})
                 .on('warn', function (warning) { warnings.push(warning); })
                 .loadAssets('index.html')
                 .populate()
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineCss: true
                 })
                 .queue(function (assetGraph) {
@@ -1953,10 +1953,10 @@ describe('transforms/subsetGoogleFonts', function () {
         it('should subset local fonts', function () {
             httpception();
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/local-single/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-single/'})
                 .loadAssets('index.html')
                 .populate()
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(function (assetGraph) {
@@ -2033,14 +2033,14 @@ describe('transforms/subsetGoogleFonts', function () {
         it('should handle HTML <link rel=stylesheet> with Google Fonts', function () {
             httpception(defaultLocalSubsetMock);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/html-link/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
                 .loadAssets('index.html')
                 .populate({
                     followRelations: {
                         crossorigin: false
                     }
                 })
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(function (assetGraph) {
@@ -2132,14 +2132,14 @@ describe('transforms/subsetGoogleFonts', function () {
         it('should handle mixed local fonts and Google fonts', function () {
             httpception(defaultLocalSubsetMock);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetGoogleFonts/local-mixed/'})
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-mixed/'})
                 .loadAssets('index.html')
                 .populate({
                     followRelations: {
                         crossorigin: false
                     }
                 })
-                .subsetGoogleFonts({
+                .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(function (assetGraph) {
