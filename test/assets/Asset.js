@@ -7,7 +7,7 @@ const httpception = require('httpception');
 const fs = require('fs');
 
 describe('assets/Asset', function () {
-    describe('#load()', function () {
+    describe('#loadAsync()', function () {
         it('should error when there is no file handle and the asset is not in a graph', function () {
             var asset = new AssetGraph.Asset({});
 
