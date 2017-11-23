@@ -1217,4 +1217,52 @@ describe('assets/Asset', function () {
             expect(new AssetGraph().addAsset({type: 'Css', text: ''})._isCompatibleWith('JavaScript'), 'to be false');
         });
     });
+
+    describe('#type', function () {
+        describe('when the asset is not loaded', function () {
+            it('should use the Content-Type if available', function () {
+                expect(new AssetGraph().addAsset({
+                    url: 'https://example.com/',
+                    contentType: 'text/css'
+                }).type, 'to equal', 'Css');
+            });
+
+            it('should guess based on the file extension when no other info exists', function () {
+                expect(new AssetGraph().addAsset({url: 'https://example.com/foo.css'}).type, 'to equal', 'Css');
+            });
+
+            describe('when an incoming relation is available', function () {
+                it('should guess based on the targetType of the incoming relation', function () {
+                    const assetGraph = new AssetGraph();
+                    const htmlAsset = assetGraph.addAsset({
+                        type: 'Html',
+                        text: '<link rel="stylesheet" href="https://example.com/">'
+                    });
+                    expect(htmlAsset.outgoingRelations[0].to.type, 'to equal', 'Css');
+                });
+
+                it('should guess the abstract Image type when the incoming relation could point at any Image', function () {
+                    const assetGraph = new AssetGraph();
+                    const htmlAsset = assetGraph.addAsset({
+                        type: 'Html',
+                        text: '<img src="https://example.com/">'
+                    });
+                    expect(htmlAsset.outgoingRelations[0].to.type, 'to equal', 'Image');
+                });
+
+                it('should guess a more specific type when a sensible file extension is available', function () {
+                    const assetGraph = new AssetGraph();
+                    const htmlAsset = assetGraph.addAsset({
+                        type: 'Html',
+                        text: '<img src="https://example.com/foo.png">'
+                    });
+                    expect(htmlAsset.outgoingRelations[0].to.type, 'to equal', 'Png');
+                });
+            });
+
+            it('should return Asset if there is no usable file extension', function () {
+                expect(new AssetGraph().addAsset({url: 'https://example.com/'}).type, 'to equal', 'Asset');
+            });
+        });
+    });
 });

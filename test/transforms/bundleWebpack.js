@@ -8,7 +8,7 @@ describe('bundleWebpack', function () {
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
-        expect(assetGraph, 'to contain asset', 'JavaScript');
+        expect(assetGraph, 'to contain asset', { type: 'JavaScript', isLoaded: true });
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 1);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
@@ -26,7 +26,7 @@ describe('bundleWebpack', function () {
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
-        expect(assetGraph, 'to contain asset', 'JavaScript');
+        expect(assetGraph, 'to contain asset', { type: 'JavaScript', isLoaded: true });
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 1);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
@@ -44,7 +44,7 @@ describe('bundleWebpack', function () {
             .bundleWebpack()
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
-        expect(assetGraph, 'to contain asset', 'Json');
+        expect(assetGraph, 'to contain asset', { type: 'Json', isLoaded: true });
         expect(assetGraph, 'to contain relation', { type: 'JavaScriptStaticUrl', to: { fileName: /^[a-f0-9]{32}\.json$/ } });
     });
 
@@ -92,7 +92,7 @@ describe('bundleWebpack', function () {
             .bundleWebpack()
             .applySourceMaps();
 
-        expect(assetGraph, 'to contain asset', 'Css');
+        expect(assetGraph, 'to contain asset', { type: 'Css', isLoaded: true });
         expect(assetGraph, 'to contain relation', {type: 'HtmlStyle', href: '/dist/main.css', from: { type: 'Html' }, to: { type: 'Css' }});
         expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/dist/main.css');
     });
