@@ -21,8 +21,8 @@ describe('transforms/addPrecacheServiceWorker', function () {
         expect(assetGraph, 'to contain assets', 'Html', 2);
         expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});
         expect(assetGraph, 'to contain asset', 'Css');
-        expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-        expect(assetGraph, 'to contain asset', {type: 'Asset', isLoaded: false, fileName: 'notFound.js'});
+        expect(assetGraph, 'to contain assets', {type: 'JavaScript', isLoaded: true}, 2);
+        expect(assetGraph, 'to contain asset', {type: 'JavaScript', isLoaded: false, fileName: 'notFound.js'});
 
         await assetGraph.addPrecacheServiceWorker({isInitial: true});
 

@@ -110,7 +110,7 @@ describe('AssetGraph#addAsset', function () {
             });
             expect(asset, 'to be an', AssetGraph.Css);
             expect(assetGraph, 'to contain asset', {
-                type: 'Asset',
+                type: 'Png',
                 url: 'https://example.com/foo.png',
                 isLoaded: false
             });
@@ -138,7 +138,7 @@ describe('AssetGraph#addAsset', function () {
             await cssAsset.loadAsync();
 
             expect(assetGraph, 'to contain asset', {
-                type: 'Asset',
+                type: 'Png',
                 url: 'https://example.com/foo.png',
                 isLoaded: false
             });
@@ -232,8 +232,6 @@ describe('AssetGraph#addAsset', function () {
             });
 
             await atomAsset.loadAsync();
-
-            expect(assetGraph, 'to contain no assets', 'Png');
 
             const infoSpy = sinon.spy().named('info');
             assetGraph.on('info', infoSpy);

@@ -51,13 +51,8 @@ describe('assets/ApplicationManifest', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/assets/ApplicationManifest/'})
             .loadAssets('start_url.webmanifest')
             .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JsonUrl', 1);
-                expect(assetGraph, 'to contain assets', 'Html', 0);
-            })
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JsonUrl', 1);
-                expect(assetGraph, 'to contain assets', { url: /\.html$/ }, 1);
+                expect(assetGraph, 'to contain relation', 'JsonUrl');
+                expect(assetGraph, 'to contain asset', 'Html');
             });
     });
 });

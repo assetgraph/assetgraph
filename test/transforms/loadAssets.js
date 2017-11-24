@@ -119,7 +119,7 @@ describe('transforms/loadAssets', function () {
                 { url: 'https://example.com/foo.png' }
             ]);
             expect(assetGraph, 'to contain asset', {
-                type: 'Asset',
+                type: 'Png',
                 url: 'https://example.com/foo.png',
                 isLoaded: false
             });

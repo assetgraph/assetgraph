@@ -11,7 +11,8 @@ describe('relations/Relation', function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'});
             await assetGraph.loadAssets('index.html');
 
-            expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false });
+            expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false, isLoaded: true });
+            expect(assetGraph, 'to contain assets', { type: 'Html', isInline: false }, 6);
 
             expect(_.map(assetGraph.findRelations({type: 'HtmlAnchor'}), 'href'), 'to satisfy', [
                 'relative.html',
@@ -54,9 +55,10 @@ describe('relations/Relation', function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/refreshHref/', canonicalRoot: 'http://canonical.com/'});
             await assetGraph.loadAssets('index.html');
 
-            expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false });
+            expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false, isLoaded: true });
+            expect(assetGraph, 'to contain assets', { type: 'Html', isInline: false }, 6);
 
-            assetGraph.findAssets({ type: 'Html' }).forEach(function (asset) {
+            assetGraph.findAssets({ type: 'Html', isLoaded: true }).forEach(function (asset) {
                 asset.text = asset.text.replace(/href="/g, 'href=" ');
             });
 

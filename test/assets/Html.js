@@ -672,7 +672,7 @@ describe('assets/Html', function () {
         await assetGraph.serializeSourceMaps();
 
         expect(assetGraph, 'to contain asset', 'JavaScript');
-        expect(assetGraph, 'to contain asset', 'Css');
+        expect(assetGraph, 'to contain assets', 'Css', 2);
         expect(assetGraph, 'to contain assets', 'SourceMap', 2);
         var cssSourceMap = assetGraph.findRelations({type: 'CssSourceMappingUrl'})[0].to;
         expect(cssSourceMap.parseTree, 'to satisfy', {
