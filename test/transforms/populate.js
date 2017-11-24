@@ -14,7 +14,6 @@ describe('transforms/populate', function () {
                 followRelations: {type: query.not('HtmlStyle')}
             });
 
-        expect(assetGraph, 'to contain asset', 'Css');
         expect(assetGraph, 'to contain asset', { type: 'Css', isLoaded: false });
 
         const htmlStyles = assetGraph.findRelations({type: 'HtmlStyle'});
