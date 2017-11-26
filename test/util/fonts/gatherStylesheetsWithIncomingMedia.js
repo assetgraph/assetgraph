@@ -1,14 +1,14 @@
-var gatherStylesheetsWithIncomingMedia = require('../../../lib/util/fonts/gatherStylesheetsWithIncomingMedia');
+var gatherStylesheetsWithPredicates = require('../../../lib/util/fonts/gatherStylesheetsWithPredicates');
 var expect = require('../../unexpected-with-plugins');
 var AssetGraph = require('../../../');
 
-describe('gatherStylesheetsWithIncomingMedia', function () {
+describe('gatherStylesheetsWithPredicates', function () {
     expect = expect.clone().addAssertion('<string> to produce result satisfying <array>', function (expect, subject, value) {
-        return new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithIncomingMedia/' + subject + '/'})
+        return new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithPredicates/' + subject + '/'})
             .loadAssets('index.html')
             .populate()
             .then(function (assetGraph) {
-                return expect(gatherStylesheetsWithIncomingMedia(assetGraph, assetGraph.findAssets({type: 'Html'})[0]), 'to satisfy', value);
+                return expect(gatherStylesheetsWithPredicates(assetGraph, assetGraph.findAssets({type: 'Html'})[0]), 'to satisfy', value);
             });
     });
 
