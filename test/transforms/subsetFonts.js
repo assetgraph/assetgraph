@@ -173,6 +173,21 @@ describe('transforms/subsetFonts', function () {
                             contentType: 'font/ttf'
                         },
                         {
+                            type: 'HtmlScript',
+                            to: {
+                                isInline: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        href: '/OpenSans.ttf',
+                                        to: {
+                                            isLoaded: true
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             type: 'HtmlStyle',
                             to: {
                                 isLoaded: true,
@@ -359,6 +374,14 @@ describe('transforms/subsetFonts', function () {
                                 type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
                                 href: 'https://fonts.gstatic.com'
+                            },
+                            {
+                                type: 'HtmlScript',
+                                to: {
+                                    type: 'JavaScript',
+                                    isInline: true,
+                                    text: expect.it('to contain', 'document.fonts.forEach').and('to contain', '__subset')
+                                }
                             },
                             {
                                 type: 'HtmlStyle',
@@ -1928,6 +1951,22 @@ describe('transforms/subsetFonts', function () {
                             },
                             as: 'font',
                             contentType: 'text/plain' // Caused by fake test data
+                        },
+                        {
+                            type: 'HtmlScript',
+                            to: {
+                                type: 'JavaScript',
+                                isInline: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        href: '/OpenSans.ttf',
+                                        to: {
+                                            isLoaded: true
+                                        }
+                                    }
+                                ]
+                            }
                         },
                         {
                             type: 'HtmlStyle',
