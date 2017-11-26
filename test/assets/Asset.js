@@ -1202,7 +1202,7 @@ describe('assets/Asset', function () {
 
     describe('#_isCompatibleWith', function () {
         it('should consider Css compatible with Asset', function () {
-            expect(new AssetGraph().addAsset({type: 'Css', text: ''})._isCompatibleWith('Asset'), 'to be true');
+            expect(new AssetGraph().addAsset({type: 'Css', text: ''})._isCompatibleWith(undefined), 'to be true');
         });
 
         it('should consider Atom compatible with Xml', function () {
@@ -1261,7 +1261,7 @@ describe('assets/Asset', function () {
             });
 
             it('should return Asset if there is no usable file extension', function () {
-                expect(new AssetGraph().addAsset({url: 'https://example.com/'}).type, 'to equal', 'Asset');
+                expect(new AssetGraph().addAsset({url: 'https://example.com/'}).type, 'to be undefined');
             });
         });
     });

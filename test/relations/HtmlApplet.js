@@ -11,7 +11,7 @@ describe('relations/HtmlApplet', function () {
                 expect(assetGraph, 'to contain assets', 2);
                 expect(assetGraph, 'to contain asset', 'Html');
                 expect(assetGraph, 'to contain relation', 'HtmlApplet');
-                expect(assetGraph, 'to contain asset', 'Asset');
+                expect(assetGraph, 'to contain asset', { type: undefined });
             })
             .run(done);
     });

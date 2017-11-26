@@ -497,7 +497,7 @@ describe('relations/Relation', function () {
                     expect(htmlAsset.text, 'to contain', '<a href="https://blah.com/whataboutthis/">');
 
                     expect(assetGraph, 'to contain asset', {
-                        type: 'Asset',
+                        type: undefined,
                         url: 'https://blah.com/whataboutthis/'
                     });
 
@@ -506,7 +506,7 @@ describe('relations/Relation', function () {
                     };
 
                     expect(assetGraph, 'to contain asset', {
-                        type: 'Asset',
+                        type: undefined,
                         url: 'https://whatdoyouknow.com/whataboutthis/'
                     });
                 });

@@ -9,7 +9,7 @@ describe('FileRedirect relation', function () {
             .populate();
 
         expect(assetGraph, 'to contain relation', 'FileRedirect');
-        expect(assetGraph, 'to contain asset', 'Asset');
+        expect(assetGraph, 'to contain asset', { type: undefined });
         expect(assetGraph.findRelations({ type: 'FileRedirect' })[0], 'to satisfy', {
             from: { url: assetGraph.root + 'subdir' },
             to: { url: assetGraph.root + 'subdir/index.html' }
@@ -22,7 +22,7 @@ describe('FileRedirect relation', function () {
             .populate();
 
         expect(assetGraph, 'to contain relation', 'FileRedirect');
-        expect(assetGraph, 'to contain asset', 'Asset');
+        expect(assetGraph, 'to contain asset', { type: undefined });
         expect(assetGraph.findRelations({ type: 'FileRedirect' })[0], 'to satisfy', {
             from: { url: assetGraph.root + 'subdir/' },
             to: { url: assetGraph.root + 'subdir/index.html' }
