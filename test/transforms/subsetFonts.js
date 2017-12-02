@@ -173,6 +173,21 @@ describe('transforms/subsetFonts', function () {
                             contentType: 'font/ttf'
                         },
                         {
+                            type: 'HtmlScript',
+                            to: {
+                                isInline: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        href: '/OpenSans.ttf',
+                                        to: {
+                                            isLoaded: true
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             type: 'HtmlStyle',
                             to: {
                                 isLoaded: true,
@@ -224,6 +239,33 @@ describe('transforms/subsetFonts', function () {
                             as: 'font'
                         },
                         {
+                            type: 'HtmlScript',
+                            to: {
+                                isInline: true,
+                                isMinified: true,
+                                text: expect.it('to contain', 'Open Sans__subset'),
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             type: 'HtmlStyle',
                             hrefType: 'rootRelative',
                             href: expect.it('to begin with', '/subfont/fonts-')
@@ -253,9 +295,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
@@ -351,14 +393,22 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlPrefetchLink',
+                                type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                href: 'https://fonts.googleapis.com'
                             },
                             {
                                 type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
                                 href: 'https://fonts.gstatic.com'
+                            },
+                            {
+                                type: 'HtmlScript',
+                                to: {
+                                    type: 'JavaScript',
+                                    isInline: true,
+                                    text: expect.it('to contain', 'document.fonts.forEach').and('to contain', '__subset')
+                                }
                             },
                             {
                                 type: 'HtmlStyle',
@@ -422,6 +472,34 @@ describe('transforms/subsetFonts', function () {
                             as: 'font'
                         },
                         {
+                            type: 'HtmlScript',
+                            to: {
+                                isInline: true,
+                                isMinified: true,
+                                text: expect.it('to contain', 'Open Sans__subset'),
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: '/subfont/Open_Sans-400-7e4f7435c9.woff2',
+                                        to: {
+                                            isLoaded: true
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             type: 'HtmlStyle',
                             href: expect.it('to begin with', '/subfont/fonts-')
                                 .and('to end with', '.css')
@@ -450,9 +528,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
@@ -723,6 +801,80 @@ describe('transforms/subsetFonts', function () {
                             as: 'font'
                         },
                         {
+                            type: 'HtmlScript',
+                            to: {
+                                isInline: true,
+                                isMinified: true,
+                                text: expect.it('to contain', 'Jim Nightshade__subset')
+                                    .and('to contain', 'Montserrat__subset')
+                                    .and('to contain', 'Space Mono__subset'),
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: '/subfont/Jim_Nightshade-400-ad9702f89a.woff2',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: '/subfont/Montserrat-400-6606281bf9.woff2',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: '/subfont/Space_Mono-400-69f5758c65.woff2',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             type: 'HtmlStyle',
                             href: expect.it('to begin with', '/subfont/fonts-')
                                 .and('to end with', '.css')
@@ -785,9 +937,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Jim+Nightshade|Montserrat|Space+Mono'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
@@ -1073,6 +1225,80 @@ describe('transforms/subsetFonts', function () {
                             as: 'font'
                         },
                         {
+                            type: 'HtmlScript',
+                            to: {
+                                isMinified: true,
+                                isInline: true,
+                                text: expect.it('to contain', 'Roboto__subset')
+                                    .and('to contain', "'font-weight':500")
+                                    .and('to contain', "'font-style':'italic','font-weight':300"),
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: '/subfont/Roboto-500-3d0cd01e1e.woff2',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: '/subfont/Roboto-400-7a7a41bc79.woff2',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: '/subfont/Roboto-300i-5bba471dfa.woff2',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             type: 'HtmlStyle',
                             href: expect.it('to begin with', '/subfont/fonts-')
                                 .and('to end with', '.css')
@@ -1133,9 +1359,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Roboto:300i,400,500'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
@@ -1389,6 +1615,36 @@ describe('transforms/subsetFonts', function () {
                                 as: 'font'
                             },
                             {
+                                type: 'HtmlScript',
+                                to: {
+                                    isMinified: true,
+                                    isInline: true,
+                                    text: expect.it('to contain', 'Open Sans__subset'),
+                                    outgoingRelations: [
+                                        {
+                                            type: 'JavaScriptStaticUrl',
+                                            hrefType: 'rootRelative',
+                                            href: '/subfont/Open_Sans-400-0585f4b130.woff2',
+                                            to: {
+                                                isLoaded: true,
+                                                contentType: 'font/woff2',
+                                                extension: '.woff2'
+                                            }
+                                        },
+
+                                        {
+                                            type: 'JavaScriptStaticUrl',
+                                            hrefType: 'rootRelative',
+                                            to: {
+                                                isLoaded: true,
+                                                contentType: 'font/woff',
+                                                extension: '.woff'
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
                                 type: 'HtmlStyle',
                                 href: expect.it('to begin with', '/subfont/fonts-')
                                     .and('to end with', '.css')
@@ -1398,9 +1654,9 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlPrefetchLink',
+                                type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                href: 'https://fonts.googleapis.com'
                             },
                             {
                                 type: 'HtmlPreconnectLink',
@@ -1448,6 +1704,36 @@ describe('transforms/subsetFonts', function () {
                                 as: 'font'
                             },
                             {
+                                type: 'HtmlScript',
+                                to: {
+                                    isMinified: true,
+                                    isInline: true,
+                                    text: expect.it('to contain', 'Open Sans__subset'),
+                                    outgoingRelations: [
+                                        {
+                                            type: 'JavaScriptStaticUrl',
+                                            hrefType: 'rootRelative',
+                                            href: '/subfont/Open_Sans-400-a92122b2f9.woff2',
+                                            to: {
+                                                isLoaded: true,
+                                                contentType: 'font/woff2',
+                                                extension: '.woff2'
+                                            }
+                                        },
+
+                                        {
+                                            type: 'JavaScriptStaticUrl',
+                                            hrefType: 'rootRelative',
+                                            to: {
+                                                isLoaded: true,
+                                                contentType: 'font/woff',
+                                                extension: '.woff'
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
                                 type: 'HtmlStyle',
                                 href: expect.it('to begin with', '/subfont/fonts-')
                                     .and('to end with', '.css')
@@ -1455,9 +1741,9 @@ describe('transforms/subsetFonts', function () {
                                 to: expect.it('not to be', indexFontStyle)
                             },
                             {
-                                type: 'HtmlPrefetchLink',
+                                type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                href: 'https://fonts.googleapis.com'
                             },
                             {
                                 type: 'HtmlPreconnectLink',
@@ -1598,6 +1884,36 @@ describe('transforms/subsetFonts', function () {
                                 as: 'font'
                             },
                             {
+                                type: 'HtmlScript',
+                                to: {
+                                    isMinified: true,
+                                    isInline: true,
+                                    text: expect.it('to contain', 'Open Sans__subset'),
+                                    outgoingRelations: [
+                                        {
+                                            type: 'JavaScriptStaticUrl',
+                                            hrefType: 'rootRelative',
+                                            href: '/subfont/Open_Sans-400-5c45d9271a.woff2',
+                                            to: {
+                                                isLoaded: true,
+                                                contentType: 'font/woff2',
+                                                extension: '.woff2'
+                                            }
+                                        },
+
+                                        {
+                                            type: 'JavaScriptStaticUrl',
+                                            hrefType: 'rootRelative',
+                                            to: {
+                                                isLoaded: true,
+                                                contentType: 'font/woff',
+                                                extension: '.woff'
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
                                 type: 'HtmlStyle',
                                 href: expect.it('to begin with', '/subfont/fonts-')
                                     .and('to end with', '.css')
@@ -1608,9 +1924,9 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlPrefetchLink',
+                                type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                href: 'https://fonts.googleapis.com'
                             },
                             {
                                 type: 'HtmlPreconnectLink',
@@ -1646,7 +1962,7 @@ describe('transforms/subsetFonts', function () {
                             }
                         ]);
 
-                        var sharedFontStyles = index.outgoingRelations[1].to;
+                        var sharedFontStyles = index.outgoingRelations[2].to;
                         var sharedFont = index.outgoingRelations[0].to;
 
                         expect(about.outgoingRelations, 'to satisfy', [
@@ -1658,6 +1974,33 @@ describe('transforms/subsetFonts', function () {
                                 as: 'font'
                             },
                             {
+                                type: 'HtmlScript',
+                                to: {
+                                    type: 'JavaScript',
+                                    isMinified: true,
+                                    isInline: true,
+                                    text: expect.it('to contain', 'Open Sans__subset'),
+                                    outgoingRelations: [
+                                        {
+                                            type: 'JavaScriptStaticUrl',
+                                            hrefType: 'rootRelative',
+                                            href: '/subfont/Open_Sans-400-5c45d9271a.woff2',
+                                            to: sharedFont
+                                        },
+
+                                        {
+                                            type: 'JavaScriptStaticUrl',
+                                            hrefType: 'rootRelative',
+                                            to: {
+                                                isLoaded: true,
+                                                contentType: 'font/woff',
+                                                extension: '.woff'
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
                                 type: 'HtmlStyle',
                                 href: expect.it('to begin with', '/subfont/fonts-')
                                     .and('to end with', '.css')
@@ -1665,9 +2008,9 @@ describe('transforms/subsetFonts', function () {
                                 to: sharedFontStyles
                             },
                             {
-                                type: 'HtmlPrefetchLink',
+                                type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                href: 'https://fonts.googleapis.com'
                             },
                             {
                                 type: 'HtmlPreconnectLink',
@@ -1930,6 +2273,22 @@ describe('transforms/subsetFonts', function () {
                             contentType: 'text/plain' // Caused by fake test data
                         },
                         {
+                            type: 'HtmlScript',
+                            to: {
+                                type: 'JavaScript',
+                                isInline: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        href: '/OpenSans.ttf',
+                                        to: {
+                                            isLoaded: true
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             type: 'HtmlStyle',
                             to: {
                                 isLoaded: true,
@@ -1977,6 +2336,40 @@ describe('transforms/subsetFonts', function () {
                             as: 'font',
                             contentType: 'font/woff2'
                         },
+                        {
+                            type: 'HtmlScript',
+                            to: {
+                                type: 'JavaScript',
+                                isMinified: true,
+                                isInline: true,
+                                text: expect.it('to contain', 'Open Sans__subset'),
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: expect.it('to begin with', '/subfont/Open_Sans-400-')
+                                            .and('to match', /-[0-9a-f]{10}\./)
+                                            .and('to end with', '.woff2'),
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+
                         {
                             type: 'HtmlStyle',
                             hrefType: 'rootRelative',
@@ -2061,6 +2454,39 @@ describe('transforms/subsetFonts', function () {
                             as: 'font'
                         },
                         {
+                            type: 'HtmlScript',
+                            to: {
+                                type: 'JavaScript',
+                                isMinified: true,
+                                isInline: true,
+                                text: expect.it('to contain', 'Open Sans__subset'),
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: expect.it('to begin with', '/subfont/Open_Sans-400-')
+                                            .and('to match', /-[0-9a-f]{10}\./)
+                                            .and('to end with', '.woff2'),
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             type: 'HtmlStyle',
                             hrefType: 'rootRelative',
                             href: expect.it('to begin with', '/subfont/fonts-')
@@ -2090,9 +2516,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
@@ -2171,6 +2597,68 @@ describe('transforms/subsetFonts', function () {
                             as: 'font'
                         },
                         {
+                            type: 'HtmlScript',
+                            to: {
+                                type: 'JavaScript',
+                                isMinified: true,
+                                isInline: true,
+                                text: expect.it('to contain', 'Open Sans__subset'),
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: expect.it('to begin with', '/subfont/Local_Sans-400-')
+                                            .and('to match', /-[0-9a-f]{10}\./)
+                                            .and('to end with', '.woff2'),
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: expect.it('to begin with', '/subfont/Local_Sans-400-')
+                                            .and('to match', /-[0-9a-f]{10}\./)
+                                            .and('to end with', '.woff'),
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: expect.it('to begin with', '/subfont/Open_Sans-400-')
+                                            .and('to match', /-[0-9a-f]{10}\./)
+                                            .and('to end with', '.woff2'),
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: expect.it('to begin with', '/subfont/Open_Sans-400-')
+                                            .and('to match', /-[0-9a-f]{10}\./)
+                                            .and('to end with', '.woff'),
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             type: 'HtmlStyle',
                             hrefType: 'rootRelative',
                             href: expect.it('to begin with', '/subfont/fonts-')
@@ -2225,9 +2713,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
