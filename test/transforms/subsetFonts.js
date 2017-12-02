@@ -295,9 +295,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
@@ -393,9 +393,9 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlPrefetchLink',
+                                type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                href: 'https://fonts.googleapis.com'
                             },
                             {
                                 type: 'HtmlPreconnectLink',
@@ -528,9 +528,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
@@ -937,9 +937,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Jim+Nightshade|Montserrat|Space+Mono'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
@@ -1359,9 +1359,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Roboto:300i,400,500'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
@@ -1654,9 +1654,9 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlPrefetchLink',
+                                type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                href: 'https://fonts.googleapis.com'
                             },
                             {
                                 type: 'HtmlPreconnectLink',
@@ -1741,9 +1741,9 @@ describe('transforms/subsetFonts', function () {
                                 to: expect.it('not to be', indexFontStyle)
                             },
                             {
-                                type: 'HtmlPrefetchLink',
+                                type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                href: 'https://fonts.googleapis.com'
                             },
                             {
                                 type: 'HtmlPreconnectLink',
@@ -1924,9 +1924,9 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlPrefetchLink',
+                                type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                href: 'https://fonts.googleapis.com'
                             },
                             {
                                 type: 'HtmlPreconnectLink',
@@ -2008,9 +2008,9 @@ describe('transforms/subsetFonts', function () {
                                 to: sharedFontStyles
                             },
                             {
-                                type: 'HtmlPrefetchLink',
+                                type: 'HtmlPreconnectLink',
                                 hrefType: 'absolute',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                href: 'https://fonts.googleapis.com'
                             },
                             {
                                 type: 'HtmlPreconnectLink',
@@ -2516,9 +2516,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
@@ -2713,9 +2713,9 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlPrefetchLink',
+                            type: 'HtmlPreconnectLink',
                             hrefType: 'absolute',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                            href: 'https://fonts.googleapis.com'
                         },
                         {
                             type: 'HtmlPreconnectLink',
