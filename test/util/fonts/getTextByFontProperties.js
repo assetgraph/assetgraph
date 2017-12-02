@@ -320,7 +320,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'foo',
+                    text: 'bar',
                     props: {
                         'font-family': 'font1',
                         'font-weight': 700,
@@ -328,7 +328,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'bar',
+                    text: 'foo',
                     props: {
                         'font-family': 'font1',
                         'font-weight': 700,
@@ -782,17 +782,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
         return expect(htmlText, 'to exhaustively satisfy computed font properties', [
             {
-                text: 'foo',
+                text: 'bar',
                 props: {
-                    'font-family': 'font1',
+                    'font-family': 'font2',
                     'font-weight': 700,
                     'font-style': 'normal'
                 }
             },
             {
-                text: 'bar',
+                text: 'foo',
                 props: {
-                    'font-family': 'font2',
+                    'font-family': 'font1',
                     'font-weight': 700,
                     'font-style': 'normal'
                 }
@@ -809,17 +809,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'after',
+                    text: 'h1',
                     props: {
-                        'font-family': 'font1',
+                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'h1',
+                    text: 'after',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font1',
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -948,17 +948,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'after',
+                    text: 'h1',
                     props: {
-                        'font-family': 'font2',
+                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'h1',
+                    text: 'after',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font2',
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -975,17 +975,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'after',
+                    text: 'h1',
                     props: {
-                        'font-family': 'font1',
+                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'h1',
+                    text: 'after',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font1',
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -1002,17 +1002,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'after',
+                    text: 'h1',
                     props: {
-                        'font-family': 'font1',
+                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'h1',
+                    text: 'after',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font1',
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -1031,14 +1031,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'after',
-                    props: {
-                        'font-family': 'font1',
-                        'font-weight': 200,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'p',
                     props: {
                         'font-family': undefined,
@@ -1050,7 +1042,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     text: 'after',
                     props: {
                         'font-family': 'font1',
-                        'font-weight': 600,
+                        'font-weight': 200,
                         'font-style': 'normal'
                     }
                 },
@@ -1058,6 +1050,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     text: 'article',
                     props: {
                         'font-family': undefined,
+                        'font-weight': 600,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
                         'font-weight': 600,
                         'font-style': 'normal'
                     }
@@ -1095,17 +1095,17 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'I',
+                    text: 'foo',
                     props: {
-                        'font-family': 'font1',
+                        'font-family': undefined,
                         'font-weight': 400,
                         'font-style': 'normal'
                     }
                 },
                 {
-                    text: 'foo',
+                    text: 'I',
                     props: {
-                        'font-family': undefined,
+                        'font-family': 'font1',
                         'font-weight': 400,
                         'font-style': 'normal'
                     }
@@ -1514,18 +1514,18 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'foo',
-                    props: {
-                        'font-family': 'myClass',
-                        'font-weight': 900,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'text',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': 'myClass',
+                        'font-weight': 900,
                         'font-style': 'normal'
                     }
                 },
@@ -1557,6 +1557,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
+                    text: 'h1',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
                     text: 'bar',
                     props: {
                         'font-family': 'font1',
@@ -1568,14 +1576,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     text: 'foo',
                     props: {
                         'font-family': 'font1',
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
-                    text: 'h1',
-                    props: {
-                        'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
@@ -1600,22 +1600,260 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'after',
-                    props: {
-                        'font-family': 'font1',
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'h1',
                     props: {
                         'font-family': undefined,
                         'font-weight': 700,
                         'font-style': 'normal'
                     }
+                },
+                {
+                    text: 'after',
+                    props: {
+                        'font-family': 'font1',
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
                 }
             ]);
+        });
+
+        describe('with ::first-letter', function () {
+            it('should do a separate trace and derive the right styling for the first letter', function () {
+                var htmlText = [
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p>foo</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'f', props: { 'font-weight': 700 } },
+                    { text: 'oo', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should ignore leading whitespace when identifying the first letter', function () {
+                var htmlText = [
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p>  \n \t foo</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'f', props: { 'font-weight': 700 } },
+                    { text: 'oo', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should not dive into child elements', function () {
+                var htmlText = [
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p><div>foo</div></p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'foo', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should not extract text after a child element', function () {
+                var htmlText = [
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p><div>foo</div>bar</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'foo', props: { 'font-weight': 400 } },
+                    { text: 'bar', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should include a leading quote marker in the first letter trace', function () {
+                var htmlText = [
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p>"foo</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: '"f', props: { 'font-weight': 700 } },
+                    { text: 'oo', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should include a leading quote marker from ::before', function () {
+                var htmlText = [
+                    '<style>p::before { content: \'"a\'; }</style>',
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p>foo</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: '"a', props: { 'font-weight': 700 } },
+                    { text: 'foo', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should retain the unrelated styling from ::before when combining with ::first-letter', function () {
+                var htmlText = [
+                    '<style>p::before { content: \'a\'; font-style: italic; }</style>',
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p>foo</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'a', props: { 'font-weight': 700, 'font-style': 'italic' } },
+                    { text: 'foo', props: { 'font-weight': 400, 'font-style': 'normal' } }
+                ]);
+            });
+
+            it('should include a leading quote marker from ::after', function () {
+                var htmlText = [
+                    '<style>p::after { content: \'"a\'; }</style>',
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p></p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: '"a', props: { 'font-weight': 700 } }
+                ]);
+            });
+
+            // This is counter-intuitive, but has been observed in both Chrome and Firefox
+            it('should not combine a leading quote marker from ::before with a letter from the element', function () {
+                var htmlText = [
+                    '<style>p::before { content: \'"\'; }</style>',
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p>foo</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: '"', props: { 'font-weight': 700 } },
+                    { text: 'foo', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should get the first letter from the ::before pseudo element', function () {
+                var htmlText = [
+                    '<style>p::before { content: \'bar\'; font-weight: 200; }</style>',
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p>foo</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'b', props: { 'font-weight': 700 } },
+                    { text: 'ar', props: { 'font-weight': 200 } },
+                    { text: 'foo', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should get the first letter from the ::after pseudo element if it is the only content', function () {
+                var htmlText = [
+                    '<style>p::after { content: \'foo\'; font-weight: 200; }</style>',
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p></p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'f', props: { 'font-weight': 700 } },
+                    { text: 'oo', props: { 'font-weight': 200 } }
+                ]);
+            });
+
+            it('should compose with other conditionals', function () {
+                var htmlText = [
+                    '<style>@media 3dglasses { p::before { content: \'abc\' } }</style>',
+                    '<style>p::first-letter { font-weight: 700; }</style>',
+                    '<p>foo</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'a', props: { 'font-weight': 700 } },
+                    { text: 'f', props: { 'font-weight': 700 } },
+                    { text: 'bc', props: { 'font-weight': 400 } },
+                    { text: 'oo', props: { 'font-weight': 400 } }
+                ]);
+            });
+        });
+
+        describe('with ::first-line', function () {
+            it('should pessimistically assume that all of the content is rendered in both the the base and the ::first-line style', function () {
+                var htmlText = [
+                    '<style>p::first-line { font-weight: 700; }</style>',
+                    '<p>foo bar quux</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'foo bar quux', props: { 'font-weight': 700 } },
+                    { text: 'foo bar quux', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should have a lower precedence than ::first-letter, even when it occurs later in the cascade', function () {
+                var htmlText = [
+                    '<style>div::first-letter { font-weight: 700; }</style>',
+                    '<style>div::first-line { font-weight: 200; font-style: italic; }</style>',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'f', props: { 'font-weight': 700, 'font-style': 'italic' } },
+                    { text: 'f', props: { 'font-weight': 700, 'font-style': 'normal' } },
+                    { text: 'oo', props: { 'font-weight': 200, 'font-style': 'italic' } },
+                    { text: 'oo', props: { 'font-weight': 400, 'font-style': 'normal' } }
+                ]);
+            });
+
+            it('should exclude content after the first linebreak from the ::first-line part, <br> case', function () {
+                var htmlText = [
+                    '<style>p::first-line { font-weight: 700; }</style>',
+                    '<p>foo bar<br>quux</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'foo bar', props: { 'font-weight': 700 } },
+                    { text: 'foo bar\nquux', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should not let a regular linebreak interfere with the ::first-line tracing', function () {
+                var htmlText = [
+                    '<style>p::first-line { font-weight: 700; }</style>',
+                    '<p>foo\nbar<br>quux</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'foo bar', props: { 'font-weight': 700 } },
+                    { text: 'foo bar\nquux', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should exclude content after the first linebreak from the ::first-line part, white-space:pre case', function () {
+                var htmlText = [
+                    '<style>pre::first-line { font-weight: 700; }</style>',
+                    '<pre>foo bar\nquux</pre>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'foo bar', props: { 'font-weight': 700 } },
+                    { text: 'foo bar\nquux', props: { 'font-weight': 400 } }
+                ]);
+            });
+
+            it('should include ::before and ::after', function () {
+                var htmlText = [
+                    '<style>p::first-line { font-weight: 700; }</style>',
+                    '<style>p::before { content: \'foo\'; }</style>',
+                    '<style>p::after { content: \'quux\'; }</style>',
+                    '<p>bar</p>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'foo', props: { 'font-weight': 700 } },
+                    { text: 'bar', props: { 'font-weight': 700 } },
+                    { text: 'quux', props: { 'font-weight': 700 } },
+                    { text: 'foo', props: { 'font-weight': 400 } },
+                    { text: 'bar', props: { 'font-weight': 400 } },
+                    { text: 'quux', props: { 'font-weight': 400 } }
+                ]);
+            });
         });
     });
 
@@ -1855,14 +2093,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'foo',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 400,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'bar',
                     props: {
                         'font-family': 'font1',
@@ -1872,6 +2102,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 },
                 {
                     text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 400,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1941,7 +2179,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'foo',
+                    text: 'bar',
                     props: {
                         'font-family': 'font1',
                         'font-weight': 400,
@@ -1949,7 +2187,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'foo',
+                    text: 'bar',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -1957,7 +2195,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'bar',
+                    text: 'foo',
                     props: {
                         'font-family': 'font1',
                         'font-weight': 400,
@@ -1965,7 +2203,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                     }
                 },
                 {
-                    text: 'bar',
+                    text: 'foo',
                     props: {
                         'font-family': undefined,
                         'font-weight': 400,
@@ -3066,14 +3304,6 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
                 {
-                    text: 'foo',
-                    props: {
-                        'font-family': undefined,
-                        'font-weight': 700,
-                        'font-style': 'normal'
-                    }
-                },
-                {
                     text: 'bar',
                     props: {
                         'font-family': undefined,
@@ -3083,6 +3313,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 },
                 {
                     text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'foo',
                     props: {
                         'font-family': undefined,
                         'font-weight': 700,
