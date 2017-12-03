@@ -149,6 +149,55 @@ describe('transforms/subsetFonts', function () {
                 });
         });
 
+        it('should not break when there is an existing preload hint pointing to a font file', function () {
+            httpception();
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/existing-preload/'})
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetFonts()
+                .then(function (assetGraph) {
+                    expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
+                });
+        });
+
+        it('should emit an info event when detaching prefetch relations to original fonts', function () {
+            httpception();
+
+            var infos = [];
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/existing-prefetch/'})
+                .on('info', function (info) {
+                    infos.push(info);
+                })
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetFonts()
+                .then(function (assetGraph) {
+                    expect(assetGraph, 'to contain no relation', 'HtmlPrefetchLink');
+
+                    expect(infos, 'to satisfy', [
+                        {
+                            message: 'Detached <link rel="prefetch" as="font" type="application/x-font-ttf" href="OpenSans.ttf">. Will be replaced with preload with JS fallback.\nIf you feel this is wrong, open an issue at https://github.com/assetgraph/assetgraph/issues',
+                            asset: {
+                                type: 'Html'
+                            },
+                            relation: {
+                                type: 'HtmlPrefetchLink'
+                            }
+                        }
+                    ]);
+                });
+        });
+
         it('should preload local fonts that it could not subset', function () {
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-single/'})
                 .loadAssets('index.html')
