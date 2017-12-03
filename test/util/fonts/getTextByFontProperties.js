@@ -614,6 +614,102 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
         });
     });
 
+    describe('with text-transform', function () {
+        it('should uppercase the extracted text content', function () {
+            var htmlText = [
+                '<style>div { text-transform: uppercase; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to satisfy computed font properties', [
+                { text: 'FOO' }
+            ]);
+        });
+
+        it('should lowercase the extracted text content', function () {
+            var htmlText = [
+                '<style>div { text-transform: lowercase; }</style>',
+                '<div>FOO</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to satisfy computed font properties', [
+                { text: 'foo' }
+            ]);
+        });
+
+        it('should capitalize the extracted text content', function () {
+            var htmlText = [
+                '<style>div { text-transform: capitalize; }</style>',
+                '<div>foo</div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to satisfy computed font properties', [
+                { text: 'Foo' }
+            ]);
+        });
+
+        it('should apply to the content of a pseudo element', function () {
+            var htmlText = [
+                '<style>div::before { content: \'foo\'; text-transform: uppercase; }</style>',
+                '<div></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to satisfy computed font properties', [
+                { text: 'FOO' }
+            ]);
+        });
+
+        it('should apply to counters used in pseudo elements', function () {
+            var htmlText = [
+                '<style>html { counter-reset: section 20; }</style>',
+                '<style>div::before { content: counter(section, lower-roman); text-transform: capitalize; }</style>',
+                '<div></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to satisfy computed font properties', [
+                { text: 'Xx' }
+            ]);
+        });
+
+        it('should not apply to list indicators', function () {
+            var htmlText = [
+                '<ol style="list-style-type: lower-roman; text-transform: uppercase">',
+                '<li>foo</li>',
+                '</ol>'
+            ].join('\n');
+
+            return expect(htmlText, 'to satisfy computed font properties', [
+                { text: 'i.' },
+                { text: 'FOO' }
+            ]);
+        });
+
+        describe('used in a conditional', function () {
+            it('should account for the fact that the transform should or should not apply', function () {
+                var htmlText = [
+                    '<style>@media 3dglasses { div { text-transform: lowercase; } }</style>',
+                    '<div>FOO</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'foo' },
+                    { text: 'FOO' }
+                ]);
+            });
+
+            it('should not multiply if the text already has the right casing', function () {
+                var htmlText = [
+                    '<style>@media 3dglasses { div { text-transform: lowercase; } }</style>',
+                    '<div>foo</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'foo' }
+                ]);
+            });
+        });
+    });
+
     it('should take browser default stylesheet into account', function () {
         var htmlText = [
             '<style>h1 { font-family: font1; } span { font-family: font2; }</style>',
