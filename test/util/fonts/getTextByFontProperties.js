@@ -2887,4 +2887,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
     });
+
+    it('should include a hyphen when a node contains a soft hyphen', function () {
+        var htmlText = [
+            '<div>foo&shy;bar</div>'
+        ].join('\n');
+
+        return expect(htmlText, 'to satisfy computed font properties', [
+            { text: 'foo-bar' }
+        ]);
+    });
 });
