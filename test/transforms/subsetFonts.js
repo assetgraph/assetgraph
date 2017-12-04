@@ -3,6 +3,7 @@ var AssetGraph = require('../../lib');
 
 var proxyquire = require('proxyquire');
 var httpception = require('httpception');
+var sinon = require('sinon');
 
 var fontCssUrlRegExp = /\/subfont\/fonts-[a-z0-9]{10}\.css$/;
 
@@ -2355,6 +2356,28 @@ describe('transforms/subsetFonts', function () {
                             }
                         }
                     ]);
+                });
+        });
+
+        it('should emit a warning about if the highest prioritized font-family is missing glyphs', function () {
+            httpception();
+
+            var warnSpy = sinon.spy().named('warn');
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/missing-glyphs/'})
+                .on('warn', warnSpy)
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .subsetFonts({
+                    inlineSubsets: false
+                })
+                .then(function () {
+                    expect(warnSpy, 'to have calls satisfying', function () {
+                        warnSpy(/The font .*\/OpenSans\.ttf is missing these characters: 中国/);
+                    });
                 });
         });
 
