@@ -21,7 +21,7 @@ describe('AssetGraph#addAsset', function () {
         const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '..', 'testdata', 'addAsset', 'relativeUrl') + '/'});
         const asset = assetGraph.addAsset('foo.png');
         assetGraph.addAsset(asset);
-        await asset.loadAsync();
+        await asset.load();
         expect(asset.type, 'to equal', 'Png');
     });
 
@@ -37,7 +37,7 @@ describe('AssetGraph#addAsset', function () {
         const assetGraph = new AssetGraph();
         const asset = assetGraph.addAsset('http://www.example.com/foo.gif');
         assetGraph.addAsset(asset);
-        await asset.loadAsync();
+        await asset.load();
         expect(asset, 'to be an object');
         expect(asset.url, 'to equal', 'http://www.example.com/foo.gif');
         expect(asset.type, 'to equal', 'Gif');
@@ -47,7 +47,7 @@ describe('AssetGraph#addAsset', function () {
         const assetGraph = new AssetGraph();
         const asset = assetGraph.addAsset('data:text/html;base64,SGVsbG8sIHdvcmxkIQo=');
         assetGraph.addAsset(asset);
-        await asset.loadAsync();
+        await asset.load();
         expect(asset, 'to be an object');
         expect(asset.rawSrc, 'to equal', new Buffer('Hello, world!\n', 'utf-8'));
     });
@@ -60,7 +60,7 @@ describe('AssetGraph#addAsset', function () {
         const asset = assetGraph.addAsset('my-funky.scheme://www.example.com/');
         assetGraph.addAsset(asset);
 
-        await asset.loadAsync();
+        await asset.load();
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^No resolver found for protocol: my-funky.scheme/));
     });
 
@@ -71,7 +71,7 @@ describe('AssetGraph#addAsset', function () {
         assetGraph.on('warn', warnSpy);
 
         const asset = assetGraph.addAsset('android-app://www.example.com/');
-        await asset.loadAsync();
+        await asset.load();
         expect(asset, 'to satisfy', { url: 'android-app://www.example.com/' });
         expect(warnSpy, 'was not called');
     });
@@ -135,7 +135,7 @@ describe('AssetGraph#addAsset', function () {
                 }
             });
 
-            await cssAsset.loadAsync();
+            await cssAsset.load();
 
             expect(assetGraph, 'to contain asset', {
                 type: 'Png',
@@ -188,7 +188,7 @@ describe('AssetGraph#addAsset', function () {
                 `
             });
 
-            await xmlAsset.loadAsync();
+            await xmlAsset.load();
 
             expect(assetGraph, 'to contain no assets', 'Png');
 
@@ -202,7 +202,7 @@ describe('AssetGraph#addAsset', function () {
 
             expect(atomAsset, 'to be', xmlAsset);
 
-            await atomAsset.loadAsync();
+            await atomAsset.load();
 
             expect(assetGraph, 'to contain asset', 'Atom');
             expect(assetGraph, 'to contain asset', { fileName: 'foo.png' });
@@ -231,7 +231,7 @@ describe('AssetGraph#addAsset', function () {
                 `
             });
 
-            await atomAsset.loadAsync();
+            await atomAsset.load();
 
             const infoSpy = sinon.spy().named('info');
             assetGraph.on('info', infoSpy);
@@ -250,7 +250,7 @@ describe('AssetGraph#addAsset', function () {
                 url: 'http://example.com/undetectable',
                 text: '/* foo */'
             });
-            await undetectableAsset.loadAsync();
+            await undetectableAsset.load();
 
             await assetGraph.addAsset({
                 type: 'Html',
@@ -263,8 +263,8 @@ describe('AssetGraph#addAsset', function () {
                     </head>
                     </html>
                 `
-            }).loadAsync();
-            await undetectableAsset.loadAsync();
+            }).load();
+            await undetectableAsset.load();
 
             expect(assetGraph, 'to contain asset', 'Css');
         });
@@ -283,12 +283,12 @@ describe('AssetGraph#addAsset', function () {
                     </head>
                     </html>
                 `
-            }).loadAsync();
+            }).load();
 
             await assetGraph.addAsset({
                 url: 'http://example.com/undetectable',
                 text: '/* foo */'
-            }).loadAsync();
+            }).load();
 
             expect(assetGraph, 'to contain asset', 'Css');
         });
@@ -320,7 +320,7 @@ describe('AssetGraph#addAsset', function () {
                 `
             });
 
-            await undetectableAsset.loadAsync();
+            await undetectableAsset.load();
 
             expect(warnSpy, 'to have calls satisfying', () => {
                 warnSpy(new Error('http://example.com/undetectable used as both Css and JavaScript'));
@@ -341,7 +341,7 @@ describe('AssetGraph#addAsset', function () {
                 type: 'Css',
                 url: 'http://example.com/more.css',
                 text: 'body { color: teal; }'
-            }).loadAsync();
+            }).load();
 
             expect(assetGraph, 'to contain asset', {
                 url: 'http://example.com/more.css',

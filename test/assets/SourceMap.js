@@ -9,7 +9,7 @@ describe('SourceMap', function () {
         beforeEach(async function () {
             assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '..', '..', 'testdata', 'assets', 'SourceMap', 'jquery')});
             sourceMap = assetGraph.addAsset('jquery-1.10.1.min.map');
-            await sourceMap.loadAsync();
+            await sourceMap.load();
         });
 
         it('should support #generatedPositionFor', function () {

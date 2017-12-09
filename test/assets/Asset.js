@@ -7,11 +7,11 @@ const httpception = require('httpception');
 const fs = require('fs');
 
 describe('assets/Asset', function () {
-    describe('#loadAsync()', function () {
+    describe('#load()', function () {
         it('should error when there is no file handle and the asset is not in a graph', function () {
             var asset = new AssetGraph.Asset({});
 
-            return expect(asset.loadAsync(), 'to be rejected');
+            return expect(asset.load(), 'to be rejected');
         });
 
         it('should autodetect the type of an asset with an unrecognizable file extension', async function () {
@@ -603,7 +603,7 @@ describe('assets/Asset', function () {
 
                 const javaScriptAsset = htmlAsset.outgoingRelations[0].to;
 
-                await javaScriptAsset.loadAsync();
+                await javaScriptAsset.load();
 
                 const replacementJavaScript = javaScriptAsset.replaceWith({
                     type: 'JavaScript',
