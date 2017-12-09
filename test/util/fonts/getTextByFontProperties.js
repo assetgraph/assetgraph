@@ -87,6 +87,14 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 text: 'strong',
                 props: {
                     'font-family': undefined,
+                    'font-weight': '400+bolder',
+                    'font-style': 'normal'
+                }
+            },
+            {
+                text: 'strong',
+                props: {
+                    'font-family': undefined,
                     'font-weight': 700,
                     'font-style': 'normal'
                 }
@@ -2992,5 +3000,40 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
         return expect(htmlText, 'to satisfy computed font properties', [
             { text: 'foo-bar' }
         ]);
+    });
+
+    describe('with a document that results in different renderings in Chrome and Firefox', function () {
+        it('should produce a subset that accommodates both renderings', function () {
+            var htmlText = [
+                '<h1>foo<strong>bar</strong></h1>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'foo',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '700+bolder',
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'bar',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': 700,
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
     });
 });
