@@ -474,6 +474,34 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ]);
         });
 
+        it('should return multiple hypothetical inherited values with `lighter` modification', function () {
+            var htmlText = [
+                '<style>div { font-weight: 600; }</style>',
+                '<style>@media 3dglasses { div { font-weight: 800; } }</style>',
+                '<style>span { font-weight: lighter; }</style>',
+                '<div><span>span</span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '800+lighter',
+                        'font-style': 'normal'
+                    }
+                },
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '600+lighter',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
         it('should return inherited value with multiple `lighter` modifications', function () {
             var htmlText = [
                 '<style>div { font-weight: 900; }</style>',
@@ -521,6 +549,34 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
             ].join('\n');
 
             return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '600+bolder',
+                        'font-style': 'normal'
+                    }
+                }
+            ]);
+        });
+
+        it('should return multiple hypothetical inherited values with `bolder` modification', function () {
+            var htmlText = [
+                '<style>div { font-weight: 600; }</style>',
+                '<style>@media 3dglasses { div { font-weight: 800; } }</style>',
+                '<style>span { font-weight: bolder; }</style>',
+                '<div><span>span</span></div>'
+            ].join('\n');
+
+            return expect(htmlText, 'to exhaustively satisfy computed font properties', [
+                {
+                    text: 'span',
+                    props: {
+                        'font-family': undefined,
+                        'font-weight': '800+bolder',
+                        'font-style': 'normal'
+                    }
+                },
                 {
                     text: 'span',
                     props: {
