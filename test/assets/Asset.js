@@ -1265,4 +1265,182 @@ describe('assets/Asset', function () {
             });
         });
     });
+
+    describe('#query', function () {
+        describe('invoked as a getter', function () {
+            it('should produce an object representing the query string', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/?foo=bar&baz=quux'
+                });
+                expect(htmlAsset.query, 'to satisfy', {
+                    foo: 'bar',
+                    baz: 'quux'
+                });
+            });
+
+            it('should produce a fresh object after the url property has been updated', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/?foo=bar&baz=quux'
+                });
+                const query = htmlAsset.query;
+                htmlAsset.url = 'https://example.com/?hey=there';
+                expect(htmlAsset.query, 'not to be', query)
+                    .and('to satisfy', {
+                        hey: 'there'
+                    });
+            });
+
+            it('should return undefined for an inline asset', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/',
+                    text: '<style>body { color: maroon; }</style>'
+                });
+                expect(htmlAsset.outgoingRelations[0].to.query, 'to be undefined');
+            });
+
+            it('should turn into undefined after an asset is inlined', function () {
+                const assetGraph = new AssetGraph();
+                const cssAsset = assetGraph.addAsset({
+                    type: 'Css',
+                    url: 'https://example.com/styles.css',
+                    text: 'body { color: maroon; }'
+                });
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/',
+                    text: '<link rel="stylesheet" href="styles.css">'
+                });
+                htmlAsset.outgoingRelations[0].inline();
+                expect(cssAsset.query, 'to be undefined');
+            });
+
+            it('should support the in operator', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/?foo=bar'
+                });
+                expect('foo' in htmlAsset.query, 'to be true');
+            });
+
+            describe('when mutating the returned object', function () {
+                it('should mutate an existing url parameter if mutated', function () {
+                    const assetGraph = new AssetGraph();
+                    const htmlAsset = assetGraph.addAsset({
+                        type: 'Html',
+                        url: 'https://example.com/?foo=bar&baz=quux'
+                    });
+                    htmlAsset.query.foo = 'yeah';
+                    expect(htmlAsset.url, 'to equal', 'https://example.com/?foo=yeah&baz=quux');
+                });
+
+                it('should introduce a query string if there is not one already', function () {
+                    const assetGraph = new AssetGraph();
+                    const htmlAsset = assetGraph.addAsset({
+                        type: 'Html',
+                        url: 'https://example.com/'
+                    });
+                    htmlAsset.query.foo = 'yeah';
+                    expect(htmlAsset.url, 'to equal', 'https://example.com/?foo=yeah');
+                });
+
+                it('should support passing a parameter value as a number', function () {
+                    const assetGraph = new AssetGraph();
+                    const htmlAsset = assetGraph.addAsset({
+                        type: 'Html',
+                        url: 'https://example.com/'
+                    });
+                    htmlAsset.query.foo = 123;
+                    expect(htmlAsset.url, 'to equal', 'https://example.com/?foo=123');
+                });
+
+                it('should remove a parameter from the query string via delete', function () {
+                    const assetGraph = new AssetGraph();
+                    const htmlAsset = assetGraph.addAsset({
+                        type: 'Html',
+                        url: 'https://example.com/?foo=bar&baz=quux'
+                    });
+                    delete htmlAsset.query.baz;
+                    expect(htmlAsset.url, 'to equal', 'https://example.com/?foo=bar');
+                });
+
+                describe('when deleting the last parameter', function () {
+                    it('should remove the query string from the url', function () {
+                        const assetGraph = new AssetGraph();
+                        const htmlAsset = assetGraph.addAsset({
+                            type: 'Html',
+                            url: 'https://example.com/?foo=bar'
+                        });
+                        delete htmlAsset.query.foo;
+                        expect(htmlAsset.url, 'to equal', 'https://example.com/');
+                    });
+
+                    it('should preserve the fragment identifier of incoming relations', function () {
+                        const assetGraph = new AssetGraph();
+                        const cssAsset = assetGraph.addAsset({
+                            type: 'Css',
+                            url: 'https://example.com/styles.css?foo=bar',
+                            text: 'body { color: maroon; }'
+                        });
+                        const htmlAsset = assetGraph.addAsset({
+                            type: 'Html',
+                            url: 'https://example.com/',
+                            text: '<link rel="stylesheet" href="styles.css?foo=bar#hey">'
+                        });
+                        delete cssAsset.query.foo;
+                        expect(htmlAsset.outgoingRelations[0].href, 'to equal', 'styles.css#hey');
+                    });
+                });
+            });
+        });
+
+        describe('invoked as a setter', function () {
+            it('should replace the existing query string based on an object', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/?foo=bar'
+                });
+                htmlAsset.query = { baz: 'quux' };
+                expect(htmlAsset.url, 'to equal', 'https://example.com/?baz=quux');
+            });
+
+            it('should replace the existing query string based on an string', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/?foo=bar'
+                });
+                htmlAsset.query = 'baz=quux';
+                expect(htmlAsset.url, 'to equal', 'https://example.com/?baz=quux');
+            });
+
+            it('should replace the existing query string based on an string with a leading question mark', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/?foo=bar'
+                });
+                htmlAsset.query = '?baz=quux';
+                expect(htmlAsset.url, 'to equal', 'https://example.com/?baz=quux');
+            });
+
+            it('should install a vivified query object', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/?foo=bar'
+                });
+                htmlAsset.query = { baz: 'hey' };
+                htmlAsset.query.quux = 'abc';
+                expect(htmlAsset.url, 'to equal', 'https://example.com/?baz=hey&quux=abc');
+            });
+        });
+    });
 });
