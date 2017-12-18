@@ -746,6 +746,21 @@ describe('assets/Asset', function () {
             expect(outgoingRelations[0].to.url, 'to equal', 'http://example.com/baz.html');
             expect(outgoingRelations[1].to.url, 'to equal', 'http://example.com/quux.html');
         });
+
+        it('should be populated immediately after updating an existing asset with more info', function () {
+            const assetGraph = new AssetGraph();
+
+            const firstAsset = assetGraph.addAsset({ url: 'https://example.com/styles.css' });
+
+            const secondAsset = assetGraph.addAsset({
+                url: 'https://example.com/styles.css',
+                type: 'Css',
+                text: 'body { background: #ff69b4 url("../images/logo1.svg"); }'
+            });
+            expect(firstAsset, 'to be', secondAsset);
+
+            expect(firstAsset.outgoingRelations, 'to have length', 1);
+        });
     });
 
     describe('#rawSrc', function () {
