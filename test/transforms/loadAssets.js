@@ -77,8 +77,8 @@ describe('transforms/loadAssets', function () {
             ]);
 
             expect(assetGraph.findAssets(), 'to satisfy', [
-                { isAsset: true, url: 'https://example.com/styles.css' },
-                { isAsset: true, url: 'https://example.com/moreStyles.css' }
+                { url: 'https://example.com/styles.css' },
+                { url: 'https://example.com/moreStyles.css' }
             ]);
             expect(assetGraph, 'to contain asset', {
                 url: 'https://example.com/styles.css'
@@ -95,8 +95,8 @@ describe('transforms/loadAssets', function () {
             const assets = await assetGraph.loadAssets('*.html');
 
             expect(assetGraph.findAssets(), 'to satisfy', [
-                { isAsset: true, fileName: 'index1.html' },
-                { isAsset: true, fileName: 'index2.html' }
+                { fileName: 'index1.html' },
+                { fileName: 'index2.html' }
             ]);
             expect(assetGraph, 'to contain asset', {
                 fileName: 'index1.html'
