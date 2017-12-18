@@ -39,7 +39,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
     });
 
     it('should not create the fallback stylesheet if a minimumIeVersion of 9 is specified', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/combo/'})
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/combo/'});
 
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
@@ -57,7 +57,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
     });
 
     it('should handle a test case with multiple Html asset that point at the same Css', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/multipleHtmls/'})
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/multipleHtmls/'});
         await assetGraph.loadAssets('*.html');
         await assetGraph.populate();
 
@@ -81,7 +81,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
     });
 
     it('should handle a test case with a root-relative HtmlStyle relation', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/rootRelative/'})
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/rootRelative/'});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.inlineCssImagesWithLegacyFallback({isInitial: true}, {sizeThreshold: 32768 * 3 / 4});
@@ -91,7 +91,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
     });
 
     it('should handle a test case with a small background-image inside a @media query', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/mediaQuery/'})
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineCssImagesWithLegacyFallback/mediaQuery/'});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.inlineCssImagesWithLegacyFallback({isInitial: true}, {sizeThreshold: 10000});
