@@ -89,10 +89,10 @@ describe('transforms/loadAssets', function () {
     });
 
     describe('with a glob pattern', function () {
-        it('should add all the matched assets to the graph', async function () {
+        it('should add all the matched assets to the graph and return them', async function () {
             const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/loadAssets/glob/'});
 
-            await assetGraph.loadAssets('*.html');
+            const assets = await assetGraph.loadAssets('*.html');
 
             expect(assetGraph.findAssets(), 'to satisfy', [
                 { isAsset: true, fileName: 'index1.html' },
@@ -103,13 +103,18 @@ describe('transforms/loadAssets', function () {
             }).and('to contain asset', {
                 fileName: 'index2.html'
             });;
+
+            expect(assets, 'to satisfy', [
+                { fileName: 'index1.html' },
+                { fileName: 'index2.html' }
+            ]);
         });
     });
 
     describe('with a single asset config object', function () {
         it('should create and add the asset and return it in an array', async function () {
             const assetGraph = new AssetGraph();
-            await assetGraph.loadAssets({
+            const assets = await assetGraph.loadAssets({
                 type: 'Css',
                 url: 'https://example.com/styles.css',
                 text: 'body { background-image: url(https://example.com/foo.png); }'
@@ -123,6 +128,10 @@ describe('transforms/loadAssets', function () {
                 url: 'https://example.com/foo.png',
                 isLoaded: false
             });
+
+            expect(assets, 'to satisfy', [
+                { url: 'https://example.com/styles.css' }
+            ]);
         });
     });
 });
