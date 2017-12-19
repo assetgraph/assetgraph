@@ -1,0 +1,5 @@
+@import "styles.css";
+
+body {
+    background: url(foo.png?inline);
+}
