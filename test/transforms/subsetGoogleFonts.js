@@ -56,8 +56,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     to: {
                         type: 'Css',
                         url: fontCssUrlRegExp,
-                        isLoaded: true,
-                        isMinified: true
+                        isLoaded: true
                     }
                 });
 
@@ -132,7 +131,6 @@ describe('transforms/subsetGoogleFonts', function () {
                             to: {
                                 type: 'Css',
                                 isInline: true,
-                                isMinified: true,
                                 outgoingRelations: [
                                     {
                                         type: 'CssFontFaceSrc',
@@ -214,8 +212,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     to: {
                         type: 'Css',
                         url: fontCssUrlRegExp,
-                        isLoaded: true,
-                        isMinified: true
+                        isLoaded: true
                     },
                     crossorigin: false
                 });
@@ -350,8 +347,7 @@ describe('transforms/subsetGoogleFonts', function () {
                     to: {
                         type: 'Css',
                         url: fontCssUrlRegExp,
-                        isLoaded: true,
-                        isMinified: true
+                        isLoaded: true
                     }
                 });
 
@@ -498,7 +494,6 @@ describe('transforms/subsetGoogleFonts', function () {
                             type: 'Css',
                             url: fontCssUrlRegExp,
                             isLoaded: true,
-                            isMinified: true,
                             outgoingRelations: [
                                 {
                                     type: 'CssFontFaceSrc',
@@ -627,7 +622,6 @@ describe('transforms/subsetGoogleFonts', function () {
                                 url: fontCssUrlRegExp,
                                 isLoaded: true,
                                 isInline: false,
-                                isMinified: true,
                                 outgoingRelations: [
                                     {
                                         type: 'CssFontFaceSrc',
@@ -649,7 +643,6 @@ describe('transforms/subsetGoogleFonts', function () {
                                 url: fontCssUrlRegExp,
                                 isLoaded: true,
                                 isInline: false,
-                                isMinified: true,
                                 outgoingRelations: [
                                     {
                                         type: 'CssFontFaceSrc',
@@ -853,8 +846,7 @@ describe('transforms/subsetGoogleFonts', function () {
                                 .and('to end with', '.css')
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
-                                isLoaded: true,
-                                isMinified: true
+                                isLoaded: true
                             }
                         },
                         {
@@ -1143,7 +1135,7 @@ describe('transforms/subsetGoogleFonts', function () {
                 .queue(function (assetGraph) {
                     var cssAsset = assetGraph.findAssets({ type: 'Css', fileName: /fonts-/ })[0];
 
-                    expect(cssAsset.text, 'to contain', 'font-weight:400;font-display:fallback');
+                    expect(cssAsset.text, 'to contain', 'font-display:fallback;font-family:\'Open Sans__subset\';font-style:normal;font-weight');
                 });
         });
     });

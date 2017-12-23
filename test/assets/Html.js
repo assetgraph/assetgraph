@@ -665,9 +665,11 @@ describe('assets/Html', function () {
 
         await assetGraph.externalizeRelations({type: ['HtmlStyle', 'HtmlScript']});
 
-        for (const asset of assetGraph.findAssets({type: ['Css', 'JavaScript']})) {
+        for (const asset of assetGraph.findAssets({type: ['JavaScript']})) {
             asset.minify();
         }
+
+        await assetGraph.minifyCss();
 
         await assetGraph.serializeSourceMaps();
 
