@@ -173,21 +173,23 @@ describe('tranforms/inlineCriticalCss', function () {
         await assetGraph.loadAssets('simple.html')
             .populate();
 
-        for (const asset of assetGraph.findAssets({isLoaded: true, isInline: false})) {
+        for (const asset of assetGraph.findAssets({type: 'Html', isLoaded: true, isInline: false})) {
             asset.minify();
         }
 
         await assetGraph
+            .minifyCss()
             .inlineHtmlTemplates()
             .bundleRelations({type: 'HtmlStyle', to: {type: 'Css', isLoaded: true}, node: function (node) {return !node.hasAttribute('nobundle');}})
             .inlineCriticalCss()
             .mergeIdenticalAssets({isLoaded: true, isInline: false, type: ['JavaScript', 'Css']}); // The bundling might produce several identical files, especially the 'oneBundlePerIncludingAsset' strategy.
 
-        for (const asset of assetGraph.findAssets({isLoaded: true})) {
+        for (const asset of assetGraph.findAssets({type: 'Html', isLoaded: true})) {
             asset.minify();
         }
 
         assetGraph
+            .minifyCss()
             .queue(function (assetGraph) {
                 expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
                     {
