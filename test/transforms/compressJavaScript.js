@@ -203,4 +203,19 @@ describe('transforms/compressJavaScript', function () {
                     .and('not to contain', '++this.foo.bar');
             });
     });
+
+    // https://github.com/mishoo/UglifyJS2/issues/180
+    it('should not break code that has a comment before EOF', function () {
+        return new AssetGraph()
+            .loadAssets({
+                type: 'JavaScript',
+                url: 'http://example.com/script.js',
+                text:
+                    'var foo = 123;//@preserve bar'
+            })
+            .compressJavaScript({type: 'JavaScript'})
+            .queue(function (assetGraph) {
+                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'var foo=123;//@preserve bar\n');
+            });
+    });
 });
