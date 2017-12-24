@@ -215,7 +215,7 @@ describe('transforms/compressJavaScript', function () {
             })
             .compressJavaScript({type: 'JavaScript'})
             .queue(function (assetGraph) {
-                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'var foo=123;//@preserve bar\n');
+                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'var foo=123;//@preserve bar');
             });
     });
 });
