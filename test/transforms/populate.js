@@ -30,7 +30,7 @@ describe('transforms/populate', function () {
         expect(assetGraph, 'to contain assets', 5);
         expect(assetGraph, 'to contain relations', 4);
 
-        const matches = assetGraph.findAssets({url: /\/index\.html$/})[0].text.match(/<a [^>]*?>/g);
+        const matches = assetGraph.findAssets({fileName: 'index.html'})[0].text.match(/<a [^>]*?>/g);
         expect(matches, 'not to be null');
         expect(matches, 'to have length', 4);
     });
@@ -65,7 +65,7 @@ describe('transforms/populate', function () {
             'absolute'
         ]);
 
-        expect(assetGraph.findAssets({url: /\/index\.html$/})[0].text.match(/src="(.*?)"/g), 'to equal', [
+        expect(assetGraph.findAssets({fileName: 'index.html'})[0].text.match(/src="(.*?)"/g), 'to equal', [
             'src="//cdn.example.com/jquery.min.js"',
             'src="http://cdn.example.com/jquery.min.js"',
             'src="https://cdn.example.com/jquery.min.js"'

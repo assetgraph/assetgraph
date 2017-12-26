@@ -36,7 +36,7 @@ describe('transforms/addCacheManifest', function () {
         expect(cacheManifest.text, 'to contain', 'NETWORK:\n# I am a comment\n/helloworld.php\n');
         expect(cacheManifest.text, 'to contain', 'FALLBACK:\nheresthething.asp foo.png\n');
 
-        assetGraph.findAssets({url: /foo.png$/})[0].url = urlTools.resolveUrl(assetGraph.root, 'somewhere/else/quux.png');
+        assetGraph.findAssets({fileName: 'foo.png'})[0].url = urlTools.resolveUrl(assetGraph.root, 'somewhere/else/quux.png');
 
         expect(cacheManifest.text, 'not to match', /\bfoo.png/);
         expect(cacheManifest.text, 'to contain', 'FALLBACK:\nheresthething.asp somewhere/else/quux.png\n');
@@ -88,14 +88,14 @@ describe('transforms/addCacheManifest', function () {
 
         expect(assetGraph, 'to contain assets', 'CacheManifest', 2);
 
-        const cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/index\.html$/}}})[0];
+        const cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'index.html'}}})[0];
         expect(assetGraph, 'to contain relations', {from: cacheManifest}, 2);
-        expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/foo\.png$/}});
-        expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/otherpage\.html$/}});
+        expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'foo.png'}});
+        expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'otherpage.html'}});
 
-        const otherCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/otherpage\.html$/}}})[0];
+        const otherCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'otherpage.html'}}})[0];
         expect(assetGraph, 'to contain relation', {from: otherCacheManifest});
-        expect(assetGraph.findRelations({from: cacheManifest})[0].to, 'to equal', assetGraph.findAssets({url: /\/foo\.png$/})[0]);
+        expect(assetGraph.findRelations({from: cacheManifest})[0].to, 'to equal', assetGraph.findAssets({fileName: 'foo.png'})[0]);
     });
 
     it('should add a cache manifest and update the existing one in a multi-page test case with one existing manifest', async function () {
@@ -112,15 +112,15 @@ describe('transforms/addCacheManifest', function () {
 
         expect(assetGraph, 'to contain assets', 'CacheManifest', 2);
 
-        var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/pageone\.html$/}}})[0];
+        var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'pageone.html'}}})[0];
         expect(assetGraph, 'to contain relations', {from: cacheManifest}, 3);
-        expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/style\.css/}});
-        expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/quux\.png/}});
-        expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {url: /\/foo\.png/}});
+        expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'style.css'}});
+        expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'quux.png'}});
+        expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'foo.png'}});
 
-        var pageTwoCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {url: /\/pagetwo\.html$/}}})[0];
+        var pageTwoCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'pagetwo.html'}}})[0];
         expect(assetGraph, 'to contain relations', {from: pageTwoCacheManifest}, 2);
-        expect(assetGraph, 'to contain relation', {from: pageTwoCacheManifest, to: {url: /\/style\.css/}});
-        expect(assetGraph, 'to contain relation', {from: pageTwoCacheManifest, to: {url: /\/quux\.png/}});
+        expect(assetGraph, 'to contain relation', {from: pageTwoCacheManifest, to: {fileName: 'style.css'}});
+        expect(assetGraph, 'to contain relation', {from: pageTwoCacheManifest, to: {fileName: 'quux.png'}});
     });
 });

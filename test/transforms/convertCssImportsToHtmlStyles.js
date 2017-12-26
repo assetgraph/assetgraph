@@ -30,7 +30,7 @@ describe('transforms/convertCssImportsToHtmlStyles', function () {
                 expect(assetGraph, 'to contain relations', 'HtmlStyle', 4);
                 expect(assetGraph, 'to contain relation', {type: 'HtmlStyle', hrefType: 'rootRelative'});
                 expect(assetGraph, 'to contain no relations', {type: 'CssImport'});
-                expect(assetGraph.findRelations({type: 'HtmlStyle', to: {url: /\/foo2\.css$/}})[0].node.getAttribute('media'), 'to equal', 'print');
+                expect(assetGraph.findRelations({type: 'HtmlStyle', to: {fileName: 'foo2.css'}})[0].node.getAttribute('media'), 'to equal', 'print');
 
                 expect(
                     assetGraph.findAssets({type: 'Html'})[0].text.match(/href=\"([^\'\"]+)\"/g),

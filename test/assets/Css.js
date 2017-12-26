@@ -82,7 +82,7 @@ describe('assets/Css', function () {
         expect(asset.text, 'to be', 'body {\n    background: red;\n}\n');
     });
 
-    it('should propagate source map source map information when pretty-printing', async function () {
+    it('should propagate source map information when pretty-printing', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Css/prettyPrintWithSourceMap/'});
         await assetGraph.loadAssets('index.css');
 

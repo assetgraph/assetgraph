@@ -475,15 +475,16 @@ describe('assets/Asset', function () {
             const assetClone = indexHtml.clone();
             assetClone.url = indexHtml.url.replace(/\.html$/, '.clone.html');
 
-            expect(assetGraph, 'to contain asset', {url: /\/index\.clone\.html$/});
-            expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {url: /\/anotherpage\.html$/}});
-            expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {url: /\/yetanotherpage\.html$/}});
-            expect(assetGraph, 'to contain relation', {from: {url: /\/index\.clone\.html$/}, to: {type: 'Css'}});
+            expect(assetGraph, 'to contain asset', {fileName: 'index.clone.html'});
+            expect(assetGraph, 'to contain relation', {from: {fileName: 'index.clone.html'}, to: {fileName: 'anotherpage.html'}});
+            expect(assetGraph, 'to contain relation', {from: {fileName: 'index.clone.html'}, to: {fileName: 'yetanotherpage.html'}});
+            expect(assetGraph, 'to contain relation', {from: {fileName: 'index.clone.html'}, to: {type: 'Css'}});
             expect(assetGraph, 'to contain asset', 'Png');
             expect(assetGraph, 'to contain assets', {type: 'Css', isInline: true}, 2);
 
-            const originalAndCloned = assetGraph.findAssets({url: /\/index(?:\.clone)?.html/});
-            expect(originalAndCloned[0].text, 'to equal', originalAndCloned[1].text);
+            const original = assetGraph.findAssets({fileName: 'index.html'})[0];
+            const cloned = assetGraph.findAssets({fileName: 'index.clone.html'})[0];
+            expect(original.text, 'to equal', cloned.text);
         });
 
         it('should handle a test case with a Css asset with an inline image', async function () {
@@ -699,7 +700,7 @@ describe('assets/Asset', function () {
 
             expect(assetGraph, 'to contain relation', 'HtmlAnchor');
 
-            const fooHtml = assetGraph.findAssets({url: /\/foo\.html$/})[0];
+            const fooHtml = assetGraph.findAssets({fileName: 'foo.html'})[0];
             fooHtml.text = '<!DOCTYPE html>\n<html><head></head><body><a href="baz.html">Another link text</a></body></html>';
 
             expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: assetGraph.findAssets({type: 'Html', url: /\/baz\.html$/})});
@@ -708,7 +709,7 @@ describe('assets/Asset', function () {
 
             fooHtml.addRelation({
                 type: 'HtmlAnchor',
-                to: assetGraph.findAssets({url: /\/quux\.html$/})[0]
+                to: assetGraph.findAssets({fileName: 'quux.html'})[0]
             }, 'after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
 
             expect(fooHtml.text, 'to match', /baz\.html/);
@@ -1014,7 +1015,7 @@ describe('assets/Asset', function () {
             .populate();
 
         expect(assetGraph, 'to contain assets', 2);
-        expect(assetGraph, 'to contain asset', {url: /\/otherpage\.html$/});
+        expect(assetGraph, 'to contain asset', {fileName: 'otherpage\.html'});
         expect(assetGraph, 'to contain relation', {href: 'otherpage.html#fragment1'});
         expect(assetGraph, 'to contain relation', {href: 'otherpage.html#fragment2'});
 

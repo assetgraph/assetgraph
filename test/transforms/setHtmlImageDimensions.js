@@ -9,19 +9,19 @@ describe('transforms/setHtmlImageDimensions', function () {
             .populate()
             .setHtmlImageDimensions()
             .queue(function (assetGraph) {
-                var node = assetGraph.findRelations({type: 'HtmlImage', to: {url: /\/foo\.png$/}})[0].node;
+                var node = assetGraph.findRelations({type: 'HtmlImage', to: {fileName: 'foo.png'}})[0].node;
                 expect(node.getAttribute('width'), 'to equal', '12');
                 expect(node.getAttribute('height'), 'to equal', '5');
 
-                node = assetGraph.findRelations({type: 'HtmlImage', to: {url: /\/bar\.jpg$/}})[0].node;
+                node = assetGraph.findRelations({type: 'HtmlImage', to: {fileName: 'bar.jpg'}})[0].node;
                 expect(node.getAttribute('width'), 'to equal', '20');
                 expect(node.getAttribute('height'), 'to equal', '20');
 
-                node = assetGraph.findRelations({type: 'HtmlImage', to: {url: /\/quux\.gif$/}})[0].node;
+                node = assetGraph.findRelations({type: 'HtmlImage', to: {fileName: 'quux.gif'}})[0].node;
                 expect(node.getAttribute('width'), 'to equal', '15');
                 expect(node.getAttribute('height'), 'to equal', '15');
 
-                var htmlImages = assetGraph.findRelations({type: 'HtmlImage', to: {url: /\/foo\.png$/}});
+                var htmlImages = assetGraph.findRelations({type: 'HtmlImage', to: {fileName: 'foo.png'}});
                 expect(htmlImages[1].node.hasAttribute('height'), 'to equal', false);
                 expect(htmlImages[1].node.getAttribute('width'), 'to equal', '123');
                 expect(htmlImages[2].node.hasAttribute('width'), 'to equal', false);
@@ -29,7 +29,7 @@ describe('transforms/setHtmlImageDimensions', function () {
                 expect(htmlImages[3].node.getAttribute('width'), 'to equal', '123');
                 expect(htmlImages[3].node.getAttribute('height'), 'to equal', '123');
 
-                var svgHtmlImages = assetGraph.findRelations({type: 'HtmlImage', to: {url: /\.svg$/}});
+                var svgHtmlImages = assetGraph.findRelations({type: 'HtmlImage', to: {type: 'Svg'}});
                 expect(svgHtmlImages[0].node.getAttribute('width'), 'to equal', '612');
                 expect(svgHtmlImages[0].node.getAttribute('height'), 'to equal', '502.174');
             });

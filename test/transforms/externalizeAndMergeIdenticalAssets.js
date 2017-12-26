@@ -17,16 +17,16 @@ describe('transforms/externalizeRelations and transforms/mergeIdenticalAssets', 
 
                 var typeTwos = assetGraph.findAssets({type: 'JavaScript', text: /TypeTwo/});
                 expect(typeTwos, 'to have length', 1);
-                expect(assetGraph, 'to contain relation', {from: {url: /first\.html$/}, to: typeTwos[0]});
-                expect(assetGraph, 'to contain relation', {from: {url: /second\.html$/}, to: typeTwos[0]});
+                expect(assetGraph, 'to contain relation', {from: {fileName: 'first.html'}, to: typeTwos[0]});
+                expect(assetGraph, 'to contain relation', {from: {fileName: 'second.html'}, to: typeTwos[0]});
 
                 var typeThrees = assetGraph.findAssets({type: 'JavaScript', text: /TypeThree/});
                 expect(typeThrees, 'to have length', 1);
-                expect(assetGraph, 'to contain relation', {from: {url: /first\.html$/}, to: typeThrees[0]});
-                expect(assetGraph, 'to contain relation', {from: {url: /second\.html$/}, to: typeThrees[0]});
+                expect(assetGraph, 'to contain relation', {from: {fileName: 'first.html'}, to: typeThrees[0]});
+                expect(assetGraph, 'to contain relation', {from: {fileName: 'second.html'}, to: typeThrees[0]});
 
                 expect(assetGraph, 'to contain relations', {
-                    from: assetGraph.findAssets({url: /first\.html$/})[0],
+                    from: assetGraph.findAssets({fileName: 'first.html'})[0],
                     to: {
                         text: /TypeOne/
                     }

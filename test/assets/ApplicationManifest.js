@@ -42,8 +42,8 @@ describe('assets/ApplicationManifest', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JsonUrl', 2);
-                expect(assetGraph, 'to contain asset', { url: /\.png/ });
-                expect(assetGraph, 'to contain asset', { url: /\.jpg/ });
+                expect(assetGraph, 'to contain asset', 'Png');
+                expect(assetGraph, 'to contain asset', 'Jpeg');
             });
     });
 

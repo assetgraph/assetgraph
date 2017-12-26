@@ -13,7 +13,7 @@ describe('relations/HtmlConditionalComment', function () {
 
         assetGraph.findAssets({type: 'JavaScript'})[0].url = urlTools.resolveUrl(assetGraph.root, 'fixIE6ForTheLoveOfGod.js');
 
-        let text = assetGraph.findAssets({url: /index\.html$/})[0].text;
+        let text = assetGraph.findAssets({fileName: 'index.html'})[0].text;
         expect(text, 'to match', /Good old/);
         expect(text, 'to match', /<script src="fixIE6ForTheLoveOfGod\.js"><\/script>/);
 
@@ -25,7 +25,7 @@ describe('relations/HtmlConditionalComment', function () {
             asset.minify();
         }
 
-        text = assetGraph.findAssets({url: /\/index\.html$/})[0].text;
+        text = assetGraph.findAssets({fileName: 'index.html'})[0].text;
         expect(text, 'to match', /Good old/);
         expect(text, 'to match', /<script src=fixIE6ForTheLoveOfGod\.js><\/script>/);
         expect(text, 'to match', /<!--\[if !IE\]>\s*--> Not IE<!--\s*<!\[endif\]-->/);

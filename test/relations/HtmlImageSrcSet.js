@@ -14,10 +14,10 @@ describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', f
                 expect(assetGraph, 'to contain asset', 'SrcSet');
                 expect(assetGraph, 'to contain relations', 'SrcSetEntry', 3);
 
-                assetGraph.findAssets({url: /\/banner-phone\.jpeg$/})[0].url = 'http://example.com/foo.jpg';
+                assetGraph.findAssets({fileName: 'banner-phone.jpeg'})[0].url = 'http://example.com/foo.jpg';
 
                 expect(
-                    assetGraph.findAssets({url: /\/index\.html$/})[0].text,
+                    assetGraph.findAssets({fileName: 'index.html'})[0].text,
                     'to match',
                     /srcset=\"banner-HD\.jpeg 2x, http:\/\/example.com\/foo\.jpg 100w, banner-phone-HD\.jpeg 100w 2x\"/
                 );
@@ -38,10 +38,10 @@ describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', f
                 expect(assetGraph, 'to contain asset', {fileName: 'banner-phone.jpeg'});
                 expect(assetGraph, 'to contain asset', {fileName: 'banner,HD.jpeg'});
 
-                assetGraph.findAssets({url: /\/banner,HD\.jpeg$/})[0].url = 'http://example.com/foo.jpg';
+                assetGraph.findAssets({fileName: 'banner,HD.jpeg'})[0].url = 'http://example.com/foo.jpg';
 
                 expect(
-                    assetGraph.findAssets({url: /\/index\.html$/})[0].text,
+                    assetGraph.findAssets({fileName: 'index.html'})[0].text,
                     'to contain',
                     'srcset="http://example.com/foo.jpg 2x, banner-phone.jpeg?foo,bar 100w 2x"'
                 );

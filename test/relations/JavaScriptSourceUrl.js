@@ -11,13 +11,13 @@ describe('relations/JavaScriptSourceUrl', function () {
                 expect(assetGraph, 'to contain assets', 4);
                 expect(assetGraph, 'to contain relations', 'JavaScriptSourceUrl', 2);
 
-                assetGraph.findAssets({url: /\/bundle\.js$/})[0].markDirty();
+                assetGraph.findAssets({fileName: 'bundle.js'})[0].markDirty();
 
-                var javaScript = assetGraph.findAssets({url: /\/bundle\.js$/})[0];
+                var javaScript = assetGraph.findAssets({fileName: 'bundle.js'})[0];
                 expect(javaScript.text, 'to match', /@\s*sourceURL=bar\.js/);
                 expect(javaScript.text, 'to match', /@\s*sourceURL=foo\.js/);
 
-                assetGraph.findAssets({url: /\/bundle\.js$/})[0].url = assetGraph.root + 'foo/bundle.js';
+                assetGraph.findAssets({fileName: 'bundle.js'})[0].url = assetGraph.root + 'foo/bundle.js';
 
                 expect(javaScript.text, 'to match', /@\s*sourceURL=..\/bar\.js/);
                 expect(javaScript.text, 'to match', /@\s*sourceURL=..\/foo\.js/);
@@ -33,8 +33,8 @@ describe('relations/JavaScriptSourceUrl', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'JavaScriptSourceUrl', 2);
 
-                expect(assetGraph.findAssets({url: /\/foo\.js$/})[0].text, 'to match', /#\s*sourceURL=\/foo\.js/);
-                expect(assetGraph.findAssets({url: /\/bar\.js$/})[0].text, 'to match', /#\s*sourceURL=\/bar\.js/);
+                expect(assetGraph.findAssets({fileName: 'foo.js'})[0].text, 'to match', /#\s*sourceURL=\/foo\.js/);
+                expect(assetGraph.findAssets({fileName: 'bar.js'})[0].text, 'to match', /#\s*sourceURL=\/bar\.js/);
             })
             .bundleRelations({type: 'HtmlScript'})
             .queue(function (assetGraph) {

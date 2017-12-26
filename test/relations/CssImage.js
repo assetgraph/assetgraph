@@ -10,9 +10,9 @@ describe('relations/CssImage', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain relations', 'CssImage', 17);
-                assetGraph.findAssets({url: /\/foo\.png$/})[0].url = assetGraph.root + 'dir/foo2.png';
+                assetGraph.findAssets({fileName: 'foo.png'})[0].url = assetGraph.root + 'dir/foo2.png';
 
-                expect(_.map(assetGraph.findRelations({to: assetGraph.findAssets({url: /\/foo2\.png$/})}), 'href'), 'to equal', [
+                expect(_.map(assetGraph.findRelations({to: assetGraph.findAssets({fileName: 'foo2.png'})}), 'href'), 'to equal', [
                     'dir/foo2.png',
                     'dir/foo2.png',
                     'dir/foo2.png',
@@ -32,7 +32,7 @@ describe('relations/CssImage', function () {
                     'dir/foo2.png'
                 ]);
 
-                expect(assetGraph.findAssets({url: /\/index\.css$/})[0].text, 'to match', /\.baz {\n    background-image: url\(dir\/foo2\.png\) !important/);
+                expect(assetGraph.findAssets({fileName: 'index.css'})[0].text, 'to match', /\.baz {\n    background-image: url\(dir\/foo2\.png\) !important/);
             })
             .run(done);
     });

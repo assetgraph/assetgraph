@@ -314,7 +314,7 @@ describe('transforms/bundleRequireJs', function () {
         await assetGraph.loadAssets('*.html')
             .populate()
             .bundleRequireJs({type: 'Html'});
-        const htmlScripts1 = assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index1\.html$/}});
+        const htmlScripts1 = assetGraph.findRelations({type: 'HtmlScript', from: {fileName: 'index1.html'}});
 
         expect(htmlScripts1, 'to have length', 2);
         expect(htmlScripts1[1].to.parseTree, 'to have the same AST as', function () {
@@ -332,7 +332,7 @@ describe('transforms/bundleRequireJs', function () {
             /* eslint-enable */
         });
 
-        const htmlScripts2 = assetGraph.findRelations({type: 'HtmlScript', from: {url: /\/index2\.html$/}});
+        const htmlScripts2 = assetGraph.findRelations({type: 'HtmlScript', from: {fileName: 'index2.html'}});
         expect(htmlScripts2, 'to have length', 2);
         expect(htmlScripts2[1].to.parseTree, 'to have the same AST as', function () {
             /* eslint-disable */
@@ -356,10 +356,10 @@ describe('transforms/bundleRequireJs', function () {
             .populate()
             .bundleRequireJs({type: 'Html'});
 
-        expect(_.map(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index\.html$/}}), 'href'), 'to equal', [
+        expect(_.map(assetGraph.findRelations({type: 'HtmlStyle', from: {fileName: 'index.html'}}), 'href'), 'to equal', [
             'main-bundle.css'
         ]);
-        expect(_.map(assetGraph.findRelations({type: 'HtmlStyle', from: {url: /\/index2\.html$/}}), 'href'), 'to equal', [
+        expect(_.map(assetGraph.findRelations({type: 'HtmlStyle', from: {fileName: 'index2.html'}}), 'href'), 'to equal', [
             'main2-bundle.css'
         ]);
     });

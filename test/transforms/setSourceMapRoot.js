@@ -27,7 +27,7 @@ describe('transforms/setSourceMapRoot', function () {
             await assetGraph.loadAssets('index.html')
                 .populate();
 
-            expect(assetGraph, 'to contain asset', {url: /\.less$/, isLoaded: true});
+            expect(assetGraph, 'to contain asset', {extension: '.less', isLoaded: true});
 
             await assetGraph.setSourceMapRoot(null, 'somewhereElse');
 
@@ -42,7 +42,7 @@ describe('transforms/setSourceMapRoot', function () {
                 .populate()
                 .setSourceMapRoot(null, 'somewhereElse');
 
-            assetGraph.findAssets({url: /\.less$/})[0].url = assetGraph.root + 'somewhereElse/bar.less';
+            assetGraph.findAssets({extension: '.less'})[0].url = assetGraph.root + 'somewhereElse/bar.less';
             expect(assetGraph.findAssets({type: 'SourceMap'})[0].parseTree, 'to satisfy', {
                 sources: ['bar.less']
             });
@@ -55,12 +55,12 @@ describe('transforms/setSourceMapRoot', function () {
                     followRelations: {from: {type: AssetGraph.query.not('SourceMap')}}
                 });
 
-            expect(assetGraph, 'to contain no assets', {url: /\.less$/, isLoaded: true});
+            expect(assetGraph, 'to contain no assets', {extension: '.less', isLoaded: true});
 
             await assetGraph.setSourceMapRoot(null, 'theSources')
                 .populate({from: {type: 'SourceMap'}});
 
-            expect(assetGraph, 'to contain asset', {url: /\.less$/, isLoaded: true});
+            expect(assetGraph, 'to contain asset', {extension: '.less', isLoaded: true});
             expect(assetGraph.findAssets({type: 'SourceMap'})[0].parseTree, 'to satisfy', {
                 sources: ['foo.less']
             });

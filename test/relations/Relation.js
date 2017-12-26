@@ -310,8 +310,8 @@ describe('relations/Relation', function () {
                     expect(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})), 'to equal',
                         ['a.js', 'b.js', 'c.js']);
 
-                    var relation = assetGraph.findRelations({to: {url: /\/b\.js$/}})[0];
-                    relation.to = assetGraph.findAssets({url: /\/d\.js$/})[0];
+                    var relation = assetGraph.findRelations({to: {fileName: 'b.js'}})[0];
+                    relation.to = assetGraph.findAssets({fileName: 'd.js'})[0];
                     relation.refreshHref();
 
                     expect(getTargetFileNames(assetGraph.findRelations()), 'to equal',

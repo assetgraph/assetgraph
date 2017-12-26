@@ -8,13 +8,13 @@ describe('relations/HtmlEdgeSideInclude', function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlEdgeSideInclude/'});
         await assetGraph.loadAssets('index.html')
             .populate({
-                followRelations: {to: {url: /\.html$/}}
+                followRelations: {to: {type: 'Html'}}
             });
 
         expect(assetGraph, 'to contain assets', 'Html', 2);
         expect(assetGraph, 'to contain relations', 'HtmlEdgeSideInclude', 2);
         expect(assetGraph, 'to contain relations', 'HtmlEdgeSideInclude', 2);
-        assetGraph.findAssets({url: /\/index\.html/})[0].url = urlTools.resolveUrl(assetGraph.root, 'foo/index.html');
+        assetGraph.findAssets({fileName: 'index.html'})[0].url = urlTools.resolveUrl(assetGraph.root, 'foo/index.html');
         expect(
             assetGraph.findRelations({to: {url: /\.php$/}, type: 'HtmlEdgeSideInclude'})[0].href,
             'to equal',

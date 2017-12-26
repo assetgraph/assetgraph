@@ -16,8 +16,8 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
         expect(assetGraph, 'to contain assets', 'Css', 7);
 
         // the ?inline=false parameter should be removed from the urls in the css assets:
-        expect(assetGraph.findAssets({url: /\/smallImagesWithInlineFalse\.css$/})[0].text, 'not to match', /inline=false/);
-        expect(assetGraph.findAssets({url: /\/imageGreaterThan32KBWithInlineParameter\.css$/})[0].text, 'not to match', /inline/);
+        expect(assetGraph.findAssets({fileName: 'smallImagesWithInlineFalse.css'})[0].text, 'not to match', /inline=false/);
+        expect(assetGraph.findAssets({fileName: 'imageGreaterThan32KBWithInlineParameter.css'})[0].text, 'not to match', /inline/);
 
         expect(assetGraph, 'to contain relations', 'HtmlConditionalComment', 7);
         expect(assetGraph, 'to contain relations', {type: 'CssImage', to: {isInline: true}}, 3);
@@ -71,9 +71,9 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function () {
         expect(assetGraph, 'to contain relations', 'HtmlConditionalComment', 2);
         expect(assetGraph, 'to contain relations', {type: 'CssImage', to: {isInline: true}}, 2);
 
-        expect(assetGraph.findAssets({type: 'Html', url: /\/1.html$/})[0].text.match(/<link[^>]*>/g), 'to have length', 2);
+        expect(assetGraph.findAssets({type: 'Html', fileName: '1.html'})[0].text.match(/<link[^>]*>/g), 'to have length', 2);
 
-        expect(assetGraph.findAssets({type: 'Html', url: /\/2.html$/})[0].text.match(/<link[^>]*>/g), 'to have length', 2);
+        expect(assetGraph.findAssets({type: 'Html', fileName: '2.html'})[0].text.match(/<link[^>]*>/g), 'to have length', 2);
 
         assetGraph.findAssets({type: 'Html', isInline: false}).forEach(function (htmlAsset) {
             expect(htmlAsset.text.match(/<!--\[if gte IE 8\]><!-->/g), 'to have length', 1);

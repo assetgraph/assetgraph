@@ -9,7 +9,7 @@ describe('bundleWebpack', function () {
             .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
 
         expect(assetGraph, 'to contain asset', { type: 'JavaScript', isLoaded: true });
-        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 1);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'index.html' } }, 1);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
             fileName: /bundle/

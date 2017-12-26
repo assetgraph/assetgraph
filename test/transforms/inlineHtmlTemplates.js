@@ -16,9 +16,9 @@ describe('transforms/inlineHtmlTemplates', function () {
             .inlineHtmlTemplates();
 
         expect(assetGraph, 'to contain relations', 'HtmlInlineScriptTemplate', 2);
-        expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate', from: {url: /\/index\.html$/}}, 2);
+        expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate', from: {fileName: 'index.html'}}, 2);
         expect(
-            assetGraph.findAssets({url: /\/index\.html$/})[0].text,
+            assetGraph.findAssets({fileName: 'index.html'})[0].text,
             'to contain',
             '<script type="text/html" id="theEmbeddedTemplate" foo="bar">\n    <h1>This is an embedded template, which should also end up in the main document</h1>\n</script>' +
             '<script type="text/html" id="foo"><div></div>\n\n</script>'
@@ -38,9 +38,9 @@ describe('transforms/inlineHtmlTemplates', function () {
             .inlineHtmlTemplates();
 
         expect(assetGraph, 'to contain relations', 'HtmlInlineScriptTemplate', 6);
-        expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate', from: {url: /\/index\.html$/}}, 6);
+        expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate', from: {fileName: 'index.html'}}, 6);
         expect(
-            assetGraph.findAssets({url: /\/index\.html$/})[0].text,
+            assetGraph.findAssets({fileName: 'index.html'})[0].text,
             'to contain',
             '<script type="text/html" id="theEmbeddedTemplate" foo="bar">\n    <h1>This is the embedded template, which should also end up in the main document</h1>\n</script>' +
             '<script type="text/html" foo="bar1">\n    <h1>This embedded template has no id. This too should end up in the main document, along with it\'s attributes</h1>\n</script>' +
@@ -70,9 +70,9 @@ describe('transforms/inlineHtmlTemplates', function () {
             .inlineHtmlTemplates();
 
         expect(assetGraph, 'to contain relations', 'HtmlInlineScriptTemplate', 12);
-        expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate', from: {url: /\/index1\.html$/}}, 6);
+        expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate', from: {fileName: 'index1.html'}}, 6);
         expect(
-            assetGraph.findAssets({url: /\/index1\.html$/})[0].text,
+            assetGraph.findAssets({fileName: 'index1.html'})[0].text,
             'to contain',
             '<script type="text/html" id="theEmbeddedTemplate" foo="bar">\n    <h1>This is the embedded template, which should also end up in the main document</h1>\n</script>' +
             '<script type="text/html" foo="bar1">\n    <h1>This embedded template has no id. This too should end up in the main document, along with it\'s attributes</h1>\n</script>' +
@@ -88,9 +88,9 @@ describe('transforms/inlineHtmlTemplates', function () {
         expect(relation, 'to be ok');
         expect(relation.to.text, 'to equal', '<div>\n    <h1>bar.ko</h1>\n</div>\n');
 
-        expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate', from: {url: /\/index2\.html$/}}, 6);
+        expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate', from: {fileName: 'index2.html'}}, 6);
         expect(
-            assetGraph.findAssets({url: /\/index2\.html$/})[0].text,
+            assetGraph.findAssets({fileName: 'index2.html'})[0].text,
             'to contain',
             '<script type="text/html" id="theEmbeddedTemplate" foo="bar">\n    <h1>This is the embedded template, which should also end up in the main document</h1>\n</script>' +
             '<script type="text/html" foo="bar1">\n    <h1>This embedded template has no id. This too should end up in the main document, along with it\'s attributes</h1>\n</script>' +

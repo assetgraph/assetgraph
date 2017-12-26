@@ -109,10 +109,10 @@ describe('AssetGraph.findRelations', function () {
                 foo: function (val) {return typeof val !== 'undefined';}
             }
         }, 6);
-        expect(assetGraph, 'to contain relations', {
+        expect(assetGraph, 'to contain relation', {
             from: {
                 foo: function (val) {return typeof val === 'undefined';}
             }
-        }, 1);
+        });
     });
 });
