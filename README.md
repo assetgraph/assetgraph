@@ -173,7 +173,7 @@ var htmlAssets = assetGraph.findAssets({type: 'Html'});
 Find assets by matching a regular expression against the url:
 
 ```javascript
-var localImageAssets = assetGraph.findAssets({url: /^file:.*\.(?:png|gif|jpg)$/});
+var localImageAssets = assetGraph.findAssets({url: {$regex: ^file:.*\.(?:png|gif|jpg)$/}});
 ```
 
 Find assets by predicate function:
@@ -196,14 +196,14 @@ a multi-criteria query to match:
 ```javascript
 var textBasedAssetsOnGoogleCom = assetGraph.findAssets({
     isText: true,
-    url: /^https?:\/\/(?:www\.)google\.com\//
+    url: {$regex: /^https?:\/\/(?:www\.)google\.com\//}
 });
 ```
 
-Find assets by existence of incoming relations (experimental feature):
+Find assets by existence of incoming relations:
 
 ```javascript
-var importedCssAssets = assetGraph.findAssets({type: 'Css', incoming: {type: 'CssImport'}})
+var importedCssAssets = assetGraph.findAssets({type: 'Css', incomingRelations: {$elemMatch: {type: 'CssImport'}}})
 ```
 
 Relation queries can contain nested asset queries when querying the
@@ -214,7 +214,7 @@ Find all HtmlAnchor (`<a href=...>`) relations pointing at local images:
 ```javascript
 assetGraph.findRelations({
     type: 'HtmlAnchor',
-    to: {isImage: true, url: /^file:/}
+    to: {isImage: true, url: {$regex: /^file:/}}
 });
 ```
 
@@ -801,7 +801,7 @@ Example:
 new AssetGraph()
     .loadAssets('a.html')
     .populate({
-        followRelations: {type: 'HtmlAnchor', to: {url: /\/[bc]\.html$/}}
+        followRelations: {type: 'HtmlAnchor', to: {url: {$regex: /\/[bc]\.html$/}}}
     })
     .run(function (err, assetGraph) {
         // Done!

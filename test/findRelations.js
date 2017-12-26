@@ -1,7 +1,6 @@
 /*global describe, it*/
 const expect = require('./unexpected-with-plugins');
 const AssetGraph = require('../lib/AssetGraph');
-const query = AssetGraph.query;
 
 describe('AssetGraph.findRelations', function () {
     it('should handle a simple test case', async function () {
@@ -47,7 +46,7 @@ describe('AssetGraph.findRelations', function () {
         dCss.markDirty();
         dCss.addRelation({
             type: 'CssImage',
-            to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0],
+            to: assetGraph.findAssets({type: 'Png'})[0],
             parentNode: dCss.parseTree,
             propertyNode: dCssPropertyNode,
             node: dCssNode
@@ -59,7 +58,7 @@ describe('AssetGraph.findRelations', function () {
         dCss.markDirty();
         assetGraph.findAssets({text: 'body { color: #eee; }'})[0].addRelation({
             type: 'CssImage',
-            to: assetGraph.findAssets({rawSrc: new Buffer('f')})[0],
+            to: assetGraph.findAssets({type: 'Png'})[0],
             parentNode: eCss.parseTree,
             propertyNode: eCssPropertyNode,
             node: eCssNode
@@ -78,40 +77,40 @@ describe('AssetGraph.findRelations', function () {
             }
         }, 2);
         expect(assetGraph, 'to contain relations', {
-            type: ['HtmlAnchor', 'HtmlStyle'],
+            type: {$in: ['HtmlAnchor', 'HtmlStyle']},
             from: {
-                text: [aHtml.text, bHtml.text]
+                text: {$in: [aHtml.text, bHtml.text]}
             },
             to: {
-                type: ['Html', 'Css']
+                type: {$in: ['Html', 'Css']}
             }
         }, 5);
         expect(assetGraph, 'to contain relations', {
-            type: /CssIm|HtmlAn/,
+            type: {$regex: /CssIm|HtmlAn/},
             from: {
-                text: /^a|#ddd/
+                text: {$regex: /^a|#ddd/}
             }
         }, 3);
-        expect(assetGraph, 'to contain relations', {
+        expect(assetGraph, 'to contain relation', {
             type: /Style/,
             from: {
-                text: /^a<link rel=/
+                text: {$regex: /^a<link rel=/}
             }
-        }, 1);
+        });
         expect(assetGraph, 'to contain relations', {
-            type: query.not('CssImage'),
+            type: {$not: 'CssImage'},
             from: {
-                text: query.not(/^a<link rel=/)
+                text: {$not: /^a<link rel=/}
             }
         }, 2);
         expect(assetGraph, 'to contain relations', {
             from: {
-                foo: function (val) {return typeof val !== 'undefined';}
+                foo(val) {return typeof val !== 'undefined';}
             }
         }, 6);
         expect(assetGraph, 'to contain relation', {
             from: {
-                foo: function (val) {return typeof val === 'undefined';}
+                foo(val) {return typeof val === 'undefined';}
             }
         });
     });

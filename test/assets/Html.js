@@ -672,9 +672,9 @@ describe('assets/Html', function () {
         assetGraph.findAssets({type: 'JavaScript'})[0].markDirty();
         assetGraph.findAssets({type: 'Css'})[0].markDirty();
 
-        await assetGraph.externalizeRelations({type: ['HtmlStyle', 'HtmlScript']});
+        await assetGraph.externalizeRelations({type: {$in: ['HtmlStyle', 'HtmlScript']}});
 
-        for (const asset of assetGraph.findAssets({type: ['JavaScript']})) {
+        for (const asset of assetGraph.findAssets({type: {$in: ['JavaScript']}})) {
             asset.minify();
         }
 

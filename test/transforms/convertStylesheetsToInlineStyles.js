@@ -16,7 +16,7 @@ describe('transforms/convertStylesheetsToInlineStyles', function () {
         await assetGraph.convertStylesheetsToInlineStyles({type: 'Html'}, 'screen');
 
         expect(assetGraph, 'to contain assets', 7);
-        expect(assetGraph, 'to contain no relations', {type: ['HtmlStyle', 'CssImport']});
+        expect(assetGraph, 'to contain no relations', {type: {$in: ['HtmlStyle', 'CssImport']}});
         expect(assetGraph, 'to contain relations', 'HtmlStyleAttribute', 5);
 
         const document = assetGraph.findAssets({type: 'Html'})[0].parseTree;

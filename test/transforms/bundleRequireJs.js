@@ -637,7 +637,7 @@ describe('transforms/bundleRequireJs', function () {
         it('should handle a non-almond test case', async function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/almond/mixed/'});
             await assetGraph.loadAssets('require-pure.html');
-            await assetGraph.populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}});
+            await assetGraph.populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: {$regex: /^file:/}}}});
             await assetGraph.populate();
 
             expect(assetGraph, 'to contain asset', 'JavaScript');
@@ -652,7 +652,7 @@ describe('transforms/bundleRequireJs', function () {
         it('should handle a test case with several data-almond attributes', async function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/almond/mixed/'});
             await assetGraph.loadAssets('require-almond.html');
-            await assetGraph.populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}});
+            await assetGraph.populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: {$regex: /^file:/}}}});
             await assetGraph.populate();
 
             expect(assetGraph, 'to contain asset', 'JavaScript');
@@ -666,13 +666,13 @@ describe('transforms/bundleRequireJs', function () {
             expect(assetGraph, 'to contain assets', 'JavaScript', 2);
             expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
 
-            expect(assetGraph.findAssets({url: /almond.js$/})[0].text, 'to equal', almond);
+            expect(assetGraph.findAssets({fileName: 'almond.js'})[0].text, 'to equal', almond);
         });
 
         it('should handle a test case where multiple Html assets use the same require.js and have a data-almond attribute', async function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/almond/multipleHtml/'});
             await assetGraph.loadAssets('*.html');
-            await assetGraph.populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}});
+            await assetGraph.populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: {$regex: /^file:/}}}});
             await assetGraph.populate();
 
             expect(assetGraph, 'to contain assets', 'Html', 2);

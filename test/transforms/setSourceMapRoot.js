@@ -52,7 +52,7 @@ describe('transforms/setSourceMapRoot', function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/setSourceMapRoot/wrongSourceRoot/'});
             await assetGraph.loadAssets('index.html')
                 .populate({
-                    followRelations: {from: {type: AssetGraph.query.not('SourceMap')}}
+                    followRelations: {from: {type: {$not: 'SourceMap'}}}
                 });
 
             expect(assetGraph, 'to contain no assets', {extension: '.less', isLoaded: true});
