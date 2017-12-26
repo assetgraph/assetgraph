@@ -18,12 +18,12 @@ describe('transforms/bundleSystemJs', function () {
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'index.html' } }, 4);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
-            fileName: /bundle/
+            fileName: { $regex: /bundle/ }
         });
         expect(assetGraph.findRelations({ from: { fileName: 'index.html' } })[2].to.text, 'to contain', 'alert(\'main!\');');
         expect(assetGraph.findRelations({
-            from: { url: /index\.html$/ },
-            to: { fileName: /bundle/ }
+            from: { fileName: 'index.html' },
+            to: { fileName: { $regex: /bundle/ } }
         })[0].to.text, 'to contain', 'alert(\'main!\');');
 
         await assetGraph.bundleRelations();
@@ -40,7 +40,7 @@ describe('transforms/bundleSystemJs', function () {
         let numNodesWithCorrectLoc = 0;
         estraverse.traverse(assetGraph.findAssets({
             type: 'JavaScript',
-            fileName: /bundle/
+            fileName: { $regex: /bundle/ }
         })[0].parseTree, {
             enter(node) {
                 if (node.loc && node.loc.source === assetGraph.root + 'main.js') {
@@ -67,7 +67,7 @@ describe('transforms/bundleSystemJs', function () {
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'index.html' } }, 5);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
-            fileName: /bundle/
+            fileName: { $regex: /bundle/ }
         });
 
         await assetGraph.bundleRelations();
@@ -78,7 +78,7 @@ describe('transforms/bundleSystemJs', function () {
     it('should handle a complex test case', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/test-tree/'});
         await assetGraph.loadAssets('index.html')
-            .populate({ followRelations: { type: AssetGraph.query.not('JavaScriptSystemImport') } });
+            .populate({ followRelations: { type: { $not: 'JavaScriptSystemImport' } } });
 
         expect(assetGraph, 'to contain assets', 'JavaScript', 4);
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'index.html' } }, 4);
@@ -89,7 +89,7 @@ describe('transforms/bundleSystemJs', function () {
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'index.html' } }, 5);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
-            fileName: /bundle/
+            fileName: { $regex: /bundle/ }
         });
 
         await assetGraph.bundleRelations();
@@ -114,15 +114,15 @@ describe('transforms/bundleSystemJs', function () {
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'page2.html' } }, 4);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
-            fileName: /bundle/
+            fileName: { $regex: /bundle/ }
         });
         expect(assetGraph.findRelations({
-            from: { url: /page1\.html$/ },
-            to: { fileName: /bundle/ }
+            from: { fileName: 'page1.html' },
+            to: { fileName: { $regex: /bundle/ } }
         })[0].to.text, 'to contain', 'alert(\'main!\');');
         expect(assetGraph.findRelations({
-            from: { url: /page2\.html$/ },
-            to: { fileName: /bundle/ }
+            from: { fileName: 'page2.html' },
+            to: { fileName: { $regex: /bundle/ } }
         })[0].to.text, 'to contain', 'alert(\'main!\');');
 
         await assetGraph.bundleRelations();
@@ -144,25 +144,25 @@ describe('transforms/bundleSystemJs', function () {
 
         expect(assetGraph, 'to contain assets', 'Html', 2);
         expect(assetGraph, 'to contain assets', 'JavaScript', 4);
-        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 3);
-        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 3);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'page1.html' } }, 3);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'page2.html' } }, 3);
 
         await assetGraph.bundleSystemJs();
 
         expect(assetGraph, 'to contain assets', 'JavaScript', 6);
-        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page1\.html$/} }, 4);
-        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /page2\.html$/} }, 4);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'page1.html' } }, 4);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'page2.html' } }, 4);
         expect(assetGraph, 'to contain assets', {
             type: 'JavaScript',
-            fileName: /bundle/
+            fileName: { $regex: /bundle/ }
         }, 2);
         expect(assetGraph.findRelations({
-            from: { url: /page1\.html$/ },
-            to: { fileName: /bundle/ }
+            from: { fileName: 'page1.html' },
+            to: { fileName: { $regex: /bundle/ } }
         })[0].to.text, 'to contain', 'alert(\'main!\');');
         expect(assetGraph.findRelations({
-            from: { url: /page2\.html$/ },
-            to: { fileName: /bundle/ }
+            from: { fileName: 'page2.html' },
+            to: { fileName: { $regex: /bundle/ } }
         })[0].to.text, 'to contain', 'alert(\'otherMain!\');');
 
         await assetGraph.bundleRelations();
@@ -265,7 +265,7 @@ describe('transforms/bundleSystemJs', function () {
                 const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleSystemJs/onlyLess/'});
                 await assetGraph.loadAssets('index.html')
                     .populate({
-                        followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+                        followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
                     });
 
                 expect(assetGraph, 'to contain assets', 'Html', 1);
@@ -274,7 +274,7 @@ describe('transforms/bundleSystemJs', function () {
                 await assetGraph
                     .bundleSystemJs()
                     .populate({
-                        followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+                        followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
                     });
 
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', '<link rel="stylesheet" href="/styles.less">');

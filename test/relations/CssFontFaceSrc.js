@@ -26,9 +26,9 @@ describe('relations/CssFontFaceSrc', function () {
         expect(assetGraph, 'to contain asset', 'Css');
         expect(assetGraph, 'to contain relations', 'CssFontFaceSrc', 6);
 
-        assetGraph.findAssets({url: /\/fontawesome-webfont\.ttf$/})[0].url = 'http://example.com/foo.ttf';
+        assetGraph.findAssets({fileName: 'fontawesome-webfont.ttf'})[0].url = 'http://example.com/foo.ttf';
 
-        expect(assetGraph.findRelations({to: {url: /\/foo\.ttf$/}})[0].href, 'to equal', 'http://example.com/foo.ttf');
+        expect(assetGraph.findRelations({to: {fileName: 'foo.ttf'}})[0].href, 'to equal', 'http://example.com/foo.ttf');
 
         expect(assetGraph.findAssets({type: 'Css'})[0].parseTree.nodes[0].nodes[2].value.match(/\burl\((\'|\"|)([^\'\"]+?)\1\)/g), 'to equal', [
             'url(\'fontawesome-webfont.eot?#iefix\')',

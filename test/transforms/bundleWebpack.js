@@ -6,17 +6,17 @@ describe('bundleWebpack', function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/simple/'});
         await assetGraph.loadAssets('index.html')
             .bundleWebpack()
-            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
+            .populate({followRelations: {type: {$not: 'SourceMapSource'}}});
 
         expect(assetGraph, 'to contain asset', { type: 'JavaScript', isLoaded: true });
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'index.html' } }, 1);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
-            fileName: /bundle/
+            fileName: { $regex: /bundle/ }
         });
         expect(assetGraph.findRelations({
-            from: { url: /index\.html$/ },
-            to: { fileName: /bundle/ }
+            from: { fileName: 'index.html' },
+            to: { fileName: { $regex: /bundle/ } }
         })[0].to.text, 'to contain', 'alert(\'main!\');');
     });
 
@@ -24,17 +24,17 @@ describe('bundleWebpack', function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/publicPath/'});
         await assetGraph.loadAssets('index.html')
             .bundleWebpack()
-            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
+            .populate({followRelations: {type: {$not: 'SourceMapSource'}}});
 
         expect(assetGraph, 'to contain asset', { type: 'JavaScript', isLoaded: true });
-        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 1);
+        expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'index.html' } }, 1);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
-            fileName: /bundle/
+            fileName: { $regex: /bundle/ }
         });
         expect(assetGraph.findRelations({
-            from: { url: /index\.html$/ },
-            to: { fileName: /bundle/ }
+            from: { fileName: 'index.html' },
+            to: { fileName: { $regex: /bundle/ } }
         })[0].to.text, 'to contain', 'alert(\'main!\');');
     });
 
@@ -42,10 +42,10 @@ describe('bundleWebpack', function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/relationInBundle/'});
         await assetGraph.loadAssets('index.html')
             .bundleWebpack()
-            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
+            .populate({followRelations: {type: {$not: 'SourceMapSource'}}});
 
         expect(assetGraph, 'to contain asset', { type: 'Json', isLoaded: true });
-        expect(assetGraph, 'to contain relation', { type: 'JavaScriptStaticUrl', to: { fileName: /^[a-f0-9]{32}\.json$/ } });
+        expect(assetGraph, 'to contain relation', { type: 'JavaScriptStaticUrl', to: { fileName: {$regex: /^[a-f0-9]{32}\.json$/ } } });
     });
 
     it('should pick up source maps from webpack', async function () {
@@ -110,7 +110,7 @@ describe('bundleWebpack', function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/commonschunk/'});
         await assetGraph.loadAssets('index.html', 'secondary.html')
             .bundleWebpack()
-            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
+            .populate({followRelations: {type: {$not: 'SourceMapSource'}}});
 
         expect(assetGraph, 'to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'bundle.main.js' } })
             .and('to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'common.js' } });
@@ -123,7 +123,7 @@ describe('bundleWebpack', function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/commonschunk/'});
         await assetGraph.loadAssets('index.html')
             .bundleWebpack()
-            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
+            .populate({followRelations: {type: {$not: 'SourceMapSource'}}});
 
         expect(assetGraph, 'to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'bundle.main.js' } })
             .and('to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'common.js' } });
@@ -140,14 +140,14 @@ describe('bundleWebpack', function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/codeSplit/'});
         await assetGraph.loadAssets('index.html')
             .bundleWebpack()
-            .populate({followRelations: {type: AssetGraph.query.not('SourceMapSource')}});
+            .populate({followRelations: {type: {$not: 'SourceMapSource'}}});
 
         // Webpack 1: 1.bundle.js
         // Webpack 2: 0.bundle.js
         expect(assetGraph, 'to contain asset', { fileName: 'bundle.js'})
-            .and('to contain asset', { fileName: /^[01]\.bundle\.js$/});
+            .and('to contain asset', { fileName: { $regex: /^[01]\.bundle\.js$/ }});
         expect(assetGraph, 'to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'bundle.js' } })
-            .and('to contain relation', { from: { fileName: 'bundle.js' }, to: { fileName: /^[01]\.bundle\.js$/ } });
+            .and('to contain relation', { from: { fileName: 'bundle.js' }, to: { fileName: { $regex: /^[01]\.bundle\.js$/ } } });
     });
 
     it('should support code splitting via require.ensure and wildcards', async function () {
@@ -155,7 +155,7 @@ describe('bundleWebpack', function () {
         await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .populate({
-                followRelations: {type: AssetGraph.query.not('SourceMapSource')}
+                followRelations: {type: {$not: 'SourceMapSource'}}
             });
 
         expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 4);
@@ -177,7 +177,7 @@ describe('bundleWebpack', function () {
         await assetGraph.loadAssets('index.html')
             .bundleWebpack()
             .populate({
-                followRelations: {type: AssetGraph.query.not('SourceMapSource')}
+                followRelations: {type: {$not: 'SourceMapSource'}}
             });
 
         expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 4);

@@ -433,10 +433,10 @@ describe('assets/Asset', function () {
 
         barHtml.url = 'http://example.com/subdir/quux.html';
         expect(assetGraph.findRelations({type: 'HtmlAnchor'})[0].href, 'to equal', 'http://example.com/subdir/quux.html');
-        expect(assetGraph.findAssets({type: 'Html', url: /\/subdir\/quux\.html$/})[0].isLoaded, 'to be false');
+        expect(assetGraph.findAssets({type: 'Html', url: { $regex: /\/subdir\/quux\.html$/ } })[0].isLoaded, 'to be false');
         assetGraph.findRelations({type: 'HtmlAnchor'})[0].hrefType = 'relative';
         expect(assetGraph.findRelations({type: 'HtmlAnchor'})[0].href, 'to equal', 'subdir/quux.html');
-        expect(assetGraph.findAssets({type: 'Html', url: /\/subdir\/quux\.html$/})[0].isLoaded, 'to be false');
+        expect(assetGraph.findAssets({type: 'Html', url: { $regex: /\/subdir\/quux\.html$/ } })[0].isLoaded, 'to be false');
     });
 
     describe('#clone()', function () {
@@ -701,9 +701,8 @@ describe('assets/Asset', function () {
             const fooHtml = assetGraph.findAssets({fileName: 'foo.html'})[0];
             fooHtml.text = '<!DOCTYPE html>\n<html><head></head><body><a href="baz.html">Another link text</a></body></html>';
 
-            expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: assetGraph.findAssets({type: 'Html', url: /\/baz\.html$/})});
-
-            // new AssetGraph.HtmlAnchor({to: assetGraph.findAssets({url: /\/quux\.html$/})[0]}).attach('after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
+            expect(assetGraph, 'to contain relation', {type: 'HtmlAnchor', to: { $in: assetGraph.findAssets({type: 'Html', fileName: 'baz.html'})}});
+            // new AssetGraph.HtmlAnchor({to: assetGraph.findAssets({fileName: 'quux.html'})[0]}).attach('after', assetGraph.findRelations({type: 'HtmlAnchor', from: fooHtml})[0]);
 
             fooHtml.addRelation({
                 type: 'HtmlAnchor',

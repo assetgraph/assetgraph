@@ -7,11 +7,11 @@ describe('transforms/inlineHtmlTemplates', function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineHtmlTemplates/withNested/'});
         await assetGraph.loadAssets('index.html')
             .populate({
-                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+                followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
             })
             .bundleSystemJs()
             .populate({
-                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+                followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
             })
             .inlineHtmlTemplates();
 
@@ -29,11 +29,11 @@ describe('transforms/inlineHtmlTemplates', function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineHtmlTemplates/multiple/'});
         await assetGraph.loadAssets('index.html')
             .populate({
-                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+                followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
             })
             .bundleSystemJs()
             .populate({
-                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+                followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
             })
             .inlineHtmlTemplates();
 
@@ -48,11 +48,11 @@ describe('transforms/inlineHtmlTemplates', function () {
             '<script type="text/html" id="foo"><img data-bind="attr: {src: \'/foo.png\'.toString(\'url\')}">\n</script><script type="text/html" id="bar"><div>\n    <h1>bar.ko</h1>\n</div>\n</script><script type="text/html" id="templateWithEmbeddedTemplate"><div data-bind="template: \'theEmbeddedTemplate\'"></div>\n\n\n\n</script></head>'
         );
 
-        let relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'foo'; }})[0];
+        let relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node(node) { return node.getAttribute('id') === 'foo'; }})[0];
         expect(relation, 'to be ok');
         expect(relation.to.text, 'to equal', '<img data-bind="attr: {src: \'/foo.png\'.toString(\'url\')}">\n');
 
-        relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'bar'; }})[0];
+        relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node(node) { return node.getAttribute('id') === 'bar'; }})[0];
         expect(relation, 'to be ok');
         expect(relation.to.text, 'to equal', '<div>\n    <h1>bar.ko</h1>\n</div>\n');
     });
@@ -61,11 +61,11 @@ describe('transforms/inlineHtmlTemplates', function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineHtmlTemplates/multipleInMultipleHtmlPages/'});
         await assetGraph.loadAssets(['index1.html', 'index2.html']);
         await assetGraph.populate({
-            followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+            followRelations: { type: {$not: 'JavaScriptSourceMappingUrl' } }
         });
         await assetGraph.bundleSystemJs();
         await assetGraph.populate({
-            followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+            followRelations: { type: {$not: 'JavaScriptSourceMappingUrl' } }
         });
         await assetGraph.inlineHtmlTemplates();
 
@@ -80,11 +80,11 @@ describe('transforms/inlineHtmlTemplates', function () {
             '<script type="text/html" id="foo"><img data-bind="attr: {src: \'/foo.png\'.toString(\'url\')}">\n</script><script type="text/html" id="bar"><div>\n    <h1>bar.ko</h1>\n</div>\n</script><script type="text/html" id="templateWithEmbeddedTemplate"><div data-bind="template: \'theEmbeddedTemplate\'"></div>\n\n\n\n</script></head>'
         );
 
-        let relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'foo'; }})[0];
+        let relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node(node) { return node.getAttribute('id') === 'foo'; }})[0];
         expect(relation, 'to be ok');
         expect(relation.to.text, 'to equal', '<img data-bind="attr: {src: \'/foo.png\'.toString(\'url\')}">\n');
 
-        relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'bar'; }})[0];
+        relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node(node) { return node.getAttribute('id') === 'bar'; }})[0];
         expect(relation, 'to be ok');
         expect(relation.to.text, 'to equal', '<div>\n    <h1>bar.ko</h1>\n</div>\n');
 
@@ -98,11 +98,11 @@ describe('transforms/inlineHtmlTemplates', function () {
             '<script type="text/html" id="foo"><img data-bind="attr: {src: \'/foo.png\'.toString(\'url\')}">\n</script><script type="text/html" id="bar"><div>\n    <h1>bar.ko</h1>\n</div>\n</script><script type="text/html" id="templateWithEmbeddedTemplate"><div data-bind="template: \'theEmbeddedTemplate\'"></div>\n\n\n\n</script></head>'
         );
 
-        relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'foo'; }})[0];
+        relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node(node) { return node.getAttribute('id') === 'foo'; }})[0];
         expect(relation, 'to be ok');
         expect(relation.to.text, 'to equal', '<img data-bind="attr: {src: \'/foo.png\'.toString(\'url\')}">\n');
 
-        relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'bar'; }})[0];
+        relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node(node) { return node.getAttribute('id') === 'bar'; }})[0];
         expect(relation, 'to be ok');
         expect(relation.to.text, 'to equal', '<div>\n    <h1>bar.ko</h1>\n</div>\n');
     });

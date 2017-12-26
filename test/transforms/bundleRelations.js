@@ -2,7 +2,6 @@
 const expect = require('../unexpected-with-plugins');
 const sinon = require('sinon');
 const AssetGraph = require('../../lib/AssetGraph');
-const query = AssetGraph.query;
 
 // Helper for extracting all values of a specific property from a postcss rule
 function getPropertyValues(container, propertyName) {
@@ -51,7 +50,7 @@ describe('transforms/bundleRelations', function () {
             await assetGraph.bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'});
 
             expect(assetGraph, 'to contain assets', 'Css', 2);
-            let cssRules = assetGraph.findAssets({type: 'Css', incoming: {from: {fileName: '1.html'}}})[0].parseTree.nodes;
+            let cssRules = assetGraph.findAssets({type: 'Css', incomingRelations: {$elemMatch: {from: {fileName: '1.html'}}}})[0].parseTree.nodes;
             expect(cssRules, 'to have length', 5);
             expect(getPropertyValues(cssRules[0], 'color'), 'to equal', [ 'azure' ]);
             expect(getPropertyValues(cssRules[1], 'color'), 'to equal', [ 'beige' ]);
@@ -59,7 +58,7 @@ describe('transforms/bundleRelations', function () {
             expect(getPropertyValues(cssRules[3], 'color'), 'to equal', [ 'deeppink' ]);
             expect(getPropertyValues(cssRules[4], 'color'), 'to equal', [ '#eeeee0' ]);
 
-            cssRules = assetGraph.findAssets({type: 'Css', incoming: {from: {fileName: '2.html'}}})[0].parseTree.nodes;
+            cssRules = assetGraph.findAssets({type: 'Css', incomingRelations: {$elemMatch: {from: {fileName: '2.html'}}}})[0].parseTree.nodes;
             expect(cssRules, 'to have length', 3);
             expect(getPropertyValues(cssRules[0], 'color'), 'to equal', [ '#eeeee0' ]);
             expect(getPropertyValues(cssRules[1], 'color'), 'to equal', [ 'beige' ]);
@@ -272,7 +271,7 @@ describe('transforms/bundleRelations', function () {
             expect(assetGraph.findAssets({fileName: 'index.html'})[0].text, 'not to contain', 'alert')
                 .and('to match', /<script async="async" src="[^"]+">/)
                 .and('to match', /<script defer="defer" src="[^"]+">/);
-            expect(assetGraph, 'to contain assets', {type: 'JavaScript', isInline: false, text: /alert/}, 2);
+            expect(assetGraph, 'to contain assets', {type: 'JavaScript', isInline: false, text: {$regex: /alert/}}, 2);
         });
 
         it('should gather all the copyright notices and put them at the top of the bundle', async function () {
@@ -312,7 +311,7 @@ describe('transforms/bundleRelations', function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/nonceAttribute'});
             await assetGraph.loadAssets('index.html')
                 .populate()
-                .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'});
+                .bundleRelations({type: {$in: ['HtmlStyle', 'HtmlScript']}}, {strategyName: 'oneBundlePerIncludingAsset'});
 
             expect(assetGraph, 'to contain relations', 'HtmlStyle', 1);
             expect(assetGraph.findRelations({type: 'HtmlStyle'})[0].to.text, 'to equal', 'body {color: #000;}body {color: #111;}');
@@ -326,7 +325,7 @@ describe('transforms/bundleRelations', function () {
                 const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/matchingNonceAttributes'});
                 await assetGraph.loadAssets('index.html')
                     .populate()
-                    .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'});
+                    .bundleRelations({type: {$in: ['HtmlStyle', 'HtmlScript']}}, {strategyName: 'oneBundlePerIncludingAsset'});
 
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', 'nonce="foo"');
             });
@@ -337,7 +336,7 @@ describe('transforms/bundleRelations', function () {
                 const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/mismatchingNonceAttributes'});
                 await assetGraph.loadAssets('index.html')
                     .populate()
-                    .bundleRelations({type: ['HtmlStyle', 'HtmlScript']}, {strategyName: 'oneBundlePerIncludingAsset'});
+                    .bundleRelations({type: {$in: ['HtmlStyle', 'HtmlScript']}}, {strategyName: 'oneBundlePerIncludingAsset'});
 
                 expect(assetGraph.findAssets({type: 'Html'})[0].text, 'not to contain', 'nonce=');
             });
@@ -410,7 +409,7 @@ describe('transforms/bundleRelations', function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptExternal/'});
             await assetGraph.loadAssets('index.html')
                 .populate({
-                    followRelations: {href: query.not(/^https?:/)}
+                    followRelations: {href: {$not: {$regex: /^https?:/}}}
                 })
                 .bundleRelations({
                     type: 'HtmlScript',
@@ -686,7 +685,7 @@ describe('transforms/bundleRelations', function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/externalHtmlStyleFollowedByInlineStyle/'});
             await assetGraph.loadAssets('*.html')
                 .populate()
-                .bundleRelations({type: ['HtmlStyle']}, {strategyName: 'sharedBundles'});
+                .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'sharedBundles'});
 
             expect(assetGraph, 'to contain assets', 'Css', 3);
             expect(assetGraph, 'to contain asset', {type: 'Css', isInline: false, fileName: 'a.css'});
@@ -698,7 +697,7 @@ describe('transforms/bundleRelations', function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/duplicateScript/'});
             await assetGraph.loadAssets('index.html')
                 .populate()
-                .bundleRelations({type: ['HtmlScript'], to: {isLoaded: true}}, {strategyName: 'sharedBundles'});
+                .bundleRelations({type: 'HtmlScript', to: {isLoaded: true}}, {strategyName: 'sharedBundles'});
 
             expect(assetGraph, 'to contain assets', 'JavaScript', 2);
 

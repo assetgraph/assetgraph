@@ -17,27 +17,27 @@ describe('AssetGraph.findAssets', function () {
         expect(assetGraph, 'to contain assets', {foo: 'bar'}, 2);
         expect(assetGraph, 'to contain assets', {foo: 'baz'}, 2);
         expect(assetGraph, 'to contain asset', {foo: 'quux'});
-        expect(assetGraph, 'to contain asset', {foo: ['quux']});
-        expect(assetGraph, 'to contain asset', {foo: function (val) {return typeof val === 'undefined';}});
+        expect(assetGraph, 'to contain asset', {foo: {$or: ['quux']}});
+        expect(assetGraph, 'to contain asset', {foo(val) {return typeof val === 'undefined';}});
 
-        expect(assetGraph, 'to contain assets', {foo: ['bar', 'quux']}, 3);
-        expect(assetGraph, 'to contain assets', {foo: ['bar', 'baz']}, 4);
-        expect(assetGraph, 'to contain assets', {foo: AssetGraph.query.or('quux', function (val) {return typeof val === 'undefined';})}, 2);
+        expect(assetGraph, 'to contain assets', {foo: {$or: ['bar', 'quux']}}, 3);
+        expect(assetGraph, 'to contain assets', {foo: {$or: ['bar', 'baz']}}, 4);
+        expect(assetGraph, 'to contain assets', {foo: {$or: ['quux', val => typeof val === 'undefined']}}, 2);
 
         expect(assetGraph, 'to contain assets', 'Html', 3);
         expect(assetGraph, 'to contain assets', 'Css', 2);
         expect(assetGraph, 'to contain asset', 'Htc');
 
-        expect(assetGraph, 'to contain assets', {type: ['Css', 'Html']}, 5);
-        expect(assetGraph, 'to contain assets', {type: ['Htc', 'Css', 'Html']}, 6);
-        expect(assetGraph, 'to contain assets', {type: ['Htc', 'Html']}, 4);
-        expect(assetGraph, 'to contain assets', {type: ['Css', 'Htc']}, 3);
+        expect(assetGraph, 'to contain assets', {type: {$in: ['Css', 'Html']}}, 5);
+        expect(assetGraph, 'to contain assets', {type: {$in: ['Htc', 'Css', 'Html']}}, 6);
+        expect(assetGraph, 'to contain assets', {type: {$in: ['Htc', 'Html']}}, 4);
+        expect(assetGraph, 'to contain assets', {type: {$in: ['Css', 'Htc']}}, 3);
 
         expect(assetGraph, 'to contain asset', {foo: 'baz', type: 'Css'});
         expect(assetGraph, 'to contain assets', {foo: 'bar', type: 'Html'}, 2);
         expect(assetGraph, 'to contain no assets', {foo: 'quux', type: 'Htc'});
 
-        expect(assetGraph, 'to contain no assets', {type: 'Html', incoming: {type: 'HtmlAnchor'}});
+        expect(assetGraph, 'to contain no assets', {type: 'Html', incomingRelations: {$elemMatch: {type: 'HtmlAnchor'}}});
 
         expect(assetGraph, 'to contain no assets', {outgoing: {type: 'HtmlAnchor'}});
 
@@ -62,9 +62,9 @@ describe('AssetGraph.findAssets', function () {
             to: assetGraph.findAssets({text: 'c'})[0]
         }, 'last');
 
-        expect(assetGraph, 'to contain assets', {type: 'Html', incoming: {type: 'HtmlAnchor'}}, 2);
-        expect(assetGraph, 'to contain assets', {incoming: {type: 'HtmlAnchor'}}, 2);
+        expect(assetGraph, 'to contain assets', {type: 'Html', incomingRelations: {$elemMatch: {type: 'HtmlAnchor'}}}, 2);
+        expect(assetGraph, 'to contain assets', {incomingRelations: {$elemMatch: {type: 'HtmlAnchor'}}}, 2);
 
-        expect(assetGraph, 'to contain asset', {outgoing: {type: 'HtmlAnchor'}});
+        expect(assetGraph, 'to contain asset', {outgoingRelations: {$elemMatch: {type: 'HtmlAnchor'}}});
     });
 });
