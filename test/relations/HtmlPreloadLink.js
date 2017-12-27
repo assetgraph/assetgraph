@@ -1,50 +1,44 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlPreloadLink', function () {
     function getHtmlAsset(htmlString) {
-        var graph = new AssetGraph({ root: __dirname });
-        var htmlAsset = new AssetGraph.Html({
+        return new AssetGraph({ root: __dirname }).addAsset({
+            type: 'Html',
             text: htmlString || '<!doctype html><html><head></head><body></body></html>',
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
-
-        graph.addAsset(htmlAsset);
-
-        return htmlAsset;
     }
 
-    it('should handle a test case with an existing <link rel="preload"> element', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPreloadLink/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
-                expect(assetGraph, 'to contain asset', 'Woff');
-            });
+    it('should handle a test case with an existing <link rel="preload"> element', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPreloadLink/'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+
+        expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
+        expect(assetGraph, 'to contain asset', 'Woff');
     });
 
-    it('should update the href', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPreloadLink/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
+    it('should update the href', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPreloadLink/'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
-                var preloadLink = assetGraph.findRelations({ type: 'HtmlPreloadLink' })[0];
+        expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
 
-                preloadLink.to.url = 'foo.bar';
+        const preloadLink = assetGraph.findRelations({ type: 'HtmlPreloadLink' })[0];
 
-                expect(preloadLink, 'to satisfy', {
-                    href: 'foo.bar'
-                });
-            });
+        preloadLink.to.url = 'foo.bar';
+
+        expect(preloadLink, 'to satisfy', {
+            href: 'foo.bar'
+        });
     });
 
     describe('when programmatically adding a relation', function () {
         it('should attach a link node in <head>', function () {
-            var htmlAsset = getHtmlAsset();
+            const htmlAsset = getHtmlAsset();
             htmlAsset.addRelation({
                 type: 'HtmlPreloadLink',
                 to: {
@@ -58,7 +52,7 @@ describe('relations/HtmlPreloadLink', function () {
         });
 
         it('should set the `as` property passed in the constructor', function () {
-            var htmlAsset = getHtmlAsset();
+            const htmlAsset = getHtmlAsset();
             htmlAsset.addRelation({
                 type: 'HtmlPreloadLink',
                 to: {
@@ -73,7 +67,7 @@ describe('relations/HtmlPreloadLink', function () {
         });
 
         it('should add the `crossorigin` attribute when the relation is loaded as a font', function () {
-            var htmlAsset = getHtmlAsset();
+            const htmlAsset = getHtmlAsset();
             htmlAsset.addRelation({
                 type: 'HtmlPreloadLink',
                 to: {
@@ -88,7 +82,7 @@ describe('relations/HtmlPreloadLink', function () {
         });
 
         it('should not add the `crossorigin` attribute when the relation is not as a font and the target is not cross origin', function () {
-            var htmlAsset = getHtmlAsset();
+            const htmlAsset = getHtmlAsset();
             htmlAsset.addRelation({
                 type: 'HtmlPreloadLink',
                 to: {
@@ -103,7 +97,7 @@ describe('relations/HtmlPreloadLink', function () {
         });
 
         it('should add the `crossorigin` attribute when the relation is crossorigin', function () {
-            var htmlAsset = getHtmlAsset();
+            const htmlAsset = getHtmlAsset();
             htmlAsset.addRelation({
                 type: 'HtmlPreloadLink',
                 to: {
@@ -121,7 +115,7 @@ describe('relations/HtmlPreloadLink', function () {
     describe('#contentType', function () {
         describe('with unresolved font targets', function () {
             it('should handle woff', function () {
-                var relation = new AssetGraph.HtmlPreloadLink({
+                const relation = new AssetGraph.HtmlPreloadLink({
                     to: { url: 'foo.woff' }
                 });
 
@@ -129,7 +123,7 @@ describe('relations/HtmlPreloadLink', function () {
             });
 
             it('should handle woff2', function () {
-                var relation = new AssetGraph.HtmlPreloadLink({
+                const relation = new AssetGraph.HtmlPreloadLink({
                     to: { url: 'foo.woff2' }
                 });
 
@@ -137,7 +131,7 @@ describe('relations/HtmlPreloadLink', function () {
             });
 
             it('should handle otf', function () {
-                var relation = new AssetGraph.HtmlPreloadLink({
+                const relation = new AssetGraph.HtmlPreloadLink({
                     to: { url: 'foo.otf' }
                 });
 
@@ -145,7 +139,7 @@ describe('relations/HtmlPreloadLink', function () {
             });
 
             it('should handle ttf', function () {
-                var relation = new AssetGraph.HtmlPreloadLink({
+                const relation = new AssetGraph.HtmlPreloadLink({
                     to: { url: 'foo.ttf' }
                 });
 
@@ -153,7 +147,7 @@ describe('relations/HtmlPreloadLink', function () {
             });
 
             it('should handle eot', function () {
-                var relation = new AssetGraph.HtmlPreloadLink({
+                const relation = new AssetGraph.HtmlPreloadLink({
                     to: { url: 'foo.eot' }
                 });
 
@@ -163,8 +157,7 @@ describe('relations/HtmlPreloadLink', function () {
 
         describe('with unresolved unknown target', function () {
             it('should return undefined', function () {
-
-                var relation = new AssetGraph.HtmlPreloadLink({
+                const relation = new AssetGraph.HtmlPreloadLink({
                     to: { url: 'foo.bar' }
                 });
 
@@ -174,8 +167,7 @@ describe('relations/HtmlPreloadLink', function () {
 
         describe('with resolved known targets', function () {
             it('should handle JavaScript', function () {
-
-                var relation = new AssetGraph.HtmlPreloadLink({
+                const relation = new AssetGraph.HtmlPreloadLink({
                     to: new AssetGraph.JavaScript({ url: 'foo.js' })
                 });
 
@@ -183,8 +175,7 @@ describe('relations/HtmlPreloadLink', function () {
             });
 
             it('should handle Css', function () {
-
-                var relation = new AssetGraph.HtmlPreloadLink({
+                const relation = new AssetGraph.HtmlPreloadLink({
                     to: new AssetGraph.Css({ url: 'foo.css' })
                 });
 

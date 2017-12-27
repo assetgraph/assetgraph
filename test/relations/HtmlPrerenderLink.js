@@ -21,31 +21,29 @@ describe('relations/HtmlPrerenderLink', function () {
         });
     });
 
-    it('should handle a test case with an existing <link rel="prerender"> element', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPrerenderLink/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlPrerenderLink');
-                expect(assetGraph, 'to contain assets', 'Html', 2);
-            });
+    it('should handle a test case with an existing <link rel="prerender"> element', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPrerenderLink/'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+
+        expect(assetGraph, 'to contain relation', 'HtmlPrerenderLink');
+        expect(assetGraph, 'to contain assets', 'Html', 2);
     });
 
-    it('should update the href', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPrerenderLink/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlPrerenderLink');
+    it('should update the href', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPrerenderLink/'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
-                const prerenderLink = assetGraph.findRelations({ type: 'HtmlPrerenderLink' })[0];
+        expect(assetGraph, 'to contain relation', 'HtmlPrerenderLink');
 
-                prerenderLink.to.url = 'foo.bar';
+        const prerenderLink = assetGraph.findRelations({ type: 'HtmlPrerenderLink' })[0];
 
-                expect(prerenderLink, 'to satisfy', {
-                    href: 'foo.bar'
-                });
-            });
+        prerenderLink.to.url = 'foo.bar';
+
+        expect(prerenderLink, 'to satisfy', {
+            href: 'foo.bar'
+        });
     });
 
     describe('when programmatically adding a relation', function () {

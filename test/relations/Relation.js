@@ -98,193 +98,186 @@ describe('relations/Relation', function () {
     });
 
     describe('#canonical', function () {
-        var testDataDir = pathModule.resolve(__dirname + '/../../testdata/relations/Relation/canonicalHref/');
+        const testDataDir = pathModule.resolve(__dirname + '/../../testdata/relations/Relation/canonicalHref/');
 
-        it('should populate "canonical" from the local root', function () {
+        it('should populate "canonical" from the local root', async function () {
             httpception();
 
-            return new AssetGraph({
+            const assetGraph = new AssetGraph({
                 root: testDataDir,
                 canonicalRoot: 'http://canonical.com/'
-            })
-                .loadAssets('canonical.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations(), 'to satisfy', [
-                        {
-                            canonical: true,
-                            crossorigin: false,
-                            hrefType: 'absolute',
-                            href: 'http://canonical.com/local.js',
-                            to: {
-                                url: 'file://' + pathModule.join(testDataDir, 'local.js')
-                            }
-                        }
-                    ]);
-                });
+            });
+            await assetGraph.loadAssets('canonical.html');
+            await assetGraph.populate();
+
+            expect(assetGraph.findRelations(), 'to satisfy', [
+                {
+                    canonical: true,
+                    crossorigin: false,
+                    hrefType: 'absolute',
+                    href: 'http://canonical.com/local.js',
+                    to: {
+                        url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                    }
+                }
+            ]);
         });
 
-        it('should treat "canonical" as non-crossorigin', function () {
+        it('should treat "canonical" as non-crossorigin', async function () {
             httpception();
 
-            return new AssetGraph({
+            const assetGraph = new AssetGraph({
                 root: testDataDir,
                 canonicalRoot: 'http://canonical.com/'
-            })
-                .loadAssets('canonical.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations(), 'to satisfy', [
-                        {
-                            hrefType: 'absolute',
-                            canonical: true,
-                            crossorigin: false
-                        }
-                    ]);
-                });
+            });
+            await assetGraph.loadAssets('canonical.html');
+            await assetGraph.populate();
+
+            expect(assetGraph.findRelations(), 'to satisfy', [
+                {
+                    hrefType: 'absolute',
+                    canonical: true,
+                    crossorigin: false
+                }
+            ]);
         });
 
-        it('should keep "canonical" relative href when moving target asset', function () {
+        it('should keep "canonical" relative href when moving target asset', async function () {
             httpception();
 
-            return new AssetGraph({
+            const assetGraph = new AssetGraph({
                 root: testDataDir,
                 canonicalRoot: 'http://canonical.com/'
-            })
-                .loadAssets('canonical.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain relations', 1);
+            });
+            await assetGraph.loadAssets('canonical.html');
+            await assetGraph.populate();
 
-                    var relation = assetGraph.findRelations()[0];
+            expect(assetGraph, 'to contain relations', 1);
 
-                    expect(relation, 'to satisfy', {
-                        href: 'http://canonical.com/local.js'
-                    });
+            const relation = assetGraph.findRelations()[0];
 
-                    relation.to.fileName = 'movedLocal.js';
+            expect(relation, 'to satisfy', {
+                href: 'http://canonical.com/local.js'
+            });
 
-                    expect(relation, 'to satisfy', {
-                        href: 'http://canonical.com/movedLocal.js'
-                    });
-                });
+            relation.to.fileName = 'movedLocal.js';
+
+            expect(relation, 'to satisfy', {
+                href: 'http://canonical.com/movedLocal.js'
+            });
         });
 
-        it('should add the canonical root to the href of a local file', function () {
-            return new AssetGraph({
+        it('should add the canonical root to the href of a local file', async function () {
+            const assetGraph = new AssetGraph({
                 root: testDataDir,
                 canonicalRoot: 'http://canonical.com/'
-            })
-                .loadAssets('local.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain relations', 1);
+            });
+            await assetGraph.loadAssets('local.html');
+            await assetGraph.populate();
 
-                    var relation = assetGraph.findRelations()[0];
+            expect(assetGraph, 'to contain relations', 1);
 
-                    expect(relation, 'to satisfy', {
-                        hrefType: 'relative',
-                        href: 'local.js',
-                        to: {
-                            url: 'file://' + pathModule.join(testDataDir, 'local.js')
-                        }
-                    });
+            const relation = assetGraph.findRelations()[0];
 
-                    relation.canonical = true;
+            expect(relation, 'to satisfy', {
+                hrefType: 'relative',
+                href: 'local.js',
+                to: {
+                    url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                }
+            });
 
-                    expect(relation, 'to satisfy', {
-                        hrefType: 'relative',
-                        canonical: true,
-                        crossorigin: false,
-                        href: 'http://canonical.com/local.js',
-                        to: {
-                            url: 'file://' + pathModule.join(testDataDir, 'local.js')
-                        }
-                    });
-                });
+            relation.canonical = true;
+
+            expect(relation, 'to satisfy', {
+                hrefType: 'relative',
+                canonical: true,
+                crossorigin: false,
+                href: 'http://canonical.com/local.js',
+                to: {
+                    url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                }
+            });
         });
 
-        it('should silently ignore a canonical setting when there is no canonicalRoot', function () {
-            return new AssetGraph({
+        it('should silently ignore a canonical setting when there is no canonicalRoot', async function () {
+            const assetGraph = new AssetGraph({
                 root: testDataDir
-            })
-                .loadAssets('local.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain relations', 1);
+            });
+            await assetGraph.loadAssets('local.html');
+            await assetGraph.populate();
 
-                    var relation = assetGraph.findRelations()[0];
+            expect(assetGraph, 'to contain relations', 1);
 
-                    expect(relation, 'to satisfy', {
-                        hrefType: 'relative',
-                        href: 'local.js',
-                        to: {
-                            url: 'file://' + pathModule.join(testDataDir, 'local.js')
-                        }
-                    });
+            const relation = assetGraph.findRelations()[0];
 
-                    relation.canonical = true;
+            expect(relation, 'to satisfy', {
+                hrefType: 'relative',
+                href: 'local.js',
+                to: {
+                    url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                }
+            });
 
-                    expect(relation, 'to satisfy', {
-                        hrefType: 'relative',
-                        canonical: false,
-                        crossorigin: false,
-                        href: 'local.js',
-                        to: {
-                            url: 'file://' + pathModule.join(testDataDir, 'local.js')
-                        }
-                    });
-                });
+            relation.canonical = true;
+
+            expect(relation, 'to satisfy', {
+                hrefType: 'relative',
+                canonical: false,
+                crossorigin: false,
+                href: 'local.js',
+                to: {
+                    url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                }
+            });
         });
 
-        it('should remove the canonical root from the href of a local file', function () {
-            return new AssetGraph({
+        it('should remove the canonical root from the href of a local file', async function () {
+            const assetGraph = new AssetGraph({
                 root: testDataDir,
                 canonicalRoot: 'http://canonical.com/'
-            })
-                .loadAssets('canonical.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain relations', 1);
+            });
+            await assetGraph.loadAssets('canonical.html');
+            await assetGraph.populate();
 
-                    var relation = assetGraph.findRelations()[0];
+            expect(assetGraph, 'to contain relations', 1);
 
-                    expect(relation, 'to satisfy', {
-                        hrefType: 'absolute',
-                        canonical: true,
-                        crossorigin: false,
-                        href: 'http://canonical.com/local.js',
-                        to: {
-                            url: 'file://' + pathModule.join(testDataDir, 'local.js')
-                        }
-                    });
+            const relation = assetGraph.findRelations()[0];
 
-                    relation.canonical = false;
+            expect(relation, 'to satisfy', {
+                hrefType: 'absolute',
+                canonical: true,
+                crossorigin: false,
+                href: 'http://canonical.com/local.js',
+                to: {
+                    url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                }
+            });
 
-                    expect(relation, 'to satisfy', {
-                        hrefType: 'rootRelative',
-                        href: '/local.js',
-                        to: {
-                            url: 'file://' + pathModule.join(testDataDir, 'local.js')
-                        }
-                    });
-                });
+            relation.canonical = false;
+
+            expect(relation, 'to satisfy', {
+                hrefType: 'rootRelative',
+                href: '/local.js',
+                to: {
+                    url: 'file://' + pathModule.join(testDataDir, 'local.js')
+                }
+            });
         });
 
-        it('should handle mailto: protocols where host matches canonicalroot ', function () {
-            return new AssetGraph({
+        it('should handle mailto: protocols where host matches canonicalroot ', async function () {
+            const assetGraph = new AssetGraph({
                 root: testDataDir,
                 canonicalRoot: 'http://bar.com/'
-            })
-                .loadAssets('mailto.html')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations(), 'to satisfy', [
-                        {
-                            canonical: false
-                        }
-                    ]);
-                });
+            });
+            await assetGraph.loadAssets('mailto.html');
+            await assetGraph.populate();
+
+            expect(assetGraph.findRelations(), 'to satisfy', [
+                {
+                    canonical: false
+                }
+            ]);
         });
     });
 
@@ -337,112 +330,103 @@ describe('relations/Relation', function () {
     });
 
     describe('#crossorigin', function () {
-        it('should evaluate to false for a relation that points from file: to file:', function () {
-            return new AssetGraph({root: __dirname})
-                .loadAssets({
-                    type: 'Html',
-                    url: 'file://' + __dirname + '/index.html',
-                    text: '<!DOCTYPE html><html><head></head><body><a href="other.html">Link</a></body></html>'
-                })
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
-                });
+        it('should evaluate to false for a relation that points from file: to file:', async function () {
+            const assetGraph = new AssetGraph({root: __dirname});
+            await assetGraph.loadAssets({
+                type: 'Html',
+                url: 'file://' + __dirname + '/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><a href="other.html">Link</a></body></html>'
+            });
+
+            expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
         });
 
-        it('should evaluate to true for a relation that points from file: to http:', function () {
-            return new AssetGraph({root: __dirname})
-                .loadAssets({
-                    type: 'Html',
-                    url: 'file://' + __dirname + '/index.html',
-                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/">Link</a></body></html>'
-                })
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
-                });
+        it('should evaluate to true for a relation that points from file: to http:', async function () {
+            const assetGraph = new AssetGraph({root: __dirname});
+            await assetGraph.loadAssets({
+                type: 'Html',
+                url: 'fil://' + __dirname + '/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/">Link</a></body></html>'
+            });
+
+            expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
         });
 
-        it('should evaluate to true for a relation that points to a different hostname via http', function () {
-            return new AssetGraph({root: __dirname})
-                .loadAssets({
-                    type: 'Html',
-                    url: 'http://example.com/index.html',
-                    text: '<!DOCTYPE html><html><head></head><body><a href="http://anotherexample.com/">Link</a></body></html>'
-                })
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
-                });
+        it('should evaluate to true for a relation that points to a different hostname via http', async function () {
+            const assetGraph = new AssetGraph({root: __dirname});
+            await assetGraph.loadAssets({
+                type: 'Html',
+                url: 'http://example.com/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><a href="http://anotherexample.com/">Link</a></body></html>'
+            });
+
+            expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
         });
 
-        it('should evaluate to false for an absolute relation that points at the same hostname via http', function () {
-            return new AssetGraph({root: __dirname})
-                .loadAssets({
-                    type: 'Html',
-                    url: 'http://example.com/index.html',
-                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>'
-                })
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
-                });
+        it('should evaluate to false for an absolute relation that points at the same hostname via http', async function () {
+            const assetGraph = new AssetGraph({root: __dirname});
+            await assetGraph.loadAssets({
+                type: 'Html',
+                url: 'http://example.com/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>'
+            });
+
+            expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
         });
 
-        it('should evaluate to true for an absolute relation that points at the same scheme and hostname, but a different port', function () {
-            return new AssetGraph({root: __dirname})
-                .loadAssets({
-                    type: 'Html',
-                    url: 'http://example.com:1337/index.html',
-                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com:1338/other.html">Link</a></body></html>'
-                })
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
-                });
+        it('should evaluate to true for an absolute relation that points at the same scheme and hostname, but a different port', async function () {
+            const assetGraph = new AssetGraph({root: __dirname});
+            await assetGraph.loadAssets({
+                type: 'Html',
+                url: 'http://example.com:1337/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com:1338/other.html">Link</a></body></html>'
+            });
+
+            expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
         });
 
-        it('should take the default http port into account when the source url omits it', function () {
-            return new AssetGraph({root: __dirname})
-                .loadAssets({
-                    type: 'Html',
-                    url: 'http://example.com/index.html',
-                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com:80/other.html">Link</a></body></html>'
-                })
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
-                });
+        it('should take the default http port into account when the source url omits it', async function () {
+            const assetGraph = new AssetGraph({root: __dirname});
+            await assetGraph.loadAssets({
+                type: 'Html',
+                url: 'http://example.com/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com:80/other.html">Link</a></body></html>'
+            });
+
+            expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
         });
 
-        it('should take the default http port into account when the target url omits it', function () {
-            return new AssetGraph({root: __dirname})
-                .loadAssets({
-                    type: 'Html',
-                    url: 'http://example.com:80/index.html',
-                    text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>'
-                })
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
-                });
+        it('should take the default http port into account when the target url omits it', async function () {
+            const assetGraph = new AssetGraph({root: __dirname});
+            await assetGraph.loadAssets({
+                type: 'Html',
+                url: 'http://example.com:80/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>'
+            });
+
+            expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
         });
 
-        it('should take the default https port into account when the source url omits it', function () {
-            return new AssetGraph({root: __dirname})
-                .loadAssets({
-                    type: 'Html',
-                    url: 'https://example.com/index.html',
-                    text: '<!DOCTYPE html><html><head></head><body><a href="https://example.com:443/other.html">Link</a></body></html>'
-                })
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
-                });
+        it('should take the default https port into account when the source url omits it', async function () {
+            const assetGraph = new AssetGraph({root: __dirname});
+            await assetGraph.loadAssets({
+                type: 'Html',
+                url: 'https://example.com/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><a href="https://example.com:443/other.html">Link</a></body></html>'
+            });
+
+            expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
         });
 
-        it('should take the default https port into account when the target url omits it', function () {
-            return new AssetGraph({root: __dirname})
-                .loadAssets({
-                    type: 'Html',
-                    url: 'https://example.com:443/index.html',
-                    text: '<!DOCTYPE html><html><head></head><body><a href="https://example.com/other.html">Link</a></body></html>'
-                })
-                .queue(function (assetGraph) {
-                    expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
-                });
+        it('should take the default https port into account when the target url omits it', async function () {
+            const assetGraph = new AssetGraph({root: __dirname});
+            await assetGraph.loadAssets({
+                type: 'Html',
+                url: 'https://example.com:443/index.html',
+                text: '<!DOCTYPE html><html><head></head><body><a href="https://example.com/other.html">Link</a></body></html>'
+            });
+
+            expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
         });
     });
 
@@ -450,8 +434,8 @@ describe('relations/Relation', function () {
         describe('on a non-inline relation', function () {
             it('should update the href of all outgoing relations of the target asset', async function () {
                 const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/inlineExternalRelation/'});
-                await assetGraph.loadAssets('index.html')
-                    .populate();
+                await assetGraph.loadAssets('index.html');
+                await assetGraph.populate();
 
                 assetGraph.findAssets({type: 'Html'})[0].outgoingRelations[0].inline();
                 expect(assetGraph.findRelations({type: 'CssImage'})[0].href, 'to equal', 'styles/foo.png');
@@ -459,8 +443,8 @@ describe('relations/Relation', function () {
 
             it('should set the incomingInlineRelation property of the target asset', async function () {
                 const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/inlineExternalRelation/'});
-                await assetGraph.loadAssets('index.html')
-                    .populate();
+                await assetGraph.loadAssets('index.html');
+                await assetGraph.populate();
 
                 const cssImage = assetGraph.findRelations({type: 'CssImage'})[0];
                 cssImage.inline();

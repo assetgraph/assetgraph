@@ -2,7 +2,6 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlMsApplicationConfig', function () {
-
     function getHtmlAsset(htmlString) {
         return new AssetGraph({ root: __dirname }).addAsset({
             type: 'Html',

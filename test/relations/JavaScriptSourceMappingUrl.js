@@ -4,30 +4,29 @@ const AssetGraph = require('../../lib/AssetGraph');
 const sinon = require('sinon');
 
 describe('relations/JavaScriptSourceMappingUrl', function () {
-    it('should handle a test case with a JavaScript asset that has @sourceMappingURL directive', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 4);
-                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-                expect(assetGraph, 'to contain asset', 'Html');
-                expect(assetGraph, 'to contain asset', 'SourceMap');
-                expect(assetGraph, 'to contain relation', 'JavaScriptSourceMappingUrl');
-                expect(assetGraph, 'to contain relation', 'SourceMapFile');
-                expect(assetGraph, 'to contain relation', 'SourceMapSource');
-                assetGraph.findAssets({type: 'JavaScript'})[0].url = assetGraph.root + 'foo/jquery.js';
+    it('should handle a test case with a JavaScript asset that has @sourceMappingURL directive', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap/'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
-                expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /@\s*sourceMappingURL=..\/jquery-1.10.1.min.map/);
-            });
+        expect(assetGraph, 'to contain assets', 4);
+        expect(assetGraph, 'to contain assets', 'JavaScript', 2);
+        expect(assetGraph, 'to contain asset', 'Html');
+        expect(assetGraph, 'to contain asset', 'SourceMap');
+        expect(assetGraph, 'to contain relation', 'JavaScriptSourceMappingUrl');
+        expect(assetGraph, 'to contain relation', 'SourceMapFile');
+        expect(assetGraph, 'to contain relation', 'SourceMapSource');
+        assetGraph.findAssets({type: 'JavaScript'})[0].url = assetGraph.root + 'foo/jquery.js';
+
+        expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to match', /@\s*sourceMappingURL=..\/jquery-1.10.1.min.map/);
     });
 
     it('should handle another test case with a JavaScript asset that has @sourceMappingURL directive', async function () {
         const warnSpy = sinon.spy().named('warn');
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap2/'});
-        await assetGraph.on('warn', warnSpy)
-            .loadAssets('index.html')
-            .populate();
+        await assetGraph.on('warn', warnSpy);
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*jquery-1.11.3.js/));
 

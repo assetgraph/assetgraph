@@ -4,15 +4,11 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlOpenGraph', function () {
     function getHtmlAsset(htmlString) {
-        var graph = new AssetGraph({ root: __dirname });
-        var htmlAsset = new AssetGraph.Html({
+        return new AssetGraph({ root: __dirname }).addAsset({
+            type: 'Html',
             text: htmlString || '<!doctype html><html><head></head><body></body></html>',
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
-
-        graph.addAsset(htmlAsset);
-
-        return htmlAsset;
     }
 
     describe('#inline', function () {
@@ -25,12 +21,11 @@ describe('relations/HtmlOpenGraph', function () {
         });
     });
 
-    it('should handle a test case with an existing <link rel="preconnect"> element', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'})
-            .loadAssets('index.html')
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlOpenGraph', 10);
-            });
+    it('should handle a test case with an existing <link rel="preconnect"> element', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'});
+        await assetGraph.loadAssets('index.html');
+
+        expect(assetGraph, 'to contain relation', 'HtmlOpenGraph', 10);
     });
 
     it('should update the href', async function () {

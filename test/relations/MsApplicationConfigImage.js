@@ -1,84 +1,79 @@
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/MsApplicationConfigImage', function () {
+describe('relations/MsApplicationConfigImage', async function () {
+    it('should handle a test case with an existing <TileImage/> element', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'});
+        await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
+        await assetGraph.populate();
 
-    it('should handle a test case with an existing <TileImage/> element', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'})
-            .loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'})
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph.findRelations(), 'to satisfy', [
-                    { type: 'MsApplicationConfigImage' }
-                ]);
+        expect(assetGraph.findRelations(), 'to satisfy', [
+            { type: 'MsApplicationConfigImage' }
+        ]);
 
-                expect(assetGraph.findAssets(), 'to satisfy', [
-                    { type: 'MsApplicationConfig' },
-                    { fileName: 'icon.png' }
-                ]);
-            });
+        expect(assetGraph.findAssets(), 'to satisfy', [
+            { type: 'MsApplicationConfig' },
+            { fileName: 'icon.png' }
+        ]);
     });
 
-    it('should update the href', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'})
-            .loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'})
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'MsApplicationConfigImage');
+    it('should update the href', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'});
+        await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
+        await assetGraph.populate();
 
-                var relation = assetGraph.findRelations({ type: 'MsApplicationConfigImage' })[0];
+        expect(assetGraph, 'to contain relation', 'MsApplicationConfigImage');
 
-                relation.to.url = 'foo.bar';
+        const relation = assetGraph.findRelations({ type: 'MsApplicationConfigImage' })[0];
 
-                expect(relation, 'to satisfy', {
-                    href: 'foo.bar'
-                });
-            });
-    });
+        relation.to.url = 'foo.bar';
 
-    it('should inline an image', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'})
-            .loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'})
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'MsApplicationConfigImage');
-
-                var relation = assetGraph.findRelations({ type: 'MsApplicationConfigImage' })[0];
-
-                relation.inline();
-
-                expect(relation, 'to satisfy', {
-                    href: expect.it('to begin with', 'data:image/png;base64,')
-                });
-            });
-    });
-
-    describe('when programmatically adding a relation', function () {
-        it('should throw when trying to attach', function () {
-            var relation = new AssetGraph.MsApplicationConfigImage({
-                to: new AssetGraph.Png({ url: 'image.png' })
-            });
-
-            expect(relation.attach.bind(relation), 'to throw', 'MsApplicationConfigImage.attach: Not supported');
+        expect(relation, 'to satisfy', {
+            href: 'foo.bar'
         });
     });
 
-    describe('when programmatically detataching a relation', function () {
-        it('it should remove the relation and clean up', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'})
-                .loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'})
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain relation', 'MsApplicationConfigImage', 1);
+    it('should inline an image', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'});
+        await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
+        await assetGraph.populate();
 
-                    var relation = assetGraph.findRelations({ type: 'MsApplicationConfigImage' })[0];
+        expect(assetGraph, 'to contain relation', 'MsApplicationConfigImage');
 
-                    relation.detach();
+        const relation = assetGraph.findRelations({ type: 'MsApplicationConfigImage' })[0];
 
-                    expect(assetGraph, 'to contain relation', 'MsApplicationConfigImage', 0);
+        relation.inline();
 
-                    expect(assetGraph.findAssets({ type: 'MsApplicationConfig'})[0].text, 'not to contain', '<TileImage');
-                });
+        expect(relation, 'to satisfy', {
+            href: expect.it('to begin with', 'data:image/png;base64,')
+        });
+    });
+
+    describe('when programmatically adding a relation', async function () {
+        it('should throw when trying to attach', function () {
+            const relation = new AssetGraph.MsApplicationConfigImage({
+                to: new AssetGraph.Png({ url: 'image.png' })
+            });
+
+            expect(() => relation.attach(), 'to throw', 'MsApplicationConfigImage.attach: Not supported');
+        });
+    });
+
+    describe('when programmatically detataching a relation', async function () {
+        it('it should remove the relation and clean up', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'});
+            await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
+            await assetGraph.populate();
+
+            expect(assetGraph, 'to contain relation', 'MsApplicationConfigImage', 1);
+
+            const relation = assetGraph.findRelations({ type: 'MsApplicationConfigImage' })[0];
+
+            relation.detach();
+
+            expect(assetGraph, 'to contain relation', 'MsApplicationConfigImage', 0);
+
+            expect(assetGraph.findAssets({ type: 'MsApplicationConfig'})[0].text, 'not to contain', '<TileImage');
         });
     });
 });

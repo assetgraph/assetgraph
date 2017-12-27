@@ -14,26 +14,25 @@ describe('assets/Html', function () {
         expect(htmlAsset.text, 'to equal', value);
     });
 
-    it('should handle a test case with a javascript: url', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/assets/Html/javascriptUrl/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 2);
-                expect(assetGraph, 'to contain asset', 'Html');
-                expect(assetGraph, 'to contain relation', 'HtmlAnchor');
-                expect(assetGraph, 'to contain asset', 'JavaScript');
+    it('should handle a test case with a javascript: url', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Html/javascriptUrl/'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
-                var javaScript = assetGraph.findAssets({type: 'JavaScript', isInline: true})[0];
-                javaScript.parseTree.body.push({
-                    type: 'CallExpression',
-                    callee: { type: 'Identifier', name: 'alert' },
-                    arguments: [ { type: 'Literal', value: 'bar', raw: '\'bar\'' } ]
-                });
-                javaScript.markDirty();
+        expect(assetGraph, 'to contain assets', 2);
+        expect(assetGraph, 'to contain asset', 'Html');
+        expect(assetGraph, 'to contain relation', 'HtmlAnchor');
+        expect(assetGraph, 'to contain asset', 'JavaScript');
 
-                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /bar/);
-            });
+        const javaScript = assetGraph.findAssets({type: 'JavaScript', isInline: true})[0];
+        javaScript.parseTree.body.push({
+            type: 'CallExpression',
+            callee: { type: 'Identifier', name: 'alert' },
+            arguments: [ { type: 'Literal', value: 'bar', raw: '\'bar\'' } ]
+        });
+        javaScript.markDirty();
+
+        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /bar/);
     });
 
     describe('#text', function () {

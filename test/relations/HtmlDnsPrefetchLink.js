@@ -21,26 +21,24 @@ describe('relations/HtmlDnsPrefetchLink', function () {
         });
     });
 
-    it('should handle a test case with an existing <link rel="dns-prefetch"> element', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDnsPrefetchLink/'})
-            .loadAssets('index.html')
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');
-            });
+    it('should handle a test case with an existing <link rel="dns-prefetch"> element', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDnsPrefetchLink/'});
+        await assetGraph.loadAssets('index.html');
+
+        expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');
     });
 
-    it('should update the href', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDnsPrefetchLink/'})
-            .loadAssets('index.html')
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');
+    it('should update the href', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDnsPrefetchLink/'});
+        await assetGraph.loadAssets('index.html');
 
-                const link = assetGraph.findRelations({ type: 'HtmlDnsPrefetchLink' })[0];
-                link.hrefType = 'relative';
-                link.to.url = assetGraph.root + 'foo.bar';
+        expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');
 
-                expect(link, 'to satisfy', { href: 'foo.bar' });
-            });
+        const link = assetGraph.findRelations({ type: 'HtmlDnsPrefetchLink' })[0];
+        link.hrefType = 'relative';
+        link.to.url = assetGraph.root + 'foo.bar';
+
+        expect(link, 'to satisfy', { href: 'foo.bar' });
     });
 
     describe('when programmatically adding a relation', function () {

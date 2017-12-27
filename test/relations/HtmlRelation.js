@@ -141,7 +141,7 @@ describe('relations/HtmlRelation', function () {
 
         describe('with no relations in <head> tag', function () {
             describe('with no relations in <body> tag', function () {
-                var html = '<!doctype html><html><head></head><body></body></html>';
+                const html = '<!doctype html><html><head></head><body></body></html>';
 
                 it('should append relation node to <head> when using "first"-position', function () {
                     const htmlAsset = getHtmlAsset(html);
@@ -183,7 +183,7 @@ describe('relations/HtmlRelation', function () {
             });
 
             describe('with relations in <body> tag', function () {
-                var html = '<!DOCTYPE html><html><head></head><body><script src="bundle.js"></script></body></html>';
+                const html = '<!DOCTYPE html><html><head></head><body><script src="bundle.js"></script></body></html>';
 
                 it('should append relation node to <head> when using "first"-position', function () {
                     const htmlAsset = getHtmlAsset(html);
@@ -247,7 +247,7 @@ describe('relations/HtmlRelation', function () {
         });
 
         describe('with relations in <head> tag', function () {
-            var html = ['<!DOCTYPE html><html><head>',
+            const html = ['<!DOCTYPE html><html><head>',
                 '<meta id="tag1" charset="utf-8">',
                 '<link id="tag2" rel="shortcut icon" href="/favicon.ico">',
                 '<meta id="tag3" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">',
@@ -257,7 +257,7 @@ describe('relations/HtmlRelation', function () {
             ].join('');
 
             it('should append relation node first in <head> when using "first"-position', function () {
-                var htmlAsset = getHtmlAsset(html);
+                const htmlAsset = getHtmlAsset(html);
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -314,7 +314,7 @@ describe('relations/HtmlRelation', function () {
             });
 
             it('should append relation node last in <head> when using "last"-position', function () {
-                var htmlAsset = getHtmlAsset(html);
+                const htmlAsset = getHtmlAsset(html);
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -371,7 +371,7 @@ describe('relations/HtmlRelation', function () {
             });
 
             it('should append relation node before <link id="tag2" rel="shortcut icon" href="/favicon.ico">', function () {
-                var htmlAsset = getHtmlAsset(html);
+                const htmlAsset = getHtmlAsset(html);
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -428,7 +428,7 @@ describe('relations/HtmlRelation', function () {
             });
 
             it('should append relation node after <meta id="tag1" charset="utf-8">', function () {
-                var htmlAsset = getHtmlAsset(html);
+                const htmlAsset = getHtmlAsset(html);
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -485,7 +485,7 @@ describe('relations/HtmlRelation', function () {
             });
 
             it('should append relation node before <meta id="tag3" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">', function () {
-                var htmlAsset = getHtmlAsset(html);
+                const htmlAsset = getHtmlAsset(html);
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -542,7 +542,7 @@ describe('relations/HtmlRelation', function () {
             });
 
             it('should append relation node after <meta id="tag3" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">', function () {
-                var htmlAsset = getHtmlAsset(html);
+                const htmlAsset = getHtmlAsset(html);
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -599,7 +599,7 @@ describe('relations/HtmlRelation', function () {
             });
 
             it('should append relation node before <meta id="tag5" name="description" content="content description">', function () {
-                var htmlAsset = getHtmlAsset(html);
+                const htmlAsset = getHtmlAsset(html);
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
@@ -656,7 +656,7 @@ describe('relations/HtmlRelation', function () {
             });
 
             it('should append relation node after <link id="tag4" rel="shortcut icon" href="/favicon.svg">', function () {
-                var htmlAsset = getHtmlAsset(html);
+                const htmlAsset = getHtmlAsset(html);
 
                 expect(htmlAsset.outgoingRelations, 'to satisfy', [
                     expect.it('to be', findRelation(htmlAsset, {
