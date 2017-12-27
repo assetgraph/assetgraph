@@ -31,6 +31,7 @@ describe('relations/CssImport', function () {
                 text: 'body { color: maroon; }'
             }
         }, 'last');
-        expect(cssAsset.text, 'to contain', 'import "moreStyles.css"projection;');
+
+        expect(cssAsset.text, 'to contain', 'import "moreStyles.css" projection;');
     });
 });
