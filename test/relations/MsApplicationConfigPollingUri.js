@@ -25,15 +25,15 @@ describe('relations/MsApplicationConfigPollingUri', function () {
     it('should update the href', async function () {
         const warnSpy = sinon.spy().named('warn');
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'});
-        await assetGraph.on('warn', warnSpy)
-            .loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'})
-            .populate();
+        await assetGraph.on('warn', warnSpy);
+        await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
+        await assetGraph.populate();
 
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*polling-target/));
 
         expect(assetGraph, 'to contain relation', 'MsApplicationConfigPollingUri');
 
-        var relation = assetGraph.findRelations({ type: 'MsApplicationConfigPollingUri' })[0];
+        const relation = assetGraph.findRelations({ type: 'MsApplicationConfigPollingUri' })[0];
 
         relation.to.url = 'foo.bar';
 
@@ -43,34 +43,34 @@ describe('relations/MsApplicationConfigPollingUri', function () {
     });
 
     it('should throw when trying to inline', function () {
-        var relation = new AssetGraph.MsApplicationConfigPollingUri({
+        const relation = new AssetGraph.MsApplicationConfigPollingUri({
             to: { type: 'Xml', url: '/polling-target' }
         });
 
-        expect(relation.inline.bind(relation), 'to throw', 'MsApplicationConfigPollingUri.inline: Not supported');
+        expect(() => relation.inline(), 'to throw', 'MsApplicationConfigPollingUri.inline: Not supported');
     });
 
     it('should throw when trying to attach', function () {
-        var relation = new AssetGraph.MsApplicationConfigPollingUri({
+        const relation = new AssetGraph.MsApplicationConfigPollingUri({
             to: { type: 'Xml', url: '/polling-target' }
         });
 
-        expect(relation.attach.bind(relation), 'to throw', 'MsApplicationConfigPollingUri.attach: Not supported');
+        expect(() => relation.attach(), 'to throw', 'MsApplicationConfigPollingUri.attach: Not supported');
     });
 
     describe('when programmatically detaching a relation', function () {
         it('should remove the relation and clean up', async function () {
             const warnSpy = sinon.spy().named('warn');
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'});
-            await assetGraph.on('warn', warnSpy)
-                .loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'})
-                .populate();
+            await assetGraph.on('warn', warnSpy);
+            await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
+            await assetGraph.populate();
 
             expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*polling-target/));
 
             expect(assetGraph, 'to contain relation', 'MsApplicationConfigPollingUri', 1);
 
-            var relation = assetGraph.findRelations({ type: 'MsApplicationConfigPollingUri' })[0];
+            const relation = assetGraph.findRelations({ type: 'MsApplicationConfigPollingUri' })[0];
 
             relation.detach();
 

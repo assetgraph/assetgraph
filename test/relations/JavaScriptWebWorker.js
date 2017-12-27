@@ -1,5 +1,5 @@
-var expect = require('../unexpected-with-plugins');
-var AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('JavaScriptWebWorker', function () {
     it('should pick up new Worker(...) as a relation', async function () {
@@ -16,16 +16,10 @@ describe('JavaScriptWebWorker', function () {
         await assetGraph.populate();
 
         const javaScriptWebWorker = assetGraph.findRelations({type: 'JavaScriptWebWorker'})[0];
-        expect(function () {
-            javaScriptWebWorker.inline();
-        }, 'to throw', /Not supported/);
+        expect(() => javaScriptWebWorker.inline(), 'to throw', /Not supported/);
 
-        expect(function () {
-            javaScriptWebWorker.detach();
-        }, 'to throw', /Not supported/);
+        expect(() => javaScriptWebWorker.detach(), 'to throw', /Not supported/);
 
-        expect(function () {
-            javaScriptWebWorker.attach('first');
-        }, 'to throw', /Not supported/);
+        expect(() => javaScriptWebWorker.attach('first'), 'to throw', /Not supported/);
     });
 });

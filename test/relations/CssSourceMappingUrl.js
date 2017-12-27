@@ -1,6 +1,6 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/CssSourceMappingUrl', function () {
     it('should handle a test case with a Css asset that has @sourceMappingURL directive', async function () {
@@ -26,7 +26,7 @@ describe('relations/CssSourceMappingUrl', function () {
                 assetGraph.root + 'foo.less'
             ]
         });
-        var css = assetGraph.findAssets({ fileName: 'somewhereelse.css' })[0];
+        const css = assetGraph.findAssets({ fileName: 'somewhereelse.css' })[0];
         css.parseTree.append(
             assetGraph.findAssets({ fileName: 'someMore.css' })[0].parseTree.nodes
         );

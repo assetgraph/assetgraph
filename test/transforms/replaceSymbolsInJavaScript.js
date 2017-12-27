@@ -9,11 +9,10 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         assetGraph = new AssetGraph();
     });
 
-    const expect = unexpected.clone().addAssertion('to come out as', async function (expect, subject, value) {
-        this.args.pop(); // Don't inspect the callback when the assertion fails
+    const expect = unexpected.clone().addAssertion('to come out as', async (expect, subject, value) => {
         // subject.code, subject.defines
         expect(subject, 'to be an object');
-        var assetConfig = {
+        const assetConfig = {
             url: 'file://' + __dirname + '/bogus.js'
         };
         if (subject && typeof subject.type === 'string') {
@@ -23,9 +22,8 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         } else if (Buffer.isBuffer(subject.rawSrc)) {
             assetConfig.rawSrc = subject.rawSrc;
         }
-        await assetGraph
-            .loadAssets(new AssetGraph.JavaScript(assetConfig))
-            .replaceSymbolsInJavaScript({type: 'JavaScript'}, subject.defines || {});
+        await assetGraph.loadAssets(new AssetGraph.JavaScript(assetConfig));
+        await assetGraph.replaceSymbolsInJavaScript({type: 'JavaScript'}, subject.defines || {});
 
         expect(assetGraph.findAssets({fileName: 'bogus.js'})[0], 'to have the same AST as', value);
         return assetGraph.findAssets()[0].parseTree;
@@ -163,7 +161,7 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
     });
 
     it('should replace nested value with undefined if no value is found and emit a warning', function () {
-        var warnings = [];
+        const warnings = [];
         assetGraph.on('warn', function (err) {
             warnings.push(err);
         });

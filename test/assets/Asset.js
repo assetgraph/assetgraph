@@ -147,7 +147,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an asset with an extensionless url', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index'
         });
@@ -178,7 +178,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle another Html asset with an extensionless url', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'æøå',
             url: 'http://example.com/index'
         });
@@ -198,7 +198,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an Html asset with an url that has an extension', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             rawSrc: new Buffer([0xc3, 0xa6, 0xc3, 0xb8, 0xc3, 0xa5]),
             url: 'http://example.com/index.blah'
         });
@@ -218,7 +218,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle another Html asset with an url that has an extension', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index.blah'
         });
@@ -232,7 +232,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle yet another Html asset with an url that has an extension', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index.blah'
         });
@@ -245,7 +245,7 @@ describe('assets/Asset', function () {
     });
 
     it('should yet yet another Html asset with an url that has an extension', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index.blah'
         });
@@ -259,7 +259,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an Html asset with an url that has an extension and a fragment identifier', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index.blah#yay'
         });
@@ -276,7 +276,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle another Html asset with an url that has an extension and a fragment identifier', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index.blah#yay'
         });
@@ -289,7 +289,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an Html asset with an url that has an extension and a query string', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index.blah?yay=bar'
         });
@@ -306,7 +306,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle another Html asset with an url that has an extension and a query string', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index.blah?yay=bar'
         });
@@ -320,7 +320,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an Html asset with an url that has an extension, a query string, and a fragment identifier', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index.blah?yay=bar#really'
         });
@@ -337,7 +337,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an Html asset with an url that has an extension, a query string, and a fragment identifier', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo',
             url: 'http://example.com/index.blah?yay=bar#really'
         });
@@ -354,7 +354,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an Html asset with no url', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: 'foo'
         });
         expect(htmlAsset.extension, 'to equal', '.html');
@@ -366,7 +366,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an Html asset with no url, but an extension of ".yay"', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             extension: '.yay',
             text: 'foo'
         });
@@ -379,7 +379,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an Html asset with no url but a fileName of "thething.yay"', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             fileName: 'thething.yay',
             text: 'foo'
         });
@@ -392,7 +392,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an Html asset with no url but an extension of ""', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             extension: '',
             text: 'foo'
         });
@@ -405,7 +405,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an Html asset with no url but a fileName of ""', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             fileName: '',
             text: 'foo'
         });
@@ -453,7 +453,7 @@ describe('assets/Asset', function () {
 
             expect(assetGraph, 'to contain assets', 'Css', 1);
 
-            var original = assetGraph.findAssets({type: 'Css'})[0];
+            const original = assetGraph.findAssets({type: 'Css'})[0];
 
             expect(original.clone.bind(original, [{}]), 'to throw', /Incoming relation is not a relation/);
         });
@@ -659,7 +659,7 @@ describe('assets/Asset', function () {
         it('should handle a combo test case', function () {
             const assetGraph = new AssetGraph({root: 'http://example.com/'});
 
-            var htmlAsset = assetGraph.addAsset({
+            const htmlAsset = assetGraph.addAsset({
                 type: 'Html',
                 url: 'http://example.com/foo.html',
                 text:
@@ -730,7 +730,7 @@ describe('assets/Asset', function () {
             clone.url = 'http://example.com/fooclone1.html';
 
             expect(clone, 'not to be undefined');
-            var outgoingRelations = assetGraph.findRelations({from: clone});
+            let outgoingRelations = assetGraph.findRelations({from: clone});
             expect(outgoingRelations, 'to have length', 2);
             expect(outgoingRelations[0].to.url, 'to equal', 'http://example.com/baz.html');
             expect(outgoingRelations[1].to.url, 'to equal', 'http://example.com/quux.html');

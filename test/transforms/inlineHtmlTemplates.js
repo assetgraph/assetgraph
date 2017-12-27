@@ -48,7 +48,7 @@ describe('transforms/inlineHtmlTemplates', function () {
             '<script type="text/html" id="foo"><img data-bind="attr: {src: \'/foo.png\'.toString(\'url\')}">\n</script><script type="text/html" id="bar"><div>\n    <h1>bar.ko</h1>\n</div>\n</script><script type="text/html" id="templateWithEmbeddedTemplate"><div data-bind="template: \'theEmbeddedTemplate\'"></div>\n\n\n\n</script></head>'
         );
 
-        var relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'foo'; }})[0];
+        let relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'foo'; }})[0];
         expect(relation, 'to be ok');
         expect(relation.to.text, 'to equal', '<img data-bind="attr: {src: \'/foo.png\'.toString(\'url\')}">\n');
 
@@ -59,15 +59,15 @@ describe('transforms/inlineHtmlTemplates', function () {
 
     it('should handle a test case with the same Knockout.js being loaded using the systemjs-tpl plugin in multiple .html pages', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineHtmlTemplates/multipleInMultipleHtmlPages/'});
-        await assetGraph.loadAssets(['index1.html', 'index2.html'])
-            .populate({
-                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
-            })
-            .bundleSystemJs()
-            .populate({
-                followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
-            })
-            .inlineHtmlTemplates();
+        await assetGraph.loadAssets(['index1.html', 'index2.html']);
+        await assetGraph.populate({
+            followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+        });
+        await assetGraph.bundleSystemJs();
+        await assetGraph.populate({
+            followRelations: { type: AssetGraph.query.not('JavaScriptSourceMappingUrl') }
+        });
+        await assetGraph.inlineHtmlTemplates();
 
         expect(assetGraph, 'to contain relations', 'HtmlInlineScriptTemplate', 12);
         expect(assetGraph, 'to contain relations', {type: 'HtmlInlineScriptTemplate', from: {fileName: 'index1.html'}}, 6);

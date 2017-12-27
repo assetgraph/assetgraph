@@ -10,10 +10,10 @@ const almond = fs.readFileSync(__dirname + '/../../testdata/transforms/bundleReq
 describe('transforms/bundleRequireJs', function () {
     it('should handle the jquery-require-sample test case', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/jquery-require-sample/webapp/'});
-        await assetGraph.loadAssets('app.html')
-            .populate();
+        await assetGraph.loadAssets('app.html');
+        await assetGraph.populate();
 
-        expect(assetGraph, 'to contain assets', 'JavaScript', 1);
+        expect(assetGraph, 'to contain asset', 'JavaScript');
 
         await assetGraph.bundleRequireJs({type: 'Html'});
 
@@ -61,10 +61,10 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case with a text dependency', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/textDependency/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs({type: 'Html'})
-            .populate({from: { type: 'JavaScript'}});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs({type: 'Html'});
+        await assetGraph.populate({from: { type: 'JavaScript'}});
 
         const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
         expect(htmlScripts, 'to have length', 2);
@@ -73,8 +73,8 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case with a module that has multiple define calls pointing at it', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/multipleIncoming/'});
-        await assetGraph.loadAssets('index.html')
-            .populate();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain asset', 'JavaScript');
 
@@ -106,9 +106,9 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle another case with a module that has multiple define calls pointing at it', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/multipleIncoming2/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs({type: 'Html'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs({type: 'Html'});
         const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
 
         expect(htmlScripts, 'to have length', 2);
@@ -132,9 +132,9 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case with a module that is included via a script tag and a JavaScriptAmdRequire relation', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/nonOrphanedJavaScript/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs({type: 'Html'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs({type: 'Html'});
         const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
 
         expect(htmlScripts, 'to have length', 3);
@@ -153,13 +153,12 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case that uses require(...) to fetch a css file', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/cssRequire/'});
-        await assetGraph.loadAssets('index.html')
-            .populate();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
         expect(assetGraph, 'to contain assets', 'JavaScript', 2);
 
-        await assetGraph
-            .bundleRequireJs({type: 'Html'})
-            .populate();
+        await assetGraph.bundleRequireJs({type: 'Html'});
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain relation', 'HtmlStyle');
         expect(assetGraph, 'to contain asset', 'Css');
@@ -169,15 +168,13 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case that includes a JavaScriptStaticUrl relation', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/withOneStaticUrl/'});
-        await assetGraph.loadAssets('index.html')
-            .populate();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
+        expect(assetGraph, 'to contain asset', 'JavaScript');
 
-        expect(assetGraph, 'to contain assets', 'JavaScript', 1);
-
-        await assetGraph
-            .bundleRequireJs({type: 'Html'})
-            .populate();
+        await assetGraph.bundleRequireJs({type: 'Html'});
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain relation', 'JavaScriptStaticUrl');
         expect(assetGraph, 'to contain asset', 'Png');
@@ -211,9 +208,9 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a umd test case', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/umd/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs({type: 'Html'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs({type: 'Html'});
         const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
 
         expect(htmlScripts, 'to have length', 2);
@@ -243,9 +240,9 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a umd test case where the wrapper has a dependency in the define call', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/umdWithDependency/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs({type: 'Html'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs({type: 'Html'});
         const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
 
         expect(htmlScripts, 'to have length', 2);
@@ -277,9 +274,9 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a non-umd test case', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/nonUmd/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs({type: 'Html'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs({type: 'Html'});
         const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
 
         expect(htmlScripts, 'to have length', 2);
@@ -311,9 +308,9 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case with multiple Html files depending on the same modules', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/multipleHtmls/'});
-        await assetGraph.loadAssets('*.html')
-            .populate()
-            .bundleRequireJs({type: 'Html'});
+        await assetGraph.loadAssets('*.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs({type: 'Html'});
         const htmlScripts1 = assetGraph.findRelations({type: 'HtmlScript', from: {fileName: 'index1.html'}});
 
         expect(htmlScripts1, 'to have length', 2);
@@ -352,9 +349,9 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case using the less! plugin', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/lessPlugin/'});
-        await assetGraph.loadAssets('index*.html')
-            .populate()
-            .bundleRequireJs({type: 'Html'});
+        await assetGraph.loadAssets('index*.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs({type: 'Html'});
 
         expect(_.map(assetGraph.findRelations({type: 'HtmlStyle', from: {fileName: 'index.html'}}), 'href'), 'to equal', [
             'main-bundle.css'
@@ -366,9 +363,9 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case with a shims config', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/shim/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs();
         const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
 
         expect(htmlScripts, 'to have length', 3);
@@ -407,8 +404,8 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case with a non-string items in the require array', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/nonString/'});
-        await assetGraph.loadAssets('index.html')
-            .populate();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
         expect(_.map(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
             assetGraph.root + 'require.js'
@@ -432,8 +429,8 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case with relative dependencies', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/relativeDependencies/'});
-        await assetGraph.loadAssets('index.html')
-            .populate();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
         expect(_.map(assetGraph.findAssets({type: 'JavaScript'}), 'url').sort(), 'to equal', [
             assetGraph.root + 'require.js'
@@ -470,8 +467,8 @@ describe('transforms/bundleRequireJs', function () {
     // This test isn't that interesting as the require.js optimizer leaves the asset on the CDN:
     it('should handle a test case with a paths config that points jquery at a CDN', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/httpPath/'});
-        await assetGraph.loadAssets('index.html')
-            .populate();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
         expect(_.map(assetGraph.findAssets({type: 'JavaScript', isInline: false}), 'url').sort(), 'to equal', [
             assetGraph.root + 'require.js'
@@ -494,9 +491,9 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case with a paths config that maps theLibrary to 3rdparty/theLibrary', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/paths/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs();
         const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
 
         expect(htmlScripts, 'to have length', 3);
@@ -529,9 +526,9 @@ describe('transforms/bundleRequireJs', function () {
     // https://github.com/assetgraph/assetgraph-builder/issues/542
     it('should support the wrap option', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/wrap/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs();
 
         const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
         expect(htmlScripts, 'to have length', 3);
@@ -557,11 +554,11 @@ describe('transforms/bundleRequireJs', function () {
 
     it('should handle a test case with a data-main that only contains a define (#127)', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/issue127/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs();
 
-        var htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
+        const htmlScripts = assetGraph.findRelations({type: 'HtmlScript'});
         expect(htmlScripts, 'to have length', 2);
         expect(htmlScripts[0].href, 'to equal', 'require.js');
         expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function () {
@@ -595,9 +592,9 @@ describe('transforms/bundleRequireJs', function () {
     */
     it('should handle a test case with a umdish factory pattern', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/umdishBackboneLocalstorage/'});
-        await assetGraph.loadAssets('index.html')
-            .populate()
-            .bundleRequireJs();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.bundleRequireJs();
 
         expect(assetGraph.findRelations({type: 'HtmlScript'})[1].to.parseTree, 'to have the same AST as', function () {
             /* eslint-disable */
@@ -639,9 +636,9 @@ describe('transforms/bundleRequireJs', function () {
     describe('with a data-almond attribute', function () {
         it('should handle a non-almond test case', async function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/almond/mixed/'});
-            await assetGraph.loadAssets('require-pure.html')
-                .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
-                .populate();
+            await assetGraph.loadAssets('require-pure.html');
+            await assetGraph.populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}});
+            await assetGraph.populate();
 
             expect(assetGraph, 'to contain asset', 'JavaScript');
             expect(assetGraph.findAssets({type: 'JavaScript'}).pop().text, 'to equal', requirejs);
@@ -654,18 +651,17 @@ describe('transforms/bundleRequireJs', function () {
 
         it('should handle a test case with several data-almond attributes', async function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/almond/mixed/'});
-            await assetGraph.loadAssets('require-almond.html')
-                .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
-                .populate();
+            await assetGraph.loadAssets('require-almond.html');
+            await assetGraph.populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}});
+            await assetGraph.populate();
 
             expect(assetGraph, 'to contain asset', 'JavaScript');
             expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
 
             expect(assetGraph.findRelations({type: 'HtmlScript'})[0].to.text, 'to equal', requirejs);
 
-            await assetGraph
-                .bundleRequireJs()
-                .populate();
+            await assetGraph.bundleRequireJs();
+            await assetGraph.populate();
 
             expect(assetGraph, 'to contain assets', 'JavaScript', 2);
             expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
@@ -675,21 +671,21 @@ describe('transforms/bundleRequireJs', function () {
 
         it('should handle a test case where multiple Html assets use the same require.js and have a data-almond attribute', async function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/almond/multipleHtml/'});
-            await assetGraph.loadAssets('*.html')
-                .populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}})
-                .populate();
+            await assetGraph.loadAssets('*.html');
+            await assetGraph.populate({from: {type: 'Html'}, followRelations: {type: 'HtmlScript', to: {url: /^file:/}}});
+            await assetGraph.populate();
 
             expect(assetGraph, 'to contain assets', 'Html', 2);
-            expect(assetGraph, 'to contain assets', 'JavaScript', 1);
+            expect(assetGraph, 'to contain asset', 'JavaScript');
             expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
 
             await assetGraph.bundleRequireJs();
 
             expect(assetGraph, 'to contain asset', 'JavaScript');
             expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
-            assetGraph.findAssets({type: 'Html'}).forEach(function (htmlAsset) {
+            for (const htmlAsset of assetGraph.findAssets({type: 'Html'})) {
                 expect(htmlAsset.text.match(/<script/g), 'to have length', 1);
-            });
+            }
         });
     });
 });

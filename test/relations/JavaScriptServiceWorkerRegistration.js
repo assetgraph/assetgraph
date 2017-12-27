@@ -1,6 +1,6 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/JavaScriptServiceWorkerRegistration', function () {
     it('should populate the relation', async function () {
@@ -72,7 +72,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
-        var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
+        const relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
 
         expect(
             () => relation.attach('before', relation),

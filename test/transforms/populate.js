@@ -76,7 +76,7 @@ describe('transforms/populate', function () {
         it('should support an empty array', function () {
             httpception();
 
-            var assetGraph = new AssetGraph();
+            const assetGraph = new AssetGraph();
             assetGraph.addAsset({
                 type: 'Html',
                 url: 'https://example.com/',
@@ -98,8 +98,8 @@ describe('transforms/populate', function () {
                 }
             });
 
-            var assetGraph = new AssetGraph();
-            var htmlAsset = assetGraph.addAsset({
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.addAsset({
                 url: 'https://example.com/',
                 text: '<script src="foo.js"></script>'
             });
@@ -126,8 +126,8 @@ describe('transforms/populate', function () {
                 }
             ]);
 
-            var assetGraph = new AssetGraph();
-            var htmlAsset = assetGraph.addAsset({
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.addAsset({
                 type: 'Html',
                 url: 'https://example.com/',
                 text: '<script src="foo.js"></script><script src="bar.js"></script><script src="quux.js"></script>'

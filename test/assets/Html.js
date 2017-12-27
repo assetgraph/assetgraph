@@ -1,11 +1,11 @@
 /*global describe, it*/
-var unexpected = require('../unexpected-with-plugins');
-var AssetGraph = require('../../lib/AssetGraph');
-var mozilla = require('source-map');
+const unexpected = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
+const mozilla = require('source-map');
 
 describe('assets/Html', function () {
-    var expect = unexpected.clone().addAssertion('to minify to', function (expect, subject, value, manipulator) {
-        var htmlAsset = new AssetGraph.Html({text: subject});
+    const expect = unexpected.clone().addAssertion('to minify to', function (expect, subject, value, manipulator) {
+        const htmlAsset = new AssetGraph.Html({text: subject});
         if (manipulator) {
             manipulator(htmlAsset);
             htmlAsset.markDirty();
@@ -49,7 +49,7 @@ describe('assets/Html', function () {
         });
 
         it('should get text of AssetGraph.Html instantiated with rawSrc property and modified parse tree', function () {
-            var htmlAsset = new AssetGraph.Html({
+            const htmlAsset = new AssetGraph.Html({
                 rawSrc: new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
@@ -58,7 +58,7 @@ describe('assets/Html', function () {
         });
 
         it('should get text of AssetGraph.Html with text property and modified parse tree', function () {
-            var htmlAsset = new AssetGraph.Html({
+            const htmlAsset = new AssetGraph.Html({
                 text: '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
@@ -81,7 +81,7 @@ describe('assets/Html', function () {
         });
 
         it('should get rawSrc of AssetGraph.Html with rawSrc property and modified parse tree', function () {
-            var htmlAsset = new AssetGraph.Html({
+            const htmlAsset = new AssetGraph.Html({
                 rawSrc: new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>')
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
@@ -90,7 +90,7 @@ describe('assets/Html', function () {
         });
 
         it('should get rawSrc of AssetGraph.Html with text property and modified parse tree', function () {
-            var htmlAsset = new AssetGraph.Html({
+            const htmlAsset = new AssetGraph.Html({
                 text: '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
@@ -119,7 +119,7 @@ describe('assets/Html', function () {
         }
 
         it('should handle a non-templated HTML asset', function () {
-            var asset = createAsset('<div></div>');
+            const asset = createAsset('<div></div>');
             asset.parseTree; // Side effect: Populate asset._templateReplacement
             expect(asset.text, 'to equal', '<div></div>');
             expect(asset._templateReplacements, 'to equal', {});
@@ -128,7 +128,7 @@ describe('assets/Html', function () {
         });
 
         it('should handle an underscore template', function () {
-            var asset = createAsset('<div><% foo %></div>');
+            const asset = createAsset('<div><% foo %></div>');
 
             asset.parseTree; // Side effect: Populate asset._templateReplacement
             expect(asset._templateReplacements, 'to equal', {'⋖5⋗': '<% foo %>'});
@@ -147,7 +147,7 @@ describe('assets/Html', function () {
         });
 
         it('should handle the PHP template syntax', function () {
-            var asset = createAsset('<div><? foo ?></div>');
+            const asset = createAsset('<div><? foo ?></div>');
             expect(asset.text, 'to equal', '<div><? foo ?></div>');
             asset.parseTree; // Side effect: Populate asset._templateReplacement
             expect(asset.parseTree.firstChild.firstChild.nodeValue, 'to equal', '⋖5⋗');
@@ -165,7 +165,7 @@ describe('assets/Html', function () {
         });
 
         it('should handle a an underscore template with a PHP close tag inside the dynamic part', function () {
-            var asset = createAsset('<div><% foo ?> %></div>');
+            const asset = createAsset('<div><% foo ?> %></div>');
 
             asset.parseTree; // Side effect: Populate asset._templateReplacement
             expect(asset.parseTree.firstChild.firstChild.nodeValue, 'to equal', '⋖5⋗');
@@ -350,8 +350,8 @@ describe('assets/Html', function () {
                 '<!DOCTYPE html><html><head></head><body><div>foo  </div></body></html>',
                 'to minify to',
                 '<!DOCTYPE html><html><head></head><body><div>foo bar</div></body></html>',
-                function (htmlAsset) {
-                    var document = htmlAsset.parseTree;
+                htmlAsset => {
+                    const document = htmlAsset.parseTree;
                     document.getElementsByTagName('div')[0].appendChild(document.createTextNode('  bar'));
                 }
             );
@@ -360,10 +360,10 @@ describe('assets/Html', function () {
                 '<!DOCTYPE html><html><head></head><body><div></div><div></div></body></html>',
                 'to minify to',
                 '<!DOCTYPE html><html><head></head><body>bar bar bar bar bar<div></div><div></div></body></html>',
-                function (htmlAsset) {
-                    var document = htmlAsset.parseTree,
-                        firstDiv = document.getElementsByTagName('div')[0];
-                    for (var i = 0 ; i < 5 ; i += 1) {
+                htmlAsset => {
+                    const document = htmlAsset.parseTree;
+                    const firstDiv = document.getElementsByTagName('div')[0];
+                    for (let i = 0 ; i < 5 ; i += 1) {
                         firstDiv.parentNode.insertBefore(document.createTextNode('  bar  '), firstDiv);
                     }
                 }
@@ -519,7 +519,7 @@ describe('assets/Html', function () {
                 '<div><!-- hey --></div>',
                 'to minify to',
                 '<div><!-- hey --></div>',
-                function (htmlAsset) {
+                htmlAsset => {
                     htmlAsset.htmlMinifierOptions = { removeComments: false };
                 }
             );
@@ -531,7 +531,7 @@ describe('assets/Html', function () {
                 '<div>  foo  <span class="bar">  quux  </span>  baz  <pre>  </pre></div>',
                 'to minify to',
                 '<div>foo <span class=bar>  quux  </span>baz<pre>  </pre></div>',
-                function (htmlAsset) {
+                htmlAsset => {
                     htmlAsset.htmlMinifierOptions = {
                         canTrimWhitespace: function customTrimmer(tagName, attrs, defaultFn) {
                             if (attrs && attrs.some(function (attr) {
@@ -644,7 +644,7 @@ describe('assets/Html', function () {
     });
 
     it('should not evaluate inline scripts', function () {
-        var htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph.Html({
             text: '<!DOCTYPE html><html><head></head><body><script>document.write("<foo>" + "</foo>");</script></body></html>'
         });
         htmlAsset.parseTree;
@@ -675,11 +675,11 @@ describe('assets/Html', function () {
         expect(assetGraph, 'to contain asset', 'JavaScript');
         expect(assetGraph, 'to contain assets', 'Css', 2);
         expect(assetGraph, 'to contain assets', 'SourceMap', 2);
-        var cssSourceMap = assetGraph.findRelations({type: 'CssSourceMappingUrl'})[0].to;
+        const cssSourceMap = assetGraph.findRelations({type: 'CssSourceMappingUrl'})[0].to;
         expect(cssSourceMap.parseTree, 'to satisfy', {
             sources: [ assetGraph.root + 'index.html' ]
         });
-        var cssSourceMapConsumer = new mozilla.SourceMapConsumer(cssSourceMap.parseTree);
+        const cssSourceMapConsumer = new mozilla.SourceMapConsumer(cssSourceMap.parseTree);
 
         expect(cssSourceMapConsumer.generatedPositionFor({
             source: assetGraph.root + 'index.html',
@@ -701,12 +701,12 @@ describe('assets/Html', function () {
             name: null
         });
 
-        var javaScriptSourceMap = assetGraph.findRelations({type: 'JavaScriptSourceMappingUrl'})[0].to;
+        const javaScriptSourceMap = assetGraph.findRelations({type: 'JavaScriptSourceMappingUrl'})[0].to;
         expect(javaScriptSourceMap.parseTree, 'to satisfy', {
             sources: [ assetGraph.root + 'index.html' ]
         });
 
-        var javaScriptSourceMapConsumer = new mozilla.SourceMapConsumer(javaScriptSourceMap.parseTree);
+        const javaScriptSourceMapConsumer = new mozilla.SourceMapConsumer(javaScriptSourceMap.parseTree);
         expect(javaScriptSourceMapConsumer.generatedPositionFor({
             source: assetGraph.root + 'index.html',
             line: 13,

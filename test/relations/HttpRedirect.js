@@ -1,7 +1,7 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph'),
-    http = require('http');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
+const http = require('http');
 
 describe('relations/HttpRedirect', function () {
     it('should handle a basic test case', async function () {
@@ -9,7 +9,7 @@ describe('relations/HttpRedirect', function () {
         let rootUrl;
         let loopCount = 0;
         let infiniteloopCount = 0;
-        const server = http.createServer(function (req, res) {
+        const server = http.createServer((req, res) => {
             if (req.url === '/301') {
                 res.writeHead(301, {
                     Location: '/relativeRedirectTarget.html',

@@ -6,8 +6,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 describe('relations/HtmlConditionalComment', function () {
     it('should handle a test case with some existing conditional comments', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlConditionalComment/'});
-        await assetGraph.loadAssets('index.html')
-            .populate();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain assets', 9);
 
@@ -34,17 +34,17 @@ describe('relations/HtmlConditionalComment', function () {
 
     it('should handle a test case with the HTML5 boilerplate conditional comments', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlConditionalComment/'});
-        await assetGraph.loadAssets('html5Boilerplate.html')
-            .populate();
+        await assetGraph.loadAssets('html5Boilerplate.html');
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain relations', 'HtmlConditionalComment', 3);
         expect(assetGraph, 'to contain assets', {type: 'Html', isInline: true}, 3);
 
-        assetGraph.findAssets({type: 'Html', isInline: true}).forEach(function (htmlAsset) {
+        for (const htmlAsset of assetGraph.findAssets({type: 'Html', isInline: true})) {
             htmlAsset.markDirty();
-        });
+        }
 
-        var text = assetGraph.findAssets({type: 'Html', isInline: false})[0].text;
+        const { text } = assetGraph.findAssets({type: 'Html', isInline: false})[0];
         expect(text, 'to match', /<!--\[if lt IE 7\]>\s*<html class="no-js lt-ie9 lt-ie8 lt-ie7">\s*<!\[endif\]-->/);
         expect(text, 'to match', /<!--\[if IE 7\]>\s*<html class="no-js lt-ie9 lt-ie8">\s*<!\[endif\]-->/);
         expect(text, 'to match', /<!--\[if IE 8\]>\s*<html class="no-js lt-ie9">\s*<!\[endif\]-->/);

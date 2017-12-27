@@ -1,16 +1,15 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlIFrameSrcDoc', function () {
     it('should handle a test case with an existing <iframe srcdoc=...> element', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlIFrameSrcDoc/'});
 
-        await assetGraph
-            .loadAssets('index.html')
-            .populate({
-                followRelations: {to: {url: /^file:/}}
-            });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate({
+            followRelations: {to: {url: /^file:/}}
+        });
 
         expect(assetGraph, 'to contain assets', 'Html', 3);
         expect(assetGraph, 'to contain asset', {type: 'Html', isInline: true});

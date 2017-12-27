@@ -144,7 +144,7 @@ describe('transforms/compressJavaScript', function () {
             const assetGraph = new AssetGraph();
             assetGraph.on('warn', warnSpy);
 
-            var asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
+            const asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
             asset.serializationOptions = { screw_ie8: true };
             assetGraph.addAsset(asset);
 

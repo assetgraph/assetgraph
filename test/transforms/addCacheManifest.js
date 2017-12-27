@@ -8,8 +8,8 @@ const sinon = require('sinon');
 describe('transforms/addCacheManifest', function () {
     it('should handle a single page with an existing cache manifest', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/existingCacheManifest/'});
-        await assetGraph.loadAssets('index.html')
-            .populate();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain relations', 4);
         expect(assetGraph, 'to contain assets', 4);
@@ -45,11 +45,11 @@ describe('transforms/addCacheManifest', function () {
     it('should add a cache manifest to a page that does not already have one', async function () {
         const warnSpy = sinon.spy().named('warn');
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifest/'});
-        await assetGraph.on('warn', warnSpy)
-            .loadAssets('index.html')
-            .populate({
-                followRelations: {to: {url: /^file:/}}
-            });
+        await assetGraph.on('warn', warnSpy);
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate({
+            followRelations: {to: {url: /^file:/}}
+        });
 
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*notFound\.js/));
 
@@ -74,8 +74,8 @@ describe('transforms/addCacheManifest', function () {
 
     it('should add cache manifest to multiple pages', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifestMultiPage/'});
-        await assetGraph.loadAssets('*.html')
-            .populate();
+        await assetGraph.loadAssets('*.html');
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain assets', 3);
         expect(assetGraph, 'to contain relations', 4);
@@ -100,8 +100,8 @@ describe('transforms/addCacheManifest', function () {
 
     it('should add a cache manifest and update the existing one in a multi-page test case with one existing manifest', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/existingCacheManifestMultiPage/'});
-        await assetGraph.loadAssets('*.html')
-            .populate();
+        await assetGraph.loadAssets('*.html');
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain assets', 'Html', 2);
         expect(assetGraph, 'to contain assets', 'Png', 2);
@@ -112,13 +112,13 @@ describe('transforms/addCacheManifest', function () {
 
         expect(assetGraph, 'to contain assets', 'CacheManifest', 2);
 
-        var cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'pageone.html'}}})[0];
+        const cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'pageone.html'}}})[0];
         expect(assetGraph, 'to contain relations', {from: cacheManifest}, 3);
         expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'style.css'}});
         expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'quux.png'}});
         expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'foo.png'}});
 
-        var pageTwoCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'pagetwo.html'}}})[0];
+        const pageTwoCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'pagetwo.html'}}})[0];
         expect(assetGraph, 'to contain relations', {from: pageTwoCacheManifest}, 2);
         expect(assetGraph, 'to contain relation', {from: pageTwoCacheManifest, to: {fileName: 'style.css'}});
         expect(assetGraph, 'to contain relation', {from: pageTwoCacheManifest, to: {fileName: 'quux.png'}});

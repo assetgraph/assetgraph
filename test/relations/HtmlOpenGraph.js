@@ -13,11 +13,11 @@ describe('relations/HtmlOpenGraph', function () {
 
     describe('#inline', function () {
         it('should throw', function () {
-            var relation = new AssetGraph.HtmlOpenGraph({
+            const relation = new AssetGraph.HtmlOpenGraph({
                 to: { url: 'index.html' }
             });
 
-            expect(relation.inline, 'to throw', /Inlining of open graph relations is not allowed/);
+            expect(() => relation.inline(), 'to throw', /Inlining of open graph relations is not allowed/);
         });
     });
 
@@ -44,7 +44,7 @@ describe('relations/HtmlOpenGraph', function () {
 
     describe('when programmatically adding a relation', function () {
         it('should handle crossorigin url', function () {
-            var htmlAsset = getHtmlAsset();
+            const htmlAsset = getHtmlAsset();
             htmlAsset.addRelation({
                 type: 'HtmlOpenGraph',
                 href: 'http://assetgraph.org',

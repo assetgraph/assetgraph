@@ -1,9 +1,9 @@
-var unexpected = require('../unexpected-with-plugins');
-var CssUrlTokenRelation = require('../../lib/relations/CssUrlTokenRelation');
+const unexpected = require('../unexpected-with-plugins');
+const CssUrlTokenRelation = require('../../lib/relations/CssUrlTokenRelation');
 
 describe('CssUrlTokenRelation', function () {
     describe('#findUrlsInPropertyValue', function () {
-        var expect = unexpected.clone().addAssertion('<string> to come out as <array|string>', function (expect, subject, value) {
+        const expect = unexpected.clone().addAssertion('<string> to come out as <array|string>', (expect, subject, value) => {
             if (!Array.isArray(value)) {
                 value = [ value ];
             }

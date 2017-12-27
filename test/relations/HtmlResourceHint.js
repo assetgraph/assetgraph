@@ -5,8 +5,8 @@ const sinon = require('sinon');
 
 describe('relations/HtmlResourceHint', function () {
     function getHtmlAsset(htmlString) {
-        var graph = new AssetGraph({ root: __dirname });
-        var htmlAsset = new AssetGraph.Html({
+        const graph = new AssetGraph({ root: __dirname });
+        const htmlAsset = new AssetGraph.Html({
             text: htmlString || '<!doctype html><html><head></head><body></body></html>',
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
@@ -18,7 +18,7 @@ describe('relations/HtmlResourceHint', function () {
 
     describe('#inline', function () {
         it('should throw', function () {
-            var relation = new AssetGraph.HtmlResourceHint({
+            const relation = new AssetGraph.HtmlResourceHint({
                 to: { url: 'foo.css' }
             });
 
@@ -29,7 +29,7 @@ describe('relations/HtmlResourceHint', function () {
     describe('#as', function () {
         describe('when target asset is not resolved', function () {
             it('should detect css as style', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.css' }
                 });
 
@@ -37,7 +37,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect js as script', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.js' }
                 });
 
@@ -45,7 +45,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect svg as image', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.svg' }
                 });
 
@@ -53,7 +53,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect jpg as image', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.jpg' }
                 });
 
@@ -61,7 +61,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect jpeg as image', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.jpeg' }
                 });
 
@@ -69,7 +69,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect png as image', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.png' }
                 });
 
@@ -77,7 +77,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect gif as image', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.gif' }
                 });
 
@@ -85,7 +85,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect webp as image', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.webp' }
                 });
 
@@ -93,7 +93,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect ico as image', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.ico' }
                 });
 
@@ -101,7 +101,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect tiff as image', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.tiff' }
                 });
 
@@ -109,7 +109,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect bmp as image', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.bmp' }
                 });
 
@@ -117,7 +117,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect html as document', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.html' }
                 });
 
@@ -125,7 +125,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect woff as font', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.woff' }
                 });
 
@@ -133,7 +133,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect woff2 as font', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.woff2' }
                 });
 
@@ -141,7 +141,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect ttf as font', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.ttf' }
                 });
 
@@ -149,7 +149,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect eot as font', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.eot' }
                 });
 
@@ -157,7 +157,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect otf as font', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo.otf' }
                 });
 
@@ -165,7 +165,7 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should fall back to an empty string', function () {
-                var relation = new AssetGraph.HtmlResourceHint({
+                const relation = new AssetGraph.HtmlResourceHint({
                     to: { url: 'foo' }
                 });
 

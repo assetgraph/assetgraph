@@ -1,8 +1,8 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins');
-var sinon = require('sinon');
-var AssetGraph = require('../../lib/AssetGraph');
-var httpception = require('httpception');
+const expect = require('../unexpected-with-plugins');
+const sinon = require('sinon');
+const AssetGraph = require('../../lib/AssetGraph');
+const httpception = require('httpception');
 
 describe('transforms/reviewContentSecurityPolicy', function () {
     it('should not do anything for Html assets that do not have an existing policy', async function () {
