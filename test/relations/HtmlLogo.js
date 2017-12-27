@@ -1,18 +1,16 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlLogo', function () {
-    it('should handle a test case with an existing <link rel="logo" href="..."> element', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlLogo/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relation', 'HtmlLogo');
-                expect(assetGraph, 'to contain asset', 'Svg');
-                assetGraph.findAssets({type: 'Svg'})[0].url = 'http://example.com/otherLogo.png';
-                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /otherLogo\.png/);
-            })
-            .run(done);
+    it('should handle a test case with an existing <link rel="logo" href="..."> element', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlLogo/'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+
+        expect(assetGraph, 'to contain relation', 'HtmlLogo');
+        expect(assetGraph, 'to contain asset', 'Svg');
+        assetGraph.findAssets({type: 'Svg'})[0].url = 'http://example.com/otherLogo.png';
+        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to match', /otherLogo\.png/);
     });
 });

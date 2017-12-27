@@ -48,7 +48,7 @@ describe('TransformQueue', function () {
     });
 
     it('should support a sync (single parameter) transform returning a promise', function () {
-        var promiseFulfilled = false;
+        let promiseFulfilled = false;
         return new AssetGraph()
             .queue(function (assetGraph) {
                 return new Promise(function (resolve, reject) {
@@ -86,7 +86,7 @@ describe('TransformQueue', function () {
     });
 
     it('should handle multiple levels of nested transforms', function () {
-        var array = [];
+        const array = [];
         return new AssetGraph()
             .pushItemToArrayAsync('a', array)
             .pushItemToArraySync('b', array)

@@ -9,7 +9,7 @@ const fs = require('fs');
 describe('assets/Asset', function () {
     describe('#load()', function () {
         it('should error when there is no file handle and the asset is not in a graph', function () {
-            var asset = new AssetGraph.Asset({});
+            const asset = new AssetGraph.Asset({});
 
             return expect(asset.load(), 'to be rejected');
         });
@@ -17,9 +17,8 @@ describe('assets/Asset', function () {
         it('should autodetect the type of an asset with an unrecognizable file extension', async function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/autodetectTypeWhenExtensionIsUnknown/'});
 
-            await assetGraph
-                .loadAssets('index.html')
-                .populate();
+            await assetGraph.loadAssets('index.html');
+            await assetGraph.populate();
 
             expect(assetGraph, 'to contain asset', 'Svg');
         });
@@ -420,7 +419,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle an AssetGraph with a loaded asset that has a link to an unloaded asset when the asset is moved', function () {
-        var assetGraph = new AssetGraph();
+        const assetGraph = new AssetGraph();
 
         assetGraph.addAsset({
             type: 'Html',
@@ -443,7 +442,7 @@ describe('assets/Asset', function () {
 
     describe('#clone()', function () {
         it('should throw if supplying incoming relations and the asset is not in a graph', function () {
-            var asset = new AssetGraph.Asset({});
+            const asset = new AssetGraph.Asset({});
 
             expect(asset.clone.bind(asset, true), 'to throw', /incomingRelations not supported because asset/);
         });
@@ -917,7 +916,7 @@ describe('assets/Asset', function () {
         });
 
         it('should throw when trying to set an url on a non-externalizable asset', function () {
-            var asset = new AssetGraph.Asset({
+            const asset = new AssetGraph.Asset({
                 isExternalizable: false
             });
 
@@ -925,13 +924,13 @@ describe('assets/Asset', function () {
         });
 
         it('should throw when trying to set a relative url with no base or ancestor to determine the relativity', function () {
-            var asset = new AssetGraph.Asset({});
+            const asset = new AssetGraph.Asset({});
 
             expect(() => asset.url = 'foo', 'to throw');
         });
 
         it('should remove the incomingInlineRelation property when un-inlining', function () {
-            var asset = new AssetGraph().addAsset({
+            const asset = new AssetGraph().addAsset({
                 type: 'Html',
                 text: '<!DOCTYPE html><html><head><style>/*foo*/</style></head></html>'
             });

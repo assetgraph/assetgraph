@@ -1,6 +1,6 @@
 /*global describe, it*/
-var expect = require('./unexpected-with-plugins').clone();
-var parseExpression = require('../lib/parseExpression');
+const expect = require('./unexpected-with-plugins').clone();
+const parseExpression = require('../lib/parseExpression');
 
 describe('parseExpression', function () {
     expect.addAssertion('to parse as', function (expect, subject, value) {

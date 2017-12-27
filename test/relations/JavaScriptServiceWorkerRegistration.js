@@ -3,96 +3,81 @@ var expect = require('../unexpected-with-plugins'),
     AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/JavaScriptServiceWorkerRegistration', function () {
-    it('should populate the relation', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptServiceWorkerRegistration', 1);
-                expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-            })
-            .run(done);
+    it('should populate the relation', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+
+        expect(assetGraph, 'to contain relations', 'JavaScriptServiceWorkerRegistration', 1);
+        expect(assetGraph, 'to contain assets', 'JavaScript', 2);
     });
 
-    it('should read the href correctly', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'})
-            .loadAssets('index.html')
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptServiceWorkerRegistration', 1);
+    it('should read the href correctly', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        await assetGraph.loadAssets('index.html');
 
-                var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
+        expect(assetGraph, 'to contain relations', 'JavaScriptServiceWorkerRegistration', 1);
 
-                expect(relation, 'to satisfy', {
-                    href: 'sw.js'
-                });
-            })
-            .run(done);
+        expect(assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' }), 'to satisfy', [ { href: 'sw.js' } ]);
     });
 
-    it('should write the href correctly', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'JavaScriptServiceWorkerRegistration', 1);
+    it('should write the href correctly', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
-                var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
+        expect(assetGraph, 'to contain relations', 'JavaScriptServiceWorkerRegistration', 1);
 
-                expect(relation, 'to satisfy', {
-                    href: 'sw.js',
-                    from: {
-                        text: expect.it('not to contain', 'static/serviceworker.js')
-                    }
-                });
+        const relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
 
-                relation.to.url = 'static/serviceworker.js';
+        expect(relation, 'to satisfy', {
+            href: 'sw.js',
+            from: {
+                text: expect.it('not to contain', 'static/serviceworker.js')
+            }
+        });
 
-                expect(relation, 'to satisfy', {
-                    href: 'static/serviceworker.js',
-                    from: {
-                        text: expect.it('to contain', 'static/serviceworker.js')
-                    }
-                });
-            })
-            .run(done);
+        relation.to.url = 'static/serviceworker.js';
+
+        expect(relation, 'to satisfy', {
+            href: 'static/serviceworker.js',
+            from: {
+                text: expect.it('to contain', 'static/serviceworker.js')
+            }
+        });
     });
 
-    it('should throw when inlining', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
+    it('should throw when inlining', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
-                expect(relation.inline, 'to throw', 'JavaScriptServiceWorkerRegistration.inline(): Not allowed');
-            })
-            .run(done);
+        const relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
+
+        expect(() => relation.inline(), 'to throw', 'JavaScriptServiceWorkerRegistration.inline(): Not allowed');
     });
 
-    it('should throw when detaching', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
+    it('should throw when detaching', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
-                expect(relation.detach, 'to throw', 'JavaScriptServiceWorkerRegistration.detach(): Not implemented');
-            })
-            .run(done);
+        const relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
+
+        expect(() => relation.detach(), 'to throw', 'JavaScriptServiceWorkerRegistration.detach(): Not implemented');
     });
 
-    it('should throw when attaching', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
+    it('should throw when attaching', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
+        var relation = assetGraph.findRelations({ type: 'JavaScriptServiceWorkerRegistration' })[0];
 
-                expect(function () {
-                    relation.attach('before', relation);
-                }, 'to throw', 'JavaScriptServiceWorkerRegistration.attach(): Not implemented');
-            })
-            .run(done);
+        expect(
+            () => relation.attach('before', relation),
+            'to throw',
+            'JavaScriptServiceWorkerRegistration.attach(): Not implemented'
+        );
     });
 });

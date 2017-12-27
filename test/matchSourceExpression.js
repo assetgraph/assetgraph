@@ -1,5 +1,5 @@
-var matchSourceExpression = require('../lib/matchSourceExpression');
-var expect = require('./unexpected-with-plugins');
+const matchSourceExpression = require('../lib/matchSourceExpression');
+const expect = require('./unexpected-with-plugins');
 
 expect.addAssertion('<string> [not] to allow <string> <string?>', function (expect, sourceExpression, url, protectedResourceUrl) {
     expect(matchSourceExpression(url, sourceExpression, protectedResourceUrl || 'http://example.com/'), '[not] to be true');

@@ -1,40 +1,36 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/XmlStylesheet', function () {
-    it('should handle a test case with inline elements', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/XmlStylesheet/'})
-            .loadAssets('logo.svg')
-            .populate()
-            .externalizeRelations({
-                type: 'SvgStyle'
-            })
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'Svg', 1);
-                expect(assetGraph, 'to contain relations', 'XmlStylesheet', 1);
-                expect(assetGraph, 'to contain assets', 'Css', 1);
+    it('should handle a test case with inline elements', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/XmlStylesheet/'});
+        await assetGraph.loadAssets('logo.svg');
+        await assetGraph.populate();
+        await assetGraph.externalizeRelations({ type: 'SvgStyle' });
 
-                expect(assetGraph.findRelations()[0].href, 'to be', assetGraph.findAssets({ type: 'Css' })[0].id + '.css');
+        expect(assetGraph, 'to contain assets', 'Svg', 1);
+        expect(assetGraph, 'to contain relations', 'XmlStylesheet', 1);
+        expect(assetGraph, 'to contain assets', 'Css', 1);
 
-                assetGraph.findAssets({
-                    type: 'Css'
-                })[0].url = 'external.css';
+        expect(assetGraph.findRelations()[0].href, 'to be', assetGraph.findAssets({ type: 'Css' })[0].id + '.css');
 
-                var relation = assetGraph.findRelations()[0];
+        assetGraph.findAssets({
+            type: 'Css'
+        })[0].url = 'external.css';
 
-                expect(relation.href, 'to be', 'external.css');
+        const relation = assetGraph.findRelations()[0];
 
-                expect(relation.attach, 'to throw');
+        expect(relation.href, 'to be', 'external.css');
 
-                relation.inline();
+        expect(relation.attach, 'to throw');
 
-                expect(relation.href, 'to match', /^data:text\/css;base64/);
+        relation.inline();
 
-                relation.detach();
+        expect(relation.href, 'to match', /^data:text\/css;base64/);
 
-                expect(assetGraph, 'to contain no relations');
-            })
-            .run(done);
+        relation.detach();
+
+        expect(assetGraph, 'to contain no relations');
     });
 });

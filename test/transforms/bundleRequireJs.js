@@ -576,24 +576,21 @@ describe('transforms/bundleRequireJs', function () {
     /*
     // This is a common mistake that require.js tolerates, although it does have the side effect that the module definition
     // function is run twice. This test case asserts that bundleRequireJs emits an error as the build will be broken.
-    it('should handle a test case with a module that is referred to both with and without the .js extension', function (done) {
-        var warns = [];
-        new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/multipleIncomingWithAndWithoutDotJsSuffix/'})
-            .on('warn', function (err) {
-                warns.push(err);
-            })
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(warns, 'to have length', 0);
-                expect(assetGraph, 'to contain assets', 'JavaScript', 5);
-            })
-            .bundleRequireJs()
-            .queue(function (assetGraph) {
-                expect(warns, 'This test has failed once in a random manner. If you see this again expect it to be a race condition', 'to be ok');
-                expect(warns, 'to have length', 1);
-                expect(warns[0].message.replace(/^file:\/\/[^\s]* /, ''), 'is referred to as both popular and popular.js, 'to equal', please omit the .js extension in define/require');
-            });
+    it('should handle a test case with a module that is referred to both with and without the .js extension', function () {
+        const warns = [];
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRequireJs/multipleIncomingWithAndWithoutDotJsSuffix/'});
+        assetGraph.on('warn', err => warns.push(err));
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+
+        expect(warns, 'to have length', 0);
+        expect(assetGraph, 'to contain assets', 'JavaScript', 5);
+
+        await assetGraph.bundleRequireJs();
+
+        expect(warns, 'This test has failed once in a random manner. If you see this again expect it to be a race condition', 'to be ok');
+        expect(warns, 'to have length', 1);
+        expect(warns[0].message.replace(/^file:\/\/[^\s]* /, ''), 'is referred to as both popular and popular.js, 'to equal', please omit the .js extension in define/require');
     });
     */
     it('should handle a test case with a umdish factory pattern', async function () {

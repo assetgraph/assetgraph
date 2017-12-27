@@ -1,38 +1,36 @@
 /*global describe, it*/
-var expect = require('../unexpected-with-plugins'),
-    AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/ContentSecurityPolicy', function () {
-    it('should handle a test case with existing Content-Security-Policy meta tags', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/assets/ContentSecurityPolicy/'})
-            .loadAssets('index.html')
-            .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 3);
-                expect(assetGraph, 'to contain asset', 'Html');
-                expect(assetGraph, 'to contain assets', 'ContentSecurityPolicy', 2);
+    it('should handle a test case with existing Content-Security-Policy meta tags', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/ContentSecurityPolicy/'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
-                expect(assetGraph, 'to contain relations', 'HtmlContentSecurityPolicy', 2);
+        expect(assetGraph, 'to contain assets', 3);
+        expect(assetGraph, 'to contain asset', 'Html');
+        expect(assetGraph, 'to contain assets', 'ContentSecurityPolicy', 2);
 
-                var contentSecurityPolicies = assetGraph.findAssets({type: 'ContentSecurityPolicy'});
-                expect(contentSecurityPolicies[0].parseTree, 'to equal', {
-                    defaultSrc: ['\'self\''],
-                    styleSrc: ['\'unsafe-inline\''],
-                    reportUri: ['http://example.com/tellyouwhat'],
-                    foobarquux: []
-                });
+        expect(assetGraph, 'to contain relations', 'HtmlContentSecurityPolicy', 2);
 
-                expect(contentSecurityPolicies[1].parseTree, 'to equal', {
-                    defaultSrc: ['\'self\''],
-                    reportUri: ['http://example.com/gossip']
-                });
+        const contentSecurityPolicies = assetGraph.findAssets({type: 'ContentSecurityPolicy'});
+        expect(contentSecurityPolicies[0].parseTree, 'to equal', {
+            defaultSrc: ['\'self\''],
+            styleSrc: ['\'unsafe-inline\''],
+            reportUri: ['http://example.com/tellyouwhat'],
+            foobarquux: []
+        });
 
-                contentSecurityPolicies[0].parseTree.reportUri = ['http://somewhereelse.com/tellyouwhat'];
-                contentSecurityPolicies[0].markDirty();
+        expect(contentSecurityPolicies[1].parseTree, 'to equal', {
+            defaultSrc: ['\'self\''],
+            reportUri: ['http://example.com/gossip']
+        });
 
-                expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', 'report-uri http://somewhereelse.com/tellyouwhat');
-            })
-            .run(done);
+        contentSecurityPolicies[0].parseTree.reportUri = ['http://somewhereelse.com/tellyouwhat'];
+        contentSecurityPolicies[0].markDirty();
+
+        expect(assetGraph.findAssets({type: 'Html'})[0].text, 'to contain', 'report-uri http://somewhereelse.com/tellyouwhat');
     });
 
     it('should normalize the casing of directives, hash names and single quoted directives', function () {
@@ -53,7 +51,7 @@ describe('assets/ContentSecurityPolicy', function () {
     });
 
     it('should support \"boolean\" directives', function () {
-        var contentSecurityPolicy = new AssetGraph.ContentSecurityPolicy({
+        const contentSecurityPolicy = new AssetGraph.ContentSecurityPolicy({
             text: 'upgrade-insecure-requests; block-all-mixed-content'
         });
         expect(contentSecurityPolicy.parseTree, 'to exhaustively satisfy', {
@@ -65,7 +63,7 @@ describe('assets/ContentSecurityPolicy', function () {
     });
 
     it('should tolerate leading newlines', function () {
-        var csp = new AssetGraph.ContentSecurityPolicy({
+        const csp = new AssetGraph.ContentSecurityPolicy({
             text: "\n     default-src 'self'; img-src 'self'"
         });
         expect(csp.parseTree, 'to satisfy', {

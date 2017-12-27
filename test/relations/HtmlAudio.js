@@ -4,28 +4,26 @@ const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlAudio', function () {
-    it('should handle a test case with existing <audio> tags', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlAudio/'})
-            .loadAssets('index.html')
-            .populate({
-                startAssets: { type: 'Html' },
-                followRelations: () => false
-            })
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain relations', 'HtmlAudio', 4);
+    it('should handle a test case with existing <audio> tags', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlAudio/'});
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate({
+            startAssets: { type: 'Html' },
+            followRelations: () => false
+        });
 
-                assetGraph.findAssets({type: 'Html'})[0].url = 'http://example.com/foo/bar.html';
-                assetGraph.findRelations().forEach(function (relation) {
-                    relation.hrefType = 'relative';
-                });
+        expect(assetGraph, 'to contain relations', 'HtmlAudio', 4);
 
-                expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
-                    '../sound.mp3',
-                    '../sound.wav',
-                    '../sound.wma',
-                    '../sound.flac'
-                ]);
-            })
-            .run(done);
+        assetGraph.findAssets({type: 'Html'})[0].url = 'http://example.com/foo/bar.html';
+        assetGraph.findRelations().forEach(function (relation) {
+            relation.hrefType = 'relative';
+        });
+
+        expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
+            '../sound.mp3',
+            '../sound.wav',
+            '../sound.wma',
+            '../sound.flac'
+        ]);
     });
 });

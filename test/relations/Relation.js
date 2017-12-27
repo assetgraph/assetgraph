@@ -1,9 +1,9 @@
 /*global describe, it*/
-var AssetGraph = require('../../lib/AssetGraph'),
-    expect = require('../unexpected-with-plugins'),
-    _ = require('lodash');
-var pathModule = require('path');
-var httpception = require('httpception');
+const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../unexpected-with-plugins');
+const _ = require('lodash');
+const pathModule = require('path');
+const httpception = require('httpception');
 
 describe('relations/Relation', function () {
     describe('#hrefType', function () {
@@ -295,49 +295,45 @@ describe('relations/Relation', function () {
     }
 
     describe('#updateTarget', function () {
-        it('should handle a combo test case', function (done) {
-            new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/updateTarget/'})
-                .loadAssets('index.html', 'd.js')
-                .populate()
-                .queue(function (assetGraph) {
-                    expect(assetGraph, 'to contain assets', 'JavaScript', 4);
-                    expect(getTargetFileNames(assetGraph.findRelations()), 'to equal',
-                        ['a.js', 'b.js', 'c.js']);
-                    expect(getTargetFileNames(assetGraph.findRelations({type: 'HtmlScript'})), 'to equal',
-                        ['a.js', 'b.js', 'c.js']);
+        it('should handle a combo test case', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/updateTarget/'});
+            await assetGraph.loadAssets('index.html', 'd.js');
+            await assetGraph.populate();
 
-                    var htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
-                    expect(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})), 'to equal',
-                        ['a.js', 'b.js', 'c.js']);
+            expect(assetGraph, 'to contain assets', 'JavaScript', 4);
+            expect(getTargetFileNames(assetGraph.findRelations()), 'to equal',
+                ['a.js', 'b.js', 'c.js']);
+            expect(getTargetFileNames(assetGraph.findRelations({type: 'HtmlScript'})), 'to equal',
+                ['a.js', 'b.js', 'c.js']);
 
-                    var relation = assetGraph.findRelations({to: {fileName: 'b.js'}})[0];
-                    relation.to = assetGraph.findAssets({fileName: 'd.js'})[0];
-                    relation.refreshHref();
+            const htmlAsset = assetGraph.findAssets({type: 'Html'})[0];
+            expect(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})), 'to equal',
+                ['a.js', 'b.js', 'c.js']);
 
-                    expect(getTargetFileNames(assetGraph.findRelations()), 'to equal',
-                        ['a.js', 'd.js', 'c.js']);
+            const relation = assetGraph.findRelations({to: {fileName: 'b.js'}})[0];
+            relation.to = assetGraph.findAssets({fileName: 'd.js'})[0];
+            relation.refreshHref();
 
-                    expect(getTargetFileNames(assetGraph.findRelations({type: 'HtmlScript'})), 'to equal',
-                        ['a.js', 'd.js', 'c.js']);
+            expect(getTargetFileNames(assetGraph.findRelations()), 'to equal',
+                ['a.js', 'd.js', 'c.js']);
 
-                    expect(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})), 'to equal',
-                        ['a.js', 'd.js', 'c.js']);
-                })
-                .run(done);
+            expect(getTargetFileNames(assetGraph.findRelations({type: 'HtmlScript'})), 'to equal',
+                ['a.js', 'd.js', 'c.js']);
+
+            expect(getTargetFileNames(assetGraph.findRelations({from: htmlAsset, type: 'HtmlScript'})), 'to equal',
+                ['a.js', 'd.js', 'c.js']);
         });
     });
 
-    it('should not add index.html to a relation that does not have it', function (done) {
-        new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/indexHtmlOnFile/'})
-            .loadAssets('linker.html')
-            .populate()
-            .queue(function (assetGraph) {
-                var htmlAnchor = assetGraph.findRelations({type: 'HtmlAnchor'})[0];
-                expect(htmlAnchor.href, 'to equal', '/');
-                htmlAnchor.to.url = 'hey/index.html';
-                expect(htmlAnchor.href, 'to equal', '/hey/');
-            })
-            .run(done);
+    it('should not add index.html to a relation that does not have it', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/Relation/indexHtmlOnFile/'});
+        await assetGraph.loadAssets('linker.html');
+        await assetGraph.populate();
+
+        const htmlAnchor = assetGraph.findRelations({type: 'HtmlAnchor'})[0];
+        expect(htmlAnchor.href, 'to equal', '/');
+        htmlAnchor.to.url = 'hey/index.html';
+        expect(htmlAnchor.href, 'to equal', '/hey/');
     });
 
     describe('#crossorigin', function () {
