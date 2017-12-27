@@ -57,16 +57,15 @@ describe('assets/Asset', function () {
                 type: 'HtmlScript',
                 to: {
                     type: 'JavaScript',
-                    text: 'alert("foo")'
+                    text: 'alert(\'foo\');'
                 }
             }, 'last');
             expect(assetGraph, 'to contain asset', {
                 type: 'JavaScript',
                 isInline: true,
-                text: 'alert("foo")'
+                text: 'alert(\'foo\');'
             });
-            // FIXME: Can work when hrefType: 'inline' has been sorted out:
-            // expect(htmlAsset.text, 'to equal', '<script>alert("foo");</script>');
+            expect(htmlAsset.text, 'to equal', '<script>alert(\'foo\');</script>');
         });
 
         it('should implicitly create an inline target asset with outgoing relations and add it to the graph', function () {

@@ -6,12 +6,12 @@ describe('AssetGraph.findAssets', function () {
     it('should handle a test case with 6 assets', async function () {
         const assetGraph = new AssetGraph();
         await assetGraph.loadAssets(
-            new AssetGraph.Html({text: 'a', foo: 'bar'}),
-            new AssetGraph.Html({text: 'b', foo: 'bar'}),
-            new AssetGraph.Html({text: 'c', foo: 'quux'}),
-            new AssetGraph.Css({text: 'body { color: #ddd; }', foo: 'baz'}),
-            new AssetGraph.Css({text: 'body { color: #eee; }'}),
-            new AssetGraph.Htc({text: 'f', foo: 'baz'})
+            new AssetGraph.Html({text: 'a', foo: 'bar', url: 'https://example.com/a'}),
+            new AssetGraph.Html({text: 'b', foo: 'bar', url: 'https://example.com/b'}),
+            new AssetGraph.Html({text: 'c', foo: 'quux', url: 'https://example.com/c'}),
+            new AssetGraph.Css({text: 'body { color: #ddd; }', foo: 'baz', url: 'https://example.com/d'}),
+            new AssetGraph.Css({text: 'body { color: #eee; }', url: 'https://example.com/e'}),
+            new AssetGraph.Htc({text: 'f', foo: 'baz', url: 'https://example.com/f'})
         );
 
         expect(assetGraph, 'to contain assets', {foo: 'bar'}, 2);
