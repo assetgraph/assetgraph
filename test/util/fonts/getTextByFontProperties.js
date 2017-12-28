@@ -1870,6 +1870,33 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 ]);
             });
         });
+
+        describe('with ::placeholder', function () {
+            it('should apply to the placeholder text of an input', function () {
+                var htmlText = [
+                    '<style>input::placeholder { font-family: foo; }</style>',
+                    '<input placeholder="foobar" value="hey">'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'hey', props: { 'font-family': undefined } },
+                    { text: 'foobar', props: { 'font-family': 'foo' } }
+                ]);
+            });
+
+            it('should compose with conditionals', function () {
+                var htmlText = [
+                    '<style>@media 3dglasses { input::placeholder { font-family: foo; } }</style>',
+                    '<input placeholder="foobar" value="hey">'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'hey', props: { 'font-family': undefined } },
+                    { text: 'foobar', props: { 'font-family': 'foo' } },
+                    { text: 'foobar', props: { 'font-family': undefined } }
+                ]);
+            });
+        });
     });
 
     describe('with display:list-item', function () {
