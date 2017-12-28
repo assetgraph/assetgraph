@@ -1837,6 +1837,21 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
                 ]);
             });
 
+            it('should exclude content after the first linebreak from the ::first-line part, conditional white-space:pre case', function () {
+                var htmlText = [
+                    '<style>div::first-line { font-weight: 700; }</style>',
+                    '<style>@media 3dglasses { div { white-space: pre; font-style: italic; } }</style>',
+                    '<div>foo bar\nquux</div>'
+                ].join('\n');
+
+                return expect(htmlText, 'to satisfy computed font properties', [
+                    { text: 'foo bar', props: { 'font-weight': 700, 'font-style': 'italic' } },
+                    { text: 'foo bar quux', props: { 'font-weight': 700, 'font-style': 'normal' } },
+                    { text: 'foo bar\nquux', props: { 'font-weight': 400, 'font-style': 'italic' } },
+                    { text: 'foo bar quux', props: { 'font-weight': 400, 'font-style': 'normal' } }
+                ]);
+            });
+
             it('should include ::before and ::after', function () {
                 var htmlText = [
                     '<style>p::first-line { font-weight: 700; }</style>',
