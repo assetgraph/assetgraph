@@ -12,9 +12,8 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
             infos.push(err);
         });
 
-        await assetGraph
-            .loadAssets('index.html')
-            .populate();
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
 
         let cssAssets = assetGraph.findAssets({type: 'Css'});
         expect(cssAssets, 'to have length', 1);
@@ -68,9 +67,9 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
         assetGraph.on('info', function (err) {
             infos.push(err);
         });
-        await assetGraph
-            .loadAssets('falcon.html')
-            .populate();
+
+        await assetGraph.loadAssets('falcon.html');
+        await assetGraph.populate();
 
         let cssAssets = assetGraph.findAssets({type: 'Css'});
         expect(cssAssets, 'to have length', 1);
@@ -132,9 +131,8 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     it('should handle a test case with an inline stylesheet', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
 
-        await assetGraph
-            .loadAssets('inline.html')
-            .populate();
+        await assetGraph.loadAssets('inline.html');
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain assets', 2);
         expect(assetGraph, 'to contain asset', 'Html');
@@ -158,9 +156,8 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     it('should handle a test case with an inline stylesheet that has rules in media queries', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
 
-        await assetGraph
-            .loadAssets('inlineWithMedia.html')
-            .populate();
+        await assetGraph.loadAssets('inlineWithMedia.html');
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain assets', 2);
         expect(assetGraph, 'to contain asset', 'Html');
@@ -186,13 +183,12 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     it('should leave a big stylesheet alone if minimumIeVersion is 10', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
 
-        await assetGraph
-            .loadAssets({
-                type: 'Html',
-                url: 'http://example.com/foo.html',
-                text: '<!DOCTYPE html><html><body><style>' + new Array(5000).join('body {color: red;}') + '</style></body></html>'
-            })
-            .populate();
+        await assetGraph.loadAssets({
+            type: 'Html',
+            url: 'http://example.com/foo.html',
+            text: '<!DOCTYPE html><html><body><style>' + new Array(5000).join('body {color: red;}') + '</style></body></html>'
+        });
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain assets', 2);
         expect(assetGraph, 'to contain asset', 'Html');
@@ -206,13 +202,12 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     it('should split an enourmous stylesheet if minimumIeVersion is 10', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
 
-        await assetGraph
-            .loadAssets({
-                type: 'Html',
-                url: 'http://example.com/foo.html',
-                text: '<!DOCTYPE html><html><body><style>' + new Array(65536).join('body {color: red;}') + '</style></body></html>'
-            })
-            .populate();
+        await assetGraph.loadAssets({
+            type: 'Html',
+            url: 'http://example.com/foo.html',
+            text: '<!DOCTYPE html><html><body><style>' + new Array(65536).join('body {color: red;}') + '</style></body></html>'
+        });
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain assets', 2);
         expect(assetGraph, 'to contain asset', 'Html');
@@ -226,13 +221,12 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     it('should leave an enourmous stylesheet alone if minimumIeVersion is null', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
 
-        await assetGraph
-            .loadAssets({
-                type: 'Html',
-                url: 'http://example.com/foo.html',
-                text: '<!DOCTYPE html><html><body><style>' + new Array(65536).join('body {color: red;}') + '</style></body></html>'
-            })
-            .populate();
+        await assetGraph.loadAssets({
+            type: 'Html',
+            url: 'http://example.com/foo.html',
+            text: '<!DOCTYPE html><html><body><style>' + new Array(65536).join('body {color: red;}') + '</style></body></html>'
+        });
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain assets', 2);
         expect(assetGraph, 'to contain asset', 'Html');
@@ -246,13 +240,12 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     it('should split a big stylesheet alone if minimumIeVersion is 9', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
 
-        await assetGraph
-            .loadAssets({
-                type: 'Html',
-                url: 'http://example.com/foo.html',
-                text: '<!DOCTYPE html><html><body><style>' + new Array(5000).join('body {color: red;}') + '</style></body></html>'
-            })
-            .populate();
+        await assetGraph.loadAssets({
+            type: 'Html',
+            url: 'http://example.com/foo.html',
+            text: '<!DOCTYPE html><html><body><style>' + new Array(5000).join('body {color: red;}') + '</style></body></html>'
+        });
+        await assetGraph.populate();
 
         expect(assetGraph, 'to contain assets', 2);
         expect(assetGraph, 'to contain asset', 'Html');
