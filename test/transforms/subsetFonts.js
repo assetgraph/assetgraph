@@ -150,53 +150,53 @@ describe('transforms/subsetFonts', function () {
                 });
         });
 
-        it('should not break when there is an existing preload hint pointing to a font file', function () {
+        it('should not break when there is an existing preload hint pointing to a font file', async function () {
             httpception();
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/existing-preload/'})
-                .loadAssets('index.html')
-                .populate({
-                    followRelations: {
-                        crossorigin: false
-                    }
-                })
-                .subsetFonts()
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
-                });
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/existing-preload/'});
+
+            await assetGraph.loadAssets('index.html');
+            await assetGraph.populate({
+                followRelations: {
+                    crossorigin: false
+                }
+            })
+            await assetGraph.subsetFonts();
+
+            expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
         });
 
-        it('should emit an info event when detaching prefetch relations to original fonts', function () {
+        it('should emit an info event when detaching prefetch relations to original fonts', async function () {
             httpception();
 
             var infos = [];
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/existing-prefetch/'})
-                .on('info', function (info) {
-                    infos.push(info);
-                })
-                .loadAssets('index.html')
-                .populate({
-                    followRelations: {
-                        crossorigin: false
-                    }
-                })
-                .subsetFonts()
-                .then(function (assetGraph) {
-                    expect(assetGraph, 'to contain no relation', 'HtmlPrefetchLink');
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/existing-prefetch/'})
+            assetGraph.on('info', function (info) {
+                infos.push(info);
+            });
 
-                    expect(infos, 'to satisfy', [
-                        {
-                            message: 'Detached <link rel="prefetch" as="font" type="application/x-font-ttf" href="OpenSans.ttf">. Will be replaced with preload with JS fallback.\nIf you feel this is wrong, open an issue at https://github.com/assetgraph/assetgraph/issues',
-                            asset: {
-                                type: 'Html'
-                            },
-                            relation: {
-                                type: 'HtmlPrefetchLink'
-                            }
-                        }
-                    ]);
-                });
+            await assetGraph.loadAssets('index.html');
+            await assetGraph.populate({
+                followRelations: {
+                    crossorigin: false
+                }
+            });
+            await assetGraph.subsetFonts();
+
+            expect(assetGraph, 'to contain no relation', 'HtmlPrefetchLink');
+
+            expect(infos, 'to satisfy', [
+                {
+                    message: 'Detached <link rel="prefetch" as="font" type="application/x-font-ttf" href="OpenSans.ttf">. Will be replaced with preload with JS fallback.\nIf you feel this is wrong, open an issue at https://github.com/assetgraph/assetgraph/issues',
+                    asset: {
+                        type: 'Html'
+                    },
+                    relation: {
+                        type: 'HtmlPrefetchLink'
+                    }
+                }
+            ]);
         });
 
         it('should preload local fonts that it could not subset', function () {
@@ -292,7 +292,6 @@ describe('transforms/subsetFonts', function () {
                             type: 'HtmlScript',
                             to: {
                                 isInline: true,
-                                isMinified: true,
                                 text: expect.it('to contain', 'Open Sans__subset'),
                                 outgoingRelations: [
                                     {
@@ -323,7 +322,6 @@ describe('transforms/subsetFonts', function () {
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
                                 isLoaded: true,
-                                isMinified: true,
                                 text: expect.it('to contain', 'Open Sans__subset'),
                                 outgoingRelations: [
                                     {
@@ -420,7 +418,6 @@ describe('transforms/subsetFonts', function () {
                                 href: undefined,
                                 to: {
                                     isLoaded: true,
-                                    isMinified: true,
                                     isInline: true,
                                     text: expect.it('to contain', 'Open Sans__subset'),
                                     outgoingRelations: [
@@ -525,7 +522,6 @@ describe('transforms/subsetFonts', function () {
                             type: 'HtmlScript',
                             to: {
                                 isInline: true,
-                                isMinified: true,
                                 text: expect.it('to contain', 'Open Sans__subset'),
                                 outgoingRelations: [
                                     {
@@ -556,7 +552,6 @@ describe('transforms/subsetFonts', function () {
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
                                 isLoaded: true,
-                                isMinified: true,
                                 text: expect.it('to contain', 'Open Sans__subset'),
                                 outgoingRelations: [
                                     {
@@ -854,7 +849,6 @@ describe('transforms/subsetFonts', function () {
                             type: 'HtmlScript',
                             to: {
                                 isInline: true,
-                                isMinified: true,
                                 text: expect.it('to contain', 'Jim Nightshade__subset')
                                     .and('to contain', 'Montserrat__subset')
                                     .and('to contain', 'Space Mono__subset'),
@@ -931,7 +925,6 @@ describe('transforms/subsetFonts', function () {
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
                                 isLoaded: true,
-                                isMinified: true,
                                 text: expect.it('to contain', 'Jim Nightshade__subset')
                                     .and('to contain', 'Montserrat__subset')
                                     .and('to contain', 'Space Mono__subset'),
@@ -1277,7 +1270,6 @@ describe('transforms/subsetFonts', function () {
                         {
                             type: 'HtmlScript',
                             to: {
-                                isMinified: true,
                                 isInline: true,
                                 text: expect.it('to contain', 'Roboto__subset')
                                     .and('to contain', "'font-weight':500")
@@ -1355,7 +1347,6 @@ describe('transforms/subsetFonts', function () {
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
                                 isLoaded: true,
-                                isMinified: true,
                                 text: expect.it('to contain', 'Roboto__subset'),
                                 outgoingRelations: [
                                     {
@@ -1598,7 +1589,6 @@ describe('transforms/subsetFonts', function () {
                                     url: fontCssUrlRegExp,
                                     isLoaded: true,
                                     isInline: false,
-                                    isMinified: true,
                                     outgoingRelations: [
                                         {
                                             type: 'CssFontFaceSrc',
@@ -1629,7 +1619,6 @@ describe('transforms/subsetFonts', function () {
                                     url: fontCssUrlRegExp,
                                     isLoaded: true,
                                     isInline: false,
-                                    isMinified: true,
                                     outgoingRelations: [
                                         {
                                             type: 'CssFontFaceSrc',
@@ -1667,7 +1656,6 @@ describe('transforms/subsetFonts', function () {
                             {
                                 type: 'HtmlScript',
                                 to: {
-                                    isMinified: true,
                                     isInline: true,
                                     text: expect.it('to contain', 'Open Sans__subset'),
                                     outgoingRelations: [
@@ -1718,10 +1706,6 @@ describe('transforms/subsetFonts', function () {
                                 to: { isInline: true }
                             },
                             {
-                                type: 'HtmlAnchor',
-                                href: 'about.html'
-                            },
-                            {
                                 type: 'HtmlScript',
                                 to: {
                                     isInline: true,
@@ -1739,6 +1723,10 @@ describe('transforms/subsetFonts', function () {
                                 node: function (node) {
                                     return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
                                 }
+                            },
+                            {
+                                type: 'HtmlAnchor',
+                                href: 'about.html'
                             }
                         ]);
 
@@ -1756,7 +1744,6 @@ describe('transforms/subsetFonts', function () {
                             {
                                 type: 'HtmlScript',
                                 to: {
-                                    isMinified: true,
                                     isInline: true,
                                     text: expect.it('to contain', 'Open Sans__subset'),
                                     outgoingRelations: [
@@ -1805,10 +1792,6 @@ describe('transforms/subsetFonts', function () {
                                 to: { isInline: true }
                             },
                             {
-                                type: 'HtmlAnchor',
-                                href: 'index.html'
-                            },
-                            {
                                 type: 'HtmlScript',
                                 to: {
                                     isInline: true,
@@ -1826,6 +1809,10 @@ describe('transforms/subsetFonts', function () {
                                 node: function (node) {
                                     return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
                                 }
+                            },
+                            {
+                                type: 'HtmlAnchor',
+                                href: 'index.html'
                             }
                         ]);
                     });
@@ -1936,7 +1923,6 @@ describe('transforms/subsetFonts', function () {
                             {
                                 type: 'HtmlScript',
                                 to: {
-                                    isMinified: true,
                                     isInline: true,
                                     text: expect.it('to contain', 'Open Sans__subset'),
                                     outgoingRelations: [
@@ -1969,8 +1955,7 @@ describe('transforms/subsetFonts', function () {
                                     .and('to end with', '.css')
                                     .and('to match', /[a-z0-9]{10}/),
                                 to: {
-                                    isLoaded: true,
-                                    isMinified: true
+                                    isLoaded: true
                                 }
                             },
                             {
@@ -1986,10 +1971,6 @@ describe('transforms/subsetFonts', function () {
                             {
                                 type: 'HtmlStyle',
                                 to: { isInline: true }
-                            },
-                            {
-                                type: 'HtmlAnchor',
-                                href: 'about.html'
                             },
                             {
                                 type: 'HtmlScript',
@@ -2009,6 +1990,10 @@ describe('transforms/subsetFonts', function () {
                                 node: function (node) {
                                     return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
                                 }
+                            },
+                            {
+                                type: 'HtmlAnchor',
+                                href: 'about.html'
                             }
                         ]);
 
@@ -2027,7 +2012,6 @@ describe('transforms/subsetFonts', function () {
                                 type: 'HtmlScript',
                                 to: {
                                     type: 'JavaScript',
-                                    isMinified: true,
                                     isInline: true,
                                     text: expect.it('to contain', 'Open Sans__subset'),
                                     outgoingRelations: [
@@ -2072,10 +2056,6 @@ describe('transforms/subsetFonts', function () {
                                 to: { isInline: true }
                             },
                             {
-                                type: 'HtmlAnchor',
-                                href: 'index.html'
-                            },
-                            {
                                 type: 'HtmlScript',
                                 to: {
                                     isInline: true,
@@ -2093,6 +2073,10 @@ describe('transforms/subsetFonts', function () {
                                 node: function (node) {
                                     return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
                                 }
+                            },
+                            {
+                                type: 'HtmlAnchor',
+                                href: 'index.html'
                             }
                         ]);
                     });
@@ -2250,7 +2234,6 @@ describe('transforms/subsetFonts', function () {
                     })
                     .queue(function (assetGraph) {
                         var cssAsset = assetGraph.findAssets({ type: 'Css', fileName: /fonts-/ })[0];
-
                         expect(cssAsset.text, 'to contain', 'font-display:fallback;');
                     });
             });
@@ -2320,7 +2303,7 @@ describe('transforms/subsetFonts', function () {
                                 isLoaded: true
                             },
                             as: 'font',
-                            contentType: 'text/plain' // Caused by fake test data
+                            contentType: 'font/ttf'
                         },
                         {
                             type: 'HtmlScript',
@@ -2412,7 +2395,6 @@ describe('transforms/subsetFonts', function () {
                             type: 'HtmlScript',
                             to: {
                                 type: 'JavaScript',
-                                isMinified: true,
                                 isInline: true,
                                 text: expect.it('to contain', 'Open Sans__subset'),
                                 outgoingRelations: [
@@ -2529,7 +2511,6 @@ describe('transforms/subsetFonts', function () {
                             type: 'HtmlScript',
                             to: {
                                 type: 'JavaScript',
-                                isMinified: true,
                                 isInline: true,
                                 text: expect.it('to contain', 'Open Sans__subset'),
                                 outgoingRelations: [
@@ -2566,7 +2547,6 @@ describe('transforms/subsetFonts', function () {
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
                                 isLoaded: true,
-                                isMinified: true,
                                 text: expect.it('to contain', 'Open Sans__subset'),
                                 outgoingRelations: [
                                     {
@@ -2672,7 +2652,6 @@ describe('transforms/subsetFonts', function () {
                             type: 'HtmlScript',
                             to: {
                                 type: 'JavaScript',
-                                isMinified: true,
                                 isInline: true,
                                 text: expect.it('to contain', 'Open Sans__subset'),
                                 outgoingRelations: [
@@ -2738,7 +2717,6 @@ describe('transforms/subsetFonts', function () {
                                 .and('to match', /[a-z0-9]{10}/),
                             to: {
                                 isLoaded: true,
-                                isMinified: true,
                                 text: expect.it('to contain', 'Open Sans__subset')
                                     .and('to contain', 'Local Sans__subset'),
                                 outgoingRelations: [
