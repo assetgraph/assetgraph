@@ -119,7 +119,7 @@ describe('relations/HtmlPreloadLink', function () {
                     to: { url: 'foo.woff' }
                 });
 
-                expect(relation.contentType, 'to be', 'application/font-woff');
+                expect(relation.contentType, 'to be', 'font/woff');
             });
 
             it('should handle woff2', function () {
@@ -135,7 +135,7 @@ describe('relations/HtmlPreloadLink', function () {
                     to: { url: 'foo.otf' }
                 });
 
-                expect(relation.contentType, 'to be', 'application/font-sfnt');
+                expect(relation.contentType, 'to be', 'font/otf');
             });
 
             it('should handle ttf', function () {
@@ -143,7 +143,7 @@ describe('relations/HtmlPreloadLink', function () {
                     to: { url: 'foo.ttf' }
                 });
 
-                expect(relation.contentType, 'to be', 'application/font-sfnt');
+                expect(relation.contentType, 'to be', 'font/ttf');
             });
 
             it('should handle eot', function () {

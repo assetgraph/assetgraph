@@ -10,10 +10,6 @@ describe('util/fonts/getCssRulesByProperty', function () {
         expect(function () { getRules(['padding']); }, 'to throw', 'cssSource argument must be a string containing valid CSS');
     });
 
-    it('should throw when not passing an incomingMedia array as the third argument', function () {
-        expect(function () { getRules(['padding'], 'body { color: maroon; }'); }, 'to throw', 'incomingMedia argument must be an array');
-    });
-
     it('should throw when not passing a valid CSS document in cssSource', function () {
         expect(function () { getRules(['padding'], 'sdkjlasjdlk'); }, 'to throw');
     });
