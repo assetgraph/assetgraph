@@ -15,7 +15,7 @@ expect.addAssertion('<string> to [exhaustively] satisfy computed font properties
         })
         .populate({ followRelations: { crossorigin: false } });
 
-    expect(getTextByFontProp(assetGraph.findAssets({type: 'Html'})[0]), 'to [exhaustively] satisfy', result);
+    expect(getTextByFontProp(assetGraph.findAssets({type: 'Html', isInline: false})[0]), 'to [exhaustively] satisfy', result);
 });
 
 describe('lib/util/fonts/getTextByFontProperties', function () {
