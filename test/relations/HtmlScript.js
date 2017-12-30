@@ -46,7 +46,6 @@ describe('relations/HtmlScript', function () {
         const relation = html.addRelation({
             type: 'HtmlScript',
             to: {
-                type: 'JavaScript',
                 url: 'firstRelationAsset.js',
                 text: '"use strict"'
             }
@@ -78,7 +77,6 @@ describe('relations/HtmlScript', function () {
         const relation = html.addRelation({
             type: 'HtmlScript',
             to: {
-                type: 'JavaScript',
                 url: 'firstRelationAsset.js',
                 text: '"use strict";'
             }
@@ -102,7 +100,6 @@ describe('relations/HtmlScript', function () {
         const relation = htmlAsset.addRelation({
             type: 'HtmlScript',
             to: {
-                type: 'JavaScript',
                 url: 'firstRelationAsset.js',
                 text: '"use strict";'
             }
@@ -127,7 +124,6 @@ describe('relations/HtmlScript', function () {
         const relation = htmlAsset.addRelation({
             type: 'HtmlScript',
             to: {
-                type: 'JavaScript',
                 url: 'firstRelationAsset.js',
                 text: '"use strict";'
             }
@@ -152,7 +148,6 @@ describe('relations/HtmlScript', function () {
         const relation = htmlAsset.addRelation({
             type: 'HtmlScript',
             to: {
-                type: 'JavaScript',
                 url: 'firstRelationAsset.js',
                 text: '"use strict";'
             }
