@@ -63,31 +63,5 @@ describe('minifyCss', function () {
         cssAsset.markDirty();
         expect(cssAsset.text, 'to contain', 'blah.png').and('to contain', 'quux.png');
     });
-
-    // https://github.com/ben-eb/postcss-merge-longhand/issues/21
-    it('should not convert long hand properties to short hand ones', async function () {
-        const assetGraph = new AssetGraph();
-        const cssAsset = assetGraph.addAsset({
-            type: 'Css',
-            text:
-                'div{\n' +
-                'border-top-width: 5px;\n' +
-                'border-right-width: 5px;\n' +
-                'border-bottom-width: 5px;\n' +
-                'border-left-width: 5px;\n' +
-                'border-top-style: solid;\n' +
-                'border-right-style: solid;\n' +
-                'border-bottom-style: solid;\n' +
-                'border-left-style: solid;\n' +
-                'border-top-color: rgb(24,27,255);\n' +
-                'border-right-color: rgb(24,27,255);\n' +
-                'border-bottom-color: rgb(24,27,255);\n' +
-                'border-left-color: rgb(24,27,255);\n' +
-                '}\n'
-
-        });
-        await assetGraph.minifyCss();
-        expect(cssAsset.text, 'to equal', 'div{border-bottom-color:#181bff;border-bottom-style:solid;border-bottom-width:5px;border-left-color:#181bff;border-left-style:solid;border-left-width:5px;border-right-color:#181bff;border-right-style:solid;border-right-width:5px;border-top-color:#181bff;border-top-style:solid;border-top-width:5px}');
-    });
 });
 
