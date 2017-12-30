@@ -550,24 +550,24 @@ describe('transforms/reviewContentSecurityPolicy', function () {
                         headers: {
                             'Content-Type': 'text/html; charset=utf-8'
                         },
-                        body: '<!DOCTYPE html><html><head><meta http-equiv="Content-Security-Policy" content="style-src \'self\'"></head><body><script src="http://www.somewhereelse.com/styles.css"></body></html>'
+                        body: '<!DOCTYPE html><html><head><meta http-equiv="Content-Security-Policy" content="style-src \'self\'"></head><body><script src="http://www.somewhereelse.com/script.js"></body></html>'
                     }
                 },
                 {
-                    request: 'GET http://www.somewhereelse.com/styles.css',
+                    request: 'GET http://www.somewhereelse.com/script.js',
                     response: {
                         statusCode: 302,
                         headers: {
-                            Location: 'http://www.yetanotherone.com/styles.css'
+                            Location: 'http://www.yetanotherone.com/script.js'
                         }
                     }
                 },
                 {
-                    request: 'GET http://www.yetanotherone.com/styles.css',
+                    request: 'GET http://www.yetanotherone.com/script.js',
                     response: {
                         statusCode: 302,
                         headers: {
-                            Location: 'http://www.somewhereelse.com/styles.css'
+                            Location: 'http://www.somewhereelse.com/script.js'
                         }
                     }
                 }
