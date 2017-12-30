@@ -67,11 +67,10 @@ describe('gatherStylesheetsWithIncomingPredicates', function () {
 
     it('should not break when there are unloaded Css assets', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithpredicates/unloadedCssAssets/'});
+        const assetGraph = new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithPredicates/unloadedCssAssets/'});
         await assetGraph.on('warn', warnSpy);
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
-
         expect(gatherStylesheetsWithPredicates(assetGraph, assetGraph.findAssets({type: 'Html'})[0]), 'to satisfy', [
             { text: '@import "notfoundeither.css";\n', predicates: {} }
         ]);
