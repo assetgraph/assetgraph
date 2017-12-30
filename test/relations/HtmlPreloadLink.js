@@ -115,41 +115,51 @@ describe('relations/HtmlPreloadLink', function () {
     describe('#contentType', function () {
         describe('with unresolved font targets', function () {
             it('should handle woff', function () {
-                const relation = new AssetGraph.HtmlPreloadLink({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
                     to: { url: 'foo.woff' }
-                });
+                }, 'firstInHead');
 
                 expect(relation.contentType, 'to be', 'font/woff');
             });
 
             it('should handle woff2', function () {
-                const relation = new AssetGraph.HtmlPreloadLink({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
                     to: { url: 'foo.woff2' }
-                });
+                }, 'firstInHead');
 
                 expect(relation.contentType, 'to be', 'font/woff2');
             });
 
             it('should handle otf', function () {
-                const relation = new AssetGraph.HtmlPreloadLink({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
                     to: { url: 'foo.otf' }
-                });
+                }, 'firstInHead');
 
                 expect(relation.contentType, 'to be', 'font/otf');
             });
 
             it('should handle ttf', function () {
-                const relation = new AssetGraph.HtmlPreloadLink({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
                     to: { url: 'foo.ttf' }
-                });
+                }, 'firstInHead');
 
                 expect(relation.contentType, 'to be', 'font/ttf');
             });
 
             it('should handle eot', function () {
-                const relation = new AssetGraph.HtmlPreloadLink({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
                     to: { url: 'foo.eot' }
-                });
+                }, 'firstInHead');
 
                 expect(relation.contentType, 'to be', 'application/vnd.ms-fontobject');
             });
@@ -157,9 +167,11 @@ describe('relations/HtmlPreloadLink', function () {
 
         describe('with unresolved unknown target', function () {
             it('should return undefined', function () {
-                const relation = new AssetGraph.HtmlPreloadLink({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
                     to: { url: 'foo.bar' }
-                });
+                }, 'firstInHead');
 
                 expect(relation.contentType, 'to be', undefined);
             });
@@ -167,17 +179,27 @@ describe('relations/HtmlPreloadLink', function () {
 
         describe('with resolved known targets', function () {
             it('should handle JavaScript', function () {
-                const relation = new AssetGraph.HtmlPreloadLink({
-                    to: new AssetGraph.JavaScript({ url: 'foo.js' })
-                });
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
+                    to: {
+                        type: 'JavaScript',
+                        url: 'foo.js'
+                    }
+                }, 'firstInHead');
 
                 expect(relation.contentType, 'to be', 'application/javascript');
             });
 
             it('should handle Css', function () {
-                const relation = new AssetGraph.HtmlPreloadLink({
-                    to: new AssetGraph.Css({ url: 'foo.css' })
-                });
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    type: 'HtmlPreloadLink',
+                    to: {
+                        type: 'Css',
+                        url: 'foo.css'
+                    }
+                }, 'firstInHead');
 
                 expect(relation.contentType, 'to be', 'text/css');
             });
