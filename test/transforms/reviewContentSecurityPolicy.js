@@ -653,4 +653,30 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             });
         });
     });
+
+    it('should return an info object', async function () {
+        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'});
+        await assetGraph.loadAssets('index.html');
+        const contentSecurityPolicy = assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0];
+        await assetGraph.populate();
+
+        const infoObject = await assetGraph.reviewContentSecurityPolicy(undefined, {update: true, level: 1});
+
+        expect(infoObject, 'to exhaustively satisfy', {
+            [contentSecurityPolicy.id]: {
+                additions: {
+                    styleSrc: {
+                        '\'sha256-XeYlw2NVzOfB1UCIJqCyGr+0n7bA4fFslFpvKu84IAw=\'': [
+                            expect.it('to be an', AssetGraph.HtmlStyle)
+                        ]
+                    },
+                    scriptSrc: {
+                        '\'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs=\'': [
+                            expect.it('to be an', AssetGraph.HtmlScript)
+                        ]
+                    }
+                }
+            }
+        });
+    });
 });
