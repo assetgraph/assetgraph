@@ -61,7 +61,7 @@ describe('gatherStylesheetsWithIncomingPredicates', function () {
 
     it('should not break when there is a cyclic CssImport', function () {
         return expect('cyclicCssImport', 'to produce result satisfying', [
-            { text: '@import "a.css";\n\n.a { font-weight: 600; }\n', incomingMedia: [] }
+            { text: '@import "a.css";\n\n.a { font-weight: 600; }\n', predicates: {} }
         ]);
     });
 
