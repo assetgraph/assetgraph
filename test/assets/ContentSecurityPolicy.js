@@ -73,4 +73,21 @@ describe('assets/ContentSecurityPolicy', function () {
         csp.markDirty();
         expect(csp.text, 'to equal', "default-src 'self'; img-src 'self'");
     });
+
+    it('should automatically derive the type when attached via an HtmlContentSecurityPolicy relation', function () {
+        const assetGraph = new AssetGraph();
+        const htmlAsset = assetGraph.addAsset({
+            type: 'Html',
+            url: 'https://example.com/',
+            text: '<!DOCTYPE html><html><head></head><body></body></html>'
+        });
+
+        htmlAsset.addRelation({
+            type: 'HtmlContentSecurityPolicy',
+            to: {
+                text: 'default-src \'none\''
+            }
+        });
+        expect(assetGraph, 'to contain asset', 'ContentSecurityPolicy');
+    });
 });
