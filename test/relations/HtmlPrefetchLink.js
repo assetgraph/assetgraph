@@ -55,7 +55,7 @@ describe('relations/HtmlPrefetchLink', function () {
                 as: 'object'
             }, 'firstInHead');
 
-            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="foo.js" as="object">');
+            expect(htmlAsset.parseTree.head.firstChild, 'to exhaustively satisfy', '<link rel="prefetch" href="foo.js" type="application/javascript" as="object">');
         });
 
         it('should add the `crossorigin` attribute when the relation is loaded as a font', function () {
