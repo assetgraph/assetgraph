@@ -160,7 +160,7 @@ describe('transforms/subsetFonts', function () {
                 followRelations: {
                     crossorigin: false
                 }
-            })
+            });
             await assetGraph.subsetFonts();
 
             expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
@@ -171,7 +171,7 @@ describe('transforms/subsetFonts', function () {
 
             var infos = [];
 
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/existing-prefetch/'})
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/existing-prefetch/'});
             assetGraph.on('info', function (info) {
                 infos.push(info);
             });
