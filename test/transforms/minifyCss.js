@@ -1,5 +1,6 @@
 const AssetGraph = require('../../');
 const expect = require('../unexpected-with-plugins');
+const sinon = require('sinon');
 
 describe('minifyCss', function () {
     it('should minify the Css text', async function () {
@@ -63,5 +64,27 @@ describe('minifyCss', function () {
         cssAsset.markDirty();
         expect(cssAsset.text, 'to contain', 'blah.png').and('to contain', 'quux.png');
     });
-});
 
+    it('should carry on despite running into errors from cssnano or postcss.parse', async function () {
+        const warnSpy = sinon.spy().named('warn');
+        const assetGraph = new AssetGraph();
+        assetGraph.on('warn', warnSpy);
+        assetGraph.addAsset({
+            url: 'https://example.com/broken.css',
+            type: 'Css',
+            text: '}'
+        });
+        const goodStyles = assetGraph.addAsset({
+            url: 'https://example.com/goodStyles.css',
+            type: 'Css',
+            text: 'body { color: maroon }'
+        });
+
+        await assetGraph.minifyCss();
+
+        expect(goodStyles.text, 'to equal', 'body{color:maroon}');
+        expect(warnSpy, 'to have calls satisfying', () => {
+            warnSpy({message: expect.it('to contain', 'Parse error in https://example.com/broken.css')});
+        });
+    });
+});
