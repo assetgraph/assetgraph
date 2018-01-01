@@ -1698,4 +1698,54 @@ describe('assets/Asset', function () {
             });
         });
     });
+
+    describe('#rootPath', function () {
+        describe('invoked as a getter', function () {
+            it('should return the root-relative path from assetGraph.root when the asset is within the root', function () {
+                const assetGraph = new AssetGraph({ root: 'file:///path/to/my/site/'});
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'file:///path/to/my/site/somewhere/within.html'
+                });
+
+                expect(htmlAsset.rootPath, 'to equal', '/somewhere/within.html');
+            });
+
+            it('should return the root-relative path when the asset is not within the root', function () {
+                const assetGraph = new AssetGraph({ root: 'https://example.com/' });
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'file:///path/to/my/site/somewhere/within.html'
+                });
+
+                expect(htmlAsset.rootPath, 'to equal', '/path/to/my/site/somewhere/within.html');
+            });
+        });
+
+        describe('invoked as a setter', function () {
+            it('should update the root-relative path from assetGraph.root when the asset is within the root', function () {
+                const assetGraph = new AssetGraph({ root: 'file:///path/to/my/site/'});
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'file:///path/to/my/site/somewhere/within.html'
+                });
+
+                htmlAsset.rootPath = '/elsewhere/but/still/within.html';
+
+                expect(htmlAsset.url, 'to equal', 'file:///path/to/my/site/elsewhere/but/still/within.html');
+            });
+
+            it('should update the root-relative path when the asset is not within the root', function () {
+                const assetGraph = new AssetGraph({ root: 'https://example.com/' });
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'file:///path/to/my/site/somewhere/within.html'
+                });
+
+                htmlAsset.rootPath = '/elsewhere/but/still/within.html';
+
+                expect(htmlAsset.url, 'to equal', 'file:///elsewhere/but/still/within.html');
+            });
+        });
+    });
 });
