@@ -1456,4 +1456,246 @@ describe('assets/Asset', function () {
             });
         });
     });
+
+    describe('#username', function () {
+        describe('invoked as a getter', function () {
+            it('should return the username of an http url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://foo:bar@example.com/'
+                });
+                expect(htmlAsset.username, 'to equal', 'foo');
+            });
+        });
+
+        describe('invoked as a setter', function () {
+            it('should introduce an username/auth part to a url that does not already have one', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://foobar.com:123/hey/there?foo'
+                });
+
+                htmlAsset.username = 'foo';
+                expect(htmlAsset.url, 'to equal', 'https://foo@foobar.com:123/hey/there?foo');
+            });
+
+            it('should replace an existing username in the url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://baz:quux@foobar.com:123/hey/there?foo'
+                });
+
+                htmlAsset.username = 'foo';
+                expect(htmlAsset.url, 'to equal', 'https://foo:quux@foobar.com:123/hey/there?foo');
+            });
+        });
+    });
+
+    describe('#password', function () {
+        describe('invoked as a getter', function () {
+            it('should return the password of an http url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://foo:bar@example.com/'
+                });
+                expect(htmlAsset.password, 'to equal', 'bar');
+            });
+        });
+
+        describe('invoked as a setter', function () {
+            it('should introduce an password/auth part to a url that does not already have one', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://foobar.com:123/hey/there?foo'
+                });
+
+                htmlAsset.password = 'foo';
+                expect(htmlAsset.url, 'to equal', 'https://:foo@foobar.com:123/hey/there?foo');
+            });
+
+            it('should replace an existing password in the url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://baz:quux@foobar.com:123/hey/there?foo'
+                });
+
+                htmlAsset.password = 'foo';
+                expect(htmlAsset.url, 'to equal', 'https://baz:foo@foobar.com:123/hey/there?foo');
+            });
+        });
+    });
+
+    describe('#host', function () {
+        describe('invoked as a getter', function () {
+            it('should return the host of an http url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/'
+                });
+                expect(htmlAsset.host, 'to equal', 'example.com');
+            });
+        });
+
+        describe('invoked as a setter', function () {
+            it('should update the host of the url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://foobar.com:123/hey/there?foo'
+                });
+
+                htmlAsset.host = 'example.com:456';
+                expect(htmlAsset.url, 'to equal', 'https://example.com:456/hey/there?foo');
+            });
+        });
+    });
+
+    describe('#hostname', function () {
+        describe('invoked as a getter', function () {
+            it('should return the hostname of an http url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/'
+                });
+                expect(htmlAsset.hostname, 'to equal', 'example.com');
+            });
+        });
+
+        describe('invoked as a setter', function () {
+            it('should update the hostname of the url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://foobar.com:123/hey/there?foo'
+                });
+
+                htmlAsset.hostname = 'example.com';
+                expect(htmlAsset.url, 'to equal', 'https://example.com:123/hey/there?foo');
+            });
+        });
+    });
+
+    describe('#port', function () {
+        describe('invoked as a getter', function () {
+            it('should return the port of an http url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com:1234/'
+                });
+                expect(htmlAsset.port, 'to equal', 1234);
+            });
+
+            it('should return undefined if an http url does not contain an explicit port', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/'
+                });
+                expect(htmlAsset.port, 'to be undefined');
+            });
+
+            it('should return undefined for a file: url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'file:///path/to/my/page.html'
+                });
+                expect(htmlAsset.port, 'to be undefined');
+            });
+        });
+
+        describe('invoked as a setter', function () {
+            it('should update the port of the url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com:123/hey/there?foo'
+                });
+
+                htmlAsset.port = 456;
+                expect(htmlAsset.url, 'to equal', 'https://example.com:456/hey/there?foo');
+            });
+        });
+    });
+
+    describe('#protocol', function () {
+        describe('invoked as a getter', function () {
+            it('should return the protocol of an http url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com:1234/'
+                });
+                expect(htmlAsset.protocol, 'to equal', 'https:');
+            });
+
+            it('should return the protocol of a file url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'file:///path/to/my/page.html'
+                });
+                expect(htmlAsset.protocol, 'to equal', 'file:');
+            });
+        });
+
+        describe('invoked as a setter', function () {
+            it('should update the protocol of the url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com:123/hey/there?foo'
+                });
+
+                htmlAsset.protocol = 'http:';
+                expect(htmlAsset.url, 'to equal', 'http://example.com:123/hey/there?foo');
+            });
+
+            it('should fill in a missing colon', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com:123/hey/there?foo'
+                });
+
+                htmlAsset.protocol = 'http';
+                expect(htmlAsset.url, 'to equal', 'http://example.com:123/hey/there?foo');
+            });
+        });
+    });
+
+    describe('#pathname', function () {
+        describe('invoked as a getter', function () {
+            it('should return the pathname of an http url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com:123/hey/there?foo'
+                });
+                expect(htmlAsset.pathname, 'to equal', '/hey/there');
+            });
+        });
+
+        describe('invoked as a setter', function () {
+            it('should update the pathname of the url', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com:123/hey/there?foo'
+                });
+
+                htmlAsset.pathname = '/somewhere/else';
+                expect(htmlAsset.url, 'to equal', 'https://example.com:123/somewhere/else?foo');
+            });
+        });
+    });
 });
