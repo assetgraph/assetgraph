@@ -674,4 +674,17 @@ describe('relations/Relation', function () {
             });
         });
     });
+
+    it('should preserve the fragment when an asset is externalized', function () {
+        const assetGraph = new AssetGraph();
+        const htmlAsset = assetGraph.addAsset({
+            type: 'Html',
+            url: 'https://example.com/',
+            text: '<img src="data:image/svg+xml;base64,CiAgICAgICAgICAgICAgICA8P3htbCB2ZXJzaW9uPSIxLjAiIGVuY29kaW5nPSJVVEYtOCI/PgogICAgICAgICAgICAgICAgPHN2ZyB3aWR0aD0iODJweCIgaGVpZ2h0PSI5MHB4IiB2aWV3Qm94PSIwIDAgODIgOTAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iaGVhcnQiPgogICAgICAgICAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMzIsMTEuMmMwLDIuNy0xLjIsNS4xLTMsNi44bDAsMEwxOSwyOGMtMSwxLTIsMi0zLDJzLTItMS0zLTJMMywxOGMtMS45LTEuNy0zLTQuMS0zLTYuOEMwLDYuMSw0LjEsMiw5LjIsMgogICAgICAgICAgICAgICAgICAgICAgICBjMi43LDAsNS4xLDEuMiw2LjgsM2MxLjctMS45LDQuMS0zLDYuOC0zQzI3LjksMS45LDMyLDYuMSwzMiwxMS4yeiIvPgogICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgIDwvc3ZnPgogICAgICAgICAgICA=#yadda">'
+        });
+
+        htmlAsset.outgoingRelations[0].to.url = 'https://example.com/image.svg';
+
+        expect(htmlAsset.text, 'to contain', '<img src="https://example.com/image.svg#yadda">');
+    });
 });
