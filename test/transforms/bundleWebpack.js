@@ -12,11 +12,11 @@ describe('bundleWebpack', function () {
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'index.html' } }, 1);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
-            fileName: { $regex: /bundle/ }
+            fileName: /bundle/
         });
         expect(assetGraph.findRelations({
             from: { fileName: 'index.html' },
-            to: { fileName: { $regex: /bundle/ } }
+            to: { fileName: /bundle/ }
         })[0].to.text, 'to contain', 'alert(\'main!\');');
     });
 
@@ -30,11 +30,11 @@ describe('bundleWebpack', function () {
         expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { fileName: 'index.html' } }, 1);
         expect(assetGraph, 'to contain asset', {
             type: 'JavaScript',
-            fileName: { $regex: /bundle/ }
+            fileName: /bundle/
         });
         expect(assetGraph.findRelations({
             from: { fileName: 'index.html' },
-            to: { fileName: { $regex: /bundle/ } }
+            to: { fileName: /bundle/ }
         })[0].to.text, 'to contain', 'alert(\'main!\');');
     });
 
@@ -45,7 +45,7 @@ describe('bundleWebpack', function () {
             .populate({followRelations: {type: {$not: 'SourceMapSource'}}});
 
         expect(assetGraph, 'to contain asset', { type: 'Json', isLoaded: true });
-        expect(assetGraph, 'to contain relation', { type: 'JavaScriptStaticUrl', to: { fileName: {$regex: /^[a-f0-9]{32}\.json$/ } } });
+        expect(assetGraph, 'to contain relation', { type: 'JavaScriptStaticUrl', to: { fileName: /^[a-f0-9]{32}\.json$/ } });
     });
 
     it('should pick up source maps from webpack', async function () {
@@ -145,9 +145,9 @@ describe('bundleWebpack', function () {
         // Webpack 1: 1.bundle.js
         // Webpack 2: 0.bundle.js
         expect(assetGraph, 'to contain asset', { fileName: 'bundle.js'})
-            .and('to contain asset', { fileName: { $regex: /^[01]\.bundle\.js$/ }});
+            .and('to contain asset', { fileName: /^[01]\.bundle\.js$/});
         expect(assetGraph, 'to contain relation', { from: { fileName: 'index.html' }, to: { fileName: 'bundle.js' } })
-            .and('to contain relation', { from: { fileName: 'bundle.js' }, to: { fileName: { $regex: /^[01]\.bundle\.js$/ } } });
+            .and('to contain relation', { from: { fileName: 'bundle.js' }, to: { fileName: /^[01]\.bundle\.js$/ } });
     });
 
     it('should support code splitting via require.ensure and wildcards', async function () {

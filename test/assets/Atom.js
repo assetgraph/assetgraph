@@ -15,6 +15,6 @@ describe('assets/Atom', function () {
 
         assetGraph.findAssets({fileName: 'bar.html'})[0].url = 'http://example.com/bar.html';
 
-        expect(assetGraph, 'to contain asset', {type: 'Atom', text: {$regex: /and a &lt;a href="http:\/\/example.com\/bar.html"/}});
+        expect(assetGraph, 'to contain asset', {type: 'Atom', text: /and a &lt;a href="http:\/\/example.com\/bar.html"/});
     });
 });
