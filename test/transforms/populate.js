@@ -37,7 +37,7 @@ describe('transforms/populate', function () {
     it('should populate a test case with protocol-relative urls from file:', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/protocolRelativeUrls/'});
         await assetGraph.loadAssets('index.html')
-            .populate({from: {url: {$regex: /^file:/}}});
+            .populate({from: {url: /^file:/}});
 
         expect(assetGraph, 'to contain assets', 3);
         expect(assetGraph, 'to contain relations', 'HtmlScript', 3);

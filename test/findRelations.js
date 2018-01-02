@@ -86,15 +86,15 @@ describe('AssetGraph.findRelations', function () {
             }
         }, 5);
         expect(assetGraph, 'to contain relations', {
-            type: {$regex: /CssIm|HtmlAn/},
+            type: /CssIm|HtmlAn/,
             from: {
-                text: {$regex: /^a|#ddd/}
+                text: /^a|#ddd/
             }
         }, 3);
         expect(assetGraph, 'to contain relation', {
             type: /Style/,
             from: {
-                text: {$regex: /^a<link rel=/}
+                text: /^a<link rel=/
             }
         });
         expect(assetGraph, 'to contain relations', {

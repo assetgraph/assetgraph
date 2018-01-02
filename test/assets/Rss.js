@@ -17,6 +17,6 @@ describe('assets/Rss', function () {
         assetGraph.findAssets({fileName: 'bar.html'})[0].url = 'http://example.com/bar.html';
         assetGraph.findRelations({type: 'RssChannelLink'})[0].hrefType = 'absolute';
 
-        expect(assetGraph, 'to contain asset', {type: 'Rss', text: {$regex: /<link>http:\/\/example.com\/bar.html<\/link>/}});
+        expect(assetGraph, 'to contain asset', {type: 'Rss', text: /<link>http:\/\/example.com\/bar.html<\/link>/});
     });
 });
