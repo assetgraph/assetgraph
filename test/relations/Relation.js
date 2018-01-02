@@ -568,4 +568,123 @@ describe('relations/Relation', function () {
             expect(svgAsset.text, 'to contain', '<use xlink:href="#path-1"></use>');
         });
     });
+
+    describe('#fragment', function () {
+        describe('invoked as a getter', function () {
+            it('should be the empty string when the relation href does not contain a fragment identifier', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/',
+                    text: '<a href="https://example.com/other.html">Link</a>'
+                });
+
+                expect(htmlAsset.outgoingRelations[0].fragment, 'to equal', '');
+            });
+
+            it('should be undefined for an inline relation', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/',
+                    text: '<style>body { color: maroon; }</style>'
+                });
+
+                expect(htmlAsset.outgoingRelations[0].fragment, 'to be undefined');
+            });
+
+            it('should be the fragment including the # when the href does contain a fragment identifier', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/',
+                    text: '<a href="https://example.com/other.html#blabla">Link</a>'
+                });
+
+                expect(htmlAsset.outgoingRelations[0].fragment, 'to equal', '#blabla');
+            });
+        });
+
+        describe('invoked as a setter', function () {
+            it('should throw if the fragment is a non-empty string that does not begin with #', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/',
+                    text: '<a href="https://example.com/other.html">Link</a>'
+                });
+
+                expect(
+                    () => htmlAsset.outgoingRelations[0].fragment = 'foo',
+                    'to throw',
+                    'The fragment must begin with a # or be empty'
+                );
+            });
+
+            it('should introduce a fragment identifier to the href of a relation that does not already have one', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/',
+                    text: '<a href="https://example.com/other.html">Link</a>'
+                });
+
+                htmlAsset.outgoingRelations[0].fragment = '#yadda';
+
+                expect(htmlAsset.text, 'to contain', '<a href="https://example.com/other.html#yadda">');
+            });
+
+            it('should replace the fragment identifier of a relation that already had one', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/',
+                    text: '<a href="https://example.com/other.html#blabla">Link</a>'
+                });
+
+                htmlAsset.outgoingRelations[0].fragment = '#yadda';
+
+                expect(htmlAsset.text, 'to contain', '<a href="https://example.com/other.html#yadda">');
+            });
+
+            it('should remove the fragment if undefined is passed', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/',
+                    text: '<a href="https://example.com/other.html#blabla">Link</a>'
+                });
+
+                htmlAsset.outgoingRelations[0].fragment = undefined;
+
+                expect(htmlAsset.text, 'to contain', '<a href="https://example.com/other.html">');
+            });
+
+            it('should remove the fragment if the empty string is passed', function () {
+                const assetGraph = new AssetGraph();
+                const htmlAsset = assetGraph.addAsset({
+                    type: 'Html',
+                    url: 'https://example.com/',
+                    text: '<a href="https://example.com/other.html#blabla">Link</a>'
+                });
+
+                htmlAsset.outgoingRelations[0].fragment = '';
+
+                expect(htmlAsset.text, 'to contain', '<a href="https://example.com/other.html">');
+            });
+        });
+    });
+
+    it('should preserve the fragment when an asset is externalized', function () {
+        const assetGraph = new AssetGraph();
+        const htmlAsset = assetGraph.addAsset({
+            type: 'Html',
+            url: 'https://example.com/',
+            text: '<img src="data:image/svg+xml;base64,CiAgICAgICAgICAgICAgICA8P3htbCB2ZXJzaW9uPSIxLjAiIGVuY29kaW5nPSJVVEYtOCI/PgogICAgICAgICAgICAgICAgPHN2ZyB3aWR0aD0iODJweCIgaGVpZ2h0PSI5MHB4IiB2aWV3Qm94PSIwIDAgODIgOTAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iaGVhcnQiPgogICAgICAgICAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMzIsMTEuMmMwLDIuNy0xLjIsNS4xLTMsNi44bDAsMEwxOSwyOGMtMSwxLTIsMi0zLDJzLTItMS0zLTJMMywxOGMtMS45LTEuNy0zLTQuMS0zLTYuOEMwLDYuMSw0LjEsMiw5LjIsMgogICAgICAgICAgICAgICAgICAgICAgICBjMi43LDAsNS4xLDEuMiw2LjgsM2MxLjctMS45LDQuMS0zLDYuOC0zQzI3LjksMS45LDMyLDYuMSwzMiwxMS4yeiIvPgogICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgIDwvc3ZnPgogICAgICAgICAgICA=#yadda">'
+        });
+
+        htmlAsset.outgoingRelations[0].to.url = 'https://example.com/image.svg';
+
+        expect(htmlAsset.text, 'to contain', '<img src="https://example.com/image.svg#yadda">');
+    });
 });
