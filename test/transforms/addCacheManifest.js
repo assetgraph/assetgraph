@@ -48,7 +48,7 @@ describe('transforms/addCacheManifest', function () {
         await assetGraph.on('warn', warnSpy);
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate({
-            followRelations: {to: {url: {$regex: /^file:/}}}
+            followRelations: {to: {protocol: 'file:'}}
         });
 
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*notFound\.js/));

@@ -433,10 +433,10 @@ describe('assets/Asset', function () {
 
         barHtml.url = 'http://example.com/subdir/quux.html';
         expect(assetGraph.findRelations({type: 'HtmlAnchor'})[0].href, 'to equal', 'http://example.com/subdir/quux.html');
-        expect(assetGraph.findAssets({type: 'Html', url: { $regex: /\/subdir\/quux\.html$/ } })[0].isLoaded, 'to be false');
+        expect(assetGraph.findAssets({type: 'Html', rootPath: '/subdir/quux.html' })[0].isLoaded, 'to be false');
         assetGraph.findRelations({type: 'HtmlAnchor'})[0].hrefType = 'relative';
         expect(assetGraph.findRelations({type: 'HtmlAnchor'})[0].href, 'to equal', 'subdir/quux.html');
-        expect(assetGraph.findAssets({type: 'Html', url: { $regex: /\/subdir\/quux\.html$/ } })[0].isLoaded, 'to be false');
+        expect(assetGraph.findAssets({type: 'Html', rootPath: '/subdir/quux.html' })[0].isLoaded, 'to be false');
     });
 
     describe('#clone()', function () {
