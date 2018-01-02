@@ -87,7 +87,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
             }, 1);
         }
 
-        expect(assetGraph, 'to contain assets', {url: /fake\./}, 7);
+        expect(assetGraph, 'to contain assets', {url: {$regex: /fake\./}}, 7);
 
         await assetGraph.splitCssIfIeLimitIsReached();
 
