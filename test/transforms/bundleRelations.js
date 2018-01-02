@@ -271,7 +271,7 @@ describe('transforms/bundleRelations', function () {
             expect(assetGraph.findAssets({fileName: 'index.html'})[0].text, 'not to contain', 'alert')
                 .and('to match', /<script async="async" src="[^"]+">/)
                 .and('to match', /<script defer="defer" src="[^"]+">/);
-            expect(assetGraph, 'to contain assets', {type: 'JavaScript', isInline: false, text: /alert/}, 2);
+            expect(assetGraph, 'to contain assets', {type: 'JavaScript', isInline: false, text: {$regex: /alert/}}, 2);
         });
 
         it('should gather all the copyright notices and put them at the top of the bundle', async function () {
@@ -409,7 +409,7 @@ describe('transforms/bundleRelations', function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptExternal/'});
             await assetGraph.loadAssets('index.html')
                 .populate({
-                    followRelations: {href: {$not: /^https?:/}}
+                    followRelations: {href: {$not: {$regex: /^https?:/}}}
                 })
                 .bundleRelations({
                     type: 'HtmlScript',
