@@ -16,7 +16,7 @@ describe('relations/HtmlEdgeSideInclude', function () {
         expect(assetGraph, 'to contain relations', 'HtmlEdgeSideInclude', 2);
         assetGraph.findAssets({fileName: 'index.html'})[0].url = urlTools.resolveUrl(assetGraph.root, 'foo/index.html');
         expect(
-            assetGraph.findRelations({to: {url: {$regex: /\.php$/}}, type: 'HtmlEdgeSideInclude'})[0].href,
+            assetGraph.findRelations({to: {extension: '.php'}, type: 'HtmlEdgeSideInclude'})[0].href,
             'to equal',
             '../dynamicStuff/metaTags.php'
         );
