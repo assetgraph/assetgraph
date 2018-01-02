@@ -8,7 +8,7 @@ describe('relations/HtmlIFrameSrcDoc', function () {
 
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate({
-            followRelations: {to: {$regex: /^file:/}}
+            followRelations: {to: {protocol: 'file:'}}
         });
 
         expect(assetGraph, 'to contain assets', 'Html', 3);

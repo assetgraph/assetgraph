@@ -409,7 +409,7 @@ describe('transforms/bundleRelations', function () {
             const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptExternal/'});
             await assetGraph.loadAssets('index.html')
                 .populate({
-                    followRelations: {href: {$not: {$regex: /^https?:/}}}
+                    followRelations: {to: {protocol: {$or: ['http', 'https']}}}
                 })
                 .bundleRelations({
                     type: 'HtmlScript',
