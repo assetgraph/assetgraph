@@ -22,6 +22,6 @@ describe('relations/HtmlIFrameSrcDoc', function () {
         document.firstChild.appendChild(document.createTextNode('Hello from the outside!'));
         asset.markDirty();
 
-        expect(assetGraph.findAssets({url: {$regex: /\/index\.html$/}})[0].text, 'to match', /Hello from the outside!/);
+        expect(assetGraph.findAssets({fileName: 'index.html'})[0].text, 'to match', /Hello from the outside!/);
     });
 });
