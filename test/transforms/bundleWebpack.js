@@ -90,6 +90,25 @@ describe('bundleWebpack', function () {
             });
     });
 
+    it('should make sources: [...] references relative when they point out of the web root', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/sourceMapsAndNodeModules/'})
+        .loadAssets('index.html')
+            .bundleWebpack()
+            .populate()
+            .applySourceMaps()
+            .queue(function (assetGraph) {
+                expect(
+                    assetGraph.findAssets({type: 'SourceMap'})[0].parseTree.sources,
+                    'to equal',
+                    [
+                        'webpack/bootstrap%205c89cbd3893270d2912a',
+                        '../../../../../node_modules/createerror/lib/createError.js',
+                        '/main.js'
+                    ]
+                );
+            });
+    });
+
     it('should pick up CSS assets in the output bundles', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/css/'})
             .loadAssets('index.html')
