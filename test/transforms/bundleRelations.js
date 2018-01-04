@@ -771,4 +771,18 @@ describe('transforms/bundleRelations', function () {
         expect(assetGraph.findAssets({type: 'Css'})[0].text, 'to contain', 'url(foo/bar.png)')
             .and('to contain', 'url(foo/blah/yadda.png)');
     });
+
+    it('should preserve source map relations so that sourcesContent can be reestablished', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/existingJavaScriptSourceMapsWithSourcesContent/'})
+            .loadAssets('index.html')
+            .populate()
+            .applySourceMaps()
+            .bundleRelations({ type: 'HtmlScript', from: { fileName: 'index.html' } })
+            .serializeSourceMaps({sourcesContent: true})
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain asset', 'SourceMap');
+                var sourceMap = assetGraph.findAssets({type: 'SourceMap'})[0];
+                expect(sourceMap.parseTree.sourcesContent, 'to equal', ['foo', 'bar']);
+            });
+    });
 });
