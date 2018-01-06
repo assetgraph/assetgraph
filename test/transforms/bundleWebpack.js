@@ -109,6 +109,27 @@ describe('bundleWebpack', function () {
             });
     });
 
+    it('should make sources: [...] references relative when they point out of the web root 2', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/sourceMapsPointingOutOfWebRoot/webroot'})
+            .logEvents()
+            .loadAssets('index.html')
+            .bundleWebpack({}, {
+                configPath: require('path').resolve(__dirname, '../../testdata/transforms/bundleWebpack/sourceMapsPointingOutOfWebRoot/webpack.config.js')
+            })
+            .populate()
+            .applySourceMaps()
+            .queue(function (assetGraph) {
+                expect(
+                    assetGraph.findAssets({type: 'SourceMap'})[0].parseTree.sources,
+                    'to equal',
+                    [
+                        'webpack/bootstrap%20032413f5df1b0769617f',
+                        '../../src/index.js'
+                    ]
+                );
+            });
+    });
+
     it('should pick up CSS assets in the output bundles', function () {
         return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleWebpack/css/'})
             .loadAssets('index.html')
