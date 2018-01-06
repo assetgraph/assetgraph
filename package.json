@@ -53,7 +53,7 @@
     "specificity": "0.3.0",
     "teepee": "^2.28.0",
     "uglify-js": "^3.3.4",
-    "urltools": "^0.3.5",
+    "urltools": "^0.4.0",
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
