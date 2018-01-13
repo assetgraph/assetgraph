@@ -162,4 +162,27 @@ describe('assets/Css', function () {
     it('should not break when attempting to retrieve the text content of an unloaded Css asset', function () {
         expect(new AssetGraph.Css({}).text, 'to be undefined');
     });
+
+    it('should set the format of CssFontFaceSrc if available', () => {
+        const css = new AssetGraph.Css({
+            text: `
+                @font-face {
+                    font-family: 'icomoon';
+                    src: url('icomoon.eot');
+                    src: url('icomoon.eot?#iefix') format('embedded-opentype'),
+                         url('icomoon.woff') format('woff'),
+                         url('icomoon.ttf') format('truetype'),
+                         url('icomoon.svg#icomoon') format('svg');
+                }
+            `
+        });
+
+        expect(css.findOutgoingRelationsInParseTree(), 'to satisfy', [
+            { format: null },
+            { format: 'embedded-opentype' },
+            { format: 'woff' },
+            { format: 'truetype' },
+            { format: 'svg' }
+        ]);
+    });
 });
