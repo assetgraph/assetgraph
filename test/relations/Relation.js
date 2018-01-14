@@ -560,9 +560,6 @@ describe('relations/Relation', function () {
                 text: '<img src="somewhereelse/image.svg">'
             });
 
-            // FIXME: Suppress warning about <use xlink:href="#path-1"></use> now pointing at an HTML asset
-            assetGraph.on('warn', () => {});
-
             htmlAsset.outgoingRelations[0].inline();
 
             expect(svgAsset.text, 'to contain', '<use xlink:href="#path-1"></use>');
