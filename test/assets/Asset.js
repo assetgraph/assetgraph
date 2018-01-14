@@ -571,6 +571,19 @@ describe('assets/Asset', function () {
 
             expect(function () { return asset.populate(); }, 'to throw');
         });
+
+        it('should attach a fragment link in an inline asset correctly', async function () {
+            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/selfAnchorInInlineSvg/'});
+
+            await assetGraph.loadAssets('index.html');
+            await assetGraph.populate();
+
+            expect(assetGraph, 'to contain relation', {
+                type: 'SvgUse',
+                from: { type: 'Svg' },
+                to: { type: 'Svg' }
+            });
+        });
     });
 
     describe('#replaceWith()', function () {
