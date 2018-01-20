@@ -5,31 +5,33 @@ const sinon = require('sinon');
 
 describe('relations/HtmlResourceHint', function () {
     function getHtmlAsset(htmlString) {
-        const graph = new AssetGraph({ root: __dirname });
-        const htmlAsset = new AssetGraph.Html({
+        return new AssetGraph({ root: __dirname }).addAsset({
+            type: 'Html',
             text: htmlString || '<!doctype html><html><head></head><body></body></html>',
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
-
-        graph.addAsset(htmlAsset);
-
-        return htmlAsset;
     }
 
     describe('#inline', function () {
         it('should throw', function () {
-            const relation = new AssetGraph.HtmlResourceHint({
+            const htmlAsset = getHtmlAsset();
+            const relation = htmlAsset.addRelation({
+                node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                type: 'HtmlResourceHint',
                 to: { url: 'foo.css' }
             });
 
-            expect(relation.inline, 'to throw', /Inlining of resource hints is not allowed/);
+            expect(() => relation.inline(), 'to throw', /Inlining of resource hints is not allowed/);
         });
     });
 
     describe('#as', function () {
         describe('when target asset is not resolved', function () {
             it('should detect css as style', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.css' }
                 });
 
@@ -37,7 +39,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect js as script', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.js' }
                 });
 
@@ -45,7 +50,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect svg as image', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.svg' }
                 });
 
@@ -53,7 +61,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect jpg as image', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.jpg' }
                 });
 
@@ -61,7 +72,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect jpeg as image', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.jpeg' }
                 });
 
@@ -69,7 +83,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect png as image', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.png' }
                 });
 
@@ -77,7 +94,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect gif as image', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.gif' }
                 });
 
@@ -85,7 +105,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect webp as image', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.webp' }
                 });
 
@@ -93,7 +116,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect ico as image', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.ico' }
                 });
 
@@ -101,7 +127,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect tiff as image', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.tiff' }
                 });
 
@@ -109,7 +138,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect bmp as image', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.bmp' }
                 });
 
@@ -117,7 +149,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect html as document', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.html' }
                 });
 
@@ -125,7 +160,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect woff as font', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.woff' }
                 });
 
@@ -133,7 +171,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect woff2 as font', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.woff2' }
                 });
 
@@ -141,7 +182,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect ttf as font', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.ttf' }
                 });
 
@@ -149,7 +193,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect eot as font', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.eot' }
                 });
 
@@ -157,7 +204,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should detect otf as font', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo.otf' }
                 });
 
@@ -165,7 +215,10 @@ describe('relations/HtmlResourceHint', function () {
             });
 
             it('should fall back to an empty string', function () {
-                const relation = new AssetGraph.HtmlResourceHint({
+                const htmlAsset = getHtmlAsset();
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: { url: 'foo' }
                 });
 
@@ -179,12 +232,14 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><img src="foo.png"></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
                 expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT/));
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[1]
                 });
 
@@ -196,12 +251,14 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><script src="foo.js"></script></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
                 expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT/));
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[1]
                 });
 
@@ -213,10 +270,12 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><link rel="stylesheet" href="foo.css"></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[1]
                 });
 
@@ -228,10 +287,12 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><link rel="stylesheet" href="foo.scss"></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[1]
                 });
 
@@ -243,10 +304,12 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><iframe src="foo.html"></iframe></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[1]
                 });
 
@@ -258,10 +321,12 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><frameset><frame src="foo.html"></frameset></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[1]
                 });
 
@@ -273,10 +338,12 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><audio src="foo.wav"></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[1]
                 });
 
@@ -288,10 +355,12 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><video src="foo.wav"></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[1]
                 });
 
@@ -303,10 +372,12 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><style>@font-face { font-family: "Noto Serif"; font-style: normal; font-weight: 400; src: url(foo.woff2) format("woff2"); }</style></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[2]
                 });
 
@@ -318,10 +389,12 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><embed src="foo.wav"></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[1]
                 });
 
@@ -333,10 +406,12 @@ describe('relations/HtmlResourceHint', function () {
                 const htmlAsset = getHtmlAsset('<body><object data="foo.wav"></object></body>');
 
                 const assetGraph = htmlAsset.assetGraph;
-                await assetGraph.on('warn', warnSpy)
-                    .populate();
+                assetGraph.on('warn', warnSpy);
+                await assetGraph.populate();
 
-                const relation = new AssetGraph.HtmlResourceHint({
+                const relation = htmlAsset.addRelation({
+                    node: htmlAsset.parseTree.createElement('link'), // Needed because HtmlResourceHint is abstract
+                    type: 'HtmlResourceHint',
                     to: assetGraph.findAssets()[1]
                 });
 

@@ -16,7 +16,8 @@ describe('relations/HtmlStyle', function () {
     });
 
     function initial(html) {
-        htmlAsset = new AssetGraph.Html({
+        htmlAsset = new AssetGraph().addAsset({
+            type: 'Html',
             url: assetGraph.root + 'index.html',
             text: html
         });

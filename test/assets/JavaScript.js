@@ -28,12 +28,12 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case that has a parse error in an asset not in an assetgraph', function () {
-        expect(() => new AssetGraph.JavaScript({ text: 'var test)' }).parseTree, 'to throw');
+        expect(() => new AssetGraph().addAsset({type: 'JavaScript', text: 'var test)' }).parseTree, 'to throw');
     });
 
     it('should handle setting a new parseTree', function () {
-        const one = new AssetGraph.JavaScript({ text: 'var test = "true";' });
-        const two = new AssetGraph.JavaScript({ text: 'var test = "false";' });
+        const one = new AssetGraph().addAsset({type: 'JavaScript', text: 'var test = "true";' });
+        const two = new AssetGraph().addAsset({type: 'JavaScript', text: 'var test = "false";' });
 
         expect(one, 'not to have the same AST as', two);
 
@@ -43,21 +43,23 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle minification', function () {
-        const one = new AssetGraph.JavaScript({ text: 'function test (argumentName) { return argumentName; }' });
-        const two = new AssetGraph.JavaScript({ text: 'function test (argumentName) { return argumentName; }' });
+        const assetGraph = new AssetGraph();
+        const one = assetGraph.addAsset({type: 'JavaScript', text: 'function test (argumentName) { return argumentName; }' });
+        const two = assetGraph.addAsset({type: 'JavaScript', text: 'function test (argumentName) { return argumentName; }' });
 
         expect(one, 'to have the same AST as', two);
 
         two.minify();
 
         expect(one.text, 'not to equal', two.text);
-        expect(two.text, 'to equal', 'function test(argumentName){return argumentName}');
+        expect(two.text, 'to equal', 'function test(argumentName){return argumentName};');
     });
 
     it('should handle invalid arguments for Amd define call', async function () {
         sinon.stub(console, 'info');
 
-        const invalidArgument = new AssetGraph.JavaScript({
+        const invalidArgument = new AssetGraph().addAsset({
+            type: 'JavaScript',
             isRequired: true,
             text: 'define([1], function () {})'
         });
@@ -169,7 +171,8 @@ describe('assets/JavaScript', function () {
 
     it('should tolerate ES6 syntax', function () {
         const es6Text = 'import gql from \'graphql-tag\';\nlet a = 123;';
-        const javaScript = new AssetGraph.JavaScript({
+        const javaScript = new AssetGraph().addAsset({
+            type: 'JavaScript',
             text: es6Text
         });
         expect(javaScript.parseTree, 'to satisfy', {
@@ -187,7 +190,7 @@ describe('assets/JavaScript', function () {
     // Awaiting https://github.com/jquery/esprima/issues/1588 (due for Esprima 5)
     it.skip('should tolerate Object spread syntax', function () {
         const text = 'const foo = { ...bar };';
-        const javaScript = new AssetGraph.JavaScript({ text });
+        const javaScript = new AssetGraph().addAsset({type: 'JavaScript', text });
         expect(javaScript.parseTree, 'to satisfy', {
             type: 'Program',
             body: [
@@ -200,7 +203,8 @@ describe('assets/JavaScript', function () {
 
     it('should tolerate JSX syntax', function () {
         const jsxText = 'function render() { return (<MyComponent />); }';
-        const javaScript = new AssetGraph.JavaScript({
+        const javaScript = new AssetGraph().addAsset({
+            type: 'JavaScript',
             text: jsxText
         });
         expect(javaScript.parseTree, 'to satisfy', {
@@ -239,7 +243,7 @@ describe('assets/JavaScript', function () {
 
     it('should fall back to "script" mode when a parse error is encountered', function () {
         const text = 'await = 123;';
-        const javaScript = new AssetGraph.JavaScript({ text });
+        const javaScript = new AssetGraph().addAsset({type: 'JavaScript', text });
         expect(javaScript.parseTree, 'to satisfy', {
             type: 'Program',
             body: [
@@ -267,10 +271,11 @@ describe('assets/JavaScript', function () {
             .on('error', errorSpy)
             .on('warn', warnSpy)
             .on('info', infoSpy)
-            .loadAssets(new AssetGraph.JavaScript({
+            .loadAssets({
+                type: 'JavaScript',
                 url: 'http://example.com/script.js',
                 text: 'await = 123;'
-            }))
+            })
             .populate();
 
         expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', () => {
@@ -286,10 +291,11 @@ describe('assets/JavaScript', function () {
             .on('error', errorSpy)
             .on('warn', warnSpy)
             .on('info', infoSpy)
-            .loadAssets(new AssetGraph.JavaScript({
+            .loadAssets({
+                type: 'JavaScript',
                 url: 'http://example.com/script.js',
                 text: 'qwvce)'
-            }))
+            })
             .populate();
 
         expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', () => {

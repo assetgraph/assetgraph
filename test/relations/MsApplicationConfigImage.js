@@ -51,11 +51,17 @@ describe('relations/MsApplicationConfigImage', async function () {
 
     describe('when programmatically adding a relation', async function () {
         it('should throw when trying to attach', function () {
-            const relation = new AssetGraph.MsApplicationConfigImage({
-                to: new AssetGraph.Png({ url: 'image.png' })
+            const assetGraph = new AssetGraph();
+            const htmlAsset = assetGraph.addAsset({
+                type: 'Html',
+                text: '<!doctype html><html><head></head><body></body></html>'
             });
+            const image = assetGraph.addAsset({type: 'Png', url: 'image.png' });
 
-            expect(() => relation.attach(), 'to throw', 'MsApplicationConfigImage.attach: Not supported');
+            expect(() => htmlAsset.addRelation({
+                type: 'MsApplicationConfigImage',
+                to: image
+            }), 'to throw', 'MsApplicationConfigImage.attach: Not supported');
         });
     });
 

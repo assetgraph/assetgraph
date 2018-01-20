@@ -13,6 +13,7 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         // subject.code, subject.defines
         expect(subject, 'to be an object');
         const assetConfig = {
+            type: 'JavaScript',
             url: 'file://' + __dirname + '/bogus.js'
         };
         if (subject && typeof subject.type === 'string') {
@@ -22,7 +23,7 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         } else if (Buffer.isBuffer(subject.rawSrc)) {
             assetConfig.rawSrc = subject.rawSrc;
         }
-        await assetGraph.loadAssets(new AssetGraph.JavaScript(assetConfig));
+        assetGraph.addAsset(assetConfig);
         await assetGraph.replaceSymbolsInJavaScript({type: 'JavaScript'}, subject.defines || {});
 
         expect(assetGraph.findAssets({fileName: 'bogus.js'})[0], 'to have the same AST as', value);

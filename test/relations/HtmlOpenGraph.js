@@ -13,7 +13,8 @@ describe('relations/HtmlOpenGraph', function () {
 
     describe('#inline', function () {
         it('should throw', function () {
-            const relation = new AssetGraph.HtmlOpenGraph({
+            const relation = getHtmlAsset().addRelation({
+                type: 'HtmlOpenGraph',
                 to: { url: 'index.html' }
             });
 

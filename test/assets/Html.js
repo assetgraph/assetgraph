@@ -5,7 +5,7 @@ const mozilla = require('source-map');
 
 describe('assets/Html', function () {
     const expect = unexpected.clone().addAssertion('to minify to', function (expect, subject, value, manipulator) {
-        const htmlAsset = new AssetGraph.Html({text: subject});
+        const htmlAsset = new AssetGraph().addAsset({type: 'Html', text: subject});
         if (manipulator) {
             manipulator(htmlAsset);
             htmlAsset.markDirty();
@@ -37,19 +37,22 @@ describe('assets/Html', function () {
 
     describe('#text', function () {
         it('should get text of asset instantiated with rawSrc property', function () {
-            expect(new AssetGraph.Html({
+            expect(new AssetGraph().addAsset({
+                type: 'Html',
                 rawSrc: new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')
             }).text, 'to equal', '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>');
         });
 
         it('should get text of AssetGraph.Html instantiated with text property', function () {
-            expect(new AssetGraph.Html({
+            expect(new AssetGraph().addAsset({
+                type: 'Html',
                 text: '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'
             }).text, 'to equal', '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>');
         });
 
         it('should get text of AssetGraph.Html instantiated with rawSrc property and modified parse tree', function () {
-            const htmlAsset = new AssetGraph.Html({
+            const htmlAsset = new AssetGraph().addAsset({
+                type: 'Html',
                 rawSrc: new Buffer('<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>')
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
@@ -58,7 +61,8 @@ describe('assets/Html', function () {
         });
 
         it('should get text of AssetGraph.Html with text property and modified parse tree', function () {
-            const htmlAsset = new AssetGraph.Html({
+            const htmlAsset = new AssetGraph().addAsset({
+                type: 'Html',
                 text: '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
@@ -69,19 +73,22 @@ describe('assets/Html', function () {
 
     describe('#rawSrc', function () {
         it('should get rawSrc of AssetGraph.Html with rawSrc property', function () {
-            expect(new AssetGraph.Html({
+            expect(new AssetGraph().addAsset({
+                type: 'Html',
                 rawSrc: new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>')
             }).rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>', 'utf-8'));
         });
 
         it('should get rawSrc of AssetGraph.Html instantiated with text property', function () {
-            expect(new AssetGraph.Html({
+            expect(new AssetGraph().addAsset({
+                type: 'Html',
                 text: '<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>'
             }).rawSrc, 'to equal', new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>', 'utf-8'));
         });
 
         it('should get rawSrc of AssetGraph.Html with rawSrc property and modified parse tree', function () {
-            const htmlAsset = new AssetGraph.Html({
+            const htmlAsset = new AssetGraph().addAsset({
+                type: 'Html',
                 rawSrc: new Buffer('<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>')
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
@@ -90,7 +97,8 @@ describe('assets/Html', function () {
         });
 
         it('should get rawSrc of AssetGraph.Html with text property and modified parse tree', function () {
-            const htmlAsset = new AssetGraph.Html({
+            const htmlAsset = new AssetGraph().addAsset({
+                type: 'Html',
                 text: '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'
             });
             htmlAsset.parseTree.body.firstChild.nodeValue = 'Not so much!';
@@ -113,7 +121,8 @@ describe('assets/Html', function () {
 
     describe('template escaping', function () {
         function createAsset(inputHtml) {
-            return new AssetGraph.Html({
+            return new AssetGraph().addAsset({
+                type: 'Html',
                 text: inputHtml
             });
         }
@@ -644,7 +653,8 @@ describe('assets/Html', function () {
     });
 
     it('should not evaluate inline scripts', function () {
-        const htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph().addAsset({
+            type: 'Html',
             text: '<!DOCTYPE html><html><head></head><body><script>document.write("<foo>" + "</foo>");</script></body></html>'
         });
         htmlAsset.parseTree;

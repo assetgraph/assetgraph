@@ -83,7 +83,8 @@ describe('transforms/addPrecacheServiceWorker', function () {
             .loadAssets('index.html')
             .populate({followRelations: {to: {url: /^file:/}}})
             .queue(assetGraph => {
-                assetGraph.addAsset(new AssetGraph.JavaScript({
+                assetGraph.addAsset(new AssetGraph().addAsset({
+                    type: 'JavaScript',
                     url: assetGraph.root + 'index-precache-service-worker.js',
                     text: 'alert("hello");'
                 }));

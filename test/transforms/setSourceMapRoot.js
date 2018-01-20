@@ -5,7 +5,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 describe('transforms/setSourceMapRoot', function () {
     it('should be able to modify source root', async function () {
         const assetGraph = new AssetGraph();
-        await assetGraph.loadAssets(new AssetGraph.SourceMap({text: '{"sourceRoot":"rootFolder"}'}))
+        await assetGraph.loadAssets(new AssetGraph().addAsset({type: 'SourceMap', text: '{"sourceRoot":"rootFolder"}'}))
             .setSourceMapRoot(null, 'otherFolder');
 
         expect(assetGraph, 'to contain asset', 'SourceMap');
@@ -14,7 +14,7 @@ describe('transforms/setSourceMapRoot', function () {
 
     it('should be able to delete source root', async function () {
         const assetGraph = new AssetGraph();
-        await assetGraph.loadAssets(new AssetGraph.SourceMap({text: '{"sourceRoot":"rootFolder"}'}))
+        await assetGraph.loadAssets(new AssetGraph().addAsset({type: 'SourceMap', text: '{"sourceRoot":"rootFolder"}'}))
             .setSourceMapRoot(null, null);
 
         expect(assetGraph, 'to contain asset', 'SourceMap');

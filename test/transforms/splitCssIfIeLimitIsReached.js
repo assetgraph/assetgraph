@@ -39,7 +39,8 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
             expect(cssAsset.parseTree.nodes.length, 'to be less than', assetGraph._parseTreeBefore.nodes.length);
         }
 
-        const cssAfter = new AssetGraph.Css({
+        const cssAfter = new AssetGraph().addAsset({
+            type: 'Css',
             text: assetGraph.findAssets({type: 'Css'}).map(function (cssAsset) {
                 return cssAsset.text;
             }).join('')
@@ -117,7 +118,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
         const text = assetGraph.findAssets({type: 'Css'}).map(
             cssAsset => cssAsset.text
         ).join('\n');
-        const parseTreeAfter = new AssetGraph.Css({ text }).parseTree;
+        const parseTreeAfter = new AssetGraph().addAsset({type: 'Css', text }).parseTree;
 
         expect(assetGraph._parseTreeBefore.toString().replace(/\n+/g, '\n'), 'to equal', (parseTreeAfter.toString() + '\n').replace(/\n+/g, '\n'));
 

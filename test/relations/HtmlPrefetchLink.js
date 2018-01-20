@@ -76,7 +76,7 @@ describe('relations/HtmlPrefetchLink', function () {
             const htmlAsset = getHtmlAsset();
             htmlAsset.addRelation({
                 type: 'HtmlPrefetchLink',
-                to: new AssetGraph.JavaScript({ text: '"use strict"', url: 'http://fisk.dk/foo.js' }),
+                to: new AssetGraph().addAsset({type: 'JavaScript', text: '"use strict"', url: 'http://fisk.dk/foo.js' }),
                 as: 'script'
             }, 'firstInHead');
 

@@ -13,7 +13,8 @@ describe('relations/HtmlPrerenderLink', function () {
 
     describe('#inline', function () {
         it('should throw', function () {
-            const relation = new AssetGraph.HtmlPrerenderLink({
+            const relation = getHtmlAsset().addRelation({
+                type: 'HtmlPrerenderLink',
                 to: { url: 'index.html' }
             });
 
@@ -60,7 +61,7 @@ describe('relations/HtmlPrerenderLink', function () {
             const htmlAsset = getHtmlAsset();
             htmlAsset.addRelation({
                 type: 'HtmlPrerenderLink',
-                to: new AssetGraph.Html({ text: '<!doctype html><html><head></head><body></body></html>', url: 'http://fisk.dk/index.html' }),
+                to: new AssetGraph().addAsset({type: 'Html', text: '<!doctype html><html><head></head><body></body></html>', url: 'http://fisk.dk/index.html' }),
                 as: 'script'
             }, 'firstInHead');
 

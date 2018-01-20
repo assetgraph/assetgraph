@@ -8,7 +8,7 @@ describe('transforms/compressJavaScript', function () {
     [undefined, 'uglifyJs'].forEach(function (compressorName) {
         it('with compressorName=' + compressorName + ' should yield a compressed JavaScript', async function () {
             const assetGraph = new AssetGraph();
-            await assetGraph.loadAssets(new AssetGraph.JavaScript({text: 'var foo = 123;'}));
+            await assetGraph.loadAssets(new AssetGraph().addAsset({type: 'JavaScript', text: 'var foo = 123;'}));
             await assetGraph.compressJavaScript({type: 'JavaScript'}, compressorName);
 
             expect(assetGraph, 'to contain asset', 'JavaScript');
@@ -18,13 +18,17 @@ describe('transforms/compressJavaScript', function () {
 
     it('should warn when UglifyJS runs into a parse error and leave the asset unchanged', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph()
-            .on('warn', warnSpy);
-        await assetGraph.loadAssets(new AssetGraph.JavaScript({text: 'var foo = `123`;'}));
+        const assetGraph = new AssetGraph();
+        assetGraph.on('warn', warnSpy);
+        assetGraph.addAsset({
+            url: 'https://example.com/script.js',
+            type: 'JavaScript',
+            text: 'var foo = `123`;'
+        });
         await assetGraph.compressJavaScript({type: 'JavaScript'});
 
         expect(warnSpy, 'to have calls satisfying', function () {
-            warnSpy(new errors.ParseError('Parse error in inline JavaScript\nUnexpected character \'`\' (line 1, column 11)'));
+            warnSpy(new errors.ParseError('Parse error in https://example.com/script.js\nUnexpected character \'`\' (line 1, column 11)'));
         });
         expect(assetGraph, 'to contain asset', 'JavaScript');
         expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'var foo = `123`;');
@@ -37,7 +41,7 @@ describe('transforms/compressJavaScript', function () {
             assetGraph.on('warn', warnSpy);
 
             assetGraph.javaScriptSerializationOptions = { ie8: true };
-            assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+            assetGraph.addAsset(new AssetGraph().addAsset({type: 'JavaScript', text: 'foo["catch"] = 123;'}));
 
             await assetGraph.compressJavaScript({type: 'JavaScript'});
 
@@ -52,7 +56,7 @@ describe('transforms/compressJavaScript', function () {
             assetGraph.on('warn', warnSpy);
 
             assetGraph.javaScriptSerializationOptions = { ie8: false };
-            assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+            assetGraph.addAsset(new AssetGraph().addAsset({type: 'JavaScript', text: 'foo["catch"] = 123;'}));
 
             await assetGraph.compressJavaScript({type: 'JavaScript'});
 
@@ -66,7 +70,7 @@ describe('transforms/compressJavaScript', function () {
             const assetGraph = new AssetGraph();
             assetGraph.on('warn', warnSpy);
 
-            const asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
+            const asset = new AssetGraph().addAsset({type: 'JavaScript', text: 'foo["catch"] = 123;'});
             asset.serializationOptions = { ie8: true };
             assetGraph.addAsset(asset);
 
@@ -82,7 +86,7 @@ describe('transforms/compressJavaScript', function () {
             const assetGraph = new AssetGraph();
             assetGraph.on('warn', warnSpy);
 
-            const asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
+            const asset = new AssetGraph().addAsset({type: 'JavaScript', text: 'foo["catch"] = 123;'});
             asset.serializationOptions = { ie8: false };
             assetGraph.addAsset(asset);
 
@@ -99,7 +103,7 @@ describe('transforms/compressJavaScript', function () {
             assetGraph.on('warn', warnSpy);
 
             assetGraph.javaScriptSerializationOptions = { screw_ie8: false };
-            assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+            assetGraph.addAsset(new AssetGraph().addAsset({type: 'JavaScript', text: 'foo["catch"] = 123;'}));
 
             await assetGraph.compressJavaScript({type: 'JavaScript'});
 
@@ -114,7 +118,7 @@ describe('transforms/compressJavaScript', function () {
             assetGraph.on('warn', warnSpy);
 
             assetGraph.javaScriptSerializationOptions = { screw_ie8: true };
-            assetGraph.addAsset(new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'}));
+            assetGraph.addAsset(new AssetGraph().addAsset({type: 'JavaScript', text: 'foo["catch"] = 123;'}));
 
             await assetGraph.compressJavaScript({type: 'JavaScript'});
 
@@ -128,7 +132,7 @@ describe('transforms/compressJavaScript', function () {
             const assetGraph = new AssetGraph();
             assetGraph.on('warn', warnSpy);
 
-            const asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
+            const asset = new AssetGraph().addAsset({type: 'JavaScript', text: 'foo["catch"] = 123;'});
             asset.serializationOptions = { screw_ie8: false };
             assetGraph.addAsset(asset);
 
@@ -144,7 +148,7 @@ describe('transforms/compressJavaScript', function () {
             const assetGraph = new AssetGraph();
             assetGraph.on('warn', warnSpy);
 
-            const asset = new AssetGraph.JavaScript({text: 'foo["catch"] = 123;'});
+            const asset = new AssetGraph().addAsset({type: 'JavaScript', text: 'foo["catch"] = 123;'});
             asset.serializationOptions = { screw_ie8: true };
             assetGraph.addAsset(asset);
 

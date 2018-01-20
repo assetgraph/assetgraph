@@ -13,7 +13,8 @@ describe('relations/HtmlDnsPrefetchLink', function () {
 
     describe('#inline', function () {
         it('should throw', function () {
-            const relation = new AssetGraph.HtmlDnsPrefetchLink({
+            const relation = getHtmlAsset().addRelation({
+                type: 'HtmlDnsPrefetchLink',
                 to: { url: 'index.html' }
             });
 

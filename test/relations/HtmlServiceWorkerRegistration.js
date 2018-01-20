@@ -13,7 +13,8 @@ describe('relations/HtmlServiceWorkerRegistration', function () {
 
     describe('#inline', function () {
         it('should throw', function () {
-            const relation = new AssetGraph.HtmlServiceWorkerRegistration({
+            const relation = getHtmlAsset().addRelation({
+                type: 'HtmlServiceWorkerRegistration',
                 to: { url: 'index.html' }
             });
 

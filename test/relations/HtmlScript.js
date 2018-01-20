@@ -67,7 +67,8 @@ describe('relations/HtmlScript', function () {
 
     it('should attach script node as the last node in document.body if no other scripts exist when using the `first` position', async function () {
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlScript/'});
-        await assetGraph.loadAssets(new AssetGraph.Html({
+        await assetGraph.loadAssets(new AssetGraph().addAsset({
+            type: 'Html',
             url: 'index.html',
             text: '<html><head></head><body><h1>Hello world</h1></body></html>'
         }));

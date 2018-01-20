@@ -5,7 +5,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 describe('relations/HtmlPreconnectLink', function () {
     function getHtmlAsset(htmlString) {
         const graph = new AssetGraph({ root: __dirname });
-        const htmlAsset = new AssetGraph.Html({
+        const htmlAsset = new AssetGraph().addAsset({
+            type: 'Html',
             text: htmlString || '<!doctype html><html><head></head><body></body></html>',
             url: 'file://' + __dirname + 'doesntmatter.html'
         });
@@ -17,7 +18,8 @@ describe('relations/HtmlPreconnectLink', function () {
 
     describe('#inline', function () {
         it('should throw', function () {
-            const relation = new AssetGraph.HtmlPreconnectLink({
+            const relation = getHtmlAsset().addRelation({
+                type: 'HtmlPreconnectLink',
                 to: { url: 'index.html' }
             });
 

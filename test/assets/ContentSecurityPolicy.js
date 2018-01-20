@@ -34,7 +34,8 @@ describe('assets/ContentSecurityPolicy', function () {
     });
 
     it('should normalize the casing of directives, hash names and single quoted directives', function () {
-        expect(new AssetGraph.ContentSecurityPolicy({
+        expect(new AssetGraph().addAsset({
+            type: 'ContentSecurityPolicy',
             text: 'DEFAULT-sRc \'seLF\' \'sHa256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs=\' HttP://foo.com dAta: sVn+SSH: \'UNsafe-InLiNe\' \'unSAFE-eVal\' \'nONCe-ABC123\''
         }).parseTree, 'to exhaustively satisfy', {
             defaultSrc: ['\'self\'', '\'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs=\'', 'http://foo.com', 'data:', 'svn+ssh:', '\'unsafe-inline\'', '\'unsafe-eval\'', '\'nonce-ABC123\'']
@@ -43,7 +44,8 @@ describe('assets/ContentSecurityPolicy', function () {
 
     // Doesn't seem to permitted by the grammar, but is used by eg. https://report-uri.io/home/generate
     it('should allow a trailing semicolon', function () {
-        expect(new AssetGraph.ContentSecurityPolicy({
+        expect(new AssetGraph().addAsset({
+            type: 'ContentSecurityPolicy',
             text: 'default-src \'self\';'
         }).parseTree, 'to exhaustively satisfy', {
             defaultSrc: ['\'self\'']
@@ -51,7 +53,8 @@ describe('assets/ContentSecurityPolicy', function () {
     });
 
     it('should support \"boolean\" directives', function () {
-        const contentSecurityPolicy = new AssetGraph.ContentSecurityPolicy({
+        const contentSecurityPolicy = new AssetGraph().addAsset({
+            type: 'ContentSecurityPolicy',
             text: 'upgrade-insecure-requests; block-all-mixed-content'
         });
         expect(contentSecurityPolicy.parseTree, 'to exhaustively satisfy', {
@@ -63,7 +66,8 @@ describe('assets/ContentSecurityPolicy', function () {
     });
 
     it('should tolerate leading newlines', function () {
-        const csp = new AssetGraph.ContentSecurityPolicy({
+        const csp = new AssetGraph().addAsset({
+            type: 'ContentSecurityPolicy',
             text: "\n     default-src 'self'; img-src 'self'"
         });
         expect(csp.parseTree, 'to satisfy', {

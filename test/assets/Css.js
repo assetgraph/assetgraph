@@ -51,13 +51,14 @@ describe('assets/Css', function () {
     });
 
     it('should get the default encoding when there is no other way to determine encoding', function () {
-        const asset = new AssetGraph.Css({});
+        const asset = new AssetGraph().addAsset({type: 'Css'});
 
         expect(asset.encoding, 'to be', AssetGraph.Text.prototype.defaultEncoding);
     });
 
     it('should get set a new encoding correctly', function () {
-        const asset = new AssetGraph.Css({
+        const asset = new AssetGraph().addAsset({
+            type: 'Css',
             encoding: 'utf-8',
             text: 'body:before { content: "🐮"; }'
         });
@@ -74,7 +75,7 @@ describe('assets/Css', function () {
 
     it('should pretty print Css text', function () {
         const text = 'body{background:red}';
-        const asset = new AssetGraph.Css({ text });
+        const asset = new AssetGraph().addAsset({type: 'Css', text });
 
         expect(asset.text, 'to be', text);
 
@@ -106,24 +107,10 @@ describe('assets/Css', function () {
         });
     });
 
-    it('should throw an error on completely invalid CSS', function () {
-        const asset = new AssetGraph.Css({
-            text: 'body {}'
-        });
-        function getParseTree() {
-            return asset.parseTree;
-        }
-
-        expect(getParseTree, 'not to throw');
-
-        asset.text = '}';
-
-        expect(getParseTree, 'to throw');
-    });
-
-    it('should emit a warn event on completely invalid CSS if the asset is part of an assetGraph', function () {
+    it('should emit a warn event on completely invalid CSS', function () {
         const assetGraph = new AssetGraph();
-        const asset = new AssetGraph.Css({
+        const asset = new AssetGraph().addAsset({
+            type: 'Css',
             text: 'body {}'
         });
 
@@ -139,10 +126,12 @@ describe('assets/Css', function () {
 
     it('should update the text of a Css asset when setting parseTree', function () {
         const cssText = 'h1{color:hotpink}';
-        const first = new AssetGraph.Css({
+        const first = new AssetGraph().addAsset({
+            type: 'Css',
             text: 'h1{color:red}'
         });
-        const second = new AssetGraph.Css({
+        const second = new AssetGraph().addAsset({
+            type: 'Css',
             text: cssText
         });
 
@@ -160,11 +149,12 @@ describe('assets/Css', function () {
     });
 
     it('should not break when attempting to retrieve the text content of an unloaded Css asset', function () {
-        expect(new AssetGraph.Css({}).text, 'to be undefined');
+        expect(new AssetGraph().addAsset({type: 'Css'}).text, 'to be undefined');
     });
 
     it('should set the format of CssFontFaceSrc if available', () => {
-        const css = new AssetGraph.Css({
+        const css = new AssetGraph().addAsset({
+            type: 'Css',
             text: `
                 @font-face {
                     font-family: 'icomoon';

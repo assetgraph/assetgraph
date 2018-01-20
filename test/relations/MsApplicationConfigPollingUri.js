@@ -43,19 +43,53 @@ describe('relations/MsApplicationConfigPollingUri', function () {
     });
 
     it('should throw when trying to inline', function () {
-        const relation = new AssetGraph.MsApplicationConfigPollingUri({
-            to: { type: 'Xml', url: '/polling-target' }
+        const assetGraph = new AssetGraph();
+
+        const msApplicationConfig = assetGraph.addAsset({
+            type: 'MsApplicationConfig',
+            text: `
+                <?xml version="1.0" encoding="utf-8"?>
+                <browserconfig>
+                    <msapplication>
+                        <notification>
+                            <frequency>30</frequency>
+                            <polling-uri  src="/notification/polling-1.xml"/>
+                            <cycle>1</cycle>
+                        </notification>
+                    </msapplication>
+                </browserconfig>
+            `
         });
 
-        expect(() => relation.inline(), 'to throw', 'MsApplicationConfigPollingUri.inline: Not supported');
+        expect(
+            () => msApplicationConfig.outgoingRelations[0].inline(),
+            'to throw',
+            'MsApplicationConfigPollingUri.inline: Not supported'
+        );
     });
 
     it('should throw when trying to attach', function () {
-        const relation = new AssetGraph.MsApplicationConfigPollingUri({
-            to: { type: 'Xml', url: '/polling-target' }
+        const assetGraph = new AssetGraph();
+
+        const msApplicationConfig = assetGraph.addAsset({
+            type: 'MsApplicationConfig',
+            text: `
+                <?xml version="1.0" encoding="utf-8"?>
+                <browserconfig>
+                    <msapplication>
+                        <notification>
+                            <frequency>30</frequency>
+                            <cycle>1</cycle>
+                        </notification>
+                    </msapplication>
+                </browserconfig>
+            `
         });
 
-        expect(() => relation.attach(), 'to throw', 'MsApplicationConfigPollingUri.attach: Not supported');
+        expect(() => msApplicationConfig.addRelation({
+            type: 'MsApplicationConfigPollingUri',
+            to: { type: 'Xml', url: '/polling-target' }
+        }), 'to throw', 'MsApplicationConfigPollingUri.attach: Not supported');
     });
 
     describe('when programmatically detaching a relation', function () {

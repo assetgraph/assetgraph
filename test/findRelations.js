@@ -7,12 +7,12 @@ describe('AssetGraph.findRelations', function () {
     it('should handle a simple test case', async function () {
         const assetGraph = new AssetGraph();
         await assetGraph.loadAssets(
-            new AssetGraph.Html({url: 'a', text: 'a', foo: 'bar'}),
-            new AssetGraph.Html({url: 'b', text: 'b', foo: 'bar'}),
-            new AssetGraph.Html({url: 'c', text: 'c', foo: 'quux'}),
-            new AssetGraph.Css({url: 'd', text: 'body { color: #ddd; }', foo: 'baz'}),
-            new AssetGraph.Css({url: 'e', text: 'body { color: #eee; }'}),
-            new AssetGraph.Png({url: 'f', rawSrc: new Buffer('f'), foo: 'baz'})
+            new AssetGraph().addAsset({type: 'Html', url: 'a', text: 'a', foo: 'bar'}),
+            new AssetGraph().addAsset({type: 'Html', url: 'b', text: 'b', foo: 'bar'}),
+            new AssetGraph().addAsset({type: 'Html', url: 'c', text: 'c', foo: 'quux'}),
+            new AssetGraph().addAsset({type: 'Css', url: 'd', text: 'body { color: #ddd; }', foo: 'baz'}),
+            new AssetGraph().addAsset({type: 'Css', url: 'e', text: 'body { color: #eee; }'}),
+            new AssetGraph().addAsset({type: 'Png', url: 'f', rawSrc: new Buffer('f'), foo: 'baz'})
         );
 
         const aHtml = assetGraph.findAssets({text: 'a'})[0];
