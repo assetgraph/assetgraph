@@ -57,7 +57,7 @@ describe('bundleWebpack', function () {
 
         let alertInScriptWithoutExistingSourceMap;
         let firstGetBoundingClientRectNode;
-        require('estraverse').traverse(assetGraph.findAssets({fileName: 'bundle.js'})[0].parseTree, {
+        require('estraverse-fb').traverse(assetGraph.findAssets({fileName: 'bundle.js'})[0].parseTree, {
             enter(node) {
                 if (node.type === 'CallExpression' && node.callee.type === 'Identifier' && node.callee.name === 'alert' &&
                     node.arguments.length === 1 && node.arguments[0].value === 'noExistingSourceMap') {

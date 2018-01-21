@@ -1,6 +1,6 @@
 /*global describe, it*/
 const expect = require('../unexpected-with-plugins');
-const estraverse = require('estraverse');
+const estraverse = require('estraverse-fb');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/bundleSystemJs', function () {
