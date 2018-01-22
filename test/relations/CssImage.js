@@ -66,14 +66,37 @@ describe('relations/CssImage', function () {
     });
 
     it('should handle a test case with a singlequote in a background-image url(...)', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/CssImage/singleQuoteInUrl/'});
-        await assetGraph.loadAssets('index.html');
-        await assetGraph.populate();
+        const assetGraph = new AssetGraph();
+        assetGraph.addAsset({
+            type: 'Html',
+            text: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style type="text/css">
+                        .foo0 {
+                            background-image: url("foo'bar.png");
+                        }
+                        .foo1 {
+                            background-image: url('bar\\'quux.png');
+                        }
+                        .foo2 {
+                            background-image: url("blah\\"baz.png");
+                        }
+                        .foo3 {
+                            background-image: url('blerg"zyp.png');
+                        }
+                    </style>
+                </head>
+                <body></body>
+                </html>
+            `
+        });
 
         expect(assetGraph, 'to contain assets', {type: 'Png'}, 4);
-        assetGraph.findRelations({type: 'CssImage'}).forEach(function (cssImage) {
+        for (const cssImage of assetGraph.findRelations({type: 'CssImage'})) {
             cssImage.to.url += '.bogus';
-        });
+        }
         const text = assetGraph.findAssets({type: 'Css'})[0].text;
         expect
             .it('to contain', '\'foo%27bar.png.bogus\'')
