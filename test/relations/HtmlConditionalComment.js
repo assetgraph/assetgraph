@@ -19,7 +19,7 @@ describe('relations/HtmlConditionalComment', function () {
 
         expect(text, 'to match', /<!--\[if !IE\]>\s*-->Not IE<!--\s*<!\[endif\]-->/);
 
-        await assetGraph.externalizeRelations({type: ['HtmlStyle', 'HtmlScript']});
+        await assetGraph.externalizeRelations({type: {$in: ['HtmlStyle', 'HtmlScript']}});
 
         for (const asset of assetGraph.findAssets({type: 'Html'})) {
             asset.minify();

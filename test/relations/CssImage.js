@@ -12,7 +12,7 @@ describe('relations/CssImage', function () {
         expect(assetGraph, 'to contain relations', 'CssImage', 17);
         assetGraph.findAssets({fileName: 'foo.png'})[0].url = assetGraph.root + 'dir/foo2.png';
 
-        expect(_.map(assetGraph.findRelations({to: assetGraph.findAssets({fileName: 'foo2.png'})}), 'href'), 'to equal', [
+        expect(_.map(assetGraph.findRelations({to: assetGraph.findAssets({fileName: 'foo2.png'})[0]}), 'href'), 'to equal', [
             'dir/foo2.png',
             'dir/foo2.png',
             'dir/foo2.png',

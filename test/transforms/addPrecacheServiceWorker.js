@@ -10,7 +10,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
         await assetGraph.on('warn', warnSpy)
             .loadAssets('index.html')
             .populate({
-                followRelations: {to: {url: /^file:/}}
+                followRelations: {to: {protocol: 'file:'}}
             });
 
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*notFound\.js/));
@@ -45,7 +45,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
             .on('info', infoSpy)
             .on('warn', warnSpy)
             .loadAssets('index.html')
-            .populate({followRelations: {to: {url: /^file:/}}})
+            .populate({followRelations: {to: {protocol: 'file:'}}})
             .addPrecacheServiceWorker({isInitial: true});
 
         expect([warnSpy, infoSpy], 'to have calls satisfying', () => {
@@ -81,7 +81,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
         await assetGraph
             .on('warn', warnSpy)
             .loadAssets('index.html')
-            .populate({followRelations: {to: {url: /^file:/}}})
+            .populate({followRelations: {to: {protocol: 'file:'}}})
             .queue(assetGraph => {
                 assetGraph.addAsset(new AssetGraph().addAsset({
                     type: 'JavaScript',

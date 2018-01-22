@@ -173,7 +173,7 @@ describe('tranforms/inlineCriticalCss', function () {
         await assetGraph.inlineHtmlTemplates();
         await assetGraph.bundleRelations({type: 'HtmlStyle', to: {type: 'Css', isLoaded: true}, node: function (node) {return !node.hasAttribute('nobundle');}});
         await assetGraph.inlineCriticalCss();
-        await assetGraph.mergeIdenticalAssets({isLoaded: true, isInline: false, type: ['JavaScript', 'Css']}); // The bundling might produce several identical files, especially the 'oneBundlePerIncludingAsset' strategy.
+        await assetGraph.mergeIdenticalAssets({isLoaded: true, isInline: false, type: {$in: ['JavaScript', 'Css']}}); // The bundling might produce several identical files, especially the 'oneBundlePerIncludingAsset' strategy.
 
         for (const asset of assetGraph.findAssets({type: 'Html', isLoaded: true})) {
             asset.minify();
@@ -187,7 +187,7 @@ describe('tranforms/inlineCriticalCss', function () {
                     isInline: true,
                     text: 'h1{color:red}a{color:#639}'
                 },
-                node: function (node) {
+                node(node) {
                     return node && node.parentNode && node.parentNode.tagName === 'HEAD';
                 }
             },

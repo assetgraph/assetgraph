@@ -15,12 +15,12 @@ describe('transforms/externalizeRelations and transforms/mergeIdenticalAssets', 
 
         expect(assetGraph, 'to contain assets', 'JavaScript', 3);
 
-        const typeTwos = assetGraph.findAssets({type: 'JavaScript', text: /TypeTwo/});
+        const typeTwos = assetGraph.findAssets({type: 'JavaScript', text: {$regex: /TypeTwo/}});
         expect(typeTwos, 'to have length', 1);
         expect(assetGraph, 'to contain relation', {from: {fileName: 'first.html'}, to: typeTwos[0]});
         expect(assetGraph, 'to contain relation', {from: {fileName: 'second.html'}, to: typeTwos[0]});
 
-        const typeThrees = assetGraph.findAssets({type: 'JavaScript', text: /TypeThree/});
+        const typeThrees = assetGraph.findAssets({type: 'JavaScript', text: {$regex: /TypeThree/}});
         expect(typeThrees, 'to have length', 1);
         expect(assetGraph, 'to contain relation', {from: {fileName: 'first.html'}, to: typeThrees[0]});
         expect(assetGraph, 'to contain relation', {from: {fileName: 'second.html'}, to: typeThrees[0]});
@@ -28,7 +28,7 @@ describe('transforms/externalizeRelations and transforms/mergeIdenticalAssets', 
         expect(assetGraph, 'to contain relations', {
             from: assetGraph.findAssets({fileName: 'first.html'})[0],
             to: {
-                text: /TypeOne/
+                text: {$regex: /TypeOne/}
             }
         }, 2);
     });

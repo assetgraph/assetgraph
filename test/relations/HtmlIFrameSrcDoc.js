@@ -8,7 +8,7 @@ describe('relations/HtmlIFrameSrcDoc', function () {
 
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate({
-            followRelations: {to: {url: /^file:/}}
+            followRelations: {to: {protocol: 'file:'}}
         });
 
         expect(assetGraph, 'to contain assets', 'Html', 3);
@@ -22,6 +22,6 @@ describe('relations/HtmlIFrameSrcDoc', function () {
         document.firstChild.appendChild(document.createTextNode('Hello from the outside!'));
         asset.markDirty();
 
-        expect(assetGraph.findAssets({url: /\/index\.html$/})[0].text, 'to match', /Hello from the outside!/);
+        expect(assetGraph.findAssets({fileName: 'index.html'})[0].text, 'to match', /Hello from the outside!/);
     });
 });

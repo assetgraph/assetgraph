@@ -26,7 +26,7 @@ describe('transforms/addCacheManifest', function () {
         const cacheManifest = assetGraph.findAssets({type: 'CacheManifest'})[0];
         const barPng = assetGraph.findAssets({
             url: urlTools.resolveUrl(assetGraph.root, 'bar.png')
-        });
+        })[0];
         expect(assetGraph, 'to contain relation', {from: cacheManifest, to: barPng});
 
         const fooPngMatches = cacheManifest.text.match(/\bfoo.png/gm);
@@ -48,7 +48,7 @@ describe('transforms/addCacheManifest', function () {
         await assetGraph.on('warn', warnSpy);
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate({
-            followRelations: {to: {url: /^file:/}}
+            followRelations: {to: {protocol: 'file:'}}
         });
 
         expect(warnSpy, 'to have calls satisfying', () => warnSpy(/^ENOENT.*notFound\.js/));
@@ -88,12 +88,12 @@ describe('transforms/addCacheManifest', function () {
 
         expect(assetGraph, 'to contain assets', 'CacheManifest', 2);
 
-        const cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'index.html'}}})[0];
+        const cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incomingRelations: {$elemMatch: {from: {fileName: 'index.html'}}}})[0];
         expect(assetGraph, 'to contain relations', {from: cacheManifest}, 2);
         expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'foo.png'}});
         expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'otherpage.html'}});
 
-        const otherCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'otherpage.html'}}})[0];
+        const otherCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incomingRelations: {$elemMatch: {from: {fileName: 'otherpage.html'}}}})[0];
         expect(assetGraph, 'to contain relation', {from: otherCacheManifest});
         expect(assetGraph.findRelations({from: cacheManifest})[0].to, 'to equal', assetGraph.findAssets({fileName: 'foo.png'})[0]);
     });
@@ -112,13 +112,13 @@ describe('transforms/addCacheManifest', function () {
 
         expect(assetGraph, 'to contain assets', 'CacheManifest', 2);
 
-        const cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'pageone.html'}}})[0];
+        const cacheManifest = assetGraph.findAssets({type: 'CacheManifest', incomingRelations: {$elemMatch: {from: {fileName: 'pageone.html'}}}})[0];
         expect(assetGraph, 'to contain relations', {from: cacheManifest}, 3);
         expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'style.css'}});
         expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'quux.png'}});
         expect(assetGraph, 'to contain relation', {from: cacheManifest, to: {fileName: 'foo.png'}});
 
-        const pageTwoCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incoming: {from: {fileName: 'pagetwo.html'}}})[0];
+        const pageTwoCacheManifest = assetGraph.findAssets({type: 'CacheManifest', incomingRelations: {$elemMatch: {from: {fileName: 'pagetwo.html'}}}})[0];
         expect(assetGraph, 'to contain relations', {from: pageTwoCacheManifest}, 2);
         expect(assetGraph, 'to contain relation', {from: pageTwoCacheManifest, to: {fileName: 'style.css'}});
         expect(assetGraph, 'to contain relation', {from: pageTwoCacheManifest, to: {fileName: 'quux.png'}});
