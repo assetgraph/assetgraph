@@ -2908,11 +2908,9 @@ describe('transforms/subsetFonts', function () {
                 .on('warn', warnSpy)
                 .loadAssets('index.html')
                 .populate()
-                .drawGraph('before.svg')
                 .subsetFonts({
                     inlineSubsets: false
                 })
-                .drawGraph('afters.svg')
                 .queue(assetGraph => {
                     expect(warnSpy, 'was not called');
 
@@ -2957,12 +2955,129 @@ describe('transforms/subsetFonts', function () {
                         crossorigin: false
                     }
                 })
-                .drawGraph('debug.svg')
                 .subsetFonts({
                     inlineSubsets: false
                 })
-                .then(function () {
-                    expect(warnSpy, 'was not called');
+                .queue(function (assetGraph) {
+                    expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
+
+                    var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+
+                    expect(index.outgoingRelations, 'to satisfy', [
+                        {
+                            type: 'HtmlPreloadLink',
+                            hrefType: 'rootRelative',
+                            href: expect.it('to begin with', '/subfont/icomoon-400-')
+                                .and('to match', /-[0-9a-f]{10}\./)
+                                .and('to end with', '.woff2'),
+                            to: {
+                                isLoaded: true
+                            },
+                            as: 'font',
+                            contentType: 'font/woff2'
+                        },
+                        {
+                            type: 'HtmlScript',
+                            to: {
+                                type: 'JavaScript',
+                                isInline: true,
+                                text: expect.it('to contain', 'icomoon__subset'),
+                                outgoingRelations: [
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        href: expect.it('to begin with', '/subfont/icomoon-400-')
+                                            .and('to match', /-[0-9a-f]{10}\./)
+                                            .and('to end with', '.woff2'),
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff2',
+                                            extension: '.woff2'
+                                        }
+                                    },
+
+                                    {
+                                        type: 'JavaScriptStaticUrl',
+                                        hrefType: 'rootRelative',
+                                        to: {
+                                            isLoaded: true,
+                                            contentType: 'font/woff',
+                                            extension: '.woff'
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+
+                        {
+                            type: 'HtmlStyle',
+                            hrefType: 'rootRelative',
+                            href: expect.it('to begin with', '/subfont/fonts-')
+                                .and('to match', /-[0-9a-f]{10}\./)
+                                .and('to end with', '.css'),
+                            to: {
+                                isLoaded: true,
+                                isInline: false,
+                                text: expect.it('to contain', 'icomoon__subset'),
+                                outgoingRelations: [
+                                    {
+                                        hrefType: 'relative',
+                                        href: expect.it('to begin with', 'icomoon-400-')
+                                            .and('to match', /-[0-9a-f]{10}\./)
+                                            .and('to end with', '.woff2'),
+                                        to: {
+                                            isLoaded: true
+                                        }
+                                    },
+                                    {
+                                        hrefType: 'relative',
+                                        href: expect.it('to begin with', 'icomoon-400-')
+                                            .and('to match', /-[0-9a-f]{10}\./)
+                                            .and('to end with', '.woff'),
+                                        to: {
+                                            isLoaded: true
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            type: 'HtmlStyle',
+                            to: {
+                                isLoaded: true,
+                                isInline: true,
+                                text: expect.it('to contain', 'icomoon'),
+                                outgoingRelations: [
+                                    {
+                                        href: 'icomoon.eot',
+                                        to: { isLoaded: true }
+                                    },
+                                    {
+                                        href: 'icomoon.eot?#iefix',
+                                        to: { isLoaded: true }
+                                    },
+                                    {
+                                        href: 'icomoon.woff',
+                                        to: { isLoaded: true }
+                                    },
+                                    {
+                                        href: 'icomoon.ttf',
+                                        to: { isLoaded: true }
+                                    },
+                                    {
+                                        href: 'icomoon.svg#icomoon',
+                                        to: { isLoaded: true }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            type: 'HtmlStyleAttribute',
+                            to: {
+                                text: expect.it('to contain', 'icomoon__subset')
+                            }
+                        }
+                    ]);
                 });
         });
 
