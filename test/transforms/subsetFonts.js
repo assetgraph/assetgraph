@@ -2902,18 +2902,13 @@ describe('transforms/subsetFonts', function () {
     describe('with non-truetype fonts in the mix', function () {
 
         it('should not attempt to subset non-truetype fonts', function () {
-            const warnSpy = sinon.spy().named('warn');
-
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/non-truetype-font/'})
-                .on('warn', warnSpy)
                 .loadAssets('index.html')
                 .populate()
                 .subsetFonts({
                     inlineSubsets: false
                 })
                 .queue(assetGraph => {
-                    expect(warnSpy, 'was not called');
-
                     const html = assetGraph.findAssets({ type: 'Html' })[0];
 
                     expect(html.outgoingRelations, 'to satisfy', [
@@ -2945,10 +2940,7 @@ describe('transforms/subsetFonts', function () {
 
 
         it('should only subset truetype fonts despite non-truetype in the same declaration', function () {
-            const warnSpy = sinon.spy().named('warn');
-
             return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/non-truetype-and-truetype/'})
-                .on('warn', warnSpy)
                 .loadAssets('index.html')
                 .populate({
                     followRelations: {
@@ -3008,7 +3000,6 @@ describe('transforms/subsetFonts', function () {
                                 ]
                             }
                         },
-
                         {
                             type: 'HtmlStyle',
                             hrefType: 'rootRelative',
