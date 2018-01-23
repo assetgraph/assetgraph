@@ -1009,6 +1009,24 @@ describe('assets/Asset', function () {
 
             expect(asset.urlOrDescription, 'to be', 'foo/bar.baz');
         });
+
+        describe('on Windows', function () {
+            const originalPlatform = process.platform;
+            beforeEach(function () {
+                Object.defineProperty(process, 'platform', { value: 'win32' });
+            });
+            afterEach(function () {
+                Object.defineProperty(process, 'platform', { value: originalPlatform });
+            });
+
+            it('should not break when the root of the AssetGraph instance is a windows-style file: url', async function () {
+                const assetGraph = new AssetGraph({root: 'file:///C%3A/projects/assetgraph/testdata/addAsset/relativeUrl/'});
+
+                assetGraph.addAsset('foo.png');
+                expect(assetGraph.findAssets()[0].url, 'to equal', 'file:///C%3A/projects/assetgraph/testdata/addAsset/relativeUrl/foo.png');
+                expect(assetGraph.findAssets()[0].urlOrDescription, 'to equal', 'C:/projects/assetgraph/testdata/addAsset/relativeUrl/foo.png');
+            });
+        });
     });
 
     it('should consider a fragment part of the relation href, not the asset url', async function () {
