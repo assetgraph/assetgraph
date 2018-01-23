@@ -375,10 +375,17 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlStyle',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                            node: function (node) {
-                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                            type: 'HtmlNoscript',
+                            to: {
+                                type: 'Html',
+                                isInline: true,
+                                isFragment: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'HtmlStyle',
+                                        href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                    }
+                                ]
                             }
                         }
                     ]);
@@ -481,10 +488,17 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlStyle',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                                node: function (node) {
-                                    return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                                type: 'HtmlNoscript',
+                                to: {
+                                    type: 'Html',
+                                    isInline: true,
+                                    isFragment: true,
+                                    outgoingRelations: [
+                                        {
+                                            type: 'HtmlStyle',
+                                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                        }
+                                    ]
                                 }
                             }
                         ]);
@@ -607,10 +621,17 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlStyle',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                            node: function (node) {
-                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                            type: 'HtmlNoscript',
+                            to: {
+                                type: 'Html',
+                                isInline: true,
+                                isFragment: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'HtmlStyle',
+                                        href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                    }
+                                ]
                             }
                         }
                     ]);
@@ -1017,10 +1038,17 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlStyle',
-                            href: 'https://fonts.googleapis.com/css?family=Jim+Nightshade|Montserrat|Space+Mono',
-                            node: function (node) {
-                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                            type: 'HtmlNoscript',
+                            to: {
+                                type: 'Html',
+                                isInline: true,
+                                isFragment: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'HtmlStyle',
+                                        href: 'https://fonts.googleapis.com/css?family=Jim+Nightshade|Montserrat|Space+Mono'
+                                    }
+                                ]
                             }
                         }
                     ]);
@@ -1436,10 +1464,17 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlStyle',
-                            href: 'https://fonts.googleapis.com/css?family=Roboto:300i,400,500',
-                            node: function (node) {
-                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                            type: 'HtmlNoscript',
+                            to: {
+                                type: 'Html',
+                                isInline: true,
+                                isFragment: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'HtmlStyle',
+                                        href: 'https://fonts.googleapis.com/css?family=Roboto:300i,400,500'
+                                    }
+                                ]
                             }
                         }
                     ]);
@@ -1714,6 +1749,10 @@ describe('transforms/subsetFonts', function () {
                                 to: { isInline: true }
                             },
                             {
+                                type: 'HtmlAnchor',
+                                href: 'about.html'
+                            },
+                            {
                                 type: 'HtmlScript',
                                 to: {
                                     isInline: true,
@@ -1726,15 +1765,18 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlStyle',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                                node: function (node) {
-                                    return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                                type: 'HtmlNoscript',
+                                to: {
+                                    type: 'Html',
+                                    isInline: true,
+                                    isFragment: true,
+                                    outgoingRelations: [
+                                        {
+                                            type: 'HtmlStyle',
+                                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                        }
+                                    ]
                                 }
-                            },
-                            {
-                                type: 'HtmlAnchor',
-                                href: 'about.html'
                             }
                         ]);
 
@@ -1800,6 +1842,10 @@ describe('transforms/subsetFonts', function () {
                                 to: { isInline: true }
                             },
                             {
+                                type: 'HtmlAnchor',
+                                href: 'index.html'
+                            },
+                            {
                                 type: 'HtmlScript',
                                 to: {
                                     isInline: true,
@@ -1812,15 +1858,18 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlStyle',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                                node: function (node) {
-                                    return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                                type: 'HtmlNoscript',
+                                to: {
+                                    type: 'Html',
+                                    isInline: true,
+                                    isFragment: true,
+                                    outgoingRelations: [
+                                        {
+                                            type: 'HtmlStyle',
+                                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                        }
+                                    ]
                                 }
-                            },
-                            {
-                                type: 'HtmlAnchor',
-                                href: 'index.html'
                             }
                         ]);
                     });
@@ -1982,6 +2031,10 @@ describe('transforms/subsetFonts', function () {
                                 to: { isInline: true }
                             },
                             {
+                                type: 'HtmlAnchor',
+                                href: 'about.html'
+                            },
+                            {
                                 type: 'HtmlScript',
                                 to: {
                                     isInline: true,
@@ -1994,15 +2047,18 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlStyle',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                                node: function (node) {
-                                    return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                                type: 'HtmlNoscript',
+                                to: {
+                                    type: 'Html',
+                                    isInline: true,
+                                    isFragment: true,
+                                    outgoingRelations: [
+                                        {
+                                            type: 'HtmlStyle',
+                                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                        }
+                                    ]
                                 }
-                            },
-                            {
-                                type: 'HtmlAnchor',
-                                href: 'about.html'
                             }
                         ]);
 
@@ -2065,6 +2121,10 @@ describe('transforms/subsetFonts', function () {
                                 to: { isInline: true }
                             },
                             {
+                                type: 'HtmlAnchor',
+                                href: 'index.html'
+                            },
+                            {
                                 type: 'HtmlScript',
                                 to: {
                                     isInline: true,
@@ -2077,15 +2137,18 @@ describe('transforms/subsetFonts', function () {
                                 }
                             },
                             {
-                                type: 'HtmlStyle',
-                                href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                                node: function (node) {
-                                    return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                                type: 'HtmlNoscript',
+                                to: {
+                                    type: 'Html',
+                                    isInline: true,
+                                    isFragment: true,
+                                    outgoingRelations: [
+                                        {
+                                            type: 'HtmlStyle',
+                                            href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                        }
+                                    ]
                                 }
-                            },
-                            {
-                                type: 'HtmlAnchor',
-                                href: 'index.html'
                             }
                         ]);
                     });
@@ -2612,10 +2675,17 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlStyle',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                            node: function (node) {
-                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                            type: 'HtmlNoscript',
+                            to: {
+                                type: 'Html',
+                                isInline: true,
+                                isFragment: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'HtmlStyle',
+                                        href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                    }
+                                ]
                             }
                         }
                     ]);
@@ -2810,15 +2880,92 @@ describe('transforms/subsetFonts', function () {
                             }
                         },
                         {
-                            type: 'HtmlStyle',
-                            href: 'https://fonts.googleapis.com/css?family=Open+Sans',
-                            node: function (node) {
-                                return expect(node.parentNode.tagName, 'to be', 'NOSCRIPT');
+                            type: 'HtmlNoscript',
+                            to: {
+                                type: 'Html',
+                                isInline: true,
+                                isFragment: true,
+                                outgoingRelations: [
+                                    {
+                                        type: 'HtmlStyle',
+                                        href: 'https://fonts.googleapis.com/css?family=Open+Sans'
+                                    }
+                                ]
                             }
                         }
                     ]);
                 });
         });
+    });
+
+
+    describe('with non-truetype fonts in the mix', function () {
+
+        it('should not attempt to subset non-truetype fonts', function () {
+            const warnSpy = sinon.spy().named('warn');
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/non-truetype-font/'})
+                .on('warn', warnSpy)
+                .loadAssets('index.html')
+                .populate()
+                .drawGraph('before.svg')
+                .subsetFonts({
+                    inlineSubsets: false
+                })
+                .drawGraph('afters.svg')
+                .queue(assetGraph => {
+                    expect(warnSpy, 'was not called');
+
+                    const html = assetGraph.findAssets({ type: 'Html' })[0];
+
+                    expect(html.outgoingRelations, 'to satisfy', [
+                        {
+                            type: 'HtmlStyle',
+                            to: {
+                                outgoingRelations: [
+                                    {
+                                        type: 'CssFontFaceSrc',
+                                        href: 'one.eot'
+                                    },
+                                    {
+                                        type: 'CssFontFaceSrc',
+                                        href: 'two.eot?#iefix'
+                                    },
+                                    {
+                                        type: 'CssFontFaceSrc',
+                                        href: 'three.svg#icomoon'
+                                    }
+                                ]
+                            }
+                        },
+                        { type: 'HtmlStyleAttribute' },
+                        { type: 'HtmlStyleAttribute' },
+                        { type: 'HtmlStyleAttribute' }
+                    ]);
+                });
+        });
+
+
+        it('should only subset truetype fonts despite non-truetype in the same declaration', function () {
+            const warnSpy = sinon.spy().named('warn');
+
+            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/non-truetype-and-truetype/'})
+                .on('warn', warnSpy)
+                .loadAssets('index.html')
+                .populate({
+                    followRelations: {
+                        crossorigin: false
+                    }
+                })
+                .drawGraph('debug.svg')
+                .subsetFonts({
+                    inlineSubsets: false
+                })
+                .then(function () {
+                    expect(warnSpy, 'was not called');
+                });
+        });
+
     });
 
 });
