@@ -12,6 +12,9 @@ matrix:
   fast_finish: true
 build: off
 shallow_clone: true
+branches:
+  only:
+  - appveyor
 test_script:
   - node --version
   - npm --version
