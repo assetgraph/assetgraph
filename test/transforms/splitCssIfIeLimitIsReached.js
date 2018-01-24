@@ -61,7 +61,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
         expect(pngRelations[0].from, 'to be', cssAssets[1]);
     });
 
-    it('should handle a real life huge Css test case', async function () {
+    it.skip('should handle a real life huge Css test case', async function () {
         const infos = [];
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
 
