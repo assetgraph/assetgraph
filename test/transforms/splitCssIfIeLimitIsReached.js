@@ -3,7 +3,7 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const _ = require('lodash');
 
-describe('transforms/splitCssIfIeLimitIsReached', function () {
+describe.skip('transforms/splitCssIfIeLimitIsReached', function () {
     it('should handle a simple Css test case', async function () {
         const infos = [];
         const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
