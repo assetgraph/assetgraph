@@ -1440,7 +1440,7 @@ describe('assets/Asset', function () {
         });
 
         describe('invoked as a setter', function () {
-            it('should throw if the asset is inline', function () {
+            it('store the query string in _query', function () {
                 const assetGraph = new AssetGraph();
                 const htmlAsset = assetGraph.addAsset({
                     type: 'Html',
@@ -1448,10 +1448,11 @@ describe('assets/Asset', function () {
                     text: '<style>body { color: maroon; }</style>'
                 });
 
+                htmlAsset.outgoingRelations[0].to.query = { foo: 123 };
                 expect(
-                    () => htmlAsset.outgoingRelations[0].to.query = 'foo',
-                    'to throw',
-                    'Cannot update the query of an inline asset'
+                    htmlAsset.outgoingRelations[0].to._query,
+                    'to equal',
+                    'foo=123'
                 );
             });
 
@@ -1494,6 +1495,35 @@ describe('assets/Asset', function () {
                 htmlAsset.query = { baz: 'hey' };
                 htmlAsset.query.quux = 'abc';
                 expect(htmlAsset.url, 'to equal', 'https://example.com/?baz=hey&quux=abc');
+            });
+        });
+
+        describe('passed to addAsset', function () {
+            describe('with a url', function () {
+                it('should update the url', function () {
+                    const assetGraph = new AssetGraph();
+                    const asset = assetGraph.addAsset({
+                        type: 'JavaScript',
+                        url: 'https://foo.com/bar.js',
+                        query: {
+                            foobar: 123
+                        }
+                    });
+                    expect(asset.url, 'to equal', 'https://foo.com/bar.js?foobar=123');
+                });
+            });
+
+            describe('without a url', function () {
+                it('should contribute to the default url', function () {
+                    const assetGraph = new AssetGraph({root: 'https://example.com/'});
+                    const asset = assetGraph.addAsset({
+                        type: 'JavaScript',
+                        query: {
+                            foobar: 123
+                        }
+                    });
+                    expect(asset.url, 'to equal', `https://example.com/${asset.id}.js?foobar=123`);
+                });
             });
         });
     });
