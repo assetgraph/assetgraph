@@ -57,9 +57,7 @@ describe('relations/CssFontFaceSrc', function() {
     expect(
       assetGraph
         .findAssets({ type: 'Css' })[0]
-        .parseTree.nodes[0].nodes[2].value.match(
-          /\burl\((\'|\"|)([^\'\"]+?)\1\)/g
-        ),
+        .parseTree.nodes[0].nodes[2].value.match(/\burl\(('|"|)([^'"]+?)\1\)/g),
       'to equal',
       [
         "url('fontawesome-webfont.eot?#iefix')",

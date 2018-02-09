@@ -40,23 +40,25 @@ describe('transforms/bundleRequireJs', function() {
     expect(htmlScripts[0].href, 'to equal', 'scripts/require.js');
     expect(htmlScripts[1].to, 'to have the same AST as', function() {
       /* eslint-disable */
-            var jquery = {};
-            define('jquery', function () {});
-            $.fn.alpha = function ()  {
-                return this.append('<p>Alpha is Go!</p>');
-            };
-            define('jquery.alpha', function () {});
-            $.fn.beta = function () {
-                return this.append('<p>Beta is Go!</p>');
-            };
-            define('jquery.beta', function () {});
-            require(['jquery', 'jquery.alpha', 'jquery.beta'], function ($) {
-                $(function () {
-                    $('body').alpha().beta();
-                });
-            });
-            define('main',function () {});
-            /* eslint-enable */
+      var jquery = {};
+      define('jquery', function() {});
+      $.fn.alpha = function() {
+        return this.append('<p>Alpha is Go!</p>');
+      };
+      define('jquery.alpha', function() {});
+      $.fn.beta = function() {
+        return this.append('<p>Beta is Go!</p>');
+      };
+      define('jquery.beta', function() {});
+      require(['jquery', 'jquery.alpha', 'jquery.beta'], function($) {
+        $(function() {
+          $('body')
+            .alpha()
+            .beta();
+        });
+      });
+      define('main', function() {});
+      /* eslint-enable */
     });
 
     await assetGraph.serializeSourceMaps();
@@ -116,6 +118,7 @@ describe('transforms/bundleRequireJs', function() {
     expect(htmlScripts, 'to have length', 2);
     expect(htmlScripts[0].href, 'to equal', 'require.js');
     expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function() {
+      /* eslint-disable */
       define('popular', [], function() {
         alert("I'm a popular helper module");
         return 'foo';
@@ -130,6 +133,7 @@ describe('transforms/bundleRequireJs', function() {
         alert('Got it all!');
       });
       define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -148,6 +152,7 @@ describe('transforms/bundleRequireJs', function() {
     expect(htmlScripts, 'to have length', 2);
     expect(htmlScripts[0].href, 'to equal', 'require.js');
     expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function() {
+      /* eslint-disable */
       define('module2', [], function() {
         return 'module2';
       });
@@ -158,6 +163,7 @@ describe('transforms/bundleRequireJs', function() {
         alert('Got it all!');
       });
       define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -177,12 +183,14 @@ describe('transforms/bundleRequireJs', function() {
     expect(htmlScripts[0].href, 'to equal', 'includedInHtmlAndViaRequire.js');
     expect(htmlScripts[1].href, 'to equal', 'require.js');
     expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function() {
+      /* eslint-disable */
       alert('includedInHtmlAndViaRequire.js');
       define('includedInHtmlAndViaRequire', function() {});
       require(['includedInHtmlAndViaRequire'], function(foo) {
         alert('Here we are!');
       });
       define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -230,24 +238,24 @@ describe('transforms/bundleRequireJs', function() {
 
     expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            define('module2', [], function () {
-                return 'foo.png'.toString('url');
-            });
-            define('module1', ['module2'], function () {
-                return 'module1';
-            });
-            define('module3', [], function () {
-                alert('module3.js');
-            });
-            require([
-                'module1',
-                'module2',
-                'module3'
-            ], function (module1, module2, module3) {
-                alert('Got it all');
-            });
-            define('main', function () {});
-            /* eslint-enable */
+      define('module2', [], function() {
+        return 'foo.png'.toString('url');
+      });
+      define('module1', ['module2'], function() {
+        return 'module1';
+      });
+      define('module3', [], function() {
+        alert('module3.js');
+      });
+      require([
+        'module1',
+        'module2',
+        'module3'
+      ], function(module1, module2, module3) {
+        alert('Got it all');
+      });
+      define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -268,23 +276,22 @@ describe('transforms/bundleRequireJs', function() {
 
     expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            (function (root, factory) {
-                if (typeof module !== 'undefined') {
-                    module.exports = factory();
-                } else if (typeof root.define === 'function' && define.amd) {
-                    define('myumdmodule', factory);
-                } else {
-                    root.myModule = factory();
-                }
-            }(this, function () {
-                return true;
-            }));
-            require(['myumdmodule'], function (myUmdModule) {
-                alert(myUmdModule);
-            });
-            define('main', function () {
-            });
-            /* eslint-enable */
+      (function(root, factory) {
+        if (typeof module !== 'undefined') {
+          module.exports = factory();
+        } else if (typeof root.define === 'function' && define.amd) {
+          define('myumdmodule', factory);
+        } else {
+          root.myModule = factory();
+        }
+      })(this, function() {
+        return true;
+      });
+      require(['myumdmodule'], function(myUmdModule) {
+        alert(myUmdModule);
+      });
+      define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -304,26 +311,25 @@ describe('transforms/bundleRequireJs', function() {
     expect(htmlScripts[0].href, 'to equal', 'require.js');
     expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            define('someDependency', [], function () {
-                alert('got the dependency!');
-            });
-            (function (root, factory) {
-                if (typeof module !== 'undefined') {
-                    module.exports = factory();
-                } else if (typeof root.define === 'function' && define.amd) {
-                    define('myumdmodule', ['someDependency'], factory);
-                } else {
-                    root.myModule = factory();
-                }
-            }(this, function (someDependency) {
-                return true;
-            }));
-            require(['myumdmodule'], function (myUmdModule) {
-                alert(myUmdModule);
-            });
-            define('main', function () {
-            });
-            /* eslint-enable */
+      define('someDependency', [], function() {
+        alert('got the dependency!');
+      });
+      (function(root, factory) {
+        if (typeof module !== 'undefined') {
+          module.exports = factory();
+        } else if (typeof root.define === 'function' && define.amd) {
+          define('myumdmodule', ['someDependency'], factory);
+        } else {
+          root.myModule = factory();
+        }
+      })(this, function(someDependency) {
+        return true;
+      });
+      require(['myumdmodule'], function(myUmdModule) {
+        alert(myUmdModule);
+      });
+      define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -343,26 +349,25 @@ describe('transforms/bundleRequireJs', function() {
     expect(htmlScripts[0].href, 'to equal', 'require.js');
     expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            (function (global) {
-                var signals = function () {
-                    return true;
-                };
-                if (typeof define === 'function' && define.amd) {
-                    define('signals', [], function () {
-                        return signals;
-                    });
-                } else if (typeof module !== 'undefined' && module.exports) {
-                    module.exports = signals;
-                } else {
-                    global['signals'] = signals;
-                }
-            }(this));
-            require(['signals'], function (myUmdModule) {
-                alert(signals);
-            });
-            define('main', function () {
-            });
-            /* eslint-enable */
+      (function(global) {
+        var signals = function() {
+          return true;
+        };
+        if (typeof define === 'function' && define.amd) {
+          define('signals', [], function() {
+            return signals;
+          });
+        } else if (typeof module !== 'undefined' && module.exports) {
+          module.exports = signals;
+        } else {
+          global['signals'] = signals;
+        }
+      })(this);
+      require(['signals'], function(myUmdModule) {
+        alert(signals);
+      });
+      define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -384,17 +389,17 @@ describe('transforms/bundleRequireJs', function() {
     expect(htmlScripts1, 'to have length', 2);
     expect(htmlScripts1[1].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            define('someDependency', [], function () {
-                alert('here is the dependency of the common module');
-            });
-            define('commonModule', ['someDependency'], function () {
-                alert('here is the common module');
-            });
-            require(['commonModule'], function (commonModule) {
-                alert('here we are in app1!');
-            });
-            define('app1', function () {});
-            /* eslint-enable */
+      define('someDependency', [], function() {
+        alert('here is the dependency of the common module');
+      });
+      define('commonModule', ['someDependency'], function() {
+        alert('here is the common module');
+      });
+      require(['commonModule'], function(commonModule) {
+        alert('here we are in app1!');
+      });
+      define('app1', function() {});
+      /* eslint-enable */
     });
 
     const htmlScripts2 = assetGraph.findRelations({
@@ -404,17 +409,17 @@ describe('transforms/bundleRequireJs', function() {
     expect(htmlScripts2, 'to have length', 2);
     expect(htmlScripts2[1].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            define('someDependency', [], function () {
-                alert('here is the dependency of the common module');
-            });
-            define('commonModule', ['someDependency'], function () {
-                alert('here is the common module');
-            });
-            require(['commonModule'], function (commonModule) {
-                alert('here we are in app2!');
-            });
-            define('app2', function () {});
-            /* eslint-enable */
+      define('someDependency', [], function() {
+        alert('here is the dependency of the common module');
+      });
+      define('commonModule', ['someDependency'], function() {
+        alert('here is the common module');
+      });
+      require(['commonModule'], function(commonModule) {
+        alert('here we are in app2!');
+      });
+      define('app2', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -471,31 +476,32 @@ describe('transforms/bundleRequireJs', function() {
 
     expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            alert('someDependency');
-            define('someDependency', function () {
-            });
-            alert('nonAmdModule1');
-            define('nonAmdModule1', ['someDependency'], function () {
-            });
-            alert('someOtherDependency');
-            define('someOtherDependency', function () {
-            });
-            alert('nonAmdModule2');
-            window.foo = { bar: 'foo dot bar' };
-            define('nonAmdModule2', ['someOtherDependency'], function (global) {
-                return function () {
-                    var ret, fn;
-                    return ret || global.foo.bar;
-                };
-            }(this));
-            require([
-                'nonAmdModule1',
-                'nonAmdModule2'
-            ], function (nonAmdModule1, nonAmdModule2) {
-                alert('Got \'em all!');
-            });
-            define('main', function () {});
-            /* eslint-enable */
+      alert('someDependency');
+      define('someDependency', function() {});
+      alert('nonAmdModule1');
+      define('nonAmdModule1', ['someDependency'], function() {});
+      alert('someOtherDependency');
+      define('someOtherDependency', function() {});
+      alert('nonAmdModule2');
+      window.foo = { bar: 'foo dot bar' };
+      define(
+        'nonAmdModule2',
+        ['someOtherDependency'],
+        (function(global) {
+          return function() {
+            var ret, fn;
+            return ret || global.foo.bar;
+          };
+        })(this)
+      );
+      require([
+        'nonAmdModule1',
+        'nonAmdModule2'
+      ], function(nonAmdModule1, nonAmdModule2) {
+        alert("Got 'em all!");
+      });
+      define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -520,14 +526,14 @@ describe('transforms/bundleRequireJs', function() {
     const htmlScripts = assetGraph.findRelations({ type: 'HtmlScript' });
     expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            require([
-                'some' + 'thing',
-                foo ? 'bar' : 'quux'
-            ], function (something, barOrQuux) {
-                alert('Got something!');
-            });
-            define('main', function () {});
-            /* eslint-enable */
+      require([
+        'some' + 'thing',
+        foo ? 'bar' : 'quux'
+      ], function(something, barOrQuux) {
+        alert('Got something!');
+      });
+      define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -555,23 +561,20 @@ describe('transforms/bundleRequireJs', function() {
     expect(htmlScripts[0].to.url, 'to match', /\/require\.js$/);
     expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            define('subdir/subsubdir/quux', [], function () {
-                alert('quux!');
-            });
-            define('subdir/bar', ['./subsubdir/quux'], function (quux) {
-                alert('bar!');
-            });
-            define('subdir/foo', [
-                './bar',
-                './subsubdir/quux'
-            ], function (bar) {
-                alert('foo!');
-            });
-            require(['subdir/foo'], function (foo) {
-                alert('Got \'em all!');
-            });
-            define('main', function () {});
-            /* eslint-enable */
+      define('subdir/subsubdir/quux', [], function() {
+        alert('quux!');
+      });
+      define('subdir/bar', ['./subsubdir/quux'], function(quux) {
+        alert('bar!');
+      });
+      define('subdir/foo', ['./bar', './subsubdir/quux'], function(bar) {
+        alert('foo!');
+      });
+      require(['subdir/foo'], function(foo) {
+        alert("Got 'em all!");
+      });
+      define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -600,13 +603,13 @@ describe('transforms/bundleRequireJs', function() {
     const htmlScripts = assetGraph.findRelations({ type: 'HtmlScript' });
     expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            require(['jquery'], function ($) {
-                $(function () {
-                    alert('Ready!');
-                });
-            });
-            define('main', function () {});
-            /* eslint-enable */
+      require(['jquery'], function($) {
+        $(function() {
+          alert('Ready!');
+        });
+      });
+      define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -627,25 +630,21 @@ describe('transforms/bundleRequireJs', function() {
 
     expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            define('theLibrary', [], function () {
-                return 'the contents of theLibrary';
-            });
-            define('subdir/bar', [], function () {
-                return 'bar';
-            });
-            define('subdir/foo', ['./bar'], function (bar) {
-                alert('Got bar: ' + bar);
-                return {};
-            });
-            require([
-                'theLibrary',
-                'subdir/foo'
-            ], function (theLibrary) {
-                alert('Got the library: ' + theLibrary);
-            });
-            define('main', function () {
-            });
-            /* eslint-enable */
+      define('theLibrary', [], function() {
+        return 'the contents of theLibrary';
+      });
+      define('subdir/bar', [], function() {
+        return 'bar';
+      });
+      define('subdir/foo', ['./bar'], function(bar) {
+        alert('Got bar: ' + bar);
+        return {};
+      });
+      require(['theLibrary', 'subdir/foo'], function(theLibrary) {
+        alert('Got the library: ' + theLibrary);
+      });
+      define('main', function() {});
+      /* eslint-enable */
     });
   });
 
@@ -667,19 +666,16 @@ describe('transforms/bundleRequireJs', function() {
 
     expect(htmlScripts[2].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            (function () {
-                define('theLibrary', [], function () {
-                    return 'the contents of theLibrary';
-                });
-                require([
-                    'theLibrary'
-                ], function (theLibrary) {
-                    alert('Got the library: ' + theLibrary);
-                });
-                define('main', function () {
-                });
-            }());
-            /* eslint-enable */
+      (function() {
+        define('theLibrary', [], function() {
+          return 'the contents of theLibrary';
+        });
+        require(['theLibrary'], function(theLibrary) {
+          alert('Got the library: ' + theLibrary);
+        });
+        define('main', function() {});
+      })();
+      /* eslint-enable */
     });
   });
 
@@ -699,10 +695,10 @@ describe('transforms/bundleRequireJs', function() {
     expect(htmlScripts[0].href, 'to equal', 'require.js');
     expect(htmlScripts[1].to.parseTree, 'to have the same AST as', function() {
       /* eslint-disable */
-            define('main', [], function () {
-                alert('It gets lonely in here if nobody runs me');
-            });
-            /* eslint-enable */
+      define('main', [], function() {
+        alert('It gets lonely in here if nobody runs me');
+      });
+      /* eslint-enable */
     });
   });
 
@@ -742,38 +738,39 @@ describe('transforms/bundleRequireJs', function() {
       'to have the same AST as',
       function() {
         /* eslint-disable */
-            (function (root) {
-                root._ = 'UNDERSCORE';
-            }(this));
-            define('underscore', function () {
-            });
-            (function (root) {
-                root.Backbone = 'BACKBONE';
-            }(this));
-            define('backbone', function () {
-            });
-            (function (root, factory) {
-                if (typeof exports === 'object' && typeof require === 'function') {
-                    module.exports = factory(require('underscore'), require('backbone'));
-                } else if (typeof define === 'function' && define.amd) {
-                    define('backbone-localstorage', [
-                        'underscore',
-                        'backbone'
-                    ], function (_, Backbone) {
-                        return factory(_ || root._, Backbone || root.Backbone);
-                    });
-                } else {
-                    factory(root._, root.Backbone);
-                }
-            }(this, function (_, Backbone) {
-                return 'LOCALSTORAGE';
-            }));
-            require(['backbone-localstorage'], function (bbls) {
-                alert(bbls);
-            });
-            define('main', function () {
-            });
-            /* eslint-enable */
+        (function(root) {
+          root._ = 'UNDERSCORE';
+        })(this);
+        define('underscore', function() {});
+        (function(root) {
+          root.Backbone = 'BACKBONE';
+        })(this);
+        define('backbone', function() {});
+        (function(root, factory) {
+          if (typeof exports === 'object' && typeof require === 'function') {
+            module.exports = factory(
+              require('underscore'),
+              require('backbone')
+            );
+          } else if (typeof define === 'function' && define.amd) {
+            define(
+              'backbone-localstorage',
+              ['underscore', 'backbone'],
+              function(_, Backbone) {
+                return factory(_ || root._, Backbone || root.Backbone);
+              }
+            );
+          } else {
+            factory(root._, root.Backbone);
+          }
+        })(this, function(_, Backbone) {
+          return 'LOCALSTORAGE';
+        });
+        require(['backbone-localstorage'], function(bbls) {
+          alert(bbls);
+        });
+        define('main', function() {});
+        /* eslint-enable */
       }
     );
   });

@@ -26,7 +26,7 @@ describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', a
     expect(
       assetGraph.findAssets({ fileName: 'index.html' })[0].text,
       'to match',
-      /srcset=\"banner-HD\.jpeg 2x, http:\/\/example.com\/foo\.jpg 100w, banner-phone-HD\.jpeg 100w 2x\"/
+      /srcset="banner-HD\.jpeg 2x, http:\/\/example.com\/foo\.jpg 100w, banner-phone-HD\.jpeg 100w 2x"/
     );
   });
 

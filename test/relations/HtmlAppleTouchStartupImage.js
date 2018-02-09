@@ -16,11 +16,13 @@ describe('relations/HtmlAppleTouchStartupImage', function() {
 
     expect(assetGraph, 'to contain assets', 2);
     expect(assetGraph, 'to contain relation', 'HtmlAppleTouchStartupImage');
-    const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0],
-      pngAsset = assetGraph.findAssets({ type: 'Png' })[0],
-      existingHtmlAppleTouchStartupImageRelation = assetGraph.findRelations({
+    const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
+    const pngAsset = assetGraph.findAssets({ type: 'Png' })[0];
+    const existingHtmlAppleTouchStartupImageRelation = assetGraph.findRelations(
+      {
         type: 'HtmlAppleTouchStartupImage'
-      })[0];
+      }
+    )[0];
     htmlAsset.addRelation(
       {
         type: 'HtmlAppleTouchStartupImage',

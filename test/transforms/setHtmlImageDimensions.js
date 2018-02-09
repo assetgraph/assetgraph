@@ -1,7 +1,7 @@
-const pathModule = require('path');
 /*global describe, it*/
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
+const pathModule = require('path');
 
 describe('transforms/setHtmlImageDimensions', function() {
   it('should handle a simple test case', async function() {

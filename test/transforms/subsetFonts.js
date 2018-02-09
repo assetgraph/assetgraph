@@ -1,6 +1,7 @@
-const pathModule = require('path');
+/*global before, after*/
 var expect = require('../unexpected-with-plugins');
 var AssetGraph = require('../../');
+const pathModule = require('path');
 
 var proxyquire = require('proxyquire');
 var httpception = require('httpception');

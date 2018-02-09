@@ -1,7 +1,7 @@
-const pathModule = require('path');
 /*global describe, it*/
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
+const pathModule = require('path');
 
 describe('transforms/minifySvgAssetsWithSvgo', function() {
   it('should handle a simple test case', async function() {
@@ -55,9 +55,9 @@ describe('transforms/minifySvgAssetsWithSvgo', function() {
       text:
         '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n' +
         '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\n' +
-        '	 width="69.964px" height="11.535px" viewBox="0 0 69.964 11.535" enable-background="new 0 0 69.964 11.535" xml:space="preserve">\n' +
+        ' width="69.964px" height="11.535px" viewBox="0 0 69.964 11.535" enable-background="new 0 0 69.964 11.535" xml:space="preserve">\n' +
         '<path fill="#ffffff" d="M32.988,8.093c-0.587,0-1.062,0.478-1.062,1.06c0,0.586,0.475,1.059,1.062,1.059\n' +
-        '		c0.584,0,1.058-0.473,1.058-1.059C34.045,8.57,33.572,8.093,32.988,8.093z"/>\n' +
+        ' c0.584,0,1.058-0.473,1.058-1.059C34.045,8.57,33.572,8.093,32.988,8.093z"/>\n' +
         '</svg>'
     });
     await assetGraph.minifySvgAssetsWithSvgo({ type: 'Svg' });

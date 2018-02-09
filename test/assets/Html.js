@@ -1,8 +1,8 @@
-const pathModule = require('path');
 /*global describe, it*/
 const unexpected = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const mozilla = require('source-map');
+const pathModule = require('path');
 
 describe('assets/Html', function() {
   const expect = unexpected
@@ -205,6 +205,7 @@ describe('assets/Html', function() {
 
     it('should handle a non-templated HTML asset', function() {
       const asset = createAsset('<div></div>');
+      // eslint-disable-next-line no-unused-expressions
       asset.parseTree; // Side effect: Populate asset._templateReplacement
       expect(asset.text, 'to equal', '<div></div>');
       expect(asset._templateReplacements, 'to equal', {});
@@ -215,6 +216,7 @@ describe('assets/Html', function() {
     it('should handle an underscore template', function() {
       const asset = createAsset('<div><% foo %></div>');
 
+      // eslint-disable-next-line no-unused-expressions
       asset.parseTree; // Side effect: Populate asset._templateReplacement
       expect(asset._templateReplacements, 'to equal', { '⋖5⋗': '<% foo %>' });
       expect(asset.text, 'to equal', '<div><% foo %></div>');
@@ -226,6 +228,7 @@ describe('assets/Html', function() {
       expect(asset.text, 'to equal', '<div></div>');
 
       asset.text = '<div><% bar %></div>';
+      // eslint-disable-next-line no-unused-expressions
       asset.parseTree; // Side effect: Populate asset._templateReplacement
       expect(
         asset.parseTree.firstChild.firstChild.nodeValue,
@@ -240,6 +243,7 @@ describe('assets/Html', function() {
     it('should handle the PHP template syntax', function() {
       const asset = createAsset('<div><? foo ?></div>');
       expect(asset.text, 'to equal', '<div><? foo ?></div>');
+      // eslint-disable-next-line no-unused-expressions
       asset.parseTree; // Side effect: Populate asset._templateReplacement
       expect(
         asset.parseTree.firstChild.firstChild.nodeValue,
@@ -254,6 +258,7 @@ describe('assets/Html', function() {
 
       asset.text = '<div><? bar ?></div>';
       expect(asset.text, 'to equal', '<div><? bar ?></div>');
+      // eslint-disable-next-line no-unused-expressions
       asset.parseTree;
       asset.markDirty(); // Side effect: Populate asset._templateReplacement
       expect(asset.text, 'to equal', '<div><? bar ?></div>');
@@ -262,6 +267,7 @@ describe('assets/Html', function() {
     it('should handle a an underscore template with a PHP close tag inside the dynamic part', function() {
       const asset = createAsset('<div><% foo ?> %></div>');
 
+      // eslint-disable-next-line no-unused-expressions
       asset.parseTree; // Side effect: Populate asset._templateReplacement
       expect(
         asset.parseTree.firstChild.firstChild.nodeValue,
@@ -804,6 +810,7 @@ describe('assets/Html', function() {
       text:
         '<!DOCTYPE html><html><head></head><body><script>document.write("<foo>" + "</foo>");</script></body></html>'
     });
+    // eslint-disable-next-line no-unused-expressions
     htmlAsset.parseTree;
     htmlAsset.markDirty();
     expect(htmlAsset.text, 'not to contain', '<foo></foo>');
@@ -811,7 +818,10 @@ describe('assets/Html', function() {
 
   it('should register the source location of inline scripts and stylesheets', async function() {
     const assetGraph = new AssetGraph({
-      root: __dirname + '../../../testdata/assets/Html/sourceMapInlineAssets/'
+      root: pathModule.resolve(
+        __dirname,
+        '../../../testdata/assets/Html/sourceMapInlineAssets/'
+      )
     });
     await assetGraph
       .loadAssets('index.html')

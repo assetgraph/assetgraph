@@ -59,7 +59,7 @@ describe('relations/HtmlConditionalComment', function() {
     expect(
       text,
       'to match',
-      /<!--\[if IE\]>\s*<link rel=stylesheet href=[^\"]+\.css>\s*<!\[endif\]-->/
+      /<!--\[if IE\]>\s*<link rel=stylesheet href=[^"]+\.css>\s*<!\[endif\]-->/
     );
   });
 
