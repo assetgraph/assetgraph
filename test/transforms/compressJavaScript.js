@@ -211,4 +211,28 @@ describe('transforms/compressJavaScript', function () {
 
         expect(assetGraph.findAssets({type: 'JavaScript'})[0].text, 'to equal', 'var foo=123;//@preserve bar');
     });
+
+    it('should compress an inline asset', async function () {
+        const assetGraph = new AssetGraph();
+        const htmlAsset = assetGraph.addAsset({
+            type: 'Html',
+            text: `
+                <!DOCTYPE html>
+                <html>
+                    <head></head>
+                    <body>
+                        <script>alert('foo' + 'bar');</script>
+                    </body>
+                </html>
+            `
+        });
+
+        await assetGraph.compressJavaScript();
+
+        expect(
+            htmlAsset.outgoingRelations[0].to.text,
+            'to equal',
+            'alert("foobar");'
+        );
+    });
 });
