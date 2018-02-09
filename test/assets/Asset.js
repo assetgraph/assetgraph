@@ -15,7 +15,7 @@ describe('assets/Asset', function () {
         });
 
         it('should autodetect the type of an asset with an unrecognizable file extension', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/autodetectTypeWhenExtensionIsUnknown/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/autodetectTypeWhenExtensionIsUnknown/')});
 
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
@@ -458,7 +458,7 @@ describe('assets/Asset', function () {
         });
 
         it('should throw when cloning an asset with invalid incoming relations', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/clone/cssWithInlineImage/')});
 
             await assetGraph.loadAssets('index.css');
 
@@ -470,7 +470,7 @@ describe('assets/Asset', function () {
         });
 
         it('should handle a test case with multiple Html assets', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/multipleHtmls/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/clone/multipleHtmls/')});
 
             await assetGraph
                 .loadAssets('index.html')
@@ -497,7 +497,7 @@ describe('assets/Asset', function () {
         });
 
         it('should handle a test case with a Css asset with an inline image', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/clone/cssWithInlineImage/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/clone/cssWithInlineImage/')});
 
             await assetGraph
                 .loadAssets('index.css')
@@ -517,7 +517,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle a test case with Html assets with meta tags specifying iso-8859-1', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/encoding/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/encoding/')});
 
         await assetGraph
             .loadAssets('iso-8859-1.html', 'iso-8859-1-simple-meta.html')
@@ -532,7 +532,7 @@ describe('assets/Asset', function () {
     });
 
     it('should handle a Css asset with @charset declaration of iso-8859-1', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/encoding/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/encoding/')});
 
         await assetGraph
             .loadAssets('iso-8859-1.css')
@@ -544,7 +544,7 @@ describe('assets/Asset', function () {
 
     describe('#inline()', function () {
         it('should handle a test case with an Html asset that has an external Css asset in a conditional comment', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/inline/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/inline/')});
 
             await assetGraph
                 .loadAssets('index.html')
@@ -588,7 +588,7 @@ describe('assets/Asset', function () {
         });
 
         it('should attach a fragment link in an inline asset correctly', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/selfAnchorInInlineSvg/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/selfAnchorInInlineSvg/')});
 
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
@@ -802,7 +802,7 @@ describe('assets/Asset', function () {
         });
 
         it('should set the rawSrc of an asset correctly', function () {
-            const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/assets/Asset/rawSrc/' });
+            const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/rawSrc/') });
             const original = assetGraph.addAsset({
                 rawSrc: new Buffer('original', 'utf8')
             });
@@ -831,11 +831,11 @@ describe('assets/Asset', function () {
                         'Content-Length': 8285,
                         'Content-Type': 'image/png'
                     },
-                    body: fs.readFileSync(__dirname + '/../../testdata/assets/Asset/rawSrc/purplealpha24bit.png')
+                    body: fs.readFileSync(pathModule.resolve(__dirname, '../../testdata/assets/Asset/rawSrc/purplealpha24bit.png'))
                 }
             });
 
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/rawSrc/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/rawSrc/')});
             await assetGraph.loadAssets('purplealpha24bit.png', 'http://gofish.dk/purplealpha24bit.png');
 
             expect(assetGraph, 'to contain assets', {type: 'Png', isLoaded: true}, 2);
@@ -860,7 +860,7 @@ describe('assets/Asset', function () {
         });
 
         it('should handle a test case with 3 assets', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/simple/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/setAssetUrl/simple/')});
 
             await assetGraph
                 .loadAssets('index.html')
@@ -887,7 +887,7 @@ describe('assets/Asset', function () {
         });
 
         it('should handle a test case with an Html asset that has multiple levels of inline assets', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/setAssetUrl/multipleLevelsOfInline/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/setAssetUrl/multipleLevelsOfInline/')});
 
             await assetGraph
                 .loadAssets('index.html')
@@ -1030,7 +1030,7 @@ describe('assets/Asset', function () {
     });
 
     it('should consider a fragment part of the relation href, not the asset url', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/fragment/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Asset/fragment/')});
 
         await assetGraph
             .loadAssets('index.html')

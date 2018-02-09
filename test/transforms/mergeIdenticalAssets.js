@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/mergeIdenticalAssets', function () {
     it('should handle a combo test case', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/mergeIdenticalAssets/combo/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/mergeIdenticalAssets/combo/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -25,7 +25,7 @@ describe('transforms/mergeIdenticalAssets', function () {
     });
 
     it('should handle a test case with a JavaScript asset and a Css asset with identical contents', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/mergeIdenticalAssets/identicalAssetsOfDifferentTypes/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/mergeIdenticalAssets/identicalAssetsOfDifferentTypes/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

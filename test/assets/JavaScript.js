@@ -6,7 +6,7 @@ const sinon = require('sinon');
 describe('assets/JavaScript', function () {
     it('should handle a test case that has a parse error in an inline JavaScript asset', async function () {
         let firstWarning;
-        await new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
+        await new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/JavaScript/')})
             .on('warn', err => firstWarning = firstWarning || err)
             .loadAssets('parseErrorInInlineJavaScript.html');
 
@@ -17,7 +17,7 @@ describe('assets/JavaScript', function () {
 
     it('should handle a test case that has a parse error in an external JavaScript asset', async function () {
         let firstWarning;
-        await new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'})
+        await new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/JavaScript/')})
             .on('warn', err => firstWarning = firstWarning || err)
             .loadAssets('parseErrorInExternalJavaScript.html')
             .populate();
@@ -74,7 +74,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should preserve the copyright notice in a JavaScript asset', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/JavaScript/')});
         await assetGraph.loadAssets('copyrightNotice.js');
 
         const javaScript = assetGraph.findAssets({type: 'JavaScript'})[0];
@@ -98,7 +98,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with JavaScript assets that have regular comments as the first non-whitespace tokens', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/JavaScript/')});
         await assetGraph.loadAssets('initialComment*.js');
 
         for (const javaScript of assetGraph.findAssets({type: 'JavaScript'})) {
@@ -125,7 +125,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with a JavaScript asset that has comments right before EOF, then marking it as dirty', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/JavaScript/')});
         await assetGraph.loadAssets('commentsBeforeEof.js')
             .populate();
 
@@ -145,7 +145,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with conditional compilation (@cc_on)', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/JavaScript/')});
         await assetGraph.loadAssets('conditionalCompilation.js');
 
         for (const javaScript of assetGraph.findAssets({type: 'JavaScript'})) {
@@ -161,7 +161,7 @@ describe('assets/JavaScript', function () {
     });
 
     it('should handle a test case with global strict mode', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/JavaScript/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/JavaScript/')});
         await assetGraph.loadAssets('globalstrict.html')
             .populate();
 

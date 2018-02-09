@@ -3,7 +3,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('JavaScriptImportScripts', function () {
     it('should pick up importScripts() and self.importScripts as relations', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptImportScripts/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptImportScripts/simple/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -11,7 +11,7 @@ describe('JavaScriptImportScripts', function () {
     });
 
     it('should support attaching and detaching importScripts relations', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptImportScripts/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptImportScripts/simple/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -43,7 +43,7 @@ describe('JavaScriptImportScripts', function () {
     });
 
     it('should support attaching and detaching importScripts separated by comma in the source file', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptImportScripts/seq/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptImportScripts/seq/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -75,7 +75,7 @@ describe('JavaScriptImportScripts', function () {
     });
 
     it('should refuse to inline, attach and detach', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptImportScripts/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptImportScripts/simple/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

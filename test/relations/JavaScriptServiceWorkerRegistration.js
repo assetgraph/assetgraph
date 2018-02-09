@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/JavaScriptServiceWorkerRegistration', function () {
     it('should populate the relation', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptServiceWorkerRegistration')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -13,7 +13,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
     });
 
     it('should read the href correctly', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptServiceWorkerRegistration')});
         await assetGraph.loadAssets('index.html');
 
         expect(assetGraph, 'to contain relations', 'JavaScriptServiceWorkerRegistration', 1);
@@ -22,7 +22,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
     });
 
     it('should write the href correctly', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptServiceWorkerRegistration')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -48,7 +48,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
     });
 
     it('should throw when inlining', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptServiceWorkerRegistration')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -58,7 +58,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
     });
 
     it('should throw when detaching', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptServiceWorkerRegistration')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -68,7 +68,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function () {
     });
 
     it('should throw when attaching', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptServiceWorkerRegistration'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptServiceWorkerRegistration')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

@@ -5,7 +5,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/JavaScriptStaticUrl', function () {
     it('should handle root relative urls', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptStaticUrl/rootRelative/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptStaticUrl/rootRelative/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

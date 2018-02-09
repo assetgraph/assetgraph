@@ -3,7 +3,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/MsApplicationConfig', function () {
     it('should handle a test case with an existing MsApplicationConfig asset', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/MsApplicationConfig/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/MsApplicationConfig/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

@@ -9,7 +9,7 @@ describe('transforms/serializeSourceMaps', function () {
         it('should leave the source map alone when no manipulations have happened', async function () {
             let initialSourceMapParseTree;
             let initialSourceMapParseTreeCopy;
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/serializeSourceMaps/existingJavaScriptSourceMap/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/serializeSourceMaps/existingJavaScriptSourceMap/')});
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
 
@@ -28,7 +28,7 @@ describe('transforms/serializeSourceMaps', function () {
 
         it('should update the source map when manipulations have happened', async function () {
             let initialSourceMapParseTree;
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/serializeSourceMaps/existingJavaScriptSourceMap/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/serializeSourceMaps/existingJavaScriptSourceMap/')});
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
 
@@ -56,7 +56,7 @@ describe('transforms/serializeSourceMaps', function () {
 
     describe('with a JavaScript asset that has no existing source map', function () {
         it('should not add a source map when no manipulations have happened', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/serializeSourceMaps/noExistingJavaScriptSourceMap/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/serializeSourceMaps/noExistingJavaScriptSourceMap/')});
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
 
@@ -69,7 +69,7 @@ describe('transforms/serializeSourceMaps', function () {
         });
 
         it('should add a source map when manipulations have happened', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/serializeSourceMaps/noExistingJavaScriptSourceMap/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/serializeSourceMaps/noExistingJavaScriptSourceMap/')});
             await assetGraph.loadAssets('index.html', 'bogus.js');
             await assetGraph.populate();
 
@@ -92,7 +92,7 @@ describe('transforms/serializeSourceMaps', function () {
         });
 
         it('should preserve the sourcesContent property when manipulations have happened and options.sourcesContent is provided', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/serializeSourceMaps/existingJavaScriptSourceMapWithSourcesContent/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/serializeSourceMaps/existingJavaScriptSourceMapWithSourcesContent/')});
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
             await assetGraph.applySourceMaps();
@@ -104,7 +104,7 @@ describe('transforms/serializeSourceMaps', function () {
         });
 
         it('should retain the source mapping info when cloning an asset', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/serializeSourceMaps/noExistingJavaScriptSourceMap/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/serializeSourceMaps/noExistingJavaScriptSourceMap/')});
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
 

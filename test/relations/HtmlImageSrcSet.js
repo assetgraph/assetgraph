@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', async function () {
     it('should handle a test case with an existing <img srcset=...> element', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlImageSrcSet/existing'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlImageSrcSet/existing')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -24,7 +24,7 @@ describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', a
     });
 
     it('should allow non-URL encoded commas in the srcset urls as long as they are not the first or the last character', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlImageSrcSet/commas'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlImageSrcSet/commas')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

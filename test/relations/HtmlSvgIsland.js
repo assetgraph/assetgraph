@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlSvgIsland', function () {
     it('should handle a test case with an existing <svg> element', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlSvgIsland/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlSvgIsland/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

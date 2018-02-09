@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/JavaScriptFetch', function () {
     it('should not populate dynamic endpoints', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptFetch')});
         await assetGraph.loadAssets('dynamic.js');
         await assetGraph.populate();
 
@@ -13,7 +13,7 @@ describe('relations/JavaScriptFetch', function () {
     });
 
     it('should populate naked fetch', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptFetch')});
         await assetGraph.loadAssets('fetch.js');
         await assetGraph.populate();
 
@@ -22,7 +22,7 @@ describe('relations/JavaScriptFetch', function () {
     });
 
     it('should populate window.fetch', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptFetch')});
         await assetGraph.loadAssets('windowFetch.js');
         await assetGraph.populate();
 
@@ -31,7 +31,7 @@ describe('relations/JavaScriptFetch', function () {
     });
 
     it('should populate a sequence fetch', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptFetch')});
         await assetGraph.loadAssets('sequenceFetch.js');
         await assetGraph.populate();
 
@@ -40,7 +40,7 @@ describe('relations/JavaScriptFetch', function () {
     });
 
     it('should read the href correctly', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptFetch')});
         await assetGraph.loadAssets('fetch.js');
 
         expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
@@ -53,7 +53,7 @@ describe('relations/JavaScriptFetch', function () {
     });
 
     it('should write the href correctly', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptFetch')});
         await assetGraph.loadAssets('fetch.js');
         await assetGraph.populate();
 
@@ -79,7 +79,7 @@ describe('relations/JavaScriptFetch', function () {
     });
 
     it('should inline as data-uri', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptFetch')});
         await assetGraph.loadAssets('fetch.js');
         await assetGraph.populate();
 
@@ -95,7 +95,7 @@ describe('relations/JavaScriptFetch', function () {
     });
 
     it('should throw when detaching', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptFetch')});
         await assetGraph.loadAssets('a.js');
         await assetGraph.populate();
 
@@ -109,7 +109,7 @@ describe('relations/JavaScriptFetch', function () {
     });
 
     it('should throw when attaching', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptFetch'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptFetch')});
         await assetGraph.loadAssets('a.js');
         await assetGraph.populate();
 

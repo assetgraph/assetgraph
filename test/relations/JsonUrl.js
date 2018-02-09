@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/JsonUrl', function () {
     it('should get the href correctly', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JsonUrl/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JsonUrl/')});
         await assetGraph.loadAssets('app.webmanifest');
         await assetGraph.populate();
 
@@ -20,7 +20,7 @@ describe('relations/JsonUrl', function () {
     });
 
     it('should set the href correctly', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JsonUrl/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JsonUrl/')});
         await assetGraph.loadAssets('app.webmanifest');
         await assetGraph.populate();
 

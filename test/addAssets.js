@@ -4,7 +4,7 @@ const AssetGraph = require('../lib/AssetGraph');
 
 describe('#addAssets', function () {
     it('should support a single url passed as a string', function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../testdata/transforms/loadAssets/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../testdata/transforms/loadAssets/simple/')});
 
         assetGraph.addAssets('index.html');
 
@@ -12,7 +12,7 @@ describe('#addAssets', function () {
     });
 
     it('should support an array of urls', function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../testdata/transforms/loadAssets/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../testdata/transforms/loadAssets/simple/')});
 
         assetGraph.addAssets(['index.html', 'index2.html']);
 
@@ -20,14 +20,14 @@ describe('#addAssets', function () {
     });
 
     it('should support multiple urls as varargs', function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../testdata/transforms/loadAssets/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../testdata/transforms/loadAssets/simple/')});
         assetGraph.addAssets('index.html', 'index2.html');
 
         expect(assetGraph, 'to contain assets', 'Html', 2);
     });
 
     it('should support an asset config object', function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../testdata/transforms/loadAssets/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../testdata/transforms/loadAssets/simple/')});
         assetGraph.addAssets({
             type: 'Html',
             url: 'http://example.com/index.html',
@@ -73,7 +73,7 @@ describe('#addAssets', function () {
 
     describe('with a glob pattern', function () {
         it('should add all the matched assets to the graph and return them', async function () {
-            const assetGraph = new AssetGraph({ root: __dirname + '/../testdata/transforms/loadAssets/glob/'});
+            const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../testdata/transforms/loadAssets/glob/')});
 
             const assets = assetGraph.addAssets('*.html');
 

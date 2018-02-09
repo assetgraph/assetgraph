@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlPictureSourceSrcSet', function () {
     it('should handle a test case with an existing <picture srcset="..."> element', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPictureSourceSrcSet/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlPictureSourceSrcSet/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

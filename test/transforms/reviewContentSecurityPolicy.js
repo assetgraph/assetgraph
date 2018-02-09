@@ -6,7 +6,7 @@ const httpception = require('httpception');
 
 describe('transforms/reviewContentSecurityPolicy', function () {
     it('should not do anything for Html assets that do not have an existing policy', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/noExistingContentSecurityPolicy/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/noExistingContentSecurityPolicy/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.reviewContentSecurityPolicy(undefined, {update: true});
@@ -15,7 +15,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should preserve existing tokens, even if they appear superfluous', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/extraDirectives/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/extraDirectives/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.reviewContentSecurityPolicy(undefined, {update: true});
@@ -26,7 +26,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should copy all tokens from default-src when introducing a new directive', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/defaultSrcWithExtraSourceExpressions/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/defaultSrcWithExtraSourceExpressions/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -41,7 +41,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should not copy the \'none\' token from default-src when introducing a new directive', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/defaultSrcWithExtraSourceExpressions/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/defaultSrcWithExtraSourceExpressions/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -64,7 +64,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     describe('when assets are present on other domains', function () {
         describe('with includePath enabled for script-src and style-src', function () {
             it('should update the style-src and script-src directives of a Content-Security-Policy when no existing source expression allows the url', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet')});
                 await assetGraph.loadAssets('index.html');
                 await assetGraph.populate();
 
@@ -82,7 +82,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
 
         describe('with includePath:true', function () {
             it('should update the style-src and script-src directives of a Content-Security-Policy when no existing source expression allows the url', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet')});
                 await assetGraph.loadAssets('index.html');
                 await assetGraph.populate();
 
@@ -100,7 +100,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
 
         describe('with includePath disabled (defaults to off)', function () {
             it('should update the style-src and script-src directives of a Content-Security-Policy when no existing source expression allows the url', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet')});
                 await assetGraph.loadAssets('index.html');
                 await assetGraph.populate();
 
@@ -117,7 +117,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
         });
 
         it('should just whitelist the host:port of the origin for less sensitive media types such as images', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/')});
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
 
@@ -131,7 +131,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
         });
 
         it('should include the port if non-default', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/')});
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
 
@@ -145,7 +145,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
         });
 
         it('should omit the port if default', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/image/')});
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
 
@@ -159,7 +159,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
         });
 
         it('should not update the style-src and script-src directives of a Content-Security-Policy when an existing source expression allows the url', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet')});
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
 
@@ -178,7 +178,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should update the image-src accordingly when images are included as data: urls', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/smallImage/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/smallImage/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.inlineRelations({type: 'HtmlImage'});
@@ -190,7 +190,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should not leave \'none\' in the list of allowed origins when adding to an existing policy', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/scriptSrcNone/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/scriptSrcNone/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.reviewContentSecurityPolicy(undefined, {update: true});
@@ -201,7 +201,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should omit a directive when its origin list is identical to that of the default-src', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/externalScriptAndStylesheet/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -222,7 +222,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should include hash-source fragments and add \'unsafe-inline\' for inline scripts and stylesheets when \'unsafe-inline\' is not in the existing policy', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.reviewContentSecurityPolicy(undefined, {update: true});
@@ -234,7 +234,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should not include hash-source fragments for inline scripts and stylesheets when unsafe-inline is in the existing policy', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -252,7 +252,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should not include hash-source fragments for inline scripts and stylesheets when unsafe-inline is in the existing default-src and there is no script-src or style-src', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -272,7 +272,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should upgrade nonces to hashes and remove the nonce attributes (and add \'unsafe-inline\' for CSP1 compatibility)', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheetWithNonces/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheetWithNonces/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.reviewContentSecurityPolicy(undefined, {update: true});
@@ -286,7 +286,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should remove a nonce from the CSP when relations with the same nonce have been bundled (integration with bundleRelations)', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/bundledScriptsWithSameNonce/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/bundledScriptsWithSameNonce/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.bundleRelations({type: 'HtmlStyle'});
@@ -299,7 +299,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should always remove a nonce with a value of \"developmentonly\", even when it is not referenced by a <script> or <link>', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/unreferencedDevelopmentOnlyNonce/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/unreferencedDevelopmentOnlyNonce/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.reviewContentSecurityPolicy(undefined, {update: true});
@@ -308,7 +308,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should leave the empty script as an allowed hash when removing a nonce so \'unsafe-inline\' would be left alone and thus take effect with CSP2+', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/upgradedNonceAndUnsafeInline/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/upgradedNonceAndUnsafeInline/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.externalizeRelations({type: 'HtmlScript'});
@@ -320,7 +320,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should leave the empty script as an allowed hash when removing nonces so \'unsafe-inline\' would be left alone and thus take effect with CSP2+', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/nonceDevelopmentOnlyAndUnsafeInline/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/nonceDevelopmentOnlyAndUnsafeInline/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.reviewContentSecurityPolicy(undefined, {update: true});
@@ -333,7 +333,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     describe('with update:false', function () {
         it('emits a warn event when an inline relation is prohibited by the policy', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/')});
             assetGraph.on('warn', warnSpy);
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
@@ -357,7 +357,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
 
         it('should emit a warn even when a relation to an asset on a non-whitelisted origin is present', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/')});
             assetGraph.on('warn', warnSpy);
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
@@ -382,7 +382,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
 
         it('should not warn when a relation to an asset in a whitelisted origin is present', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/')});
             assetGraph.on('warn', warnSpy);
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
@@ -400,7 +400,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
 
         it('emits a warn event when a relation is prohibited by a \'none\' directive', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/scriptSrcNone/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/scriptSrcNone/')});
             assetGraph.on('warn', warnSpy);
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
@@ -418,7 +418,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
 
         it('does not warn when a relation is whitelisted by a nonce', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheetWithNonces/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheetWithNonces/')});
             assetGraph.on('warn', warnSpy);
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
@@ -629,7 +629,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should hash an inline script when there is a nonce, even when \'unsafe-inline\' is permitted', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/nonceAndUnsafeInline/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/nonceAndUnsafeInline/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.reviewContentSecurityPolicy(undefined, {update: true});
@@ -642,7 +642,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
 
     describe('when level is set to 1', function () {
         it('should add \'unsafe-inline\' for inline scripts and styles (and no hashes) when \'unsafe-inline\' is not in the existing policy', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/')});
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();
             await assetGraph.reviewContentSecurityPolicy(undefined, {update: true, level: 1});
@@ -655,7 +655,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     });
 
     it('should return an info object', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineScriptAndStylesheet/')});
         await assetGraph.loadAssets('index.html');
         const contentSecurityPolicy = assetGraph.findAssets({type: 'ContentSecurityPolicy'})[0];
         await assetGraph.populate();
@@ -683,7 +683,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     describe('with a style attribute', function () {
         describe('in update:true mode', function () {
             it('should add a hash of attribute and \'unsafe-hashed-attributes\' to style-src', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineStyleAttribute/'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineStyleAttribute/')});
                 await assetGraph.loadAssets('index.html');
                 await assetGraph.reviewContentSecurityPolicy(undefined, {update: true});
 
@@ -697,7 +697,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
 
         describe('in validation mode', function () {
             it('should emit two warnings, one about \'unsafe-hashed-attributes\' missing and one about the hash source missing', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineStyleAttribute/'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineStyleAttribute/')});
                 const warnSpy = sinon.spy().named('warn');
                 assetGraph.on('warn', warnSpy);
                 await assetGraph.loadAssets('index.html');
@@ -717,7 +717,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
     describe('with an inline event handler', function () {
         describe('in update:true mode', function () {
             it('should add a hash of the event handler and \'unsafe-hashed-attributes\' to script-src', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/')});
                 await assetGraph.loadAssets('index.html');
                 await assetGraph.reviewContentSecurityPolicy(undefined, {update: true});
 
@@ -729,7 +729,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
 
         describe('in validation mode', function () {
             it('should emit two warnings, one about \'unsafe-hashed-attributes\' missing and one about the hash source missing', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/')});
                 const warnSpy = sinon.spy().named('warn');
                 assetGraph.on('warn', warnSpy);
                 await assetGraph.loadAssets('index.html');
@@ -745,7 +745,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             });
 
             it('should change the wording of the \'unsafe-hashed-attributes\' warning when level >= 3', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/')});
                 const warnSpy = sinon.spy().named('warn');
                 assetGraph.on('warn', warnSpy);
                 await assetGraph.loadAssets('index.html');
@@ -758,7 +758,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             });
 
             it('should only warn about the missing hash source when \'unsafe-hashed-attributes\' is already whitelisted', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/')});
                 const warnSpy = sinon.spy().named('warn');
                 assetGraph.on('warn', warnSpy);
                 await assetGraph.loadAssets('index.html');
@@ -773,7 +773,7 @@ describe('transforms/reviewContentSecurityPolicy', function () {
             });
 
             it('should not issue any warnings when both \'unsafe-hashed-attributes\' and the hash are already whitelisted', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/')});
                 const warnSpy = sinon.spy().named('warn');
                 assetGraph.on('warn', warnSpy);
                 await assetGraph.loadAssets('index.html');

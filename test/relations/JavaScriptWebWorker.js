@@ -3,7 +3,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('JavaScriptWebWorker', function () {
     it('should pick up new Worker(...) as a relation', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptWebWorker/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptWebWorker/simple/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -11,7 +11,7 @@ describe('JavaScriptWebWorker', function () {
     });
 
     it('should refuse to inline, attach and detach', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptWebWorker/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptWebWorker/simple/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/externalizeRelations and transforms/mergeIdenticalAssets', function () {
     it('should handle a test case with multiple inline scripts then externalizing them', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/externalizeAndMergeIdenticalAssets/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/externalizeAndMergeIdenticalAssets/')});
         await assetGraph.loadAssets('first.html', 'second.html');
         await assetGraph.populate();
         await assetGraph.externalizeRelations({type: 'HtmlScript'});

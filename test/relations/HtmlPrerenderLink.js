@@ -23,7 +23,7 @@ describe('relations/HtmlPrerenderLink', function () {
     });
 
     it('should handle a test case with an existing <link rel="prerender"> element', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPrerenderLink/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlPrerenderLink/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -32,7 +32,7 @@ describe('relations/HtmlPrerenderLink', function () {
     });
 
     it('should update the href', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPrerenderLink/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlPrerenderLink/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

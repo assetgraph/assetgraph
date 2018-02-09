@@ -5,7 +5,7 @@ const sinon = require('sinon');
 
 describe('gatherStylesheetsWithIncomingPredicates', function () {
     const expect = unexpected.clone().addAssertion('<string> to produce result satisfying <array>', async (expect, subject, value) => {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithPredicates/' + subject + '/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../../testdata/util/fonts/gatherStylesheetsWithPredicates/') + subject + '/'});
 
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
@@ -67,7 +67,7 @@ describe('gatherStylesheetsWithIncomingPredicates', function () {
 
     it('should not break when there are unloaded Css assets', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/gatherStylesheetsWithPredicates/unloadedCssAssets/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../../testdata/util/fonts/gatherStylesheetsWithPredicates/unloadedCssAssets/')});
         await assetGraph.on('warn', warnSpy);
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();

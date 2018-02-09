@@ -12,7 +12,7 @@ describe('relations/HtmlPrefetchLink', function () {
     }
 
     it('should handle a test case with an existing <link rel="prefetch"> element', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPrefetchLink/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlPrefetchLink/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -21,7 +21,7 @@ describe('relations/HtmlPrefetchLink', function () {
     });
 
     it('should update the href', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPrefetchLink/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlPrefetchLink/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlNoscript', function () {
     it('should handle a test case with an existing <noscript>', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlNoscript/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlNoscript/')});
         await assetGraph.loadAssets('index.html')
             .populate();
 

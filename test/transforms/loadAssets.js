@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/loadAssets', function () {
     it('should support a single url passed as a string', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/loadAssets/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/loadAssets/simple/')});
         await assetGraph.loadAssets('index.html');
 
         expect(assetGraph, 'to contain asset', 'Html');
@@ -12,7 +12,7 @@ describe('transforms/loadAssets', function () {
     });
 
     it('should support an array of urls', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/loadAssets/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/loadAssets/simple/')});
         await assetGraph.loadAssets(['index.html', 'index2.html']);
 
         expect(assetGraph, 'to contain assets', 'Html', 2);
@@ -21,7 +21,7 @@ describe('transforms/loadAssets', function () {
     });
 
     it('should support multiple urls as varargs', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/loadAssets/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/loadAssets/simple/')});
         await assetGraph.loadAssets('index.html', 'index2.html');
 
         expect(assetGraph, 'to contain assets', 'Html', 2);
@@ -30,7 +30,7 @@ describe('transforms/loadAssets', function () {
     });
 
     it('should support an asset config object', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/loadAssets/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/loadAssets/simple/')});
         await assetGraph.loadAssets({
             type: 'Html',
             url: 'http://example.com/index.html',
@@ -42,7 +42,7 @@ describe('transforms/loadAssets', function () {
     });
 
     it('should support the keepUnpopulated option', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/loadAssets/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/loadAssets/simple/')});
         await assetGraph.loadAssets({
             type: 'Html',
             keepUnpopulated: true,
@@ -85,7 +85,7 @@ describe('transforms/loadAssets', function () {
 
     describe('with a glob pattern', function () {
         it('should add all the matched assets to the graph and return them', async function () {
-            const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/loadAssets/glob/'});
+            const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/loadAssets/glob/')});
 
             const assets = await assetGraph.loadAssets('*.html');
 

@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/ContentSecurityPolicy', function () {
     it('should handle a test case with existing Content-Security-Policy meta tags', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/ContentSecurityPolicy/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/ContentSecurityPolicy/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

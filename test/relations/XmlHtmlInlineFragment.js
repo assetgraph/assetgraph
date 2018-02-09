@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/XmlHtmlInlineFragment', function () {
     it('should handle a test case with an RSS feed with a <description> tag', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/XmlHtmlInlineFragment/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/XmlHtmlInlineFragment/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

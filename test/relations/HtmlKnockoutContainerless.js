@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlKnockoutContainerless', function () {
     it('should handle a test case with existing <!-- ko ... --> comments', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlKnockoutContainerless/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlKnockoutContainerless/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

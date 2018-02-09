@@ -5,7 +5,7 @@ const sinon = require('sinon');
 describe('relations/MsApplicationConfigPollingUri', function () {
     it('should handle a test case with an existing <TileImage/> element', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/MsApplicationConfigPollingUri/')});
         await assetGraph.on('warn', warnSpy)
             .loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'})
             .populate();
@@ -24,7 +24,7 @@ describe('relations/MsApplicationConfigPollingUri', function () {
 
     it('should update the href', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/MsApplicationConfigPollingUri/')});
         await assetGraph.on('warn', warnSpy);
         await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
         await assetGraph.populate();
@@ -95,7 +95,7 @@ describe('relations/MsApplicationConfigPollingUri', function () {
     describe('when programmatically detaching a relation', function () {
         it('should remove the relation and clean up', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigPollingUri/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/MsApplicationConfigPollingUri/')});
             await assetGraph.on('warn', warnSpy);
             await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
             await assetGraph.populate();

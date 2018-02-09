@@ -7,7 +7,7 @@ const sinon = require('sinon');
 
 describe('transforms/addCacheManifest', function () {
     it('should handle a single page with an existing cache manifest', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/existingCacheManifest/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addCacheManifest/existingCacheManifest/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -44,7 +44,7 @@ describe('transforms/addCacheManifest', function () {
 
     it('should add a cache manifest to a page that does not already have one', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifest/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addCacheManifest/noCacheManifest/')});
         await assetGraph.on('warn', warnSpy);
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate({
@@ -73,7 +73,7 @@ describe('transforms/addCacheManifest', function () {
     });
 
     it('should add cache manifest to multiple pages', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/noCacheManifestMultiPage/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addCacheManifest/noCacheManifestMultiPage/')});
         await assetGraph.loadAssets('*.html');
         await assetGraph.populate();
 
@@ -99,7 +99,7 @@ describe('transforms/addCacheManifest', function () {
     });
 
     it('should add a cache manifest and update the existing one in a multi-page test case with one existing manifest', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addCacheManifest/existingCacheManifestMultiPage/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addCacheManifest/existingCacheManifestMultiPage/')});
         await assetGraph.loadAssets('*.html');
         await assetGraph.populate();
 

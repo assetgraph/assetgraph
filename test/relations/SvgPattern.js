@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/SvgPattern', function () {
     it('should handle a test case with a <pattern xlink:href=...> referencing an external file', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/SvgPattern/xlinkhref/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/SvgPattern/xlinkhref/')});
         await assetGraph.loadAssets('pattern.svg');
         await assetGraph.populate();
 
@@ -15,7 +15,7 @@ describe('relations/SvgPattern', function () {
     });
 
     it('should handle a test case with a <pattern href=...> referencing an external file', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/SvgPattern/href/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/SvgPattern/href/')});
         await assetGraph.loadAssets('pattern.svg');
         await assetGraph.populate();
 

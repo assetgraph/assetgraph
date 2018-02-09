@@ -5,7 +5,7 @@ const sinon = require('sinon');
 
 describe('relations/JavaScriptSourceMappingUrl', function () {
     it('should handle a test case with a JavaScript asset that has @sourceMappingURL directive', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -23,7 +23,7 @@ describe('relations/JavaScriptSourceMappingUrl', function () {
 
     it('should handle another test case with a JavaScript asset that has @sourceMappingURL directive', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap2/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap2/')});
         await assetGraph.on('warn', warnSpy);
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();

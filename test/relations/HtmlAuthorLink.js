@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlAuthorLink', function () {
     it('should handle a test case with an existing <link rel="author">', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlAuthorLink/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlAuthorLink/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

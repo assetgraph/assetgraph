@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/CssImport', function () {
     it('should handle a simple test case', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/CssImport/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/CssImport/')});
         await assetGraph.loadAssets('index.css');
         await assetGraph.populate();
 

@@ -14,7 +14,7 @@ function getPropertyValues(container, propertyName) {
 
 describe('transforms/convertCssImportsToHtmlStyles', function () {
     it('should converting Css @import rules to <link rel="stylesheet">', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/convertCssImportsToHtmlStyles/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/convertCssImportsToHtmlStyles/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

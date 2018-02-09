@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/JavaScriptSourceUrl', function () {
     it('should handle a test case with an existing bundle that has @sourceURL directives', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceUrl/existingBundle/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptSourceUrl/existingBundle/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -24,7 +24,7 @@ describe('relations/JavaScriptSourceUrl', function () {
     });
 
     it('should handle a test case with two JavaScript assets, then running the addJavaScriptSourceUrl transform', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/JavaScriptSourceUrl/bundleRelations/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/JavaScriptSourceUrl/bundleRelations/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.addJavaScriptSourceUrl();

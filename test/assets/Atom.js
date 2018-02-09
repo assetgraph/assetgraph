@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('assets/Atom', function () {
     it('should find an Atom asset', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Atom/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Atom/')});
         await assetGraph.loadAssets('feed.atom')
             .populate();
 

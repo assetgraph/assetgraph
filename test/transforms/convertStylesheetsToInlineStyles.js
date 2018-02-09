@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/convertStylesheetsToInlineStyles', function () {
     it('should convert all stylesheets to inline styles', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/convertStylesheetsToInlineStyles/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/convertStylesheetsToInlineStyles/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

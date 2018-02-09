@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/SvgStyle', function () {
     it('should handle a test case with inline <style> elements', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/SvgStyle/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/SvgStyle/')});
         await assetGraph.loadAssets('kiwi.svg');
         await assetGraph.populate();
 

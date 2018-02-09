@@ -6,7 +6,7 @@ const sinon = require('sinon');
 describe('transforms/addPrecacheServiceWorker', function () {
     it('should add a precache service worker to a single HTML page', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/singlePage/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addPrecacheServiceWorker/singlePage/')});
         await assetGraph.on('warn', warnSpy)
             .loadAssets('index.html')
             .populate({
@@ -41,7 +41,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
     it('should relay informational messages from sw-precache', async function () {
         const infoSpy = sinon.spy().named('info');
         const warnSpy = sinon.spy().named('warn');
-        await new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/singlePage/'})
+        await new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addPrecacheServiceWorker/singlePage/')})
             .on('info', infoSpy)
             .on('warn', warnSpy)
             .loadAssets('index.html')
@@ -55,7 +55,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
     });
 
     it('should add precache service workers to multiple pages', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/multiPage/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addPrecacheServiceWorker/multiPage/')});
         await assetGraph.loadAssets('*.html')
             .populate();
 
@@ -77,7 +77,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
 
     it('should give up when the target location of the service worker is clobbered', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/singlePage/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addPrecacheServiceWorker/singlePage/')});
         await assetGraph
             .on('warn', warnSpy)
             .loadAssets('index.html')
@@ -101,7 +101,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
 
     describe('in single:true mode', function () {
         it('should add the same shared precache service worker to multiple pages', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/multiPage/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addPrecacheServiceWorker/multiPage/')});
             await assetGraph.loadAssets('*.html')
                 .populate();
 
@@ -124,7 +124,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
         });
 
         it('should only add one fragment to the service worker file name per unique basename', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/multiPage/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addPrecacheServiceWorker/multiPage/')});
             await assetGraph.loadAssets('*.html')
                 .populate();
 
@@ -136,7 +136,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
         });
 
         it('should put the service worker at a common path prefix', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/multiPageInDifferentDirectories/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addPrecacheServiceWorker/multiPageInDifferentDirectories/')});
             await assetGraph.loadAssets('**/*.html')
                 .populate();
 
@@ -159,7 +159,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
 
         it('should create multiple service workers when when the participating HTML assets reside on different schemes', async function () {
             const infoSpy = sinon.spy().named('info');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/multiPage/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addPrecacheServiceWorker/multiPage/')});
             await assetGraph.on('info', infoSpy)
                 .loadAssets('*.html')
                 .populate();
@@ -178,7 +178,7 @@ describe('transforms/addPrecacheServiceWorker', function () {
 
         it('should create multiple service workers when when the participating HTML assets reside on different hosts', async function () {
             const infoSpy = sinon.spy().named('info');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/addPrecacheServiceWorker/multiPage/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/addPrecacheServiceWorker/multiPage/')});
             await assetGraph.on('info', infoSpy)
                 .loadAssets('*.html')
                 .populate();

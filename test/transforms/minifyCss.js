@@ -17,7 +17,7 @@ describe('minifyCss', function () {
     });
 
     it('should propagate source map source map information', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/minifyCss/withSourceMap/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/minifyCss/withSourceMap/')});
         await assetGraph.loadAssets('index.css');
 
         await assetGraph.minifyCss();

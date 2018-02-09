@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlEdgeSideIncludeSafeComment', function () {
     it('should handle a test case with existing <!--esi ...---> comments', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlEdgeSideIncludeSafeComment/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlEdgeSideIncludeSafeComment/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

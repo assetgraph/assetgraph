@@ -7,7 +7,7 @@ const httpception = require('httpception');
 
 describe('transforms/populate', function () {
     it('should handle a test case with an Html asset and some stylesheets when told not to follow relations to Css', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/notToCss/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/populate/notToCss/')});
         await assetGraph.loadAssets('index.html')
             .populate({
                 followRelations: {type: {$not: 'HtmlStyle'}}
@@ -22,7 +22,7 @@ describe('transforms/populate', function () {
     });
 
     it('should handle a test case with custom protocols', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/customProtocols/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/populate/customProtocols/')});
         await assetGraph.loadAssets('index.html')
             .populate({followRelations: {to: {type: {$not: 'Css'}}}});
 
@@ -35,7 +35,7 @@ describe('transforms/populate', function () {
     });
 
     it('should populate a test case with protocol-relative urls from file:', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/populate/protocolRelativeUrls/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/populate/protocolRelativeUrls/')});
         await assetGraph.loadAssets('index.html')
             .populate({from: {protocol: 'file:'}});
 

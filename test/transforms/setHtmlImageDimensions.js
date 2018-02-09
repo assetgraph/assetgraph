@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/setHtmlImageDimensions', function () {
     it('should handle a simple test case', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/setHtmlImageDimensions/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/setHtmlImageDimensions/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.setHtmlImageDimensions();

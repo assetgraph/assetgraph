@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/CssFontFaceSrc', function () {
     it('should handle a simple test case', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/CssFontFaceSrc/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/CssFontFaceSrc/simple/')});
         await assetGraph.loadAssets('index.css');
         await assetGraph.populate();
 
@@ -19,7 +19,7 @@ describe('relations/CssFontFaceSrc', function () {
     });
 
     it('should handle a test case with multiple src properties in one rule and multiple urls in one value', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/CssFontFaceSrc/multipleSrc/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/CssFontFaceSrc/multipleSrc/')});
         await assetGraph.loadAssets('index.css');
         await assetGraph.populate();
 

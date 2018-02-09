@@ -2341,7 +2341,7 @@ describe('lib/util/fonts/getTextByFontProperties', function () {
         });
 
         it('should trace multiple levels of @import tagged with media lists', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../../testdata/util/fonts/getTextByFontProperties/nestedCssImportWithMedia/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../../testdata/util/fonts/getTextByFontProperties/nestedCssImportWithMedia/')});
 
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate();

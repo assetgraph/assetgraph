@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlShortcutIcon', function () {
     it('should handle a test case with an existing <link rel="shortcut icon" href="..."> elements in different variants', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlShortcutIcon/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlShortcutIcon/')});
         await assetGraph.loadAssets('index.html')
             .populate();
 

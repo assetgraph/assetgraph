@@ -15,7 +15,7 @@ describe('assets/Css', function () {
 
     it('should handle a test case with a parse error in an inline Css asset', async function () {
         const warnSpy = sandbox.spy().named('warn');
-        await new AssetGraph({root: __dirname + '/../../testdata/assets/Css/parseErrors/'})
+        await new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Css/parseErrors/')})
             .on('warn', warnSpy)
             .loadAssets('parseErrorInInlineCss.html');
 
@@ -26,7 +26,7 @@ describe('assets/Css', function () {
 
     it('should handle a test case with a parse error in an external Css asset', async function () {
         const warnSpy = sandbox.spy().named('warn');
-        await new AssetGraph({root: __dirname + '/../../testdata/assets/Css/parseErrors/'})
+        await new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Css/parseErrors/')})
             .on('warn', warnSpy)
             .loadAssets('parseErrorInExternalCss.html')
             .populate();
@@ -37,7 +37,7 @@ describe('assets/Css', function () {
     });
 
     it('should handle a test case that has multiple neighbour @font-face rules', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Css/multipleFontFaceRules/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Css/multipleFontFaceRules/')});
         await assetGraph.loadAssets('index.css')
             .populate({
                 followRelations: { crossdomain: false }
@@ -84,7 +84,7 @@ describe('assets/Css', function () {
     });
 
     it('should propagate source map information when pretty-printing', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Css/prettyPrintWithSourceMap/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Css/prettyPrintWithSourceMap/')});
         await assetGraph.loadAssets('index.css');
 
         for (const asset of assetGraph.findAssets()) {

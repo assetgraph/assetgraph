@@ -130,7 +130,7 @@ describe('transforms/subsetFonts', function () {
 
             var warnings = [];
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-single/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/local-single/')})
                 .on('warn', function (warning) {
                     warnings.push(warning);
                 })
@@ -153,7 +153,7 @@ describe('transforms/subsetFonts', function () {
         it('should not break when there is an existing preload hint pointing to a font file', async function () {
             httpception();
 
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/existing-preload/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/existing-preload/')});
             assetGraph.on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/));
             await assetGraph.loadAssets('index.html');
             await assetGraph.populate({
@@ -171,7 +171,7 @@ describe('transforms/subsetFonts', function () {
 
             var infos = [];
 
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/existing-prefetch/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/existing-prefetch/')});
             assetGraph.on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/));
             assetGraph.on('info', function (info) {
                 infos.push(info);
@@ -201,7 +201,7 @@ describe('transforms/subsetFonts', function () {
         });
 
         it('should preload local fonts that it could not subset', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-single/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/local-single/')})
                 .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                 .loadAssets('index.html')
                 .populate()
@@ -263,7 +263,7 @@ describe('transforms/subsetFonts', function () {
         it('should handle HTML <link rel=stylesheet>', function () {
             httpception(defaultGoogleFontSubsetMock);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/html-link/')})
                 .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                 .loadAssets('index.html')
                 .populate({
@@ -397,7 +397,7 @@ describe('transforms/subsetFonts', function () {
             it('should inline the font Css and change outgoing relations to rootRelative', function () {
                 httpception(defaultGoogleFontSubsetMock);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
+                return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/html-link/')})
                     .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                     .loadAssets('index.html')
                     .populate({
@@ -509,7 +509,7 @@ describe('transforms/subsetFonts', function () {
         it('should handle CSS @import', function () {
             httpception(defaultGoogleFontSubsetMock);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/css-import/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/css-import/')})
                 .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                 .loadAssets('index.html')
                 .populate({
@@ -822,7 +822,7 @@ describe('transforms/subsetFonts', function () {
                 }
             ]);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/multi-family/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/multi-family/')})
                 .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                 .loadAssets('index.html')
                 .populate({
@@ -1251,7 +1251,7 @@ describe('transforms/subsetFonts', function () {
                 }
             ]);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/multi-weight/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/multi-weight/')})
                 .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                 .loadAssets('index.html')
                 .populate({
@@ -1603,7 +1603,7 @@ describe('transforms/subsetFonts', function () {
                     }
                 ]);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/multi-page/'})
+                return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/multi-page/')})
                     .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                     .loadAssets('index.html')
                     .populate({
@@ -1949,7 +1949,7 @@ describe('transforms/subsetFonts', function () {
                     }
                 ]);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/multi-page/'})
+                return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/multi-page/')})
                     .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                     .loadAssets('index.html')
                     .populate({
@@ -2159,7 +2159,7 @@ describe('transforms/subsetFonts', function () {
             it('should not add a font-display property when no fontDisplay is defined', function () {
                 httpception(defaultGoogleFontSubsetMock);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
+                return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/html-link/')})
                     .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                     .loadAssets('index.html')
                     .populate({
@@ -2180,7 +2180,7 @@ describe('transforms/subsetFonts', function () {
             it('should not add a font-display property when an invalid font-display value is provided', function () {
                 httpception(defaultGoogleFontSubsetMock);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
+                return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/html-link/')})
                     .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                     .loadAssets('index.html')
                     .populate({
@@ -2202,7 +2202,7 @@ describe('transforms/subsetFonts', function () {
             it('should add a font-display property', function () {
                 httpception(defaultGoogleFontSubsetMock);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
+                return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/html-link/')})
                     .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                     .loadAssets('index.html')
                     .populate({
@@ -2296,7 +2296,7 @@ describe('transforms/subsetFonts', function () {
                     }
                 ]);
 
-                return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
+                return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/html-link/')})
                     .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
                     .loadAssets('index.html')
                     .populate({
@@ -2322,7 +2322,7 @@ describe('transforms/subsetFonts', function () {
 
             var warnings = [];
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-single/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/local-single/')})
                 .on('warn', function (warning) {
                     warnings.push(warning);
                 })
@@ -2345,7 +2345,7 @@ describe('transforms/subsetFonts', function () {
 
             var warnings = [];
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-invalid/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/local-invalid/')})
                 .on('warn', function (warning) { warnings.push(warning); })
                 .loadAssets('index.html')
                 .populate()
@@ -2422,7 +2422,7 @@ describe('transforms/subsetFonts', function () {
             httpception();
 
             var warnSpy = sinon.spy().named('warn');
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/missing-glyphs/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/missing-glyphs/')})
                 .on('warn', warnSpy)
                 .loadAssets('index.html')
                 .populate({
@@ -2443,7 +2443,7 @@ describe('transforms/subsetFonts', function () {
         it('should subset local fonts', function () {
             httpception();
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-single/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/local-single/')})
                 .loadAssets('index.html')
                 .populate()
                 .subsetFonts({
@@ -2556,7 +2556,7 @@ describe('transforms/subsetFonts', function () {
         it('should handle HTML <link rel=stylesheet> with Google Fonts', function () {
             httpception(defaultLocalSubsetMock);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/html-link/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/html-link/')})
                 // FIXME: Maybe use a font that's not missing any chars?
                 .on('warn', warn => expect(warn, 'to satisfy', /is missing these characters/))
                 .loadAssets('index.html')
@@ -2695,7 +2695,7 @@ describe('transforms/subsetFonts', function () {
         it('should handle mixed local fonts and Google fonts', function () {
             httpception(defaultLocalSubsetMock);
 
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/local-mixed/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/local-mixed/')})
                 // FIXME: Maybe use a font that's not missing any chars?
                 .on('warn', warn => expect(warn, 'to satisfy', /is missing these characters/))
                 .loadAssets('index.html')
@@ -2902,7 +2902,7 @@ describe('transforms/subsetFonts', function () {
     describe('with non-truetype fonts in the mix', function () {
 
         it('should not attempt to subset non-truetype fonts', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/non-truetype-font/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/non-truetype-font/')})
                 .loadAssets('index.html')
                 .populate()
                 .subsetFonts({
@@ -2940,7 +2940,7 @@ describe('transforms/subsetFonts', function () {
 
 
         it('should only subset truetype fonts despite non-truetype in the same declaration', function () {
-            return new AssetGraph({root: __dirname + '/../../testdata/transforms/subsetFonts/non-truetype-and-truetype/'})
+            return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/subsetFonts/non-truetype-and-truetype/')})
                 .loadAssets('index.html')
                 .populate({
                     followRelations: {

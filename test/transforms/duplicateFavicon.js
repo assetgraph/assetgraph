@@ -5,7 +5,7 @@ const urlTools = require('urltools');
 
 describe('transforms.duplicateFavicon', function () {
     it('should handle a referenced favicon.ico', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/duplicateFavicon/referencedFavicon'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/duplicateFavicon/referencedFavicon')});
         await assetGraph.loadAssets('index.html')
             .populate();
 
@@ -29,7 +29,7 @@ describe('transforms.duplicateFavicon', function () {
     });
 
     it('should handle an unreferenced favicon.ico', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/duplicateFavicon/unreferencedFavicon'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/duplicateFavicon/unreferencedFavicon')});
         await assetGraph.loadAssets('index.html', 'noHead.html', 'favicon.ico')
             .populate();
 

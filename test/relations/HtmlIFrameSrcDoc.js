@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlIFrameSrcDoc', function () {
     it('should handle a test case with an existing <iframe srcdoc=...> element', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlIFrameSrcDoc/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlIFrameSrcDoc/')});
 
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate({

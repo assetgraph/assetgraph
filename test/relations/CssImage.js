@@ -5,7 +5,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/CssImage', function () {
     it('should handle a test case with a bunch of different CssImage relations', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/CssImage/combo/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/CssImage/combo/')});
         await assetGraph.loadAssets('index.css');
         await assetGraph.populate();
 
@@ -36,7 +36,7 @@ describe('relations/CssImage', function () {
     });
 
     it('should handle a test case with three CssImage relations pointing at mouse cursors', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/CssImage/mouseCursors/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/CssImage/mouseCursors/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -48,7 +48,7 @@ describe('relations/CssImage', function () {
     });
 
     it('should handle a test case with a CssImage relation inside a @media rule', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/CssImage/mediaRule/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/CssImage/mediaRule/')});
         await assetGraph.loadAssets('relationInMediaRule.css');
         await assetGraph.populate();
 
@@ -56,7 +56,7 @@ describe('relations/CssImage', function () {
     });
 
     it('should handle a test case with multiple CSS filter urls', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/CssImage/filter/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/CssImage/filter/')});
         await assetGraph.loadAssets('index.css');
         await assetGraph.populate();
 

@@ -5,7 +5,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlPictureSource test', function () {
     it('should handle a test case with an existing <picture><source src="..."></picture> construct', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlPictureSource/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlPictureSource/')});
         await assetGraph.loadAssets('index.html')
             .populate({
                 followRelations: () => false

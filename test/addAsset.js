@@ -79,7 +79,7 @@ describe('AssetGraph#addAsset', function () {
     it('should only warn about unknown unsupported protocols', async function () {
         const warnSpy = sinon.spy().named('warn');
 
-        const assetGraph = new AssetGraph({root: __dirname + '/../testdata/unsupportedProtocols/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../testdata/unsupportedProtocols/')});
         assetGraph.on('warn', warnSpy);
 
         await assetGraph

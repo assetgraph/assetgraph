@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('resolvers/file', function () {
     it('should handle a test case with non-ASCII file names', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/resolvers/file/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/resolvers/file/')});
         await assetGraph.loadAssets('spaces, unsafe chars & ñøń-ÃßÇ¡¡.html');
         await assetGraph.populate();
 

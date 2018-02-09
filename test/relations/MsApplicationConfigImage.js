@@ -3,7 +3,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/MsApplicationConfigImage', async function () {
     it('should handle a test case with an existing <TileImage/> element', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/MsApplicationConfigImage/')});
         await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
         await assetGraph.populate();
 
@@ -18,7 +18,7 @@ describe('relations/MsApplicationConfigImage', async function () {
     });
 
     it('should update the href', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/MsApplicationConfigImage/')});
         await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
         await assetGraph.populate();
 
@@ -34,7 +34,7 @@ describe('relations/MsApplicationConfigImage', async function () {
     });
 
     it('should inline an image', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/MsApplicationConfigImage/')});
         await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
         await assetGraph.populate();
 
@@ -67,7 +67,7 @@ describe('relations/MsApplicationConfigImage', async function () {
 
     describe('when programmatically detataching a relation', async function () {
         it('it should remove the relation and clean up', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/MsApplicationConfigImage/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/MsApplicationConfigImage/')});
             await assetGraph.loadAssets({ type: 'MsApplicationConfig', url: 'IEconfig.xml'});
             await assetGraph.populate();
 

@@ -5,7 +5,7 @@ const sinon = require('sinon');
 
 describe('transforms/inlineCssImagesPerQueryString', function () {
     it('should inline an HtmlImage', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineAssetsPerQueryString/htmlImage'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineAssetsPerQueryString/htmlImage')});
 
         const htmlAsset = await assetGraph.addAsset('index.html').load();
         await assetGraph.populate();
@@ -16,7 +16,7 @@ describe('transforms/inlineCssImagesPerQueryString', function () {
 
     describe('when the same image has occurrences both with and without ?inline=false', function () {
         it('should not break when ?inline=false is removed', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineAssetsPerQueryString/htmlImageWithAndWithoutInlineFalse'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineAssetsPerQueryString/htmlImageWithAndWithoutInlineFalse')});
 
             const htmlAsset = await assetGraph.addAsset('index.html').load();
             await assetGraph.populate();
@@ -32,7 +32,7 @@ describe('transforms/inlineCssImagesPerQueryString', function () {
 
     describe('with inline=false', function () {
         it('should remove the ?inline parameter from the url of the asset', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineAssetsPerQueryString/htmlImageInlineFalse'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineAssetsPerQueryString/htmlImageInlineFalse')});
 
             const htmlAsset = await assetGraph.addAsset('index.html').load();
             await assetGraph.populate();
@@ -45,7 +45,7 @@ describe('transforms/inlineCssImagesPerQueryString', function () {
     describe('when minimumIeVersion === 7', function () {
         it('should emit a warning when producing any data url', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineAssetsPerQueryString/htmlImage'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineAssetsPerQueryString/htmlImage')});
 
             assetGraph.on('warn', warnSpy);
 
@@ -63,7 +63,7 @@ describe('transforms/inlineCssImagesPerQueryString', function () {
     describe('when minimumIeVersion === 8', function () {
         it('should emit a warning when producing a data url > 32 KB', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineAssetsPerQueryString/htmlImageBig'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineAssetsPerQueryString/htmlImageBig')});
 
             assetGraph.on('warn', warnSpy);
 
@@ -79,7 +79,7 @@ describe('transforms/inlineCssImagesPerQueryString', function () {
 
         it('should not emit a warning when producing a data url > 32 KB inside an IE>8 conditional comment', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineAssetsPerQueryString/htmlImageBigInIeGt8ConditionalComment'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineAssetsPerQueryString/htmlImageBigInIeGt8ConditionalComment')});
 
             assetGraph.on('warn', warnSpy);
 
@@ -93,7 +93,7 @@ describe('transforms/inlineCssImagesPerQueryString', function () {
 
         it('should emit a warning when producing a data url > 32 KB inside an IE>=8 conditional comment', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineAssetsPerQueryString/htmlImageBigInIeLte8ConditionalComment'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineAssetsPerQueryString/htmlImageBigInIeLte8ConditionalComment')});
 
             assetGraph.on('warn', warnSpy);
 
@@ -110,7 +110,7 @@ describe('transforms/inlineCssImagesPerQueryString', function () {
 
     it('should not break due to a circular reference', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/inlineAssetsPerQueryString/circularReference'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineAssetsPerQueryString/circularReference')});
         assetGraph.on('warn', warnSpy);
 
         await assetGraph.addAsset('index.html').load();

@@ -5,7 +5,7 @@ const sinon = require('sinon');
 
 describe('resolvers/data', function () {
     it('should handle a test case with data: url anchors', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/resolvers/data/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/resolvers/data/')});
         await assetGraph.loadAssets('dataUrl.html')
             .populate();
 
@@ -21,7 +21,7 @@ describe('resolvers/data', function () {
 
     it('should handle a test case with an unparsable data: url', async function () {
         const warnSpy = sinon.spy().named('warn');
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/resolvers/data/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/resolvers/data/')});
         await assetGraph.on('warn', warnSpy)
             .loadAssets('unparsableDataUrl.html')
             .populate();

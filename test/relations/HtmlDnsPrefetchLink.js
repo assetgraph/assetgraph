@@ -23,14 +23,14 @@ describe('relations/HtmlDnsPrefetchLink', function () {
     });
 
     it('should handle a test case with an existing <link rel="dns-prefetch"> element', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDnsPrefetchLink/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlDnsPrefetchLink/')});
         await assetGraph.loadAssets('index.html');
 
         expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');
     });
 
     it('should update the href', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlDnsPrefetchLink/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlDnsPrefetchLink/')});
         await assetGraph.loadAssets('index.html');
 
         expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');

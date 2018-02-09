@@ -23,14 +23,14 @@ describe('relations/HtmlOpenGraph', function () {
     });
 
     it('should handle a test case with an existing <link rel="preconnect"> element', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlOpenGraph/')});
         await assetGraph.loadAssets('index.html');
 
         expect(assetGraph, 'to contain relation', 'HtmlOpenGraph', 10);
     });
 
     it('should update the href', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlOpenGraph/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlOpenGraph/')});
         await assetGraph.loadAssets('index.html');
 
         expect(assetGraph, 'to contain relation', 'HtmlOpenGraph', 10);

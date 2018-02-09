@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/minifySvgAssetsWithSvgo', function () {
     it('should handle a simple test case', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/minifySvgAssetsWithSvgo/simple/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/minifySvgAssetsWithSvgo/simple/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -21,7 +21,7 @@ describe('transforms/minifySvgAssetsWithSvgo', function () {
     });
 
     it('should preserve the top-level attributes of an SVG island in HTML when minifying', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/minifySvgAssetsWithSvgo/svgIslandInHtml/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/minifySvgAssetsWithSvgo/svgIslandInHtml/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/SvgUse', function () {
     it('should handle a test case with a <use xlink:href=...> referencing an external file', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/SvgUse/xlinkhref'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/SvgUse/xlinkhref')});
         await assetGraph.loadAssets('user.svg');
         await assetGraph.populate();
 
@@ -15,7 +15,7 @@ describe('relations/SvgUse', function () {
     });
 
     it('should handle a test case with a <use href=...> referencing an external file', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/SvgUse/href/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/SvgUse/href/')});
         await assetGraph.loadAssets('user.svg');
         await assetGraph.populate();
 

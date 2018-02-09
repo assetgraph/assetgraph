@@ -6,7 +6,7 @@ const _ = require('lodash');
 describe('transforms/splitCssIfIeLimitIsReached', function () {
     it('should handle a simple Css test case', async function () {
         const infos = [];
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/splitCssIfIeLimitIsReached/')});
 
         assetGraph.on('info', function (err) {
             infos.push(err);
@@ -63,7 +63,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
 
     it('should handle a real life huge Css test case', async function () {
         const infos = [];
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/splitCssIfIeLimitIsReached/')});
 
         assetGraph.on('info', function (err) {
             infos.push(err);
@@ -130,7 +130,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     });
 
     it('should handle a test case with an inline stylesheet', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/splitCssIfIeLimitIsReached/')});
 
         await assetGraph.loadAssets('inline.html');
         await assetGraph.populate();
@@ -155,7 +155,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     });
 
     it('should handle a test case with an inline stylesheet that has rules in media queries', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/splitCssIfIeLimitIsReached/')});
 
         await assetGraph.loadAssets('inlineWithMedia.html');
         await assetGraph.populate();
@@ -182,7 +182,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     });
 
     it('should leave a big stylesheet alone if minimumIeVersion is 10', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/splitCssIfIeLimitIsReached/')});
 
         await assetGraph.loadAssets({
             type: 'Html',
@@ -201,7 +201,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     });
 
     it('should split an enourmous stylesheet if minimumIeVersion is 10', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/splitCssIfIeLimitIsReached/')});
 
         await assetGraph.loadAssets({
             type: 'Html',
@@ -220,7 +220,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     });
 
     it('should leave an enourmous stylesheet alone if minimumIeVersion is null', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/splitCssIfIeLimitIsReached/')});
 
         await assetGraph.loadAssets({
             type: 'Html',
@@ -239,7 +239,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     });
 
     it('should split a big stylesheet alone if minimumIeVersion is 9', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/splitCssIfIeLimitIsReached/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/splitCssIfIeLimitIsReached/')});
 
         await assetGraph.loadAssets({
             type: 'Html',

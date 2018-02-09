@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms.autoprefixer', function () {
     it('should handle an unprefixed test case', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/autoprefixer/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/autoprefixer/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -18,7 +18,7 @@ describe('transforms.autoprefixer', function () {
     });
 
     it('should handle a simple option case', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/autoprefixer/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/autoprefixer/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.autoprefixer('last 2 versions');
@@ -26,14 +26,14 @@ describe('transforms.autoprefixer', function () {
 
     it('should handle a complex option case', async function () {
 
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/autoprefixer/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/autoprefixer/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.autoprefixer('last 2 versions, ie > 8,ff > 28');
     });
 
     it('should preserve source information', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/autoprefixer/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/autoprefixer/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -47,7 +47,7 @@ describe('transforms.autoprefixer', function () {
     });
 
     it('should preserve source maps', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/autoprefixer/existingExternalSourceMap'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/autoprefixer/existingExternalSourceMap')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 

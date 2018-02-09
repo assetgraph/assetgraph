@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('tranforms/inlineCriticalCss', function () {
     it('should not do anything on an empty page', async function () {
-        const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
+        const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineCriticalCss/') });
         await assetGraph.loadAssets('empty.html');
         await assetGraph.populate();
 
@@ -20,7 +20,7 @@ describe('tranforms/inlineCriticalCss', function () {
     it('should emit a warning when encountering broken html', async function () {
         const warnSpy = sinon.spy();
 
-        const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
+        const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineCriticalCss/') });
         await assetGraph.on('warn', warnSpy);
         await assetGraph.loadAssets('missing-structure.html');
         await assetGraph.populate();
@@ -39,7 +39,7 @@ describe('tranforms/inlineCriticalCss', function () {
     });
 
     it('should inline the heading style of a simple test case', async function () {
-        const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
+        const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineCriticalCss/') });
         await assetGraph.loadAssets('simple.html');
         await assetGraph.populate();
         await assetGraph.inlineCriticalCss();
@@ -65,7 +65,7 @@ describe('tranforms/inlineCriticalCss', function () {
     });
 
     it('should include the <html> node in critical nodes', async function () {
-        const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
+        const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineCriticalCss/') });
         await assetGraph.loadAssets('htmlnode.html');
         await assetGraph.populate();
         await assetGraph.inlineCriticalCss();
@@ -87,7 +87,7 @@ describe('tranforms/inlineCriticalCss', function () {
     });
 
     it('should handle at-rule block nested CSS rules', async function () {
-        const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
+        const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineCriticalCss/') });
         await assetGraph.loadAssets('media.html');
         await assetGraph.populate();
         await assetGraph.inlineCriticalCss();
@@ -126,7 +126,7 @@ describe('tranforms/inlineCriticalCss', function () {
     });
 
     it('should handle pseudo-selectors', async function () {
-        const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
+        const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineCriticalCss/') });
         await assetGraph.loadAssets('pseudo.html');
         await assetGraph.populate();
         await assetGraph.inlineCriticalCss();
@@ -161,7 +161,7 @@ describe('tranforms/inlineCriticalCss', function () {
     });
 
     it('should combine with other CSS transforms without throwing', async function () {
-        const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/inlineCriticalCss/' });
+        const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/inlineCriticalCss/') });
         await assetGraph.loadAssets('simple.html');
         await assetGraph.populate();
 

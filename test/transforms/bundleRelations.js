@@ -15,7 +15,7 @@ function getPropertyValues(container, propertyName) {
 describe('transforms/bundleRelations', function () {
     describe('with the oneBundlePerIncludingAsset strategy', function () {
         it('should bundle two stylesheets', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/singleHtml'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/singleHtml')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -40,7 +40,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should bundle correctly when two Html assets that relate to some of the same Css assets', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/twoHtmls'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/twoHtmls')});
             await assetGraph.loadAssets('1.html', '2.html')
                 .populate();
 
@@ -66,7 +66,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should insert a CSS bundle at the point of the first incoming relation', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/insertPoint/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/insertPoint/')});
             await assetGraph.loadAssets('HtmlStyle.html')
                 .populate();
 
@@ -90,7 +90,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should insert a JS bundle at the point of the last incoming relation', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/insertPoint/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/insertPoint/')});
             await assetGraph.loadAssets('HtmlScript.html')
                 .populate();
 
@@ -114,7 +114,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should bundle correctly in the presence of conditional comments', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -145,7 +145,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should bundle HtmlStyles correctly when two of them are in an inverted conditional comment', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/invertedConditionalCommentInTheMiddle/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/invertedConditionalCommentInTheMiddle/')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -173,7 +173,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should not bundle stylesheets with different media attributes', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/differentMedia/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/differentMedia/')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -203,7 +203,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should not bundle scripts with additional attributes', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/skippedScripts/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/skippedScripts/')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -225,7 +225,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('allows bundling scripts with different data-assetgraph-conditions attributes, but merges the values', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditions/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/conditions/')});
             await assetGraph.loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'})
@@ -240,7 +240,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should treat defer="defer" and async="async" as bundle discriminators and treat additional attributes like "nobundle"', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlScriptAttributes'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/additionalHtmlScriptAttributes')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -263,7 +263,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should reinstate async="async" and defer="defer" on the relations to the bundle asset', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/asyncAndDeferredScripts'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/asyncAndDeferredScripts')});
             await assetGraph.loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'});
@@ -275,7 +275,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should gather all the copyright notices and put them at the top of the bundle', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/copyrightNotices/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/copyrightNotices/')});
             await assetGraph.loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: 'HtmlScript'}, {strategyName: 'oneBundlePerIncludingAsset'});
@@ -284,7 +284,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should not bundle stylesheets with additional attributes on the tag', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlStyleAttributes'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/additionalHtmlStyleAttributes')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -308,7 +308,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should ignore the nonce attribute when bundling', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/nonceAttribute'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/nonceAttribute')});
             await assetGraph.loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: {$in: ['HtmlStyle', 'HtmlScript']}}, {strategyName: 'oneBundlePerIncludingAsset'});
@@ -322,7 +322,7 @@ describe('transforms/bundleRelations', function () {
 
         describe('when all nonces of the bundled relations match', function () {
             it('should reattach the nonce value to the bundle relation', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/matchingNonceAttributes'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/matchingNonceAttributes')});
                 await assetGraph.loadAssets('index.html')
                     .populate()
                     .bundleRelations({type: {$in: ['HtmlStyle', 'HtmlScript']}}, {strategyName: 'oneBundlePerIncludingAsset'});
@@ -333,7 +333,7 @@ describe('transforms/bundleRelations', function () {
 
         describe('when the nonces of the bundled relations mismatch', function () {
             it('should reattach the nonce value to the bundle relation', async function () {
-                const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/mismatchingNonceAttributes'});
+                const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/mismatchingNonceAttributes')});
                 await assetGraph.loadAssets('index.html')
                     .populate()
                     .bundleRelations({type: {$in: ['HtmlStyle', 'HtmlScript']}}, {strategyName: 'oneBundlePerIncludingAsset'});
@@ -343,7 +343,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle 5 HtmlStyles in a Html asset, two of which are in a conditional comment', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -373,7 +373,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle an @import in a second stylesheet', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/importRules/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/importRules/')});
             await assetGraph.loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'});
@@ -395,7 +395,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle multiple stylesheets, one of which is referred to with a root-relative url', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/rootRelative/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/rootRelative/')});
             await assetGraph.loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'oneBundlePerIncludingAsset'});
@@ -406,7 +406,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle script tags interrupted by an external script inclusion', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptExternal/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/scriptExternal/')});
             await assetGraph.loadAssets('index.html')
                 .populate({
                     followRelations: {to: {protocol: {$or: ['http', 'https']}}}
@@ -432,7 +432,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle script tags interrupted by an unloaded script', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/unloadedScript/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/unloadedScript/')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -444,7 +444,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle script tags in both <head> and <body>', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/scriptsInHead/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/scriptsInHead/')});
             await assetGraph.loadAssets('index.html')
                 .populate()
                 .bundleRelations({
@@ -464,7 +464,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle script tags in alternating strict mode', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/strictScripts/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/strictScripts/')});
             await assetGraph.on('info', function (e) {
                 if (!this._infos) {
                     this._infos = [];
@@ -489,7 +489,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle named bundles', async function () {
-            const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/bundleRelations/namedBundles/'});
+            const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/namedBundles/')});
             await assetGraph.loadAssets('index.html')
                 .populate()
                 .bundleRelations({
@@ -508,7 +508,7 @@ describe('transforms/bundleRelations', function () {
 
         it('should propagate source map information correctly', async function () {
             const warnSpy = sinon.spy().named('warn');
-            const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/bundleRelations/cssSourceMaps/'});
+            const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/cssSourceMaps/')});
             await assetGraph.on('warn', warnSpy)
                 .loadAssets('index.html')
                 .populate()
@@ -544,7 +544,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should bundle importScripts(...) relations in a web worker', async function () {
-            const assetGraph = new AssetGraph({ root: __dirname + '/../../testdata/transforms/bundleRelations/webWorker/'});
+            const assetGraph = new AssetGraph({ root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/webWorker/')});
             await assetGraph.loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: 'JavaScriptImportScripts'}, {trategyName: 'oneBundlePerIncludingAsset'});
@@ -562,7 +562,7 @@ describe('transforms/bundleRelations', function () {
 
     describe('with the sharedBundles strategy', function () {
         it('should handle a test case with 1 Html, 2 stylesheets, and 3 images', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/singleHtml'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/singleHtml')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -587,7 +587,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle a test case with two Html assets that relate to some of the same Css assets', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/twoHtmls'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/twoHtmls')});
             await assetGraph.loadAssets('1.html', '2.html')
                 .populate();
 
@@ -613,7 +613,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle a test case with 5 HtmlStyles in a Html asset, two of which is in a conditional comment', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/conditionalCommentInTheMiddle/')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -645,7 +645,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle a test case with stylesheets with different media attributes', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/differentMedia/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/differentMedia/')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -682,7 +682,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle a test with two pages, each containing an external HtmlStyle followed by an inline one', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/externalHtmlStyleFollowedByInlineStyle/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/externalHtmlStyleFollowedByInlineStyle/')});
             await assetGraph.loadAssets('*.html')
                 .populate()
                 .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'sharedBundles'});
@@ -694,7 +694,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should handle a duplicated script', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/duplicateScript/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/duplicateScript/')});
             await assetGraph.loadAssets('index.html')
                 .populate()
                 .bundleRelations({type: 'HtmlScript', to: {isLoaded: true}}, {strategyName: 'sharedBundles'});
@@ -713,7 +713,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('treat defer="defer" and async="async" as bundle discriminators and treat additional attributes like "nobundle"', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlScriptAttributes'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/additionalHtmlScriptAttributes')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -736,7 +736,7 @@ describe('transforms/bundleRelations', function () {
         });
 
         it('should not bundle stylesheets with additional attributes on the tag', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/additionalHtmlStyleAttributes'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/additionalHtmlStyleAttributes')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
@@ -761,7 +761,7 @@ describe('transforms/bundleRelations', function () {
     });
 
     it('should reattach the outgoing relations correctly when bundling assets that reside in different directories', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/stylesheetsInDifferentDirs/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/stylesheetsInDifferentDirs/')});
         await assetGraph.loadAssets('index.html')
             .populate()
             .bundleRelations({type: 'HtmlStyle'}, {strategyName: 'sharedBundles'});
@@ -772,7 +772,7 @@ describe('transforms/bundleRelations', function () {
     });
 
     it('should preserve source map relations so that sourcesContent can be reestablished', function () {
-        return new AssetGraph({root: __dirname + '/../../testdata/transforms/bundleRelations/existingJavaScriptSourceMapsWithSourcesContent/'})
+        return new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/transforms/bundleRelations/existingJavaScriptSourceMapsWithSourcesContent/')})
             .loadAssets('index.html')
             .populate()
             .applySourceMaps()

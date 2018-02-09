@@ -4,7 +4,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/SvgFontFaceUri', function () {
     it('should handle a test case with a <font-face-uri xlink:href=...> referencing an external file', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/SvgFontFaceUri/xlinkhref/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/SvgFontFaceUri/xlinkhref/')});
         await assetGraph.loadAssets('image.svg');
         await assetGraph.populate();
 
@@ -15,7 +15,7 @@ describe('relations/SvgFontFaceUri', function () {
     });
 
     it('should handle a test case with a <font-face-uri href=...> referencing an external file', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/SvgFontFaceUri/href/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/SvgFontFaceUri/href/')});
         await assetGraph.loadAssets('image.svg');
         await assetGraph.populate();
 

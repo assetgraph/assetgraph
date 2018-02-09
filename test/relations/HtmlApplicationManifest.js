@@ -5,7 +5,7 @@ const sinon = require('sinon');
 
 describe('relations/HtmlApplicationManifest', function () {
     it('should handle a test case with an existing <link rel="manifest">', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlApplicationManifest/')});
         await assetGraph.loadAssets('index.html')
             .populate();
 
@@ -14,7 +14,7 @@ describe('relations/HtmlApplicationManifest', function () {
     });
 
     it('should read the link href correctly', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlApplicationManifest/')});
         await assetGraph.loadAssets('index.html')
             .populate();
 
@@ -24,7 +24,7 @@ describe('relations/HtmlApplicationManifest', function () {
     });
 
     it('should write the link href correctly', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlApplicationManifest/')});
         await assetGraph.loadAssets('index.html')
             .populate();
 
@@ -40,7 +40,7 @@ describe('relations/HtmlApplicationManifest', function () {
     });
 
     it('should append <link rel="manifest"> to a containing document', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlApplicationManifest/')});
         await assetGraph.loadAssets('index.html')
             .populate();
 
@@ -62,7 +62,7 @@ describe('relations/HtmlApplicationManifest', function () {
     it('should warn when there are multiple application manifests linked from the same document', async function () {
         const warnSpy = sinon.spy().named('warn');
 
-        await new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlApplicationManifest/'})
+        await new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlApplicationManifest/')})
             .on('warn', warnSpy)
             .loadAssets({
                 type: 'Html',

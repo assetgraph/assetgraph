@@ -5,7 +5,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlAudio', function () {
     it('should handle a test case with existing <audio> tags', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/relations/HtmlAudio/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlAudio/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate({
             startAssets: { type: 'Html' },

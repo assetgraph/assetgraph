@@ -15,7 +15,7 @@ describe('assets/Html', function () {
     });
 
     it('should handle a test case with a javascript: url', async function () {
-        const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Html/javascriptUrl/'});
+        const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Html/javascriptUrl/')});
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
 
@@ -109,7 +109,7 @@ describe('assets/Html', function () {
 
     describe('#findOutgoingRelationsInParseTree', function () {
         it('should add Css type to HtmlStyle relation targets that have no .css file extension', async function () {
-            const assetGraph = new AssetGraph({root: __dirname + '/../../testdata/assets/Html/cssWithoutExtension/'});
+            const assetGraph = new AssetGraph({root: pathModule.resolve(__dirname, '../../testdata/assets/Html/cssWithoutExtension/')});
             await assetGraph.loadAssets('index.html')
                 .populate();
 
