@@ -1,3 +1,4 @@
+const pathModule = require('path');
 /*global describe, it*/
 const _ = require('lodash');
 const expect = require('../unexpected-with-plugins');

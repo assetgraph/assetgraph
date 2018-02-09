@@ -1,3 +1,4 @@
+const pathModule = require('path');
 const gatherStylesheetsWithPredicates = require('../../../lib/util/fonts/gatherStylesheetsWithPredicates');
 const unexpected = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../');

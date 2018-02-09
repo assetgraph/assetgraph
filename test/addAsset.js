@@ -1,3 +1,4 @@
+const pathModule = require('path');
 const expect = require('./unexpected-with-plugins');
 const AssetGraph = require('../');
 const httpception = require('httpception');

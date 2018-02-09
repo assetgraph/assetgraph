@@ -1,3 +1,4 @@
+const pathModule = require('path');
 var expect = require('../../unexpected-with-plugins').clone();
 var AssetGraph = require('../../../');
 var getTextByFontProp = require('../../../lib/util/fonts/getTextByFontProperties');

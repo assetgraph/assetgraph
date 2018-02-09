@@ -1,3 +1,4 @@
+const pathModule = require('path');
 var expect = require('../unexpected-with-plugins');
 var AssetGraph = require('../../');
 

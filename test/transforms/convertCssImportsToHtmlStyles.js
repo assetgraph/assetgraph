@@ -1,3 +1,4 @@
+const pathModule = require('path');
 /*global describe, it*/
 const expect = require('../unexpected-with-plugins');
 const urlTools = require('urltools');
