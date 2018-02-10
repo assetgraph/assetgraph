@@ -11,13 +11,11 @@ describe('gatherStylesheetsWithIncomingPredicates', function() {
       '<string> to produce result satisfying <array>',
       async (expect, subject, value) => {
         const assetGraph = new AssetGraph({
-          root:
-            pathModule.resolve(
-              __dirname,
-              '../../../testdata/util/fonts/gatherStylesheetsWithPredicates/'
-            ) +
-            subject +
-            '/'
+          root: pathModule.resolve(
+            __dirname,
+            '../../../testdata/util/fonts/gatherStylesheetsWithPredicates',
+            subject
+          )
         });
 
         await assetGraph.loadAssets('index.html');

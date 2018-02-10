@@ -820,7 +820,7 @@ describe('assets/Html', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../../testdata/assets/Html/sourceMapInlineAssets/'
+        '../../testdata/assets/Html/sourceMapInlineAssets/'
       )
     });
     await assetGraph
