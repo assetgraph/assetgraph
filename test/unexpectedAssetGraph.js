@@ -5,7 +5,7 @@ const escodegen = require('escodegen');
 
 module.exports = {
   name: 'unexpected-assetgraph',
-  installInto: function(expect) {
+  installInto(expect) {
     expect.addType({
       name: 'AssetGraph.asset',
       base: 'object',

@@ -216,7 +216,7 @@ describe('tranforms/inlineCriticalCss', function() {
     await assetGraph.bundleRelations({
       type: 'HtmlStyle',
       to: { type: 'Css', isLoaded: true },
-      node: function(node) {
+      node(node) {
         return !node.hasAttribute('nobundle');
       }
     });

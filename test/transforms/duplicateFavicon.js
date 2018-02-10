@@ -66,7 +66,7 @@ describe('transforms.duplicateFavicon', function() {
     });
     expect(assetGraph, 'to contain asset', {
       url: urlTools.resolveUrl(assetGraph.root, 'favicon.copy.ico'),
-      isInitial: function(isInitial) {
+      isInitial(isInitial) {
         return !isInitial;
       }
     });
