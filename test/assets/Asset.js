@@ -1261,7 +1261,7 @@ describe('assets/Asset', function() {
     it('should return the url if the url is not a file-url', function() {
       const url = 'https://twitter.com/';
       const asset = new AssetGraph().addAsset({
-        url: url
+        url
       });
 
       expect(asset.urlOrDescription, 'to be', url);

@@ -111,7 +111,7 @@ module.exports = {
         urls = urls.map(url => URL.resolve(subject.root, url));
         expect.errorMode = 'nested';
         urls.forEach(function(url) {
-          expect(subject.findAssets({ url: url }), 'to have length', 1);
+          expect(subject.findAssets({ url }), 'to have length', 1);
         });
       }
     );

@@ -10,7 +10,7 @@ var expect = require('../../unexpected-with-plugins')
     expect.errorMode = 'nested';
     var result = extractTextFromContentPropertyValue(subject[0], subject[1]);
     if (typeof value === 'string') {
-      expect(result, 'to satisfy', [{ value: value }]);
+      expect(result, 'to satisfy', [{ value }]);
     } else {
       expect(result, 'to equal', value);
     }
