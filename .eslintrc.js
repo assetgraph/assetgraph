@@ -1,18 +1,7 @@
 module.exports = {
-    extends: [
-        'onelint'
-    ],
+    extends: ['pretty-standard'],
+    plugins: ['prettier'],
     rules: {
-        'no-const-assign': 2
-    },
-    env: {
-        es6: true
-    },
-    parserOptions: {
-        ecmaVersion: 2017,
-        ecmaFeatures: {
-            experimentalObjectRestSpread: true
-
-        }
+        'prettier/prettier': 'error'
     }
 };
