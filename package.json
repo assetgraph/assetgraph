@@ -70,7 +70,7 @@
     "eslint-plugin-prettier": "^2.6.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
-    "httpception": "^1.0.1",
+    "httpception": "^1.0.2",
     "iconv-lite": "^0.4.19",
     "less": "^2.7.3",
     "magicpen-prism": "2.3.0",
