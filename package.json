@@ -2,7 +2,7 @@
   "name": "assetgraph",
   "description": "An auto discovery dependency graph based optimization framework for web pages and applications",
   "repository": "git://github.com/assetgraph/assetgraph.git",
-  "version": "3.14.0",
+  "version": "3.14.1",
   "license": "BSD-3-Clause",
   "maintainers": [
     {
@@ -31,7 +31,7 @@
     "css-list-helpers": "1.0.1",
     "cssnano": "^4.0.0-rc.2",
     "esanimate": "^1.1.0",
-    "escodegen": "^1.8.0",
+    "escodegen": "^1.9.1",
     "esprima": "^4.0.0",
     "espurify": "^1.7.0",
     "estraverse": "^4.2.0",
