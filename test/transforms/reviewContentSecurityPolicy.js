@@ -1101,13 +1101,15 @@ describe('transforms/reviewContentSecurityPolicy', function() {
   describe('with an inline event handler', function() {
     describe('in update:true mode', function() {
       describe('with level=2', function() {
-        it("should add 'unsafe-inline' instead of 'unsafe-hashed-attributes'", async function() {
+        it("should add 'unsafe-inline' instead of 'unsafe-hashed-attributes' and emit a warning", async function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
               '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/'
             )
           });
+          const warnSpy = sinon.spy().named('warn');
+          assetGraph.on('warn', warnSpy);
           await assetGraph.loadAssets('index.html');
           await assetGraph.reviewContentSecurityPolicy(undefined, {
             level: 2,
@@ -1122,6 +1124,13 @@ describe('transforms/reviewContentSecurityPolicy', function() {
               scriptSrc: ["'unsafe-inline'"]
             }
           );
+
+          expect(warnSpy, 'to have calls satisfying', () => {
+            warnSpy(
+              `testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/index.html contains one or more inline event handlers, which cannot be whitelisted with CSP level 2 except via 'unsafe-inline', which almost defeats the purpose of having a CSP\n` +
+                `The 'unsafe-hashed-attributes' CSP3 keyword will allow it, but at the time of writing the spec is not finalized and no browser implements it.`
+            );
+          });
         });
 
         describe("when the existing CSP allows 'unsafe-inline'", function() {
