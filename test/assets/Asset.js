@@ -730,14 +730,14 @@ describe('assets/Asset', function() {
           type: 'Html',
           url: 'https://www.example.com/',
           text: `
-                        <!DOCTYPE html>
-                        <html>
-                            <head></head>
-                            <body>
-                                <script src="foo.js"></script>
-                            </body>
-                        </html>
-                    `
+            <!DOCTYPE html>
+            <html>
+                <head></head>
+                <body>
+                    <script src="foo.js"></script>
+                </body>
+            </html>
+          `
         });
 
         httpception({
@@ -775,14 +775,14 @@ describe('assets/Asset', function() {
           type: 'Html',
           url: 'https://www.example.com/',
           text: `
-                        <!DOCTYPE html>
-                        <html>
-                            <head></head>
-                            <body>
-                                <a href="hey.html">Look here</a>
-                            </body>
-                        </html>
-                    `
+              <!DOCTYPE html>
+              <html>
+                  <head></head>
+                  <body>
+                      <a href="hey.html">Look here</a>
+                  </body>
+              </html>
+          `
         });
 
         const replacementHtmlAsset = assetGraph.addAsset({
