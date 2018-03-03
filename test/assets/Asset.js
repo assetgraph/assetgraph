@@ -766,6 +766,30 @@ describe('assets/Asset', function() {
           incomingRelations: [{ from: { url: 'https://www.example.com/' } }]
         });
       });
+
+      it('should interpret the urls in the replacement asset as relative to the old assets url', async function() {
+        const htmlAsset = new AssetGraph().addAsset({
+          type: 'Html',
+          url: 'https://www.example.com/somewhere/deep/index.html',
+          text: '<!DOCTYPE html><html></html>'
+        });
+
+        const replacementJavaScript = htmlAsset.replaceWith({
+          type: 'Html',
+          text: `
+            <!DOCTYPE html>
+            <html>
+              <script src="foo.js"></script>
+            </html>
+          `
+        });
+
+        expect(
+          replacementJavaScript.outgoingRelations[0].to.url,
+          'to equal',
+          'https://www.example.com/somewhere/deep/foo.js'
+        );
+      });
     });
 
     describe('when passed an existing asset', function() {
