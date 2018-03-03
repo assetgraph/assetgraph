@@ -17,35 +17,71 @@ describe('minifyCss', function() {
     expect(cssAsset.text, 'to be', 'body{background:red}');
   });
 
-  it('should propagate source map source map information', async function() {
-    const assetGraph = new AssetGraph({
-      root: pathModule.resolve(
-        __dirname,
-        '../../testdata/transforms/minifyCss/withSourceMap/'
-      )
+  describe('when the asset does not have an existing source map reference', function() {
+    it('should propagate source map information', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/minifyCss/noExistingSourceMap/'
+        )
+      });
+      await assetGraph.loadAssets('index.css');
+
+      await assetGraph.minifyCss();
+      await assetGraph.serializeSourceMaps();
+
+      expect(assetGraph, 'to contain asset', 'SourceMap');
+
+      const sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
+      expect(
+        sourceMap.generatedPositionFor({
+          source: assetGraph.root + 'index.css',
+          line: 2,
+          column: 4
+        }),
+        'to equal',
+        {
+          line: 1,
+          column: 5,
+          lastColumn: null
+        }
+      );
     });
-    await assetGraph.loadAssets('index.css');
+  });
 
-    await assetGraph.minifyCss();
+  describe('when the asset has a source map already', function() {
+    it('should preserve the #sourceMappingURL comment', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/minifyCss/existingSourceMap/'
+        )
+      });
+      const [cssAsset] = await assetGraph.loadAssets('foo.css');
+      await assetGraph.populate();
 
-    await assetGraph.serializeSourceMaps();
+      expect(cssAsset.text, 'to contain', '/*# sourceMappingURL=foo.map */');
+      await assetGraph.minifyCss();
+      expect(cssAsset.text, 'to contain', '/*# sourceMappingURL=foo.map */');
+      await assetGraph.serializeSourceMaps();
 
-    expect(assetGraph, 'to contain asset', 'SourceMap');
+      expect(assetGraph, 'to contain asset', 'SourceMap');
 
-    const sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
-    expect(
-      sourceMap.generatedPositionFor({
-        source: assetGraph.root + 'index.css',
-        line: 2,
-        column: 4
-      }),
-      'to equal',
-      {
-        line: 1,
-        column: 5,
-        lastColumn: null
-      }
-    );
+      const sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
+      expect(
+        sourceMap.generatedPositionFor({
+          source: assetGraph.root + 'foo.css',
+          line: 2,
+          column: 4
+        }),
+        'to equal',
+        {
+          line: 1,
+          column: 5,
+          lastColumn: null
+        }
+      );
+    });
   });
 
   it('should preserve CSS hacks that depend on raws being present', async function() {
