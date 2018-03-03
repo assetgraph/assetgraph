@@ -767,6 +767,57 @@ describe('assets/Asset', function() {
         });
       });
 
+      describe('when the new asset does not have a url', function() {
+        it('should take over the url of the old asset', async function() {
+          const htmlAsset = new AssetGraph().addAsset({
+            type: 'Html',
+            url: 'https://www.example.com/somewhere/deep/index.html',
+            text: '<!DOCTYPE html><html></html>'
+          });
+
+          const replacementJavaScript = htmlAsset.replaceWith({
+            type: 'Html',
+            text: `
+              <!DOCTYPE html>
+              <html>
+              </html>
+            `
+          });
+
+          expect(
+            replacementJavaScript.url,
+            'to equal',
+            'https://www.example.com/somewhere/deep/index.html'
+          );
+        });
+      });
+
+      describe('when the new asset has a url', function() {
+        it('should preserve the new url', async function() {
+          const htmlAsset = new AssetGraph().addAsset({
+            type: 'Html',
+            url: 'https://www.example.com/somewhere/deep/index.html',
+            text: '<!DOCTYPE html><html></html>'
+          });
+
+          const replacementJavaScript = htmlAsset.replaceWith({
+            type: 'Html',
+            url: 'https://www.example.com/somewhere/else.html',
+            text: `
+              <!DOCTYPE html>
+              <html>
+              </html>
+            `
+          });
+
+          expect(
+            replacementJavaScript.url,
+            'to equal',
+            'https://www.example.com/somewhere/else.html'
+          );
+        });
+      });
+
       it('should interpret the urls in the replacement asset as relative to the old assets url', async function() {
         const htmlAsset = new AssetGraph().addAsset({
           type: 'Html',
@@ -810,7 +861,6 @@ describe('assets/Asset', function() {
         });
 
         const replacementHtmlAsset = assetGraph.addAsset({
-          TYPE: 'Html',
           type: 'Html',
           url: 'https://www.example.com/somewhere/else/page.html',
           text:
