@@ -160,6 +160,18 @@ describe('relations/Relation', function() {
         ]
       );
     });
+
+    it('should externalize a relation when its hrefType is changed from inline', async function() {
+      const assetGraph = new AssetGraph();
+      const htmlAsset = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/',
+        text: '<style>body { color: maroon; }</style>'
+      });
+
+      htmlAsset.outgoingRelations[0].hrefType = 'rootRelative';
+      expect(htmlAsset.text, 'to contain', '<link');
+    });
   });
 
   describe('#canonical', function() {
