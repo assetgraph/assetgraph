@@ -65,6 +65,7 @@
     "closure-compiler": "^0.2.12",
     "coveralls": "^3.0.0",
     "css-loader": "^0.28.4",
+    "docdash": "^0.4.0",
     "eslint": "^4.3.0",
     "eslint-config-pretty-standard": "^1.2.0",
     "eslint-plugin-prettier": "^2.6.0",
@@ -72,6 +73,7 @@
     "file-loader": "^1.1.5",
     "httpception": "^1.0.2",
     "iconv-lite": "^0.4.19",
+    "jsdoc": "^3.5.5",
     "less": "^2.7.3",
     "magicpen-prism": "2.3.0",
     "mocha": "^4.0.1",
@@ -99,6 +101,7 @@
     "lint": "eslint .",
     "test": "npm run lint && mocha",
     "travis": "npm run lint && npm run coverage",
+    "docs": "jsdoc -c jsdoc.json",
     "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text --all -- mocha --reporter dot && echo google-chrome coverage/lcov-report/index.html"
   },
   "nyc": {

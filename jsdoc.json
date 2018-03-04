@@ -1,0 +1,23 @@
+{
+  "opts": {
+    "template": "node_modules/docdash",
+    "encoding": "utf8",
+    "destination": "./jsdoc/",
+    "recurse": true,
+    "readme": "README.md"
+  },
+
+  "source": {
+    "include": "lib",
+    "includePattern": ".js$"
+  },
+
+  "plugins": [
+      "plugins/markdown"
+  ],
+
+  "docdash": {
+      "static": true,
+      "sort": true
+  }
+}
