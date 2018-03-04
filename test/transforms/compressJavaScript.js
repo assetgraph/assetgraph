@@ -249,48 +249,6 @@ describe('transforms/compressJavaScript', function() {
     });
   });
 
-  // Tracking https://github.com/mishoo/UglifyJS2/issues/2313
-  it('should not break code that uses getters and setters', async function() {
-    const warnSpy = sinon.spy().named('warn');
-    const assetGraph = new AssetGraph();
-    assetGraph.on('warn', warnSpy);
-    await assetGraph.loadAssets({
-      type: 'JavaScript',
-      url: 'http://example.com/script.js',
-      text:
-        'var foo = { _bar: 0 };\n' +
-        '\n' +
-        "Object.defineProperty(foo, 'bar', {\n" +
-        '    get: function () {\n' +
-        '        // Side effect in getter: Increment this._bar\n' +
-        '        this._bar += 1;\n' +
-        '        return this._bar;\n' +
-        '    },\n' +
-        '    set: function (bar) {\n' +
-        '        this._bar = bar;\n' +
-        '    }\n' +
-        '});\n' +
-        '\n' +
-        '(function () {\n' +
-        '    this.foo.bar++;\n' +
-        '    if (this.foo.bar > 2) {\n' +
-        "        console.log('yay');\n" +
-        '    }\n' +
-        '}.call({foo: foo}));'
-    });
-    await assetGraph.compressJavaScript({ type: 'JavaScript' });
-
-    expect(warnSpy, 'was not called');
-    expect(assetGraph, 'to contain asset', 'JavaScript');
-    expect(
-      assetGraph.findAssets({ type: 'JavaScript' })[0].text,
-      'to contain',
-      'this.foo.bar++'
-    )
-      .and('to contain', '<this.foo.bar')
-      .and('not to contain', '++this.foo.bar');
-  });
-
   // https://github.com/mishoo/UglifyJS2/issues/180
   it('should not break code that has a comment before EOF', async function() {
     const assetGraph = new AssetGraph();
