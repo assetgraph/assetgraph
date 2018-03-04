@@ -204,14 +204,13 @@ describe('tranforms/inlineCriticalCss', function() {
     await assetGraph.populate();
 
     for (const asset of assetGraph.findAssets({
-      type: 'Html',
+      type: { $in: ['Html', 'Css'] },
       isLoaded: true,
       isInline: false
     })) {
       asset.minify();
     }
 
-    await assetGraph.minifyCss();
     await assetGraph.inlineHtmlTemplates();
     await assetGraph.bundleRelations({
       type: 'HtmlStyle',
@@ -228,13 +227,11 @@ describe('tranforms/inlineCriticalCss', function() {
     }); // The bundling might produce several identical files, especially the 'oneBundlePerIncludingAsset' strategy.
 
     for (const asset of assetGraph.findAssets({
-      type: 'Html',
+      type: { $in: ['Html', 'Css'] },
       isLoaded: true
     })) {
       asset.minify();
     }
-
-    await assetGraph.minifyCss();
 
     expect(assetGraph.findRelations({ type: 'HtmlStyle' }), 'to satisfy', [
       {

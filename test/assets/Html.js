@@ -837,12 +837,10 @@ describe('assets/Html', function() {
     });
 
     for (const asset of assetGraph.findAssets({
-      type: { $in: ['JavaScript'] }
+      type: { $in: ['JavaScript', 'Css'] }
     })) {
-      asset.minify();
+      await asset.minify();
     }
-
-    await assetGraph.minifyCss();
 
     await assetGraph.serializeSourceMaps();
 
