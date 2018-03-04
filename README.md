@@ -78,26 +78,28 @@ These are some of the supported assets and associated relation types:
 
 #### HTML
 
-`<a>`, `<link rel="stylesheet|shortcut icon|alternate">`, `<script>`, `<style>`,
+`<a>`, `<link rel="stylesheet|shortcut icon|fluid-icon|alternate|serviceworker">`, `<script>`, `<style>`,
 `<html manifest="...">` `<img>`, `<video>`, `<audio>`, `<applet>`,
-`<embed>`, `<esi:include>`, `<iframe>`
+`<embed>`, `<esi:include>`, `<iframe>`, `<svg>`, `<meta property="og:...">`
+
+#### SVG
+
+`<style>`, inline `style=...` attributes, event handlers, `<?xml-stylesheet href=...>`, `<font-face-src>`
 
 #### CSS
 
-`background-image: url(...)`, `@import url(...)`, `behavior: url(...)`,
-`filter: AlphaImageLoader(src='...')`
+`//# sourceMappingURL=...`, `background-image: url(...)`, `@import url(...)`, `behavior: url(...)`,
+`filter: AlphaImageLoader(src='...')`, `@font-face { src: url(...) }`
 
 #### JavaScript
 
-AMD/RequireJS `require` and `define`, CommonJS `require(...)`,
-homegrown `INCLUDE` syntax for specifying requirements, and homegrown
-`GETSTATICURL(...)` and `GETTEXT(...)` syntax for referencing external files
+`//# sourceMappingURL=...`, homegrown `'foo/bar.png'.toString('url')` syntax for referencing external files
 
-#### HTC
+#### Web manifest
 
-(same as for HTML)
+Icon urls, `related_applications`, `start_url`, etc.
 
-#### Cache manifest
+#### Cache manifest (appcache)
 
 Entries in the `CACHE`, `NETWORK` and `FALLBACK` sections
 
@@ -111,10 +113,7 @@ Entries in the `CACHE`, `NETWORK` and `FALLBACK` sections
   remote server via http.
 * Find explicit dependencies between JavaScript and CSS and roll them
   out as `<script>` and `<link rel='stylesheet'>` tags in your
-  HTML. For now require.js/AMD, the ExtJS 4 syntax and a homegrown
-  `INCLUDE` syntax are supported, but the parsing phase can be
-  adapted to almost any syntax. Support for more script loaders will
-  be added on demand.
+  HTML.
 * Bundle and inline CSS and JavaScript.
 * Create a cache manifest with references to all the assets your web
   app needs to be usable offline.
@@ -139,16 +138,14 @@ href="http://npmjs.org/">npm</a> installed, then run:
 $ npm install assetgraph
 ```
 
-# API documentation
-
-A work in progress. Look <a href="http://gofish.dk/assetgraph/api/">here</a>.
-
 ## Querying the graph
 
 AssetGraph supports a flexible syntax for finding assets and relations
 in a populated graph using the `findAssets` and `findRelations`
-methods. Both methods take a query object as the first argument. Below
-are some basic examples.
+methods. Both methods take a query object as the first argument.
+The query engine uses MongoDB-like queries via the
+[sift module](https://github.com/crcn/sift.js). Please consult that
+to learn about the advanced querying features. Below are some basic examples.
 
 Get an array containing all assets in the graph:
 
@@ -162,10 +159,18 @@ Find assets by type:
 var htmlAssets = assetGraph.findAssets({ type: 'Html' });
 ```
 
+Find assets of different named types:
+
+```javascript
+var jsAndCss = assetGraph.findAssets({ type: { $in: ['Css', 'JavaScript' ] });
+```
+
 Find assets by matching a regular expression against the url:
 
 ```javascript
-var localImageAssets = assetGraph.findAssets({url: {$regex: ^file:.*\.(?:png|gif|jpg)$/}});
+var localImageAssets = assetGraph.findAssets({
+  url: { $regex: /^file:.*\.(?:png|gif|jpg)$/ }
+});
 ```
 
 Find assets by predicate function:
@@ -235,14 +240,14 @@ Thus the skeleton looks something like this:
 ```javascript
 var AssetGraph = require('assetgraph');
 
-new AssetGraph({ root: '/the/root/directory/' })
-  .loadAssets('*.html') // Load all Html assets in the root dir
-  .populate({ followRelations: { type: 'HtmlAnchor' } }) // Follow <a href=...>
-  // More work...
-  .writeAssetsToDisc({ type: 'Html' }) // Overwrite existing files
-  .run(function(err, assetGraph) {
-    // Done!
-  });
+const assetGraph = new AssetGraph({ root: '/the/root/directory/' });
+
+await assetGraph.loadAssets('*.html'); // Load all Html assets in the root dir
+await assetGraph.populate({ followRelations: { type: 'HtmlAnchor' } }); // Follow <a href=...>
+// More work...
+await assetGraph.writeAssetsToDisc({ type: 'Html' }); // Overwrite existing files
+
+// Done!
 ```
 
 In the following sections the built-in transforms are documented
@@ -288,24 +293,6 @@ The created bundles will be placed at the root of the asset graph with
 names derived from their unique id (for example
 `file://root/of/graph/124.css`) and will replace the original
 assets.
-
-## assetGraph.compileCoffeeScriptToJavaScript([queryObj])
-
-Finds all `CoffeeScript` assets in the graph (or those specified by
-`queryObj`), compiles them to `JavaScript` assets and replaces the
-originals.
-
-## assetGraph.compileLessToCss([queryObj])
-
-Finds all `Less` assets in the graph (or those specified by
-`queryObj`), compiles them to `Css` assets and replaces the
-originals.
-
-## assetGraph.compileScssToCss([queryObj])
-
-Finds all `Scss` assets in the graph (or those specified by
-`queryObj`), compiles them to `Css` assets and replaces the
-originals.
 
 ## assetGraph.compressJavaScript([queryObj[, compressorName[, compressorOptions]]])
 
@@ -438,56 +425,14 @@ could be turned into:
 <link rel='stylesheet' href='5.css'>
 ```
 
-## assetGraph.flattenStaticIncludes([queryObj])
-
-Finds all `Html` assets in the graph (or those matched by
-`queryObj`), finds all `JavaScript` and `Css` assets reachable
-through `HtmlScript`, `HtmlStyle`, `JavaScriptOneInclude`, and
-`JavaScriptExtJsRequire` relations and rolls them out as plain
-`HtmlScript` (`<script src='...'>`) and `HtmlStyle` (`<link rel='stylesheet' href='...'>`) relations.
-
-If your project uses deeply nested `INCLUDE` statements, this
-transform allows you to create a "development version" that works in a
-browser. Refer to <a
-href="https://github.com/assetgraph/assetgraph-builder/blob/master/bin/buildDevelopment">the
-buildDevelopment script from AssetGraph-builder</a>.
-
-For example:
-
-```html
-<head></head>
-<body>
-    <script>INCLUDE('foo.js');</script>
-</body>
-```
-
-where `foo.js` contains:
-
-```javascript
-INCLUDE('bar.js');
-INCLUDE('quux.css');
-var blah = 'baz';
-...
-```
-
-is turned into:
-
-```html
-<head>
-    <link rel='stylesheet' href='quux.css'>
-</head>
-<script src='bar.js'></script>
-<script src='foo.js'></script>
-```
-
-## assetGraph.inlineCssImagesWithLegacyFallback([queryObj[, sizeThreshold]])
+## assetGraph.inlineCssImagesWithLegacyFallback([queryObj[, options]])
 
 Finds all `Html` assets in the graph (or those matched by
 `queryObj`), finds all directly reachable `Css` assets, and
 converts the outgoing `CssImage` relations (`background-image`
 etc.) to `data:` urls, subject to these criteria:
 
-1.  If `sizeThreshold` is specified, images with a greater byte size
+1.  If `options.sizeThreshold` is specified, images with a greater byte size
     won't be inlined.
 
 2.  To avoid duplication, images referenced by more than one
@@ -497,6 +442,9 @@ etc.) to `data:` urls, subject to these criteria:
     parameter will always be inlined (eg. `background-image: url(foo.png?inline);`). This takes precedence over the first two
     criteria.
 
+4.  If `options.minimumIeVersion` is specified, the `data:` url length
+    limitations of that version of Internet Explorer will be honored.
+
 If any image is inlined an Internet Explorer-only version of the
 stylesheet will be created and referenced from the `Html` asset in a
 conditional comment.
@@ -504,9 +452,10 @@ conditional comment.
 For example:
 
 ```javascript
-assetGraph
-    .inlineCssImagesWithLegacyFallback()
-    .run(funtion (err, assetGraph) {...});
+await assetGraph.inlineCssImagesWithLegacyFallback(
+  { type: 'Html' },
+  { minimumIeVersion: 7, sizeThreshold: 4096 }
+);
 ```
 
 where `assetGraph` contains an Html asset with this fragment:
@@ -552,7 +501,7 @@ example `HtmlScript`, `HtmlStyle`, and `CssImage`.
 Example:
 
 ```javascript
-assetGraph.inlineRelations({ type: ['HtmlStyle', 'CssImage'] });
+await assetGraph.inlineRelations({ type: { $in: ['HtmlStyle', 'CssImage'] } });
 ```
 
 where `assetGraph` contains an Html asset with this fragment:
@@ -581,12 +530,13 @@ same way as when they were external.
 
 ## assetGraph.loadAssets(fileName|wildcard|url|Asset[, ...])
 
-Add new assets to the graph and make sure they are loaded. Several
+Add new assets to the graph and make sure they are loaded, returning a promise
+that fulfills with an array of the assets that were added. Several
 syntaxes are supported, for example:
 
 ```javascript
-assetGraph.loadAssets('a.html', 'b.css'); // Relative to assetGraph.root
-assetGraph.loadAssets(new AssetGraph.JavaScript({
+const [ aHtml, bCss ] = await assetGraph.loadAssets('a.html', 'b.css'); // Relative to assetGraph.root
+await assetGraph.loadAssets({
     url: "http://example.com/index.html",
     text: "var foo = bar;" // The source is specified, won't be loaded
 });
@@ -595,8 +545,8 @@ assetGraph.loadAssets(new AssetGraph.JavaScript({
 `file://` urls support wildcard expansion:
 
 ```javascript
-assetGraph.loadAssets('file:///foo/bar/*.html'); // Wildcard expansion
-assetGraph.loadAssets('*.html'); // assetGraph.root must be file://...
+await assetGraph.loadAssets('file:///foo/bar/*.html'); // Wildcard expansion
+await assetGraph.loadAssets('*.html'); // assetGraph.root must be file://...
 ```
 
 ## assetGraph.mergeIdenticalAssets([queryObj])
@@ -608,7 +558,7 @@ removed assets are updated to point at the copy that is kept.
 For example:
 
 ```javascript
-assetGraph.mergeIdenticalAssets();
+await assetGraph.mergeIdenticalAssets({ type: { $in: ['Png', 'Css'] } });
 ```
 
 where `assetGraph` contains an `Html` asset with this fragment:
@@ -674,7 +624,7 @@ asset will be changed according to the return value:
 Move all `Css` and `Png` assets to a root-relative url:
 
 ```javascript
-assetGraph.moveAssets({ type: 'Css' }, '/images/');
+await assetGraph.moveAssets({ type: 'Css' }, '/images/');
 ```
 
 If the graph contains `http://example.com/foo/bar.css` and
@@ -686,13 +636,10 @@ Move all non-inline `JavaScript` and `Css` assets to either
 the current file name part of their url:
 
 ```javascript
-assetGraph.moveAssets(
-  { type: ['JavaScript', 'Css'], isInline: false },
-  function(asset, assetGraph) {
-    return (
-      'http://example.com/' + asset.type.toLowerCase() + '/' + asset.fileName
-    );
-  }
+await assetGraph.moveAssets(
+  { type: { $in: ['JavaScript', 'Css'] }, isInline: false },
+  (asset, assetGraph) =>
+    `http://example.com/${asset.type.toLowerCase()}/${asset.fileName}`
 );
 ```
 
@@ -714,11 +661,9 @@ Here's a simplified example taken from `buildProduction` in
 <a href="http://github.com/assetgraph/assetgraph-builder">AssetGraph-builder</a>.
 
 ```javascript
-assetGraph.moveAssetsInOrder(
+await assetGraph.moveAssetsInOrder(
   { type: ['JavaScript', 'Css', 'Jpeg', 'Gif', 'Png'] },
-  function(asset) {
-    return '/static/' + asset.md5Hex.substr(0, 10) + asset.extension;
-  }
+  asset => `/static/${asset.md5Hex.substr(0, 10)}${asset.extension}`
 );
 ```
 
@@ -768,17 +713,14 @@ The maximum number of assets that can be loading at once (defaults to 100).
 Example:
 
 ```javascript
-new AssetGraph()
-  .loadAssets('a.html')
-  .populate({
-    followRelations: {
-      type: 'HtmlAnchor',
-      to: { url: { $regex: /\/[bc]\.html$/ } }
-    }
-  })
-  .run(function(err, assetGraph) {
-    // Done!
-  });
+const assetGraph = new AssetGraph();
+await assetGraph.loadAssets('a.html');
+await assetGraph.populate({
+  followRelations: {
+    type: 'HtmlAnchor',
+    to: { url: { $regex: /\/[bc]\.html$/ } }
+  }
+});
 ```
 
 If `a.html` links to `b.html`, and `b.html` links to `c.html`
@@ -804,37 +746,7 @@ Example:
 
 ```javascript
 // Pretty-print all Html and Css assets:
-assetGraph.prettyPrintAssets({ type: ['Html', 'Css'] });
-```
-
-## assetGraph.removeAssets([queryObj[, detachIncomingRelations]])
-
-Remove all assets in the graph, or those specified by `queryObj`,
-along with their incoming relations. If `detachIncomingRelations` is
-set to `true`, the incoming relations will also be detached (removed
-from the parse tree of the source asset). This is not supported by
-all relation types.
-
-Example:
-
-```javascript
-var AssetGraph = require('assetgraph');
-new AssetGraph()
-  // Add a Html asset with an inline Css asset:
-  .loadAssets(
-    new AssetGraph.Html({
-      text:
-        '<html><head><style type="text/css">body {color: red;}</style></head></html>'
-    })
-  )
-  // Remove the inline Css asset and detach the incoming HtmlStyle relation:
-  .removeAssets({ type: 'Css' }, true)
-  // Now the graph only contains the Html asset (without the <style> element):
-  .writeAssetsToStdout({ type: 'Html' })
-  // '<html><head></head></html>'
-  .run(function(err, assetGraph) {
-    // Done!
-  });
+await assetGraph.prettyPrintAssets({ type: { $in: ['Html', 'Css'] } });
 ```
 
 ## assetGraph.removeRelations([queryObj, [options]])
@@ -849,80 +761,10 @@ Whether to also detach the relations (remove their nodes from the
 parse tree of the source asset). Only supported for some relation
 types. Defaults to `false`.
 
-#### `unresolved`: Boolean
-
-Whether to remove unresolved relations too ("dangling" ones whose
-target assets aren't in the graph). Defaults to `false`.
-
 #### `removeOrphan`: Boolean
 
 Whether to also remove assets that become "orphans" as a result of
 removing their last incoming relation.
-
-## assetGraph.setAssetContentType(queryObj, contentType)
-
-Updates the `contentType` property of all assets matching
-`queryObj`. After an asset is loaded, the `contentType` property
-is only kept around as a handy piece of metadata, so updating it has
-no side effects. It's mostly useful if want to upload a "snapshot" of
-an AssetGraph to a WebDAV server or similar.
-
-## assetGraph.setAssetEncoding(queryObj, newEncoding)
-
-Changes the encoding (charset) of the assets matched by `queryObj`
-to `encoding` (`utf-8`, `windows-1252`, `TIS-620`, etc.).
-Only works for text-based assets. Affects the `rawSrc` property of
-the asset, the decoded `text` property remains unchanged.
-
-Uses <a href="http://github.com/bnoordhuis/node-iconv">node-iconv</a>
-to do the actual text conversion, so make sure the charset is
-supported.
-
-As a convenient side effect, `Html` assets with a `<head>` element
-will get a `<meta http-equiv="Content-Type" content="...">` appended
-specifying the new encoding. If such a `<meta>` already exists, it
-will be updated.
-
-Example:
-
-```javascript
-var AssetGraph = require('assetgraph');
-
-new AssetGraph()
-  // Add a Html asset with an inline Css asset:
-  .loadAssets(
-    new AssetGraph.Html({
-      text: '<html><head></head>æ</html>'
-    })
-  )
-  .setAssetEncoding({ type: 'Html' }, 'iso-8859-1')
-  .writeAssetsToStdout({ type: 'Html' })
-  // <html><head></head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head>�</html>
-  .run(function(err, assetGraph) {
-    // Done!
-  });
-```
-
-## assetGraph.setAssetExtension(queryObj, extension)
-
-Changes the extension part of the urls of all non-inline assets
-matching `queryObj` to `extension`. The extension should include
-the leading dot like the `require('path').extname()` function.
-
-Example:
-
-```javascript
-var AssetGraph = require('assetgraph');
-
-new AssetGraph()
-  .loadAssets('http://example.com/foo.html')
-  .setAssetExtension({ type: 'Html' }, '.bar')
-  .run(function(err, assetGraph) {
-    if (err) throw err;
-    console.log(assetGraph.findAssets({ type: 'Html' })[0].url); // 'http://example.com/foo.bar'
-    // Done!
-  });
-```
 
 ## assetGraph.setHtmlImageDimensions([queryObj])
 
@@ -934,30 +776,20 @@ in the graph.
 Example:
 
 ```javascript
-var AssetGraph = require('assetgraph');
+const AssetGraph = require('assetgraph');
 
-new AssetGraph()
-  .loadAssets('hasanimage.html')
-  .populate()
-  // assetGraph.findAssets({type: 'Html'})[0].text === '<body><img src="foo.png"></body>'
-  .setHtmlImageDimensions()
-  // assetGraph.findAssets({type: 'Html'})[0].text === '<body><img src="foo.png" width="29" height="32"></body>'
-  .run(function(err, assetGraph) {
-    // Done!
-  });
+const assetGraph = new AssetGraph();
+await assetGraph.loadAssets('hasanimage.html');
+await assetGraph.populate();
+
+// assetGraph.findAssets({type: 'Html'})[0].text === '<body><img src="foo.png"></body>'
+
+await assetGraph.setHtmlImageDimensions();
+
+// assetGraph.findAssets({type: 'Html'})[0].text === '<body><img src="foo.png" width="29" height="32"></body>'
 ```
 
-## assetGraph.startOverIfAssetSourceFilesChange([queryObj])
-
-Starts watching all non-inline `file://` assets (or those matching
-`queryObj`) as they're added to the graph, and reruns all the
-following transformations when a source file is changed on disc.
-
-Used to power `buildDevelopment --watch` in <a
-href="http://github.com/assetgraph/assetgraph-builder">AssetGraph-builder</a>.
-Should be considered experimental.
-
-## assetGraph.stats([queryObj])
+## assetGraph.writeStatsToStderr([queryObj])
 
 Dumps an ASCII table with some basic stats about all the assets in the
 graph (or those matching `queryObj`) in their current state.
@@ -988,16 +820,16 @@ Directories will be created as needed.
 Example:
 
 ```javascript
-var AssetGraph = require('assetgraph');
+const AssetGraph = require('assetgraph');
 
-new AssetGraph({root: 'http://example.com/'})
-    .loadAssets('http://example.com/bar/quux/foo.html',
-                'http://example.com/bar/baz.html')
-    // Will write the two assets to /my/output/dir/quux/foo.html and /my/output/dir/baz.html:
-    .writeAssetsToDisc({type: 'Html'} 'file:///my/output/dir/', 'http://example.com/bar/')
-    .run(function (err, assetGraph) {
-        // Done!
-    });
+const assetGraph = new AssetGraph({root: 'http://example.com/'});
+await assetGraph.loadAssets(
+  'http://example.com/bar/quux/foo.html',
+  'http://example.com/bar/baz.html'
+);
+
+// Write the two assets to /my/output/dir/quux/foo.html and /my/output/dir/baz.html:
+await assetGraph.writeAssetsToDisc({type: 'Html'} 'file:///my/output/dir/', 'http://example.com/bar/');
 ```
 
 ## assetGraph.writeAssetsToStdout([queryObj])
