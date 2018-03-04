@@ -45,6 +45,7 @@
     "memoizesync": "1.1.1",
     "mkdirp": "^0.5.1",
     "normalizeurl": "^1.0.0",
+    "opentype": "^0.1.2",
     "perfectionist": "^2.4.0",
     "postcss": "^6.0.14",
     "read-pkg-up": "^3.0.0",
@@ -57,6 +58,7 @@
     "sw-precache": "^5.2.0",
     "teepee": "^2.31.1",
     "uglify-js": "^3.3.0",
+    "uninspected": "^1.9.0",
     "urltools": "^0.4.1",
     "xmldom": "^0.1.27"
   },
