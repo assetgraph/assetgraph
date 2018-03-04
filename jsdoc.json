@@ -4,8 +4,7 @@
     "encoding": "utf8",
     "destination": "./jsdoc/",
     "recurse": true,
-    "readme": "README.md",
-    "package": "package.json"
+    "readme": "README.md"
   },
 
   "source": {
