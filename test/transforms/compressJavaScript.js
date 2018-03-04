@@ -287,7 +287,7 @@ describe('transforms/compressJavaScript', function() {
       'to contain',
       'this.foo.bar++'
     )
-      .and('to contain', 'this.foo.bar>')
+      .and('to contain', '<this.foo.bar')
       .and('not to contain', '++this.foo.bar');
   });
 
