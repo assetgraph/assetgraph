@@ -172,6 +172,18 @@ describe('assets/Asset', function() {
       cssAsset.url = 'https://example.com/styles/';
       expect(cssAsset.fileName, 'to be undefined');
     });
+
+    it('should update _baseName and _extension', function() {
+      const assetGraph = new AssetGraph();
+      const cssAsset = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/foo.bar.css',
+        text: '<style>/**/</style>'
+      }).outgoingRelations[0].to;
+      cssAsset.fileName = 'baz.quux.css';
+      expect(cssAsset._baseName, 'to equal', 'baz.quux');
+      expect(cssAsset._extension, 'to equal', '.css');
+    });
   });
 
   it('should handle an asset with an extensionless url', function() {
