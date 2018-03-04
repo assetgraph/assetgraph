@@ -271,14 +271,14 @@ describe('transforms/compressJavaScript', function() {
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
       text: `
-                <!DOCTYPE html>
-                <html>
-                    <head></head>
-                    <body>
-                        <script>alert('foo' + 'bar');</script>
-                    </body>
-                </html>
-            `
+        <!DOCTYPE html>
+        <html>
+          <head></head>
+          <body>
+            <script>alert('foo' + 'bar');</script>
+          </body>
+        </html>
+      `
     });
 
     await assetGraph.compressJavaScript();
