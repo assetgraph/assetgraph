@@ -285,7 +285,7 @@ counts as a separate including asset, so in the below example
 `ie.css` and `all.css` won't be bundled together:
 
 ```html
-<![if IE]><link rel='stylesheet' href='ie.css'><![endif]-->
+<!--[if IE]><link rel='stylesheet' href='ie.css'><![endif]-->
 <link rel='stylesheet' href='all.css'>
 ```
 
