@@ -1132,21 +1132,20 @@ describe('assets/Asset', function() {
   });
 
   describe('#url', function() {
-    it('should throw if an existing asset occupies the same url', function() {
-      const assetGraph = new AssetGraph();
-      assetGraph.addAsset({
-        type: 'Text',
-        url: 'https://example.com/foo.txt'
+    describe('when an existing asset occupies the same url', function() {
+      it('should move the other asset out of the way by appending a unique suffix to the base name', function() {
+        const assetGraph = new AssetGraph();
+        const fooTxt = assetGraph.addAsset({
+          type: 'Text',
+          url: 'https://example.com/foo.txt'
+        });
+        const barTxt = assetGraph.addAsset({
+          type: 'Text',
+          url: 'https://example.com/bar.txt'
+        });
+        barTxt.url = 'https://example.com/foo.txt';
+        expect(fooTxt.url, 'to equal', 'https://example.com/foo-1.txt');
       });
-      const barTxt = assetGraph.addAsset({
-        type: 'Text',
-        url: 'https://example.com/bar.txt'
-      });
-      expect(
-        () => (barTxt.url = 'https://example.com/foo.txt'),
-        'to throw',
-        'https://example.com/foo.txt already exists in the graph, cannot update url'
-      );
     });
 
     it('should handle a test case with 3 assets', async function() {
