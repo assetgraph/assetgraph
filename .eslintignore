@@ -3,3 +3,4 @@ lib/3rdparty
 examples
 node_modules
 coverage
+jsdoc
