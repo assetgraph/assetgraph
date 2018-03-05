@@ -662,7 +662,7 @@ Here's a simplified example taken from `buildProduction` in
 
 ```javascript
 await assetGraph.moveAssetsInOrder(
-  { type: ['JavaScript', 'Css', 'Jpeg', 'Gif', 'Png'] },
+  { type: { $in: ['JavaScript', 'Css', 'Jpeg', 'Gif', 'Png'] } },
   asset => `/static/${asset.md5Hex.substr(0, 10)}${asset.extension}`
 );
 ```
