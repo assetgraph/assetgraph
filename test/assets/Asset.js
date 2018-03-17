@@ -1463,7 +1463,7 @@ describe('assets/Asset', function() {
       expect(assetGraph, 'to contain assets', 1);
     });
 
-    it('should work in the presence of self-referencing inline assets', async function () {
+    it('should work in the presence of self-referencing inline assets', async function() {
       const assetGraph = new AssetGraph();
       const htmlAsset = assetGraph.addAsset({
         url: 'https://example.com/',
