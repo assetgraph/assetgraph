@@ -1426,7 +1426,7 @@ describe('assets/Asset', function() {
     expect(assetGraph, 'to contain relation', { href: '#selffragment' });
   });
 
-  describe('#unload()', function() {
+  describe('#unload', function() {
     it('should clear inline assets from the graph', async function() {
       const assetGraph = new AssetGraph();
 
@@ -1461,6 +1461,24 @@ describe('assets/Asset', function() {
         isPopulated: expect.it('to be falsy')
       });
       expect(assetGraph, 'to contain assets', 1);
+    });
+
+    it('should work in the presence of self-referencing inline assets', async function () {
+      const assetGraph = new AssetGraph();
+      const htmlAsset = assetGraph.addAsset({
+        url: 'https://example.com/',
+        type: 'Html',
+        text: `
+          <!DOCTYPE html>
+          <html>
+          <head></head>
+          <body>
+            <svg><use href="#foo" xlink:href="#foo"></use></svg>
+          </body>
+          </html>
+        `
+      });
+      htmlAsset.unload();
     });
   });
 
