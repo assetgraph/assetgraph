@@ -18,7 +18,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
       infos.push(err);
     });
 
-    await assetGraph.loadAssets('index.html');
+    const [ htmlAsset ] = await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
     let cssAssets = assetGraph.findAssets({ type: 'Css' });
@@ -32,6 +32,8 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
     );
 
     await assetGraph.splitCssIfIeLimitIsReached();
+
+    expect(htmlAsset.parseTree.querySelectorAll('link[rel="stylesheet"]'), 'to have length', 2);
 
     expect(infos, 'to have length', 1);
 
