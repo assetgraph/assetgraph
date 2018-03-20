@@ -2643,7 +2643,7 @@ describe('transforms/subsetFonts', function() {
         .then(function() {
           expect(warnSpy, 'to have calls satisfying', function() {
             warnSpy(
-              /The font .*\/OpenSans\.ttf is missing these characters: 中国/
+              /The font .*\/OpenSans\.ttf is missing these characters: U\+4E2D \(中\), U\+56FD \(国\)/
             );
           });
         });
