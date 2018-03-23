@@ -32,6 +32,14 @@ describe('Assetgraph', function() {
       }, 'not to throw');
     });
 
+    it('should accept an http URL with an ip address', function() {
+      return expect(function() {
+        const assetGraph = new AssetGraph({ canonicalRoot: 'http://0.0.0.0:8000/' });
+
+        expect(assetGraph.canonicalRoot, 'to be', 'http://0.0.0.0:8000/');
+      }, 'not to throw');
+    });
+
     it('should add a trailing slash', function() {
       return expect(function() {
         const assetGraph = new AssetGraph({ canonicalRoot: 'http://fisk.dk' });
