@@ -45,7 +45,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
     await assetGraph.addPrecacheServiceWorker({ isInitial: true });
 
     expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
-    expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
+    expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 4);
     expect(
       assetGraph,
       'to contain relation',
@@ -116,7 +116,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
       'JavaScriptServiceWorkerRegistration',
       2
     );
-    expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
+    expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 5);
     expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
     expect(assetGraph, 'to contain asset', {
       url: assetGraph.root + 'index-precache-service-worker.js'
@@ -191,7 +191,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
         'JavaScriptServiceWorkerRegistration',
         2
       );
-      expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 2);
+      expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
       expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
       expect(assetGraph, 'to contain asset', {
         url: assetGraph.root + 'index-otherpage-precache-service-worker.js'
@@ -254,7 +254,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
         'JavaScriptServiceWorkerRegistration',
         2
       );
-      expect(assetGraph, 'to contain relation', 'JavaScriptStaticUrl');
+      expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
       expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
       expect(assetGraph, 'to contain asset', {
         url:
