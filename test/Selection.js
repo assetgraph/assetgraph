@@ -74,10 +74,36 @@ describe('Selection', function() {
     });
   });
 
-  it('should call a transform scoped to the contained assets', function() {
-    assetGraph.findAssets({ type: 'Css' }).moveAssets('/foobar/');
+  describe('with transforms', function() {
+    it('should call a transform scoped to the contained assets', function() {
+      assetGraph.findAssets({ type: 'Css' }).moveAssets('/foobar/');
 
-    expect(cssAsset1.url, 'to equal', 'https://example.com/foobar/styles1.css');
-    expect(cssAsset2.url, 'to equal', 'https://example.com/foobar/styles2.css');
+      expect(
+        cssAsset1.url,
+        'to equal',
+        'https://example.com/foobar/styles1.css'
+      );
+      expect(
+        cssAsset2.url,
+        'to equal',
+        'https://example.com/foobar/styles2.css'
+      );
+    });
+
+    it('should call a transform scoped to the contained assets', async function() {
+      AssetGraph.registerTransform(assetGraph => {
+        for (const asset of assetGraph) {
+          asset.text += 'div { background-color: yellow }';
+        }
+      }, 'foobar');
+
+      await assetGraph.findAssets({ fileName: 'styles1.css' }).foobar();
+      expect(
+        cssAsset1.text,
+        'to equal',
+        'div { color: teal }div { background-color: yellow }'
+      );
+      expect(cssAsset2.text, 'to equal', 'div { color: teal }');
+    });
   });
 });
