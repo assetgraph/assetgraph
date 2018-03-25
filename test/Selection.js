@@ -1,6 +1,6 @@
 /*global describe, it*/
 const expect = require('./unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const AssetGraph = require('../lib/AssetGraph');
 
 describe('Selection', function() {
   let assetGraph, cssAsset1, cssAsset2;
@@ -28,8 +28,8 @@ describe('Selection', function() {
   it('should call a method on all the contained assets', function() {
     assetGraph.findAssets({ type: 'Css' }).prettyPrint();
 
-    expect(cssAsset1.text, 'to equal', 'body {\n  color: maroon;\n}\n');
-    expect(cssAsset2.text, 'to equal', 'body {\n  color: tan;\n}\n');
+    expect(cssAsset1.text, 'to equal', 'body {\n    color: maroon;\n}\n');
+    expect(cssAsset2.text, 'to equal', 'body {\n    color: tan;\n}\n');
   });
 
   it('should call a getter on all the contained assets', function() {
@@ -50,13 +50,15 @@ describe('Selection', function() {
     it('should call an async method on all the contained assets and return a single promise', async function() {
       await assetGraph.findAssets({ type: 'Css' }).minify();
 
-      expect(cssAsset1.text, 'to equal', 'body{color:maroon;}');
-      expect(cssAsset2.text, 'to equal', 'body{color:tan;}');
+      expect(cssAsset1.text, 'to equal', 'body{color:maroon}');
+      expect(cssAsset2.text, 'to equal', 'body{color:tan}');
     });
 
     describe('that fulfills with a value', function() {
       beforeEach(function() {
-        AssetGraph.Css.prototype.foo = async () => this.text.length;
+        AssetGraph.Css.prototype.foo = async function() {
+          return this.text.length;
+        };
       });
 
       afterEach(function() {
@@ -65,8 +67,8 @@ describe('Selection', function() {
 
       it('should fulfill with an array of the fulfillment values', async function() {
         expect(await assetGraph.findAssets({ type: 'Css' }).foo(), 'to equal', [
-          22,
-          19
+          21,
+          18
         ]);
       });
     });
