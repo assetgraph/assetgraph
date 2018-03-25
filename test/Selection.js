@@ -90,7 +90,7 @@ describe('Selection', function() {
       );
     });
 
-    it('should call a transform scoped to the contained assets', async function() {
+    it('should provide an iterable object to the transform', async function() {
       AssetGraph.registerTransform(assetGraph => {
         for (const asset of assetGraph) {
           asset.text += 'div { background-color: yellow }';
