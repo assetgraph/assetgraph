@@ -11,7 +11,7 @@ describe('resolvers/data', function() {
     });
     await assetGraph.loadAssets('dataUrl.html').populate();
 
-    expect(assetGraph, 'to contain assets', 8);
+    expect(assetGraph, 'to contain assets', 9);
     expect(
       assetGraph.findAssets({ type: 'Html' })[1].parseTree.body.firstChild
         .nodeValue,
@@ -41,6 +41,12 @@ describe('resolvers/data', function() {
       'A brief note'
     );
     expect(assetGraph.findAssets({ type: 'Text' })[3].text, 'to equal', 'ΩδΦ');
+
+    expect(
+      assetGraph.findAssets({ type: 'Svg' })[0].text,
+      'to equal',
+      '<svg width="10" height="10" viewBox="0 0 20 38" xmlns="http://www.w3.org/2000/svg"><path d="M1.49 4.31l14 16.126.002-2.624-14 16.074-1.314 1.51 3.017 2.626 1.313-1.508 14-16.075 1.142-1.313-1.14-1.313-14-16.125L3.2.18.18 2.8l1.31 1.51z" /><text>🐭</text></svg>'
+    );
   });
 
   it('should handle a test case with an unparsable data: url', async function() {
