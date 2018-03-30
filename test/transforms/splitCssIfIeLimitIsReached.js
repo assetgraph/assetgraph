@@ -270,33 +270,6 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
     expect(assetGraph, 'to contain asset', 'Css');
   });
 
-  it('should split an enourmous stylesheet if minimumIeVersion is 10', async function() {
-    const assetGraph = new AssetGraph({
-      root: pathModule.resolve(
-        __dirname,
-        '../../testdata/transforms/splitCssIfIeLimitIsReached/'
-      )
-    });
-
-    await assetGraph.loadAssets({
-      type: 'Html',
-      url: 'http://example.com/foo.html',
-      text:
-        '<!DOCTYPE html><html><body><style>' +
-        new Array(65536).join('body {color: red;}') +
-        '</style></body></html>'
-    });
-    await assetGraph.populate();
-
-    expect(assetGraph, 'to contain assets', 2);
-    expect(assetGraph, 'to contain asset', 'Html');
-    expect(assetGraph, 'to contain asset', 'Css');
-
-    await assetGraph.splitCssIfIeLimitIsReached({}, { minimumIeVersion: 10 });
-
-    expect(assetGraph, 'to contain assets', 'Css', 2);
-  });
-
   it('should leave an enourmous stylesheet alone if minimumIeVersion is null', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
