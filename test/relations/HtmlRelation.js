@@ -162,7 +162,7 @@ describe('relations/HtmlRelation', function() {
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
+            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
           },
           'firstInHead'
         );
@@ -187,7 +187,7 @@ describe('relations/HtmlRelation', function() {
           const relation = htmlAsset.addRelation(
             {
               type: 'HtmlPreloadLink',
-              to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
+              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
             },
             'firstInHead'
           );
@@ -209,7 +209,7 @@ describe('relations/HtmlRelation', function() {
           const relation = htmlAsset.addRelation(
             {
               type: 'HtmlPreloadLink',
-              to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
+              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
             },
             'lastInHead'
           );
@@ -245,7 +245,7 @@ describe('relations/HtmlRelation', function() {
           const relation = htmlAsset.addRelation(
             {
               type: 'HtmlPreloadLink',
-              to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
+              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
             },
             'firstInHead'
           );
@@ -280,7 +280,7 @@ describe('relations/HtmlRelation', function() {
           const relation = htmlAsset.addRelation(
             {
               type: 'HtmlPreloadLink',
-              to: { type: 'Html', text: '"use strict"', url: 'foo.js' }
+              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
             },
             'lastInHead'
           );

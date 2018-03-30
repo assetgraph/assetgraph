@@ -28,6 +28,39 @@ describe('assets/Asset', function() {
 
       expect(assetGraph, 'to contain asset', 'Svg');
     });
+
+    it('should warn if the Content-Type of the asset contradicts the incoming relations', async function () {
+      const assetGraph = new AssetGraph();
+      const htmlAsset = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://www.example.com/',
+        text: `
+          <!DOCTYPE html>
+          <html>
+              <head></head>
+              <body>
+                  <script src="foo.js"></script>
+              </body>
+          </html>
+        `
+      });
+
+      httpception({
+        request: 'GET https://www.example.com/foo.js',
+        response: {
+          headers: {
+            'Content-Type': 'image/png'
+          },
+          body: 'alert("foo");'
+        }
+      });
+      const warnSpy = sinon.spy();
+      assetGraph.on('warn', warnSpy);
+      await htmlAsset.outgoingRelations[0].to.load();
+      expect(warnSpy, 'to have calls satisfying', () => {
+        warnSpy('https://www.example.com/foo.js used as both JavaScript and Png');
+      });
+    });
   });
 
   describe('#addRelation()', function() {
@@ -177,12 +210,12 @@ describe('assets/Asset', function() {
       const assetGraph = new AssetGraph();
       const cssAsset = assetGraph.addAsset({
         type: 'Html',
-        url: 'https://example.com/foo.bar.css',
+        url: 'https://example.com/foo.bar.html',
         text: '<style>/**/</style>'
       }).outgoingRelations[0].to;
-      cssAsset.fileName = 'baz.quux.css';
+      cssAsset.fileName = 'baz.quux.html';
       expect(cssAsset._baseName, 'to equal', 'baz.quux');
-      expect(cssAsset._extension, 'to equal', '.css');
+      expect(cssAsset._extension, 'to equal', '.html');
     });
   });
 
