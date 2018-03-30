@@ -94,6 +94,43 @@ describe('assets/Asset', function() {
         warnSpy('Asset is used as both JavaScript and Text');
       });
     });
+
+    it('should not complain about a SourceMap being served as application/json', async function() {
+      httpception([
+          {
+              request: 'GET https://example.com/styles.css',
+              response: {
+                  headers: {
+                      'Content-Type': 'text/css'
+                  },
+                  body: 'div { color: maroon; }/*#sourceMappingURL=css.map*/'
+              }
+          },
+          {
+              request: 'GET https://example.com/css.map',
+              response: {
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: {
+                      version: 3,
+                      sources: [ '/a.less' ],
+                      names: [],
+                      mappings: 'AAAA;EACE,eAAe;EACf,sBAAsB;CACvB;AACD;EACE,+CAA+C;EAC/C,uCAAuC;CACxC',
+                      file: 'styles.css'
+                  }
+              }
+          }
+      ]);
+      const assetGraph = new AssetGraph();
+      const warnSpy = sinon.spy();
+      assetGraph.on('warn', warnSpy);
+      await assetGraph.loadAssets('https://example.com/styles.css');
+      await assetGraph.populate({
+        followRelations: {type: 'CssSourceMappingUrl'}
+      });
+      expect(warnSpy, 'was not called');
+    });
   });
 
   describe('#addRelation()', function() {
