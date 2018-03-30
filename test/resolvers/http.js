@@ -3,6 +3,7 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const http = require('http');
 const httpception = require('httpception');
+const sinon = require('sinon');
 
 describe('resolvers/http', function() {
   it('should resolve an http url and load an asset', async function() {
@@ -100,9 +101,14 @@ describe('resolvers/http', function() {
     });
 
     const assetGraph = new AssetGraph({ root: 'http://example.com/' });
+    const warnSpy = sinon.spy().named('warn');
+    assetGraph.on('warn', warnSpy);
     await assetGraph.loadAssets('/foo.html');
     await assetGraph.populate();
 
     expect(assetGraph, 'to contain asset', { type: 'Html', text: html });
+    expect(warnSpy, 'to have calls satisfying', () => {
+      warnSpy('Invalid Content-Type response header received: &');
+    });
   });
 });
