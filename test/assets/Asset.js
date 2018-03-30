@@ -68,6 +68,33 @@ describe('assets/Asset', function() {
       expect(warnSpy, 'was not called');
     });
 
+    it('should not complain if an HTTP redirect with a Content-Type conflicts with the expected type', async function() {
+      const assetGraph = new AssetGraph();
+      const warnSpy = sinon.spy();
+      assetGraph.on('warn', warnSpy);
+
+      httpception({
+        request: 'GET https://www.example.com/foo.js',
+        response: {
+          statusCode: 302,
+          headers: {
+            'Content-Type': 'text/html',
+            Location: 'https://www.example.com/otherScript.js'
+          },
+          body: 'Sorry, please get the script from over there'
+        }
+      });
+
+      await assetGraph.loadAssets('https://www.example.com/foo.js');
+
+      expect(warnSpy, 'to have calls satisfying', () => {
+        // Would be nice to get rid of this warning also as it's based on assuming that the asset is JavaScript, even though it's explicitly Html:
+        warnSpy(
+          'Parse error in https://www.example.com/foo.js\nLine 1: Unexpected identifier (line 1)'
+        );
+      });
+    });
+
     it('should complain if an unparsable Content-Type response header is received', async function() {
       const assetGraph = new AssetGraph();
       const warnSpy = sinon.spy();
