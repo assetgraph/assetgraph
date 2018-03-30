@@ -29,7 +29,7 @@ describe('assets/Asset', function() {
       expect(assetGraph, 'to contain asset', 'Svg');
     });
 
-    it('should warn if the Content-Type of the asset contradicts the incoming relations', async function () {
+    it('should warn if the Content-Type of the asset contradicts the incoming relations', async function() {
       const assetGraph = new AssetGraph();
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
@@ -58,7 +58,44 @@ describe('assets/Asset', function() {
       assetGraph.on('warn', warnSpy);
       await htmlAsset.outgoingRelations[0].to.load();
       expect(warnSpy, 'to have calls satisfying', () => {
-        warnSpy('https://www.example.com/foo.js used as both JavaScript and Png');
+        warnSpy(
+          'https://www.example.com/foo.js used as both JavaScript and Png'
+        );
+      });
+    });
+
+    it('should warn if the Content-Type is text/plain when expecting a specific Text subclass', async function() {
+      const assetGraph = new AssetGraph();
+      const htmlAsset = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://www.example.com/',
+        text: `
+          <!DOCTYPE html>
+          <html>
+              <head></head>
+              <body>
+                  <script src="foo.js"></script>
+              </body>
+          </html>
+        `
+      });
+
+      httpception({
+        request: 'GET https://www.example.com/foo.js',
+        response: {
+          headers: {
+            'Content-Type': 'text/plain'
+          },
+          body: 'alert("foo");'
+        }
+      });
+      const warnSpy = sinon.spy();
+      assetGraph.on('warn', warnSpy);
+      await htmlAsset.outgoingRelations[0].to.load();
+      expect(warnSpy, 'to have calls satisfying', () => {
+        warnSpy(
+          'https://www.example.com/foo.js used as both JavaScript and Text'
+        );
       });
     });
   });
