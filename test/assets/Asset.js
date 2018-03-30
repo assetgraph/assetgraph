@@ -48,6 +48,26 @@ describe('assets/Asset', function() {
       });
     });
 
+    it('should not complain if no Content-Type response header is received with an HTTP redirect', async function() {
+      const assetGraph = new AssetGraph();
+      const warnSpy = sinon.spy();
+      assetGraph.on('warn', warnSpy);
+
+      httpception({
+        request: 'GET https://www.example.com/foo.js',
+        response: {
+          statusCode: 302,
+          headers: {
+            Location: 'https://www.example.com/otherScript.js'
+          }
+        }
+      });
+
+      await assetGraph.loadAssets('https://www.example.com/foo.js');
+
+      expect(warnSpy, 'was not called');
+    });
+
     it('should complain if an unparsable Content-Type response header is received', async function() {
       const assetGraph = new AssetGraph();
       const warnSpy = sinon.spy();
