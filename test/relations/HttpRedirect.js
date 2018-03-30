@@ -69,23 +69,33 @@ describe('relations/HttpRedirect', function() {
       })
       .listen(0);
 
-    serverAddress = server.address();
-    const serverHostname =
-      serverAddress.address === '::' ? 'localhost' : serverAddress.address;
-    rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/';
+    try {
+      serverAddress = server.address();
+      const serverHostname =
+        serverAddress.address === '::' ? 'localhost' : serverAddress.address;
+      rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/';
 
-    const assetGraph = new AssetGraph({ root: rootUrl });
-    assetGraph.requestOptions = { numRetries: 1 };
+      const assetGraph = new AssetGraph({ root: rootUrl });
+      assetGraph.requestOptions = { numRetries: 1 };
 
-    await assetGraph.loadAssets('/301', '/302', '/loop', '/infiniteloop');
-    await assetGraph.populate();
+      await assetGraph.loadAssets('/301', '/302', '/loop', '/infiniteloop');
+      await assetGraph.populate();
 
-    expect(assetGraph, 'to contain assets', 'Html', 7);
-    expect(assetGraph, 'to contain assets', { statusCode: 301 }, 2);
-    expect(assetGraph, 'to contain assets', { statusCode: 302 }, 2);
-    expect(assetGraph, 'to contain relations', 'HttpRedirect', 4);
-    expect(loopCount, 'to be', 1);
-    expect(infiniteloopCount, 'to be', 2);
-    server.close();
+      expect(assetGraph, 'to contain assets', 'Html', 7);
+      expect(assetGraph, 'to contain assets', { statusCode: 301 }, 2);
+      expect(assetGraph, 'to contain assets', { statusCode: 302 }, 2);
+      expect(assetGraph, 'to contain relations', 'HttpRedirect', 4);
+      const httpRedirects = assetGraph.findRelations({ type: 'HttpRedirect' });
+      expect(httpRedirects, 'to satisfy', [
+        { href: '/relativeRedirectTarget.html' },
+        { href: `${rootUrl}absoluteRedirectTarget.html` },
+        { href: '/loopRedirectTarget.html' },
+        { href: `${rootUrl}infiniteloop` }
+      ]);
+      expect(loopCount, 'to be', 1);
+      expect(infiniteloopCount, 'to be', 2);
+    } finally {
+      server.close();
+    }
   });
 });
