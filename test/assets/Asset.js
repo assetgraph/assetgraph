@@ -58,9 +58,7 @@ describe('assets/Asset', function() {
       assetGraph.on('warn', warnSpy);
       await htmlAsset.outgoingRelations[0].to.load();
       expect(warnSpy, 'to have calls satisfying', () => {
-        warnSpy(
-          'https://www.example.com/foo.js used as both JavaScript and Png'
-        );
+        warnSpy('Asset is used as both JavaScript and Png');
       });
     });
 
@@ -93,9 +91,7 @@ describe('assets/Asset', function() {
       assetGraph.on('warn', warnSpy);
       await htmlAsset.outgoingRelations[0].to.load();
       expect(warnSpy, 'to have calls satisfying', () => {
-        warnSpy(
-          'https://www.example.com/foo.js used as both JavaScript and Text'
-        );
+        warnSpy('Asset is used as both JavaScript and Text');
       });
     });
   });

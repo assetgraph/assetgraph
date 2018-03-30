@@ -361,11 +361,9 @@ describe('AssetGraph#addAsset', function() {
       await undetectableAsset.load();
 
       expect(warnSpy, 'to have calls satisfying', () => {
-        warnSpy(
-          new Error(
-            'http://example.com/undetectable used as both Css and JavaScript'
-          )
-        );
+        const err = new Error('Asset is used as both Css and JavaScript');
+        err.asset = undetectableAsset;
+        warnSpy(err);
       });
     });
 
