@@ -132,10 +132,13 @@ describe('transforms/populate', function() {
         });
     });
 
-    it('should a single instance', function() {
+    it('should support a single instance', async function() {
       httpception({
         request: 'GET https://example.com/foo.js',
         response: {
+          headers: {
+            'Content-Type': 'application/javascript'
+          },
           body: 'alert("foo");'
         }
       });
@@ -145,29 +148,33 @@ describe('transforms/populate', function() {
         url: 'https://example.com/',
         text: '<script src="foo.js"></script>'
       });
-      return assetGraph
-        .populate({
-          followRelations: htmlAsset.outgoingRelations[0]
-        })
-        .then(function() {
-          expect(assetGraph, 'to contain asset', {
-            url: 'https://example.com/foo.js',
-            isLoaded: true
-          });
-        });
+      await assetGraph.populate({
+        followRelations: htmlAsset.outgoingRelations[0]
+      });
+
+      expect(assetGraph, 'to contain asset', {
+        url: 'https://example.com/foo.js',
+        isLoaded: true
+      });
     });
 
-    it('should support an array with multiple items', function() {
+    it('should support an array with multiple items', async function() {
       httpception([
         {
           request: 'GET https://example.com/foo.js',
           response: {
+            headers: {
+              'Content-Type': 'application/javascript'
+            },
             body: 'alert("foo");'
           }
         },
         {
           request: 'GET https://example.com/bar.js',
           response: {
+            headers: {
+              'Content-Type': 'application/javascript'
+            },
             body: 'alert("bar");'
           }
         }
@@ -180,23 +187,21 @@ describe('transforms/populate', function() {
         text:
           '<script src="foo.js"></script><script src="bar.js"></script><script src="quux.js"></script>'
       });
-      return assetGraph
-        .populate({
-          followRelations: { $in: htmlAsset.outgoingRelations.slice(0, 2) }
+      await assetGraph.populate({
+        followRelations: { $in: htmlAsset.outgoingRelations.slice(0, 2) }
+      });
+
+      expect(assetGraph, 'to contain asset', {
+        url: 'https://example.com/foo.js',
+        isLoaded: true
+      })
+        .and('to contain asset', {
+          url: 'https://example.com/bar.js',
+          isLoaded: true
         })
-        .then(function() {
-          expect(assetGraph, 'to contain asset', {
-            url: 'https://example.com/foo.js',
-            isLoaded: true
-          })
-            .and('to contain asset', {
-              url: 'https://example.com/bar.js',
-              isLoaded: true
-            })
-            .and('to contain asset', {
-              url: 'https://example.com/quux.js',
-              isLoaded: false
-            });
+        .and('to contain asset', {
+          url: 'https://example.com/quux.js',
+          isLoaded: false
         });
     });
   });

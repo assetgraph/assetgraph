@@ -51,6 +51,9 @@ describe('AssetGraph#addAsset', function() {
       request: 'GET http://www.example.com/foo.gif',
       response: {
         statusCode: 200,
+        headers: {
+          'Content-Type': 'image/gif'
+        },
         body: new Buffer('GIF')
       }
     });

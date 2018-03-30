@@ -29,6 +29,47 @@ describe('assets/Asset', function() {
       expect(assetGraph, 'to contain asset', 'Svg');
     });
 
+    it('should complain if no Content-Type response header is received', async function() {
+      const assetGraph = new AssetGraph();
+      const warnSpy = sinon.spy();
+      assetGraph.on('warn', warnSpy);
+
+      httpception({
+        request: 'GET https://www.example.com/foo.js',
+        response: {
+          body: 'alert("foo");'
+        }
+      });
+
+      await assetGraph.loadAssets('https://www.example.com/foo.js');
+
+      expect(warnSpy, 'to have calls satisfying', () => {
+        warnSpy('No Content-Type response header received');
+      });
+    });
+
+    it('should complain if an unparsable Content-Type response header is received', async function() {
+      const assetGraph = new AssetGraph();
+      const warnSpy = sinon.spy();
+      assetGraph.on('warn', warnSpy);
+
+      httpception({
+        request: 'GET https://www.example.com/foo.js',
+        response: {
+          headers: {
+            'Content-Type': 'foo!$bar'
+          },
+          body: 'alert("foo");'
+        }
+      });
+
+      await assetGraph.loadAssets('https://www.example.com/foo.js');
+
+      expect(warnSpy, 'to have calls satisfying', () => {
+        warnSpy('Invalid Content-Type response header received: foo!$bar');
+      });
+    });
+
     it('should warn if the Content-Type of the asset contradicts the incoming relations', async function() {
       const assetGraph = new AssetGraph();
       const htmlAsset = assetGraph.addAsset({
