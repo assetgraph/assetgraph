@@ -201,20 +201,20 @@ describe('AssetGraph#addAsset', function() {
       const xmlAsset = assetGraph.addAsset({
         url: 'http://example.com/feed.xml',
         text: `
-                    <?xml version="1.0" encoding="utf-8"?>
-                    <feed xmlns="http://www.w3.org/2005/Atom">
-                      <title>Example blog</title>
-                      <updated>2014-08-29T00:11:13+02:00</updated>
-                      <id>http://example.com/</id>
-                      <entry>
-                        <title>Karma Generator Rewrite 0.8.0</title>
-                        <link href="http://example.com/blog/article/"/>
-                        <updated>2014-05-12T00:00:00+02:00</updated>
-                        <id>http://example.com/blog/article/</id>
-                        <content type="html">This contains an image: &lt;img src=&quot;foo.png&quot;&gt; and a &lt;a href=&quot;bar.html&quot;&gt;relative link&lt;/a&gt;</content>
-                      </entry>
-                    </feed>
-                `
+          <?xml version="1.0" encoding="utf-8"?>
+          <feed xmlns="http://www.w3.org/2005/Atom">
+            <title>Example blog</title>
+            <updated>2014-08-29T00:11:13+02:00</updated>
+            <id>http://example.com/</id>
+            <entry>
+              <title>Karma Generator Rewrite 0.8.0</title>
+              <link href="http://example.com/blog/article/"/>
+              <updated>2014-05-12T00:00:00+02:00</updated>
+              <id>http://example.com/blog/article/</id>
+              <content type="html">This contains an image: &lt;img src=&quot;foo.png&quot;&gt; and a &lt;a href=&quot;bar.html&quot;&gt;relative link&lt;/a&gt;</content>
+            </entry>
+          </feed>
+        `
       });
 
       await xmlAsset.load();
@@ -289,13 +289,13 @@ describe('AssetGraph#addAsset', function() {
           type: 'Html',
           url: 'http://example.com/',
           text: `
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <link rel="stylesheet" href="undetectable">
-                    </head>
-                    </html>
-                `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <link rel="stylesheet" href="undetectable">
+            </head>
+            </html>
+          `
         })
         .load();
       await undetectableAsset.load();
@@ -311,13 +311,13 @@ describe('AssetGraph#addAsset', function() {
           type: 'Html',
           url: 'http://example.com/',
           text: `
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <link rel="stylesheet" href="undetectable">
-                    </head>
-                    </html>
-                `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <link rel="stylesheet" href="undetectable">
+            </head>
+            </html>
+          `
         })
         .load();
 
@@ -346,16 +346,16 @@ describe('AssetGraph#addAsset', function() {
         type: 'Html',
         url: 'http://example.com/',
         text: `
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <link rel="stylesheet" href="undetectable">
-                    </head>
-                    <body>
-                        <script src="undetectable"></script>
-                    </body>
-                    </html>
-                `
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <link rel="stylesheet" href="undetectable">
+          </head>
+          <body>
+              <script src="undetectable"></script>
+          </body>
+          </html>
+        `
       });
 
       await undetectableAsset.load();
