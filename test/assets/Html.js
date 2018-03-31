@@ -179,6 +179,18 @@ describe('assets/Html', function() {
     });
   });
 
+  describe('#unload', function() {
+    it('should not break when the asset is not loaded', function() {
+      const assetGraph = new AssetGraph();
+      const htmlAsset = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/'
+      });
+
+      htmlAsset.unload();
+    });
+  });
+
   describe('#findOutgoingRelationsInParseTree', function() {
     it('should add Css type to HtmlStyle relation targets that have no .css file extension', async function() {
       const assetGraph = new AssetGraph({
