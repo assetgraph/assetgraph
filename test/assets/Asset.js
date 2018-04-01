@@ -331,6 +331,125 @@ describe('assets/Asset', function() {
       });
       await assetGraph.populate();
     });
+
+    describe('with metadataOnly:true', function() {
+      describe('with a file: asset', function() {
+        it('should succeed if the file does exist, but not populate asset.text or asset.rawSrc', async function() {
+          const assetGraph = new AssetGraph({
+            root: pathModule.resolve(
+              __dirname,
+              '../../testdata/assets/Asset/metadataOnly/'
+            )
+          });
+          const asset = assetGraph.addAsset({
+            url: 'index.html'
+          });
+          await asset.load({ metadataOnly: true });
+          expect(asset.isLoaded, 'to be false');
+          expect(asset._text, 'to be undefined');
+          expect(asset._rawSrc, 'to be undefined');
+        });
+
+        it('should return a rejected promise if the file does not exist', async function() {
+          const assetGraph = new AssetGraph({
+            root: pathModule.resolve(
+              __dirname,
+              '../../testdata/assets/Asset/metadataOnly/'
+            )
+          });
+          const asset = assetGraph.addAsset({
+            url: 'foo.html'
+          });
+          await expect(
+            asset.load({ metadataOnly: true }),
+            'to be rejected with',
+            /ENOENT/
+          );
+        });
+
+        it('should materialize a FileRedirect relation and make believe the asset is loaded', async function() {
+          const assetGraph = new AssetGraph({
+            root: pathModule.resolve(
+              __dirname,
+              '../../testdata/assets/Asset/metadataOnly/'
+            )
+          });
+          const warnSpy = sinon.spy().named('warn');
+          assetGraph.on('warn', warnSpy);
+
+          const asset = assetGraph.addAsset({
+            url: 'subdir'
+          });
+          await asset.load({ metadataOnly: true });
+          expect(asset.outgoingRelations, 'to satisfy', [
+            {
+              type: 'FileRedirect',
+              to: {
+                url: `${assetGraph.root}subdir/index.html`
+              }
+            }
+          ]);
+          expect(asset.rawSrc, 'to equal', new Buffer([]));
+        });
+      });
+
+      describe('with an http(s): asset', function() {
+        it('should issue a HEAD request', async function() {
+          const asset = new AssetGraph().addAsset({
+            url: 'https://www.example.com/'
+          });
+
+          expect(asset.type, 'to be undefined');
+
+          httpception({
+            request: 'HEAD https://www.example.com/',
+            response: {
+              headers: {
+                'Content-Type': 'text/html; charset=iso-8859-1'
+              }
+            }
+          });
+
+          await asset.load({ metadataOnly: true });
+
+          expect(asset.type, 'to equal', 'Html');
+          expect(asset.contentType, 'to equal', 'text/html');
+          expect(asset.isLoaded, 'to be false');
+          expect(asset._encoding, 'to equal', 'iso-8859-1');
+          expect(asset._text, 'to be undefined');
+          expect(asset._rawSrc, 'to be undefined');
+        });
+
+        it('should materialize a HttpRedirect relation', async function() {
+          const asset = new AssetGraph().addAsset({
+            url: 'https://www.example.com/'
+          });
+
+          expect(asset.type, 'to be undefined');
+
+          httpception({
+            request: 'HEAD https://www.example.com/',
+            response: {
+              statusCode: 302,
+              headers: {
+                Location: 'https://somewhereelse.com/'
+              }
+            }
+          });
+
+          await asset.load({ metadataOnly: true });
+
+          expect(asset.outgoingRelations, 'to satisfy', [
+            {
+              type: 'HttpRedirect',
+              to: {
+                url: 'https://somewhereelse.com/'
+              }
+            }
+          ]);
+        });
+      });
+    });
   });
 
   describe('#addRelation()', function() {
