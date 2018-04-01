@@ -87,12 +87,7 @@ describe('assets/Asset', function() {
 
       await assetGraph.loadAssets('https://www.example.com/foo.js');
 
-      expect(warnSpy, 'to have calls satisfying', () => {
-        // Would be nice to get rid of this warning also as it's based on assuming that the asset is JavaScript, even though it's explicitly Html:
-        warnSpy(
-          'Parse error in https://www.example.com/foo.js\nLine 1: Unexpected identifier (line 1)'
-        );
-      });
+      expect(warnSpy, 'was not called');
     });
 
     it('should complain if an unparsable Content-Type response header is received', async function() {
@@ -219,6 +214,113 @@ describe('assets/Asset', function() {
         followRelations: { type: 'CssSourceMappingUrl' }
       });
       expect(warnSpy, 'was not called');
+    });
+
+    it('should not upgrade an HTTP redirect without a Content-Type to Svg just because of the file extension', async function() {
+      httpception([
+        {
+          request:
+            'GET https://travis-ci.org/peerigon/extract-loader.svg?branch=master',
+          response: {
+            statusCode: 302,
+            headers: {
+              Location:
+                'https://api.travis-ci.org/peerigon/extract-loader.svg?branch=master'
+            }
+          }
+        },
+        {
+          request:
+            'GET https://api.travis-ci.org/peerigon/extract-loader.svg?branch=master',
+          response: {
+            statusCode: 302,
+            headers: {
+              'Content-Type': 'image/svg+xml'
+            },
+            body: `
+              <svg xmlns="http://www.w3.org/2000/svg" width="90" height="20">
+                <linearGradient id="a" x2="0" y2="100%">
+                    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+                    <stop offset="1" stop-opacity=".1" />
+                </linearGradient>
+                <rect rx="3" width="90" height="20" fill="#555" />
+                <rect rx="3" x="37" width="53" height="20" fill="#4c1" />
+                <path fill="#4c1" d="M37 0h4v20h-4z" />
+                <rect rx="3" width="90" height="20" fill="url(#a)" />
+                <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
+                    <text x="19.5" y="15" fill="#010101" fill-opacity=".3">build</text>
+                    <text x="19.5" y="14">build</text>
+                    <text x="62.5" y="15" fill="#010101" fill-opacity=".3">passing</text>
+                    <text x="62.5" y="14">passing</text>
+                </g>
+              </svg>
+            `
+          }
+        }
+      ]);
+
+      const assetGraph = new AssetGraph();
+      assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/',
+        text:
+          '<img src="https://travis-ci.org/peerigon/extract-loader.svg?branch=master" alt="Build Status">'
+      });
+      await assetGraph.populate();
+    });
+
+    it('should not upgrade a text/html redirect asset to Svg just because of the file extension', async function() {
+      httpception([
+        {
+          request:
+            'GET https://travis-ci.org/peerigon/extract-loader.svg?branch=master',
+          response: {
+            statusCode: 302,
+            headers: {
+              'Content-Type': 'text/html',
+              Location:
+                'https://api.travis-ci.org/peerigon/extract-loader.svg?branch=master'
+            }
+          }
+        },
+        {
+          request:
+            'GET https://api.travis-ci.org/peerigon/extract-loader.svg?branch=master',
+          response: {
+            statusCode: 302,
+            headers: {
+              'Content-Type': 'image/svg+xml'
+            },
+            body: `
+              <svg xmlns="http://www.w3.org/2000/svg" width="90" height="20">
+                <linearGradient id="a" x2="0" y2="100%">
+                    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+                    <stop offset="1" stop-opacity=".1" />
+                </linearGradient>
+                <rect rx="3" width="90" height="20" fill="#555" />
+                <rect rx="3" x="37" width="53" height="20" fill="#4c1" />
+                <path fill="#4c1" d="M37 0h4v20h-4z" />
+                <rect rx="3" width="90" height="20" fill="url(#a)" />
+                <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
+                    <text x="19.5" y="15" fill="#010101" fill-opacity=".3">build</text>
+                    <text x="19.5" y="14">build</text>
+                    <text x="62.5" y="15" fill="#010101" fill-opacity=".3">passing</text>
+                    <text x="62.5" y="14">passing</text>
+                </g>
+              </svg>
+            `
+          }
+        }
+      ]);
+
+      const assetGraph = new AssetGraph();
+      assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/',
+        text:
+          '<img src="https://travis-ci.org/peerigon/extract-loader.svg?branch=master" alt="Build Status">'
+      });
+      await assetGraph.populate();
     });
   });
 
@@ -1939,7 +2041,7 @@ describe('assets/Asset', function() {
         });
       });
 
-      it('should return Asset if there is no usable file extension', function() {
+      it('should return undefined if there is no usable file extension', function() {
         expect(
           new AssetGraph().addAsset({ url: 'https://example.com/' }).type,
           'to be undefined'

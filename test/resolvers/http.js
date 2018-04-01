@@ -106,7 +106,10 @@ describe('resolvers/http', function() {
     await assetGraph.loadAssets('/foo.html');
     await assetGraph.populate();
 
-    expect(assetGraph, 'to contain asset', { type: 'Html', text: html });
+    expect(assetGraph, 'to contain asset', {
+      type: 'Html',
+      url: 'http://example.com/foo.html'
+    });
     expect(warnSpy, 'to have calls satisfying', () => {
       warnSpy('Invalid Content-Type response header received: &');
     });

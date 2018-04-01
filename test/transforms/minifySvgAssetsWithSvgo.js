@@ -51,6 +51,7 @@ describe('transforms/minifySvgAssetsWithSvgo', function() {
   it('should not throw away too much precision', async function() {
     const assetGraph = new AssetGraph();
     await assetGraph.loadAssets({
+      type: 'Svg',
       url: 'http://example.com/dot.svg',
       text:
         '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n' +
