@@ -269,6 +269,15 @@ describe('assets/Asset', function() {
       await assetGraph.populate();
     });
 
+    it('should an unloaded HTTP asset if the Content-Type is known', async function() {
+      const assetGraph = new AssetGraph();
+      const htmlAsset = assetGraph.addAsset({
+        url: 'https://example.com/',
+        contentType: 'text/html'
+      });
+      expect(htmlAsset._type, 'to equal', 'Html');
+    });
+
     it('should not upgrade a text/html redirect asset to Svg just because of the file extension', async function() {
       httpception([
         {
