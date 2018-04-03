@@ -620,14 +620,14 @@ describe('relations/Relation', function() {
             type: 'Html',
             url: 'https://example.com/',
             text: `
-                            <!DOCTYPE html>
-                            <html>
-                                <head></head>
-                                <body>
-                                    <a href="https://example.com/other.html">Link</a>
-                                </body>
-                            </html>
-                        `
+              <!DOCTYPE html>
+              <html>
+                <head></head>
+                <body>
+                  <a href="https://example.com/other.html">Link</a>
+                </body>
+              </html>
+            `
           });
 
           htmlAsset.outgoingRelations[0].to = 'https://blah.com/whataboutthis/';
@@ -661,14 +661,14 @@ describe('relations/Relation', function() {
             type: 'Html',
             url: 'https://example.com/',
             text: `
-                            <!DOCTYPE html>
-                            <html>
-                                <head></head>
-                                <body>
-                                    <a href="https://example.com/other.html">Link</a>
-                                </body>
-                            </html>
-                        `
+              <!DOCTYPE html>
+              <html>
+                <head></head>
+                <body>
+                  <a href="https://example.com/other.html">Link</a>
+                </body>
+              </html>
+            `
           });
 
           const imageAsset = assetGraph.addAsset({
@@ -694,27 +694,28 @@ describe('relations/Relation', function() {
       const svgAsset = assetGraph.addAsset({
         type: 'Svg',
         url: 'https://example.com/image.svg',
-        text:
-          '<?xml version="1.0" encoding="UTF-8"?>\n' +
-          '<svg width="82px" height="90px" viewBox="0 0 82 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n' +
-          '    <defs>\n' +
-          '        <polygon id="path-1" points="2.57083634e-05 42.5179483 48.5419561 42.5179483 48.5419561 0.268335496 2.57083634e-05 0.268335496"></polygon>\n' +
-          '    </defs>\n' +
-          '    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">\n' +
-          '        <g id="blabla" transform="translate(-377.000000, -479.000000)">\n' +
-          '            <g id="Page-1" transform="translate(418.770235, 524.226071) rotate(1.000000) translate(-418.770235, -524.226071) translate(376.770235, 478.726071)">\n' +
-          '                <polygon id="Fill-1" fill="#CBCACA" points="29.4199768 11.3513514 0 17.8208401 0.478874723 44.5945946 30 43.7301168"></polygon>\n' +
-          '                <g id="Group-39" transform="translate(34.054054, 47.027027)">\n' +
-          '                    <mask id="mask-2" fill="white">\n' +
-          '                        <use xlink:href="#path-1"></use>\n' +
-          '                    </mask>\n' +
-          '                    <g id="Clip-38"></g>\n' +
-          '                    <polygon id="Fill-37" fill="#CBCACA" mask="url(#mask-2)" points="47.7852768 0.268335496 2.57083634e-05 0.657295986 0.594559438 33.8575146 48.5419561 42.5185782"></polygon>\n' +
-          '                </g>\n' +
-          '            </g>\n' +
-          '        </g>\n' +
-          '    </g>\n' +
-          '</svg>'
+        text: `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <svg width="82px" height="90px" viewBox="0 0 82 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs>
+              <polygon id="path-1" points="2.57083634e-05 42.5179483 48.5419561 42.5179483 48.5419561 0.268335496 2.57083634e-05 0.268335496"></polygon>
+            </defs>
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="blabla" transform="translate(-377.000000, -479.000000)">
+                <g id="Page-1" transform="translate(418.770235, 524.226071) rotate(1.000000) translate(-418.770235, -524.226071) translate(376.770235, 478.726071)">
+                  <polygon id="Fill-1" fill="#CBCACA" points="29.4199768 11.3513514 0 17.8208401 0.478874723 44.5945946 30 43.7301168"></polygon>
+                  <g id="Group-39" transform="translate(34.054054, 47.027027)">
+                    <mask id="mask-2" fill="white">
+                      <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-38"></g>
+                    <polygon id="Fill-37" fill="#CBCACA" mask="url(#mask-2)" points="47.7852768 0.268335496 2.57083634e-05 0.657295986 0.594559438 33.8575146 48.5419561 42.5185782"></polygon>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+        `
       });
 
       svgAsset.url = 'https://example.com/somewhereelse/image.svg';
