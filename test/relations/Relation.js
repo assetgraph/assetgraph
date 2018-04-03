@@ -592,6 +592,23 @@ describe('relations/Relation', function() {
         expect(cssImage.to.incomingInlineRelation, 'to be', cssImage);
       });
     });
+
+    // Regression test
+    // Would be nice to tweak the semantics of addAsset or replace it with a more complete
+    // set of lifecycle hooks
+    it('should not break when the target asset has not been fully populated yet', function() {
+      const assetGraph = new AssetGraph();
+      assetGraph.on('addAsset', asset => {
+        if (asset.type === 'Css') {
+          // For some historical reason this kicks in before the Html asset has been added to the graph
+          asset.incomingRelations[0].inline();
+        }
+      });
+      assetGraph.addAsset({
+        type: 'Html',
+        text: '<style>body { color: maroon; }</style>'
+      });
+    });
   });
 
   describe('#to', function() {
