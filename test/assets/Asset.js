@@ -420,8 +420,10 @@ describe('assets/Asset', function() {
           expect(asset._rawSrc, 'to be undefined');
         });
 
-        it('should materialize a HttpRedirect relation', async function() {
-          const asset = new AssetGraph().addAsset({
+        it('should materialize an HttpRedirect relation', async function() {
+          const assetGraph = new AssetGraph();
+
+          const asset = assetGraph.addAsset({
             url: 'https://www.example.com/'
           });
 
@@ -439,6 +441,19 @@ describe('assets/Asset', function() {
 
           await asset.load({ metadataOnly: true });
 
+          expect(assetGraph, 'to contain relation', 'HttpRedirect');
+
+          expect(asset.outgoingRelations, 'to satisfy', [
+            {
+              type: 'HttpRedirect',
+              to: {
+                url: 'https://somewhereelse.com/'
+              }
+            }
+          ]);
+
+          expect(assetGraph, 'to contain relation', 'HttpRedirect');
+
           expect(asset.outgoingRelations, 'to satisfy', [
             {
               type: 'HttpRedirect',
@@ -448,6 +463,29 @@ describe('assets/Asset', function() {
             }
           ]);
         });
+      });
+    });
+
+    describe('with an asset that has its body specified initially', function() {
+      it('should be idempotent', async function() {
+        const assetGraph = new AssetGraph();
+        const htmlAsset = assetGraph.addAsset({
+          type: 'Html',
+          url: 'https://example.com/',
+          text:
+            '<img src="foo.png"><style>body { background: url(bar.png); }</style>'
+        });
+        expect(assetGraph, 'to contain relation', 'HtmlImage');
+        expect(assetGraph, 'to contain relation', 'HtmlStyle');
+        expect(assetGraph, 'to contain relation', 'CssImage');
+        expect(assetGraph, 'to contain assets', 'Png', 2);
+
+        await htmlAsset.load();
+
+        expect(assetGraph, 'to contain relation', 'HtmlImage');
+        expect(assetGraph, 'to contain relation', 'HtmlStyle');
+        expect(assetGraph, 'to contain relation', 'CssImage');
+        expect(assetGraph, 'to contain assets', 'Png', 2);
       });
     });
   });
