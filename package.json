@@ -75,7 +75,7 @@
     "httpception": "^1.0.2",
     "iconv-lite": "^0.4.19",
     "jsdoc": "^3.5.5",
-    "less": "^2.7.3",
+    "less": "^3.0.1",
     "magicpen-prism": "2.3.0",
     "mocha": "^4.0.1",
     "nyc": "^11.1.0",
