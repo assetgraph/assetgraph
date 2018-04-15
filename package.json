@@ -76,7 +76,7 @@
     "iconv-lite": "^0.4.19",
     "jsdoc": "^3.5.5",
     "less": "^2.7.3",
-    "magicpen-prism": "2.3.0",
+    "magicpen-prism": "2.4.0",
     "mocha": "^4.0.1",
     "nyc": "^11.1.0",
     "open": "^0.0.5",
