@@ -508,7 +508,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       return expect(htmlText, 'to satisfy computed font properties', [
         { props: { 'font-family': 'font1' }, text: 'type:undefined' },
         { props: { 'font-family': 'font1' }, text: '2017-12-03' },
-        { props: { 'font-family': 'font1' }, text: '2017-12-03T11:22:33' },
+        { props: { 'font-family': 'font1' }, text: '2017-12-03T11:22' },
         { props: { 'font-family': 'font1' }, text: 'foo@example.com' },
         { props: { 'font-family': 'font1' }, text: '2017-12' },
         { props: { 'font-family': 'font1' }, text: '1234' },
