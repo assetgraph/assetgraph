@@ -117,20 +117,12 @@ var defaultLocalSubsetMock = [
 
 describe('transforms/subsetFonts', function() {
   describe('without fonttools installed', function() {
-    before(function() {
-      // Mock on
-      proxyquire('../../lib/transforms/subsetFonts', {
+    const subsetFontsWithoutFontTools = proxyquire(
+      '../../lib/transforms/subsetFonts',
+      {
         '../util/fonts/subsetLocalFont': null
-      });
-    });
-
-    after(function() {
-      // Mock off
-      proxyquire.noPreserveCache();
-      proxyquire('../../lib/transforms/subsetFonts', {
-        '../util/fonts/subsetLocalFont': require('../../lib/util/fonts/subsetLocalFont')
-      });
-    });
+      }
+    );
 
     it('should emit a warning about font subsetting tool not being available', function() {
       httpception();
@@ -152,9 +144,11 @@ describe('transforms/subsetFonts', function() {
             crossorigin: false
           }
         })
-        .subsetFonts({
-          inlineSubsets: false
-        })
+        .queue(
+          subsetFontsWithoutFontTools({
+            inlineSubsets: false
+          })
+        )
         .queue(function() {
           expect(warnings, 'to satisfy', [
             expect.it('to be an', Error) // Can't get the right type of error due to limited mocking abilities
@@ -180,7 +174,7 @@ describe('transforms/subsetFonts', function() {
           crossorigin: false
         }
       });
-      await assetGraph.subsetFonts();
+      await assetGraph.queue(subsetFontsWithoutFontTools);
 
       expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
     });
@@ -209,7 +203,7 @@ describe('transforms/subsetFonts', function() {
           crossorigin: false
         }
       });
-      await assetGraph.subsetFonts();
+      await assetGraph.queue(subsetFontsWithoutFontTools);
 
       expect(assetGraph, 'to contain no relation', 'HtmlPrefetchLink');
 
@@ -237,9 +231,11 @@ describe('transforms/subsetFonts', function() {
         .on('warn', warn => expect(warn, 'to satisfy', /Cannot find module/))
         .loadAssets('index.html')
         .populate()
-        .subsetFonts({
-          inlineSubsets: false
-        })
+        .queue(
+          subsetFontsWithoutFontTools({
+            inlineSubsets: false
+          })
+        )
         .queue(function(assetGraph) {
           expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
@@ -308,9 +304,11 @@ describe('transforms/subsetFonts', function() {
             crossorigin: false
           }
         })
-        .subsetFonts({
-          inlineSubsets: false
-        })
+        .queue(
+          subsetFontsWithoutFontTools({
+            inlineSubsets: false
+          })
+        )
         .queue(function(assetGraph) {
           expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
@@ -448,10 +446,12 @@ describe('transforms/subsetFonts', function() {
               crossorigin: false
             }
           })
-          .subsetFonts({
-            inlineSubsets: false,
-            inlineCss: true
-          })
+          .queue(
+            subsetFontsWithoutFontTools({
+              inlineSubsets: false,
+              inlineCss: true
+            })
+          )
           .queue(function(assetGraph) {
             expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
@@ -567,9 +567,11 @@ describe('transforms/subsetFonts', function() {
             crossorigin: false
           }
         })
-        .subsetFonts({
-          inlineSubsets: false
-        })
+        .queue(
+          subsetFontsWithoutFontTools({
+            inlineSubsets: false
+          })
+        )
         .queue(function(assetGraph) {
           expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
@@ -906,9 +908,11 @@ describe('transforms/subsetFonts', function() {
             crossorigin: false
           }
         })
-        .subsetFonts({
-          inlineSubsets: false
-        })
+        .queue(
+          subsetFontsWithoutFontTools({
+            inlineSubsets: false
+          })
+        )
         .queue(function(assetGraph) {
           expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
@@ -1362,9 +1366,11 @@ describe('transforms/subsetFonts', function() {
             crossorigin: false
           }
         })
-        .subsetFonts({
-          inlineSubsets: false
-        })
+        .queue(
+          subsetFontsWithoutFontTools({
+            inlineSubsets: false
+          })
+        )
         .queue(function(assetGraph) {
           expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
@@ -1732,10 +1738,12 @@ describe('transforms/subsetFonts', function() {
               crossorigin: false
             }
           })
-          .subsetFonts({
-            inlineSubsets: false,
-            subsetPerPage: true
-          })
+          .queue(
+            subsetFontsWithoutFontTools({
+              inlineSubsets: false,
+              subsetPerPage: true
+            })
+          )
           .queue(function(assetGraph) {
             expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
             expect(assetGraph, 'to contain asset', { fileName: 'about.html' });
@@ -2103,10 +2111,12 @@ describe('transforms/subsetFonts', function() {
               crossorigin: false
             }
           })
-          .subsetFonts({
-            inlineSubsets: false,
-            subsetPerPage: false
-          })
+          .queue(
+            subsetFontsWithoutFontTools({
+              inlineSubsets: false,
+              subsetPerPage: false
+            })
+          )
           .queue(function(assetGraph) {
             expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
             expect(assetGraph, 'to contain asset', { fileName: 'about.html' });
@@ -2320,9 +2330,11 @@ describe('transforms/subsetFonts', function() {
               crossorigin: false
             }
           })
-          .subsetFonts({
-            inlineSubsets: false
-          })
+          .queue(
+            subsetFontsWithoutFontTools({
+              inlineSubsets: false
+            })
+          )
           .queue(function(assetGraph) {
             var cssAsset = assetGraph.findAssets({
               type: 'Css',
@@ -2349,10 +2361,12 @@ describe('transforms/subsetFonts', function() {
               crossorigin: false
             }
           })
-          .subsetFonts({
-            inlineSubsets: false,
-            fontDisplay: 'foo'
-          })
+          .queue(
+            subsetFontsWithoutFontTools({
+              inlineSubsets: false,
+              fontDisplay: 'foo'
+            })
+          )
           .queue(function(assetGraph) {
             var cssAsset = assetGraph.findAssets({
               type: 'Css',
@@ -2379,10 +2393,12 @@ describe('transforms/subsetFonts', function() {
               crossorigin: false
             }
           })
-          .subsetFonts({
-            inlineSubsets: false,
-            fontDisplay: 'block'
-          })
+          .queue(
+            subsetFontsWithoutFontTools({
+              inlineSubsets: false,
+              fontDisplay: 'block'
+            })
+          )
           .queue(function(assetGraph) {
             var cssAsset = assetGraph.findAssets({
               type: 'Css',
@@ -2489,10 +2505,12 @@ describe('transforms/subsetFonts', function() {
               crossorigin: false
             }
           })
-          .subsetFonts({
-            inlineSubsets: false,
-            fontDisplay: 'fallback'
-          })
+          .queue(
+            subsetFontsWithoutFontTools({
+              inlineSubsets: false,
+              fontDisplay: 'fallback'
+            })
+          )
           .queue(function(assetGraph) {
             var cssAsset = assetGraph.findAssets({
               type: 'Css',
