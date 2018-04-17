@@ -173,7 +173,7 @@ describe('transforms/subsetFonts', function() {
           crossorigin: false
         }
       });
-      await assetGraph.queue(subsetFontsWithoutFontTools);
+      await assetGraph.queue(subsetFontsWithoutFontTools());
 
       expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
     });
@@ -202,7 +202,7 @@ describe('transforms/subsetFonts', function() {
           crossorigin: false
         }
       });
-      await assetGraph.queue(subsetFontsWithoutFontTools);
+      await assetGraph.queue(subsetFontsWithoutFontTools());
 
       expect(assetGraph, 'to contain no relation', 'HtmlPrefetchLink');
 
