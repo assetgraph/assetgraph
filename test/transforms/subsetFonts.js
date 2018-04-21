@@ -123,10 +123,10 @@ describe('transforms/subsetFonts', function() {
       }
     );
 
-    it('should emit a warning about font subsetting tool not being available', function() {
+    it('should emit an info about font subsetting tool not being available', function() {
       httpception();
 
-      var warnings = [];
+      var infos = [];
 
       return new AssetGraph({
         root: pathModule.resolve(
@@ -134,8 +134,8 @@ describe('transforms/subsetFonts', function() {
           '../../testdata/transforms/subsetFonts/local-single/'
         )
       })
-        .on('warn', function(warning) {
-          warnings.push(warning);
+        .on('info', function(warning) {
+          infos.push(warning);
         })
         .loadAssets('index.html')
         .populate({
@@ -149,7 +149,7 @@ describe('transforms/subsetFonts', function() {
           })
         )
         .queue(function() {
-          expect(warnings, 'to satisfy', [
+          expect(infos, 'to satisfy', [
             expect.it('to be an', Error) // Can't get the right type of error due to limited mocking abilities
           ]);
         });
@@ -207,6 +207,10 @@ describe('transforms/subsetFonts', function() {
       expect(assetGraph, 'to contain no relation', 'HtmlPrefetchLink');
 
       expect(infos, 'to satisfy', [
+        {
+          message:
+            'Local subsetting is not possible because fonttools are not installed. Falling back to only subsetting Google Fonts. Run `pip install fonttools brotli zopfli` to enable local font subsetting'
+        },
         {
           message:
             'Detached <link rel="prefetch" as="font" type="application/x-font-ttf" href="OpenSans.ttf">. Will be replaced with preload with JS fallback.\nIf you feel this is wrong, open an issue at https://github.com/assetgraph/assetgraph/issues',
@@ -2659,9 +2663,12 @@ describe('transforms/subsetFonts', function() {
         })
         .then(function() {
           expect(warnSpy, 'to have calls satisfying', function() {
-            warnSpy(
-              /The font .*\/OpenSans\.ttf is missing these characters: U\+4E2D \(中\), U\+56FD \(国\)/
-            );
+            warnSpy({
+              message: expect
+                .it('to contain', 'OpenSans.ttf is missing these characters')
+                .and('to contain', 'U+4E2D (中)')
+                .and('to contain', 'U+56FD (国)')
+            });
           });
         });
     });
