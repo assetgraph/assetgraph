@@ -208,7 +208,8 @@ describe('transforms/subsetFonts', function() {
 
       expect(infos, 'to satisfy', [
         {
-          message: 'Local subsetting is not possible because fonttools are not installed. Falling back to only subsetting Google Fonts. Run `pip install fonttools brotli zopfli` to enable local font subsetting',
+          message:
+            'Local subsetting is not possible because fonttools are not installed. Falling back to only subsetting Google Fonts. Run `pip install fonttools brotli zopfli` to enable local font subsetting'
         },
         {
           message:
@@ -2663,9 +2664,10 @@ describe('transforms/subsetFonts', function() {
         .then(function() {
           expect(warnSpy, 'to have calls satisfying', function() {
             warnSpy({
-              message: expect.it('to contain', 'OpenSans.ttf is missing these characters')
-                  .and('to contain', 'U+4E2D (中)')
-                  .and('to contain', 'U+56FD (国)')
+              message: expect
+                .it('to contain', 'OpenSans.ttf is missing these characters')
+                .and('to contain', 'U+4E2D (中)')
+                .and('to contain', 'U+56FD (国)')
             });
           });
         });
