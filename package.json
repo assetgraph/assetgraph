@@ -58,8 +58,7 @@
     "sw-precache": "^5.2.0",
     "teepee": "^2.31.1",
     "uglify-js": "^3.3.0",
-    "urltools": "^0.4.1",
-    "xmldom": "^0.1.27"
+    "urltools": "^0.4.1"
   },
   "devDependencies": {
     "autoprefixer": "^8.2.0",
