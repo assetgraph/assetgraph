@@ -3919,4 +3919,25 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       );
     });
   });
+
+  it('should not die when there is a :host() selector', function() {
+    var htmlText = [
+      '<style>:host(.special-custom-element) { display: block; }</style><h1>foo</h1>'
+    ].join('\n');
+
+    return expect(
+      htmlText,
+      'to exhaustively satisfy computed font properties',
+      [
+        {
+          text: 'foo',
+          props: {
+            'font-family': undefined,
+            'font-style': 'normal',
+            'font-weight': 700
+          }
+        }
+      ]
+    );
+  });
 });
