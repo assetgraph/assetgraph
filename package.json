@@ -28,7 +28,7 @@
     "createerror": "^1.3.0",
     "css-font-parser": "^0.2.3",
     "css-font-weight-names": "0.2.1",
-    "css-list-helpers": "1.0.1",
+    "css-list-helpers": "2.0.0",
     "cssnano": "^4.0.0-rc.2",
     "data-urls": "^1.0.0",
     "esanimate": "^1.1.0",
