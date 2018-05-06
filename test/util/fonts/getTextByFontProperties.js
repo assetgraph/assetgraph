@@ -3940,4 +3940,395 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       ]
     );
   });
+
+  describe('with CSS custom properties', function() {
+    it('should pick up variable values defined for :root', async function() {
+      await expect(
+        `
+          <style>
+            :root {
+              --my-font: foo;
+            }
+            div {
+              font-family: var(--my-font);
+              color: var(--second-color);
+            }
+          </style>
+
+          <div>bar</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'bar',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          }
+        ]
+      );
+    });
+
+    it('should follow the cascade when a property is defined multiple times, most specific last', async function() {
+      await expect(
+        `
+          <style>
+            :root {
+              --my-font: foo;
+            }
+
+            #container {
+              --my-font: bar;
+            }
+
+            div {
+              font-family: var(--my-font);
+            }
+          </style>
+
+          <div>
+            quux
+            <div id="container">baz</div>
+            blah
+          </div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          },
+          {
+            text: 'quuxblah',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          }
+        ]
+      );
+    });
+
+    it('should follow the cascade when a property is defined multiple times, most specific first', async function() {
+      await expect(
+        `
+          <style>
+            #container {
+              --my-font: bar;
+            }
+
+            :root {
+              --my-font: foo;
+            }
+
+            div {
+              font-family: var(--my-font);
+            }
+          </style>
+
+          <div>
+            quux
+            <div id="container">baz</div>
+            blah
+          </div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          },
+          {
+            text: 'quuxblah',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          }
+        ]
+      );
+    });
+
+    it('should support usage of custom properties in the definition of other custom properties', async function() {
+      await expect(
+        `
+          <style>
+            :root {
+              --my-font: foo;
+            }
+
+            html {
+              --the-actual-font: var(--my-font);
+            }
+
+            div {
+              font-family: var(--the-actual-font);
+            }
+          </style>
+
+          <div>bar</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'bar',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          }
+        ]
+      );
+    });
+
+    it('should trace both variants when a custom property is defined differently in @media blocks', async function() {
+      await expect(
+        `
+          <style>
+            @media 3dglasses {
+              :root {
+                --my-font: foo;
+              }
+            }
+            @media projection {
+              :root {
+                --my-font: bar;
+              }
+            }
+
+            div {
+              font-family: var(--my-font);
+            }
+          </style>
+
+          <div>quux</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'quux',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          },
+          {
+            text: 'quux',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          },
+          {
+            text: 'quux',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          }
+        ]
+      );
+    });
+
+    it('should trace all variants when a custom property my multiple hypothetical values is used to define another one', async function() {
+      await expect(
+        `
+          <style>
+            :root {
+              --my-font: bar;
+            }
+
+            @media 3dglasses {
+              :root {
+                --my-font: foo;
+              }
+            }
+
+            div {
+              --the-actual-font: var(--my-font);
+              font-family: var(--the-actual-font);
+            }
+          </style>
+
+          <div>baz</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          },
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          }
+        ]
+      );
+    });
+
+    describe('with a default value', function() {
+      it('should use the default value when the custom property is not defined', async function() {
+        await expect(
+          `
+            <style>
+              div {
+                font-family: var(--my-font, 'foo');
+              }
+            </style>
+
+            <div>quux</div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'quux',
+              props: {
+                'font-family': 'foo',
+                'font-style': 'normal',
+                'font-weight': 400
+              }
+            }
+          ]
+        );
+      });
+
+      it('should ignore the default value when the custom property is defined', async function() {
+        await expect(
+          `
+            <style>
+              :root {
+                --my-font: 'bar';
+              }
+
+              div {
+                font-family: var(--my-font, 'foo');
+              }
+            </style>
+
+            <div>quux</div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'quux',
+              props: {
+                'font-family': 'bar',
+                'font-style': 'normal',
+                'font-weight': 400
+              }
+            }
+          ]
+        );
+      });
+    });
+
+    it('should fall back to the initial value when a referenced custom property is not defined and there is no default value', async function() {
+      await expect(
+        `
+          <style>
+            div {
+              font-family: var(--my-font);
+            }
+          </style>
+
+          <div>quux</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'quux',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          }
+        ]
+      );
+    });
+
+    describe('with custom property look-alikes inside quoted strings', function() {
+      it('should leave the content property alone', async function() {
+        await expect(
+          `
+            <style>
+              :root {
+                --my-font: 'bar';
+              }
+
+              div::after {
+                content: 'var(--my-font)';
+              }
+            </style>
+
+            <div></div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'var(--my-font)',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 400
+              }
+            }
+          ]
+        );
+      });
+
+      it('should leave the font-family property alone', async function() {
+        await expect(
+          `
+            <style>
+              :root {
+                --my-font: 'bar';
+              }
+
+              div {
+                font-family: 'var(--my-font)';
+              }
+            </style>
+
+            <div>quux</div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'quux',
+              props: {
+                'font-family': 'var(--my-font)',
+                'font-style': 'normal',
+                'font-weight': 400
+              }
+            }
+          ]
+        );
+      });
+    });
+  });
 });
