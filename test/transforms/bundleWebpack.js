@@ -160,9 +160,9 @@ describe('bundleWebpack', function() {
       assetGraph.findAssets({ type: 'SourceMap' })[0].parseTree.sources,
       'to equal',
       [
-        'webpack://webpack/bootstrap%20de21dd479e9906cb4143',
-        '/main.js',
-        '../../../../../node_modules/createerror/lib/createError.js'
+        'webpack://webpack/bootstrap',
+        '../../../../../node_modules/createerror/lib/createError.js',
+        '/main.js'
       ]
     );
   });
