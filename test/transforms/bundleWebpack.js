@@ -19,12 +19,10 @@ describe('bundleWebpack', function() {
       type: 'JavaScript',
       isLoaded: true
     });
-    expect(
-      assetGraph,
-      'to contain relations',
-      { type: 'HtmlScript', from: { fileName: 'index.html' } },
-      1
-    );
+    expect(assetGraph, 'to contain relation', {
+      type: 'HtmlScript',
+      from: { fileName: 'index.html' }
+    });
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
       fileName: { $regex: /bundle/ }
@@ -55,12 +53,10 @@ describe('bundleWebpack', function() {
       type: 'JavaScript',
       isLoaded: true
     });
-    expect(
-      assetGraph,
-      'to contain relations',
-      { type: 'HtmlScript', from: { fileName: 'index.html' } },
-      1
-    );
+    expect(assetGraph, 'to contain relation', {
+      type: 'HtmlScript',
+      from: { fileName: 'index.html' }
+    });
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
       fileName: { $regex: /bundle/ }
@@ -86,11 +82,10 @@ describe('bundleWebpack', function() {
       .loadAssets('index.html')
       .bundleWebpack()
       .populate({ followRelations: { type: { $not: 'SourceMapSource' } } });
-
-    expect(assetGraph, 'to contain asset', { type: 'Json', isLoaded: true });
+    expect(assetGraph, 'to contain asset', { type: 'Png', isLoaded: true });
     expect(assetGraph, 'to contain relation', {
       type: 'JavaScriptStaticUrl',
-      to: { fileName: { $regex: /^[a-f0-9]{32}\.json$/ } }
+      to: { fileName: { $regex: /^[a-f0-9]{32}\.png$/ } }
     });
   });
 
