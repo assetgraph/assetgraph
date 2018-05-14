@@ -7,7 +7,7 @@ const AssetGraph = require('../../lib/AssetGraph');
 describe('assets/Css', function() {
   let sandbox;
   beforeEach(function() {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
   });
 
   afterEach(function() {
