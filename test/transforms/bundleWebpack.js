@@ -19,12 +19,10 @@ describe('bundleWebpack', function() {
       type: 'JavaScript',
       isLoaded: true
     });
-    expect(
-      assetGraph,
-      'to contain relations',
-      { type: 'HtmlScript', from: { fileName: 'index.html' } },
-      1
-    );
+    expect(assetGraph, 'to contain relation', {
+      type: 'HtmlScript',
+      from: { fileName: 'index.html' }
+    });
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
       fileName: { $regex: /bundle/ }
@@ -55,12 +53,10 @@ describe('bundleWebpack', function() {
       type: 'JavaScript',
       isLoaded: true
     });
-    expect(
-      assetGraph,
-      'to contain relations',
-      { type: 'HtmlScript', from: { fileName: 'index.html' } },
-      1
-    );
+    expect(assetGraph, 'to contain relation', {
+      type: 'HtmlScript',
+      from: { fileName: 'index.html' }
+    });
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
       fileName: { $regex: /bundle/ }
@@ -86,11 +82,10 @@ describe('bundleWebpack', function() {
       .loadAssets('index.html')
       .bundleWebpack()
       .populate({ followRelations: { type: { $not: 'SourceMapSource' } } });
-
-    expect(assetGraph, 'to contain asset', { type: 'Json', isLoaded: true });
+    expect(assetGraph, 'to contain asset', { type: 'Png', isLoaded: true });
     expect(assetGraph, 'to contain relation', {
       type: 'JavaScriptStaticUrl',
-      to: { fileName: { $regex: /^[a-f0-9]{32}\.json$/ } }
+      to: { fileName: { $regex: /^[a-f0-9]{32}\.png$/ } }
     });
   });
 
@@ -165,9 +160,9 @@ describe('bundleWebpack', function() {
       assetGraph.findAssets({ type: 'SourceMap' })[0].parseTree.sources,
       'to equal',
       [
-        'webpack://webpack/bootstrap%20de21dd479e9906cb4143',
-        '/main.js',
-        '../../../../../node_modules/createerror/lib/createError.js'
+        'webpack://webpack/bootstrap',
+        '../../../../../node_modules/createerror/lib/createError.js',
+        '/main.js'
       ]
     );
   });
@@ -211,71 +206,6 @@ describe('bundleWebpack', function() {
       fileName: 'bundle.main.js',
       isLoaded: true
     }).and('to contain no asset', { fileName: 'bundle.unused.js' });
-  });
-
-  it('should work with the commons chunk plugin', async function() {
-    const assetGraph = new AssetGraph({
-      root: pathModule.resolve(
-        __dirname,
-        '../../testdata/transforms/bundleWebpack/commonschunk/'
-      )
-    });
-    await assetGraph
-      .loadAssets('index.html', 'secondary.html')
-      .bundleWebpack()
-      .populate({ followRelations: { type: { $not: 'SourceMapSource' } } });
-
-    expect(assetGraph, 'to contain relation', {
-      from: { fileName: 'index.html' },
-      to: { fileName: 'bundle.main.js' }
-    }).and('to contain relation', {
-      from: { fileName: 'index.html' },
-      to: { fileName: 'common.js' }
-    });
-    expect(assetGraph, 'to contain relation', {
-      from: { fileName: 'secondary.html' },
-      to: { fileName: 'bundle.secondary.js' }
-    }).and('to contain relation', {
-      from: { fileName: 'secondary.html' },
-      to: { fileName: 'common.js' }
-    });
-    expect(
-      assetGraph.findAssets({ fileName: 'common.js' })[0].text,
-      'to contain',
-      "alert('dep!')"
-    );
-  });
-
-  it('should work with the commons chunk plugin when only one bundle is built', async function() {
-    const assetGraph = new AssetGraph({
-      root: pathModule.resolve(
-        __dirname,
-        '../../testdata/transforms/bundleWebpack/commonschunk/'
-      )
-    });
-    await assetGraph
-      .loadAssets('index.html')
-      .bundleWebpack()
-      .populate({ followRelations: { type: { $not: 'SourceMapSource' } } });
-
-    expect(assetGraph, 'to contain relation', {
-      from: { fileName: 'index.html' },
-      to: { fileName: 'bundle.main.js' }
-    }).and('to contain relation', {
-      from: { fileName: 'index.html' },
-      to: { fileName: 'common.js' }
-    });
-
-    // Note: When building the multi-entry point app with the commons chunk plugin one page at a time like this,
-    // we will end up with a common bundle that only contains the webpack loader. The common dependency ends
-    // up in the "main" bundle. This is expected -- if you'd like the commons chunk bundle to actually work
-    // as intended, build the entire app in one go:
-    expect(assetGraph, 'to contain asset', { fileName: 'common.js' });
-    expect(
-      assetGraph.findAssets({ fileName: 'bundle.main.js' })[0].text,
-      'to contain',
-      "alert('dep!')"
-    );
   });
 
   it('should support code splitting via require.ensure', async function() {

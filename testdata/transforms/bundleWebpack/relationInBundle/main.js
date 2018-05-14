@@ -1,3 +1,3 @@
-require('./foo.json');
+require('./foo.png');
 
 alert('main!');
