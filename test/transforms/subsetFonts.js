@@ -695,6 +695,33 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
+    // Regression test for https://github.com/Munter/subfont/issues/24
+    it('should not break if two CSS @imports reference the same Google Web Font', async function() {
+      httpception(defaultGoogleFontSubsetMock);
+
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/css-import-twice/'
+        )
+      });
+
+      await assetGraph.loadAssets('index.html').populate({
+        followRelations: {
+          crossorigin: false
+        }
+      });
+      await assetGraph.queue(
+        subsetFontsWithoutFontTools({
+          inlineSubsets: false
+        })
+      );
+
+      expect(assetGraph, 'to contain relation', 'CssImport');
+      expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
+      expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
+    });
+
     it('should handle multiple font-families', function() {
       httpception([
         {
