@@ -695,31 +695,58 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
-    // Regression test for https://github.com/Munter/subfont/issues/24
-    it('should not break if two CSS @imports reference the same Google Web Font', async function() {
-      httpception(defaultGoogleFontSubsetMock);
+    // Regression tests for https://github.com/Munter/subfont/issues/24
+    describe('when the same Google Web Font is referenced multiple times', function() {
+      it('should not break for two identical CSS @imports from the same asset', async function() {
+        httpception(defaultGoogleFontSubsetMock);
 
-      const assetGraph = new AssetGraph({
-        root: pathModule.resolve(
-          __dirname,
-          '../../testdata/transforms/subsetFonts/css-import-twice/'
-        )
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/css-import-twice/'
+          )
+        });
+
+        await assetGraph.loadAssets('index.html').populate({
+          followRelations: {
+            crossorigin: false
+          }
+        });
+        await assetGraph.queue(
+          subsetFontsWithoutFontTools({
+            inlineSubsets: false
+          })
+        );
+
+        expect(assetGraph, 'to contain relation', 'CssImport');
+        expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
+        expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
       });
 
-      await assetGraph.loadAssets('index.html').populate({
-        followRelations: {
-          crossorigin: false
-        }
-      });
-      await assetGraph.queue(
-        subsetFontsWithoutFontTools({
-          inlineSubsets: false
-        })
-      );
+      it('should not break for two CSS @imports in different stylesheets', async function() {
+        httpception(defaultGoogleFontSubsetMock);
 
-      expect(assetGraph, 'to contain relation', 'CssImport');
-      expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
-      expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/css-import-twice-different-css/'
+          )
+        });
+
+        await assetGraph.loadAssets('index.html').populate({
+          followRelations: {
+            crossorigin: false
+          }
+        });
+        await assetGraph.queue(
+          subsetFontsWithoutFontTools({
+            inlineSubsets: false
+          })
+        );
+        expect(assetGraph, 'to contain relation', 'CssImport');
+        expect(assetGraph, 'to contain relations', 'HtmlStyle', 4);
+        expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
+      });
     });
 
     it('should handle multiple font-families', function() {
