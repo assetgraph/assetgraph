@@ -695,6 +695,26 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
+    it('should not break if there is an existing reference to a Google Web Font CSS inside a script', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/google-webfont-ref-in-javascript/'
+        )
+      });
+      assetGraph.on('warn', console.log);
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate({
+        followRelations: {
+          crossorigin: false
+        }
+      });
+      await assetGraph.subsetFonts({
+        inlineSubsets: false,
+        inlineCss: true
+      });
+    });
+
     // Regression tests for https://github.com/Munter/subfont/issues/24
     describe('when the same Google Web Font is referenced multiple times', function() {
       it('should not break for two identical CSS @imports from the same asset', async function() {
