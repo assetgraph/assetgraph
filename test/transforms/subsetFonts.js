@@ -695,6 +695,38 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
+    it('should add the __subset font name to the font shorthand property', async function() {
+      httpception(defaultGoogleFontSubsetMock);
+
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/font-shorthand/'
+        )
+      });
+      assetGraph.on('warn', warn =>
+        expect(warn, 'to satisfy', /Cannot find module/)
+      );
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate({
+        followRelations: {
+          crossorigin: false
+        }
+      });
+
+      await assetGraph.queue(
+        subsetFontsWithoutFontTools({
+          inlineSubsets: false
+        })
+      );
+
+      expect(
+        assetGraph.findAssets({ fileName: 'index.html' })[0].text,
+        'to contain',
+        "font: 12px/18px 'Open Sans__subset', 'Open Sans', Helvetica;"
+      );
+    });
+
     it('should not break if there is an existing reference to a Google Web Font CSS inside a script', async function() {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
