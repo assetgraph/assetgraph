@@ -69,6 +69,37 @@ describe('transforms/addPrecacheServiceWorker', function() {
       .and('not to contain', 'fixIE6.js');
   });
 
+  describe('with minify:true', function() {
+    it('should minify the service worker and the registration script', async function() {
+      const warnSpy = sinon.spy().named('warn');
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/addPrecacheServiceWorker/singlePage/'
+        )
+      });
+      assetGraph.on('warn', warnSpy);
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate({
+        followRelations: { to: { protocol: 'file:' } }
+      });
+      await assetGraph.addPrecacheServiceWorker(
+        { isInitial: true },
+        { minify: true }
+      );
+
+      expect(
+        assetGraph,
+        'to contain assets',
+        {
+          type: 'JavaScript',
+          _toBeMinified: true
+        },
+        2
+      );
+    });
+  });
+
   it('should relay informational messages from sw-precache', async function() {
     const infoSpy = sinon.spy().named('info');
     const warnSpy = sinon.spy().named('warn');
