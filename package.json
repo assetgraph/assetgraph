@@ -78,7 +78,7 @@
     "less": "^2.7.3",
     "magicpen-prism": "2.4.0",
     "mocha": "^5.1.0",
-    "nyc": "^11.1.0",
+    "nyc": "^12.0.1",
     "open": "^0.0.5",
     "prettier": "^1.10.2",
     "proxyquire": "^2.0.1",
