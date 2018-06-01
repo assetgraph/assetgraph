@@ -5,6 +5,7 @@ const pathModule = require('path');
 var proxyquire = require('proxyquire');
 var httpception = require('httpception');
 var sinon = require('sinon');
+var fs = require('fs');
 
 var fontCssUrlRegExp = /\/subfont\/fonts-[a-z0-9]{10}\.css$/;
 
@@ -105,11 +106,12 @@ var defaultLocalSubsetMock = [
       headers: {
         'Content-Type': 'font/ttf'
       },
-      body: new Buffer(
-        'AAEAAAAKAIAAAwAgT1MvMgSEBCEAAAEoAAAATmNtYXAADABzAAABgAAAACxnbHlmCAE5AgAAAbQAAAAUaGVhZAPk4EQAAACsAAAANmhoZWEIAQQDAAAA5AAAACRobXR4BAAAAAAAAXgAAAAIbG9jYQAKAAAAAAGsAAAABm1heHAABAACAAABCAAAACBuYW1lACMIXgAAAcgAAAAgcG9zdAADAAAAAAHoAAAAIAABAAAAAQAAbEJJk18PPPUAAgQAAAAAANBme+sAAAAA0GkfZAAAAAAEAAQAAAAAAAACAAAAAAAAAAEAAAQAAAAAAAQAAAAAAAQAAAEAAAAAAAAAAAAAAAAAAAACAAEAAAACAAIAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAIAQAAAAAAAQAAAAAAAAAAAAEAAAAAAAAAQADAAEAAAAMAAQAIAAAAAQABAABAAAAQP//AAAAQP///8EAAQAAAAAAAAAAAAoAAAABAAAAAAQABAAAAQAAMQEEAAQAAAAAAgAeAAMAAQQJAAEAAgAAAAMAAQQJAAIAAgAAAEAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
-        'base64'
+      body: fs.readFileSync(
+        pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/OpenSans.ttf'
+        )
       )
-      // body: new Buffer('2345678', 'base64')
     }
   }
 ];
@@ -2771,9 +2773,9 @@ describe('transforms/subsetFonts', function() {
           expect(warnSpy, 'to have calls satisfying', function() {
             warnSpy({
               message: expect
-                .it('to contain', 'OpenSans.ttf is missing these characters')
-                .and('to contain', 'U+4E2D (中)')
-                .and('to contain', 'U+56FD (国)')
+                .it('to contain', 'Missing glyph fallback detected')
+                .and('to contain', '\\u{4e2d} (中)')
+                .and('to contain', '\\u{56fd} (国)')
             });
           });
         });
