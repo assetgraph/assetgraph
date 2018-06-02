@@ -2667,7 +2667,7 @@ describe('transforms/subsetFonts', function() {
               body: fs.readFileSync(
                 pathModule.resolve(
                   __dirname,
-                  '../../testdata/transforms/subsetFonts/openSans-400.woff'
+                  '../../testdata/transforms/subsetFonts/OpenSans-400.woff'
                 )
               )
             }
