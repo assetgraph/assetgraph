@@ -19,7 +19,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
 
     await assetGraph.inlineCssImagesWithLegacyFallback(
       { isInitial: true },
-      { sizeThreshold: 32768 * 3 / 4 }
+      { sizeThreshold: (32768 * 3) / 4 }
     );
 
     expect(assetGraph, 'to contain assets', 'Css', 7);
@@ -119,7 +119,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
       { isInitial: true },
       {
         minimumIeVersion: 9,
-        sizeThreshold: 32768 * 3 / 4
+        sizeThreshold: (32768 * 3) / 4
       }
     );
 
@@ -148,7 +148,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
 
     await assetGraph.inlineCssImagesWithLegacyFallback(
       { isInitial: true },
-      { sizeThreshold: 32768 * 3 / 4 }
+      { sizeThreshold: (32768 * 3) / 4 }
     );
 
     expect(assetGraph, 'to contain assets', 'Css', 3);
@@ -198,7 +198,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
     await assetGraph.populate();
     await assetGraph.inlineCssImagesWithLegacyFallback(
       { isInitial: true },
-      { sizeThreshold: 32768 * 3 / 4 }
+      { sizeThreshold: (32768 * 3) / 4 }
     );
 
     expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
