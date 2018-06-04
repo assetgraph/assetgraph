@@ -7,21 +7,19 @@
 
 AssetGraph is an extensible, <a href="http://nodejs.org/">node.js</a>-based
 framework for manipulating and optimizing web pages and web
-applications. It's the core of the third generation of the production
-builder tool we are using at One.com for some of our web apps.
+applications. The main core is a dependency graph model of your entire website, where all assets are treated as first class citizens. It can automatically dicsover assets based on your declarative code, reducing the configuration needs to a minimum.
 
 If you just want to get started with the basics, read [Peter Müller - Getting started with Assetgraph](http://mntr.dk/2014/getting-started-with-assetgraph/).
 
 If you are looking for a prepackaged build system take a look at <a
 href="https://github.com/assetgraph/assetgraph-builder">Assetgraph-builder</a>.
 
-Check out <a href="http://gofish.dk/assetgraph.pdf">the slides from a
-presentation of AssetGraph</a> held at <a
-href="http://www.meetup.com/The-Oresund-JavaScript-Meetup/">the
-Öresund JavaScript Meetup</a> on June 16th, 2011.
+## Tools built with AssetGraph
 
-The complete AssetGraph-based build system mentioned in the slides can
-be found <a href="https://github.com/assetgraph/assetgraph-builder">here</a>.
+- [assetgraph-builder](https://www.npmjs.com/package/assetgraph-builder) - A static web page build system that post-processes your website with extremely little configuration
+- [subfont](https://www.npmjs.com/package/subfont) - A tool that supercharges your webfont loading by automatically applying all best practice loading techniques and generating optimal font subsets
+- [hyperlink](https://www.npmjs.com/package/hyperlink) - A link checker tool that will ensure all your internal and external links are intact and up to date
+- [seespee](https://www.npmjs.com/package/seespee) - A Content-Security Policy generator. Point it at a webpage and it will tell you what policy you need as a minimum
 
 # Assets and relations
 
