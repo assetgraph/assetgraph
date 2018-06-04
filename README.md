@@ -20,6 +20,7 @@ href="https://github.com/assetgraph/assetgraph-builder">Assetgraph-builder</a>.
 - [subfont](https://www.npmjs.com/package/subfont) - A tool that supercharges your webfont loading by automatically applying all best practice loading techniques and generating optimal font subsets
 - [hyperlink](https://www.npmjs.com/package/hyperlink) - A link checker tool that will ensure all your internal and external links are intact and up to date
 - [seespee](https://www.npmjs.com/package/seespee) - A Content-Security Policy generator. Point it at a webpage and it will tell you what policy you need as a minimum
+- [trackingdog](https://github.com/papandreou/trackingdog) - cli for finding the original source location of a line+column in a generated file, utilizing the source map
 
 # Assets and relations
 
