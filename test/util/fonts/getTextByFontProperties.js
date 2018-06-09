@@ -4330,5 +4330,47 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         );
       });
     });
+
+    describe('combined with CSS animations', function() {
+      it('should pick up all values of font-style used in an animation', function() {
+        var htmlText = [
+          '<style>:root { --my-font-style: normal }</style>',
+          '<style>@keyframes foo { 50% { --my-font-style: oblique } 100% { --my-font-style: italic } }</style>',
+          '<style>h1 { font-style: var(--my-font-style); animation-name: foo; }</style>',
+          '<h1>bar</h1>'
+        ].join('\n');
+
+        return expect(
+          htmlText,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 700,
+                'font-style': 'normal'
+              }
+            },
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 700,
+                'font-style': 'oblique'
+              }
+            },
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 700,
+                'font-style': 'italic'
+              }
+            }
+          ]
+        );
+      });
+    });
   });
 });
