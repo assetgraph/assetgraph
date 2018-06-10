@@ -4424,6 +4424,54 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           ]
         );
       });
+
+      it.skip('should trace the intermediate values of font-weight', function() {
+        var htmlText = [
+          '<style>:root { --my-font-weight: 100 }</style>',
+          '<style>@keyframes foo { 100% { --my-font-weight: 400 } }</style>',
+          '<style>h1 { font-weight: var(--my-font-weight); animation-name: foo; }</style>',
+          '<h1>bar</h1>'
+        ].join('\n');
+
+        return expect(
+          htmlText,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 100,
+                'font-style': 'normal'
+              }
+            },
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 200,
+                'font-style': 'normal'
+              }
+            },
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 300,
+                'font-style': 'normal'
+              }
+            },
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 400,
+                'font-style': 'normal'
+              }
+            }
+          ]
+        );
+      });
     });
   });
 });
