@@ -4331,6 +4331,59 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       });
     });
 
+    describe('with circular references', function() {
+      it('should expand to the initial value when a custom property is defined in terms of itself', async function() {
+        await expect(
+          `
+            <style>
+              :root {
+                --my-font: var(--my-font);
+              }
+            </style>
+
+            <div>quux</div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'quux',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 400
+              }
+            }
+          ]
+        );
+      });
+
+      it('should expand to the initial value when there is a circular reference', async function() {
+        await expect(
+          `
+            <style>
+              :root {
+                --my-font: var(--my-other-font);
+                --my-other-font: var(--my-font);
+              }
+            </style>
+
+            <div>quux</div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'quux',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 400
+              }
+            }
+          ]
+        );
+      });
+    });
+
     describe('combined with CSS animations', function() {
       it('should pick up all values of font-style used in an animation', function() {
         var htmlText = [
