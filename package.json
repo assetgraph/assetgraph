@@ -85,7 +85,7 @@
     "prettier": "~1.13.4",
     "proxyquire": "^2.0.1",
     "requirejs": "^2.3.5",
-    "sinon": "^5.0.1",
+    "sinon": "^6.0.0",
     "style-loader": "^0.21.0",
     "svgo": "^1.0.3",
     "systemjs-asset-plugin": "^3.0.0",
