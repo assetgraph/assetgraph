@@ -4505,5 +4505,25 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ]
       );
     });
+
+    it('should support custom property expansion in the counter-increment property', function() {
+      var htmlText = [
+        '<html><head>',
+        '<style>:root { --my-increment: 10; }</style>',
+        '<style>@media screen { :root { --my-increment: 8; } }</style>',
+        '<style>html { counter-reset: section 0; }</style>',
+        '<style>div:before { content: counter(section, decimal); }</style>',
+        '<style>div { font-family: font1; counter-increment: section var(--my-increment); }</style>',
+        '</head><body>',
+        '<div></div>',
+        '<div></div>',
+        '</body></html>'
+      ].join('\n');
+
+      return expect(htmlText, 'to satisfy computed font properties', [
+        { text: '810' },
+        { text: '161820' }
+      ]);
+    });
   });
 });
