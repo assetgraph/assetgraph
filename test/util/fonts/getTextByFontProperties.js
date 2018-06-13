@@ -4473,5 +4473,37 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         );
       });
     });
+
+    it('should support custom property expansion in the content property', function() {
+      var htmlText = [
+        "<style>:root { --my-prop: 'the value'; }</style>",
+        "<style>@media projection { :root { --my-prop: 'the other value'; } }</style>",
+        '<style>div:after { content: var(--my-prop) }</style>',
+        '<div></div>'
+      ].join('\n');
+
+      return expect(
+        htmlText,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'the other value',
+            props: {
+              'font-family': undefined,
+              'font-weight': 400,
+              'font-style': 'normal'
+            }
+          },
+          {
+            text: 'the value',
+            props: {
+              'font-family': undefined,
+              'font-weight': 400,
+              'font-style': 'normal'
+            }
+          }
+        ]
+      );
+    });
   });
 });
