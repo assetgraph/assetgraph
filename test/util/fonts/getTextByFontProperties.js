@@ -4474,21 +4474,40 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       });
     });
 
-    it('should support custom property expansion in the font shorthand property', function() {
-      var htmlText = [
-        "<style>:root { --my-prop: 'foo'; }</style>",
-        '<style>div { font: var(--my-prop) }</style>',
-        '<div>bar</div>'
-      ].join('\n');
+    describe.skip('with custom properties in the font shorthand value', function() {
+      it('should support a simple font-family value', function() {
+        var htmlText = [
+          '<style>:root { --my-prop: foo; }</style>',
+          '<style>div { font: var(--my-prop) }</style>',
+          '<div>bar</div>'
+        ].join('\n');
 
-      return expect(htmlText, 'to satisfy computed font properties', [
-        {
-          text: 'bar',
-          props: {
-            'font-family': 'foo'
+        return expect(htmlText, 'to satisfy computed font properties', [
+          {
+            text: 'bar',
+            props: {
+              'font-family': 'foo'
+            }
           }
-        }
-      ]);
+        ]);
+      });
+
+      it('should a complex value', function() {
+        var htmlText = [
+          '<style>:root { --my-prop: ultra-expanded 12px foo; }</style>',
+          '<style>div { font: var(--my-prop) }</style>',
+          '<div>bar</div>'
+        ].join('\n');
+
+        return expect(htmlText, 'to satisfy computed font properties', [
+          {
+            text: 'bar',
+            props: {
+              'font-family': 'foo'
+            }
+          }
+        ]);
+      });
     });
 
     it('should support custom property expansion in the content property', function() {
