@@ -4474,11 +4474,11 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       });
     });
 
-    describe.skip('with custom properties in the font shorthand value', function() {
+    describe('with custom properties in the font shorthand value', function() {
       it('should support a simple font-family value', function() {
         var htmlText = [
           '<style>:root { --my-prop: foo; }</style>',
-          '<style>div { font: var(--my-prop) }</style>',
+          '<style>div { font: 12px var(--my-prop) }</style>',
           '<div>bar</div>'
         ].join('\n');
 

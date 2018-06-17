@@ -116,21 +116,6 @@ describe('util/fonts/getCssRulesByProperty', function() {
   });
 
   describe('shorthand font-property', function() {
-    it('should ignore invalid shorthands', function() {
-      var result = getRules(
-        ['font-family', 'font-size'],
-        'h1 { font: 15px; }',
-        []
-      );
-
-      expect(result, 'to exhaustively satisfy', {
-        counterStyles: [],
-        keyframes: [],
-        'font-family': [],
-        'font-size': []
-      });
-    });
-
     it('register the longhand value from a valid shorthand', function() {
       var result = getRules(
         ['font-family', 'font-size'],
@@ -146,8 +131,8 @@ describe('util/fonts/getCssRulesByProperty', function() {
             selector: 'h1',
             predicates: {},
             specificityArray: [0, 0, 0, 1],
-            prop: 'font-family',
-            value: 'serif',
+            prop: 'font',
+            value: '15px serif',
             important: false
           }
         ],
@@ -156,8 +141,8 @@ describe('util/fonts/getCssRulesByProperty', function() {
             selector: 'h1',
             predicates: {},
             specificityArray: [0, 0, 0, 1],
-            prop: 'font-size',
-            value: '15px',
+            prop: 'font',
+            value: '15px serif',
             important: false
           }
         ]
@@ -179,8 +164,8 @@ describe('util/fonts/getCssRulesByProperty', function() {
             selector: 'h1',
             predicates: {},
             specificityArray: [0, 0, 0, 1],
-            prop: 'font-family',
-            value: 'serif',
+            prop: 'font',
+            value: '15px serif',
             important: false
           }
         ],
@@ -189,8 +174,8 @@ describe('util/fonts/getCssRulesByProperty', function() {
             selector: 'h1',
             predicates: {},
             specificityArray: [0, 0, 0, 1],
-            prop: 'font-size',
-            value: '15px',
+            prop: 'font',
+            value: '15px serif',
             important: false
           }
         ],
@@ -199,8 +184,8 @@ describe('util/fonts/getCssRulesByProperty', function() {
             selector: 'h1',
             predicates: {},
             specificityArray: [0, 0, 0, 1],
-            prop: 'font-style',
-            value: 'normal',
+            prop: 'font',
+            value: '15px serif',
             important: false
           }
         ],
@@ -209,8 +194,8 @@ describe('util/fonts/getCssRulesByProperty', function() {
             selector: 'h1',
             predicates: {},
             specificityArray: [0, 0, 0, 1],
-            prop: 'font-weight',
-            value: 400,
+            prop: 'font',
+            value: '15px serif',
             important: false
           }
         ]
@@ -232,8 +217,8 @@ describe('util/fonts/getCssRulesByProperty', function() {
             selector: 'h1',
             predicates: {},
             specificityArray: [0, 0, 0, 1],
-            prop: 'font-family',
-            value: 'serif',
+            prop: 'font',
+            value: '15px serif',
             important: false
           }
         ],
@@ -250,8 +235,8 @@ describe('util/fonts/getCssRulesByProperty', function() {
             selector: 'h1',
             predicates: {},
             specificityArray: [0, 0, 0, 1],
-            prop: 'font-size',
-            value: '15px',
+            prop: 'font',
+            value: '15px serif',
             important: false
           },
           {

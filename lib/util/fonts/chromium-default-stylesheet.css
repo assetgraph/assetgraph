@@ -328,7 +328,7 @@ input, textarea, keygen, select, button, meter, progress {
 }
 input, textarea, keygen, select, button {
     margin: 0__qem;
-    font: -webkit-small-control;
+    /* font: -webkit-small-control; */
     text-rendering: auto; /* FIXME: Remove when tabs work with optimizeLegibility. */
     color: initial;
     letter-spacing: normal;
