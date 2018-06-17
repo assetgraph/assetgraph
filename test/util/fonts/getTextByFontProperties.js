@@ -4190,6 +4190,47 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       );
     });
 
+    it('should not break when expanding custom properties that lead to impossible predicate combinations', async function() {
+      await expect(
+        `
+          <style>
+            :root {
+              --my-font: bar;
+              font: normal 12px var(--my-font);
+            }
+
+            @media 3dglasses {
+              :root {
+                --my-font: foo;
+                font: bold 14px var(--my-font);
+              }
+            }
+          </style>
+
+          <div>baz</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 700
+            }
+          },
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 400
+            }
+          }
+        ]
+      );
+    });
+
     describe('with a default value', function() {
       it('should use the default value when the custom property is not defined', async function() {
         await expect(
