@@ -69,7 +69,7 @@
     "coveralls": "^3.0.0",
     "css-loader": "^0.28.4",
     "docdash": "^0.4.0",
-    "eslint": "^4.3.0",
+    "eslint": "^5.0.0",
     "eslint-config-pretty-standard": "^1.2.0",
     "eslint-plugin-prettier": "^2.6.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
