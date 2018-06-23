@@ -590,12 +590,10 @@ describe('transforms/bundleRequireJs', function() {
     await assetGraph.populate();
 
     expect(
-      _
-        .map(
-          assetGraph.findAssets({ type: 'JavaScript', isInline: false }),
-          'url'
-        )
-        .sort(),
+      _.map(
+        assetGraph.findAssets({ type: 'JavaScript', isInline: false }),
+        'url'
+      ).sort(),
       'to equal',
       [assetGraph.root + 'require.js']
     );
