@@ -739,6 +739,56 @@ describe('transforms/subsetFonts', function() {
       );
     });
 
+    it('should add the __subset font name to a custom property that contributes to the font-family property', async function() {
+      httpception(defaultGoogleFontSubsetMock);
+
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/font-shorthand-with-custom-property/'
+        )
+      });
+      assetGraph.on('warn', warn =>
+        expect(warn, 'to satisfy', /Cannot find module/)
+      );
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate({
+        followRelations: {
+          crossorigin: false
+        }
+      });
+
+      await assetGraph.queue(
+        subsetFontsWithoutFontTools({
+          inlineSubsets: false
+        })
+      );
+
+      expect(
+        assetGraph.findAssets({ fileName: 'index.html' })[0].text,
+        'to contain',
+        "--unrelated-property: 'Open Sans', Helvetica;"
+      )
+        .and(
+          'to contain',
+          "--the-font: 'Open Sans__subset', 'Open Sans', Helvetica;"
+        )
+        .and(
+          'to contain',
+          "--the-font-family: 'Open Sans__subset', 'Open Sans', Helvetica;"
+        )
+        .and('to contain', 'font: 12px/18px var(--the-font)')
+        .and('to contain', '--fallback-font: sans-serif')
+        .and(
+          'to contain',
+          "font: 12px 'Open Sans__subset', 'Open Sans', var(--fallback-font);"
+        )
+        .and(
+          'to contain',
+          "font-family: 'Open Sans__subset', 'Open Sans', var(--fallback-font);"
+        );
+    });
+
     it('should not break if there is an existing reference to a Google Web Font CSS inside a script', async function() {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(

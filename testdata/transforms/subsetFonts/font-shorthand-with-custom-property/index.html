@@ -1,0 +1,24 @@
+<style>
+    @import 'https://fonts.googleapis.com/css?family=Open+Sans';
+
+    :root {
+      --unrelated-property: 'Open Sans', Helvetica;
+      --the-font: 'Open Sans', Helvetica;
+      --the-font-family: 'Open Sans', Helvetica;
+      --my-font: var(--the-font);
+      --fallback-font: sans-serif;
+    }
+
+    body {
+      font: 12px 'Open Sans', var(--fallback-font);
+      font-family: 'Open Sans', var(--fallback-font);
+    }
+
+    h1 {
+      font: 12px/18px var(--the-font);
+      font-family: var(--the-font-family);
+    }
+</style>
+<body>
+  <h1>Hello</h1>
+</body>
