@@ -40,7 +40,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           text: 'div',
           props: {
             'font-family': undefined,
-            'font-weight': 400,
+            'font-weight': 'normal',
             'font-style': 'normal'
           }
         }
@@ -59,7 +59,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           text: 'div',
           props: {
             'font-family': undefined,
-            'font-weight': 700,
+            'font-weight': 'bold',
             'font-style': 'normal'
           }
         }
@@ -81,7 +81,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           text: 'div',
           props: {
             'font-family': undefined,
-            'font-weight': 700,
+            'font-weight': 'bold',
             'font-style': 'normal'
           }
         }
@@ -102,7 +102,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           text: 'div',
           props: {
             'font-family': undefined,
-            'font-weight': 400,
+            'font-weight': 'normal',
             'font-style': 'normal'
           }
         },
@@ -110,7 +110,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           text: 'strong',
           props: {
             'font-family': undefined,
-            'font-weight': '400+bolder',
+            'font-weight': 'normal+bolder',
             'font-style': 'normal'
           }
         },
@@ -118,7 +118,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           text: 'strong',
           props: {
             'font-family': undefined,
-            'font-weight': 700,
+            'font-weight': 'bold',
             'font-style': 'normal'
           }
         },
@@ -126,7 +126,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           text: 'em',
           props: {
             'font-family': undefined,
-            'font-weight': 400,
+            'font-weight': 'normal',
             'font-style': 'italic'
           }
         }
@@ -134,7 +134,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     );
   });
 
-  it('should unquote single quoted font-family', function() {
+  it('should trace a single quoted font-family', function() {
     var htmlText = [
       "<style>body { font-family: 'font 1'; }</style>",
       'text'
@@ -147,8 +147,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         {
           text: 'text',
           props: {
-            'font-family': 'font 1',
-            'font-weight': 400,
+            'font-family': "'font 1'",
+            'font-weight': 'normal',
             'font-style': 'normal'
           }
         }
@@ -156,7 +156,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     );
   });
 
-  it('should unquote double quoted font-family', function() {
+  it('should trace a double quoted font-family', function() {
     var htmlText = [
       '<style>body { font-family: "font 1"; }</style>',
       'text'
@@ -169,8 +169,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         {
           text: 'text',
           props: {
-            'font-family': 'font 1',
-            'font-weight': 400,
+            'font-family': '"font 1"',
+            'font-weight': 'normal',
             'font-style': 'normal'
           }
         }
@@ -178,7 +178,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     );
   });
 
-  it('should return font-weight as a number', function() {
+  it('should return font-weight as a string', function() {
     var htmlText = ['<style>body { font-weight: 500; }</style>', 'text'].join(
       '\n'
     );
@@ -191,7 +191,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           text: 'text',
           props: {
             'font-family': undefined,
-            'font-weight': 500,
+            'font-weight': '500',
             'font-style': 'normal'
           }
         }
@@ -214,7 +214,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'h1',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -236,7 +236,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'div',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -258,7 +258,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'div',
             props: {
               'font-family': undefined,
-              'font-weight': 300,
+              'font-weight': 'light',
               'font-style': 'normal'
             }
           }
@@ -280,7 +280,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'div',
             props: {
               'font-family': undefined,
-              'font-weight': 300,
+              'font-weight': 'light',
               'font-style': 'normal'
             }
           }
@@ -302,7 +302,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'div',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -324,7 +324,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'div',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -346,7 +346,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'div',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -368,7 +368,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'div',
             props: {
               'font-family': undefined,
-              'font-weight': 300,
+              'font-weight': 'light',
               'font-style': 'normal'
             }
           }
@@ -392,7 +392,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': 'font1',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -400,7 +400,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': 'font1',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -421,7 +421,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         {
           props: {
             'font-family': undefined,
-            'font-weight': 400,
+            'font-weight': 'normal',
             'font-style': 'normal'
           },
           text: 'button'
@@ -429,7 +429,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         {
           props: {
             'font-family': undefined,
-            'font-weight': 400,
+            'font-weight': 'normal',
             'font-style': 'normal'
           },
           text: 'option'
@@ -437,7 +437,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         {
           props: {
             'font-family': undefined,
-            'font-weight': 400,
+            'font-weight': 'normal',
             'font-style': 'normal'
           },
           text: 'textarea'
@@ -445,7 +445,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         {
           props: {
             'font-family': undefined,
-            'font-weight': 400,
+            'font-weight': 'normal',
             'font-style': 'normal'
           },
           text: 'input'
@@ -540,7 +540,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'span',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -564,7 +564,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'span',
             props: {
               'font-family': undefined,
-              'font-weight': '400+lighter',
+              'font-weight': 'normal+lighter',
               'font-style': 'normal'
             }
           }
@@ -666,7 +666,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'span',
             props: {
               'font-family': undefined,
-              'font-weight': '400+bolder',
+              'font-weight': 'normal+bolder',
               'font-style': 'normal'
             }
           }
@@ -945,7 +945,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           text: 'bar',
           props: {
             'font-family': 'font2',
-            'font-weight': 700,
+            'font-weight': 'bold',
             'font-style': 'normal'
           }
         },
@@ -953,7 +953,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           text: 'foo',
           props: {
             'font-family': 'font1',
-            'font-weight': 700,
+            'font-weight': 'bold',
             'font-style': 'normal'
           }
         }
@@ -976,7 +976,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'h1',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -984,7 +984,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'after',
             props: {
               'font-family': 'font1',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -1035,7 +1035,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '<',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1058,7 +1058,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '>]',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1082,7 +1082,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '(',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1090,7 +1090,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '<',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1109,7 +1109,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '«‹‘\'"',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1117,7 +1117,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '»›’\'"',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1141,7 +1141,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'h1',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -1149,7 +1149,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'after',
             props: {
               'font-family': 'font2',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -1172,7 +1172,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'h1',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -1180,7 +1180,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'after',
             props: {
               'font-family': 'font1',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -1203,7 +1203,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'h1',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -1211,7 +1211,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'after',
             props: {
               'font-family': 'font1',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -1236,7 +1236,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'p',
             props: {
               'font-family': undefined,
-              'font-weight': 200,
+              'font-weight': '200',
               'font-style': 'normal'
             }
           },
@@ -1244,7 +1244,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'after',
             props: {
               'font-family': 'font1',
-              'font-weight': 200,
+              'font-weight': '200',
               'font-style': 'normal'
             }
           },
@@ -1252,7 +1252,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'article',
             props: {
               'font-family': undefined,
-              'font-weight': 600,
+              'font-weight': '600',
               'font-style': 'normal'
             }
           },
@@ -1260,7 +1260,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'after',
             props: {
               'font-family': 'font1',
-              'font-weight': 600,
+              'font-weight': '600',
               'font-style': 'normal'
             }
           }
@@ -1282,7 +1282,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': 'font1',
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -1308,7 +1308,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -1316,7 +1316,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'I',
             props: {
               'font-family': 'font1',
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -1343,7 +1343,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '1.',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1369,7 +1369,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'I.',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1396,7 +1396,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'Ⓐ.',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1420,7 +1420,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '0.',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1445,7 +1445,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '0.',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1470,7 +1470,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'Ⓐ',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1478,7 +1478,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1501,7 +1501,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'a',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1509,7 +1509,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'b',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1517,7 +1517,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'c',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1525,7 +1525,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'd',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1533,7 +1533,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '"',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1541,7 +1541,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: "'",
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1549,7 +1549,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '7',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1572,7 +1572,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'pⒶsq',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1595,7 +1595,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'Ⓐ',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1603,7 +1603,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1611,7 +1611,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'II',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1635,7 +1635,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'Ⓐ',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1643,7 +1643,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'Ⓓ',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1670,7 +1670,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'Ⓐ',
               props: {
                 'font-family': 'font2',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1678,7 +1678,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'Ⓓ',
               props: {
                 'font-family': 'font2',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -1686,7 +1686,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'Ⓐ',
               props: {
                 'font-family': 'font1',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -1717,7 +1717,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 text: 'Ⓓ',
                 props: {
                   'font-family': 'font1',
-                  'font-weight': 400,
+                  'font-weight': 'normal',
                   'font-style': 'normal'
                 }
               },
@@ -1725,7 +1725,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 text: 'Ⓕ',
                 props: {
                   'font-family': 'font1',
-                  'font-weight': 400,
+                  'font-weight': 'normal',
                   'font-style': 'normal'
                 }
               },
@@ -1733,7 +1733,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 text: 'VIII',
                 props: {
                   'font-family': 'font1',
-                  'font-weight': 400,
+                  'font-weight': 'normal',
                   'font-style': 'normal'
                 }
               }
@@ -1757,7 +1757,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bazbaryadda',
             props: {
               'font-family': 'font1',
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -1783,23 +1783,23 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'text',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
           {
             text: 'foo',
             props: {
-              'font-family': 'myClass',
-              'font-weight': 900,
+              'font-family': '"myClass"',
+              'font-weight': '900',
               'font-style': 'normal'
             }
           },
           {
             text: 'foo',
             props: {
-              'font-family': 'myClass',
-              'font-weight': 400,
+              'font-family': '"myClass"',
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -1807,7 +1807,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -1830,7 +1830,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'h1',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -1838,7 +1838,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': 'font1',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -1846,7 +1846,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': 'font1',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -1869,7 +1869,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'before',
             props: {
               'font-family': 'font2',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -1877,7 +1877,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'h1',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -1885,7 +1885,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'after',
             props: {
               'font-family': 'font1',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -1901,8 +1901,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'f', props: { 'font-weight': 700 } },
-          { text: 'oo', props: { 'font-weight': 400 } }
+          { text: 'f', props: { 'font-weight': '700' } },
+          { text: 'oo', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -1913,8 +1913,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'f', props: { 'font-weight': 700 } },
-          { text: 'oo', props: { 'font-weight': 400 } }
+          { text: 'f', props: { 'font-weight': '700' } },
+          { text: 'oo', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -1925,7 +1925,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'foo', props: { 'font-weight': 400 } }
+          { text: 'foo', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -1936,8 +1936,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'foo', props: { 'font-weight': 400 } },
-          { text: 'bar', props: { 'font-weight': 400 } }
+          { text: 'foo', props: { 'font-weight': 'normal' } },
+          { text: 'bar', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -1948,8 +1948,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: '"f', props: { 'font-weight': 700 } },
-          { text: 'oo', props: { 'font-weight': 400 } }
+          { text: '"f', props: { 'font-weight': '700' } },
+          { text: 'oo', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -1961,8 +1961,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: '"a', props: { 'font-weight': 700 } },
-          { text: 'foo', props: { 'font-weight': 400 } }
+          { text: '"a', props: { 'font-weight': '700' } },
+          { text: 'foo', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -1974,8 +1974,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'a', props: { 'font-weight': 700, 'font-style': 'italic' } },
-          { text: 'foo', props: { 'font-weight': 400, 'font-style': 'normal' } }
+          {
+            text: 'a',
+            props: { 'font-weight': '700', 'font-style': 'italic' }
+          },
+          {
+            text: 'foo',
+            props: { 'font-weight': 'normal', 'font-style': 'normal' }
+          }
         ]);
       });
 
@@ -1987,7 +1993,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: '"a', props: { 'font-weight': 700 } }
+          { text: '"a', props: { 'font-weight': '700' } }
         ]);
       });
 
@@ -2000,8 +2006,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: '"', props: { 'font-weight': 700 } },
-          { text: 'foo', props: { 'font-weight': 400 } }
+          { text: '"', props: { 'font-weight': '700' } },
+          { text: 'foo', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -2013,9 +2019,9 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'b', props: { 'font-weight': 700 } },
-          { text: 'ar', props: { 'font-weight': 200 } },
-          { text: 'foo', props: { 'font-weight': 400 } }
+          { text: 'b', props: { 'font-weight': '700' } },
+          { text: 'ar', props: { 'font-weight': '200' } },
+          { text: 'foo', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -2027,8 +2033,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'f', props: { 'font-weight': 700 } },
-          { text: 'oo', props: { 'font-weight': 200 } }
+          { text: 'f', props: { 'font-weight': '700' } },
+          { text: 'oo', props: { 'font-weight': '200' } }
         ]);
       });
 
@@ -2040,10 +2046,10 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'a', props: { 'font-weight': 700 } },
-          { text: 'f', props: { 'font-weight': 700 } },
-          { text: 'bc', props: { 'font-weight': 400 } },
-          { text: 'oo', props: { 'font-weight': 400 } }
+          { text: 'a', props: { 'font-weight': '700' } },
+          { text: 'f', props: { 'font-weight': '700' } },
+          { text: 'bc', props: { 'font-weight': 'normal' } },
+          { text: 'oo', props: { 'font-weight': 'normal' } }
         ]);
       });
     });
@@ -2056,8 +2062,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'foo bar quux', props: { 'font-weight': 700 } },
-          { text: 'foo bar quux', props: { 'font-weight': 400 } }
+          { text: 'foo bar quux', props: { 'font-weight': '700' } },
+          { text: 'foo bar quux', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -2069,10 +2075,22 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'f', props: { 'font-weight': 700, 'font-style': 'italic' } },
-          { text: 'f', props: { 'font-weight': 700, 'font-style': 'normal' } },
-          { text: 'oo', props: { 'font-weight': 200, 'font-style': 'italic' } },
-          { text: 'oo', props: { 'font-weight': 400, 'font-style': 'normal' } }
+          {
+            text: 'f',
+            props: { 'font-weight': '700', 'font-style': 'italic' }
+          },
+          {
+            text: 'f',
+            props: { 'font-weight': '700', 'font-style': 'normal' }
+          },
+          {
+            text: 'oo',
+            props: { 'font-weight': '200', 'font-style': 'italic' }
+          },
+          {
+            text: 'oo',
+            props: { 'font-weight': 'normal', 'font-style': 'normal' }
+          }
         ]);
       });
 
@@ -2083,8 +2101,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'foo bar', props: { 'font-weight': 700 } },
-          { text: 'foo bar\nquux', props: { 'font-weight': 400 } }
+          { text: 'foo bar', props: { 'font-weight': '700' } },
+          { text: 'foo bar\nquux', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -2095,8 +2113,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'foo bar', props: { 'font-weight': 700 } },
-          { text: 'foo bar\nquux', props: { 'font-weight': 400 } }
+          { text: 'foo bar', props: { 'font-weight': '700' } },
+          { text: 'foo bar\nquux', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -2107,8 +2125,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'foo bar', props: { 'font-weight': 700 } },
-          { text: 'foo bar\nquux', props: { 'font-weight': 400 } }
+          { text: 'foo bar', props: { 'font-weight': '700' } },
+          { text: 'foo bar\nquux', props: { 'font-weight': 'normal' } }
         ]);
       });
 
@@ -2122,19 +2140,19 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         return expect(htmlText, 'to satisfy computed font properties', [
           {
             text: 'foo bar',
-            props: { 'font-weight': 700, 'font-style': 'italic' }
+            props: { 'font-weight': '700', 'font-style': 'italic' }
           },
           {
             text: 'foo bar quux',
-            props: { 'font-weight': 700, 'font-style': 'normal' }
+            props: { 'font-weight': '700', 'font-style': 'normal' }
           },
           {
             text: 'foo bar\nquux',
-            props: { 'font-weight': 400, 'font-style': 'italic' }
+            props: { 'font-weight': 'normal', 'font-style': 'italic' }
           },
           {
             text: 'foo bar quux',
-            props: { 'font-weight': 400, 'font-style': 'normal' }
+            props: { 'font-weight': 'normal', 'font-style': 'normal' }
           }
         ]);
       });
@@ -2148,12 +2166,12 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ].join('\n');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'foo', props: { 'font-weight': 700 } },
-          { text: 'bar', props: { 'font-weight': 700 } },
-          { text: 'quux', props: { 'font-weight': 700 } },
-          { text: 'foo', props: { 'font-weight': 400 } },
-          { text: 'bar', props: { 'font-weight': 400 } },
-          { text: 'quux', props: { 'font-weight': 400 } }
+          { text: 'foo', props: { 'font-weight': '700' } },
+          { text: 'bar', props: { 'font-weight': '700' } },
+          { text: 'quux', props: { 'font-weight': '700' } },
+          { text: 'foo', props: { 'font-weight': 'normal' } },
+          { text: 'bar', props: { 'font-weight': 'normal' } },
+          { text: 'quux', props: { 'font-weight': 'normal' } }
         ]);
       });
     });
@@ -2198,7 +2216,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: '1.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2206,7 +2224,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2228,7 +2246,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'I.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2236,7 +2254,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2258,7 +2276,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'I.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2266,7 +2284,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2288,7 +2306,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'yeah',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2296,7 +2314,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2318,7 +2336,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'I.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2326,7 +2344,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2348,7 +2366,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'I.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2371,7 +2389,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'I.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': '400',
               'font-style': 'normal'
             }
           },
@@ -2379,7 +2397,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: '1.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': '400',
               'font-style': 'normal'
             }
           },
@@ -2387,7 +2405,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'Hello',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': '400',
               'font-style': 'normal'
             }
           }
@@ -2410,7 +2428,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: '1.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2418,7 +2436,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: '2.',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': '700',
               'font-style': 'normal'
             }
           },
@@ -2426,7 +2444,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: '2.3.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2434,7 +2452,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: '3.4.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2458,7 +2476,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': 'font1',
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2466,7 +2484,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2474,7 +2492,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2496,7 +2514,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': 'font1',
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -2504,7 +2522,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2526,7 +2544,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': 'font1',
-              'font-weight': 500,
+              'font-weight': '500',
               'font-style': 'normal'
             }
           },
@@ -2534,7 +2552,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': 'font1',
-              'font-weight': 400,
+              'font-weight': '400',
               'font-style': 'normal'
             }
           }
@@ -2556,7 +2574,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': 'font1',
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2564,7 +2582,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2572,7 +2590,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': 'font1',
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2580,7 +2598,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2604,7 +2622,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': 'font1',
-              'font-weight': 500,
+              'font-weight': '500',
               'font-style': 'normal'
             }
           },
@@ -2612,7 +2630,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': 'font1',
-              'font-weight': 400,
+              'font-weight': '400',
               'font-style': 'normal'
             }
           }
@@ -2635,7 +2653,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': 'font2',
-              'font-weight': 800,
+              'font-weight': '800',
               'font-style': 'normal'
             }
           },
@@ -2643,7 +2661,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': 'font1',
-              'font-weight': 400,
+              'font-weight': '400',
               'font-style': 'normal'
             }
           }
@@ -2666,7 +2684,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-style': 'normal',
-              'font-weight': 800,
+              'font-weight': '800',
               'font-family': 'font2'
             }
           },
@@ -2674,7 +2692,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-style': 'normal',
-              'font-weight': 500,
+              'font-weight': '500',
               'font-family': 'font2'
             }
           },
@@ -2682,7 +2700,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-style': 'normal',
-              'font-weight': 400,
+              'font-weight': '400',
               'font-family': 'font1'
             }
           }
@@ -2705,7 +2723,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-style': 'normal',
-              'font-weight': 800,
+              'font-weight': '800',
               'font-family': 'font2'
             }
           },
@@ -2713,7 +2731,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-style': 'normal',
-              'font-weight': 500,
+              'font-weight': '500',
               'font-family': 'font2'
             }
           },
@@ -2721,7 +2739,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-style': 'normal',
-              'font-weight': 400,
+              'font-weight': '400',
               'font-family': 'font1'
             }
           }
@@ -2748,7 +2766,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 500,
+              'font-weight': '500',
               'font-style': 'normal'
             }
           },
@@ -2756,7 +2774,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 600,
+              'font-weight': '600',
               'font-style': 'normal'
             }
           },
@@ -2764,7 +2782,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': '700',
               'font-style': 'normal'
             }
           }
@@ -2787,8 +2805,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           {
             text: 'foo',
             props: {
-              'font-family': 'famfam',
-              'font-weight': 700,
+              'font-family': '"famfam"',
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -2809,8 +2827,8 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           {
             text: 'foo',
             props: {
-              'font-family': 'famfam',
-              'font-weight': 400,
+              'font-family': '"famfam"',
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2835,7 +2853,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 100,
+              'font-weight': '100',
               'font-style': 'normal'
             }
           },
@@ -2843,7 +2861,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 200,
+              'font-weight': '200',
               'font-style': 'normal'
             }
           },
@@ -2851,7 +2869,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 300,
+              'font-weight': '300',
               'font-style': 'normal'
             }
           },
@@ -2859,7 +2877,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': '400',
               'font-style': 'normal'
             }
           }
@@ -2882,7 +2900,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -2890,7 +2908,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'oblique'
             }
           },
@@ -2898,7 +2916,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'italic'
             }
           }
@@ -2921,7 +2939,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'quux',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2929,7 +2947,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: '1.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2937,7 +2955,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'I.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -2945,7 +2963,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -2968,7 +2986,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 100,
+              'font-weight': '100',
               'font-style': 'normal'
             }
           },
@@ -2976,7 +2994,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 200,
+              'font-weight': '200',
               'font-style': 'normal'
             }
           },
@@ -2984,7 +3002,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 300,
+              'font-weight': '300',
               'font-style': 'normal'
             }
           },
@@ -2992,7 +3010,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': '400',
               'font-style': 'normal'
             }
           }
@@ -3016,7 +3034,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -3024,7 +3042,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -3048,7 +3066,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': '400',
               'font-style': 'normal'
             }
           },
@@ -3056,7 +3074,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 100,
+              'font-weight': '100',
               'font-style': 'normal'
             }
           },
@@ -3064,7 +3082,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 200,
+              'font-weight': '200',
               'font-style': 'normal'
             }
           },
@@ -3072,7 +3090,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 300,
+              'font-weight': '300',
               'font-style': 'normal'
             }
           },
@@ -3080,7 +3098,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 500,
+              'font-weight': '500',
               'font-style': 'normal'
             }
           },
@@ -3088,7 +3106,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 600,
+              'font-weight': '600',
               'font-style': 'normal'
             }
           },
@@ -3096,7 +3114,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': '700',
               'font-style': 'normal'
             }
           }
@@ -3122,7 +3140,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             },
@@ -3130,7 +3148,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': '400',
                 'font-style': 'normal'
               }
             },
@@ -3138,7 +3156,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 500,
+                'font-weight': '500',
                 'font-style': 'normal'
               }
             },
@@ -3146,7 +3164,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 600,
+                'font-weight': '600',
                 'font-style': 'normal'
               }
             }
@@ -3171,7 +3189,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             },
@@ -3179,7 +3197,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': '400',
                 'font-style': 'normal'
               }
             },
@@ -3187,7 +3205,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 500,
+                'font-weight': '500',
                 'font-style': 'normal'
               }
             },
@@ -3195,7 +3213,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 600,
+                'font-weight': '600',
                 'font-style': 'normal'
               }
             }
@@ -3218,7 +3236,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             },
@@ -3226,7 +3244,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': '400',
                 'font-style': 'normal'
               }
             },
@@ -3234,7 +3252,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 500,
+                'font-weight': '500',
                 'font-style': 'normal'
               }
             },
@@ -3242,7 +3260,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 600,
+                'font-weight': '600',
                 'font-style': 'normal'
               }
             }
@@ -3265,7 +3283,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             },
@@ -3273,7 +3291,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'bar',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': '400',
                 'font-style': 'normal'
               }
             }
@@ -3303,7 +3321,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             }
@@ -3326,7 +3344,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -3352,7 +3370,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             }
@@ -3378,7 +3396,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '1.',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -3386,7 +3404,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'I.II.',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -3410,7 +3428,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             },
@@ -3418,7 +3436,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -3445,7 +3463,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'italic'
               }
             },
@@ -3453,7 +3471,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -3480,7 +3498,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'italic'
               }
             },
@@ -3488,7 +3506,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'italic'
               }
             },
@@ -3496,7 +3514,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             },
@@ -3504,7 +3522,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -3528,7 +3546,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             }
@@ -3549,7 +3567,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -3575,7 +3593,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             }
@@ -3601,7 +3619,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: '1.',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             },
@@ -3609,7 +3627,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'I.II.',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -3631,7 +3649,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'normal'
               }
             },
@@ -3639,7 +3657,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -3662,7 +3680,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 700,
+                'font-weight': '700',
                 'font-style': 'italic'
               }
             },
@@ -3670,7 +3688,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'foo',
               props: {
                 'font-family': undefined,
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal'
               }
             }
@@ -3694,7 +3712,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'italic'
             }
           },
@@ -3702,7 +3720,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': '700',
               'font-style': 'normal'
             }
           }
@@ -3726,7 +3744,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': '700',
               'font-style': 'normal'
             }
           }
@@ -3745,7 +3763,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -3771,7 +3789,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': '700',
               'font-style': 'normal'
             }
           }
@@ -3797,7 +3815,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: '1.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           },
@@ -3805,7 +3823,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'I.II.',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -3827,7 +3845,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': '700',
               'font-style': 'normal'
             }
           },
@@ -3835,7 +3853,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -3858,7 +3876,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': '700',
               'font-style': 'italic'
             }
           },
@@ -3866,7 +3884,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 400,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }
@@ -3895,7 +3913,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': '700+bolder',
+              'font-weight': 'bold+bolder',
               'font-style': 'normal'
             }
           },
@@ -3903,7 +3921,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           },
@@ -3911,7 +3929,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'foo',
             props: {
               'font-family': undefined,
-              'font-weight': 700,
+              'font-weight': 'bold',
               'font-style': 'normal'
             }
           }
@@ -3934,10 +3952,673 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           props: {
             'font-family': undefined,
             'font-style': 'normal',
-            'font-weight': 700
+            'font-weight': 'bold'
           }
         }
       ]
     );
+  });
+
+  describe('with CSS custom properties', function() {
+    it('should pick up variable values defined for :root', async function() {
+      await expect(
+        `
+          <style>
+            :root {
+              --my-font: foo;
+            }
+            div {
+              font-family: var(--my-font);
+              color: var(--second-color);
+            }
+          </style>
+
+          <div>bar</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'bar',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
+    it('should follow the cascade when a property is defined multiple times, most specific last', async function() {
+      await expect(
+        `
+          <style>
+            :root {
+              --my-font: foo;
+            }
+
+            #container {
+              --my-font: bar;
+            }
+
+            div {
+              font-family: var(--my-font);
+            }
+          </style>
+
+          <div>
+            quux
+            <div id="container">baz</div>
+            blah
+          </div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          },
+          {
+            text: 'quuxblah',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
+    it('should follow the cascade when a property is defined multiple times, most specific first', async function() {
+      await expect(
+        `
+          <style>
+            #container {
+              --my-font: bar;
+            }
+
+            :root {
+              --my-font: foo;
+            }
+
+            div {
+              font-family: var(--my-font);
+            }
+          </style>
+
+          <div>
+            quux
+            <div id="container">baz</div>
+            blah
+          </div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          },
+          {
+            text: 'quuxblah',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
+    it('should support usage of custom properties in the definition of other custom properties', async function() {
+      await expect(
+        `
+          <style>
+            :root {
+              --my-font: foo;
+            }
+
+            html {
+              --the-actual-font: var(--my-font);
+            }
+
+            div {
+              font-family: var(--the-actual-font);
+            }
+          </style>
+
+          <div>bar</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'bar',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
+    it('should trace both variants when a custom property is defined differently in @media blocks', async function() {
+      await expect(
+        `
+          <style>
+            @media 3dglasses {
+              :root {
+                --my-font: foo;
+              }
+            }
+            @media projection {
+              :root {
+                --my-font: bar;
+              }
+            }
+
+            div {
+              font-family: var(--my-font);
+            }
+          </style>
+
+          <div>quux</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'quux',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          },
+          {
+            text: 'quux',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          },
+          {
+            text: 'quux',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
+    it('should trace all variants when a custom property my multiple hypothetical values is used to define another one', async function() {
+      await expect(
+        `
+          <style>
+            :root {
+              --my-font: bar;
+            }
+
+            @media 3dglasses {
+              :root {
+                --my-font: foo;
+              }
+            }
+
+            div {
+              --the-actual-font: var(--my-font);
+              font-family: var(--the-actual-font);
+            }
+          </style>
+
+          <div>baz</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          },
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
+    it('should not break when expanding custom properties that lead to impossible predicate combinations', async function() {
+      await expect(
+        `
+          <style>
+            :root {
+              --my-font: bar;
+              font: normal 12px var(--my-font);
+            }
+
+            @media 3dglasses {
+              :root {
+                --my-font: foo;
+                font: bold 14px var(--my-font);
+              }
+            }
+          </style>
+
+          <div>baz</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'bold'
+            }
+          },
+          {
+            text: 'baz',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
+    describe('with a default value', function() {
+      it('should use the default value when the custom property is not defined', async function() {
+        await expect(
+          `
+            <style>
+              div {
+                font-family: var(--my-font, 'foo');
+              }
+            </style>
+
+            <div>quux</div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'quux',
+              props: {
+                'font-family': "'foo'",
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
+            }
+          ]
+        );
+      });
+
+      it('should ignore the default value when the custom property is defined', async function() {
+        await expect(
+          `
+            <style>
+              :root {
+                --my-font: 'bar';
+              }
+
+              div {
+                font-family: var(--my-font, 'foo');
+              }
+            </style>
+
+            <div>quux</div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'quux',
+              props: {
+                'font-family': "'bar'",
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
+            }
+          ]
+        );
+      });
+    });
+
+    it('should fall back to the initial value when a referenced custom property is not defined and there is no default value', async function() {
+      await expect(
+        `
+          <style>
+            div {
+              font-family: var(--my-font);
+            }
+          </style>
+
+          <div>quux</div>
+        `,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'quux',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
+    describe('with custom property look-alikes inside quoted strings', function() {
+      it('should leave the content property alone', async function() {
+        await expect(
+          `
+            <style>
+              :root {
+                --my-font: 'bar';
+              }
+
+              div::after {
+                content: 'var(--my-font)';
+              }
+            </style>
+
+            <div></div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'var(--my-font)',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
+            }
+          ]
+        );
+      });
+
+      it('should leave the font-family property alone', async function() {
+        await expect(
+          `
+            <style>
+              :root {
+                --my-font: 'bar';
+              }
+
+              div {
+                font-family: 'var(--my-font)';
+              }
+            </style>
+
+            <div>quux</div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'quux',
+              props: {
+                'font-family': "'var(--my-font)'",
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
+            }
+          ]
+        );
+      });
+    });
+
+    describe('with circular references', function() {
+      it('should expand to the initial value when a custom property is defined in terms of itself', async function() {
+        await expect(
+          `
+            <style>
+              :root {
+                --my-font: var(--my-font);
+              }
+            </style>
+
+            <div>quux</div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'quux',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
+            }
+          ]
+        );
+      });
+
+      it('should expand to the initial value when there is a circular reference', async function() {
+        await expect(
+          `
+            <style>
+              :root {
+                --my-font: var(--my-other-font);
+                --my-other-font: var(--my-font);
+              }
+            </style>
+
+            <div>quux</div>
+          `,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'quux',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
+            }
+          ]
+        );
+      });
+    });
+
+    describe('combined with CSS animations', function() {
+      it('should pick up all values of font-style used in an animation', function() {
+        var htmlText = [
+          '<style>:root { --my-font-style: normal }</style>',
+          '<style>@keyframes foo { 50% { --my-font-style: oblique } 100% { --my-font-style: italic } }</style>',
+          '<style>h1 { font-style: var(--my-font-style); animation-name: foo; }</style>',
+          '<h1>bar</h1>'
+        ].join('\n');
+
+        return expect(
+          htmlText,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 'bold',
+                'font-style': 'normal'
+              }
+            },
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 'bold',
+                'font-style': 'oblique'
+              }
+            },
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 'bold',
+                'font-style': 'italic'
+              }
+            }
+          ]
+        );
+      });
+
+      it.skip('should trace the intermediate values of font-weight', function() {
+        var htmlText = [
+          '<style>:root { --my-font-weight: 100 }</style>',
+          '<style>@keyframes foo { 100% { --my-font-weight: 400 } }</style>',
+          '<style>h1 { font-weight: var(--my-font-weight); animation-name: foo; }</style>',
+          '<h1>bar</h1>'
+        ].join('\n');
+
+        return expect(
+          htmlText,
+          'to exhaustively satisfy computed font properties',
+          [
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': '100',
+                'font-style': 'normal'
+              }
+            },
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': '200',
+                'font-style': 'normal'
+              }
+            },
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': '300',
+                'font-style': 'normal'
+              }
+            },
+            {
+              text: 'bar',
+              props: {
+                'font-family': undefined,
+                'font-weight': 'normal',
+                'font-style': 'normal'
+              }
+            }
+          ]
+        );
+      });
+    });
+
+    describe('with custom properties in the font shorthand value', function() {
+      it('should support a simple font-family value', function() {
+        var htmlText = [
+          '<style>:root { --my-prop: foo; }</style>',
+          '<style>div { font: 12px var(--my-prop) }</style>',
+          '<div>bar</div>'
+        ].join('\n');
+
+        return expect(htmlText, 'to satisfy computed font properties', [
+          {
+            text: 'bar',
+            props: {
+              'font-family': 'foo'
+            }
+          }
+        ]);
+      });
+
+      it('should a complex value', function() {
+        var htmlText = [
+          '<style>:root { --my-prop: ultra-expanded 12px foo; }</style>',
+          '<style>div { font: var(--my-prop) }</style>',
+          '<div>bar</div>'
+        ].join('\n');
+
+        return expect(htmlText, 'to satisfy computed font properties', [
+          {
+            text: 'bar',
+            props: {
+              'font-family': 'foo'
+            }
+          }
+        ]);
+      });
+    });
+
+    it('should support custom property expansion in the content property', function() {
+      var htmlText = [
+        "<style>:root { --my-prop: 'the value'; }</style>",
+        "<style>@media projection { :root { --my-prop: 'the other value'; } }</style>",
+        '<style>div:after { content: var(--my-prop) }</style>',
+        '<div></div>'
+      ].join('\n');
+
+      return expect(
+        htmlText,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'the other value',
+            props: {
+              'font-family': undefined,
+              'font-weight': 'normal',
+              'font-style': 'normal'
+            }
+          },
+          {
+            text: 'the value',
+            props: {
+              'font-family': undefined,
+              'font-weight': 'normal',
+              'font-style': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
+    it('should support custom property expansion in the counter-increment property', function() {
+      var htmlText = [
+        '<html><head>',
+        '<style>:root { --my-increment: 10; }</style>',
+        '<style>@media screen { :root { --my-increment: 8; } }</style>',
+        '<style>html { counter-reset: section 0; }</style>',
+        '<style>div:before { content: counter(section, decimal); }</style>',
+        '<style>div { font-family: font1; counter-increment: section var(--my-increment); }</style>',
+        '</head><body>',
+        '<div></div>',
+        '<div></div>',
+        '</body></html>'
+      ].join('\n');
+
+      return expect(htmlText, 'to satisfy computed font properties', [
+        { text: '810' },
+        { text: '161820' }
+      ]);
+    });
   });
 });

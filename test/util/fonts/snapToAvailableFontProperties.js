@@ -28,7 +28,7 @@ describe('snapToAvailableFontProperties', function() {
       'font-family': 'Tahoma',
       'font-stretch': 'normal',
       'font-style': 'normal',
-      'font-weight': 400
+      'font-weight': '400'
     });
 
     expect(snapped, 'to be undefined');
@@ -41,13 +41,13 @@ describe('snapToAvailableFontProperties', function() {
           'font-family': 'Tahoma',
           'font-stretch': 'normal',
           'font-style': 'normal',
-          'font-weight': 400
+          'font-weight': '400'
         }
       ],
       {
         'font-family': 'Tahoma',
         'font-style': 'normal',
-        'font-weight': 400
+        'font-weight': '400'
       }
     );
 
@@ -55,7 +55,7 @@ describe('snapToAvailableFontProperties', function() {
       'font-family': 'Tahoma',
       'font-stretch': 'normal',
       'font-style': 'normal',
-      'font-weight': 400
+      'font-weight': '400'
     });
   });
 
@@ -66,13 +66,13 @@ describe('snapToAvailableFontProperties', function() {
           'font-family': 'Tahoma',
           'font-stretch': 'normal',
           'font-style': 'normal',
-          'font-weight': 400
+          'font-weight': '400'
         }
       ],
       {
         'font-family': 'Tahoma',
         'font-stretch': 'normal',
-        'font-weight': 400
+        'font-weight': '400'
       }
     );
 
@@ -80,7 +80,7 @@ describe('snapToAvailableFontProperties', function() {
       'font-family': 'Tahoma',
       'font-stretch': 'normal',
       'font-style': 'normal',
-      'font-weight': 400
+      'font-weight': '400'
     });
   });
 
@@ -91,7 +91,7 @@ describe('snapToAvailableFontProperties', function() {
           'font-family': 'Tahoma',
           'font-stretch': 'normal',
           'font-style': 'normal',
-          'font-weight': 400
+          'font-weight': '400'
         }
       ],
       {
@@ -105,7 +105,7 @@ describe('snapToAvailableFontProperties', function() {
       'font-family': 'Tahoma',
       'font-stretch': 'normal',
       'font-style': 'normal',
-      'font-weight': 400
+      'font-weight': '400'
     });
   });
 
@@ -570,9 +570,9 @@ describe('snapToAvailableFontProperties', function() {
       it('should snap to the exact value', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 400 },
-            { 'font-family': 'foo', 'font-weight': 500 },
-            { 'font-family': 'foo', 'font-weight': 600 }
+            { 'font-family': 'foo', 'font-weight': '400' },
+            { 'font-family': 'foo', 'font-weight': '500' },
+            { 'font-family': 'foo', 'font-weight': '600' }
           ],
           {
             'font-family': 'foo',
@@ -580,15 +580,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 500 });
+        expect(snapped, 'to satisfy', { 'font-weight': '500' });
       });
 
       it('should snap to the best available lighter value', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 100 },
-            { 'font-family': 'foo', 'font-weight': 200 },
-            { 'font-family': 'foo', 'font-weight': 500 }
+            { 'font-family': 'foo', 'font-weight': '100' },
+            { 'font-family': 'foo', 'font-weight': '200' },
+            { 'font-family': 'foo', 'font-weight': '500' }
           ],
           {
             'font-family': 'foo',
@@ -596,15 +596,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 200 });
+        expect(snapped, 'to satisfy', { 'font-weight': '200' });
       });
 
       it('should snap to the best available bolder value', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 500 },
-            { 'font-family': 'foo', 'font-weight': 700 },
-            { 'font-family': 'foo', 'font-weight': 800 }
+            { 'font-family': 'foo', 'font-weight': '500' },
+            { 'font-family': 'foo', 'font-weight': '700' },
+            { 'font-family': 'foo', 'font-weight': '800' }
           ],
           {
             'font-family': 'foo',
@@ -612,15 +612,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 700 });
+        expect(snapped, 'to satisfy', { 'font-weight': '700' });
       });
 
       it('should snap to the exact value plus 1 lighter', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 500 },
-            { 'font-family': 'foo', 'font-weight': 700 },
-            { 'font-family': 'foo', 'font-weight': 800 }
+            { 'font-family': 'foo', 'font-weight': '500' },
+            { 'font-family': 'foo', 'font-weight': '700' },
+            { 'font-family': 'foo', 'font-weight': '800' }
           ],
           {
             'font-family': 'foo',
@@ -628,15 +628,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 500 });
+        expect(snapped, 'to satisfy', { 'font-weight': '500' });
       });
 
       it('should snap to the exact value plus 2 lighter', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 500 },
-            { 'font-family': 'foo', 'font-weight': 700 },
-            { 'font-family': 'foo', 'font-weight': 800 }
+            { 'font-family': 'foo', 'font-weight': '500' },
+            { 'font-family': 'foo', 'font-weight': '700' },
+            { 'font-family': 'foo', 'font-weight': '800' }
           ],
           {
             'font-family': 'foo',
@@ -644,15 +644,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 500 });
+        expect(snapped, 'to satisfy', { 'font-weight': '500' });
       });
 
       it('should snap to the best available value plus 1 lighter', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 500 },
-            { 'font-family': 'foo', 'font-weight': 700 },
-            { 'font-family': 'foo', 'font-weight': 800 }
+            { 'font-family': 'foo', 'font-weight': '500' },
+            { 'font-family': 'foo', 'font-weight': '700' },
+            { 'font-family': 'foo', 'font-weight': '800' }
           ],
           {
             'font-family': 'foo',
@@ -660,15 +660,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 700 });
+        expect(snapped, 'to satisfy', { 'font-weight': '700' });
       });
 
       it('should snap to the best available value plus 2 lighter', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 500 },
-            { 'font-family': 'foo', 'font-weight': 700 },
-            { 'font-family': 'foo', 'font-weight': 800 }
+            { 'font-family': 'foo', 'font-weight': '500' },
+            { 'font-family': 'foo', 'font-weight': '700' },
+            { 'font-family': 'foo', 'font-weight': '800' }
           ],
           {
             'font-family': 'foo',
@@ -676,15 +676,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 500 });
+        expect(snapped, 'to satisfy', { 'font-weight': '500' });
       });
 
       it('should not snap to a lighter weight than what is available', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 200 },
-            { 'font-family': 'foo', 'font-weight': 300 },
-            { 'font-family': 'foo', 'font-weight': 400 }
+            { 'font-family': 'foo', 'font-weight': '200' },
+            { 'font-family': 'foo', 'font-weight': '300' },
+            { 'font-family': 'foo', 'font-weight': '400' }
           ],
           {
             'font-family': 'foo',
@@ -692,15 +692,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 200 });
+        expect(snapped, 'to satisfy', { 'font-weight': '200' });
       });
 
       it('should snap to the exact value plus 1 bolder', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 200 },
-            { 'font-family': 'foo', 'font-weight': 300 },
-            { 'font-family': 'foo', 'font-weight': 400 }
+            { 'font-family': 'foo', 'font-weight': '200' },
+            { 'font-family': 'foo', 'font-weight': '300' },
+            { 'font-family': 'foo', 'font-weight': '400' }
           ],
           {
             'font-family': 'foo',
@@ -708,15 +708,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 400 });
+        expect(snapped, 'to satisfy', { 'font-weight': '400' });
       });
 
       it('should snap to the exact value plus 2 bolder', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 200 },
-            { 'font-family': 'foo', 'font-weight': 300 },
-            { 'font-family': 'foo', 'font-weight': 400 }
+            { 'font-family': 'foo', 'font-weight': '200' },
+            { 'font-family': 'foo', 'font-weight': '300' },
+            { 'font-family': 'foo', 'font-weight': '400' }
           ],
           {
             'font-family': 'foo',
@@ -724,15 +724,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 400 });
+        expect(snapped, 'to satisfy', { 'font-weight': '400' });
       });
 
       it('should snap to best available value plus 1 bolder', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 200 },
-            { 'font-family': 'foo', 'font-weight': 300 },
-            { 'font-family': 'foo', 'font-weight': 400 }
+            { 'font-family': 'foo', 'font-weight': '200' },
+            { 'font-family': 'foo', 'font-weight': '300' },
+            { 'font-family': 'foo', 'font-weight': '400' }
           ],
           {
             'font-family': 'foo',
@@ -740,15 +740,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 300 });
+        expect(snapped, 'to satisfy', { 'font-weight': '300' });
       });
 
       it('should snap to best available value plus 2 bolder', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 200 },
-            { 'font-family': 'foo', 'font-weight': 300 },
-            { 'font-family': 'foo', 'font-weight': 400 }
+            { 'font-family': 'foo', 'font-weight': '200' },
+            { 'font-family': 'foo', 'font-weight': '300' },
+            { 'font-family': 'foo', 'font-weight': '400' }
           ],
           {
             'font-family': 'foo',
@@ -756,15 +756,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 400 });
+        expect(snapped, 'to satisfy', { 'font-weight': '400' });
       });
 
       it('should not snap to a bolder weight than what is available', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 200 },
-            { 'font-family': 'foo', 'font-weight': 300 },
-            { 'font-family': 'foo', 'font-weight': 400 }
+            { 'font-family': 'foo', 'font-weight': '200' },
+            { 'font-family': 'foo', 'font-weight': '300' },
+            { 'font-family': 'foo', 'font-weight': '400' }
           ],
           {
             'font-family': 'foo',
@@ -772,15 +772,15 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 400 });
+        expect(snapped, 'to satisfy', { 'font-weight': '400' });
       });
 
       it('should snap to the corect value given both lighter and bolder modifications', function() {
         var snapped = snap(
           [
-            { 'font-family': 'foo', 'font-weight': 200 },
-            { 'font-family': 'foo', 'font-weight': 300 },
-            { 'font-family': 'foo', 'font-weight': 400 }
+            { 'font-family': 'foo', 'font-weight': '200' },
+            { 'font-family': 'foo', 'font-weight': '300' },
+            { 'font-family': 'foo', 'font-weight': '400' }
           ],
           {
             'font-family': 'foo',
@@ -788,7 +788,7 @@ describe('snapToAvailableFontProperties', function() {
           }
         );
 
-        expect(snapped, 'to satisfy', { 'font-weight': 300 });
+        expect(snapped, 'to satisfy', { 'font-weight': '300' });
       });
     });
   });
