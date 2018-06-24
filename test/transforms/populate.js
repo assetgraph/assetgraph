@@ -82,10 +82,9 @@ describe('transforms/populate', function() {
     );
 
     assetGraph.findAssets({ type: 'JavaScript' }).forEach(function(javaScript) {
-      javaScript.url =
-        javaScript.url.match(/^(https?:)/)[1] +
-        '//cdn.example.com/' +
-        javaScript.fileName;
+      javaScript.url = `${
+        javaScript.url.match(/^(https?:)/)[1]
+      }//cdn.example.com/${javaScript.fileName}`;
     });
 
     expect(

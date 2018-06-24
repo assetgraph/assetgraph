@@ -74,7 +74,7 @@ describe('transforms/bundleSystemJs', function() {
       })[0].parseTree,
       {
         enter(node) {
-          if (node.loc && node.loc.source === assetGraph.root + 'main.js') {
+          if (node.loc && node.loc.source === `${assetGraph.root}main.js`) {
             numNodesWithCorrectLoc += 1;
           }
         }
@@ -594,7 +594,7 @@ describe('transforms/bundleSystemJs', function() {
         assetGraph.findRelations({ type: 'SystemJsLazyBundle', to: asset })
           .length > 0
       ) {
-        return assetGraph.root + 'static/foobar-' + asset.fileName;
+        return `${assetGraph.root}static/foobar-${asset.fileName}`;
       }
     });
 

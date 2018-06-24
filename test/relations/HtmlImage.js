@@ -12,7 +12,7 @@ describe('relations/HtmlImage', function() {
   function initial(html) {
     htmlAsset = assetGraph.addAsset({
       type: 'Html',
-      url: assetGraph.root + 'index.html',
+      url: `${assetGraph.root}index.html`,
       text: html
     });
   }

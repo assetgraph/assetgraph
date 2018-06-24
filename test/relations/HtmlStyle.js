@@ -10,7 +10,7 @@ describe('relations/HtmlStyle', function() {
     assetGraph = new AssetGraph({ root: __dirname });
     cssAsset = assetGraph.addAsset({
       type: 'Css',
-      url: assetGraph.root + 'injected.css',
+      url: `${assetGraph.root}injected.css`,
       text: 'div{color:red}'
     });
   });
@@ -18,7 +18,7 @@ describe('relations/HtmlStyle', function() {
   function initial(html) {
     htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
-      url: assetGraph.root + 'index.html',
+      url: `${assetGraph.root}index.html`,
       text: html
     });
     assetGraph.addAsset(htmlAsset);
@@ -260,7 +260,7 @@ describe('relations/HtmlStyle', function() {
     it('should support the media property when adding an external stylesheet', function() {
       const htmlAsset = new AssetGraph().addAsset({
         type: 'Html',
-        url: assetGraph.root + 'index.html',
+        url: `${assetGraph.root}index.html`,
         text: '<!DOCTYPE html><html><head></head><body></body></html>'
       });
       htmlAsset.addRelation(

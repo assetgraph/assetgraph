@@ -73,7 +73,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
       })
       .parseTree.toString();
 
-    expect(assetGraph._parseTreeBefore.toString(), 'to equal', cssAfter + '\n');
+    expect(assetGraph._parseTreeBefore.toString(), 'to equal', `${cssAfter}\n`);
 
     cssAssets = assetGraph.findAssets({
       type: 'Css'
@@ -119,7 +119,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
         assetGraph,
         'to contain asset',
         {
-          url: new RegExp('\\.' + extension + '(?:$|#)')
+          url: new RegExp(`\\.${extension}(?:$|#)`)
         },
         1
       );
@@ -169,12 +169,12 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
     expect(
       assetGraph._parseTreeBefore.toString().replace(/\n+/g, '\n'),
       'to equal',
-      (parseTreeAfter.toString() + '\n').replace(/\n+/g, '\n')
+      `${parseTreeAfter.toString()}\n`.replace(/\n+/g, '\n')
     );
 
     for (const extension of ['png', 'gif', 'svg', 'ttf', 'eot', 'woff']) {
       expect(assetGraph, 'to contain asset', {
-        url: new RegExp('\\.' + extension + '(?:$|#)')
+        url: new RegExp(`\\.${extension}(?:$|#)`)
       });
     }
   });
@@ -254,10 +254,9 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
     await assetGraph.loadAssets({
       type: 'Html',
       url: 'http://example.com/foo.html',
-      text:
-        '<!DOCTYPE html><html><body><style>' +
-        new Array(5000).join('body {color: red;}') +
-        '</style></body></html>'
+      text: `<!DOCTYPE html><html><body><style>${new Array(5000).join(
+        'body {color: red;}'
+      )}</style></body></html>`
     });
     await assetGraph.populate();
 
@@ -281,10 +280,9 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
     await assetGraph.loadAssets({
       type: 'Html',
       url: 'http://example.com/foo.html',
-      text:
-        '<!DOCTYPE html><html><body><style>' +
-        new Array(5000).join('body {color: red;}') +
-        '</style></body></html>'
+      text: `<!DOCTYPE html><html><body><style>${new Array(5000).join(
+        'body {color: red;}'
+      )}</style></body></html>`
     });
     await assetGraph.populate();
 

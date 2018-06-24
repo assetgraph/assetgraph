@@ -23,8 +23,8 @@ describe('FileRedirect relation', function() {
       assetGraph.findRelations({ type: 'FileRedirect' })[0],
       'to satisfy',
       {
-        from: { url: assetGraph.root + 'subdir' },
-        to: { url: assetGraph.root + 'subdir/index.html' }
+        from: { url: `${assetGraph.root}subdir` },
+        to: { url: `${assetGraph.root}subdir/index.html` }
       }
     );
   });
@@ -49,8 +49,8 @@ describe('FileRedirect relation', function() {
       assetGraph.findRelations({ type: 'FileRedirect' })[0],
       'to satisfy',
       {
-        from: { url: assetGraph.root + 'subdir/' },
-        to: { url: assetGraph.root + 'subdir/index.html' }
+        from: { url: `${assetGraph.root}subdir/` },
+        to: { url: `${assetGraph.root}subdir/index.html` }
       }
     );
   });

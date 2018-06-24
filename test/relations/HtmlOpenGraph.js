@@ -54,7 +54,7 @@ describe('relations/HtmlOpenGraph', function() {
     const link = assetGraph.findRelations({ type: 'HtmlOpenGraph' })[0];
 
     link.hrefType = 'relative';
-    link.to.url = assetGraph.root + 'foo.bar';
+    link.to.url = `${assetGraph.root}foo.bar`;
 
     expect(link, 'to satisfy', { href: 'foo.bar' });
   });

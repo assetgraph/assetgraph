@@ -22,7 +22,7 @@ module.exports = {
       },
       inspect(asset, depth, output) {
         return output
-          .text(asset.type + '(')
+          .text(`${asset.type}(`)
           .text(asset.urlOrDescription)
           .text(')');
       },
@@ -43,9 +43,10 @@ module.exports = {
         assetGraph.findAssets({ isInline: false }).forEach(function(asset) {
           output
             .text(
-              (asset.isLoaded ? ' ' : '!') +
-                ' ' +
-                urlTools.buildRelativeUrl(assetGraph.root, asset.url)
+              `${asset.isLoaded ? ' ' : '!'} ${urlTools.buildRelativeUrl(
+                assetGraph.root,
+                asset.url
+              )}`
             )
             .nl();
         });
@@ -65,7 +66,7 @@ module.exports = {
       },
       inspect(relation, depth, output) {
         return output
-          .text(relation.type + '(')
+          .text(`${relation.type}(`)
           .text(relation.toString())
           .text(')');
       },
@@ -173,7 +174,7 @@ module.exports = {
       } else if (typeof stringOrAssetOrFunctionOrAst === 'function') {
         return {
           type: 'Program',
-          body: esprima.parse('!' + stringOrAssetOrFunctionOrAst.toString())
+          body: esprima.parse(`!${stringOrAssetOrFunctionOrAst.toString()}`)
             .body[0].expression.argument.body.body
         };
       } else {

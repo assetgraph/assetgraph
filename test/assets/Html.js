@@ -863,7 +863,7 @@ describe('assets/Html', function() {
       type: 'CssSourceMappingUrl'
     })[0].to;
     expect(cssSourceMap.parseTree, 'to satisfy', {
-      sources: [assetGraph.root + 'index.html']
+      sources: [`${assetGraph.root}index.html`]
     });
     const cssSourceMapConsumer = new mozilla.SourceMapConsumer(
       cssSourceMap.parseTree
@@ -871,7 +871,7 @@ describe('assets/Html', function() {
 
     expect(
       cssSourceMapConsumer.generatedPositionFor({
-        source: assetGraph.root + 'index.html',
+        source: `${assetGraph.root}index.html`,
         line: 6,
         column: 17
       }),
@@ -890,7 +890,7 @@ describe('assets/Html', function() {
       }),
       'to equal',
       {
-        source: assetGraph.root + 'index.html',
+        source: `${assetGraph.root}index.html`,
         line: 6,
         column: 16,
         name: null
@@ -901,7 +901,7 @@ describe('assets/Html', function() {
       type: 'JavaScriptSourceMappingUrl'
     })[0].to;
     expect(javaScriptSourceMap.parseTree, 'to satisfy', {
-      sources: [assetGraph.root + 'index.html']
+      sources: [`${assetGraph.root}index.html`]
     });
 
     const javaScriptSourceMapConsumer = new mozilla.SourceMapConsumer(
@@ -909,7 +909,7 @@ describe('assets/Html', function() {
     );
     expect(
       javaScriptSourceMapConsumer.generatedPositionFor({
-        source: assetGraph.root + 'index.html',
+        source: `${assetGraph.root}index.html`,
         line: 13,
         column: 16
       }),
@@ -928,7 +928,7 @@ describe('assets/Html', function() {
       }),
       'to equal',
       {
-        source: assetGraph.root + 'index.html',
+        source: `${assetGraph.root}index.html`,
         line: 13,
         column: 16,
         name: 'alert'

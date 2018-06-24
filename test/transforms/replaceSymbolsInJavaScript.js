@@ -17,7 +17,7 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       expect(subject, 'to be an object');
       const assetConfig = {
         type: 'JavaScript',
-        url: 'file://' + pathModule.resolve(__dirname, 'bogus.js')
+        url: `file://${pathModule.resolve(__dirname, 'bogus.js')}`
       };
       if (subject && typeof subject.type === 'string') {
         assetConfig.parseTree = subject.parseTree;

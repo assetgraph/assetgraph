@@ -22,7 +22,7 @@ describe('relations/XmlStylesheet', function() {
     expect(
       assetGraph.findRelations()[0].href,
       'to be',
-      assetGraph.findAssets({ type: 'Css' })[0].id + '.css'
+      `${assetGraph.findAssets({ type: 'Css' })[0].id}.css`
     );
 
     assetGraph.findAssets({

@@ -199,7 +199,7 @@ describe('relations/Relation', function() {
           hrefType: 'absolute',
           href: 'http://canonical.com/local.js',
           to: {
-            url: 'file://' + pathModule.join(testDataDir, 'local.js')
+            url: `file://${pathModule.join(testDataDir, 'local.js')}`
           }
         }
       ]);
@@ -265,7 +265,7 @@ describe('relations/Relation', function() {
         hrefType: 'relative',
         href: 'local.js',
         to: {
-          url: 'file://' + pathModule.join(testDataDir, 'local.js')
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`
         }
       });
 
@@ -277,7 +277,7 @@ describe('relations/Relation', function() {
         crossorigin: false,
         href: 'http://canonical.com/local.js',
         to: {
-          url: 'file://' + pathModule.join(testDataDir, 'local.js')
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`
         }
       });
     });
@@ -297,7 +297,7 @@ describe('relations/Relation', function() {
         hrefType: 'relative',
         href: 'local.js',
         to: {
-          url: 'file://' + pathModule.join(testDataDir, 'local.js')
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`
         }
       });
 
@@ -309,7 +309,7 @@ describe('relations/Relation', function() {
         crossorigin: false,
         href: 'local.js',
         to: {
-          url: 'file://' + pathModule.join(testDataDir, 'local.js')
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`
         }
       });
     });
@@ -332,7 +332,7 @@ describe('relations/Relation', function() {
         crossorigin: false,
         href: 'http://canonical.com/local.js',
         to: {
-          url: 'file://' + pathModule.join(testDataDir, 'local.js')
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`
         }
       });
 
@@ -342,7 +342,7 @@ describe('relations/Relation', function() {
         hrefType: 'rootRelative',
         href: '/local.js',
         to: {
-          url: 'file://' + pathModule.join(testDataDir, 'local.js')
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`
         }
       });
     });
@@ -450,7 +450,7 @@ describe('relations/Relation', function() {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
-        url: 'file://' + pathModule.resolve(__dirname, 'index.html'),
+        url: `file://${pathModule.resolve(__dirname, 'index.html')}`,
         text:
           '<!DOCTYPE html><html><head></head><body><a href="other.html">Link</a></body></html>'
       });
@@ -462,7 +462,7 @@ describe('relations/Relation', function() {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
-        url: 'fil://' + pathModule.resolve(__dirname, 'index.html'),
+        url: `fil://${pathModule.resolve(__dirname, 'index.html')}`,
         text:
           '<!DOCTYPE html><html><head></head><body><a href="http://example.com/">Link</a></body></html>'
       });

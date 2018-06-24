@@ -6,31 +6,26 @@ const errors = require('../../lib/errors');
 
 describe('transforms/compressJavaScript', function() {
   [undefined, 'uglifyJs'].forEach(function(compressorName) {
-    it(
-      'with compressorName=' +
-        compressorName +
-        ' should yield a compressed JavaScript',
-      async function() {
-        const assetGraph = new AssetGraph();
-        await assetGraph.loadAssets(
-          new AssetGraph().addAsset({
-            type: 'JavaScript',
-            text: 'var foo = 123;'
-          })
-        );
-        await assetGraph.compressJavaScript(
-          { type: 'JavaScript' },
-          compressorName
-        );
+    it(`with compressorName=${compressorName} should yield a compressed JavaScript`, async function() {
+      const assetGraph = new AssetGraph();
+      await assetGraph.loadAssets(
+        new AssetGraph().addAsset({
+          type: 'JavaScript',
+          text: 'var foo = 123;'
+        })
+      );
+      await assetGraph.compressJavaScript(
+        { type: 'JavaScript' },
+        compressorName
+      );
 
-        expect(assetGraph, 'to contain asset', 'JavaScript');
-        expect(
-          assetGraph.findAssets({ type: 'JavaScript' })[0].text,
-          'to match',
-          /^var foo=123;?\n?$/
-        );
-      }
-    );
+      expect(assetGraph, 'to contain asset', 'JavaScript');
+      expect(
+        assetGraph.findAssets({ type: 'JavaScript' })[0].text,
+        'to match',
+        /^var foo=123;?\n?$/
+      );
+    });
   });
 
   it('should warn when UglifyJS runs into a parse error and leave the asset unchanged', async function() {
