@@ -134,7 +134,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     );
   });
 
-  it('should unquote single quoted font-family', function() {
+  it('should trace a single quoted font-family', function() {
     var htmlText = [
       "<style>body { font-family: 'font 1'; }</style>",
       'text'
@@ -147,7 +147,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         {
           text: 'text',
           props: {
-            'font-family': 'font 1',
+            'font-family': "'font 1'",
             'font-weight': 'normal',
             'font-style': 'normal'
           }
@@ -156,7 +156,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     );
   });
 
-  it('should unquote double quoted font-family', function() {
+  it('should trace a double quoted font-family', function() {
     var htmlText = [
       '<style>body { font-family: "font 1"; }</style>',
       'text'
@@ -169,7 +169,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         {
           text: 'text',
           props: {
-            'font-family': 'font 1',
+            'font-family': '"font 1"',
             'font-weight': 'normal',
             'font-style': 'normal'
           }
@@ -1790,7 +1790,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           {
             text: 'foo',
             props: {
-              'font-family': 'myClass',
+              'font-family': '"myClass"',
               'font-weight': '900',
               'font-style': 'normal'
             }
@@ -1798,7 +1798,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           {
             text: 'foo',
             props: {
-              'font-family': 'myClass',
+              'font-family': '"myClass"',
               'font-weight': 'normal',
               'font-style': 'normal'
             }
@@ -2805,7 +2805,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           {
             text: 'foo',
             props: {
-              'font-family': 'famfam',
+              'font-family': '"famfam"',
               'font-weight': 'bold',
               'font-style': 'normal'
             }
@@ -2827,7 +2827,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           {
             text: 'foo',
             props: {
-              'font-family': 'famfam',
+              'font-family': '"famfam"',
               'font-weight': 'normal',
               'font-style': 'normal'
             }
@@ -4266,7 +4266,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             {
               text: 'quux',
               props: {
-                'font-family': 'foo',
+                'font-family': "'foo'",
                 'font-style': 'normal',
                 'font-weight': 'normal'
               }
@@ -4295,7 +4295,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             {
               text: 'quux',
               props: {
-                'font-family': 'bar',
+                'font-family': "'bar'",
                 'font-style': 'normal',
                 'font-weight': 'normal'
               }
@@ -4380,7 +4380,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             {
               text: 'quux',
               props: {
-                'font-family': 'var(--my-font)',
+                'font-family': "'var(--my-font)'",
                 'font-style': 'normal',
                 'font-weight': 'normal'
               }
