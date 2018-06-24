@@ -80,8 +80,9 @@ describe('transforms/setSourceMapRoot', function() {
         .populate()
         .setSourceMapRoot(null, 'somewhereElse');
 
-      assetGraph.findAssets({ extension: '.less' })[0].url =
-        assetGraph.root + 'somewhereElse/bar.less';
+      assetGraph.findAssets({ extension: '.less' })[0].url = `${
+        assetGraph.root
+      }somewhereElse/bar.less`;
       expect(
         assetGraph.findAssets({ type: 'SourceMap' })[0].parseTree,
         'to satisfy',

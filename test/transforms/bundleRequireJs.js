@@ -518,7 +518,7 @@ describe('transforms/bundleRequireJs', function() {
     expect(
       _.map(assetGraph.findAssets({ type: 'JavaScript' }), 'url').sort(),
       'to equal',
-      [assetGraph.root + 'require.js']
+      [`${assetGraph.root}require.js`]
     );
 
     await assetGraph.bundleRequireJs({ type: 'Html' });
@@ -550,7 +550,7 @@ describe('transforms/bundleRequireJs', function() {
     expect(
       _.map(assetGraph.findAssets({ type: 'JavaScript' }), 'url').sort(),
       'to equal',
-      [assetGraph.root + 'require.js']
+      [`${assetGraph.root}require.js`]
     );
 
     await assetGraph.bundleRequireJs({ type: 'Html' });
@@ -595,7 +595,7 @@ describe('transforms/bundleRequireJs', function() {
         'url'
       ).sort(),
       'to equal',
-      [assetGraph.root + 'require.js']
+      [`${assetGraph.root}require.js`]
     );
 
     await assetGraph.bundleRequireJs();

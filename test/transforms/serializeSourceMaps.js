@@ -57,7 +57,7 @@ describe('transforms/serializeSourceMaps', function() {
         esprima.parse('var bogus = 123;', {
           loc: true,
           attachComment: true,
-          source: assetGraph.root + 'bogus.js'
+          source: `${assetGraph.root}bogus.js`
         }).body[0]
       );
       javaScript.markDirty();
@@ -68,7 +68,7 @@ describe('transforms/serializeSourceMaps', function() {
       const sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
       expect(sourceMap.parseTree, 'not to be', initialSourceMapParseTree);
       expect(JSON.parse(sourceMap.text), 'to satisfy', {
-        sources: expect.it('to contain', assetGraph.root + 'bogus.js')
+        sources: expect.it('to contain', `${assetGraph.root}bogus.js`)
       });
     });
   });
@@ -120,7 +120,7 @@ describe('transforms/serializeSourceMaps', function() {
         '//# sourceMappingURL=myScript.js.map'
       );
       expect(JSON.parse(sourceMap.text), 'to satisfy', {
-        sources: [assetGraph.root + 'myScript.js', assetGraph.root + 'bogus.js']
+        sources: [`${assetGraph.root}myScript.js`, `${assetGraph.root}bogus.js`]
       });
     });
 
@@ -156,13 +156,13 @@ describe('transforms/serializeSourceMaps', function() {
         esprima.parse('var bogus = 123;', {
           loc: true,
           attachComment: true,
-          source: assetGraph.root + 'bogus.js'
+          source: `${assetGraph.root}bogus.js`
         }).body[0]
       );
       myScript.markDirty();
       const clonedMyScript = myScript.clone(myScript.incomingRelations);
       assetGraph.removeAsset(myScript);
-      clonedMyScript.url = assetGraph.root + 'clonedMyScript.js';
+      clonedMyScript.url = `${assetGraph.root}clonedMyScript.js`;
 
       await assetGraph.serializeSourceMaps();
 
@@ -171,7 +171,7 @@ describe('transforms/serializeSourceMaps', function() {
         to: { type: 'SourceMap' }
       })[0].to;
       expect(JSON.parse(sourceMap.text), 'to satisfy', {
-        sources: expect.it('to contain', assetGraph.root + 'bogus.js')
+        sources: expect.it('to contain', `${assetGraph.root}bogus.js`)
       });
     });
   });

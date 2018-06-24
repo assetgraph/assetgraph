@@ -20,7 +20,7 @@ describe('relations/HtmlMetaRefresh', function() {
           res.writeHead(200, {
             'Content-Type': 'text/html; charset=UTF-8'
           });
-          res.end('This is ' + req.url);
+          res.end(`This is ${req.url}`);
         } else {
           res.writeHead(404);
           res.end();

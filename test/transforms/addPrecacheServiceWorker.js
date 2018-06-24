@@ -53,7 +53,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
       1
     );
     expect(assetGraph, 'to contain asset', {
-      url: assetGraph.root + 'index-precache-service-worker.js'
+      url: `${assetGraph.root}index-precache-service-worker.js`
     });
     expect(
       assetGraph.findAssets({ type: 'Html' })[0].text,
@@ -150,9 +150,9 @@ describe('transforms/addPrecacheServiceWorker', function() {
     expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 5);
     expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
     expect(assetGraph, 'to contain asset', {
-      url: assetGraph.root + 'index-precache-service-worker.js'
+      url: `${assetGraph.root}index-precache-service-worker.js`
     }).and('to contain asset', {
-      url: assetGraph.root + 'otherpage-precache-service-worker.js'
+      url: `${assetGraph.root}otherpage-precache-service-worker.js`
     });
   });
 
@@ -172,7 +172,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
         assetGraph.addAsset(
           new AssetGraph().addAsset({
             type: 'JavaScript',
-            url: assetGraph.root + 'index-precache-service-worker.js',
+            url: `${assetGraph.root}index-precache-service-worker.js`,
             text: 'alert("hello");'
           })
         );
@@ -225,7 +225,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
       expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
       expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
       expect(assetGraph, 'to contain asset', {
-        url: assetGraph.root + 'index-otherpage-precache-service-worker.js'
+        url: `${assetGraph.root}index-otherpage-precache-service-worker.js`
       });
       expect(
         assetGraph,
@@ -246,8 +246,9 @@ describe('transforms/addPrecacheServiceWorker', function() {
       });
       await assetGraph.loadAssets('*.html').populate();
 
-      assetGraph.findAssets({ fileName: 'otherpage.html' })[0].url =
-        assetGraph.root + 'somewhereelse/index.html';
+      assetGraph.findAssets({ fileName: 'otherpage.html' })[0].url = `${
+        assetGraph.root
+      }somewhereelse/index.html`;
 
       await assetGraph.addPrecacheServiceWorker(
         { isInitial: true },
@@ -255,7 +256,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
       );
 
       expect(assetGraph, 'to contain asset', {
-        url: assetGraph.root + 'index-precache-service-worker.js'
+        url: `${assetGraph.root}index-precache-service-worker.js`
       });
     });
 
@@ -288,8 +289,9 @@ describe('transforms/addPrecacheServiceWorker', function() {
       expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
       expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
       expect(assetGraph, 'to contain asset', {
-        url:
-          assetGraph.root + 'path/to/index-otherpage-precache-service-worker.js'
+        url: `${
+          assetGraph.root
+        }path/to/index-otherpage-precache-service-worker.js`
       });
       expect(
         assetGraph,

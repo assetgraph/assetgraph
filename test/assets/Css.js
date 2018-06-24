@@ -118,7 +118,7 @@ describe('assets/Css', function() {
     const sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
     expect(
       sourceMap.generatedPositionFor({
-        source: assetGraph.root + 'index.css',
+        source: `${assetGraph.root}index.css`,
         line: 1,
         column: 6
       }),
@@ -232,7 +232,7 @@ describe('assets/Css', function() {
         const sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
         expect(
           sourceMap.generatedPositionFor({
-            source: assetGraph.root + 'index.css',
+            source: `${assetGraph.root}index.css`,
             line: 2,
             column: 4
           }),
@@ -267,7 +267,7 @@ describe('assets/Css', function() {
         const sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
         expect(
           sourceMap.generatedPositionFor({
-            source: assetGraph.root + 'foo.css',
+            source: `${assetGraph.root}foo.css`,
             line: 2,
             column: 4
           }),

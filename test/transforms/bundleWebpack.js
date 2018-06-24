@@ -129,7 +129,7 @@ describe('bundleWebpack', function() {
     );
     expect(alertInScriptWithoutExistingSourceMap, 'to satisfy', {
       loc: {
-        source: assetGraph.root + 'noExistingSourceMap.js',
+        source: `${assetGraph.root}noExistingSourceMap.js`,
         start: {
           line: 3
         }
@@ -137,7 +137,7 @@ describe('bundleWebpack', function() {
     });
     expect(firstGetBoundingClientRectNode, 'to satisfy', {
       loc: {
-        source: assetGraph.root + 'jquery-1.10.1.js',
+        source: `${assetGraph.root}jquery-1.10.1.js`,
         start: {
           line: 9591
         }

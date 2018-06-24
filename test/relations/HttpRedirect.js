@@ -21,7 +21,7 @@ describe('relations/HttpRedirect', function() {
           );
         } else if (req.url === '/302') {
           res.writeHead(302, {
-            Location: rootUrl + 'absoluteRedirectTarget.html',
+            Location: `${rootUrl}absoluteRedirectTarget.html`,
             'Content-Type': 'text/html; charset=UTF-8'
           });
           res.end(
@@ -30,7 +30,7 @@ describe('relations/HttpRedirect', function() {
         } else if (req.url === '/infiniteloop') {
           infiniteloopCount += 1;
           res.writeHead(302, {
-            Location: rootUrl + 'infiniteloop',
+            Location: `${rootUrl}infiniteloop`,
             'Content-Type': 'text/html; charset=UTF-8'
           });
           res.end(
@@ -40,7 +40,7 @@ describe('relations/HttpRedirect', function() {
           if (loopCount === 0) {
             loopCount += 1;
             res.writeHead(302, {
-              Location: rootUrl + 'loop',
+              Location: `${rootUrl}loop`,
               'Content-Type': 'text/html; charset=UTF-8'
             });
             res.end(
@@ -61,7 +61,7 @@ describe('relations/HttpRedirect', function() {
           res.writeHead(200, {
             'Content-Type': 'text/html; charset=UTF-8'
           });
-          res.end('This is ' + req.url);
+          res.end(`This is ${req.url}`);
         } else {
           res.writeHead(404);
           res.end();
@@ -73,7 +73,7 @@ describe('relations/HttpRedirect', function() {
       serverAddress = server.address();
       const serverHostname =
         serverAddress.address === '::' ? 'localhost' : serverAddress.address;
-      rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/';
+      rootUrl = `http://${serverHostname}:${serverAddress.port}/`;
 
       const assetGraph = new AssetGraph({ root: rootUrl });
       assetGraph.requestOptions = { numRetries: 1 };

@@ -22,8 +22,9 @@ describe('relations/JavaScriptSourceMappingUrl', function() {
     expect(assetGraph, 'to contain relation', 'JavaScriptSourceMappingUrl');
     expect(assetGraph, 'to contain relation', 'SourceMapFile');
     expect(assetGraph, 'to contain relation', 'SourceMapSource');
-    assetGraph.findAssets({ type: 'JavaScript' })[0].url =
-      assetGraph.root + 'foo/jquery.js';
+    assetGraph.findAssets({ type: 'JavaScript' })[0].url = `${
+      assetGraph.root
+    }foo/jquery.js`;
 
     expect(
       assetGraph.findAssets({ type: 'JavaScript' })[0].text,
@@ -59,7 +60,7 @@ describe('relations/JavaScriptSourceMappingUrl', function() {
       'to satisfy',
       {
         start: { line: 15, column: 1 },
-        source: assetGraph.root + 'jquery-1.11.3.js'
+        source: `${assetGraph.root}jquery-1.11.3.js`
       }
     );
   });
