@@ -964,7 +964,7 @@ describe('transforms/bundleRelations', function() {
       expect(
         assetGraph.findAssets({ type: 'SourceMap' })[0].parseTree.sources,
         'to equal',
-        [assetGraph.root + 'a.less', assetGraph.root + 'b.less']
+        [`${assetGraph.root}a.less`, `${assetGraph.root}b.less`]
       );
     });
 

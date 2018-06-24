@@ -20,8 +20,9 @@ describe('relations/CssSourceMappingUrl', function() {
     expect(assetGraph, 'to contain relation', 'CssSourceMappingUrl');
     expect(assetGraph, 'to contain relation', 'SourceMapFile');
     expect(assetGraph, 'to contain relation', 'SourceMapSource');
-    assetGraph.findAssets({ fileName: 'foo.css' })[0].url =
-      assetGraph.root + 'foo/somewhereelse.css';
+    assetGraph.findAssets({ fileName: 'foo.css' })[0].url = `${
+      assetGraph.root
+    }foo/somewhereelse.css`;
 
     expect(
       assetGraph.findAssets({ fileName: 'somewhereelse.css' })[0].text,
@@ -38,7 +39,7 @@ describe('relations/CssSourceMappingUrl', function() {
       })[0].from.sourceMap,
       'to satisfy',
       {
-        sources: [assetGraph.root + 'foo.less']
+        sources: [`${assetGraph.root}foo.less`]
       }
     );
     const css = assetGraph.findAssets({ fileName: 'somewhereelse.css' })[0];
@@ -57,8 +58,8 @@ describe('relations/CssSourceMappingUrl', function() {
       'to satisfy',
       {
         sources: [
-          assetGraph.root + 'foo.less',
-          assetGraph.root + 'someMore.css'
+          `${assetGraph.root}foo.less`,
+          `${assetGraph.root}someMore.css`
         ]
       }
     );

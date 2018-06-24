@@ -18,7 +18,7 @@ describe('resolvers/http', function() {
     const serverAddress = server.address();
     const serverHostname =
       serverAddress.address === '::' ? 'localhost' : serverAddress.address;
-    const rootUrl = 'http://' + serverHostname + ':' + serverAddress.port + '/';
+    const rootUrl = `http://${serverHostname}:${serverAddress.port}/`;
 
     const assetGraph = new AssetGraph({ root: rootUrl });
 

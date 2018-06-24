@@ -31,14 +31,13 @@ describe('AssetGraph#addAsset', function() {
 
   it('should handle a relative path', async function() {
     const assetGraph = new AssetGraph({
-      root:
-        pathModule.resolve(
-          __dirname,
-          '..',
-          'testdata',
-          'addAsset',
-          'relativeUrl'
-        ) + '/'
+      root: `${pathModule.resolve(
+        __dirname,
+        '..',
+        'testdata',
+        'addAsset',
+        'relativeUrl'
+      )}/`
     });
     const asset = assetGraph.addAsset('foo.png');
     assetGraph.addAsset(asset);

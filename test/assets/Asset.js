@@ -1814,7 +1814,7 @@ describe('assets/Asset', function() {
 
     it('should make a file-url under process.cwd() relative to process.cwd()', function() {
       const asset = new AssetGraph().addAsset({
-        url: 'file://' + process.cwd() + '/foo/bar.baz'
+        url: `file://${process.cwd()}/foo/bar.baz`
       });
 
       expect(asset.urlOrDescription, 'to be', 'foo/bar.baz');
@@ -1892,26 +1892,24 @@ describe('assets/Asset', function() {
 
       await assetGraph
         .loadAssets({
-          url: 'file://' + process.cwd() + '/foo/bar.html',
+          url: `file://${process.cwd()}/foo/bar.html`,
           text:
-            '<!DOCTYPE html>\n' +
-            '<html>\n' +
-            '<head>\n' +
-            '<style>\n' +
-            'body {\n' +
-            '    background-image: url(data:image/svg+xml;base64,' +
-            new Buffer(
+            `${'<!DOCTYPE html>\n' +
+              '<html>\n' +
+              '<head>\n' +
+              '<style>\n' +
+              'body {\n' +
+              '    background-image: url(data:image/svg+xml;base64,'}${new Buffer(
               '<?xml version="1.0" encoding="UTF-8"?>\n' +
                 '<svg>\n' +
                 '<rect x="200" y="100" width="600" height="300" style="color: maroon"/>\n' +
                 '<rect x="200" y="100" width="600" height="300" style="color: maroon"/>\n' +
                 '</svg>'
-            ).toString('base64') +
-            ');\n' +
-            '}\n' +
-            '</style>\n' +
-            '</head>\n' +
-            '</html>'
+            ).toString('base64')});\n` +
+            `}\n` +
+            `</style>\n` +
+            `</head>\n` +
+            `</html>`
         })
         .populate();
 
@@ -1948,26 +1946,24 @@ describe('assets/Asset', function() {
 
       await assetGraph
         .loadAssets({
-          url: 'file://' + process.cwd() + '/foo/bar.html',
+          url: `file://${process.cwd()}/foo/bar.html`,
           text:
-            '<!DOCTYPE html>\n' +
-            '<html>\n' +
-            '<head>\n' +
-            '<style>\n' +
-            'body {\n' +
-            '    background-image: url(data:image/svg+xml;base64,' +
-            new Buffer(
+            `${'<!DOCTYPE html>\n' +
+              '<html>\n' +
+              '<head>\n' +
+              '<style>\n' +
+              'body {\n' +
+              '    background-image: url(data:image/svg+xml;base64,'}${new Buffer(
               '<?xml version="1.0" encoding="UTF-8"?>\n' +
                 '<svg>\n' +
                 '<rect x="200" y="100" width="600" height="300" style="color: maroon"/>\n' +
                 '<rect x="200" y="100" width="600" height="300" style="color: maroon"/>\n' +
                 '</svg>'
-            ).toString('base64') +
-            ');\n' +
-            '}\n' +
-            '</style>\n' +
-            '</head>\n' +
-            '</html>'
+            ).toString('base64')});\n` +
+            `}\n` +
+            `</style>\n` +
+            `</head>\n` +
+            `</html>`
         })
         .populate();
 
