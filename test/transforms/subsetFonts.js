@@ -3191,6 +3191,37 @@ describe('transforms/subsetFonts', function() {
       );
     });
 
+    it('should assume font-weight:normal and font-style:normal when not explicitly mentioned in the @font-face block', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/font-weight-and-style-omitted/'
+        )
+      });
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate();
+      const info = await assetGraph.subsetFonts({
+        inlineSubsets: false
+      });
+      expect(info, 'to satisfy', {
+        fontInfo: [
+          {
+            fontUsages: [
+              {
+                text: 'fo',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': 'normal',
+                  'font-style': 'normal',
+                  'font-family': 'Open Sans'
+                }
+              }
+            ]
+          }
+        ]
+      });
+    });
+
     it('should handle mixed local fonts and Google fonts', function() {
       httpception(defaultLocalSubsetMock);
 
