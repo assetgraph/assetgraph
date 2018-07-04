@@ -29,7 +29,7 @@
     "css-font-parser": "^0.2.3",
     "css-font-weight-names": "0.2.1",
     "css-list-helpers": "2.0.0",
-    "cssnano": "^4.0.0-rc.2",
+    "cssnano": "4.0.0",
     "data-urls": "^1.0.0",
     "esanimate": "^1.1.0",
     "escodegen": "^1.9.1",
