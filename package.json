@@ -68,7 +68,7 @@
     "autoprefixer": "^8.2.0",
     "closure-compiler": "^0.2.12",
     "coveralls": "^3.0.0",
-    "css-loader": "^0.28.4",
+    "css-loader": "^1.0.0",
     "docdash": "^0.4.0",
     "eslint": "^5.0.0",
     "eslint-config-pretty-standard": "^2.0.0",
