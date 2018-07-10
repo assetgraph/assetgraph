@@ -751,7 +751,11 @@ describe('transforms/subsetFonts', function() {
       assetGraph.on('warn', warn =>
         expect(warn, 'to satisfy', /Cannot find module/)
       );
-      await assetGraph.loadAssets('index.html');
+      const [htmlAsset] = await assetGraph.loadAssets('index.html');
+
+      // Remove annoying trailing \n inserted by jsdom that breaks the test because it makes us ask GWF to include space in the subset
+      htmlAsset.parseTree.body.lastChild.nodeValue = '';
+
       await assetGraph.populate({
         followRelations: {
           crossorigin: false
