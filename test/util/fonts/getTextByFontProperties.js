@@ -30,7 +30,7 @@ expect.addAssertion(
 
 describe('lib/util/fonts/getTextByFontProperties', function() {
   it('should strip empty text nodes', function() {
-    var htmlText = ['  <div>div</div>   <span></span>  '].join('\n');
+    var htmlText = ['  <div>div</div>   <span></span>  '].join('');
 
     return expect(
       htmlText,
@@ -43,13 +43,46 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             'font-weight': 'normal',
             'font-style': 'normal'
           }
+        },
+        {
+          text: '       ',
+          props: {
+            'font-family': undefined,
+            'font-style': 'normal',
+            'font-weight': 'normal'
+          }
+        }
+      ]
+    );
+  });
+
+  it('should include whitespace', async function() {
+    await expect(
+      '<h2><span>foo</span> </h2>',
+      'to exhaustively satisfy computed font properties',
+      [
+        {
+          text: 'foo',
+          props: {
+            'font-family': undefined,
+            'font-weight': 'bold',
+            'font-style': 'normal'
+          }
+        },
+        {
+          text: ' ',
+          props: {
+            'font-family': undefined,
+            'font-weight': 'bold',
+            'font-style': 'normal'
+          }
         }
       ]
     );
   });
 
   it('should apply inline style attribute values', function() {
-    var htmlText = ['<div style="font-weight: bold">div</div>'].join('\n');
+    var htmlText = ['<div style="font-weight: bold">div</div>'].join('');
 
     return expect(
       htmlText,
@@ -71,7 +104,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     var htmlText = [
       '<style>div { font-weight: bold; }</style>',
       '<div>div</div>'
-    ].join('\n');
+    ].join('');
 
     return expect(
       htmlText,
@@ -138,7 +171,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     var htmlText = [
       "<style>body { font-family: 'font 1'; }</style>",
       'text'
-    ].join('\n');
+    ].join('');
 
     return expect(
       htmlText,
@@ -160,7 +193,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     var htmlText = [
       '<style>body { font-family: "font 1"; }</style>',
       'text'
-    ].join('\n');
+    ].join('');
 
     return expect(
       htmlText,
@@ -179,9 +212,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
   });
 
   it('should return font-weight as a string', function() {
-    var htmlText = ['<style>body { font-weight: 500; }</style>', 'text'].join(
-      '\n'
-    );
+    var htmlText = '<style>body { font-weight: 500; }</style>text';
 
     return expect(
       htmlText,
@@ -204,7 +235,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>h1 { font-weight: normal; }</style>',
         '<h1>h1</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -226,7 +257,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { font-weight: bold; }</style>',
         '<div style="font-weight: normal">div</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -248,7 +279,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { font-weight: bold; font-weight: light }</style>',
         '<div>div</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -270,7 +301,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>.all {font-weight: light} div { font-weight: bold; }</style>',
         '<div class="all">div</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -292,7 +323,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div {font-weight: light} div { font-weight: bold; }</style>',
         '<div>div</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -314,7 +345,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>.all {font-weight: light} div { font-weight: bold !important; }</style>',
         '<div class="all">div</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -336,7 +367,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { font-weight: bold !important; }</style>',
         '<div style="font-weight: light">div</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -358,7 +389,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { font-weight: bold !important; }</style>',
         '<div style="font-weight: light !important">div</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -382,7 +413,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>h1 { font-family: font1; } span { font-family: inherit; }</style>',
         '<h1>foo <span>bar</span></h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -397,7 +428,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             }
           },
           {
-            text: 'foo',
+            text: 'foo ',
             props: {
               'font-family': 'font1',
               'font-weight': 'bold',
@@ -415,7 +446,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<option>option</option>',
         '<textarea>textarea</textarea>',
         '<input value="input">'
-      ].join('\n');
+      ].join('');
 
       return expect(htmlText, 'to satisfy computed font properties', [
         {
@@ -460,7 +491,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<select><option>option</option></select>',
         '<textarea>textarea</textarea>',
         '<input value="input">'
-      ].join('\n');
+      ].join('');
 
       return expect(htmlText, 'to satisfy computed font properties', [
         {
@@ -503,7 +534,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<input type="week" value="2017-W50">',
         '<input type="radio" value="type:radio">',
         '<input placeholder="placeholder">'
-      ].join('\n');
+      ].join('');
 
       return expect(htmlText, 'to satisfy computed font properties', [
         { props: { 'font-family': 'font1' }, text: 'type:undefined' },
@@ -530,7 +561,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>.all {font-weight: 900} span { font-weight: initial; }</style>',
         '<div class="all"><span>span</span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -554,7 +585,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>span { font-weight: lighter; }</style>',
         '<div><span>span</span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -577,7 +608,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>div { font-weight: 600; }</style>',
         '<style>span { font-weight: lighter; }</style>',
         '<div><span>span</span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -601,7 +632,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>@media 3dglasses { div { font-weight: 800; } }</style>',
         '<style>span { font-weight: lighter; }</style>',
         '<div><span>span</span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -632,7 +663,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>div { font-weight: 900; }</style>',
         '<style>span { font-weight: lighter; }</style>',
         '<div><span><span>span</span></span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -656,7 +687,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>span { font-weight: bolder; }</style>',
         '<div><span>span</span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -679,7 +710,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>div { font-weight: 600; }</style>',
         '<style>span { font-weight: bolder; }</style>',
         '<div><span>span</span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -703,7 +734,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>@media 3dglasses { div { font-weight: 800; } }</style>',
         '<style>span { font-weight: bolder; }</style>',
         '<div><span>span</span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -734,7 +765,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>div { font-weight: 200; }</style>',
         '<style>span { font-weight: bolder; }</style>',
         '<div><span><span>span</span></span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -760,7 +791,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>span { font-weight: bolder; }</style>',
         '<style>.inner { font-weight: lighter; }</style>',
         '<div><span><span class="inner">span</span></span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -784,7 +815,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>span { font-weight: lighter; }</style>',
         '<style>.inner { font-weight: bolder; }</style>',
         '<div><span><span class="inner">span</span></span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -808,7 +839,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>span { font-weight: lighter; }</style>',
         '<style>.inner:hover { font-weight: bolder; }</style>',
         '<div><span><span class="inner">span</span></span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -840,7 +871,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { text-transform: uppercase; }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(htmlText, 'to satisfy computed font properties', [
         { text: 'FOO' }
@@ -851,7 +882,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { text-transform: lowercase; }</style>',
         '<div>FOO</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(htmlText, 'to satisfy computed font properties', [
         { text: 'foo' }
@@ -862,7 +893,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { text-transform: capitalize; }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(htmlText, 'to satisfy computed font properties', [
         { text: 'Foo' }
@@ -873,7 +904,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         "<style>div::before { content: 'foo'; text-transform: uppercase; }</style>",
         '<div></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(htmlText, 'to satisfy computed font properties', [
         { text: 'FOO' }
@@ -885,7 +916,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>html { counter-reset: section 20; }</style>',
         '<style>div::before { content: counter(section, lower-roman); text-transform: capitalize; }</style>',
         '<div></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(htmlText, 'to satisfy computed font properties', [
         { text: 'Xx' }
@@ -897,7 +928,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<ol style="list-style-type: lower-roman; text-transform: uppercase">',
         '<li>foo</li>',
         '</ol>'
-      ].join('\n');
+      ].join('');
 
       return expect(htmlText, 'to satisfy computed font properties', [
         { text: 'i.' },
@@ -910,7 +941,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>@media 3dglasses { div { text-transform: lowercase; } }</style>',
           '<div>FOO</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'foo' },
@@ -922,7 +953,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>@media 3dglasses { div { text-transform: lowercase; } }</style>',
           '<div>foo</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'foo' }
@@ -935,7 +966,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     var htmlText = [
       '<style>h1 { font-family: font1; } span { font-family: font2; }</style>',
       '<h1>foo <span>bar</span></h1>'
-    ].join('\n');
+    ].join('');
 
     return expect(
       htmlText,
@@ -950,7 +981,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           }
         },
         {
-          text: 'foo',
+          text: 'foo ',
           props: {
             'font-family': 'font1',
             'font-weight': 'bold',
@@ -966,7 +997,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>h1:after { content: "after"; font-family: font1 !important; }</style>',
         '<h1>h1</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -996,7 +1027,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>h1:after { font-family: font1 !important; }</style>',
         '<h1></h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1010,7 +1041,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>h1 { content: "foo" }</style>',
         '<style>h1:after { font-family: font1 !important; }</style>',
         '<h1></h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1025,7 +1056,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>div:after { quotes: "<" ">"; }</style>',
           '<style>div:after { content: open-quote; font-family: font1 !important; }</style>',
           '<div></div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1048,7 +1079,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>div:after { quotes: "<" ">" "[" "]"; }</style>',
           '<style>div:after { content: close-quote; font-family: font1 !important; }</style>',
           '<div></div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1072,7 +1103,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@media 3dglasses { div:after { quotes: "(" ")"; } }</style>',
           '<style>div:after { content: open-quote; font-family: font1 !important; }</style>',
           '<div></div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1099,7 +1130,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       });
 
       it('should assume a conservative set of the most common quote characters when the quotes property is not explicitly given', function() {
-        var htmlText = ['<q></q>'].join('\n');
+        var htmlText = ['<q></q>'].join('');
 
         return expect(
           htmlText,
@@ -1131,7 +1162,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>h1::after { content: "after"; font-family: font1; }</style>',
         '<style>h1::after { content: "after"; font-family: font2; }</style>',
         '<h1>h1</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1162,7 +1193,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>h1:after { content: "after"; font-family: font1 !important; }</style>',
         '<style>h1:after { content: "after"; font-family: font2; }</style>',
         '<h1>h1</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1193,7 +1224,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>h1:after { content: "after"; font-family: font1 !important; }</style>',
         '<h1>h1</h1>',
         '<h1>h1</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1226,7 +1257,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>article { font-weight: 600; }</style>',
         '<p class="foo">p</section>',
         '<article class="foo">article</atricle>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1272,7 +1303,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div:after { content: attr(data-foo); font-family: font1; }</style>',
         '<div data-foo="bar"></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1298,7 +1329,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '</head><body>',
         '<div>foo</div>',
         '</body></html>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1333,7 +1364,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '</head><body>',
           '<div></div>',
           '</body></html>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1359,7 +1390,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '</head><body>',
           '<div></div>',
           '</body></html>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1386,7 +1417,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '</head><body>',
           '<div></div>',
           '</body>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1410,7 +1441,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: foobar; }</style>',
           '<style>div:after { content: counters(section, ".", circled-alpha); font-family: font1; }</style>',
           '<div></div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1435,7 +1466,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; fallback: bar; }</style>',
           '<style>div:after { content: counters(section, ".", circled-alpha); font-family: font1; }</style>',
           '<div></div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1460,7 +1491,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ }</style>',
           '<style>div { font-family: font1; display: list-item; list-style-type: circled-alpha; }</style>',
           '<div>foo</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1491,7 +1522,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@counter-style circled-alpha { system: fixed; symbols: \'a\' b "c" url(foo.svg) "\\64" "\\"" \'\\\'\'; }</style>',
           '<style>li { font-family: font1; display: list-item; list-style-type: circled-alpha; }</style>',
           '<ol><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ol>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1562,7 +1593,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; prefix: "p"; suffix: "s"; pad: 5 "q"; }</style>',
           '<style>li { font-family: font1; list-style-type: circled-alpha; }</style>',
           '<ol><li></li></ol>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1585,7 +1616,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@counter-style circled-alpha { system: fixed; symbols: Ⓐ; fallback: upper-roman }</style>',
           '<style>div { font-family: font1; display: list-item; list-style-type: circled-alpha; }</style>',
           '<div>foo</div><div></div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1625,7 +1656,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@media 3dglasses { @counter-style circled-alpha { system: fixed; symbols: Ⓓ Ⓔ Ⓕ } }</style>',
           '<style>li { font-family: font1; list-style-type: circled-alpha; }</style>',
           '<ol><li></li></ol>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1658,7 +1689,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@media 3dglasses { @counter-style circled-alpha { system: fixed; symbols: Ⓓ Ⓔ Ⓕ } }</style>',
           '<style>@media 3dglasses { li { font-family: font2; list-style-type: circled-alpha; } }</style>',
           '<ol><li></li></ol>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -1707,7 +1738,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             '<div></div>',
             '<div></div>',
             '</body></html>'
-          ].join('\n');
+          ].join('');
 
           return expect(
             htmlText,
@@ -1747,7 +1778,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div:after { content: "baz" attr(data-foo) "yadda"; font-family: font1; }</style>',
         '<div data-foo="bar"></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1773,7 +1804,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<div id="myId" class="myClass">text</div>',
         '<div class="myClass">text</div>',
         '<div >text</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1820,7 +1851,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>h1:after { content: "foo"; font-family: font1 !important; }</style>',
         '<style>@media 3dglasses { h1:after { content: "bar"; font-family: font1 !important; } }</style>',
         '<h1>h1</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1859,7 +1890,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>.after:after { content: "after"; font-family: font1 !important; }</style>',
         '<style>h1:before { content: "before"; font-family: font2; }</style>',
         '<h1 class="after">h1</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -1898,7 +1929,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p>foo</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'f', props: { 'font-weight': '700' } },
@@ -1910,10 +1941,10 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p>  \n \t foo</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
-          { text: 'f', props: { 'font-weight': '700' } },
+          { text: '    \t f', props: { 'font-weight': '700' } },
           { text: 'oo', props: { 'font-weight': 'normal' } }
         ]);
       });
@@ -1922,7 +1953,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p><div>foo</div></p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'foo', props: { 'font-weight': 'normal' } }
@@ -1933,7 +1964,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p><div>foo</div>bar</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'foo', props: { 'font-weight': 'normal' } },
@@ -1945,7 +1976,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p>"foo</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: '"f', props: { 'font-weight': '700' } },
@@ -1958,7 +1989,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           "<style>p::before { content: '\"a'; }</style>",
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p>foo</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: '"a', props: { 'font-weight': '700' } },
@@ -1971,7 +2002,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           "<style>p::before { content: 'a'; font-style: italic; }</style>",
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p>foo</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           {
@@ -1990,7 +2021,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           "<style>p::after { content: '\"a'; }</style>",
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p></p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: '"a', props: { 'font-weight': '700' } }
@@ -2003,7 +2034,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           "<style>p::before { content: '\"'; }</style>",
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p>foo</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: '"', props: { 'font-weight': '700' } },
@@ -2016,7 +2047,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           "<style>p::before { content: 'bar'; font-weight: 200; }</style>",
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p>foo</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'b', props: { 'font-weight': '700' } },
@@ -2030,7 +2061,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           "<style>p::after { content: 'foo'; font-weight: 200; }</style>",
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p></p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'f', props: { 'font-weight': '700' } },
@@ -2043,7 +2074,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           "<style>@media 3dglasses { p::before { content: 'abc' } }</style>",
           '<style>p::first-letter { font-weight: 700; }</style>',
           '<p>foo</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'a', props: { 'font-weight': '700' } },
@@ -2059,7 +2090,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>p::first-line { font-weight: 700; }</style>',
           '<p>foo bar quux</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'foo bar quux', props: { 'font-weight': '700' } },
@@ -2072,7 +2103,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>div::first-letter { font-weight: 700; }</style>',
           '<style>div::first-line { font-weight: 200; font-style: italic; }</style>',
           '<div>foo</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           {
@@ -2098,7 +2129,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>p::first-line { font-weight: 700; }</style>',
           '<p>foo bar<br>quux</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'foo bar', props: { 'font-weight': '700' } },
@@ -2110,7 +2141,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>p::first-line { font-weight: 700; }</style>',
           '<p>foo\nbar<br>quux</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'foo bar', props: { 'font-weight': '700' } },
@@ -2122,7 +2153,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>pre::first-line { font-weight: 700; }</style>',
           '<pre>foo bar\nquux</pre>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'foo bar', props: { 'font-weight': '700' } },
@@ -2135,7 +2166,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>div::first-line { font-weight: 700; }</style>',
           '<style>@media 3dglasses { div { white-space: pre; font-style: italic; } }</style>',
           '<div>foo bar\nquux</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           {
@@ -2163,7 +2194,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           "<style>p::before { content: 'foo'; }</style>",
           "<style>p::after { content: 'quux'; }</style>",
           '<p>bar</p>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'foo', props: { 'font-weight': '700' } },
@@ -2181,7 +2212,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>input::placeholder { font-family: foo; }</style>',
           '<input placeholder="foobar" value="hey">'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'hey', props: { 'font-family': undefined } },
@@ -2193,7 +2224,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>@media 3dglasses { input::placeholder { font-family: foo; } }</style>',
           '<input placeholder="foobar" value="hey">'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           { text: 'hey', props: { 'font-family': undefined } },
@@ -2206,7 +2237,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
 
   describe('with display:list-item', function() {
     it('should include the default list indicators in the subset', function() {
-      var htmlText = ['<ol><li>foo</li></ol>'].join('\n');
+      var htmlText = ['<ol><li>foo</li></ol>'].join('');
 
       return expect(
         htmlText,
@@ -2236,7 +2267,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { display: list-item; list-style-type: upper-roman; }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2266,7 +2297,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { display: list-item block; list-style-type: upper-roman; }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2296,7 +2327,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         "<style>div { display: list-item; list-style-type: 'yeah'; }</style>",
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2326,7 +2357,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { display: list-item; list-style: upper-roman inside; }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2356,7 +2387,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { display: list-item; list-style: upper-roman inside; }</style>',
         '<div></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2379,7 +2410,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>li { list-style-type: decimal; font-weight: 400 }</style>',
         '<style>@media 3dglasses { li { list-style-type: upper-roman; } } </style>',
         '<li>Hello</li>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2418,7 +2449,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style media="3dglasses">.foo { display: none; }</style>',
         '<style>li:nth-child(2) { font-weight: 700; }</style>',
         '<ol><li></li><li class="foo"></li><li></li><li></li></ol>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2466,7 +2497,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>:hover > span { font-family: font1; }</style>',
         '<div>foo<span>bar</span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2504,7 +2535,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div:hover { font-family: font1; font-weight: bold }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2534,7 +2565,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { font-family: font1; font-weight: 400 } div:hover { font-weight: 500 }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2564,7 +2595,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div:hover { font-family: font1; }</style>',
         '<div>foo<span>bar</span></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2612,7 +2643,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { font-family: font1; font-weight: 400 } @media (max-width: 600px) { div { font-weight: 500 } }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2643,7 +2674,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>div { font-family: font1; font-weight: 400 }</style>',
         '<style media="projection">div { font-family: font2; font-weight: 800 }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2674,7 +2705,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>div { font-family: font1; font-weight: 400 }</style>',
         '<style media="projection">div { font-family: font2; font-weight: 800 } @media (max-width: 600px) { div { font-weight: 500 } }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2713,7 +2744,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>div { font-family: font1; font-weight: 400 }</style>',
         '<style>@media projection { div { font-family: font2; font-weight: 800 } @media (max-width: 600px) { div { font-weight: 500 } } }</style>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2785,6 +2816,22 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               'font-weight': '700',
               'font-style': 'normal'
             }
+          },
+          {
+            text: '        ',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          },
+          {
+            text: ' ',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
           }
         ]
       );
@@ -2796,7 +2843,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>h1 { font-weight: normal; font: bold 10px "famfam"; }</style>',
         '<h1>foo</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2818,7 +2865,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>h1 { font: bold 10px "famfam"; font-weight: normal; }</style>',
         '<h1>foo</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2843,7 +2890,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>@keyframes foo { 100% { font-weight: 400 } }</style>',
         '<style>h1 { font-weight: 100; animation: 3s ease-in 1s 2 reverse both foo; }</style>',
         '<h1>bar</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2890,7 +2937,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>@keyframes foo { 50% { font-style: oblique } 100% { font-style: italic } }</style>',
         '<style>h1 { font-style: normal; animation-name: foo; }</style>',
         '<h1>bar</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2929,7 +2976,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>@keyframes foo { 50% { list-style-type: decimal; } 100% { list-style-type: upper-roman; } }</style>',
         '<style>ol > li { list-style-type: "quux"; animation-name: foo; }</style>',
         '<ol><li>bar</li></ol>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -2976,7 +3023,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>@keyframes foo { 100% { font-weight: 400 } }</style>',
         '<style>h1 { font-weight: 100; animation-name: foo; }</style>',
         '<h1>bar</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -3024,7 +3071,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>@keyframes foo { 100% { content: "bar"; } }</style>',
         '<style>div:before { content: "foo"; animation: 3s ease-in 1s 2 reverse both paused foo; }</style>',
         '<div></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -3056,7 +3103,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<style>@keyframes foo { from { font-weight: 400; } to { font-weight: 700; } }</style>',
         '<style>h1 { font-weight: 400; animation-name: foo; }</style>',
         '<h1>bar</h1>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -3130,7 +3177,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>h1 { font-weight: 400; transition: width 2s, height 2s, font-weight 2s, transform 2s; }</style>',
           '<style>h1:hover { font-weight: 700; }</style>',
           '<h1>bar</h1>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3179,7 +3226,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>h1 { font-weight: 400; transition-property: font-weight; transition-duration: 4s; }</style>',
           '<style>h1:hover { font-weight: 700; }</style>',
           '<h1>bar</h1>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3226,7 +3273,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>h1 { font-weight: 400; transition-property: all; transition-duration: 4s; }</style>',
           '<style>h1:hover { font-weight: 700; }</style>',
           '<h1>bar</h1>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3273,7 +3320,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>h1 { font-weight: 400; transition-property: color; }</style>',
           '<style>h1:hover { font-weight: 700; }</style>',
           '<h1>bar</h1>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3311,14 +3358,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '    foo',
           '  <![endif]-->',
           '</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
           'to exhaustively satisfy computed font properties',
           [
             {
-              text: 'foo',
+              text: '      foo  ',
               props: {
                 'font-family': undefined,
                 'font-weight': '700',
@@ -3334,7 +3381,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<!--[if IE]>',
           '  <div>foo</div>',
           '<![endif]-->'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3346,6 +3393,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-family': undefined,
                 'font-weight': 'normal',
                 'font-style': 'normal'
+              }
+            },
+            {
+              text: '  ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
               }
             }
           ]
@@ -3360,7 +3415,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '    <div>foo</div>',
           '  <![endif]-->',
           '</section>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3372,6 +3427,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-family': undefined,
                 'font-weight': '700',
                 'font-style': 'normal'
+              }
+            },
+            {
+              text: '        ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
               }
             }
           ]
@@ -3386,7 +3449,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '  <![endif]-->',
           '  <li style="list-style-type: upper-roman"></li>',
           '</ol>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3407,6 +3470,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-weight': 'normal',
                 'font-style': 'normal'
               }
+            },
+            {
+              text: '          ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
             }
           ]
         );
@@ -3418,7 +3489,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '  <style>div { font-weight: 700; }</style>',
           '<![endif]-->',
           '<div>foo</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3438,6 +3509,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-family': undefined,
                 'font-weight': 'normal',
                 'font-style': 'normal'
+              }
+            },
+            {
+              text: '  ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
               }
             }
           ]
@@ -3453,7 +3532,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '  <style>div { font-style: italic }</style>',
           '<![endif]-->',
           '<div>foo</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3473,6 +3552,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-family': undefined,
                 'font-weight': 'normal',
                 'font-style': 'normal'
+              }
+            },
+            {
+              text: '    ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
               }
             }
           ]
@@ -3488,7 +3575,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '  <style>div { font-style: italic }</style>',
           '<![endif]-->',
           '<div>foo</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3525,6 +3612,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-weight': 'normal',
                 'font-style': 'normal'
               }
+            },
+            {
+              text: '    ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
             }
           ]
         );
@@ -3536,7 +3631,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<style>div { font-weight: 700; }</style>',
           '<div><!--[if !IE]>-->foo<!--<![endif]--></div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3583,7 +3678,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '    <div>foo</div>',
           '  <!--<![endif]-->',
           '</section>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3595,6 +3690,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-family': undefined,
                 'font-weight': '700',
                 'font-style': 'normal'
+              }
+            },
+            {
+              text: '        ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
               }
             }
           ]
@@ -3609,7 +3712,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '  <!--<![endif]-->',
           '  <li style="list-style-type: upper-roman"></li>',
           '</ol>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3630,6 +3733,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-weight': 'normal',
                 'font-style': 'normal'
               }
+            },
+            {
+              text: '          ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
             }
           ]
         );
@@ -3639,7 +3750,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         var htmlText = [
           '<!--[if !IE]>--><style>div { font-weight: 700; }</style><!--<![endif]-->',
           '<div>foo</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3670,7 +3781,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<!--[if !IE]>--><style>div { font-weight: 700; }</style><!--<![endif]-->',
           '<!--[if !IE]>--><style>div { font-style: italic }</style><!--<![endif]-->',
           '<div>foo</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -3702,7 +3813,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<!--[if IE]><style>div { font-style: italic; }</style><![endif]-->',
         '<!--[if !IE]>--><style>div { font-weight: 700; }</style><!--<![endif]-->',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -3734,7 +3845,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<style>div { font-weight: 700; }</style>',
         '<div><noscript>foo</noscript></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -3753,7 +3864,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     });
 
     it('should trace the DOM nodes inside the element', function() {
-      var htmlText = ['<noscript><div>foo</div></noscript>'].join('\n');
+      var htmlText = ['<noscript><div>foo</div></noscript>'].join('');
 
       return expect(
         htmlText,
@@ -3779,7 +3890,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '    <div>foo</div>',
         '  </noscript>',
         '</section>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -3791,6 +3902,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               'font-family': undefined,
               'font-weight': '700',
               'font-style': 'normal'
+            }
+          },
+          {
+            text: '        ',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
             }
           }
         ]
@@ -3805,7 +3924,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '  </noscript>',
         '  <li style="list-style-type: upper-roman"></li>',
         '</ol>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -3826,6 +3945,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               'font-weight': 'normal',
               'font-style': 'normal'
             }
+          },
+          {
+            text: '          ',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
           }
         ]
       );
@@ -3835,7 +3962,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       var htmlText = [
         '<noscript><style>div { font-weight: 700; }</style></noscript>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -3866,7 +3993,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<noscript><style>div { font-weight: 700; }</style></noscript>',
         '<noscript><style>div { font-style: italic }</style></noscript>',
         '<div>foo</div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -3894,7 +4021,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
   });
 
   it('should include a hyphen when a node contains a soft hyphen', function() {
-    var htmlText = ['<div>foo&shy;bar</div>'].join('\n');
+    var htmlText = ['<div>foo&shy;bar</div>'].join('');
 
     return expect(htmlText, 'to satisfy computed font properties', [
       { text: 'foo-bar' }
@@ -3903,7 +4030,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
 
   describe('with a document that results in different renderings in Chrome and Firefox', function() {
     it('should produce a subset that accommodates both renderings', function() {
-      var htmlText = ['<h1>foo<strong>bar</strong></h1>'].join('\n');
+      var htmlText = ['<h1>foo<strong>bar</strong></h1>'].join('');
 
       return expect(
         htmlText,
@@ -3941,7 +4068,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
   it('should not die when there is a :host() selector', function() {
     var htmlText = [
       '<style>:host(.special-custom-element) { display: block; }</style><h1>foo</h1>'
-    ].join('\n');
+    ].join('');
 
     return expect(
       htmlText,
@@ -3984,6 +4111,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               'font-style': 'normal',
               'font-weight': 'normal'
             }
+          },
+          {
+            text: '                                ',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
           }
         ]
       );
@@ -4023,9 +4158,17 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             }
           },
           {
-            text: 'quuxblah',
+            text: '             quux                          blah           ',
             props: {
               'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          },
+          {
+            text: '                                ',
+            props: {
+              'font-family': undefined,
               'font-style': 'normal',
               'font-weight': 'normal'
             }
@@ -4068,9 +4211,17 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             }
           },
           {
-            text: 'quuxblah',
+            text: '             quux                          blah           ',
             props: {
               'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          },
+          {
+            text: '                                ',
+            props: {
+              'font-family': undefined,
               'font-style': 'normal',
               'font-weight': 'normal'
             }
@@ -4104,6 +4255,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             text: 'bar',
             props: {
               'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          },
+          {
+            text: '                                ',
+            props: {
+              'font-family': undefined,
               'font-style': 'normal',
               'font-weight': 'normal'
             }
@@ -4159,6 +4318,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               'font-style': 'normal',
               'font-weight': 'normal'
             }
+          },
+          {
+            text: '                                ',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
           }
         ]
       );
@@ -4203,6 +4370,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               'font-style': 'normal',
               'font-weight': 'normal'
             }
+          },
+          {
+            text: '                                ',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
           }
         ]
       );
@@ -4244,6 +4419,22 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               'font-style': 'normal',
               'font-weight': 'normal'
             }
+          },
+          {
+            text: '                                ',
+            props: {
+              'font-family': 'foo',
+              'font-style': 'normal',
+              'font-weight': 'bold'
+            }
+          },
+          {
+            text: '                                ',
+            props: {
+              'font-family': 'bar',
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
           }
         ]
       );
@@ -4267,6 +4458,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               text: 'quux',
               props: {
                 'font-family': "'foo'",
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
+            },
+            {
+              text: '                                      ',
+              props: {
+                'font-family': undefined,
                 'font-style': 'normal',
                 'font-weight': 'normal'
               }
@@ -4299,6 +4498,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-style': 'normal',
                 'font-weight': 'normal'
               }
+            },
+            {
+              text: '                                      ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
             }
           ]
         );
@@ -4320,6 +4527,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         [
           {
             text: 'quux',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          },
+          {
+            text: '                                ',
             props: {
               'font-family': undefined,
               'font-style': 'normal',
@@ -4355,6 +4570,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-style': 'normal',
                 'font-weight': 'normal'
               }
+            },
+            {
+              text: '                                      ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
             }
           ]
         );
@@ -4384,6 +4607,14 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 'font-style': 'normal',
                 'font-weight': 'normal'
               }
+            },
+            {
+              text: '                                      ',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
             }
           ]
         );
@@ -4399,13 +4630,20 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 --my-font: var(--my-font);
               }
             </style>
-
             <div>quux</div>
           `,
           'to exhaustively satisfy computed font properties',
           [
             {
               text: 'quux',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
+            },
+            {
+              text: '                                     ',
               props: {
                 'font-family': undefined,
                 'font-style': 'normal',
@@ -4425,13 +4663,20 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
                 --my-other-font: var(--my-font);
               }
             </style>
-
             <div>quux</div>
           `,
           'to exhaustively satisfy computed font properties',
           [
             {
               text: 'quux',
+              props: {
+                'font-family': undefined,
+                'font-style': 'normal',
+                'font-weight': 'normal'
+              }
+            },
+            {
+              text: '                                     ',
               props: {
                 'font-family': undefined,
                 'font-style': 'normal',
@@ -4450,7 +4695,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@keyframes foo { 50% { --my-font-style: oblique } 100% { --my-font-style: italic } }</style>',
           '<style>h1 { font-style: var(--my-font-style); animation-name: foo; }</style>',
           '<h1>bar</h1>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -4490,7 +4735,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>@keyframes foo { 100% { --my-font-weight: 400 } }</style>',
           '<style>h1 { font-weight: var(--my-font-weight); animation-name: foo; }</style>',
           '<h1>bar</h1>'
-        ].join('\n');
+        ].join('');
 
         return expect(
           htmlText,
@@ -4539,7 +4784,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
           '<style>:root { --my-prop: foo; }</style>',
           '<style>div { font: 12px var(--my-prop) }</style>',
           '<div>bar</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           {
@@ -4551,12 +4796,12 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         ]);
       });
 
-      it('should a complex value', function() {
+      it('should support a complex value', function() {
         var htmlText = [
           '<style>:root { --my-prop: ultra-expanded 12px foo; }</style>',
           '<style>div { font: var(--my-prop) }</style>',
           '<div>bar</div>'
-        ].join('\n');
+        ].join('');
 
         return expect(htmlText, 'to satisfy computed font properties', [
           {
@@ -4575,7 +4820,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         "<style>@media projection { :root { --my-prop: 'the other value'; } }</style>",
         '<style>div:after { content: var(--my-prop) }</style>',
         '<div></div>'
-      ].join('\n');
+      ].join('');
 
       return expect(
         htmlText,
@@ -4613,7 +4858,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         '<div></div>',
         '<div></div>',
         '</body></html>'
-      ].join('\n');
+      ].join('');
 
       return expect(htmlText, 'to satisfy computed font properties', [
         { text: '810' },
