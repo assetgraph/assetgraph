@@ -9,7 +9,7 @@ describe('assets/Text', function() {
         expect(
           new AssetGraph().addAsset({
             type: 'Text',
-            rawSrc: new Buffer('Hello, world!\u263a')
+            rawSrc: Buffer.from('Hello, world!\u263a')
           }).text,
           'to equal',
           'Hello, world!\u263a'
@@ -32,7 +32,7 @@ describe('assets/Text', function() {
       it('should update the text', function() {
         const textAsset = new AssetGraph().addAsset({
           type: 'Text',
-          rawSrc: new Buffer('Hello, world!\u263a')
+          rawSrc: Buffer.from('Hello, world!\u263a')
         });
         textAsset.text = 'foo';
         expect(textAsset.text, 'to equal', 'foo');
@@ -41,7 +41,7 @@ describe('assets/Text', function() {
       it('should remove _lastKnownByteLength', function() {
         const textAsset = new AssetGraph().addAsset({
           type: 'Text',
-          rawSrc: new Buffer('Hello, world!\u263a')
+          rawSrc: Buffer.from('Hello, world!\u263a')
         });
         expect(textAsset._lastKnownByteLength, 'to equal', 16);
         textAsset.text = 'foo';
@@ -56,10 +56,10 @@ describe('assets/Text', function() {
         expect(
           new AssetGraph().addAsset({
             type: 'Text',
-            rawSrc: new Buffer('Hello, world!\u263a', 'utf-8')
+            rawSrc: Buffer.from('Hello, world!\u263a', 'utf-8')
           }).rawSrc,
           'to equal',
-          new Buffer('Hello, world!\u263a', 'utf-8')
+          Buffer.from('Hello, world!\u263a', 'utf-8')
         );
       });
 
@@ -70,7 +70,7 @@ describe('assets/Text', function() {
             text: 'Hello, world!\u263a'
           }).rawSrc,
           'to equal',
-          new Buffer('Hello, world!\u263a', 'utf-8')
+          Buffer.from('Hello, world!\u263a', 'utf-8')
         );
       });
     });
@@ -79,19 +79,19 @@ describe('assets/Text', function() {
       it('should update the rawSrc', function() {
         const asset = new AssetGraph().addAsset({
           type: 'Asset',
-          rawSrc: new Buffer('Hello, world!\u263a')
+          rawSrc: Buffer.from('Hello, world!\u263a')
         });
-        asset.rawSrc = new Buffer('foo');
-        expect(asset.rawSrc, 'to equal', new Buffer('foo'));
+        asset.rawSrc = Buffer.from('foo');
+        expect(asset.rawSrc, 'to equal', Buffer.from('foo'));
       });
 
       it('should update _lastKnownByteLength', function() {
         const asset = new AssetGraph().addAsset({
           type: 'Asset',
-          rawSrc: new Buffer('Hello, world!\u263a')
+          rawSrc: Buffer.from('Hello, world!\u263a')
         });
         expect(asset._lastKnownByteLength, 'to equal', 16);
-        asset.rawSrc = new Buffer('foo');
+        asset.rawSrc = Buffer.from('foo');
         expect(asset._lastKnownByteLength, 'to equal', 3);
       });
     });

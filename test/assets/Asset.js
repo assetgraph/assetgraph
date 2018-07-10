@@ -389,7 +389,7 @@ describe('assets/Asset', function() {
               }
             }
           ]);
-          expect(asset.rawSrc, 'to equal', new Buffer([]));
+          expect(asset.rawSrc, 'to equal', Buffer.from([]));
         });
       });
 
@@ -702,7 +702,7 @@ describe('assets/Asset', function() {
   it('should handle an Html asset with an url that has an extension', function() {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
-      rawSrc: new Buffer([0xc3, 0xa6, 0xc3, 0xb8, 0xc3, 0xa5]),
+      rawSrc: Buffer.from([0xc3, 0xa6, 0xc3, 0xb8, 0xc3, 0xa5]),
       url: 'http://example.com/index.blah'
     });
 
@@ -715,7 +715,7 @@ describe('assets/Asset', function() {
     expect(htmlAsset.fileName, 'to equal', 'index.blerg');
     expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg');
 
-    htmlAsset.rawSrc = new Buffer('foo', 'utf-8');
+    htmlAsset.rawSrc = Buffer.from('foo', 'utf-8');
 
     expect(htmlAsset.lastKnownByteLength, 'to equal', 3);
   });
@@ -1532,10 +1532,10 @@ describe('assets/Asset', function() {
         )
       });
       const original = assetGraph.addAsset({
-        rawSrc: new Buffer('original', 'utf8')
+        rawSrc: Buffer.from('original', 'utf8')
       });
       const clone = assetGraph.addAsset({
-        rawSrc: new Buffer('clone', 'utf8')
+        rawSrc: Buffer.from('clone', 'utf8')
       });
 
       const unloadSpy = sinon.spy(clone, 'unload');
@@ -1899,7 +1899,7 @@ describe('assets/Asset', function() {
               '<head>\n' +
               '<style>\n' +
               'body {\n' +
-              '    background-image: url(data:image/svg+xml;base64,'}${new Buffer(
+              '    background-image: url(data:image/svg+xml;base64,'}${Buffer.from(
               '<?xml version="1.0" encoding="UTF-8"?>\n' +
                 '<svg>\n' +
                 '<rect x="200" y="100" width="600" height="300" style="color: maroon"/>\n' +
@@ -1953,7 +1953,7 @@ describe('assets/Asset', function() {
               '<head>\n' +
               '<style>\n' +
               'body {\n' +
-              '    background-image: url(data:image/svg+xml;base64,'}${new Buffer(
+              '    background-image: url(data:image/svg+xml;base64,'}${Buffer.from(
               '<?xml version="1.0" encoding="UTF-8"?>\n' +
                 '<svg>\n' +
                 '<rect x="200" y="100" width="600" height="300" style="color: maroon"/>\n' +

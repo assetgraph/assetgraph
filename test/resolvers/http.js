@@ -96,7 +96,7 @@ describe('resolvers/http', function() {
       response: {
         statusCode: 200,
         headers: 'Content-Type: &',
-        body: new Buffer(html)
+        body: Buffer.from(html)
       }
     });
 

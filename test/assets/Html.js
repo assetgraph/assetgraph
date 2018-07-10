@@ -59,7 +59,7 @@ describe('assets/Html', function() {
       expect(
         new AssetGraph().addAsset({
           type: 'Html',
-          rawSrc: new Buffer(
+          rawSrc: Buffer.from(
             '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'
           )
         }).text,
@@ -82,7 +82,7 @@ describe('assets/Html', function() {
     it('should get text of AssetGraph.Html instantiated with rawSrc property and modified parse tree', function() {
       const htmlAsset = new AssetGraph().addAsset({
         type: 'Html',
-        rawSrc: new Buffer(
+        rawSrc: Buffer.from(
           '<!DOCTYPE html><html><body>Hello, world!\u263a</body></html>'
         )
       });
@@ -115,12 +115,12 @@ describe('assets/Html', function() {
       expect(
         new AssetGraph().addAsset({
           type: 'Html',
-          rawSrc: new Buffer(
+          rawSrc: Buffer.from(
             '<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>'
           )
         }).rawSrc,
         'to equal',
-        new Buffer(
+        Buffer.from(
           '<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>',
           'utf-8'
         )
@@ -135,7 +135,7 @@ describe('assets/Html', function() {
             '<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>'
         }).rawSrc,
         'to equal',
-        new Buffer(
+        Buffer.from(
           '<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>',
           'utf-8'
         )
@@ -145,7 +145,7 @@ describe('assets/Html', function() {
     it('should get rawSrc of AssetGraph.Html with rawSrc property and modified parse tree', function() {
       const htmlAsset = new AssetGraph().addAsset({
         type: 'Html',
-        rawSrc: new Buffer(
+        rawSrc: Buffer.from(
           '<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>'
         )
       });
@@ -154,7 +154,7 @@ describe('assets/Html', function() {
       expect(
         htmlAsset.rawSrc,
         'to equal',
-        new Buffer(
+        Buffer.from(
           '<!DOCTYPE html><html><head></head><body>Not so much!</body></html>',
           'utf-8'
         )
@@ -171,7 +171,7 @@ describe('assets/Html', function() {
       expect(
         htmlAsset.rawSrc,
         'to equal',
-        new Buffer(
+        Buffer.from(
           '<!DOCTYPE html><html><head></head><body>Not so much!</body></html>',
           'utf-8'
         )

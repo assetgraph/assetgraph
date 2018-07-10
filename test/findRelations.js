@@ -38,7 +38,7 @@ describe('AssetGraph.findRelations', function() {
       new AssetGraph().addAsset({
         type: 'Png',
         url: 'f',
-        rawSrc: new Buffer('f'),
+        rawSrc: Buffer.from('f'),
         foo: 'baz'
       })
     );

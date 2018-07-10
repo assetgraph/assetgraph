@@ -53,7 +53,7 @@ describe('AssetGraph#addAsset', function() {
         headers: {
           'Content-Type': 'image/gif'
         },
-        body: new Buffer('GIF')
+        body: Buffer.from('GIF')
       }
     });
 
@@ -74,7 +74,7 @@ describe('AssetGraph#addAsset', function() {
     assetGraph.addAsset(asset);
     await asset.load();
     expect(asset, 'to be an object');
-    expect(asset.rawSrc, 'to equal', new Buffer('Hello, world!\n', 'utf-8'));
+    expect(asset.rawSrc, 'to equal', Buffer.from('Hello, world!\n', 'utf-8'));
   });
 
   it('should not loop infinitely when encountering non-resolvable urls', async function() {
