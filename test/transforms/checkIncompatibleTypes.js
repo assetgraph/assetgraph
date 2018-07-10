@@ -60,6 +60,41 @@ describe('checkIncompatibleTypes', function() {
     });
   });
 
+  it('should not complain about a targetType:Image relation pointing at a specific image type', async function() {
+    const assetGraph = new AssetGraph();
+    const htmlAsset = assetGraph.addAsset({
+      type: 'Html',
+      url: 'https://www.example.com/',
+      text: `
+        <!DOCTYPE html>
+        <html>
+            <head></head>
+            <body>
+                <img src="image.png">
+            </body>
+        </html>
+      `
+    });
+
+    httpception({
+      request: 'GET https://www.example.com/image.png',
+      response: {
+        headers: {
+          'Content-Type': 'image/png'
+        },
+        body: Buffer.from(
+          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAADUlEQVQI12P4//+/GgAJIgMksOYDrwAAAABJRU5ErkJggg==',
+          'base64'
+        )
+      }
+    });
+    await htmlAsset.outgoingRelations[0].to.load();
+    const warnSpy = sinon.spy();
+    assetGraph.on('warn', warnSpy);
+    await assetGraph.checkIncompatibleTypes();
+    expect(warnSpy, 'was not called');
+  });
+
   it('should warn if an asset is being used in incompatible contexts', async function() {
     const assetGraph = new AssetGraph();
 
