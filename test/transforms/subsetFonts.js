@@ -2810,7 +2810,7 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
-    it('should not break when the original @font-face declarations have unicode-range and the first source does not include the characters we need', async function() {
+    it('should error out when an original @font-face declaration has a unicode-range property', async function() {
       httpception();
 
       const assetGraph = new AssetGraph({
@@ -2825,7 +2825,11 @@ describe('transforms/subsetFonts', function() {
           crossorigin: false
         }
       });
-      await assetGraph.subsetFonts();
+      await expect(
+        assetGraph.subsetFonts(),
+        'to be rejected with',
+        'subsetFonts transform: @font-face declarations with unicode-range are not supported when subsetting'
+      );
     });
 
     it('should emit a warning when subsetting invalid fonts', function() {
