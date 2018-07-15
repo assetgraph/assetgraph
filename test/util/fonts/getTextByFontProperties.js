@@ -56,6 +56,25 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     );
   });
 
+  it('should skip template language placeholders', function() {
+    var htmlText = '<div>foo <?bar?> quux</div>';
+
+    return expect(
+      htmlText,
+      'to exhaustively satisfy computed font properties',
+      [
+        {
+          text: 'foo  quux',
+          props: {
+            'font-family': undefined,
+            'font-weight': 'normal',
+            'font-style': 'normal'
+          }
+        }
+      ]
+    );
+  });
+
   it('should include whitespace', async function() {
     await expect(
       '<h2><span>foo</span> </h2>',
