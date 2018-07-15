@@ -2810,6 +2810,24 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
+    it('should not break when the original @font-face declarations have unicode-range and the first source does not include the characters we need', async function() {
+      httpception();
+
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/woff2-original/'
+        )
+      });
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate({
+        followRelations: {
+          crossorigin: false
+        }
+      });
+      await assetGraph.subsetFonts();
+    });
+
     it('should emit a warning when subsetting invalid fonts', function() {
       httpception();
 
