@@ -21,9 +21,24 @@ var defaultGoogleFontSubsetMock = [
         "  font-family: 'Open Sans';",
         '  font-style: normal;',
         '  font-weight: 400;',
-        "  src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/l/font?kit=Open+Sans:400) format('woff');",
+        "  src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/s/opensans/v15/mem8YaGs126MiZpBA-UFVZ0d.woff) format('woff');",
         '}'
       ].join('\n')
+    }
+  },
+  {
+    request:
+      'GET https://fonts.gstatic.com/s/opensans/v15/mem8YaGs126MiZpBA-UFVZ0d.woff',
+    response: {
+      headers: {
+        'Content-Type': 'font/woff'
+      },
+      body: fs.readFileSync(
+        pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/OpenSans-400.woff'
+        )
+      )
     }
   },
   {
@@ -902,6 +917,40 @@ describe('transforms/subsetFonts', function() {
         },
         {
           request:
+            'GET https://fonts.gstatic.com/l/font?kit=Jim+Nightshade:400',
+          response: {
+            body: fs.readFileSync(
+              pathModule.resolve(
+                __dirname,
+                '../../testdata/transforms/subsetFonts/JimNightshade-400.woff'
+              )
+            )
+          }
+        },
+        {
+          request: 'GET https://fonts.gstatic.com/l/font?kit=Montserrat:400',
+          response: {
+            body: fs.readFileSync(
+              pathModule.resolve(
+                __dirname,
+                '../../testdata/transforms/subsetFonts/Montserrat-400.woff'
+              )
+            )
+          }
+        },
+        {
+          request: 'GET https://fonts.gstatic.com/l/font?kit=Space+Mono:400',
+          response: {
+            body: fs.readFileSync(
+              pathModule.resolve(
+                __dirname,
+                '../../testdata/transforms/subsetFonts/SpaceMono-400.woff'
+              )
+            )
+          }
+        },
+        {
+          request:
             'GET https://fonts.googleapis.com/css?family=Jim+Nightshade:400&text=Helo&format=woff2',
           response: {
             headers: {
@@ -1378,6 +1427,40 @@ describe('transforms/subsetFonts', function() {
         },
 
         {
+          request: 'GET https://fonts.gstatic.com/l/font?kit=Roboto:300i',
+          response: {
+            body: fs.readFileSync(
+              pathModule.resolve(
+                __dirname,
+                '../../testdata/transforms/subsetFonts/Roboto-300i.woff'
+              )
+            )
+          }
+        },
+        {
+          request: 'GET https://fonts.gstatic.com/l/font?kit=Roboto:400',
+          response: {
+            body: fs.readFileSync(
+              pathModule.resolve(
+                __dirname,
+                '../../testdata/transforms/subsetFonts/Roboto-400.woff'
+              )
+            )
+          }
+        },
+        {
+          request: 'GET https://fonts.gstatic.com/l/font?kit=Roboto:500',
+          response: {
+            body: fs.readFileSync(
+              pathModule.resolve(
+                __dirname,
+                '../../testdata/transforms/subsetFonts/Roboto-500.woff'
+              )
+            )
+          }
+        },
+
+        {
           request:
             'GET https://fonts.googleapis.com/css?family=Roboto:500&text=Helo&format=woff2',
           response: {
@@ -1839,11 +1922,27 @@ describe('transforms/subsetFonts', function() {
                 "  font-family: 'Open Sans';",
                 '  font-style: normal;',
                 '  font-weight: 400;',
-                "  src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/l/font?text=*) format('woff');",
+                "  src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/l/font?kit=OpenSans:400) format('woff');",
                 '}'
               ].join('\n')
             }
           },
+
+          {
+            request: 'GET https://fonts.gstatic.com/l/font?kit=OpenSans:400',
+            response: {
+              headers: {
+                'Content-Type': 'font/woff'
+              },
+              body: fs.readFileSync(
+                pathModule.resolve(
+                  __dirname,
+                  '../../testdata/transforms/subsetFonts/OpenSans-400.woff'
+                )
+              )
+            }
+          },
+
           {
             request:
               'GET https://fonts.googleapis.com/css?family=Open+Sans:400&text=%20abotu&format=woff2',
@@ -2274,9 +2373,24 @@ describe('transforms/subsetFonts', function() {
                 "  font-family: 'Open Sans';",
                 '  font-style: normal;',
                 '  font-weight: 400;',
-                "  src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/l/font?text=*) format('woff');",
+                "  src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/l/font?kit=OpenSans:400) format('woff');",
                 '}'
               ].join('\n')
+            }
+          },
+
+          {
+            request: 'GET https://fonts.gstatic.com/l/font?kit=OpenSans:400',
+            response: {
+              headers: {
+                'Content-Type': 'font/woff'
+              },
+              body: fs.readFileSync(
+                pathModule.resolve(
+                  __dirname,
+                  '../../testdata/transforms/subsetFonts/OpenSans-400.woff'
+                )
+              )
             }
           },
 
@@ -2676,9 +2790,24 @@ describe('transforms/subsetFonts', function() {
                 '  font-style: normal;',
                 '  font-weight: 400;',
                 '  font-display: swap;',
-                "  src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/l/font?kit=fake) format('woff');",
+                "  src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/l/font?kit=OpenSans:400) format('woff');",
                 '}'
               ].join('\n')
+            }
+          },
+
+          {
+            request: 'GET https://fonts.gstatic.com/l/font?kit=OpenSans:400',
+            response: {
+              headers: {
+                'Content-Type': 'font/woff'
+              },
+              body: fs.readFileSync(
+                pathModule.resolve(
+                  __dirname,
+                  '../../testdata/transforms/subsetFonts/OpenSans-400.woff'
+                )
+              )
             }
           },
 
