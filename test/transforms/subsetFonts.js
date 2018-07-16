@@ -2810,6 +2810,28 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
+    it('should error out on multiple @font-face declarations with the same family/weight/style/stretch', async function() {
+      httpception();
+
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/woff2-original/'
+        )
+      });
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate({
+        followRelations: {
+          crossorigin: false
+        }
+      });
+      await expect(
+        assetGraph.subsetFonts(),
+        'to be rejected with',
+        'subsetFonts transform: Multiple @font-face with the same font-family/font-style/font-weight (maybe with different unicode-range?) are not supported'
+      );
+    });
+
     it('should emit a warning when subsetting invalid fonts', function() {
       httpception();
 
