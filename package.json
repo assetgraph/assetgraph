@@ -65,7 +65,7 @@
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
-    "autoprefixer": "^8.2.0",
+    "autoprefixer": "^9.0.0",
     "closure-compiler": "^0.2.12",
     "coveralls": "^3.0.0",
     "css-loader": "^1.0.0",
