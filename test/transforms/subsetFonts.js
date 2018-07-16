@@ -2810,7 +2810,7 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
-    it('should error out when an original @font-face declaration has a unicode-range property', async function() {
+    it('should error out on multiple @font-face declarations with the same family/weight/style/stretch', async function() {
       httpception();
 
       const assetGraph = new AssetGraph({
@@ -2828,7 +2828,7 @@ describe('transforms/subsetFonts', function() {
       await expect(
         assetGraph.subsetFonts(),
         'to be rejected with',
-        'subsetFonts transform: @font-face declarations with unicode-range are not supported when subsetting'
+        'subsetFonts transform: Multiple @font-face with the same font-family/font-style/font-weight (maybe with different unicode-range?) are not supported'
       );
     });
 
