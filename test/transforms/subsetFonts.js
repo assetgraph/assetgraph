@@ -3086,6 +3086,38 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
+    it('should tolerate case differences in font-family', async function() {
+      httpception();
+
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/local-font-family-case-difference/'
+        )
+      });
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate();
+      const { fontInfo } = await assetGraph.subsetFonts({
+        inlineSubsets: false
+      });
+
+      expect(fontInfo, 'to satisfy', [
+        {
+          fontUsages: [
+            {
+              texts: ['Hello, world!', 'Hello, yourself!'],
+              props: { 'font-family': 'Open Sans' }
+            }
+          ]
+        }
+      ]);
+      expect(
+        assetGraph.findAssets({ type: 'Css' })[0].text,
+        'to contain',
+        "font-family: 'Open Sans__subset', oPeN sAnS;"
+      ).and('to contain', "--the-font: 'Open Sans__subset', OpEn SaNs;");
+    });
+
     it('should handle HTML <link rel=stylesheet> with Google Fonts', function() {
       httpception(defaultLocalSubsetMock);
 
