@@ -736,7 +736,19 @@ describe('transforms/subsetFonts', function() {
         assetGraph.findAssets({ fileName: 'index.html' })[0].text,
         'to contain',
         "font: 12px/18px 'Open Sans__subset', 'Open Sans', Helvetica;"
-      );
+      )
+        .and(
+          'to contain',
+          ".with-weight-and-style { font: italic 700 12px/18px 'Open Sans__subset', 'Open Sans', Helvetica; }"
+        )
+        .and(
+          'to contain',
+          ".with-style-and-weight { font: italic 700 12px/18px 'Open Sans__subset', 'Open Sans', Helvetica; }"
+        )
+        .and(
+          'to contain',
+          ".with-weight { font: 700 12px/18px 'Open Sans__subset', 'Open Sans', Helvetica; }"
+        );
     });
 
     it('should add the __subset font name to a custom property that contributes to the font-family property', async function() {
