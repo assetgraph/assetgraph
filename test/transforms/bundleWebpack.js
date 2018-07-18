@@ -161,8 +161,8 @@ describe('bundleWebpack', function() {
       'to equal',
       [
         'webpack://webpack/bootstrap',
-        '../../../../../node_modules/createerror/lib/createError.js',
-        '/main.js'
+        '/main.js',
+        '../../../../../node_modules/createerror/lib/createError.js'
       ]
     );
   });
