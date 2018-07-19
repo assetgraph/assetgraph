@@ -127,6 +127,23 @@ describe('snapToAvailableFontProperties', function() {
       });
     });
 
+    it('should return a case insensitive match', function() {
+      var snapped = snap(
+        [
+          {
+            'font-family': 'Foo'
+          }
+        ],
+        {
+          'font-family': 'foO'
+        }
+      );
+
+      expect(snapped, 'to satisfy', {
+        'font-family': 'Foo'
+      });
+    });
+
     it('should unquote quoted values', function() {
       var snapped = snap(
         [

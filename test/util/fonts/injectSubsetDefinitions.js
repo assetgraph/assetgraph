@@ -30,6 +30,14 @@ describe('injectSubsetDefinitions', function() {
     );
   });
 
+  it('should match the font-family case sensitively', function() {
+    expect(
+      injectSubsetDefinitions('Times new rOman', webfontNameMap),
+      'to equal',
+      "'times new roman__subset', Times new rOman"
+    );
+  });
+
   it('should tolerate multiple spaces between words', function() {
     expect(
       injectSubsetDefinitions('times   new   roman', webfontNameMap),
@@ -54,12 +62,33 @@ describe('injectSubsetDefinitions', function() {
     );
   });
 
-  it('should not inject the subset into a value that already has it', function() {
+  it('should not inject the subset into a value that already has it, same casing', function() {
     expect(
       injectSubsetDefinitions(
         "'times new roman__subset', times new roman",
         webfontNameMap
       ),
+      'to equal',
+      "'times new roman__subset', times new roman"
+    );
+  });
+
+  it('should not inject the subset into a value that already has it, case difference in existing value', function() {
+    expect(
+      injectSubsetDefinitions(
+        "'TIMES new roman__subset', times new roman",
+        webfontNameMap
+      ),
+      'to equal',
+      "'TIMES new roman__subset', times new roman"
+    );
+  });
+
+  it('should not inject the subset into a value that already has it, case difference in webfontNameMap value', function() {
+    expect(
+      injectSubsetDefinitions("'times new roman__subset', times new roman", {
+        'times new roman': 'TIMES new roman__subset'
+      }),
       'to equal',
       "'times new roman__subset', times new roman"
     );
