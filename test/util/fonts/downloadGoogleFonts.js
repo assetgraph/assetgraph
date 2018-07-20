@@ -46,12 +46,10 @@ describe('downloadGoogleFonts', () => {
       }
     ]);
 
-    const [result] = await downloadGoogleFonts(
-      [
-        {
-          'font-family': 'Roboto'
-        }
-      ],
+    const result = await downloadGoogleFonts(
+      {
+        'font-family': 'Roboto'
+      },
       {
         formats: ['woff2']
       }
