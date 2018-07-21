@@ -793,15 +793,15 @@ describe('transforms/subsetFonts', function() {
           'to contain',
           "--the-font-family: 'Open Sans__subset', 'Open Sans', Helvetica;"
         )
-        .and('to contain', 'font: 12px/18px var(--the-font)')
+        .and('to contain', 'foNT: 12px/18px var(--the-font)')
         .and('to contain', '--fallback-font: sans-serif')
         .and(
           'to contain',
-          "font: 12px 'Open Sans__subset', 'Open Sans', var(--fallback-font);"
+          "foNT: 12px 'Open Sans__subset', 'Open Sans', var(--fallback-font);"
         )
         .and(
           'to contain',
-          "font-family: 'Open Sans__subset', 'Open Sans', var(--fallback-font);"
+          "font-FAMILY: 'Open Sans__subset', 'Open Sans', var(--fallback-font);"
         );
     });
 
