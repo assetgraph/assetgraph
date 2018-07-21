@@ -3148,6 +3148,42 @@ describe('transforms/subsetFonts', function() {
     ]);
   });
 
+  it('should support multiple @font-face blocks with different font-family, but same src', async function() {
+    httpception();
+
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/transforms/subsetFonts/multiple-font-face-with-same-src/'
+      )
+    });
+    await assetGraph.loadAssets('index.html');
+    await assetGraph.populate();
+    const { fontInfo } = await assetGraph.subsetFonts({
+      inlineSubsets: false
+    });
+
+    expect(fontInfo, 'to satisfy', [
+      {
+        fontUsages: [
+          {
+            texts: ['Hello, world!', 'Hello, yourself!'],
+            props: { 'font-family': 'foo' }
+          }
+        ]
+      }
+    ]);
+
+    const htmlAsset = assetGraph.findAssets({
+      type: 'Html'
+    })[0];
+
+    expect(htmlAsset.text, 'to contain', "font-family: foo__subset, 'foo'").and(
+      'to contain',
+      '<p style="font-family: foo__subset, bar">Hello, yourself!</p>'
+    );
+  });
+
   it('should tolerate case differences in font-family', async function() {
     httpception();
 
