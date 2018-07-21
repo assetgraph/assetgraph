@@ -119,6 +119,28 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     );
   });
 
+  it('should match CSS property names case insensitively', function() {
+    var htmlText = [
+      '<style>div { FONT-family: foo; font-WEIGHT: bold; }</style>',
+      '<div style="FONT-style: italic;">div</div>'
+    ].join('');
+
+    return expect(
+      htmlText,
+      'to exhaustively satisfy computed font properties',
+      [
+        {
+          text: 'div',
+          props: {
+            'font-family': 'foo',
+            'font-weight': 'bold',
+            'font-style': 'italic'
+          }
+        }
+      ]
+    );
+  });
+
   it('should apply stylesheet attribute values', function() {
     var htmlText = [
       '<style>div { font-weight: bold; }</style>',
