@@ -2963,6 +2963,31 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
+    // Some fonts don't contain these, but browsers don't seem to mind, so the warnings would just be noise
+    it('should not warn about tab and newline missing from the font being subset', async function() {
+      httpception();
+
+      var warnSpy = sinon.spy().named('warn');
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/missing-tab-and-newline-glyphs/'
+        )
+      });
+      assetGraph.on('warn', warnSpy);
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate({
+        followRelations: {
+          crossorigin: false
+        }
+      });
+      await assetGraph.subsetFonts({
+        inlineSubsets: false
+      });
+
+      expect(warnSpy, 'was not called');
+    });
+
     it('should subset local fonts', function() {
       httpception();
 
