@@ -3111,6 +3111,49 @@ describe('transforms/subsetFonts', function() {
         });
     });
 
+    it('should return a fontInfo object with defaulted/normalized props', async function() {
+      httpception();
+
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/font-face-defaults-and-casing/'
+        )
+      });
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate();
+      const { fontInfo } = await assetGraph.subsetFonts({
+        inlineSubsets: false
+      });
+
+      expect(fontInfo, 'to satisfy', [
+        {
+          fontUsages: [
+            {
+              texts: ['Hello, world!'],
+              props: {
+                'font-family': 'Foo',
+                'font-style': 'normal',
+                'font-weight': 700,
+                'font-stretch': 'condensed',
+                src: "url(OpenSans.ttf) format('truetype')"
+              }
+            },
+            {
+              texts: ['Hello, yourself!'],
+              props: {
+                'font-family': 'BAR',
+                'font-style': 'italic',
+                'font-weight': 400,
+                'font-stretch': 'normal',
+                src: "url(OpenSans2.ttf) format('truetype')"
+              }
+            }
+          ]
+        }
+      ]);
+    });
+
     it('should tolerate case differences in font-family', async function() {
       httpception();
 
@@ -3314,7 +3357,7 @@ describe('transforms/subsetFonts', function() {
                 text: 'fo',
                 props: {
                   'font-stretch': 'normal',
-                  'font-weight': 'normal',
+                  'font-weight': 400,
                   'font-style': 'normal',
                   'font-family': 'Open Sans'
                 }
