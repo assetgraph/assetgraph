@@ -2840,7 +2840,7 @@ describe('transforms/subsetFonts', function() {
       await expect(
         assetGraph.subsetFonts(),
         'to be rejected with',
-        'subsetFonts transform: Multiple @font-face with the same font-family/font-style/font-weight (maybe with different unicode-range?) are not supported'
+        'subsetFonts transform: Multiple @font-face with the same font-family/font-style/font-weight (maybe with different unicode-range?) is not supported yet: Roboto Slab/normal/300'
       );
     });
 
