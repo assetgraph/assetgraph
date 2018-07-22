@@ -1064,6 +1064,28 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       );
     });
 
+    it('should support an ::after selector without anything else', function() {
+      var htmlText = [
+        '<style>::after { content: "after" }</style>',
+        '<div></div>'
+      ].join('');
+
+      return expect(
+        htmlText,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'after',
+            props: {
+              'font-family': undefined,
+              'font-weight': 'normal',
+              'font-style': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
     it('should support :after without content', function() {
       var htmlText = [
         '<style>h1:after { font-family: font1 !important; }</style>',
