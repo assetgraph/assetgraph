@@ -3337,26 +3337,24 @@ describe('transforms/subsetFonts', function() {
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
-    const info = await assetGraph.subsetFonts({
+    const { fontInfo } = await assetGraph.subsetFonts({
       inlineSubsets: false
     });
-    expect(info, 'to satisfy', {
-      fontInfo: [
-        {
-          fontUsages: [
-            {
-              text: 'fo',
-              props: {
-                'font-stretch': 'normal',
-                'font-weight': 400,
-                'font-style': 'normal',
-                'font-family': 'Open Sans'
-              }
+    expect(fontInfo, 'to satisfy', [
+      {
+        fontUsages: [
+          {
+            text: 'fo',
+            props: {
+              'font-stretch': 'normal',
+              'font-weight': 400,
+              'font-style': 'normal',
+              'font-family': 'Open Sans'
             }
-          ]
-        }
-      ]
-    });
+          }
+        ]
+      }
+    ]);
   });
 
   it('should handle mixed local fonts and Google fonts', async function() {
