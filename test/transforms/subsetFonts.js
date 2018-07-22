@@ -1,15 +1,15 @@
-var expect = require('../unexpected-with-plugins');
-var AssetGraph = require('../../');
+const expect = require('../unexpected-with-plugins');
+const AssetGraph = require('../../');
 const pathModule = require('path');
 
-var proxyquire = require('proxyquire');
-var httpception = require('httpception');
-var sinon = require('sinon');
-var fs = require('fs');
+const proxyquire = require('proxyquire');
+const httpception = require('httpception');
+const sinon = require('sinon');
+const fs = require('fs');
 
-var fontCssUrlRegExp = /\/subfont\/fonts-[a-z0-9]{10}\.css$/;
+const fontCssUrlRegExp = /\/subfont\/fonts-[a-z0-9]{10}\.css$/;
 
-var defaultGoogleFontSubsetMock = [
+const defaultGoogleFontSubsetMock = [
   {
     request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
     response: {
@@ -92,7 +92,7 @@ var defaultGoogleFontSubsetMock = [
   }
 ];
 
-var defaultLocalSubsetMock = [
+const defaultLocalSubsetMock = [
   {
     request: 'GET https://fonts.googleapis.com/css?family=Open+Sans',
     response: {
@@ -138,7 +138,7 @@ describe('transforms/subsetFonts', function() {
     it('should emit an info about font subsetting tool not being available', async function() {
       httpception();
 
-      var infos = [];
+      const infos = [];
 
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
@@ -192,7 +192,7 @@ describe('transforms/subsetFonts', function() {
     it('should emit an info event when detaching prefetch relations to original fonts', async function() {
       httpception();
 
-      var infos = [];
+      const infos = [];
 
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
@@ -329,7 +329,7 @@ describe('transforms/subsetFonts', function() {
 
       expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-      var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+      const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
 
       expect(index.outgoingRelations, 'to satisfy', [
         {
@@ -594,7 +594,7 @@ describe('transforms/subsetFonts', function() {
 
       expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-      var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+      const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
 
       expect(index.outgoingRelations, 'to satisfy', [
         {
@@ -1620,7 +1620,7 @@ describe('transforms/subsetFonts', function() {
 
       expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-      var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+      const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
 
       expect(index.outgoingRelations, 'to satisfy', [
         {
@@ -2009,8 +2009,8 @@ describe('transforms/subsetFonts', function() {
         expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
         expect(assetGraph, 'to contain asset', { fileName: 'about.html' });
 
-        var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
-        var about = assetGraph.findAssets({ fileName: 'about.html' })[0];
+        const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+        const about = assetGraph.findAssets({ fileName: 'about.html' })[0];
 
         // Subsets
         expect(
@@ -2179,8 +2179,8 @@ describe('transforms/subsetFonts', function() {
           }
         ]);
 
-        var indexFontStyle = index.outgoingRelations[1].to;
-        var indexFont = index.outgoingRelations[0].to;
+        const indexFontStyle = index.outgoingRelations[1].to;
+        const indexFont = index.outgoingRelations[0].to;
 
         expect(about.outgoingRelations, 'to satisfy', [
           {
@@ -2384,8 +2384,8 @@ describe('transforms/subsetFonts', function() {
         expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
         expect(assetGraph, 'to contain asset', { fileName: 'about.html' });
 
-        var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
-        var about = assetGraph.findAssets({ fileName: 'about.html' })[0];
+        const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+        const about = assetGraph.findAssets({ fileName: 'about.html' })[0];
 
         expect(index.outgoingRelations, 'to satisfy', [
           {
@@ -2599,7 +2599,7 @@ describe('transforms/subsetFonts', function() {
             inlineSubsets: false
           })
         );
-        var cssAsset = assetGraph.findAssets({
+        const cssAsset = assetGraph.findAssets({
           type: 'Css',
           fileName: /fonts-/
         })[0];
@@ -2930,7 +2930,7 @@ describe('transforms/subsetFonts', function() {
   it('should emit a warning about if the highest prioritized font-family is missing glyphs', async function() {
     httpception();
 
-    var warnSpy = sinon.spy().named('warn');
+    const warnSpy = sinon.spy().named('warn');
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
@@ -3000,7 +3000,7 @@ describe('transforms/subsetFonts', function() {
 
     expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-    var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+    const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
 
     expect(index.outgoingRelations, 'to satisfy', [
       {
@@ -3205,7 +3205,7 @@ describe('transforms/subsetFonts', function() {
 
     expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-    var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+    const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
 
     expect(index.outgoingRelations, 'to satisfy', [
       {
@@ -3384,7 +3384,7 @@ describe('transforms/subsetFonts', function() {
 
     expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-    var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+    const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
 
     expect(index.outgoingRelations, 'to satisfy', [
       {
@@ -3640,7 +3640,7 @@ describe('with non-truetype fonts in the mix', function() {
     });
     expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
-    var index = assetGraph.findAssets({ fileName: 'index.html' })[0];
+    const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
 
     expect(index.outgoingRelations, 'to satisfy', [
       {
