@@ -295,23 +295,23 @@ describe('assets/Html', function() {
 
   describe('#isFragment', function() {
     describe('when the source has not been parsed yet', function() {
-      it('should be true when the source has no <html>, <head>, or <body>', function () {
+      it('should be true when the source has no <html>, <head>, or <body>', function() {
         expect(createAsset('<div>foo</div>').isFragment, 'to be true');
       });
 
-      it('should be false when the source contains <html>', function () {
+      it('should be false when the source contains <html>', function() {
         expect(createAsset('<html>').isFragment, 'to be false');
       });
 
-      it('should be false when the source contains <head>', function () {
+      it('should be false when the source contains <head>', function() {
         expect(createAsset('<head>').isFragment, 'to be false');
       });
 
-      it('should be false when the source contains <body>', function () {
+      it('should be false when the source contains <body>', function() {
         expect(createAsset('<body>').isFragment, 'to be false');
       });
 
-      it('should be false when the source contains a doctype', function () {
+      it('should be false when the source contains a doctype', function() {
         expect(createAsset('<!doctype html>').isFragment, 'to be false');
       });
     });
