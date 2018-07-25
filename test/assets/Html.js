@@ -4,6 +4,13 @@ const AssetGraph = require('../../lib/AssetGraph');
 const mozilla = require('source-map');
 const pathModule = require('path');
 
+function createAsset(inputHtml) {
+  return new AssetGraph().addAsset({
+    type: 'Html',
+    text: inputHtml
+  });
+}
+
 describe('assets/Html', function() {
   const expect = unexpected
     .clone()
@@ -208,13 +215,6 @@ describe('assets/Html', function() {
   });
 
   describe('template escaping', function() {
-    function createAsset(inputHtml) {
-      return new AssetGraph().addAsset({
-        type: 'Html',
-        text: inputHtml
-      });
-    }
-
     it('should handle a non-templated HTML asset', function() {
       const asset = createAsset('<div></div>');
       // eslint-disable-next-line no-unused-expressions
@@ -290,6 +290,30 @@ describe('assets/Html', function() {
       expect(asset.text, 'to equal', '<div><% foo ?> %></div>');
       asset.markDirty();
       expect(asset.text, 'to equal', '<div><% foo ?> %></div>');
+    });
+  });
+
+  describe('#isFragment', function() {
+    describe('when the source has not been parsed yet', function() {
+      it('should be true when the source has no <html>, <head>, or <body>', function () {
+        expect(createAsset('<div>foo</div>').isFragment, 'to be true');
+      });
+
+      it('should be false when the source contains <html>', function () {
+        expect(createAsset('<html>').isFragment, 'to be false');
+      });
+
+      it('should be false when the source contains <head>', function () {
+        expect(createAsset('<head>').isFragment, 'to be false');
+      });
+
+      it('should be false when the source contains <body>', function () {
+        expect(createAsset('<body>').isFragment, 'to be false');
+      });
+
+      it('should be false when the source contains a doctype', function () {
+        expect(createAsset('<!doctype html>').isFragment, 'to be false');
+      });
     });
   });
 
