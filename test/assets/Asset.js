@@ -29,6 +29,28 @@ describe('assets/Asset', function() {
       expect(assetGraph, 'to contain asset', 'Svg');
     });
 
+    it('should complain if an unparsable Content-Type response header is received', async function() {
+      const assetGraph = new AssetGraph();
+      const warnSpy = sinon.spy();
+      assetGraph.on('warn', warnSpy);
+
+      httpception({
+        request: 'GET https://www.example.com/foo.js',
+        response: {
+          headers: {
+            'Content-Type': 'foo!$bar'
+          },
+          body: 'alert("foo");'
+        }
+      });
+
+      await assetGraph.loadAssets('https://www.example.com/foo.js');
+
+      expect(warnSpy, 'to have calls satisfying', () => {
+        warnSpy('Invalid Content-Type response header received: foo!$bar');
+      });
+    });
+
     it('should complain if no Content-Type response header is received', async function() {
       const assetGraph = new AssetGraph();
       const warnSpy = sinon.spy();
@@ -65,154 +87,6 @@ describe('assets/Asset', function() {
 
       await assetGraph.loadAssets('https://www.example.com/foo.js');
 
-      expect(warnSpy, 'was not called');
-    });
-
-    it('should not complain if an HTTP redirect with a Content-Type conflicts with the expected type', async function() {
-      const assetGraph = new AssetGraph();
-      const warnSpy = sinon.spy();
-      assetGraph.on('warn', warnSpy);
-
-      httpception({
-        request: 'GET https://www.example.com/foo.js',
-        response: {
-          statusCode: 302,
-          headers: {
-            'Content-Type': 'text/html',
-            Location: 'https://www.example.com/otherScript.js'
-          },
-          body: 'Sorry, please get the script from over there'
-        }
-      });
-
-      await assetGraph.loadAssets('https://www.example.com/foo.js');
-
-      expect(warnSpy, 'was not called');
-    });
-
-    it('should complain if an unparsable Content-Type response header is received', async function() {
-      const assetGraph = new AssetGraph();
-      const warnSpy = sinon.spy();
-      assetGraph.on('warn', warnSpy);
-
-      httpception({
-        request: 'GET https://www.example.com/foo.js',
-        response: {
-          headers: {
-            'Content-Type': 'foo!$bar'
-          },
-          body: 'alert("foo");'
-        }
-      });
-
-      await assetGraph.loadAssets('https://www.example.com/foo.js');
-
-      expect(warnSpy, 'to have calls satisfying', () => {
-        warnSpy('Invalid Content-Type response header received: foo!$bar');
-      });
-    });
-
-    it('should warn if the Content-Type of the asset contradicts the incoming relations', async function() {
-      const assetGraph = new AssetGraph();
-      const htmlAsset = assetGraph.addAsset({
-        type: 'Html',
-        url: 'https://www.example.com/',
-        text: `
-          <!DOCTYPE html>
-          <html>
-              <head></head>
-              <body>
-                  <script src="foo.js"></script>
-              </body>
-          </html>
-        `
-      });
-
-      httpception({
-        request: 'GET https://www.example.com/foo.js',
-        response: {
-          headers: {
-            'Content-Type': 'image/png'
-          },
-          body: 'alert("foo");'
-        }
-      });
-      const warnSpy = sinon.spy();
-      assetGraph.on('warn', warnSpy);
-      await htmlAsset.outgoingRelations[0].to.load();
-      expect(warnSpy, 'to have calls satisfying', () => {
-        warnSpy('Asset is used as both JavaScript and Png');
-      });
-    });
-
-    it('should warn if the Content-Type is text/plain when expecting a specific Text subclass', async function() {
-      const assetGraph = new AssetGraph();
-      const htmlAsset = assetGraph.addAsset({
-        type: 'Html',
-        url: 'https://www.example.com/',
-        text: `
-          <!DOCTYPE html>
-          <html>
-              <head></head>
-              <body>
-                  <script src="foo.js"></script>
-              </body>
-          </html>
-        `
-      });
-
-      httpception({
-        request: 'GET https://www.example.com/foo.js',
-        response: {
-          headers: {
-            'Content-Type': 'text/plain'
-          },
-          body: 'alert("foo");'
-        }
-      });
-      const warnSpy = sinon.spy();
-      assetGraph.on('warn', warnSpy);
-      await htmlAsset.outgoingRelations[0].to.load();
-      expect(warnSpy, 'to have calls satisfying', () => {
-        warnSpy('Asset is used as both JavaScript and Text');
-      });
-    });
-
-    it('should not complain about a SourceMap being served as application/json', async function() {
-      httpception([
-        {
-          request: 'GET https://example.com/styles.css',
-          response: {
-            headers: {
-              'Content-Type': 'text/css'
-            },
-            body: 'div { color: maroon; }/*#sourceMappingURL=css.map*/'
-          }
-        },
-        {
-          request: 'GET https://example.com/css.map',
-          response: {
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: {
-              version: 3,
-              sources: ['/a.less'],
-              names: [],
-              mappings:
-                'AAAA;EACE,eAAe;EACf,sBAAsB;CACvB;AACD;EACE,+CAA+C;EAC/C,uCAAuC;CACxC',
-              file: 'styles.css'
-            }
-          }
-        }
-      ]);
-      const assetGraph = new AssetGraph();
-      const warnSpy = sinon.spy();
-      assetGraph.on('warn', warnSpy);
-      await assetGraph.loadAssets('https://example.com/styles.css');
-      await assetGraph.populate({
-        followRelations: { type: 'CssSourceMappingUrl' }
-      });
       expect(warnSpy, 'was not called');
     });
 
@@ -2106,50 +1980,6 @@ describe('assets/Asset', function() {
       'to contain',
       '<iframe src="somewhere/page2.html">'
     );
-  });
-
-  describe('#_isCompatibleWith', function() {
-    it('should consider Css compatible with Asset', function() {
-      expect(
-        new AssetGraph()
-          .addAsset({ type: 'Css', text: '' })
-          ._isCompatibleWith(undefined),
-        'to be true'
-      );
-    });
-
-    it('should consider Atom compatible with Xml', function() {
-      expect(
-        new AssetGraph()
-          .addAsset({
-            type: 'Atom',
-            text: '<?xml version="1.0" encoding="utf-8"?>'
-          })
-          ._isCompatibleWith('Xml'),
-        'to be true'
-      );
-    });
-
-    it('should consider Xml compatible with Atom', function() {
-      expect(
-        new AssetGraph()
-          .addAsset({
-            type: 'Xml',
-            text: '<?xml version="1.0" encoding="utf-8"?>'
-          })
-          ._isCompatibleWith('Atom'),
-        'to be true'
-      );
-    });
-
-    it('should consider Css incompatible with JavaScript', function() {
-      expect(
-        new AssetGraph()
-          .addAsset({ type: 'Css', text: '' })
-          ._isCompatibleWith('JavaScript'),
-        'to be false'
-      );
-    });
   });
 
   describe('#type', function() {

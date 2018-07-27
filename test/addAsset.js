@@ -333,42 +333,6 @@ describe('AssetGraph#addAsset', function() {
       expect(assetGraph, 'to contain asset', 'Css');
     });
 
-    it('should warn if an asset is being used in incompatible contexts', async function() {
-      const assetGraph = new AssetGraph();
-
-      const warnSpy = sinon.spy().named('warn');
-      assetGraph.on('warn', warnSpy);
-
-      const undetectableAsset = assetGraph.addAsset({
-        url: 'http://example.com/undetectable',
-        text: '/* foo */'
-      });
-
-      assetGraph.addAsset({
-        type: 'Html',
-        url: 'http://example.com/',
-        text: `
-          <!DOCTYPE html>
-          <html>
-          <head>
-              <link rel="stylesheet" href="undetectable">
-          </head>
-          <body>
-              <script src="undetectable"></script>
-          </body>
-          </html>
-        `
-      });
-
-      await undetectableAsset.load();
-
-      expect(warnSpy, 'to have calls satisfying', () => {
-        const err = new Error('Asset is used as both Css and JavaScript');
-        err.asset = undetectableAsset;
-        warnSpy(err);
-      });
-    });
-
     it('should upgrade an unloaded asset with text', async function() {
       const assetGraph = new AssetGraph();
       assetGraph.addAsset({
