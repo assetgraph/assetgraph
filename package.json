@@ -60,7 +60,7 @@
     "specificity": "^0.4.0",
     "sw-precache": "^5.2.0",
     "teepee": "^2.31.1",
-    "uglify-js": "3.4.5",
+    "uglify-js": "3.4.6",
     "urltools": "^0.4.1",
     "xmldom": "^0.1.27"
   },
