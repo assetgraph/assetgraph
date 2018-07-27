@@ -56,6 +56,25 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     );
   });
 
+  it('should skip template language placeholders', function() {
+    var htmlText = '<div>foo <?bar?> quux</div>';
+
+    return expect(
+      htmlText,
+      'to exhaustively satisfy computed font properties',
+      [
+        {
+          text: 'foo  quux',
+          props: {
+            'font-family': undefined,
+            'font-weight': 'normal',
+            'font-style': 'normal'
+          }
+        }
+      ]
+    );
+  });
+
   it('should include whitespace', async function() {
     await expect(
       '<h2><span>foo</span> </h2>',
@@ -94,6 +113,28 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             'font-family': undefined,
             'font-weight': 'bold',
             'font-style': 'normal'
+          }
+        }
+      ]
+    );
+  });
+
+  it('should match CSS property names case insensitively', function() {
+    var htmlText = [
+      '<style>div { FONT-family: foo; font-WEIGHT: bold; }</style>',
+      '<div style="FONT-style: italic;">div</div>'
+    ].join('');
+
+    return expect(
+      htmlText,
+      'to exhaustively satisfy computed font properties',
+      [
+        {
+          text: 'div',
+          props: {
+            'font-family': 'foo',
+            'font-weight': 'bold',
+            'font-style': 'italic'
           }
         }
       ]
@@ -1016,6 +1057,28 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
             props: {
               'font-family': 'font1',
               'font-weight': 'bold',
+              'font-style': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
+    it('should support an ::after selector without anything else', function() {
+      var htmlText = [
+        '<style>::after { content: "after" }</style>',
+        '<div></div>'
+      ].join('');
+
+      return expect(
+        htmlText,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'after',
+            props: {
+              'font-family': undefined,
+              'font-weight': 'normal',
               'font-style': 'normal'
             }
           }

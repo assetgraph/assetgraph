@@ -127,6 +127,23 @@ describe('snapToAvailableFontProperties', function() {
       });
     });
 
+    it('should return a case insensitive match', function() {
+      var snapped = snap(
+        [
+          {
+            'font-family': 'Foo'
+          }
+        ],
+        {
+          'font-family': 'foO'
+        }
+      );
+
+      expect(snapped, 'to satisfy', {
+        'font-family': 'Foo'
+      });
+    });
+
     it('should unquote quoted values', function() {
       var snapped = snap(
         [
@@ -202,6 +219,33 @@ describe('snapToAvailableFontProperties', function() {
 
       expect(snapped, 'to satisfy', {
         'font-stretch': 'condensed'
+      });
+    });
+
+    it('should return a case insensitive match', function() {
+      var snapped = snap(
+        [
+          {
+            'font-family': 'foo',
+            'font-stretch': 'extra-condensed'
+          },
+          {
+            'font-family': 'foo',
+            'font-stretch': 'conDENSED'
+          },
+          {
+            'font-family': 'foo',
+            'font-stretch': 'normal'
+          }
+        ],
+        {
+          'font-family': 'foo',
+          'font-stretch': 'CONdensed'
+        }
+      );
+
+      expect(snapped, 'to satisfy', {
+        'font-stretch': 'conDENSED'
       });
     });
 
@@ -376,6 +420,33 @@ describe('snapToAvailableFontProperties', function() {
 
         expect(snapped, 'to satisfy', {
           'font-style': 'italic'
+        });
+      });
+
+      it('should return a case insensitive match', function() {
+        var snapped = snap(
+          [
+            {
+              'font-family': 'foo',
+              'font-style': 'normal'
+            },
+            {
+              'font-family': 'foo',
+              'font-style': 'itaLIC'
+            },
+            {
+              'font-family': 'foo',
+              'font-style': 'oblique'
+            }
+          ],
+          {
+            'font-family': 'foo',
+            'font-style': 'ITAlic'
+          }
+        );
+
+        expect(snapped, 'to satisfy', {
+          'font-style': 'itaLIC'
         });
       });
 
@@ -583,6 +654,22 @@ describe('snapToAvailableFontProperties', function() {
         expect(snapped, 'to satisfy', { 'font-weight': '500' });
       });
 
+      it('should snap to a case insensitive match', function() {
+        var snapped = snap(
+          [
+            { 'font-family': 'foo', 'font-weight': 'boLD' },
+            { 'font-family': 'foo', 'font-weight': 'light' },
+            { 'font-family': 'foo', 'font-weight': 'normal' }
+          ],
+          {
+            'font-family': 'foo',
+            'font-weight': 'BOld'
+          }
+        );
+
+        expect(snapped, 'to satisfy', { 'font-weight': 'boLD' });
+      });
+
       it('should snap to the best available lighter value', function() {
         var snapped = snap(
           [
@@ -775,7 +862,7 @@ describe('snapToAvailableFontProperties', function() {
         expect(snapped, 'to satisfy', { 'font-weight': '400' });
       });
 
-      it('should snap to the corect value given both lighter and bolder modifications', function() {
+      it('should snap to the correct value given both lighter and bolder modifications', function() {
         var snapped = snap(
           [
             { 'font-family': 'foo', 'font-weight': '200' },
