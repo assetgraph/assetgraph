@@ -3233,6 +3233,70 @@ describe('transforms/subsetFonts', function() {
       ]);
     });
 
+    describe('with unused variants', function() {
+      it('should provide a @font-face declaration for the __subset version of an unused variants', async function() {
+        httpception();
+
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/unused-variant/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+
+        const subfontCss = assetGraph.findAssets({
+          type: 'Css',
+          path: '/subfont/'
+        })[0];
+
+        expect(
+          subfontCss.text,
+          'to contain',
+          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:local("Roboto Bold Italic"),local("Roboto-BoldItalic"),url(Roboto-700i-846d1890ae.woff) format("woff")'
+        );
+        expect(assetGraph, 'to contain relation', {
+          from: subfontCss,
+          to: {
+            url: `${assetGraph.root}subfont/Roboto-700i-846d1890ae.woff`
+          }
+        });
+      });
+
+      it('should not provide a @font-face declaration for the __subset version of an unused variant that did not get any subsets created', async function() {
+        httpception();
+
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/unused-font/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+
+        const subfontCss = assetGraph.findAssets({
+          type: 'Css',
+          path: '/subfont/'
+        })[0];
+
+        expect(subfontCss.text, 'not to contain', 'unused__subset');
+        expect(assetGraph, 'to contain no relation', {
+          from: subfontCss,
+          to: {
+            url: `${assetGraph.root}subfont/Roboto-700i-846d1890ae.woff`
+          }
+        });
+      });
+    });
+
     it('should return a fontInfo object with defaulted/normalized props', async function() {
       httpception();
 
