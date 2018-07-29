@@ -162,7 +162,9 @@ describe('checkIncompatibleTypes', function() {
     assetGraph.on('warn', warnSpy);
     await assetGraph.checkIncompatibleTypes();
     expect(warnSpy, 'to have calls satisfying', () => {
-      warnSpy('Asset is used as both JavaScript and Text');
+      warnSpy(
+        'Asset served with a Content-Type of text/plain, but used as JavaScript'
+      );
     });
   });
 
