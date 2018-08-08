@@ -3234,7 +3234,7 @@ describe('transforms/subsetFonts', function() {
     });
 
     describe('with unused variants', function() {
-      it('should provide a @font-face declaration for the __subset version of an unused variants', async function() {
+      it('should provide a @font-face declaration for the __subset version of an unused variant', async function() {
         httpception();
 
         const assetGraph = new AssetGraph({
@@ -3257,7 +3257,7 @@ describe('transforms/subsetFonts', function() {
         expect(
           subfontCss.text,
           'to contain',
-          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:local("Roboto Bold Italic"),local("Roboto-BoldItalic"),url(Roboto-700i-846d1890ae.woff) format("woff")'
+          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(Roboto-700i-846d1890ae.woff) format("woff")'
         );
         expect(assetGraph, 'to contain relation', {
           from: subfontCss,
