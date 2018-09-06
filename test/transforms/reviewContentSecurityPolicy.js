@@ -1293,9 +1293,7 @@ describe('transforms/reviewContentSecurityPolicy', function() {
           await assetGraph.reviewContentSecurityPolicy(undefined, { level: 3 });
 
           expect(warnSpy, 'to have calls satisfying', () => {
-            warnSpy(
-              /An asset violates the script-src 'unsafe-hashes'/
-            );
+            warnSpy(/An asset violates the script-src 'unsafe-hashes'/);
           });
         });
 

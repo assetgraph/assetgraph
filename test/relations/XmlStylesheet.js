@@ -27,8 +27,7 @@ describe('relations/XmlStylesheet', function() {
 
     assetGraph.findAssets({
       type: 'Css'
-    })[0].url =
-      'external.css';
+    })[0].url = 'external.css';
 
     const relation = assetGraph.findRelations()[0];
 
