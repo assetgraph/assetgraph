@@ -1043,7 +1043,7 @@ describe('transforms/reviewContentSecurityPolicy', function() {
   describe('with a style attribute', function() {
     describe('in update:true mode', function() {
       describe('with level=3', function() {
-        it("should add a hash of attribute and 'unsafe-hashed-attributes' to style-src", async function() {
+        it("should add a hash of attribute and 'unsafe-hashes' to style-src", async function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
@@ -1063,7 +1063,7 @@ describe('transforms/reviewContentSecurityPolicy', function() {
           expect(csp.parseTree, 'to satisfy', {
             styleSrc: [
               "'sha256-7uLHzkxvqv0UYsGK5JejxUXJey1gcHfYeV1OtXoN0B8='",
-              "'unsafe-hashed-attributes'"
+              "'unsafe-hashes'"
             ]
           });
         });
@@ -1072,7 +1072,7 @@ describe('transforms/reviewContentSecurityPolicy', function() {
 
     describe('in validation mode', function() {
       describe('with level=3', function() {
-        it("should emit two warnings, one about 'unsafe-hashed-attributes' missing and one about the hash source missing", async function() {
+        it("should emit two warnings, one about 'unsafe-hashes' missing and one about the hash source missing", async function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
@@ -1089,7 +1089,7 @@ describe('transforms/reviewContentSecurityPolicy', function() {
               /An asset violates the default-src 'none' Content-Security-Policy directive:/
             );
             warnSpy(
-              "testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineStyleAttribute/index.html: Missing style-src 'unsafe-hashed-attributes':\n" +
+              "testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineStyleAttribute/index.html: Missing style-src 'unsafe-hashes':\n" +
                 '  inline Css in testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineStyleAttribute/index.html'
             );
           });
@@ -1101,7 +1101,7 @@ describe('transforms/reviewContentSecurityPolicy', function() {
   describe('with an inline event handler', function() {
     describe('in update:true mode', function() {
       describe('with level=2', function() {
-        it("should add 'unsafe-inline' instead of 'unsafe-hashed-attributes' and emit a warning", async function() {
+        it("should add 'unsafe-inline' instead of 'unsafe-hashes' and emit a warning", async function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
@@ -1128,13 +1128,13 @@ describe('transforms/reviewContentSecurityPolicy', function() {
           expect(warnSpy, 'to have calls satisfying', () => {
             warnSpy(
               `testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/index.html contains one or more inline event handlers, which cannot be whitelisted with CSP level 2 except via 'unsafe-inline', which almost defeats the purpose of having a CSP\n` +
-                `The 'unsafe-hashed-attributes' CSP3 keyword will allow it, but at the time of writing the spec is not finalized and no browser implements it.`
+                `The 'unsafe-hashes' CSP3 keyword will allow it, but at the time of writing the spec is not finalized and no browser implements it.`
             );
           });
         });
 
         describe("when the existing CSP allows 'unsafe-inline'", function() {
-          it("should not add 'unsafe-hashed-attributes' or any hashes", async function() {
+          it("should not add 'unsafe-hashes' or any hashes", async function() {
             const assetGraph = new AssetGraph({
               root: pathModule.resolve(
                 __dirname,
@@ -1183,7 +1183,7 @@ describe('transforms/reviewContentSecurityPolicy', function() {
       });
 
       describe('with level=3', function() {
-        it("should add a hash of the event handler and 'unsafe-hashed-attributes' to script-src", async function() {
+        it("should add a hash of the event handler and 'unsafe-hashes' to script-src", async function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
@@ -1203,7 +1203,7 @@ describe('transforms/reviewContentSecurityPolicy', function() {
             {
               scriptSrc: [
                 "'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs='",
-                "'unsafe-hashed-attributes'"
+                "'unsafe-hashes'"
               ]
             }
           );
@@ -1234,7 +1234,7 @@ describe('transforms/reviewContentSecurityPolicy', function() {
       });
 
       describe('with level=3', function() {
-        it("should emit two warnings, one about 'unsafe-hashed-attributes' missing and one about the hash source missing", async function() {
+        it("should emit two warnings, one about 'unsafe-hashes' missing and one about the hash source missing", async function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
@@ -1251,13 +1251,13 @@ describe('transforms/reviewContentSecurityPolicy', function() {
               /An asset violates the default-src 'none' Content-Security-Policy directive:/
             );
             warnSpy(
-              "testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/index.html: Missing script-src 'unsafe-hashed-attributes':\n" +
+              "testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/index.html: Missing script-src 'unsafe-hashes':\n" +
                 '  inline JavaScript in testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/inlineEventHandler/index.html'
             );
           });
         });
 
-        it("should change the wording of the 'unsafe-hashed-attributes' warning when level >= 3", async function() {
+        it("should change the wording of the 'unsafe-hashes' warning when level >= 3", async function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
@@ -1273,11 +1273,11 @@ describe('transforms/reviewContentSecurityPolicy', function() {
             warnSpy(
               /An asset violates the default-src 'none' Content-Security-Policy directive:/
             );
-            warnSpy(/: Missing script-src 'unsafe-hashed-attributes'/);
+            warnSpy(/: Missing script-src 'unsafe-hashes'/);
           });
         });
 
-        it("should only warn about the missing hash source when 'unsafe-hashed-attributes' is already whitelisted", async function() {
+        it("should only warn about the missing hash source when 'unsafe-hashes' is already whitelisted", async function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
@@ -1289,17 +1289,17 @@ describe('transforms/reviewContentSecurityPolicy', function() {
           await assetGraph.loadAssets('index.html');
           assetGraph.findAssets({
             type: 'ContentSecurityPolicy'
-          })[0].parseTree.scriptSrc = ["'unsafe-hashed-attributes'"];
+          })[0].parseTree.scriptSrc = ["'unsafe-hashes'"];
           await assetGraph.reviewContentSecurityPolicy(undefined, { level: 3 });
 
           expect(warnSpy, 'to have calls satisfying', () => {
             warnSpy(
-              /An asset violates the script-src 'unsafe-hashed-attributes'/
+              /An asset violates the script-src 'unsafe-hashes'/
             );
           });
         });
 
-        it("should not issue any warnings when both 'unsafe-hashed-attributes' and the hash are already whitelisted", async function() {
+        it("should not issue any warnings when both 'unsafe-hashes' and the hash are already whitelisted", async function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
@@ -1312,7 +1312,7 @@ describe('transforms/reviewContentSecurityPolicy', function() {
           assetGraph.findAssets({
             type: 'ContentSecurityPolicy'
           })[0].parseTree.scriptSrc = [
-            "'unsafe-hashed-attributes'",
+            "'unsafe-hashes'",
             "'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs='"
           ];
           await assetGraph.reviewContentSecurityPolicy(undefined, { level: 3 });
