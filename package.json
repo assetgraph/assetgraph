@@ -44,7 +44,7 @@
     "imageinfo": "^1.0.4",
     "jsdom": "^12.0.0",
     "lines-and-columns": "^1.1.6",
-    "lodash": "^4.11.2",
+    "lodash": "4.17.11",
     "memoizesync": "1.1.1",
     "mkdirp": "^0.5.1",
     "normalizeurl": "^1.0.0",
