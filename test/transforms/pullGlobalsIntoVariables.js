@@ -6,7 +6,7 @@ const escodegen = require('escodegen');
 
 function getFunctionBodySource(fn) {
   return escodegen.generate(
-    esprima.parse(fn.toString().replace(/^function \(\) \{\n|\}$/g, ''))
+    esprima.parse(fn.toString().replace(/^function\s*\(\) \{\n|\}$/g, ''))
   );
 }
 
