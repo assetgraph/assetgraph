@@ -9,6 +9,50 @@ const fs = require('fs');
 
 describe('assets/Asset', function() {
   describe('#load()', function() {
+    it('should add an HTTP referer header to an http request when following a relation', async function() {
+      httpception([
+        {
+          request: {
+            url: 'GET https://www.example.com/',
+            headers: {
+              Referer: undefined
+            }
+          },
+          response: {
+            headers: {
+              'Content-Type': 'text/html'
+            },
+            body:
+              '<link rel="stylesheet" href="https://www.example.com/style.css">'
+          }
+        },
+
+        {
+          request: {
+            url: 'GET https://www.example.com/style.css',
+            headers: {
+              Referer: 'https://www.example.com/'
+            }
+          },
+          response: {
+            headers: {
+              'Content-Type': 'text/css'
+            },
+            body: 'body { background: rebeccapurple; }'
+          }
+        }
+      ]);
+
+      const assetGraph = new AssetGraph({
+        root: 'https://www.example.com/'
+      });
+
+      await assetGraph.loadAssets('/');
+      await assetGraph.populate();
+
+      expect(assetGraph, 'to contain asset', 'Css');
+    });
+
     it('should error when there is no file handle and the asset is not in a graph', function() {
       const asset = new AssetGraph().addAsset({});
 
