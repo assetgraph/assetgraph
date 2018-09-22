@@ -9,7 +9,7 @@ const fs = require('fs');
 
 describe('assets/Asset', function() {
   describe('#load()', function() {
-    it('should add an HTTP referer header to an http request when following a relation', async function() {
+    it('should add an HTTP referer header to an http request when following a relation from a HTTP asset', async function() {
       httpception([
         {
           request: {
@@ -48,6 +48,34 @@ describe('assets/Asset', function() {
       });
 
       await assetGraph.loadAssets('/');
+      await assetGraph.populate();
+
+      expect(assetGraph, 'to contain asset', 'Css');
+    });
+    it('should not add an HTTP referer header to an http request when following a relation from a non-HTTP asset', async function() {
+      httpception([
+        {
+          request: {
+            url: 'GET https://www.example.com/style.css',
+            headers: {
+              Referer: undefined
+            }
+          },
+          response: {
+            headers: {
+              'Content-Type': 'text/css'
+            },
+            body: 'body { background: rebeccapurple; }'
+          }
+        }
+      ]);
+
+      const assetGraph = new AssetGraph();
+
+      await assetGraph.loadAssets({
+        type: 'Html',
+        text: '<link rel="stylesheet" href="https://www.example.com/style.css">'
+      });
       await assetGraph.populate();
 
       expect(assetGraph, 'to contain asset', 'Css');
