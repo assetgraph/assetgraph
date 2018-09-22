@@ -9,6 +9,74 @@ const fs = require('fs');
 
 describe('assets/Asset', function() {
   describe('#load()', function() {
+    it('should add an HTTP referer header to an http request when following a relation from a HTTP asset', async function() {
+      httpception([
+        {
+          request: {
+            url: 'GET https://www.example.com/',
+            headers: {
+              Referer: undefined
+            }
+          },
+          response: {
+            headers: {
+              'Content-Type': 'text/html'
+            },
+            body:
+              '<link rel="stylesheet" href="https://www.example.com/style.css">'
+          }
+        },
+
+        {
+          request: {
+            url: 'GET https://www.example.com/style.css',
+            headers: {
+              Referer: 'https://www.example.com/'
+            }
+          },
+          response: {
+            headers: {
+              'Content-Type': 'text/css'
+            },
+            body: 'body { background: rebeccapurple; }'
+          }
+        }
+      ]);
+
+      const assetGraph = new AssetGraph({
+        root: 'https://www.example.com/'
+      });
+
+      await assetGraph.loadAssets('/');
+      await assetGraph.populate();
+    });
+    it('should not add an HTTP referer header to an http request when following a relation from a non-HTTP asset', async function() {
+      httpception([
+        {
+          request: {
+            url: 'GET https://www.example.com/style.css',
+            headers: {
+              Referer: undefined
+            }
+          },
+          response: {
+            headers: {
+              'Content-Type': 'text/css'
+            },
+            body: 'body { background: rebeccapurple; }'
+          }
+        }
+      ]);
+
+      const assetGraph = new AssetGraph();
+
+      await assetGraph.loadAssets({
+        type: 'Html',
+        text: '<link rel="stylesheet" href="https://www.example.com/style.css">'
+      });
+      await assetGraph.populate();
+    });
+
     it('should error when there is no file handle and the asset is not in a graph', function() {
       const asset = new AssetGraph().addAsset({});
 
