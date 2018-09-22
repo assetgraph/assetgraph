@@ -49,8 +49,6 @@ describe('assets/Asset', function() {
 
       await assetGraph.loadAssets('/');
       await assetGraph.populate();
-
-      expect(assetGraph, 'to contain asset', 'Css');
     });
     it('should not add an HTTP referer header to an http request when following a relation from a non-HTTP asset', async function() {
       httpception([
@@ -77,8 +75,6 @@ describe('assets/Asset', function() {
         text: '<link rel="stylesheet" href="https://www.example.com/style.css">'
       });
       await assetGraph.populate();
-
-      expect(assetGraph, 'to contain asset', 'Css');
     });
 
     it('should error when there is no file handle and the asset is not in a graph', function() {
