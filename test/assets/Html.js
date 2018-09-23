@@ -672,6 +672,22 @@ describe('assets/Html', function() {
     });
   });
 
+  describe('#prettyPrint()', function() {
+    it('should format the document nicely', function() {
+      const htmlAsset = new AssetGraph().addAsset({
+        type: 'Html',
+        text:
+          '<!DOCTYPE html><html><head></head><body><span>foo</span></body></html>'
+      });
+      htmlAsset.prettyPrint();
+      expect(
+        htmlAsset.text,
+        'to equal',
+        '<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\n  <span>foo</span>\n</body>\n</html>\n'
+      );
+    });
+  });
+
   describe('#allowsPerCsp', function() {
     let assetGraph;
     beforeEach(function() {

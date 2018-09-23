@@ -31,6 +31,7 @@
     "css-list-helpers": "2.0.0",
     "cssnano": "4.1.0",
     "data-urls": "^1.0.0",
+    "domspace": "^1.1.1",
     "esanimate": "^1.1.0",
     "escodegen": "^1.9.1",
     "esprima": "^4.0.0",
