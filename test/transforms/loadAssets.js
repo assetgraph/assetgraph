@@ -143,6 +143,34 @@ describe('transforms/loadAssets', function() {
     });
   });
 
+  describe('with a glob pattern in a file: url', function() {
+    it('should add all the matched assets to the graph and return them', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/loadAssets/glob/'
+        )
+      });
+
+      const assets = await assetGraph.loadAssets(`${assetGraph.root}/*.html`);
+
+      expect(assetGraph.findAssets(), 'to satisfy', [
+        { fileName: 'index1.html' },
+        { fileName: 'index2.html' }
+      ]);
+      expect(assetGraph, 'to contain asset', {
+        fileName: 'index1.html'
+      }).and('to contain asset', {
+        fileName: 'index2.html'
+      });
+
+      expect(assets, 'to satisfy', [
+        { fileName: 'index1.html' },
+        { fileName: 'index2.html' }
+      ]);
+    });
+  });
+
   describe('with a single asset config object', function() {
     it('should create and add the asset and return it in an array', async function() {
       const assetGraph = new AssetGraph();
