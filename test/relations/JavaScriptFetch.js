@@ -126,8 +126,7 @@ describe('relations/JavaScriptFetch', function() {
     relation.inline();
 
     expect(relation.from, 'to satisfy', {
-      text:
-        "fetch('data:application/javascript,module.exports%20%3D%20\\'fetched\\'%3B%0A');"
+      text: `fetch("data:application/javascript,module.exports%20%3D%20'fetched'%3B%0A");`
     });
   });
 

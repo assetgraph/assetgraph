@@ -357,4 +357,45 @@ describe('assets/JavaScript', function() {
       );
     });
   });
+
+  describe('serialization', function() {
+    describe('when there are more singlequotes than doublequotes in a string literal', function() {
+      it('should use doublequotes when serializing', function() {
+        const javaScript = new AssetGraph().addAsset({
+          type: 'JavaScript',
+          text: `var foo = 'b\\'\\'"ar';`
+        });
+        // Force a reserialization from the AST:
+        javaScript.parseTree; // eslint-disable-line no-unused-expressions
+        javaScript.markDirty();
+        expect(javaScript.text, 'to equal', `var foo = "b''\\"ar";`);
+      });
+    });
+
+    describe('when there are more doublequotes than singlequotes in a string literal', function() {
+      it('should use singlequotes when serializing', function() {
+        const javaScript = new AssetGraph().addAsset({
+          type: 'JavaScript',
+          text: `var foo = "b\\"\\"'ar";`
+        });
+        // Force a reserialization from the AST:
+        javaScript.parseTree; // eslint-disable-line no-unused-expressions
+        javaScript.markDirty();
+        expect(javaScript.text, 'to equal', `var foo = 'b""\\'ar';`);
+      });
+    });
+
+    describe('when there is the same number of doublequotes and singlequotes in a string literal', function() {
+      it('should use singlequotes when serializing', function() {
+        const javaScript = new AssetGraph().addAsset({
+          type: 'JavaScript',
+          text: `var foo = "b\\"'ar";`
+        });
+        // Force a reserialization from the AST:
+        javaScript.parseTree; // eslint-disable-line no-unused-expressions
+        javaScript.markDirty();
+        expect(javaScript.text, 'to equal', `var foo = 'b"\\'ar';`);
+      });
+    });
+  });
 });
