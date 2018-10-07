@@ -3808,6 +3808,41 @@ describe('transforms/subsetFonts', function() {
         }
       ]);
     });
+
+    it('should avoid duplicating fonts', async function() {
+      httpception();
+
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/partial-font-sharing-across-pages/'
+        )
+      });
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate();
+      const { fontInfo } = await assetGraph.subsetFonts({
+        inlineSubsets: false
+      });
+
+      const fonts = assetGraph.findAssets({
+        type: 'Woff2',
+        path: '/subfont/'
+      }).sort((a, b) => a.fileName < b.fileName);
+
+      const fontMap = fonts.reduce((result, font) => {
+        const key = `md5: ${font.md5Hex.slice(0, 10)}`;
+
+        if (key in result) {
+          result[key].push(font);
+        } else {
+          result[key] = [font];
+        }
+
+        return result;
+      }, {});
+
+      expect(fontMap, 'to have values satisfying', 'to have length', 1);
+    });
   });
 
   describe('with non-truetype fonts in the mix', function() {
