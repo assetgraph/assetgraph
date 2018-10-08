@@ -1198,7 +1198,7 @@ describe('assets/Asset', function() {
               }
             );
 
-            // expect(replacementJavaScript.url, 'to be null');
+            expect(replacementJavaScript.url, 'to be null');
 
             expect(
               htmlAsset.text,
