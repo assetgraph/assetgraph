@@ -3824,10 +3824,12 @@ describe('transforms/subsetFonts', function() {
         inlineSubsets: false
       });
 
-      const fonts = assetGraph.findAssets({
-        type: 'Woff2',
-        path: '/subfont/'
-      }).sort((a, b) => a.fileName < b.fileName);
+      const fonts = assetGraph
+        .findAssets({
+          type: 'Woff2',
+          path: '/subfont/'
+        })
+        .sort((a, b) => a.fileName < b.fileName);
 
       const fontMap = fonts.reduce((result, font) => {
         const key = `md5: ${font.md5Hex.slice(0, 10)}`;
