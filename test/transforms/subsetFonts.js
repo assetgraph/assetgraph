@@ -1749,7 +1749,7 @@ describe('transforms/subsetFonts', function() {
             text: expect
               .it('to contain', 'Roboto__subset')
               .and('to contain', "'font-weight':500")
-              .and('to contain', "'font-style':'italic','font-weight':300"),
+              .and('to contain', "'font-weight':300,'font-style':'italic'"),
             outgoingRelations: [
               {
                 type: 'JavaScriptStaticUrl',
