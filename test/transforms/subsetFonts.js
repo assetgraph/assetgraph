@@ -3820,7 +3820,7 @@ describe('transforms/subsetFonts', function() {
       });
       await assetGraph.loadAssets('index.html');
       await assetGraph.populate();
-      const { fontInfo } = await assetGraph.subsetFonts({
+      await assetGraph.subsetFonts({
         inlineSubsets: false
       });
 
