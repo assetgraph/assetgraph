@@ -1182,27 +1182,55 @@ describe('assets/Asset', function() {
       });
 
       describe('when the new asset does not have a url', function() {
-        it('should take over the url of the old asset', async function() {
-          const htmlAsset = new AssetGraph().addAsset({
-            type: 'Html',
-            url: 'https://www.example.com/somewhere/deep/index.html',
-            text: '<!DOCTYPE html><html></html>'
-          });
+        describe('and an inline asset is being replaced', function() {
+          it('should make the new asset inline', async function() {
+            const htmlAsset = new AssetGraph().addAsset({
+              type: 'Html',
+              url: 'https://www.example.com/',
+              text:
+                '<!DOCTYPE html><html><body><script>alert("foo");</script></body></html>'
+            });
 
-          const replacementJavaScript = htmlAsset.replaceWith({
-            type: 'Html',
-            text: `
-              <!DOCTYPE html>
-              <html>
-              </html>
-            `
-          });
+            const replacementJavaScript = htmlAsset.outgoingRelations[0].to.replaceWith(
+              {
+                type: 'JavaScript',
+                text: 'alert("bar");'
+              }
+            );
 
-          expect(
-            replacementJavaScript.url,
-            'to equal',
-            'https://www.example.com/somewhere/deep/index.html'
-          );
+            // expect(replacementJavaScript.url, 'to be null');
+
+            expect(
+              htmlAsset.text,
+              'to contain',
+              '<script>alert("bar");</script>'
+            );
+          });
+        });
+
+        describe('and a non-inline asset is being replaced', function() {
+          it('should take over the url of the old asset', async function() {
+            const htmlAsset = new AssetGraph().addAsset({
+              type: 'Html',
+              url: 'https://www.example.com/somewhere/deep/index.html',
+              text: '<!DOCTYPE html><html></html>'
+            });
+
+            const replacementAsset = htmlAsset.replaceWith({
+              type: 'Html',
+              text: `
+                <!DOCTYPE html>
+                <html>
+                </html>
+              `
+            });
+
+            expect(
+              replacementAsset.url,
+              'to equal',
+              'https://www.example.com/somewhere/deep/index.html'
+            );
+          });
         });
       });
 
