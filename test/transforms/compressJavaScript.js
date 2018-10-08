@@ -281,7 +281,7 @@ describe('transforms/compressJavaScript', function() {
     expect(
       htmlAsset.outgoingRelations[0].to.text,
       'to equal',
-      'alert("foobar");'
+      "alert('foobar');"
     );
   });
 });
