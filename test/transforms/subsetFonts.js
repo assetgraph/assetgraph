@@ -3257,14 +3257,25 @@ describe('transforms/subsetFonts', function() {
         expect(
           subfontCss.text,
           'to contain',
-          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(Roboto-700i-846d1890ae.woff) format("woff")'
+          'font-family:Roboto__subset;font-weight:700;font-style:italic;font-stretch:normal;'
         );
-        expect(assetGraph, 'to contain relation', {
-          from: subfontCss,
-          to: {
-            url: `${assetGraph.root}subfont/Roboto-700i-846d1890ae.woff`
+        expect(subfontCss.outgoingRelations, 'to satisfy', [
+          {
+            type: 'CssFontFaceSrc',
+            hrefType: 'relative',
+            href: 'Roboto-400-b437bcc0b2.woff2'
+          },
+          {
+            type: 'CssFontFaceSrc',
+            hrefType: 'relative',
+            href: 'Roboto-400-fe62230c45.woff'
+          },
+          {
+            type: 'CssFontFaceSrc',
+            hrefType: 'relative',
+            href: 'Roboto-700i-846d1890ae.woff'
           }
-        });
+        ]);
       });
 
       it('should not provide a @font-face declaration for the __subset version of an unused variant that did not get any subsets created', async function() {
