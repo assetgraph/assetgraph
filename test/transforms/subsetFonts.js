@@ -1748,8 +1748,8 @@ describe('transforms/subsetFonts', function() {
             isInline: true,
             text: expect
               .it('to contain', 'Roboto__subset')
-              .and('to contain', "'font-weight':500")
-              .and('to contain', "'font-weight':300,'font-style':'italic'"),
+              .and('to contain', "'weight':500")
+              .and('to contain', "'weight':300,'style':'italic'"),
             outgoingRelations: [
               {
                 type: 'JavaScriptStaticUrl',
@@ -3254,11 +3254,6 @@ describe('transforms/subsetFonts', function() {
           path: '/subfont/'
         })[0];
 
-        expect(
-          subfontCss.text,
-          'to contain',
-          'font-family:Roboto__subset;font-weight:700;font-style:italic;font-stretch:normal;'
-        );
         expect(subfontCss.outgoingRelations, 'to satisfy', [
           {
             type: 'CssFontFaceSrc',
