@@ -803,8 +803,7 @@ describe('relations/Relation', function() {
       const svgAsset = assetGraph.addAsset({
         type: 'Svg',
         url: 'https://example.com/image.svg',
-        text: `
-          <?xml version="1.0" encoding="UTF-8"?>
+        text: `<?xml version="1.0" encoding="UTF-8"?>
           <svg width="82px" height="90px" viewBox="0 0 82 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
               <polygon id="path-1" points="2.57083634e-05 42.5179483 48.5419561 42.5179483 48.5419561 0.268335496 2.57083634e-05 0.268335496"></polygon>
@@ -970,7 +969,7 @@ describe('relations/Relation', function() {
       type: 'Html',
       url: 'https://example.com/',
       text:
-        '<img src="data:image/svg+xml;base64,CiAgICAgICAgICAgICAgICA8P3htbCB2ZXJzaW9uPSIxLjAiIGVuY29kaW5nPSJVVEYtOCI/PgogICAgICAgICAgICAgICAgPHN2ZyB3aWR0aD0iODJweCIgaGVpZ2h0PSI5MHB4IiB2aWV3Qm94PSIwIDAgODIgOTAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iaGVhcnQiPgogICAgICAgICAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMzIsMTEuMmMwLDIuNy0xLjIsNS4xLTMsNi44bDAsMEwxOSwyOGMtMSwxLTIsMi0zLDJzLTItMS0zLTJMMywxOGMtMS45LTEuNy0zLTQuMS0zLTYuOEMwLDYuMSw0LjEsMiw5LjIsMgogICAgICAgICAgICAgICAgICAgICAgICBjMi43LDAsNS4xLDEuMiw2LjgsM2MxLjctMS45LDQuMS0zLDYuOC0zQzI3LjksMS45LDMyLDYuMSwzMiwxMS4yeiIvPgogICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgIDwvc3ZnPgogICAgICAgICAgICA=#yadda">'
+        '<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iODJweCIgaGVpZ2h0PSI5MHB4IiB2aWV3Qm94PSIwIDAgODIgOTAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGlkPSJoZWFydCI+CiAgICAgICAgPHBhdGggZD0iTTMyLDExLjJjMCwyLjctMS4yLDUuMS0zLDYuOGwwLDBMMTksMjhjLTEsMS0yLDItMywycy0yLTEtMy0yTDMsMThjLTEuOS0xLjctMy00LjEtMy02LjhDMCw2LjEsNC4xLDIsOS4yLDIKICAgICAgICBjMi43LDAsNS4xLDEuMiw2LjgsM2MxLjctMS45LDQuMS0zLDYuOC0zQzI3LjksMS45LDMyLDYuMSwzMiwxMS4yeiIvPgogICAg#yadda">'
     });
 
     htmlAsset.outgoingRelations[0].to.url = 'https://example.com/image.svg';

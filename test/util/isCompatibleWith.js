@@ -18,7 +18,7 @@ describe('isCompatibleWith', function() {
       isCompatibleWith(
         new AssetGraph().addAsset({
           type: 'Atom',
-          text: '<?xml version="1.0" encoding="utf-8"?>'
+          text: '<?xml version="1.0" encoding="utf-8"?><foo></foo>'
         }),
         'Xml'
       ),
@@ -31,7 +31,7 @@ describe('isCompatibleWith', function() {
       isCompatibleWith(
         new AssetGraph().addAsset({
           type: 'Xml',
-          text: '<?xml version="1.0" encoding="utf-8"?>'
+          text: '<?xml version="1.0" encoding="utf-8"?><foo></foo>'
         }),
         'Atom'
       ),
