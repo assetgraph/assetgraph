@@ -103,7 +103,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "npm run lint && mocha",
-    "travis": "npm run lint && npm run coverage",
+    "ci": "npm run lint && npm run coverage",
     "docs": "jsdoc -c jsdoc.json",
     "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text --all -- mocha --reporter dot && echo google-chrome coverage/lcov-report/index.html"
   },
