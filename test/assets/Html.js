@@ -683,7 +683,7 @@ describe('assets/Html', function() {
       expect(
         htmlAsset.text,
         'to equal',
-        '<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\n  <span>foo</span>\n</body>\n</html>\n'
+        '<!DOCTYPE html><html>\n<head>\n</head>\n<body>\n  <span>foo</span>\n</body>\n</html>'
       );
     });
   });
