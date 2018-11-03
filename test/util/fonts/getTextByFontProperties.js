@@ -2701,7 +2701,7 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
     });
   });
 
-  describe('CSS @media queries', function() {
+  describe('with CSS @media queries', function() {
     it('should include the possibility of the media query matching or not matching', function() {
       var htmlText = [
         '<style>div { font-family: font1; font-weight: 400 } @media (max-width: 600px) { div { font-weight: 500 } }</style>',
@@ -2894,6 +2894,38 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
               'font-family': undefined,
               'font-style': 'normal',
               'font-weight': 'normal'
+            }
+          }
+        ]
+      );
+    });
+  });
+
+  describe('with CSS @supports queries', function() {
+    it('should include the possibility of the query matching or not matching', function() {
+      var htmlText = [
+        '<style>div { font-family: font1; font-weight: 400 } @supports (--foo: green) { div { font-weight: 500 } }</style>',
+        '<div>foo</div>'
+      ].join('');
+
+      return expect(
+        htmlText,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'foo',
+            props: {
+              'font-family': 'font1',
+              'font-weight': '500',
+              'font-style': 'normal'
+            }
+          },
+          {
+            text: 'foo',
+            props: {
+              'font-family': 'font1',
+              'font-weight': '400',
+              'font-style': 'normal'
             }
           }
         ]
