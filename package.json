@@ -84,7 +84,7 @@
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
     "open": "^0.0.5",
-    "prettier": "~1.14.2",
+    "prettier": "~1.15.1",
     "proxyquire": "^2.0.1",
     "requirejs": "^2.3.5",
     "sinon": "^7.0.0",
