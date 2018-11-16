@@ -140,4 +140,17 @@ describe('relations/CssImage', function() {
       .and('to contain', "'blah%22baz.png.bogus'")
       .and('to contain', "'blerg%22zyp.png.bogus'")(text);
   });
+
+  it('should support detecting mask-image properties as relations', async function() {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/relations/CssImage/maskImage/'
+      )
+    });
+    await assetGraph.loadAssets('index.html');
+    await assetGraph.populate();
+
+    expect(assetGraph, 'to contain relations', 'CssImage', 2);
+  });
 });
