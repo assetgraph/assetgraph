@@ -1,6 +1,6 @@
-var expect = require('unexpected');
+const expect = require('unexpected');
 
-var snap = require('../../../lib/util/fonts/snapToAvailableFontProperties');
+const snap = require('../../../lib/util/fonts/snapToAvailableFontProperties');
 
 describe('snapToAvailableFontProperties', function() {
   it('should throw a type error when not passing a @font-face declarations array', function() {
@@ -389,6 +389,49 @@ describe('snapToAvailableFontProperties', function() {
 
         expect(snapped, 'to satisfy', {
           'font-stretch': 'normal'
+        });
+      });
+    });
+
+    describe('with CSS Fonts 4 ranges', function() {
+      it('should snap to an entry with a range that contains the desired value', function() {
+        var snapped = snap(
+          [
+            { 'font-family': 'foo', 'font-stretch': 'ultra-condensed' },
+            {
+              'font-family': 'foo',
+              'font-stretch': 'extra-condensed semi-condensed'
+            },
+            { 'font-family': 'foo', 'font-stretch': 'expanded' }
+          ],
+          {
+            'font-family': 'foo',
+            'font-stretch': 'condensed'
+          }
+        );
+
+        expect(snapped, 'to satisfy', {
+          'font-stretch': 'extra-condensed semi-condensed'
+        });
+      });
+
+      it('should prefer a range containing the value to a an inexact match within the range', function() {
+        var snapped = snap(
+          [
+            { 'font-family': 'foo', 'font-stretch': 'extra-condensed' },
+            {
+              'font-family': 'foo',
+              'font-stretch': 'ultra-condensed ultra-expanded'
+            }
+          ],
+          {
+            'font-family': 'foo',
+            'font-stretch': 'condensed'
+          }
+        );
+
+        expect(snapped, 'to satisfy', {
+          'font-stretch': 'ultra-condensed ultra-expanded'
         });
       });
     });
