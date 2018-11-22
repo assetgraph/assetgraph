@@ -4,6 +4,8 @@
 [![Build Status](https://travis-ci.org/assetgraph/assetgraph.svg?branch=master)](https://travis-ci.org/assetgraph/assetgraph)
 [![Coverage Status](https://img.shields.io/coveralls/assetgraph/assetgraph.svg)](https://coveralls.io/r/assetgraph/assetgraph?branch=master)
 [![Dependency Status](https://david-dm.org/assetgraph/assetgraph.svg)](https://david-dm.org/assetgraph/assetgraph)
+[![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/assetgraph/assetgraph.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/assetgraph/assetgraph/context:javascript)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/assetgraph/assetgraph.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/assetgraph/assetgraph/alerts)
 
 AssetGraph is an extensible, <a href="http://nodejs.org/">node.js</a>-based
 framework for manipulating and optimizing web pages and web
