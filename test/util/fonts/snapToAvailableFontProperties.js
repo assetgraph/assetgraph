@@ -921,5 +921,38 @@ describe('snapToAvailableFontProperties', function() {
         expect(snapped, 'to satisfy', { 'font-weight': '300' });
       });
     });
+
+    describe('with CSS Fonts 4 ranges', function() {
+      it('should snap to an entry with a range that contains the desired value', function() {
+        var snapped = snap(
+          [
+            { 'font-family': 'foo', 'font-weight': '100' },
+            { 'font-family': 'foo', 'font-weight': '200 400' },
+            { 'font-family': 'foo', 'font-weight': '500' }
+          ],
+          {
+            'font-family': 'foo',
+            'font-weight': '300'
+          }
+        );
+
+        expect(snapped, 'to satisfy', { 'font-weight': '200 400' });
+      });
+
+      it('should prefer a range containing the value to a an inexact match within the range', function() {
+        var snapped = snap(
+          [
+            { 'font-family': 'foo', 'font-weight': '100 800' },
+            { 'font-family': 'foo', 'font-weight': '300' }
+          ],
+          {
+            'font-family': 'foo',
+            'font-weight': '400'
+          }
+        );
+
+        expect(snapped, 'to satisfy', { 'font-weight': '100 800' });
+      });
+    });
   });
 });

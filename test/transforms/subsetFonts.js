@@ -3808,6 +3808,46 @@ describe('transforms/subsetFonts', function() {
         }
       ]);
     });
+
+    describe('with a variable font defined in a @supports block and a non-variable fallback', function() {
+      it('should subset both the variable font and the fallback fonts', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/variable-font-in-supports-block-with-fallback/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        const { fontInfo } = await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+        expect(fontInfo, 'to satisfy', [
+          {
+            fontUsages: [
+              {
+                text: 'Hello, ',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': 400,
+                  'font-style': 'normal',
+                  'font-family': 'Venn VF'
+                }
+              },
+              {
+                text: 'world!',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': 700,
+                  'font-style': 'normal',
+                  'font-family': 'Venn VF'
+                }
+              }
+            ]
+          }
+        ]);
+      });
+    });
   });
 
   describe('with non-truetype fonts in the mix', function() {
