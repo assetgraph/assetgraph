@@ -2,7 +2,7 @@ var expect = require('unexpected').clone();
 var resolveFontWeight = require('../../../lib/util/fonts/resolveFontWeight');
 
 describe('resolveFontWeight', function() {
-  it('should return the input weight if it exists inthe available weights', function() {
+  it('should return the input weight if it exists in the available weights', function() {
     expect(resolveFontWeight(100, [100, 200, 300]), 'to be', 100);
     expect(resolveFontWeight(200, [100, 200, 300]), 'to be', 200);
     expect(resolveFontWeight(300, [200, 300, 400]), 'to be', 300);
