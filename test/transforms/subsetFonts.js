@@ -3810,7 +3810,7 @@ describe('transforms/subsetFonts', function() {
     });
 
     describe('with a variable font defined in a @supports block and a non-variable fallback', function() {
-      it('should subset both the variable font and the fallback fonts', async function() {
+      it('should subset both the variable font and the fallback font', async function() {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
