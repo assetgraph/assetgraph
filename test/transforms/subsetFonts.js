@@ -3848,6 +3848,55 @@ describe('transforms/subsetFonts', function() {
         ]);
       });
     });
+
+    describe('with a variable font defined in a @supports block and a non-variable fallback with two variants', function() {
+      it('should subset both the variable font and the fallback font', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/variable-font-in-supports-block-with-two-fallback-variants/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        const { fontInfo } = await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+        expect(fontInfo, 'to satisfy', [
+          {
+            fontUsages: [
+              {
+                text: ' !,Hdelorw',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': 400,
+                  'font-style': 'normal',
+                  'font-family': 'Venn VF'
+                }
+              },
+              {
+                text: 'dlorw',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': 700,
+                  'font-style': 'normal',
+                  'font-family': 'Venn'
+                }
+              },
+              {
+                text: ' !,Helo',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': 400,
+                  'font-style': 'normal',
+                  'font-family': 'Venn'
+                }
+              }
+            ]
+          }
+        ]);
+      });
+    });
   });
 
   describe('with non-truetype fonts in the mix', function() {
