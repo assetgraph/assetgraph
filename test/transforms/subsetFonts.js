@@ -3826,7 +3826,7 @@ describe('transforms/subsetFonts', function() {
           {
             fontUsages: [
               {
-                text: 'Hello, ',
+                text: ' !,Hdelorw',
                 props: {
                   'font-stretch': 'normal',
                   'font-weight': 400,
@@ -3835,12 +3835,12 @@ describe('transforms/subsetFonts', function() {
                 }
               },
               {
-                text: 'world!',
+                text: ' !,Hdelorw',
                 props: {
                   'font-stretch': 'normal',
-                  'font-weight': 700,
+                  'font-weight': 400,
                   'font-style': 'normal',
-                  'font-family': 'Venn VF'
+                  'font-family': 'Venn'
                 }
               }
             ]
