@@ -3320,8 +3320,8 @@ describe('transforms/subsetFonts', function() {
               props: {
                 'font-family': 'Foo',
                 'font-style': 'normal',
-                'font-weight': 700,
-                'font-stretch': 'condensed',
+                'font-weight': 'boLD',
+                'font-stretch': 'conDENSED',
                 src: "url(OpenSans.ttf) format('truetype')"
               }
             },
@@ -3329,8 +3329,8 @@ describe('transforms/subsetFonts', function() {
               texts: ['Hello, yourself!'],
               props: {
                 'font-family': 'BAR',
-                'font-style': 'italic',
-                'font-weight': 400,
+                'font-style': 'ITAlic',
+                'font-weight': 'normal',
                 'font-stretch': 'normal',
                 src: "url(OpenSans2.ttf) format('truetype')"
               }
@@ -3579,7 +3579,7 @@ describe('transforms/subsetFonts', function() {
               text: 'fo',
               props: {
                 'font-stretch': 'normal',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal',
                 'font-family': 'Open Sans'
               }
@@ -3829,7 +3829,7 @@ describe('transforms/subsetFonts', function() {
                 text: ' !,Hdelorw',
                 props: {
                   'font-stretch': 'normal',
-                  'font-weight': 400,
+                  'font-weight': 'normal',
                   'font-style': 'normal',
                   'font-family': 'Venn VF'
                 }
@@ -3838,7 +3838,7 @@ describe('transforms/subsetFonts', function() {
                 text: ' !,Hdelorw',
                 props: {
                   'font-stretch': 'normal',
-                  'font-weight': 400,
+                  'font-weight': 'normal',
                   'font-style': 'normal',
                   'font-family': 'Venn'
                 }
@@ -3869,7 +3869,7 @@ describe('transforms/subsetFonts', function() {
                 text: ' !,Hdelorw',
                 props: {
                   'font-stretch': 'normal',
-                  'font-weight': 400,
+                  'font-weight': '300 800',
                   'font-style': 'normal',
                   'font-family': 'Venn VF'
                 }
@@ -3878,7 +3878,7 @@ describe('transforms/subsetFonts', function() {
                 text: 'dlorw',
                 props: {
                   'font-stretch': 'normal',
-                  'font-weight': 700,
+                  'font-weight': '700',
                   'font-style': 'normal',
                   'font-family': 'Venn'
                 }
@@ -3887,7 +3887,7 @@ describe('transforms/subsetFonts', function() {
                 text: ' !,Helo',
                 props: {
                   'font-stretch': 'normal',
-                  'font-weight': 400,
+                  'font-weight': '400',
                   'font-style': 'normal',
                   'font-family': 'Venn'
                 }
