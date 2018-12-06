@@ -3846,6 +3846,12 @@ describe('transforms/subsetFonts', function() {
             ]
           }
         ]);
+
+        expect(
+          assetGraph.findAssets({ type: 'Css' })[0].text,
+          'to contain',
+          `font-family: 'Venn VF__subset', 'Venn VF', Venn__subset, 'Venn', sans-serif;`
+        );
       });
     });
 
