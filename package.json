@@ -26,7 +26,7 @@
     "chalk": "^2.0.1",
     "common-path-prefix": "^1.0.0",
     "createerror": "^1.3.0",
-    "css-font-parser": "^0.2.3",
+    "css-font-parser-papandreou": "^0.2.3-patch1",
     "css-font-weight-names": "0.2.1",
     "css-list-helpers": "2.0.0",
     "cssnano": "4.1.8",
