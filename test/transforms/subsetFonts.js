@@ -3903,6 +3903,46 @@ describe('transforms/subsetFonts', function() {
         ]);
       });
     });
+
+    describe('with two variable fonts that provide different font-weight ranges of the same font-family', function() {
+      it('should subset both fonts when a CSS animation sweeps over both ranges', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/two-variable-fonts-animated/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        const { fontInfo } = await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+        expect(fontInfo, 'to satisfy', [
+          {
+            fontUsages: [
+              {
+                text: ' !,Hdelorw',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': '1 500',
+                  'font-style': 'normal',
+                  'font-family': 'Venn VF'
+                }
+              },
+              {
+                text: ' !,Hdelorw',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': '501 900',
+                  'font-style': 'normal',
+                  'font-family': 'Venn VF'
+                }
+              }
+            ]
+          }
+        ]);
+      });
+    });
   });
 
   describe('with non-truetype fonts in the mix', function() {
