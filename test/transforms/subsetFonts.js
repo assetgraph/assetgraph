@@ -3267,6 +3267,42 @@ describe('transforms/subsetFonts', function() {
         });
       });
 
+      it('should not preload the unused variants', async function() {
+        httpception();
+
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/one-unused-and-one-used-variant/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+        const preloadRelations = assetGraph.findRelations({
+          type: 'HtmlPreloadLink'
+        });
+        expect(
+          preloadRelations.map(relation =>
+            relation.href.replace(/\/subfont\/(.*)-[0-9a-f]*\.woff2/, '$1')
+          ),
+          'to satisfy',
+          ['Roboto-400']
+        );
+        expect(
+          assetGraph
+            .findAssets({ type: 'JavaScript' })[0]
+            .text.match(/'url\('\+'[^']+'/g)
+            .map(str =>
+              str.replace(/^.*\/subfont\/(.*?)-[a-f0-9]+\.woff.*/, '$1')
+            ),
+          'to satisfy',
+          ['Roboto-400']
+        );
+      });
+
       it('should not provide a @font-face declaration for the __subset version of an unused variant that did not get any subsets created', async function() {
         httpception();
 
