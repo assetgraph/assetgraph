@@ -239,9 +239,9 @@ describe('tranforms/inlineCriticalCss', function() {
           isInline: true,
           text: 'h1{color:red}a{color:#639}'
         },
-        node(node) {
+        node: expect.it(node => {
           return node && node.parentNode && node.parentNode.tagName === 'HEAD';
-        }
+        })
       },
       {
         to: {
