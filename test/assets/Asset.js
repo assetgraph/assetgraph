@@ -50,6 +50,7 @@ describe('assets/Asset', function() {
       await assetGraph.loadAssets('/');
       await assetGraph.populate();
     });
+
     it('should not add an HTTP referer header to an http request when following a relation from a non-HTTP asset', async function() {
       httpception([
         {
