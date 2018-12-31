@@ -206,4 +206,33 @@ describe('checkIncompatibleTypes', function() {
     await assetGraph.checkIncompatibleTypes();
     expect(warnSpy, 'was not called');
   });
+
+  it('should not complain if a source map is served with a Content-Type of application/octet-stream', async function() {
+    const assetGraph = new AssetGraph();
+
+    httpception({
+      request: 'GET https://www.example.com/foo.js.map',
+      response: {
+        headers: {
+          'Content-Type': 'application/octet-stream'
+        },
+        body: {
+          version: 3,
+          sources: ['foo.js'],
+          names: [],
+          mappings: 'AAEA;EACI,cAAA',
+          file: 'foo.js'
+        }
+      }
+    });
+
+    await assetGraph.loadAssets('https://www.example.com/foo.js.map');
+
+    expect(assetGraph, 'to contain asset', 'SourceMap');
+
+    const warnSpy = sinon.spy();
+    assetGraph.on('warn', warnSpy);
+    await assetGraph.checkIncompatibleTypes();
+    expect(warnSpy, 'was not called');
+  });
 });
