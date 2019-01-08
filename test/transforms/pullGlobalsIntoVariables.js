@@ -2,7 +2,7 @@
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const esprima = require('esprima');
-const escodegen = require('escodegen');
+const escodegen = require('escodegen-papandreou');
 
 function getFunctionBodySource(fn) {
   return escodegen.generate(

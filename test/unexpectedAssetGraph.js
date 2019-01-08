@@ -1,7 +1,7 @@
 const URL = require('url');
 const urlTools = require('urltools');
 const esprima = require('esprima');
-const escodegen = require('escodegen');
+const escodegen = require('escodegen-papandreou');
 
 module.exports = {
   name: 'unexpected-assetgraph',
