@@ -3909,6 +3909,11 @@ describe('transforms/subsetFonts', function() {
           'to contain',
           "{'font-weight':'300 800'}"
         );
+        expect(assetGraph, 'to contain asset', {
+          fileName: {
+            $regex: '^Venn_VF-300_800-[a-f0-9]+.woff2'
+          }
+        });
       });
     });
 
