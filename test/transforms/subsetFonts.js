@@ -3901,6 +3901,14 @@ describe('transforms/subsetFonts', function() {
             ]
           }
         ]);
+        const preloadFallbackJavaScript = assetGraph.findAssets({
+          type: 'JavaScript'
+        })[0];
+        expect(
+          preloadFallbackJavaScript.text,
+          'to contain',
+          "{'font-weight':'300 800'}"
+        );
       });
     });
 
