@@ -2948,4 +2948,70 @@ describe('assets/Asset', function() {
       });
     });
   });
+
+  describe('with non-ascii characters in a url', function() {
+    // Invalid, but tolerated by browsers
+    // https://github.com/webpack/webpack.js.org/pull/2762
+
+    it('should substitute percent-encoded utf-8 octets when requesting the asset from a remote server', async function() {
+      httpception({
+        request: 'GET https://example.com/%E2%9C%AD',
+        response: {
+          statusCode: 200,
+          headers: {
+            'Content-Type': 'image/png'
+          },
+          body: Buffer.from('PNG')
+        }
+      });
+
+      const assetGraph = new AssetGraph();
+      assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/',
+        text: `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+            </head>
+            <body>
+              <img src="https://example.com/✭">
+            </body>
+          </html>
+        `
+      });
+      await assetGraph.populate();
+    });
+
+    it('should treat a url with an unencoded non-ascii char as identical to an existing one where it is percent-encoded as utf-8 octets', async function() {
+      const assetGraph = new AssetGraph();
+      const asset1 = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/%E2%9C%AD'
+      });
+
+      const asset2 = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/✭'
+      });
+
+      expect(asset1, 'to be', asset2);
+    });
+
+    it('should treat a url with percent-encoded utf-8 octets as identical to an existing one where it was the corresponding non-ascii char', async function() {
+      const assetGraph = new AssetGraph();
+      const asset1 = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/✭'
+      });
+
+      const asset2 = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/%E2%9C%AD'
+      });
+
+      expect(asset1, 'to be', asset2);
+    });
+  });
 });
