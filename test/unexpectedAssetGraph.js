@@ -1,4 +1,4 @@
-const URL = require('url');
+const urlModule = require('url');
 const urlTools = require('urltools');
 const esprima = require('esprima');
 const escodegen = require('escodegen-papandreou');
@@ -109,7 +109,7 @@ module.exports = {
         if (!Array.isArray(urls)) {
           urls = [urls];
         }
-        urls = urls.map(url => URL.resolve(subject.root, url));
+        urls = urls.map(url => new urlModule.URL(url, subject.root).toString());
         expect.errorMode = 'nested';
         urls.forEach(function(url) {
           expect(subject.findAssets({ url }), 'to have length', 1);

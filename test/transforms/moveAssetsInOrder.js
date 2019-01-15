@@ -39,7 +39,7 @@ describe('transforms/moveAssetsInOrder', function() {
     await assetGraph.populate();
 
     await expect(
-      assetGraph.moveAssetsInOrder({ type: 'Css' }, '/css/'),
+      () => assetGraph.moveAssetsInOrder({ type: 'Css' }, '/css/'),
       'to error',
       /Couldn't find a suitable rename order due to cycles in the selection/
     );
