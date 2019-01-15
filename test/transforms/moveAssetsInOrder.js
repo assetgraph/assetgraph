@@ -24,10 +24,7 @@ describe('transforms/moveAssetsInOrder', function() {
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
-    await assetGraph.moveAssetsInOrder({ type: 'Css' }, function(
-      asset,
-      assetGraph
-    ) {
+    await assetGraph.moveAssetsInOrder({ type: 'Css' }, function(asset) {
       expect(asset.fileName, 'to be', order[idx]);
       idx += 1;
     });
@@ -42,7 +39,7 @@ describe('transforms/moveAssetsInOrder', function() {
     await assetGraph.populate();
 
     await expect(
-      async () => await assetGraph.moveAssetsInOrder({ type: 'Css' }, '/css/'),
+      assetGraph.moveAssetsInOrder({ type: 'Css' }, '/css/'),
       'to error',
       /Couldn't find a suitable rename order due to cycles in the selection/
     );

@@ -183,8 +183,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
     );
 
     await expect(
-      async () =>
-        await assetGraph.addPrecacheServiceWorker({ isInitial: true }),
+      assetGraph.addPrecacheServiceWorker({ isInitial: true }),
       'to be rejected with',
       new Error(
         `addPrecacheServiceWorker transform: There is already a service worker at ${
