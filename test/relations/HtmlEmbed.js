@@ -1,5 +1,5 @@
 const pathModule = require('path');
-/*global describe, it*/
+/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const urlTools = require('urltools');
 const AssetGraph = require('../../lib/AssetGraph');

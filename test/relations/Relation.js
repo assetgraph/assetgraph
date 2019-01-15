@@ -1,4 +1,4 @@
-/*global describe, it*/
+/* global describe, it */
 const AssetGraph = require('../../lib/AssetGraph');
 const expect = require('../unexpected-with-plugins');
 const _ = require('lodash');
