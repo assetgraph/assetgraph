@@ -1,5 +1,5 @@
 const pathModule = require('path');
-/*global describe, it*/
+/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
@@ -52,7 +52,7 @@ describe('relations/CssImage', function() {
     expect(
       assetGraph.findAssets({ fileName: 'index.css' })[0].text,
       'to match',
-      /\.baz {\n    background-image: url\(dir\/foo2\.png\) !important/
+      /\.baz {\n {4}background-image: url\(dir\/foo2\.png\) !important/
     );
   });
 

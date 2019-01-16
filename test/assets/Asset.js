@@ -1,5 +1,5 @@
 const pathModule = require('path');
-/*global describe, it*/
+/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const sinon = require('sinon');
 const urlTools = require('urltools');
@@ -642,7 +642,7 @@ describe('assets/Asset', function() {
     expect(htmlAsset.lastKnownByteLength, 'to equal', 6);
   });
 
-  it('should handle an Html asset with an url that has an extension', function() {
+  it('should handle an Html asset with a url that has an extension', function() {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
       rawSrc: Buffer.from([0xc3, 0xa6, 0xc3, 0xb8, 0xc3, 0xa5]),
@@ -663,7 +663,7 @@ describe('assets/Asset', function() {
     expect(htmlAsset.lastKnownByteLength, 'to equal', 3);
   });
 
-  it('should handle another Html asset with an url that has an extension', function() {
+  it('should handle another Html asset with a url that has an extension', function() {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
       text: 'foo',
@@ -678,7 +678,7 @@ describe('assets/Asset', function() {
     expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg');
   });
 
-  it('should handle yet another Html asset with an url that has an extension', function() {
+  it('should handle yet another Html asset with a url that has an extension', function() {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
       text: 'foo',
@@ -692,7 +692,7 @@ describe('assets/Asset', function() {
     expect(htmlAsset.url, 'to equal', 'http://example.com/index');
   });
 
-  it('should yet yet another Html asset with an url that has an extension', function() {
+  it('should yet yet another Html asset with a url that has an extension', function() {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
       text: 'foo',
@@ -707,7 +707,7 @@ describe('assets/Asset', function() {
     expect(htmlAsset.url, 'to equal', 'http://example.com/');
   });
 
-  it('should handle an Html asset with an url that has an extension and a fragment identifier', function() {
+  it('should handle an Html asset with a url that has an extension and a fragment identifier', function() {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
       text: 'foo',
@@ -725,7 +725,7 @@ describe('assets/Asset', function() {
     expect(htmlAsset.url, 'to equal', 'http://example.com/index');
   });
 
-  it('should handle another Html asset with an url that has an extension and a fragment identifier', function() {
+  it('should handle another Html asset with a url that has an extension and a fragment identifier', function() {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
       text: 'foo',
@@ -739,25 +739,7 @@ describe('assets/Asset', function() {
     expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg');
   });
 
-  it('should handle an Html asset with an url that has an extension and a query string', function() {
-    const htmlAsset = new AssetGraph().addAsset({
-      type: 'Html',
-      text: 'foo',
-      url: 'http://example.com/index.blah?yay=bar'
-    });
-
-    expect(htmlAsset.extension, 'to equal', '.blah');
-    expect(htmlAsset.fileName, 'to equal', 'index.blah');
-    htmlAsset.extension = '.blerg';
-    expect(htmlAsset.extension, 'to equal', '.blerg');
-    expect(htmlAsset.fileName, 'to equal', 'index.blerg');
-    expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg?yay=bar');
-    htmlAsset.extension = '';
-    expect(htmlAsset.fileName, 'to equal', 'index');
-    expect(htmlAsset.url, 'to equal', 'http://example.com/index?yay=bar');
-  });
-
-  it('should handle another Html asset with an url that has an extension and a query string', function() {
+  it('should handle another Html asset with a url that has an extension and a query string', function() {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
       text: 'foo',
@@ -772,7 +754,7 @@ describe('assets/Asset', function() {
     expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg?yay=bar');
   });
 
-  it('should handle an Html asset with an url that has an extension, a query string, and a fragment identifier', function() {
+  it('should handle an Html asset with a url that has an extension, a query string, and a fragment identifier', function() {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
       text: 'foo',
@@ -790,7 +772,7 @@ describe('assets/Asset', function() {
     expect(htmlAsset.url, 'to equal', 'http://example.com/index?yay=bar');
   });
 
-  it('should handle an Html asset with an url that has an extension, a query string, and a fragment identifier', function() {
+  it('should handle an Html asset with a url that has an extension and a query string', function() {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
       text: 'foo',
@@ -799,6 +781,10 @@ describe('assets/Asset', function() {
     expect(htmlAsset.extension, 'to equal', '.blah');
     expect(htmlAsset.fileName, 'to equal', 'index.blah');
     htmlAsset.fileName = 'index.blerg';
+    expect(htmlAsset.extension, 'to equal', '.blerg');
+    expect(htmlAsset.fileName, 'to equal', 'index.blerg');
+    expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg?yay=bar');
+    htmlAsset.extension = '.blerg';
     expect(htmlAsset.extension, 'to equal', '.blerg');
     expect(htmlAsset.fileName, 'to equal', 'index.blerg');
     expect(htmlAsset.url, 'to equal', 'http://example.com/index.blerg?yay=bar');
@@ -1711,7 +1697,7 @@ describe('assets/Asset', function() {
       );
     });
 
-    it('should throw when trying to set an url on a non-externalizable asset', function() {
+    it('should throw when trying to set a url on a non-externalizable asset', function() {
       const asset = new AssetGraph().addAsset({});
       asset.isExternalizable = false;
 

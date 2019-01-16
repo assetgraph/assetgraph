@@ -1,29 +1,11 @@
 const pathModule = require('path');
-/*global describe, it*/
+/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlScript', function() {
-  it('should handle a test case with existing <script> elements', async function() {
-    const assetGraph = new AssetGraph({
-      root: pathModule.resolve(
-        __dirname,
-        '../../testdata/relations/HtmlScript/'
-      )
-    });
-    await assetGraph.loadAssets('index.html').populate();
-
-    expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
-    expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
-      'externalNoType.js',
-      undefined,
-      'externalWithTypeTextJavaScript.js',
-      undefined
-    ]);
-  });
-
-  it('should attach script node after another when using the `after` position', async function() {
+  it('should inline a script', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
@@ -40,6 +22,30 @@ describe('relations/HtmlScript', function() {
     firstScript.inline();
 
     expect(firstScript.node.hasAttribute('src'), 'to be', false);
+
+    expect(
+      firstScript.node.textContent,
+      'to equal',
+      "var external = 'noType';"
+    );
+  });
+
+  it('should handle a test case with existing <script> elements', async function() {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/relations/HtmlScript/'
+      )
+    });
+    await assetGraph.loadAssets('index.html').populate();
+
+    expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
+    expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
+      'externalNoType.js',
+      undefined,
+      'externalWithTypeTextJavaScript.js',
+      undefined
+    ]);
   });
 
   it('should attach script node before the first existing script node when using the `first` position', async function() {
@@ -79,39 +85,6 @@ describe('relations/HtmlScript', function() {
     expect(relation.node.parentNode, 'not to be', document.body);
     expect(relation.node.parentNode, 'to be', document.head);
     expect(relation.node, 'to be', firstScript.node.previousSibling);
-  });
-
-  it('should attach script node as the last node in document.body if no other scripts exist when using the `first` position', async function() {
-    const assetGraph = new AssetGraph({
-      root: pathModule.resolve(
-        __dirname,
-        '../../testdata/relations/HtmlScript/'
-      )
-    });
-    await assetGraph.loadAssets(
-      new AssetGraph().addAsset({
-        type: 'Html',
-        url: 'index.html',
-        text: '<html><head></head><body><h1>Hello world</h1></body></html>'
-      })
-    );
-
-    const html = assetGraph.findAssets({ type: 'Html' })[0];
-    const document = html.parseTree;
-    const relation = html.addRelation(
-      {
-        type: 'HtmlScript',
-        to: {
-          url: 'firstRelationAsset.js',
-          text: '"use strict";'
-        }
-      },
-      'first'
-    );
-
-    expect(relation.node.parentNode, 'not to be', document.head);
-    expect(relation.node.parentNode, 'to be', document.body);
-    expect(relation.node, 'to be', document.body.lastChild);
   });
 
   it('should attach script node as the last node in document.body if no other scripts exist when using the `first` position', function() {
@@ -179,7 +152,7 @@ describe('relations/HtmlScript', function() {
     expect(relation.node, 'to be', firstScript.node.previousSibling);
   });
 
-  it('should attach script node after another when using the `after` position', async function() {
+  it('should attach a script node after another when using the `after` position', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,

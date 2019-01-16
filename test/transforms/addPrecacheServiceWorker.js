@@ -1,5 +1,5 @@
 const pathModule = require('path');
-/*global describe, it*/
+/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const sinon = require('sinon');
@@ -183,8 +183,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
     );
 
     await expect(
-      async () =>
-        await assetGraph.addPrecacheServiceWorker({ isInitial: true }),
+      assetGraph.addPrecacheServiceWorker({ isInitial: true }),
       'to be rejected with',
       new Error(
         `addPrecacheServiceWorker transform: There is already a service worker at ${

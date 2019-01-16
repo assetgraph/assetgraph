@@ -1,4 +1,4 @@
-/*global describe, it*/
+/* global describe, it */
 const expect = require('./unexpected-with-plugins').clone();
 const parseExpression = require('../lib/parseExpression');
 

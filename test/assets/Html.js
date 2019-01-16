@@ -1,4 +1,4 @@
-/*global describe, it*/
+/* global describe, it */
 const unexpected = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const mozilla = require('source-map');

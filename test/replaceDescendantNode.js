@@ -1,4 +1,4 @@
-/*global describe, it*/
+/* global describe, it */
 const replaceDescendantNode = require('../lib/replaceDescendantNode');
 const esprima = require('esprima');
 const escodegen = require('escodegen-papandreou');
