@@ -1,0 +1,13 @@
+{
+  "opts": {
+    "template": "node_modules/tsd-jsdoc/dist",
+    "encoding": "utf8",
+    "destination": ".",
+    "recurse": true
+  },
+
+  "source": {
+    "include": "lib",
+    "includePattern": ".js$"
+  }
+}
