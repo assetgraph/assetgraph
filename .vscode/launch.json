@@ -8,7 +8,10 @@
       "type": "node",
       "request": "launch",
       "name": "Test suite",
-      "program": "${workspaceFolder}/node_modules/.bin/_mocha"
+      "program": "${workspaceFolder}/node_modules/.bin/_mocha",
+      "skipFiles": [
+        "<node_internals>/**" // Prevent stepping through async_hooks.js et al.
+      ]
     }
   ]
 }
