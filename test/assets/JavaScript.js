@@ -331,7 +331,7 @@ describe('assets/JavaScript', function() {
 
     expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', () => {
       infoSpy(
-        'Could not parse http://example.com/script.js as a module, fall back to script mode\nLine 1: Unexpected identifier'
+        "Could not parse http://example.com/script.js as a module, fall back to script mode\nCan not use keyword 'await' outside an async function"
       );
     });
   });
@@ -353,7 +353,7 @@ describe('assets/JavaScript', function() {
 
     expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', () => {
       warnSpy(
-        'Parse error in http://example.com/script.js\nLine 1: Unexpected token ) (line 1)'
+        'Parse error in http://example.com/script.js\nUnexpected token ) (line 1)'
       );
     });
   });
