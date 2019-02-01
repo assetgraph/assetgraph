@@ -9,7 +9,7 @@ describe('relations/HtmlScript', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/HtmlScript/'
+        '../../testdata/relations/HtmlScript/combo'
       )
     });
     await assetGraph.loadAssets('index.html').populate();
@@ -34,7 +34,7 @@ describe('relations/HtmlScript', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/HtmlScript/'
+        '../../testdata/relations/HtmlScript/combo'
       )
     });
     await assetGraph.loadAssets('index.html').populate();
@@ -52,7 +52,7 @@ describe('relations/HtmlScript', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/HtmlScript/'
+        '../../testdata/relations/HtmlScript/combo'
       )
     });
     await assetGraph.loadAssets('index.html').populate();
@@ -91,7 +91,7 @@ describe('relations/HtmlScript', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/HtmlScript/'
+        '../../testdata/relations/HtmlScript/combo'
       )
     });
 
@@ -122,7 +122,7 @@ describe('relations/HtmlScript', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/HtmlScript/'
+        '../../testdata/relations/HtmlScript/combo'
       )
     });
 
@@ -156,7 +156,7 @@ describe('relations/HtmlScript', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/HtmlScript/'
+        '../../testdata/relations/HtmlScript/combo'
       )
     });
 
@@ -191,7 +191,7 @@ describe('relations/HtmlScript', function() {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
-          '../../testdata/relations/HtmlScript/'
+          '../../testdata/relations/HtmlScript/combo'
         )
       });
 
@@ -221,7 +221,7 @@ describe('relations/HtmlScript', function() {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
-          '../../testdata/relations/HtmlScript/'
+          '../../testdata/relations/HtmlScript/combo'
         )
       });
 
@@ -241,7 +241,7 @@ describe('relations/HtmlScript', function() {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
-          '../../testdata/relations/HtmlScript/'
+          '../../testdata/relations/HtmlScript/combo'
         )
       });
 
@@ -271,7 +271,7 @@ describe('relations/HtmlScript', function() {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
-          '../../testdata/relations/HtmlScript/'
+          '../../testdata/relations/HtmlScript/combo'
         )
       });
 
@@ -284,5 +284,31 @@ describe('relations/HtmlScript', function() {
 
       expect(htmlAsset.outgoingRelations, 'to satisfy', [{ defer: true }]);
     });
+  });
+
+  it('should populate an inline <script type=module>', async function() {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/relations/HtmlScript/moduleInline/'
+      )
+    });
+    await assetGraph.loadAssets('index.html').populate();
+
+    expect(assetGraph, 'to contain relation', 'HtmlScript');
+    expect(assetGraph, 'to contain assets', 'JavaScript', 2);
+  });
+
+  it('should follow an external <script type=module>', async function() {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/relations/HtmlScript/moduleExternal/'
+      )
+    });
+    await assetGraph.loadAssets('index.html').populate();
+
+    expect(assetGraph, 'to contain relation', 'HtmlScript');
+    expect(assetGraph, 'to contain asset', 'JavaScript');
   });
 });
