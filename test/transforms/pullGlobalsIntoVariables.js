@@ -1,12 +1,12 @@
 /* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
-const esprima = require('esprima');
+const espree = require('espree');
 const escodegen = require('escodegen-papandreou');
 
 function getFunctionBodySource(fn) {
   return escodegen.generate(
-    esprima.parse(fn.toString().replace(/^function\s*\(\) \{\n|\}$/g, ''))
+    espree.parse(fn.toString().replace(/^function\s*\(\) \{\n|\}$/g, ''))
   );
 }
 

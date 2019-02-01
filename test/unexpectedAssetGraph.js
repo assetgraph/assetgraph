@@ -1,6 +1,6 @@
 const urlModule = require('url');
 const urlTools = require('urltools');
-const esprima = require('esprima');
+const espree = require('espree');
 const escodegen = require('escodegen-papandreou');
 
 module.exports = {
@@ -168,13 +168,13 @@ module.exports = {
 
     function toAst(stringOrAssetOrFunctionOrAst) {
       if (typeof stringOrAssetOrFunctionOrAst === 'string') {
-        return esprima.parse(stringOrAssetOrFunctionOrAst);
+        return espree.parse(stringOrAssetOrFunctionOrAst);
       } else if (stringOrAssetOrFunctionOrAst.isAsset) {
         return stringOrAssetOrFunctionOrAst.parseTree;
       } else if (typeof stringOrAssetOrFunctionOrAst === 'function') {
         return {
           type: 'Program',
-          body: esprima.parse(`!${stringOrAssetOrFunctionOrAst.toString()}`)
+          body: espree.parse(`!${stringOrAssetOrFunctionOrAst.toString()}`)
             .body[0].expression.argument.body.body
         };
       } else {

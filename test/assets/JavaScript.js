@@ -239,7 +239,7 @@ describe('assets/JavaScript', function() {
     expect(javaScript.text, 'to equal', es6Text);
   });
 
-  // Awaiting https://github.com/jquery/esprima/issues/1588 (due for Esprima 5)
+  // Awaiting https://github.com/jquery/espree/issues/1588 (due for Esprima 5)
   it.skip('should tolerate Object spread syntax', function() {
     const text = 'const foo = { ...bar };';
     const javaScript = new AssetGraph().addAsset({ type: 'JavaScript', text });
