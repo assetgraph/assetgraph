@@ -98,6 +98,7 @@
     "svgo": "^1.0.5",
     "systemjs-asset-plugin": "^3.0.0",
     "systemjs-builder": "^0.16.13",
+    "uglify-js": "^3.4.9",
     "unexpected": "^11.0.0-1",
     "unexpected-dom": "^4.5.0",
     "unexpected-set": "^1.1.0",
