@@ -61,7 +61,7 @@
     "specificity": "^0.4.0",
     "sw-precache": "^5.2.0",
     "teepee": "^2.31.1",
-    "uglify-js": "3.4.9",
+    "terser": "^3.14.1",
     "urltools": "^0.4.1",
     "xmldom": "^0.1.27"
   },
@@ -98,6 +98,7 @@
     "svgo": "^1.0.5",
     "systemjs-asset-plugin": "^3.0.0",
     "systemjs-builder": "^0.16.13",
+    "uglify-js": "^3.4.9",
     "unexpected": "^11.0.0-1",
     "unexpected-dom": "^4.5.0",
     "unexpected-set": "^1.1.0",
