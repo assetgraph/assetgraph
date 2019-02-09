@@ -331,7 +331,7 @@ describe('assets/JavaScript', function() {
 
     expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', () => {
       infoSpy(
-        "Could not parse http://example.com/script.js as a module, fall back to script mode\nCan not use keyword 'await' outside an async function"
+        "Could not parse http://example.com/script.js as a module, fall back to script mode\nCannot use keyword 'await' outside an async function"
       );
     });
   });
