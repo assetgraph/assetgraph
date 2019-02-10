@@ -51,8 +51,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var bar = 'foo';
-            /* eslint-enable */
+        var bar = 'foo';
+        /* eslint-enable */
       }
     );
   });
@@ -66,8 +66,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var bar = FOO;
-            /* eslint-enable */
+        var bar = FOO;
+        /* eslint-enable */
       }
     );
   });
@@ -85,8 +85,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var bar = undefined;
-            /* eslint-enable */
+        var bar = undefined;
+        /* eslint-enable */
       }
     );
     expect(warnSpy, 'to have calls satisfying', () =>
@@ -111,8 +111,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var bar = !undefined;
-            /* eslint-enable */
+        var bar = !undefined;
+        /* eslint-enable */
       }
     );
     expect(warnSpy, 'to have calls satisfying', () =>
@@ -148,8 +148,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var bar = {quux: {baz: 123}};
-            /* eslint-enable */
+        var bar = { quux: { baz: 123 } };
+        /* eslint-enable */
       }
     );
   });
@@ -165,8 +165,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var bar = 'baz';
-            /* eslint-enable */
+        var bar = 'baz';
+        /* eslint-enable */
       }
     );
   });
@@ -182,8 +182,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var bar = 'baz';
-            /* eslint-enable */
+        var bar = 'baz';
+        /* eslint-enable */
       }
     );
   });
@@ -199,8 +199,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var bar = 'foo';
-            /* eslint-enable */
+        var bar = 'foo';
+        /* eslint-enable */
       }
     );
   });
@@ -216,8 +216,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var bar = 'baz';
-            /* eslint-enable */
+        var bar = 'baz';
+        /* eslint-enable */
       }
     );
   });
@@ -237,8 +237,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var qux = undefined;
-            /* eslint-enable */
+        var qux = undefined;
+        /* eslint-enable */
       }
     ).then(function() {
       expect(warnings, 'to satisfy', [
@@ -258,8 +258,12 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            var bar = { bar: 'baz' }[function () { return "bar"; }];
-            /* eslint-enable */
+        var bar = { bar: 'baz' }[
+          function() {
+            return 'bar';
+          }
+        ];
+        /* eslint-enable */
       }
     );
   });
@@ -276,8 +280,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            foo.bar(123);
-            /* eslint-enable */
+        foo.bar(123);
+        /* eslint-enable */
       }
     );
   });
@@ -293,8 +297,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            alert(123 + 987);
-            /* eslint-enable */
+        alert(123 + 987);
+        /* eslint-enable */
       }
     );
   });
@@ -310,8 +314,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            123 + 456;
-            /* eslint-enable */
+        123 + 456;
+        /* eslint-enable */
       }
     );
   });
@@ -327,8 +331,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            2 + 2;
-            /* eslint-enable */
+        2 + 2;
+        /* eslint-enable */
       }
     ).then(function(parseTree) {
       var binOp = parseTree.body[0].expression;
@@ -348,8 +352,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            alert(123 + 'bar' + 'bar');
-            /* eslint-enable */
+        alert(123 + 'bar' + 'bar');
+        /* eslint-enable */
       }
     );
   });
@@ -365,8 +369,8 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
       'to come out as',
       function() {
         /* eslint-disable */
-            window.FOO + window[FOO] + foo.bar.FOO + 2;
-            /* eslint-enable */
+        window.FOO + window[FOO] + foo.bar.FOO + 2;
+        /* eslint-enable */
       }
     );
   });

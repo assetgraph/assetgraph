@@ -484,16 +484,12 @@ describe('transforms/bundleRequireJs', function() {
       define('someOtherDependency', function() {});
       alert('nonAmdModule2');
       window.foo = { bar: 'foo dot bar' };
-      define(
-        'nonAmdModule2',
-        ['someOtherDependency'],
-        (function(global) {
-          return function() {
-            var ret, fn;
-            return ret || global.foo.bar;
-          };
-        })(this)
-      );
+      define('nonAmdModule2', ['someOtherDependency'], (function(global) {
+        return function() {
+          var ret, fn;
+          return ret || global.foo.bar;
+        };
+      })(this));
       require([
         'nonAmdModule1',
         'nonAmdModule2'
@@ -753,13 +749,12 @@ describe('transforms/bundleRequireJs', function() {
               require('backbone')
             );
           } else if (typeof define === 'function' && define.amd) {
-            define(
-              'backbone-localstorage',
-              ['underscore', 'backbone'],
-              function(_, Backbone) {
-                return factory(_ || root._, Backbone || root.Backbone);
-              }
-            );
+            define('backbone-localstorage', [
+              'underscore',
+              'backbone'
+            ], function(_, Backbone) {
+              return factory(_ || root._, Backbone || root.Backbone);
+            });
           } else {
             factory(root._, root.Backbone);
           }
