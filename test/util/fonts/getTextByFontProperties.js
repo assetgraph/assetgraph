@@ -4535,6 +4535,24 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
       );
     });
 
+    // Regression test for error: localFontPropRules[prop] is not iterable
+    it('should not break when an inline style specifies a custom property that has not been defined yet', async function() {
+      await expect(
+        `<div style="--foo: bar;">foo</div>`,
+        'to exhaustively satisfy computed font properties',
+        [
+          {
+            text: 'foo',
+            props: {
+              'font-family': undefined,
+              'font-style': 'normal',
+              'font-weight': 'normal'
+            }
+          }
+        ]
+      );
+    });
+
     describe('with a default value', function() {
       it('should use the default value when the custom property is not defined', async function() {
         await expect(
