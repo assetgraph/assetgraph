@@ -5,8 +5,6 @@ const http = require('http');
 
 describe('relations/HtmlMetaRefresh', function() {
   it('should handle a basic test case', async function() {
-    let serverAddress;
-    let rootUrl;
     const server = http
       .createServer((req, res) => {
         if (req.url === '/metaRefresh') {
@@ -28,8 +26,8 @@ describe('relations/HtmlMetaRefresh', function() {
       })
       .listen(0);
 
-    serverAddress = server.address();
-    rootUrl = `http://${
+    const serverAddress = server.address();
+    const rootUrl = `http://${
       serverAddress.address === '::' ? 'localhost' : serverAddress.address
     }:${serverAddress.port}/`;
 

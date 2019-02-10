@@ -8,8 +8,6 @@ const _ = require('lodash');
 describe('transforms/serializeSourceMaps', function() {
   describe('with a JavaScript asset with an existing source map', function() {
     it('should leave the source map alone when no manipulations have happened', async function() {
-      let initialSourceMapParseTree;
-      let initialSourceMapParseTreeCopy;
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
@@ -21,10 +19,13 @@ describe('transforms/serializeSourceMaps', function() {
 
       expect(assetGraph, 'to contain assets', 'JavaScript', 2);
       expect(assetGraph, 'to contain asset', 'SourceMap');
-      initialSourceMapParseTree = assetGraph.findAssets({
+      const initialSourceMapParseTree = assetGraph.findAssets({
         type: 'SourceMap'
       })[0]._parseTree;
-      initialSourceMapParseTreeCopy = _.clone(initialSourceMapParseTree, true);
+      const initialSourceMapParseTreeCopy = _.clone(
+        initialSourceMapParseTree,
+        true
+      );
 
       await assetGraph.serializeSourceMaps();
 
