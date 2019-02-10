@@ -36,7 +36,6 @@ describe('transforms/serializeSourceMaps', function() {
     });
 
     it('should update the source map when manipulations have happened', async function() {
-      let initialSourceMapParseTree;
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
@@ -48,7 +47,7 @@ describe('transforms/serializeSourceMaps', function() {
 
       expect(assetGraph, 'to contain assets', 'JavaScript', 2);
       expect(assetGraph, 'to contain asset', 'SourceMap');
-      initialSourceMapParseTree = assetGraph.findAssets({
+      const initialSourceMapParseTree = assetGraph.findAssets({
         type: 'SourceMap'
       })[0]._parseTree;
       const javaScript = assetGraph.findAssets({
