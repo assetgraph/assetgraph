@@ -1,1 +1,9 @@
-package.json
+/testdata/
+/lib/3rdparty/
+/examples/
+/node_modules/
+/coverage/
+/jsdoc/
+
+# Don't fight npm install --save
+/package.json

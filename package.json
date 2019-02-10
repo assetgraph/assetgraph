@@ -78,7 +78,6 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-mocha": "^5.2.1",
     "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -109,7 +108,7 @@
   },
   "main": "lib/AssetGraph.js",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . && prettier --check '**/*.js'",
     "test": "mocha",
     "ci": "npm run coverage && npm run lint",
     "docs": "jsdoc -c jsdoc.json",
