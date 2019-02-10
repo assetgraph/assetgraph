@@ -8,6 +8,13 @@
     "prefer-template": "error",
     "mocha/no-exclusive-tests": "error",
     "mocha/no-nested-tests": "error",
-    "mocha/no-identical-title": "error"
+    "mocha/no-identical-title": "error",
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "all",
+        "ignoreReadBeforeAssign": false
+      }
+    ]
   }
 }
