@@ -3320,8 +3320,8 @@ describe('transforms/subsetFonts', function() {
               props: {
                 'font-family': 'Foo',
                 'font-style': 'normal',
-                'font-weight': 700,
-                'font-stretch': 'condensed',
+                'font-weight': 'boLD',
+                'font-stretch': 'conDENSED',
                 src: "url(OpenSans.ttf) format('truetype')"
               }
             },
@@ -3329,8 +3329,8 @@ describe('transforms/subsetFonts', function() {
               texts: ['Hello, yourself!'],
               props: {
                 'font-family': 'BAR',
-                'font-style': 'italic',
-                'font-weight': 400,
+                'font-style': 'ITAlic',
+                'font-weight': 'normal',
                 'font-stretch': 'normal',
                 src: "url(OpenSans2.ttf) format('truetype')"
               }
@@ -3579,7 +3579,7 @@ describe('transforms/subsetFonts', function() {
               text: 'fo',
               props: {
                 'font-stretch': 'normal',
-                'font-weight': 400,
+                'font-weight': 'normal',
                 'font-style': 'normal',
                 'font-family': 'Open Sans'
               }
@@ -3807,6 +3807,154 @@ describe('transforms/subsetFonts', function() {
           }
         }
       ]);
+    });
+
+    describe('with a variable font defined in a @supports block and a non-variable fallback', function() {
+      it('should subset both the variable font and the fallback font', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/variable-font-in-supports-block-with-fallback/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        const { fontInfo } = await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+        expect(fontInfo, 'to satisfy', [
+          {
+            fontUsages: [
+              {
+                text: ' !,Hdelorw',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': 'normal',
+                  'font-style': 'normal',
+                  'font-family': 'Venn VF'
+                }
+              },
+              {
+                text: ' !,Hdelorw',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': 'normal',
+                  'font-style': 'normal',
+                  'font-family': 'Venn'
+                }
+              }
+            ]
+          }
+        ]);
+
+        expect(
+          assetGraph.findAssets({ type: 'Css' })[0].text,
+          'to contain',
+          `font-family: 'Venn VF__subset', 'Venn VF', Venn__subset, 'Venn', sans-serif;`
+        );
+      });
+    });
+
+    describe('with a variable font defined in a @supports block and a non-variable fallback with two variants', function() {
+      it('should subset both the variable font and the fallback font', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/variable-font-in-supports-block-with-two-fallback-variants/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        const { fontInfo } = await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+        expect(fontInfo, 'to satisfy', [
+          {
+            fontUsages: [
+              {
+                text: ' !,Hdelorw',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': '300 800',
+                  'font-style': 'normal',
+                  'font-family': 'Venn VF'
+                }
+              },
+              {
+                text: 'dlorw',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': '700',
+                  'font-style': 'normal',
+                  'font-family': 'Venn'
+                }
+              },
+              {
+                text: ' !,Helo',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': '400',
+                  'font-style': 'normal',
+                  'font-family': 'Venn'
+                }
+              }
+            ]
+          }
+        ]);
+        const preloadFallbackJavaScript = assetGraph.findAssets({
+          type: 'JavaScript'
+        })[0];
+        expect(
+          preloadFallbackJavaScript.text,
+          'to contain',
+          "{'font-weight':'300 800'}"
+        );
+        expect(assetGraph, 'to contain asset', {
+          fileName: {
+            $regex: '^Venn_VF-300_800-[a-f0-9]+.woff2'
+          }
+        });
+      });
+    });
+
+    describe('with two variable fonts that provide different font-weight ranges of the same font-family', function() {
+      it('should subset both fonts when a CSS animation sweeps over both ranges', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/two-variable-fonts-animated/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        const { fontInfo } = await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+        expect(fontInfo, 'to satisfy', [
+          {
+            fontUsages: [
+              {
+                text: ' !,Hdelorw',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': '1 500',
+                  'font-style': 'normal',
+                  'font-family': 'Venn VF'
+                }
+              },
+              {
+                text: ' !,Hdelorw',
+                props: {
+                  'font-stretch': 'normal',
+                  'font-weight': '501 900',
+                  'font-style': 'normal',
+                  'font-family': 'Venn VF'
+                }
+              }
+            ]
+          }
+        ]);
+      });
     });
   });
 
