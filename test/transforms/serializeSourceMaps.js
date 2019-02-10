@@ -29,7 +29,7 @@ describe('transforms/serializeSourceMaps', function() {
       await assetGraph.serializeSourceMaps();
 
       expect(assetGraph, 'to contain asset', 'SourceMap');
-      let sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
+      const sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
       expect(sourceMap.parseTree, 'to be', initialSourceMapParseTree);
       expect(sourceMap.parseTree, 'to satisfy', initialSourceMapParseTreeCopy);
     });
