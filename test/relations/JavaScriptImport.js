@@ -7,8 +7,8 @@ describe('JavaScriptImport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-                import foo from 'bar/quux.js';
-            `
+        import foo from 'bar/quux.js';
+      `
     });
 
     expect(javaScript.outgoingRelations, 'to satisfy', [
@@ -25,8 +25,8 @@ describe('JavaScriptImport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-                import foo from 'bar/quux.js';
-            `
+        import foo from 'bar/quux.js';
+      `
     });
 
     javaScript.outgoingRelations[0].href = 'blabla.js';
@@ -41,8 +41,8 @@ describe('JavaScriptImport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        import foo from 'bar/quux.js';
-                    `
+            import foo from 'bar/quux.js';
+          `
         });
 
         const newRelation = javaScript.addRelation(
@@ -67,9 +67,9 @@ describe('JavaScriptImport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        import foo from 'bar/quux.js';
-                        alert('foo');
-                    `
+            import foo from 'bar/quux.js';
+            alert('foo');
+          `
         });
 
         const newRelation = javaScript.addRelation(
@@ -84,9 +84,9 @@ describe('JavaScriptImport', function() {
           javaScript.text,
           'to equal',
           `
-                    import foo from 'bar/quux.js';
-                    import 'http://blabla.com/lib.js';
-                    alert('foo');`.replace(/^\s+/gm, '')
+            import foo from 'bar/quux.js';
+            import 'http://blabla.com/lib.js';
+            alert('foo');`.replace(/^\s+/gm, '')
         );
       });
 
@@ -95,8 +95,8 @@ describe('JavaScriptImport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        alert('foo');
-                    `
+            alert('foo');
+          `
         });
 
         const newRelation = javaScript.addRelation(
@@ -111,8 +111,8 @@ describe('JavaScriptImport', function() {
           javaScript.text,
           'to equal',
           `
-                    import 'http://blabla.com/lib.js';
-                    alert('foo');`.replace(/^\s+/gm, '')
+            import 'http://blabla.com/lib.js';
+            alert('foo');`.replace(/^\s+/gm, '')
         );
       });
     });
@@ -123,9 +123,9 @@ describe('JavaScriptImport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        import foo from 'bar/quux.js';
-                        import baz from 'blah.js';
-                    `
+            import foo from 'bar/quux.js';
+            import baz from 'blah.js';
+          `
         });
 
         const newRelation = javaScript.addRelation(
@@ -141,9 +141,9 @@ describe('JavaScriptImport', function() {
           javaScript.text,
           'to equal',
           `
-                    import foo from 'bar/quux.js';
-                    import 'http://blabla.com/lib.js';
-                    import baz from 'blah.js';`.replace(/^\s+/gm, '')
+            import foo from 'bar/quux.js';
+            import 'http://blabla.com/lib.js';
+            import baz from 'blah.js';`.replace(/^\s+/gm, '')
         );
       });
     });
@@ -154,9 +154,9 @@ describe('JavaScriptImport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        import foo from 'bar/quux.js';
-                        import baz from 'blah.js';
-                    `
+            import foo from 'bar/quux.js';
+            import baz from 'blah.js';
+          `
         });
 
         const newRelation = javaScript.addRelation(
@@ -172,9 +172,9 @@ describe('JavaScriptImport', function() {
           javaScript.text,
           'to equal',
           `
-                    import foo from 'bar/quux.js';
-                    import 'http://blabla.com/lib.js';
-                    import baz from 'blah.js';`.replace(/^\s+/gm, '')
+            import foo from 'bar/quux.js';
+            import 'http://blabla.com/lib.js';
+            import baz from 'blah.js';`.replace(/^\s+/gm, '')
         );
       });
     });
