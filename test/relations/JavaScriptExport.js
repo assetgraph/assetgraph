@@ -8,14 +8,14 @@ describe('JavaScriptExport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-                export { foo } from 'bar/quux.js';
+                export { foo } from './bar/quux.js';
             `
     });
 
     expect(javaScript.outgoingRelations, 'to satisfy', [
       {
         type: 'JavaScriptExport',
-        href: 'bar/quux.js',
+        href: './bar/quux.js',
         to: { url: 'https://example.com/bar/quux.js' }
       }
     ]);
@@ -26,14 +26,14 @@ describe('JavaScriptExport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-                export * from 'bar/quux.js';
+                export * from './bar/quux.js';
             `
     });
 
     expect(javaScript.outgoingRelations, 'to satisfy', [
       {
         type: 'JavaScriptExport',
-        href: 'bar/quux.js',
+        href: './bar/quux.js',
         to: { url: 'https://example.com/bar/quux.js' }
       }
     ]);
@@ -68,16 +68,16 @@ describe('JavaScriptExport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-                export { foo } from 'bar/quux.js';
+                export { foo } from './bar/quux.js';
             `
     });
 
-    javaScript.outgoingRelations[0].href = 'blabla.js';
+    javaScript.outgoingRelations[0].href = './blabla.js';
     javaScript.markDirty();
     expect(
       javaScript.text,
       'to contain',
-      "export {\n    foo\n} from 'blabla.js';"
+      "export {\n    foo\n} from './blabla.js';"
     );
   });
 
@@ -108,7 +108,7 @@ describe('JavaScriptExport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        export { foo } from 'bar/quux.js';
+                        export { foo } from './bar/quux.js';
                     `
         });
 
@@ -134,7 +134,7 @@ describe('JavaScriptExport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        export { foo } from 'bar/quux.js';
+                        export { foo } from './bar/quux.js';
                         alert('foo');
                     `
         });
@@ -153,7 +153,7 @@ describe('JavaScriptExport', function() {
           `
                     export {
                         foo
-                    } from 'bar/quux.js';
+                    } from './bar/quux.js';
                     export * from 'http://blabla.com/lib.js';
                     alert('foo');`
             .replace(/^\n/, '')
@@ -194,8 +194,8 @@ describe('JavaScriptExport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        export { foo } from 'bar/quux.js';
-                        export { baz } from 'blah.js';
+                        export { foo } from './bar/quux.js';
+                        export { baz } from './blah.js';
                     `
         });
 
@@ -214,11 +214,11 @@ describe('JavaScriptExport', function() {
           `
                     export {
                         foo
-                    } from 'bar/quux.js';
+                    } from './bar/quux.js';
                     export * from 'http://blabla.com/lib.js';
                     export {
                         baz
-                    } from 'blah.js';`
+                    } from './blah.js';`
             .replace(/^\n/, '')
             .replace(/^ {20}/gm, '')
         );
@@ -231,8 +231,8 @@ describe('JavaScriptExport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        export { foo } from 'bar/quux.js';
-                        export { baz } from 'blah.js';
+                        export { foo } from './bar/quux.js';
+                        export { baz } from './blah.js';
                     `
         });
 
@@ -251,11 +251,11 @@ describe('JavaScriptExport', function() {
           `
                     export {
                         foo
-                    } from 'bar/quux.js';
+                    } from './bar/quux.js';
                     export * from 'http://blabla.com/lib.js';
                     export {
                         baz
-                    } from 'blah.js';`
+                    } from './blah.js';`
             .replace(/^\n/, '')
             .replace(/^ {20}/gm, '')
         );
@@ -268,7 +268,7 @@ describe('JavaScriptExport', function() {
       const javaScript = new AssetGraph().addAsset({
         type: 'JavaScript',
         url: 'https://example.com/',
-        text: "export { foo } from 'bar/quux.js';"
+        text: "export { foo } from './bar/quux.js';"
       });
       javaScript.outgoingRelations[0].detach();
       expect(javaScript.outgoingRelations, 'to equal', []);

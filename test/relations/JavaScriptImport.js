@@ -8,14 +8,14 @@ describe('JavaScriptImport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-        import foo from 'bar/quux.js';
+        import foo from './bar/quux.js';
       `
     });
 
     expect(javaScript.outgoingRelations, 'to satisfy', [
       {
         type: 'JavaScriptImport',
-        href: 'bar/quux.js',
+        href: './bar/quux.js',
         to: { url: 'https://example.com/bar/quux.js' }
       }
     ]);
@@ -26,13 +26,13 @@ describe('JavaScriptImport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-        import foo from 'bar/quux.js';
+        import foo from './bar/quux.js';
       `
     });
 
-    javaScript.outgoingRelations[0].href = 'blabla.js';
+    javaScript.outgoingRelations[0].href = './blabla.js';
     javaScript.markDirty();
-    expect(javaScript.text, 'to contain', "import foo from 'blabla.js';");
+    expect(javaScript.text, 'to contain', "import foo from './blabla.js';");
   });
 
   it('should keep ./ in front of relative urls', async function() {
@@ -53,6 +53,34 @@ describe('JavaScriptImport', function() {
       'to contain',
       `import main from './static/foobar.js';`
     );
+  });
+
+  it('should put ./ in front of the url when the hrefType is changed to relative', function() {
+    const assetGraph = new AssetGraph();
+    const javaScript = assetGraph.addAsset({
+      type: 'JavaScript',
+      url: `${assetGraph.root}index.js`,
+      text: `
+        import foo from '${assetGraph.root}foo.js';
+      `
+    });
+
+    javaScript.outgoingRelations[0].hrefType = 'relative';
+    expect(javaScript.text, 'to contain', "import foo from './foo.js';");
+  });
+
+  it('should leave a "bare" package name alone when moving the file', function() {
+    const assetGraph = new AssetGraph();
+    const javaScript = assetGraph.addAsset({
+      type: 'JavaScript',
+      url: `${assetGraph.root}index.js`,
+      text: `
+        import foo from 'foo';
+      `
+    });
+
+    javaScript.url = `${assetGraph.root}somewhere/else.js`;
+    expect(javaScript.text, 'to contain', "import foo from 'foo';");
   });
 
   describe('#attach', function() {
@@ -88,7 +116,7 @@ describe('JavaScriptImport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-            import foo from 'bar/quux.js';
+            import foo from './bar/quux.js';
             alert('foo');
           `
         });
@@ -105,7 +133,7 @@ describe('JavaScriptImport', function() {
           javaScript.text,
           'to equal',
           `
-            import foo from 'bar/quux.js';
+            import foo from './bar/quux.js';
             import 'http://blabla.com/lib.js';
             alert('foo');`.replace(/^\s+/gm, '')
         );
@@ -144,8 +172,8 @@ describe('JavaScriptImport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-            import foo from 'bar/quux.js';
-            import baz from 'blah.js';
+            import foo from './bar/quux.js';
+            import baz from './blah.js';
           `
         });
 
@@ -162,9 +190,9 @@ describe('JavaScriptImport', function() {
           javaScript.text,
           'to equal',
           `
-            import foo from 'bar/quux.js';
+            import foo from './bar/quux.js';
             import 'http://blabla.com/lib.js';
-            import baz from 'blah.js';`.replace(/^\s+/gm, '')
+            import baz from './blah.js';`.replace(/^\s+/gm, '')
         );
       });
     });
@@ -175,8 +203,8 @@ describe('JavaScriptImport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-            import foo from 'bar/quux.js';
-            import baz from 'blah.js';
+            import foo from './bar/quux.js';
+            import baz from './blah.js';
           `
         });
 
@@ -193,9 +221,9 @@ describe('JavaScriptImport', function() {
           javaScript.text,
           'to equal',
           `
-            import foo from 'bar/quux.js';
+            import foo from './bar/quux.js';
             import 'http://blabla.com/lib.js';
-            import baz from 'blah.js';`.replace(/^\s+/gm, '')
+            import baz from './blah.js';`.replace(/^\s+/gm, '')
         );
       });
     });
@@ -206,7 +234,7 @@ describe('JavaScriptImport', function() {
       const javaScript = new AssetGraph().addAsset({
         type: 'JavaScript',
         url: 'https://example.com/',
-        text: "import foo from 'bar/quux.js';"
+        text: "import foo from './bar/quux.js';"
       });
       javaScript.outgoingRelations[0].detach();
       expect(javaScript.outgoingRelations, 'to equal', []);
