@@ -8,8 +8,8 @@ describe('JavaScriptExport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-                export { foo } from './bar/quux.js';
-            `
+        export { foo } from './bar/quux.js';
+      `
     });
 
     expect(javaScript.outgoingRelations, 'to satisfy', [
@@ -26,8 +26,8 @@ describe('JavaScriptExport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-                export * from './bar/quux.js';
-            `
+        export * from './bar/quux.js';
+      `
     });
 
     expect(javaScript.outgoingRelations, 'to satisfy', [
@@ -44,8 +44,8 @@ describe('JavaScriptExport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-                export function foo () {};
-            `
+        export function foo () {};
+      `
     });
 
     expect(javaScript.outgoingRelations, 'to equal', []);
@@ -56,8 +56,8 @@ describe('JavaScriptExport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-                export default 123;
-            `
+        export default 123;
+      `
     });
 
     expect(javaScript.outgoingRelations, 'to equal', []);
@@ -68,8 +68,8 @@ describe('JavaScriptExport', function() {
       type: 'JavaScript',
       url: 'https://example.com/',
       text: `
-                export { foo } from './bar/quux.js';
-            `
+        export { foo } from './bar/quux.js';
+      `
     });
 
     javaScript.outgoingRelations[0].href = './blabla.js';
@@ -108,8 +108,8 @@ describe('JavaScriptExport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        export { foo } from './bar/quux.js';
-                    `
+            export { foo } from './bar/quux.js';
+          `
         });
 
         const newRelation = javaScript.addRelation(
@@ -134,9 +134,9 @@ describe('JavaScriptExport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        export { foo } from './bar/quux.js';
-                        alert('foo');
-                    `
+            export { foo } from './bar/quux.js';
+            alert('foo');
+          `
         });
 
         const newRelation = javaScript.addRelation(
@@ -151,13 +151,13 @@ describe('JavaScriptExport', function() {
           javaScript.text,
           'to equal',
           `
-                    export {
-                        foo
-                    } from './bar/quux.js';
-                    export * from 'http://blabla.com/lib.js';
-                    alert('foo');`
+            export {
+                foo
+            } from './bar/quux.js';
+            export * from 'http://blabla.com/lib.js';
+            alert('foo');`
             .replace(/^\n/, '')
-            .replace(/^ {20}/gm, '')
+            .replace(/^ {12}/gm, '')
         );
       });
 
@@ -166,8 +166,8 @@ describe('JavaScriptExport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        alert('foo');
-                    `
+            alert('foo');
+          `
         });
 
         const newRelation = javaScript.addRelation(
@@ -182,8 +182,8 @@ describe('JavaScriptExport', function() {
           javaScript.text,
           'to equal',
           `
-                    export * from 'http://blabla.com/lib.js';
-                    alert('foo');`.replace(/^\s+/gm, '')
+            export * from 'http://blabla.com/lib.js';
+            alert('foo');`.replace(/^\s+/gm, '')
         );
       });
     });
@@ -194,9 +194,9 @@ describe('JavaScriptExport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        export { foo } from './bar/quux.js';
-                        export { baz } from './blah.js';
-                    `
+            export { foo } from './bar/quux.js';
+            export { baz } from './blah.js';
+          `
         });
 
         const newRelation = javaScript.addRelation(
@@ -212,15 +212,15 @@ describe('JavaScriptExport', function() {
           javaScript.text,
           'to equal',
           `
-                    export {
-                        foo
-                    } from './bar/quux.js';
-                    export * from 'http://blabla.com/lib.js';
-                    export {
-                        baz
-                    } from './blah.js';`
+            export {
+                foo
+            } from './bar/quux.js';
+            export * from 'http://blabla.com/lib.js';
+            export {
+                baz
+            } from './blah.js';`
             .replace(/^\n/, '')
-            .replace(/^ {20}/gm, '')
+            .replace(/^ {12}/gm, '')
         );
       });
     });
@@ -231,9 +231,9 @@ describe('JavaScriptExport', function() {
           type: 'JavaScript',
           url: 'https://example.com/',
           text: `
-                        export { foo } from './bar/quux.js';
-                        export { baz } from './blah.js';
-                    `
+            export { foo } from './bar/quux.js';
+            export { baz } from './blah.js';
+          `
         });
 
         const newRelation = javaScript.addRelation(
@@ -249,15 +249,15 @@ describe('JavaScriptExport', function() {
           javaScript.text,
           'to equal',
           `
-                    export {
-                        foo
-                    } from './bar/quux.js';
-                    export * from 'http://blabla.com/lib.js';
-                    export {
-                        baz
-                    } from './blah.js';`
+            export {
+                foo
+            } from './bar/quux.js';
+            export * from 'http://blabla.com/lib.js';
+            export {
+                baz
+            } from './blah.js';`
             .replace(/^\n/, '')
-            .replace(/^ {20}/gm, '')
+            .replace(/^ {12}/gm, '')
         );
       });
     });
