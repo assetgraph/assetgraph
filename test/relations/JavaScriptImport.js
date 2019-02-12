@@ -1,5 +1,6 @@
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
+const pathModule = require('path');
 
 describe('JavaScriptImport', function() {
   it('should detect a relation', function() {
@@ -32,6 +33,26 @@ describe('JavaScriptImport', function() {
     javaScript.outgoingRelations[0].href = 'blabla.js';
     javaScript.markDirty();
     expect(javaScript.text, 'to contain', "import foo from 'blabla.js';");
+  });
+
+  it('should keep ./ in front of relative urls', async function() {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/relations/JavaScriptImport/relative/'
+      )
+    });
+    const [javaScript] = await assetGraph.loadAssets('index.js');
+    await assetGraph.populate();
+    expect(javaScript.text, 'to contain', `import main from './main.js';`);
+    assetGraph.findAssets({ fileName: 'main.js' })[0].url = `${
+      assetGraph.root
+    }/static/foobar.js`;
+    expect(
+      javaScript.text,
+      'to contain',
+      `import main from './static/foobar.js';`
+    );
   });
 
   describe('#attach', function() {

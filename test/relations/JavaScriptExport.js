@@ -1,5 +1,6 @@
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
+const pathModule = require('path');
 
 describe('JavaScriptExport', function() {
   it('should detect an ExportNamedDeclaration node', function() {
@@ -77,6 +78,26 @@ describe('JavaScriptExport', function() {
       javaScript.text,
       'to contain',
       "export {\n    foo\n} from 'blabla.js';"
+    );
+  });
+
+  it('should keep ./ in front of relative urls', async function() {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/relations/JavaScriptExport/relative/'
+      )
+    });
+    const [javaScript] = await assetGraph.loadAssets('index.js');
+    await assetGraph.populate();
+    expect(javaScript.text, 'to contain', `export { foo } from './main.js';`);
+    assetGraph.findAssets({ fileName: 'main.js' })[0].url = `${
+      assetGraph.root
+    }/static/foobar.js`;
+    expect(
+      javaScript.text,
+      'to contain',
+      `export {\n    foo\n} from './static/foobar.js';`
     );
   });
 
