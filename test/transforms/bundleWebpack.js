@@ -37,6 +37,21 @@ describe('bundleWebpack', function() {
     );
   });
 
+  it('should create a bundle when no webpack bundle is referenced', async function() {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/transforms/bundleWebpack/unusedwebpack/'
+      )
+    });
+    await assetGraph
+      .loadAssets('index.html')
+      .bundleWebpack()
+      .populate();
+
+    expect(assetGraph, 'to contain no relation', 'HtmlScript');
+  });
+
   it('should create a bundle consisting of a single file with a different publicPath', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
