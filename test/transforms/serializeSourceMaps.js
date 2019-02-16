@@ -57,7 +57,7 @@ describe('transforms/serializeSourceMaps', function() {
         espree.parse('var bogus = 123;', {
           loc: true,
           attachComment: true,
-          source: `${assetGraph.root}bogus.js`
+          sourceFile: `${assetGraph.root}bogus.js`
         }).body[0]
       );
       javaScript.markDirty();
@@ -156,7 +156,7 @@ describe('transforms/serializeSourceMaps', function() {
         espree.parse('var bogus = 123;', {
           loc: true,
           attachComment: true,
-          source: `${assetGraph.root}bogus.js`
+          sourceFile: `${assetGraph.root}bogus.js`
         }).body[0]
       );
       myScript.markDirty();
