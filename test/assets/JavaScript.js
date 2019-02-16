@@ -239,13 +239,31 @@ describe('assets/JavaScript', function() {
     expect(javaScript.text, 'to equal', es6Text);
   });
 
-  // Awaiting https://github.com/jquery/esprima/issues/1588 (due for Esprima 5)
-  it.skip('should tolerate Object spread syntax', function() {
+  it('should tolerate Object spread syntax', function() {
     const text = 'const foo = { ...bar };';
     const javaScript = new AssetGraph().addAsset({ type: 'JavaScript', text });
     expect(javaScript.parseTree, 'to satisfy', {
       type: 'Program',
-      body: [],
+      body: [
+        {
+          type: 'VariableDeclaration',
+          kind: 'const',
+          declarations: [
+            {
+              type: 'VariableDeclarator',
+              init: {
+                type: 'ObjectExpression',
+                properties: [
+                  {
+                    type: 'SpreadElement',
+                    argument: { type: 'Identifier', name: 'bar' }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
       sourceType: 'module'
     });
     javaScript.markDirty();
