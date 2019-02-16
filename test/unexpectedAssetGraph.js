@@ -1,6 +1,6 @@
 const urlModule = require('url');
 const urlTools = require('urltools');
-const espree = require('espree');
+const espree = require('espree-papandreou');
 const escodegen = require('escodegen-papandreou');
 
 module.exports = {

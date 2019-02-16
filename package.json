@@ -34,7 +34,7 @@
     "domspace": "^1.2.1",
     "esanimate": "^1.1.0",
     "escodegen-papandreou": "1.11.0-patch1",
-    "espree": "^5.0.0",
+    "espree-papandreou": "5.0.1-patch1",
     "esprima": "^4.0.0",
     "espurify": "^2.0.1",
     "estraverse": "^4.2.0",

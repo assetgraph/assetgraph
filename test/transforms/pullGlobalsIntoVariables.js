@@ -1,7 +1,7 @@
 /* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
-const espree = require('espree');
+const espree = require('espree-papandreou');
 const escodegen = require('escodegen-papandreou');
 
 function getFunctionBodySource(fn) {

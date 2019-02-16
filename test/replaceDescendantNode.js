@@ -1,6 +1,6 @@
 /* global describe, it */
 const replaceDescendantNode = require('../lib/replaceDescendantNode');
-const espree = require('espree');
+const espree = require('espree-papandreou');
 const escodegen = require('escodegen-papandreou');
 const expect = require('./unexpected-with-plugins');
 

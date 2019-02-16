@@ -1,7 +1,7 @@
 const pathModule = require('path');
 /* global describe, it */
 const expect = require('../unexpected-with-plugins');
-const espree = require('espree');
+const espree = require('espree-papandreou');
 const AssetGraph = require('../../lib/AssetGraph');
 const _ = require('lodash');
 
