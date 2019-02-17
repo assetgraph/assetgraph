@@ -378,4 +378,97 @@ describe('transforms/addPrecacheServiceWorker', function() {
       );
     });
   });
+
+  it('use a config at the canonical path if present', async function() {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/transforms/addPrecacheServiceWorker/customConfig/'
+      )
+    });
+    await assetGraph.loadAssets('index.html').populate({
+      followRelations: { to: { protocol: 'file:' } }
+    });
+
+    await assetGraph.addPrecacheServiceWorker({ isInitial: true });
+
+    expect(
+      assetGraph,
+      'to contain relation',
+      'JavaScriptServiceWorkerRegistration',
+      1
+    );
+    const serviceWorker = assetGraph.findAssets({
+      fileName: 'index-precache-service-worker.js'
+    })[0];
+    expect(serviceWorker.text, 'to contain', 'ag-test-url');
+  });
+
+  it('use a config at custom path if present', async function() {
+    const root = pathModule.resolve(
+      __dirname,
+      '../../testdata/transforms/addPrecacheServiceWorker/customConfig/'
+    );
+    const assetGraph = new AssetGraph({
+      root
+    });
+    await assetGraph.loadAssets('index.html').populate({
+      followRelations: { to: { protocol: 'file:' } }
+    });
+
+    await assetGraph.addPrecacheServiceWorker(
+      {
+        isInitial: true
+      },
+      {
+        configPath: pathModule.resolve(root, 'custom-sw-precache-config.js')
+      }
+    );
+
+    expect(
+      assetGraph,
+      'to contain relation',
+      'JavaScriptServiceWorkerRegistration',
+      1
+    );
+    const serviceWorker = assetGraph.findAssets({
+      fileName: 'index-precache-service-worker.js'
+    })[0];
+    expect(serviceWorker.text, 'to contain', 'ag-test-url-at-custom-path');
+  });
+
+  it('warn if config at custom path is not present', async function() {
+    const warnSpy = sinon.spy().named('warn');
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/transforms/addPrecacheServiceWorker/customConfig/'
+      )
+    });
+    await assetGraph
+      .on('warn', warnSpy)
+      .loadAssets('index.html')
+      .populate({
+        followRelations: { to: { protocol: 'file:' } }
+      });
+
+    await assetGraph.addPrecacheServiceWorker(
+      {
+        isInitial: true
+      },
+      {
+        configPath: 'not-found-sw-precache-config.js'
+      }
+    );
+
+    expect(
+      assetGraph,
+      'to contain no relation',
+      'JavaScriptServiceWorkerRegistration',
+      1
+    );
+    expect(warnSpy, 'to have calls satisfying', () =>
+      warnSpy(/not-found-sw-precache-config\.js/)
+    );
+  });
 });
