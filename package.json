@@ -53,6 +53,7 @@
     "perfectionist": "^2.4.0",
     "postcss": "7.0.9",
     "postcss-values-parser": "^2.0.0",
+    "puppeteer": "^1.12.2",
     "read-pkg-up": "^4.0.0",
     "repeat-string": "^1.5.4",
     "schemes": "^1.0.1",
