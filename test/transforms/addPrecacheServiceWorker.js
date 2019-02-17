@@ -471,4 +471,28 @@ describe('transforms/addPrecacheServiceWorker', function() {
       warnSpy(/not-found-sw-precache-config\.js/)
     );
   });
+
+  it('should throw if the staticFileGlobs option is given', async function() {
+    const warnSpy = sinon.spy().named('warn');
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/transforms/addPrecacheServiceWorker/customConfigWithStaticFileGlobs/'
+      )
+    });
+    await assetGraph
+      .on('warn', warnSpy)
+      .loadAssets('index.html')
+      .populate({
+        followRelations: { to: { protocol: 'file:' } }
+      });
+
+    await expect(
+      assetGraph.addPrecacheServiceWorker({
+        isInitial: true
+      }),
+      'to be rejected with',
+      'addPrecacheServiceWorker transform: The staticFileGlobs config option is not supported at present, sorry!'
+    );
+  });
 });
