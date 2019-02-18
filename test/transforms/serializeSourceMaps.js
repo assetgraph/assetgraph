@@ -1,7 +1,7 @@
 const pathModule = require('path');
 /* global describe, it */
 const expect = require('../unexpected-with-plugins');
-const espree = require('espree-papandreou');
+const parseJavaScript = require('../../lib/parseJavaScript');
 const AssetGraph = require('../../lib/AssetGraph');
 const _ = require('lodash');
 
@@ -54,9 +54,9 @@ describe('transforms/serializeSourceMaps', function() {
         fileName: 'jquery-1.10.1.min.js'
       })[0];
       javaScript.parseTree.body.push(
-        espree.parse('var bogus = 123;', {
-          loc: true,
-          attachComment: true,
+        parseJavaScript('var bogus = 123;', {
+          locations: true,
+          ranges: true,
           sourceFile: `${assetGraph.root}bogus.js`
         }).body[0]
       );
@@ -153,9 +153,9 @@ describe('transforms/serializeSourceMaps', function() {
 
       const myScript = assetGraph.findAssets({ fileName: 'myScript.js' })[0];
       myScript.parseTree.body.push(
-        espree.parse('var bogus = 123;', {
-          loc: true,
-          attachComment: true,
+        parseJavaScript('var bogus = 123;', {
+          locations: true,
+          ranges: true,
           sourceFile: `${assetGraph.root}bogus.js`
         }).body[0]
       );
