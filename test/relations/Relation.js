@@ -363,6 +363,60 @@ describe('relations/Relation', function() {
     });
   });
 
+  describe('with a mountRoot setting', function() {
+    it('should honor the mountRoot setting when changing a hrefType to rootRelative', function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/relations/Relation/mountRoot/'
+        ),
+        mountRoot: '/my-app'
+      });
+
+      const htmlAsset = assetGraph.addAsset({
+        type: 'Html',
+        url: `${assetGraph.root}index.html`,
+        text: '<link rel="stylesheet" href="style.css">'
+      });
+      htmlAsset.outgoingRelations[0].hrefType = 'rootRelative';
+      expect(
+        htmlAsset.outgoingRelations[0].href,
+        'to equal',
+        '/my-app/style.css'
+      );
+      expect(
+        htmlAsset.text,
+        'to contain',
+        '<link rel="stylesheet" href="/my-app/style.css">'
+      );
+    });
+
+    describe('when an existing root-relative relation starts with the mount root', function() {
+      it('should strip the mount root when converting the relation to relative', function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/relations/Relation/mountRoot/'
+          ),
+          mountRoot: '/my-app'
+        });
+
+        const htmlAsset = assetGraph.addAsset({
+          type: 'Html',
+          url: `${assetGraph.root}index.html`,
+          text: '<link rel="stylesheet" href="/my-app/style.css">'
+        });
+        htmlAsset.outgoingRelations[0].hrefType = 'relative';
+        expect(htmlAsset.outgoingRelations[0].href, 'to equal', 'style.css');
+        expect(
+          htmlAsset.text,
+          'to contain',
+          '<link rel="stylesheet" href="style.css">'
+        );
+      });
+    });
+  });
+
   function getTargetFileNames(relations) {
     return _.map(_.map(relations, 'to'), 'url').map(function(url) {
       return url.replace(/^.*\//, '');
