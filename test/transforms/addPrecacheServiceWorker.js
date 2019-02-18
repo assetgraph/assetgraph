@@ -377,6 +377,38 @@ describe('transforms/addPrecacheServiceWorker', function() {
         )
       );
     });
+
+    it('should respect mountRoot', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/addPrecacheServiceWorker/multiPage/'
+        ),
+        mountRoot: '/my-app'
+      });
+      const htmlAssets = await assetGraph.loadAssets('*.html');
+
+      await assetGraph.populate();
+
+      await assetGraph.addPrecacheServiceWorker(
+        { isInitial: true },
+        { single: true }
+      );
+
+      expect(
+        htmlAssets[0].text,
+        'to contain',
+        `navigator.serviceWorker.register('/my-app/index-otherpage-precache-service-worker.js');`
+      );
+      const serviceWorker = assetGraph.findAssets({
+        fileName: 'index-otherpage-precache-service-worker.js'
+      })[0];
+      expect(
+        serviceWorker.text,
+        'to contain',
+        `"/my-app/foo.png".toString('url')`
+      );
+    });
   });
 
   it('use a config at the canonical path if present', async function() {
