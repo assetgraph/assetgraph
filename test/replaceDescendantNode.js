@@ -1,7 +1,7 @@
 /* global describe, it */
 const replaceDescendantNode = require('../lib/replaceDescendantNode');
 const esprima = require('esprima');
-const escodegen = require('escodegen-papandreou');
+const escodegen = require('escodegen');
 const expect = require('./unexpected-with-plugins');
 
 describe('replaceDescendantNode', function() {
