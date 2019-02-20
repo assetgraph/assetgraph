@@ -119,7 +119,7 @@
     "ci": "npm run coverage && npm run lint",
     "docs": "jsdoc -c jsdoc.json",
     "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text --all -- mocha --reporter dot && echo google-chrome coverage/lcov-report/index.html",
-    "fonttracer": "rollup --config rollup.config.js --sourcemap --format umd --name fonttracer -o fonttracer.js lib/util/fonts/getTextByFontProperties.js"
+    "fonttracer": "rollup --config rollup.config.js --sourcemap --format umd --name fonttracer -o fonttracer.js browser/fonttracer.js"
   },
   "nyc": {
     "include": [
