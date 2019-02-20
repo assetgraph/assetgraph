@@ -56,6 +56,7 @@
     "puppeteer": "^1.12.2",
     "read-pkg-up": "^4.0.0",
     "repeat-string": "^1.5.4",
+    "rollup-plugin-json": "^3.1.0",
     "schemes": "^1.0.1",
     "semver": "^5.3.0",
     "sift": "^7.0.1",
@@ -94,6 +95,10 @@
     "prettier": "~1.16.0",
     "proxyquire": "^2.0.1",
     "requirejs": "^2.3.5",
+    "rollup": "^1.2.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
     "sinon": "^7.0.0",
     "style-loader": "^0.23.0",
     "svgo": "^1.0.5",
@@ -113,7 +118,8 @@
     "test": "mocha",
     "ci": "npm run coverage && npm run lint",
     "docs": "jsdoc -c jsdoc.json",
-    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text --all -- mocha --reporter dot && echo google-chrome coverage/lcov-report/index.html"
+    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text --all -- mocha --reporter dot && echo google-chrome coverage/lcov-report/index.html",
+    "fonttracer": "rollup --config rollup.config.js --sourcemap --format umd --name fonttracer -o fonttracer.js lib/util/fonts/getTextByFontProperties.js"
   },
   "nyc": {
     "include": [
