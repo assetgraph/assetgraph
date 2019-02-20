@@ -1,7 +1,8 @@
 const pathModule = require('path');
-var expect = require('../../unexpected-with-plugins').clone();
-var AssetGraph = require('../../../');
-var getTextByFontProp = require('../../../lib/util/fonts/getTextByFontProperties');
+const expect = require('../../unexpected-with-plugins').clone();
+const AssetGraph = require('../../../');
+const getTextByFontProp = require('../../../lib/util/fonts/getTextByFontProperties');
+const gatherStylesheetsWithPredicates = require('../../../lib/util/fonts/gatherStylesheetsWithPredicates');
 
 expect.addAssertion(
   '<string> to [exhaustively] satisfy computed font properties <array>',
@@ -11,16 +12,18 @@ expect.addAssertion(
     };
     const assetGraph = new AssetGraph();
 
-    await assetGraph
-      .loadAssets({
-        type: 'Html',
-        text: subject
-      })
-      .populate({ followRelations: { crossorigin: false } });
+    const [htmlAsset] = await assetGraph.loadAssets({
+      type: 'Html',
+      text: subject
+    });
+
+    await assetGraph.populate({ followRelations: { crossorigin: false } });
 
     expect(
       getTextByFontProp(
-        assetGraph.findAssets({ type: 'Html', isInline: false })[0]
+        htmlAsset.parseTree,
+        gatherStylesheetsWithPredicates(htmlAsset.assetGraph, htmlAsset),
+        htmlAsset
       ),
       'to [exhaustively] satisfy',
       result
@@ -2849,11 +2852,15 @@ describe('lib/util/fonts/getTextByFontProperties', function() {
         )
       });
 
-      await assetGraph.loadAssets('index.html');
+      const [htmlAsset] = await assetGraph.loadAssets('index.html');
       await assetGraph.populate();
 
       expect(
-        getTextByFontProp(assetGraph.findAssets({ type: 'Html' })[0]),
+        getTextByFontProp(
+          htmlAsset.parseTree,
+          gatherStylesheetsWithPredicates(htmlAsset.assetGraph, htmlAsset),
+          htmlAsset
+        ),
         'to exhaustively satisfy',
         [
           {
