@@ -1193,6 +1193,25 @@ describe('assets/Asset', function() {
               '<script>alert("bar");</script>'
             );
           });
+
+          // Regression test for https://github.com/assetgraph/assetgraph-builder/issues/660
+          it('should not break if the replacement asset has an outgoing relation with a root-relative url', async function() {
+            const htmlAsset = new AssetGraph().addAsset({
+              type: 'Html',
+              url: 'https://www.example.com/',
+              text: "<script>alert('foo');</script>"
+            });
+
+            // Used to break with TypeError: Cannot read property 'length' of null
+            const replacementJavaScript = htmlAsset.outgoingRelations[0].to.replaceWith(
+              {
+                type: 'JavaScript',
+                text: "alert('/foo.png'.toString('url'));"
+              }
+            );
+
+            expect(replacementJavaScript.url, 'to be null');
+          });
         });
 
         describe('and a non-inline asset is being replaced', function() {
