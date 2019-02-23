@@ -25,89 +25,67 @@ describe('Assetgraph', function() {
     });
 
     it('should accept an http URL', function() {
-      return expect(function() {
-        const assetGraph = new AssetGraph({ canonicalRoot: 'http://fisk.dk/' });
+      const assetGraph = new AssetGraph({ canonicalRoot: 'http://fisk.dk/' });
 
-        expect(assetGraph.canonicalRoot, 'to be', 'http://fisk.dk/');
-      }, 'not to throw');
+      expect(assetGraph.canonicalRoot, 'to be', 'http://fisk.dk/');
     });
 
     it('should accept an http URL with an ip address', function() {
-      return expect(function() {
-        const assetGraph = new AssetGraph({
-          canonicalRoot: 'http://0.0.0.0:8000/'
-        });
+      const assetGraph = new AssetGraph({
+        canonicalRoot: 'http://0.0.0.0:8000/'
+      });
 
-        expect(assetGraph.canonicalRoot, 'to be', 'http://0.0.0.0:8000/');
-      }, 'not to throw');
+      expect(assetGraph.canonicalRoot, 'to be', 'http://0.0.0.0:8000/');
     });
 
     it('should add a trailing slash', function() {
-      return expect(function() {
-        const assetGraph = new AssetGraph({ canonicalRoot: 'http://fisk.dk' });
+      const assetGraph = new AssetGraph({ canonicalRoot: 'http://fisk.dk' });
 
-        expect(assetGraph.canonicalRoot, 'to be', 'http://fisk.dk/');
-      }, 'not to throw');
+      expect(assetGraph.canonicalRoot, 'to be', 'http://fisk.dk/');
     });
 
     it('should accept an http URL with a path', function() {
-      return expect(function() {
-        const assetGraph = new AssetGraph({
-          canonicalRoot: 'http://fisk.dk/foo/bar/baz/'
-        });
+      const assetGraph = new AssetGraph({
+        canonicalRoot: 'http://fisk.dk/foo/bar/baz/'
+      });
 
-        expect(
-          assetGraph.canonicalRoot,
-          'to be',
-          'http://fisk.dk/foo/bar/baz/'
-        );
-      }, 'not to throw');
+      expect(assetGraph.canonicalRoot, 'to be', 'http://fisk.dk/foo/bar/baz');
     });
 
     it('should accept an http URL with a port', function() {
-      return expect(function() {
-        const assetGraph = new AssetGraph({
-          canonicalRoot: 'http://fisk.dk:3000/'
-        });
+      const assetGraph = new AssetGraph({
+        canonicalRoot: 'http://fisk.dk:3000/'
+      });
 
-        expect(assetGraph.canonicalRoot, 'to be', 'http://fisk.dk:3000/');
-      }, 'not to throw');
+      expect(assetGraph.canonicalRoot, 'to be', 'http://fisk.dk:3000/');
     });
 
     it('should accept an http URL with a subdomain', function() {
-      return expect(function() {
-        const assetGraph = new AssetGraph({
-          canonicalRoot: 'http://sub.fisk.dk/'
-        });
+      const assetGraph = new AssetGraph({
+        canonicalRoot: 'http://sub.fisk.dk/'
+      });
 
-        expect(assetGraph.canonicalRoot, 'to be', 'http://sub.fisk.dk/');
-      }, 'not to throw');
+      expect(assetGraph.canonicalRoot, 'to be', 'http://sub.fisk.dk/');
     });
 
     it('should accept an https URL', function() {
-      return expect(function() {
-        const assetGraph = new AssetGraph({
-          canonicalRoot: 'https://fisk.dk/'
-        });
+      const assetGraph = new AssetGraph({
+        canonicalRoot: 'https://fisk.dk/'
+      });
 
-        expect(assetGraph.canonicalRoot, 'to be', 'https://fisk.dk/');
-      }, 'not to throw');
+      expect(assetGraph.canonicalRoot, 'to be', 'https://fisk.dk/');
     });
 
     it('should accept a protocol relative URL', function() {
-      return expect(function() {
-        const assetGraph = new AssetGraph({ canonicalRoot: '//fisk.dk/' });
+      const assetGraph = new AssetGraph({ canonicalRoot: '//fisk.dk/' });
 
-        expect(assetGraph.canonicalRoot, 'to be', '//fisk.dk/');
-      }, 'not to throw');
+      expect(assetGraph.canonicalRoot, 'to be', '//fisk.dk/');
     });
 
     it('should ensure a trailing slash ', function() {
-      return expect(function() {
-        const assetGraph = new AssetGraph({ canonicalRoot: '//fisk.dk' });
+      const assetGraph = new AssetGraph({ canonicalRoot: '//fisk.dk' });
 
-        expect(assetGraph.canonicalRoot, 'to be', '//fisk.dk/');
-      }, 'not to throw');
+      expect(assetGraph.canonicalRoot, 'to be', '//fisk.dk/');
     });
   });
 });

@@ -378,13 +378,13 @@ describe('transforms/addPrecacheServiceWorker', function() {
       );
     });
 
-    it('should respect mountRoot', async function() {
+    it('should respect a root-relative canonicalRoot', async function() {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/addPrecacheServiceWorker/multiPage/'
         ),
-        mountRoot: '/my-app'
+        canonicalRoot: '/my-app'
       });
       const htmlAssets = await assetGraph.loadAssets('*.html');
 

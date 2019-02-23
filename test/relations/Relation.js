@@ -363,56 +363,112 @@ describe('relations/Relation', function() {
     });
   });
 
-  describe('with a mountRoot setting', function() {
-    it('should honor the mountRoot setting when changing a hrefType to rootRelative', function() {
-      const assetGraph = new AssetGraph({
-        root: pathModule.resolve(
-          __dirname,
-          '../../testdata/relations/Relation/mountRoot/'
-        ),
-        mountRoot: '/my-app'
-      });
-
-      const htmlAsset = assetGraph.addAsset({
-        type: 'Html',
-        url: `${assetGraph.root}index.html`,
-        text: '<link rel="stylesheet" href="style.css">'
-      });
-      htmlAsset.outgoingRelations[0].hrefType = 'rootRelative';
-      expect(
-        htmlAsset.outgoingRelations[0].href,
-        'to equal',
-        '/my-app/style.css'
-      );
-      expect(
-        htmlAsset.text,
-        'to contain',
-        '<link rel="stylesheet" href="/my-app/style.css">'
-      );
-    });
-
-    describe('when an existing root-relative relation starts with the mount root', function() {
-      it('should strip the mount root when converting the relation to relative', function() {
+  describe('with a canonicalRoot setting', function() {
+    describe('of a root-relative url', function() {
+      it('should honor it when changing a hrefType to rootRelative', function() {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/relations/Relation/mountRoot/'
           ),
-          mountRoot: '/my-app'
+          canonicalRoot: '/my-app'
         });
 
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: `${assetGraph.root}index.html`,
-          text: '<link rel="stylesheet" href="/my-app/style.css">'
+          text: '<link rel="stylesheet" href="style.css">'
         });
-        htmlAsset.outgoingRelations[0].hrefType = 'relative';
-        expect(htmlAsset.outgoingRelations[0].href, 'to equal', 'style.css');
+        htmlAsset.outgoingRelations[0].hrefType = 'rootRelative';
+        expect(
+          htmlAsset.outgoingRelations[0].href,
+          'to equal',
+          '/my-app/style.css'
+        );
         expect(
           htmlAsset.text,
           'to contain',
-          '<link rel="stylesheet" href="style.css">'
+          '<link rel="stylesheet" href="/my-app/style.css">'
         );
+      });
+
+      describe('when an existing root-relative relation starts with the canonical root path', function() {
+        it('should strip it when converting the relation to relative', function() {
+          const assetGraph = new AssetGraph({
+            root: pathModule.resolve(
+              __dirname,
+              '../../testdata/relations/Relation/mountRoot/'
+            ),
+            canonicalRoot: '/my-app'
+          });
+
+          const htmlAsset = assetGraph.addAsset({
+            type: 'Html',
+            url: `${assetGraph.root}index.html`,
+            text: '<link rel="stylesheet" href="/my-app/style.css">'
+          });
+          htmlAsset.outgoingRelations[0].hrefType = 'relative';
+          expect(htmlAsset.outgoingRelations[0].href, 'to equal', 'style.css');
+          expect(
+            htmlAsset.text,
+            'to contain',
+            '<link rel="stylesheet" href="style.css">'
+          );
+        });
+      });
+    });
+
+    describe('of a protocol relative url', function() {
+      it('should honor it when changing a hrefType to rootRelative', function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/relations/Relation/mountRoot/'
+          ),
+          canonicalRoot: '//my.doma.in/my-app'
+        });
+
+        const htmlAsset = assetGraph.addAsset({
+          type: 'Html',
+          url: `${assetGraph.root}index.html`,
+          text: '<link rel="stylesheet" href="style.css">'
+        });
+        htmlAsset.outgoingRelations[0].hrefType = 'rootRelative';
+        expect(
+          htmlAsset.outgoingRelations[0].href,
+          'to equal',
+          '/my-app/style.css'
+        );
+        expect(
+          htmlAsset.text,
+          'to contain',
+          '<link rel="stylesheet" href="/my-app/style.css">'
+        );
+      });
+
+      describe('when an existing root-relative relation starts with the canonical root path', function() {
+        it('should strip it when converting the relation to relative', function() {
+          const assetGraph = new AssetGraph({
+            root: pathModule.resolve(
+              __dirname,
+              '../../testdata/relations/Relation/mountRoot/'
+            ),
+            canonicalRoot: '//doma.in/my-app'
+          });
+
+          const htmlAsset = assetGraph.addAsset({
+            type: 'Html',
+            url: `${assetGraph.root}index.html`,
+            text: '<link rel="stylesheet" href="/my-app/style.css">'
+          });
+          htmlAsset.outgoingRelations[0].hrefType = 'relative';
+          expect(htmlAsset.outgoingRelations[0].href, 'to equal', 'style.css');
+          expect(
+            htmlAsset.text,
+            'to contain',
+            '<link rel="stylesheet" href="style.css">'
+          );
+        });
       });
     });
   });
