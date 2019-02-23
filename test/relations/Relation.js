@@ -369,7 +369,7 @@ describe('relations/Relation', function() {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
-            '../../testdata/relations/Relation/mountRoot/'
+            '../../testdata/relations/Relation/rootRelativeCanonicalRoot/'
           ),
           canonicalRoot: '/my-app'
         });
@@ -397,7 +397,7 @@ describe('relations/Relation', function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
-              '../../testdata/relations/Relation/mountRoot/'
+              '../../testdata/relations/Relation/rootRelativeCanonicalRoot/'
             ),
             canonicalRoot: '/my-app'
           });
@@ -423,7 +423,7 @@ describe('relations/Relation', function() {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
-            '../../testdata/relations/Relation/mountRoot/'
+            '../../testdata/relations/Relation/rootRelativeCanonicalRoot/'
           ),
           canonicalRoot: '//my.doma.in/my-app'
         });
@@ -451,7 +451,7 @@ describe('relations/Relation', function() {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
-              '../../testdata/relations/Relation/mountRoot/'
+              '../../testdata/relations/Relation/rootRelativeCanonicalRoot/'
             ),
             canonicalRoot: '//doma.in/my-app'
           });
