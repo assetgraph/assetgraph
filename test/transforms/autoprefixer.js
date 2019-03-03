@@ -27,7 +27,7 @@ describe('transforms.autoprefixer', function() {
       await expect(
         () => autoprefixerTransform()(assetGraph),
         'to error',
-        `autoprefixer transform: Found 2 css asset(s) while --browsers option is active, but no autoprefixer module is available. Please use npm to install autoprefixer in your project so the autoprefixer transform can require it.\nCannot find module 'autoprefixer/package.json'`
+        `autoprefixer transform: Found 2 css assets, but no autoprefixer module is available. Please use npm to install autoprefixer in your project so the autoprefixer transform can require it.\nCannot find module 'autoprefixer/package.json'`
       );
     });
 
