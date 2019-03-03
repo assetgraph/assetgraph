@@ -2,8 +2,53 @@ const pathModule = require('path');
 /* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
+const proxyquire = require('proxyquire');
 
 describe('transforms.autoprefixer', function() {
+  describe('if autoprefixer is not available', function() {
+    const autoprefixerTransform = proxyquire(
+      '../../lib/transforms/autoprefixer',
+      {
+        autoprefixer: null,
+        'autoprefixer/package.json': null
+      }
+    );
+
+    it('should fail', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/autoprefixer/'
+        )
+      });
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate();
+
+      await expect(
+        () => autoprefixerTransform()(assetGraph),
+        'to error',
+        `autoprefixer transform: Found 2 css asset(s) while --browsers option is active, but no autoprefixer module is available. Please use npm to install autoprefixer in your project so the autoprefixer transform can require it.\nCannot find module 'autoprefixer/package.json'`
+      );
+    });
+
+    describe('and errorIfNotFound:false is given', function() {
+      it('should do nothing', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/autoprefixer/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+
+        await autoprefixerTransform(['last 999 versions'], {
+          errorIfNotFound: false
+        })(assetGraph);
+      });
+    });
+  });
+
   it('should handle an unprefixed test case', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
