@@ -2,8 +2,41 @@ const pathModule = require('path');
 /* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
+const proxyquire = require('proxyquire');
+const sinon = require('sinon');
 
 describe('transforms.autoprefixer', function() {
+  describe('if autoprefixer is not available', function() {
+    const autoprefixerTransform = proxyquire(
+      '../../lib/transforms/autoprefixer',
+      {
+        autoprefixer: null,
+        'autoprefixer/package.json': null
+      }
+    );
+
+    it('should emit an info event', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/autoprefixer/'
+        )
+      });
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate();
+      const infoSpy = sinon.spy();
+      assetGraph.on('info', infoSpy);
+      await autoprefixerTransform()(assetGraph);
+      await expect(infoSpy, 'to have calls satisfying', () => {
+        infoSpy(
+          new Error(
+            `autoprefixer transform: Found 2 css assets, but no autoprefixer module is available. Please use npm to install autoprefixer in your project so the autoprefixer transform can require it.\nCannot find module 'autoprefixer/package.json'`
+          )
+        );
+      });
+    });
+  });
+
   it('should handle an unprefixed test case', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
