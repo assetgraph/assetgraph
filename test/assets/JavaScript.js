@@ -127,6 +127,21 @@ describe('assets/JavaScript', function() {
     expect(javaScript.text, 'to match', /Copyright blablabla/);
   });
 
+  it('should preserve comments despite assetGraph.sourceMaps being false', async function() {
+    const assetGraph = new AssetGraph();
+    assetGraph.sourceMaps = false;
+
+    const javaScript = assetGraph.addAsset({
+      type: 'JavaScript',
+      text: "// foo\nalert('bar');"
+    });
+
+    javaScript.parseTree; // eslint-disable-line no-unused-expressions
+    javaScript.markDirty();
+
+    expect(javaScript.text, 'to contain', '// foo');
+  });
+
   it('should handle a test case with JavaScript assets that have regular comments as the first non-whitespace tokens', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(__dirname, '../../testdata/assets/JavaScript/')
