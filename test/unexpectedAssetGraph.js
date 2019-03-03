@@ -186,16 +186,15 @@ module.exports = {
       return escodegen.generate(ast);
     }
 
-    expect.addAssertion('[not] to have the same AST as', function(
-      expect,
-      subject,
-      value
-    ) {
-      expect(
-        prettyPrintAst(toAst(subject)),
-        '[not] to equal',
-        prettyPrintAst(toAst(value))
-      );
-    });
+    expect.addAssertion(
+      '<object|string|function|AssetGraph.asset> [not] to have the same AST as <object|string|function|AssetGraph.asset>',
+      function(expect, subject, value) {
+        expect(
+          prettyPrintAst(toAst(subject)),
+          '[not] to equal',
+          prettyPrintAst(toAst(value))
+        );
+      }
+    );
   }
 };

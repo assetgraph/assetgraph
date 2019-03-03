@@ -12,33 +12,35 @@ describe('transforms/replaceSymbolsInJavaScript', function() {
 
   const expect = unexpected
     .clone()
-    .addAssertion('to come out as', async (expect, subject, value) => {
-      // subject.code, subject.defines
-      expect(subject, 'to be an object');
-      const assetConfig = {
-        type: 'JavaScript',
-        url: `file://${pathModule.resolve(__dirname, 'bogus.js')}`
-      };
-      if (subject && typeof subject.type === 'string') {
-        assetConfig.parseTree = subject.parseTree;
-      } else if (typeof subject.text === 'string') {
-        assetConfig.text = subject.text;
-      } else if (Buffer.isBuffer(subject.rawSrc)) {
-        assetConfig.rawSrc = subject.rawSrc;
-      }
-      assetGraph.addAsset(assetConfig);
-      await assetGraph.replaceSymbolsInJavaScript(
-        { type: 'JavaScript' },
-        subject.defines || {}
-      );
+    .addAssertion(
+      '<object> to come out as <function|string>',
+      async (expect, subject, value) => {
+        // subject.code, subject.defines
+        const assetConfig = {
+          type: 'JavaScript',
+          url: `file://${pathModule.resolve(__dirname, 'bogus.js')}`
+        };
+        if (subject && typeof subject.type === 'string') {
+          assetConfig.parseTree = subject.parseTree;
+        } else if (typeof subject.text === 'string') {
+          assetConfig.text = subject.text;
+        } else if (Buffer.isBuffer(subject.rawSrc)) {
+          assetConfig.rawSrc = subject.rawSrc;
+        }
+        assetGraph.addAsset(assetConfig);
+        await assetGraph.replaceSymbolsInJavaScript(
+          { type: 'JavaScript' },
+          subject.defines || {}
+        );
 
-      expect(
-        assetGraph.findAssets({ fileName: 'bogus.js' })[0],
-        'to have the same AST as',
-        value
-      );
-      return assetGraph.findAssets()[0].parseTree;
-    });
+        expect(
+          assetGraph.findAssets({ fileName: 'bogus.js' })[0],
+          'to have the same AST as',
+          value
+        );
+        return assetGraph.findAssets()[0].parseTree;
+      }
+    );
 
   it('should replace a primitive value', function() {
     return expect(

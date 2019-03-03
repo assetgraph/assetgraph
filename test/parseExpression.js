@@ -3,7 +3,11 @@ const expect = require('./unexpected-with-plugins').clone();
 const parseExpression = require('../lib/parseExpression');
 
 describe('parseExpression', function() {
-  expect.addAssertion('to parse as', function(expect, subject, value) {
+  expect.addAssertion('<any> to parse as <object>', function(
+    expect,
+    subject,
+    value
+  ) {
     expect(parseExpression(subject), 'to exhaustively satisfy', value);
   });
 

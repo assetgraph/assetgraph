@@ -14,7 +14,7 @@ function createAsset(inputHtml) {
 describe('assets/Html', function() {
   const expect = unexpected
     .clone()
-    .addAssertion('to minify to', function(
+    .addAssertion('<string> to minify to <string> <function?>', function(
       expect,
       subject,
       value,
