@@ -1,7 +1,7 @@
 const pathModule = require('path');
 /* global describe, it */
 const expect = require('../unexpected-with-plugins');
-const esprima = require('esprima');
+const parseJavaScript = require('../../lib/parseJavaScript');
 const AssetGraph = require('../../lib/AssetGraph');
 const _ = require('lodash');
 
@@ -54,10 +54,10 @@ describe('transforms/serializeSourceMaps', function() {
         fileName: 'jquery-1.10.1.min.js'
       })[0];
       javaScript.parseTree.body.push(
-        esprima.parse('var bogus = 123;', {
-          loc: true,
-          attachComment: true,
-          source: `${assetGraph.root}bogus.js`
+        parseJavaScript('var bogus = 123;', {
+          locations: true,
+          ranges: true,
+          sourceFile: `${assetGraph.root}bogus.js`
         }).body[0]
       );
       javaScript.markDirty();
@@ -153,10 +153,10 @@ describe('transforms/serializeSourceMaps', function() {
 
       const myScript = assetGraph.findAssets({ fileName: 'myScript.js' })[0];
       myScript.parseTree.body.push(
-        esprima.parse('var bogus = 123;', {
-          loc: true,
-          attachComment: true,
-          source: `${assetGraph.root}bogus.js`
+        parseJavaScript('var bogus = 123;', {
+          locations: true,
+          ranges: true,
+          sourceFile: `${assetGraph.root}bogus.js`
         }).body[0]
       );
       myScript.markDirty();

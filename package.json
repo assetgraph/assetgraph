@@ -21,6 +21,8 @@
     "test/unexpectedAssetGraph.js"
   ],
   "dependencies": {
+    "acorn": "^6.1.0",
+    "acorn-jsx": "^5.0.1",
     "bluebird": "^3.5.1",
     "chalk": "^2.0.1",
     "common-path-prefix": "^1.0.0",
@@ -33,8 +35,7 @@
     "domspace": "^1.2.1",
     "esanimate": "^1.1.0",
     "escodegen": "^1.11.1",
-    "esprima": "^4.0.0",
-    "espurify": "^2.0.0",
+    "espurify": "^2.0.1",
     "estraverse": "^4.2.0",
     "estraverse-fb": "^1.3.2",
     "font-family-papandreou": "^0.2.0-patch1",

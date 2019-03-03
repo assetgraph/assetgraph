@@ -19,7 +19,7 @@ describe('assets/JavaScript', function() {
       'to match',
       /parseErrorInInlineJavaScript\.html/
     );
-    expect(firstWarning.message, 'to match', /line 2\b/);
+    expect(firstWarning.message, 'to contain', '(2:8)');
   });
 
   it('should handle a test case that has a parse error in an external JavaScript asset', async function() {
@@ -33,7 +33,7 @@ describe('assets/JavaScript', function() {
 
     expect(firstWarning, 'to be an', Error);
     expect(firstWarning.message, 'to match', /parseError\.js/);
-    expect(firstWarning.message, 'to match', /line 6\b/);
+    expect(firstWarning.message, 'to contain', '(6:13)');
   });
 
   it('should handle a test case that has a parse error in an asset not in an assetgraph', function() {
@@ -239,13 +239,31 @@ describe('assets/JavaScript', function() {
     expect(javaScript.text, 'to equal', es6Text);
   });
 
-  // Awaiting https://github.com/jquery/esprima/issues/1588 (due for Esprima 5)
-  it.skip('should tolerate Object spread syntax', function() {
+  it('should tolerate Object spread syntax', function() {
     const text = 'const foo = { ...bar };';
     const javaScript = new AssetGraph().addAsset({ type: 'JavaScript', text });
     expect(javaScript.parseTree, 'to satisfy', {
       type: 'Program',
-      body: [],
+      body: [
+        {
+          type: 'VariableDeclaration',
+          kind: 'const',
+          declarations: [
+            {
+              type: 'VariableDeclarator',
+              init: {
+                type: 'ObjectExpression',
+                properties: [
+                  {
+                    type: 'SpreadElement',
+                    argument: { type: 'Identifier', name: 'bar' }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
       sourceType: 'module'
     });
     javaScript.markDirty();
@@ -331,7 +349,7 @@ describe('assets/JavaScript', function() {
 
     expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', () => {
       infoSpy(
-        'Could not parse http://example.com/script.js as a module, fall back to script mode\nLine 1: Unexpected identifier'
+        "Could not parse http://example.com/script.js as a module, fall back to script mode\nCannot use keyword 'await' outside an async function (1:0)"
       );
     });
   });
@@ -353,7 +371,7 @@ describe('assets/JavaScript', function() {
 
     expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', () => {
       warnSpy(
-        'Parse error in http://example.com/script.js\nLine 1: Unexpected token ) (line 1)'
+        'Parse error in http://example.com/script.js\nUnexpected token (1:5)'
       );
     });
   });
