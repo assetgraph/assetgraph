@@ -33,7 +33,7 @@
 - [addPrecache...: Throw if staticFileGlobs is passed](https://github.com/assetgraph/assetgraph/commit/403e0a0025f1141131f3f79162969db8ffda041c) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Switch to sw-precache's promise interface, fixes error reporting](https://github.com/assetgraph/assetgraph/commit/9ccfc73d4bd95b315a12b621694d45a4fcad426e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Interpret config paths as relative to process.cwd\(\)](https://github.com/assetgraph/assetgraph/commit/1a471712902f51db7a584445a3627c2009dc33d2) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+2 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v5.6.4)
+- [+2 more](https://github.com/assetgraph/assetgraph/compare/v5.6.3...v5.6.4)
 
 ### v5.6.3 (2019-02-15)
 
@@ -59,7 +59,7 @@
 - [eslint --fix .](https://github.com/assetgraph/assetgraph/commit/7fd9a27f3b73e2c572dceb1e65f57fceae4b7c8d) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [.eslintrc: Enable the prefer-const rule](https://github.com/assetgraph/assetgraph/commit/1a82a3a2e19387e2ed3a7cfcad6cab6696df2cfa) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Fix formatting in files where \/\*eslint-disable\*\/ previously disabled prettier, too](https://github.com/assetgraph/assetgraph/commit/73d3dedeb3109f3aa6a6ba76bb61b33aa5407bda) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v5.6.0)
+- [+3 more](https://github.com/assetgraph/assetgraph/compare/v5.5.1...v5.6.0)
 
 ### v5.5.1 (2019-02-03)
 
@@ -82,7 +82,7 @@
 - [Comment out the two failing bundleWebpack tests](https://github.com/assetgraph/assetgraph/commit/3300f12d7caa4e129720612f070e66bcf2ce2f40) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Empty commit to see if that might fix the build](https://github.com/assetgraph/assetgraph/commit/3d47ff23f48bb00ccabd7639759b3c3755eda70b) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Update prettier to version 1.16.0](https://github.com/assetgraph/assetgraph/commit/2724a807efe5f35617287131cd809c3e53a61193) ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
-- [+4 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v5.4.2)
+- [+4 more](https://github.com/assetgraph/assetgraph/compare/v5.4.1...v5.4.2)
 
 ### v5.4.1 (2019-01-09)
 
@@ -99,7 +99,7 @@
 - [Fix missing empty line in test](https://github.com/assetgraph/assetgraph/commit/9d50799f5d381d1e0ccb0c99bc249eeba5a8a082) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Update unexpected to 11.0.0-1](https://github.com/assetgraph/assetgraph/commit/e0d5509f0cb90229b0e8ebdc628dce8156319bd0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Tests: Use expect.it to prepare for Unexpected 11](https://github.com/assetgraph/assetgraph/commit/32953f3a5c71977319f2bbecce683848700b7458) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+12 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v5.4.1)
+- [+12 more](https://github.com/assetgraph/assetgraph/compare/v5.4.0...v5.4.1)
 
 ### v5.4.0 (2018-10-17)
 
@@ -178,7 +178,7 @@
 - [eslint --fix .](https://github.com/assetgraph/assetgraph/commit/3263729d201ad0de721c8c34d13289c87c47bf66) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Avoid false positive fragment detection](https://github.com/assetgraph/assetgraph/commit/f31c3fad820ed7033d1bafae28ed9a771c55b904) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [subsetFonts: Ignore ::-webkit-scrollbar pseudo element \(not supported by nwsapi\)](https://github.com/assetgraph/assetgraph/commit/af140b3a12532fa1c642a974efecf58d964ec83c) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+18 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.13.0)
+- [+18 more](https://github.com/assetgraph/assetgraph/compare/v4.12.1...v4.13.0)
 
 ### v4.12.1 (2018-07-21)
 
@@ -194,7 +194,7 @@
 - [Collapse two identical ifs](https://github.com/assetgraph/assetgraph/commit/af3531a97900ae168cf03c7873dc7d7a03bf0386) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Do not throw away the font-style and font-weight bits when patching up the font shorthand](https://github.com/assetgraph/assetgraph/commit/fac5d28932131d3b4bacd438a746d090dd762fa0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [addPrecacheServiceWorker: Skip more relation types when traversing for assets to include](https://github.com/assetgraph/assetgraph/commit/4b2e51a59167f065dbdabd0064d46d18ba73f149) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.12.1)
+- [+3 more](https://github.com/assetgraph/assetgraph/compare/v4.12.0...v4.12.1)
 
 ### v4.12.0 (2018-07-15)
 
@@ -210,7 +210,7 @@
 - [subsetFonts: Strip some more pseudo elements that aren't supported by jsdom\/nwsapi](https://github.com/assetgraph/assetgraph/commit/ec1ae9f43c6cc0143f6b9bd8d07d42b1d97eac8e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Fix more tests](https://github.com/assetgraph/assetgraph/commit/e0e9a32b1fa86665d10f0698175d8b8c488643fb) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Fix another failing test where space crept in](https://github.com/assetgraph/assetgraph/commit/a93d59c441e929e4feb2fe616a621e974abedba8) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+2 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.12.0)
+- [+2 more](https://github.com/assetgraph/assetgraph/compare/v4.11.1...v4.12.0)
 
 ### v4.11.1 (2018-06-30)
 
@@ -233,7 +233,7 @@
 - [Use 1-based line and column numbers when warning about missing glyphs](https://github.com/assetgraph/assetgraph/commit/ec33e4dfd22a7941e0def9904f260f4e1617d607) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [subsetFonts: Mention the font-weight and font-style when warning about missing glyphs](https://github.com/assetgraph/assetgraph/commit/cf4b81945afb77fe85aa5dda7e27b9a547130e56) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Use array spread instead of concat](https://github.com/assetgraph/assetgraph/commit/3500c662e5812022f422ac8d7d83ecaabd2bad4c) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+4 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.11.0)
+- [+4 more](https://github.com/assetgraph/assetgraph/compare/v4.10.1...v4.11.0)
 
 ### v4.10.1 (2018-06-09)
 
@@ -261,7 +261,7 @@
 - [Asset: Memoize the inferred type](https://github.com/assetgraph/assetgraph/commit/c97c71d6579f935f151a86b0167073bda2474fe5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [\_tryUpgrade: Short circuit if the asset already has the given type](https://github.com/assetgraph/assetgraph/commit/0b785e492000d8887b4caa5a76d17cbd57df7f78) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Update README.md](https://github.com/assetgraph/assetgraph/commit/29ac64965480f77029b6d211dce2ab212332a6dd) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+6 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.9.0)
+- [+6 more](https://github.com/assetgraph/assetgraph/compare/v4.8.0...v4.9.0)
 
 ### v4.8.0 (2018-05-26)
 
@@ -297,7 +297,7 @@
 - [Travis: Run with node.js 10](https://github.com/assetgraph/assetgraph/commit/61a9c92fdd3f08b04c1dea4e049e14b18c5f2705) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Fix undeffing order broken by da206a6](https://github.com/assetgraph/assetgraph/commit/14e097a2e2bc1436c17600706b92c84319615797) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [SourceMap: Set this.\_consumer to undefined when the text, rawSrc or parse tree changes](https://github.com/assetgraph/assetgraph/commit/c540415b93ed466490426b636a72f3b62eabb7a5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.6.2)
+- [+3 more](https://github.com/assetgraph/assetgraph/compare/v4.6.1...v4.6.2)
 
 ### v4.6.1 (2018-04-21)
 
@@ -321,7 +321,7 @@
 - [Keep using a ^ dep for jsdom](https://github.com/assetgraph/assetgraph/commit/e50e818e27c57570ede0f94a15536241ab484a36) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Revert "Remove estraverse \(we use estraverse-fb now\)"](https://github.com/assetgraph/assetgraph/commit/7e1e129d6cdf717e38547d3b34c4b537f38237d6) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Remove estraverse \(we use estraverse-fb now\)](https://github.com/assetgraph/assetgraph/commit/acbad800b6309be8cce3ffa7acf7c03e520cc639) ([Andreas Lind](mailto:andreas.lind@peakon.com))
-- [+7 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.6.0)
+- [+7 more](https://github.com/assetgraph/assetgraph/compare/v4.5.0...v4.6.0)
 
 ### v4.5.0 (2018-04-01)
 
@@ -335,7 +335,7 @@
 - [assets.\*.findOutgoingRelationsInParseTree: Don't break when the asset isn't loaded](https://github.com/assetgraph/assetgraph/commit/b4ef30354327bb50324786e24704d8f417235bab) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Html\#unload: Don't break if the asset isn't already loaded](https://github.com/assetgraph/assetgraph/commit/99d3c8fdaf1f0a61b7dcb4a807a434b26cf43b52) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Fix parsing of the charset parameter from the Content-Type header \(broken by 047864702\)](https://github.com/assetgraph/assetgraph/commit/9e4636b40b91e539ed9495423b2597b000b132c6) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+2 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.4.0)
+- [+2 more](https://github.com/assetgraph/assetgraph/compare/v4.3.1...v4.4.0)
 
 ### v4.3.1 (2018-03-30)
 
@@ -359,7 +359,7 @@
 - [Asset\#\_warnIncompatibleTypes: Attach err.asset](https://github.com/assetgraph/assetgraph/commit/4f5ec437de7b99ed4f734d31d2ef5d586d3f7f6a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Remove accidentally added bogus package-lock file](https://github.com/assetgraph/assetgraph/commit/f4f06c5ddcb36d4632d8eda5d69e738e9b2588e7) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Reformat comment](https://github.com/assetgraph/assetgraph/commit/0e71e8ac073fcb400874be37a260fa964a61d87e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+7 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.2.0)
+- [+7 more](https://github.com/assetgraph/assetgraph/compare/v4.1.0...v4.2.0)
 
 ### v4.1.0 (2018-03-24)
 
@@ -401,7 +401,7 @@
 - [Externalize AssetConfig type definition in jsdoc](https://github.com/assetgraph/assetgraph/commit/67aec16de2d6c6d37dc7893eb669ad3f71525a15) ([Peter Müller](mailto:munter@fumle.dk))
 - [Document Asset config object for constructor](https://github.com/assetgraph/assetgraph/commit/2d09ad3aebf7bbec3615232011406d80c263b69f) ([Peter Müller](mailto:munter@fumle.dk))
 - [More jsdoc updates](https://github.com/assetgraph/assetgraph/commit/fe9995cf0bd03b41db9d51b8807e1f4da31d5dba) ([Peter Müller](mailto:munter@fumle.dk))
-- [+10 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.0.1)
+- [+10 more](https://github.com/assetgraph/assetgraph/compare/v4.0.0...v4.0.1)
 
 ### v4.0.0 (2018-03-05)
 
@@ -439,7 +439,7 @@
 - [Remove the nextSuffixToTry loop from Asset\#externalize now that it's handled by the Asset\#url setter](https://github.com/assetgraph/assetgraph/commit/7b1118a10b06d0b20952e8671f7d85efaa9465ff) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Adapt to an output change in uglify-js 3.3.13](https://github.com/assetgraph/assetgraph/commit/bff8a7289dbf7c2006c3116546e295b30a2cff5d) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Asset\#url setter: Move the other asset out of the way in case of a url collision](https://github.com/assetgraph/assetgraph/commit/eb880ab445ec2609ada22c7b819f14fee718b654) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+195 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v4.0.0)
+- [+195 more](https://github.com/assetgraph/assetgraph/compare/v3.14.2...v4.0.0)
 
 ### v3.14.2 (2018-02-26)
 
@@ -534,7 +534,7 @@
 - [bundleRequireJs: Test that the wrap option is passed to the require.js optimizer](https://github.com/assetgraph/assetgraph/commit/2e203ed9f8844bc237c52050c8c6f65fe6a2b681) ([Andreas Lind](mailto:andreas@one.com))
 - [Support display:list-item when the value includes more tokens](https://github.com/assetgraph/assetgraph/commit/94248a55b770efcc62c7b20425ff9234a542ea68) ([Andreas Lind](mailto:andreas@one.com))
 - [Merge two ifs](https://github.com/assetgraph/assetgraph/commit/ceeb26be4f322dccb63b63d8b513b90e6d14fb74) ([Andreas Lind](mailto:andreas@one.com))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v3.10.0)
+- [+3 more](https://github.com/assetgraph/assetgraph/compare/v3.9.1...v3.10.0)
 
 ### v3.9.1 (2017-09-19)
 
@@ -702,7 +702,7 @@
 - [inlineHtmlTemplates: Inject the &lt;script type=text\/html&gt; templates into &lt;head&gt; instead of &lt;body&gt;](https://github.com/assetgraph/assetgraph/commit/8548aa8e9de066fbf6ffc714d0b8573dd4e1077e) ([Andreas Lind](mailto:andreas@one.com))
 - [Add support for new AssetGraph\({disableFetch: true}\) to disable the JavaScriptFetch relation](https://github.com/assetgraph/assetgraph/commit/c229c92d67550ca81080b4c5f065d1c1cffe09f1) ([Andreas Lind](mailto:andreas@one.com))
 - [eslintrc: Permit es6 syntax so we can at least use the features supported by node.js 4 in v3](https://github.com/assetgraph/assetgraph/commit/8a70a004a8bc3b568903e35515358fb67c6fd83f) ([Andreas Lind](mailto:andreas@one.com))
-- [+244 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v3.6.3)
+- [+244 more](https://github.com/assetgraph/assetgraph/compare/v2.17.4...v3.6.3)
 
 ### v2.17.4 (2017-08-02)
 
@@ -846,7 +846,7 @@
 - [logEvents: Mention the name of the failing transform when exiting early due to stopOnWarning](https://github.com/assetgraph/assetgraph/commit/a8c0a6eb1e62470bc49e44e50fb7b148029e80fb) ([Andreas Lind](mailto:andreas@one.com))
 - [bundleWebpack: Disable mangling and compression when UglifyJsPlugin is detected so that we can detect relations in the generated webpack loader](https://github.com/assetgraph/assetgraph/commit/253d1b430511928d840506ff73662ac995774889) ([Andreas Lind](mailto:andreas@one.com))
 - [bundleWebpack: Add support for rewriting to JavaScriptStaticUrl when webpack is configured with a chunkFilename config](https://github.com/assetgraph/assetgraph/commit/68c9ff2eeba8a69c66361a4dc62be123bc3f25ab) ([Andreas Lind](mailto:andreas@one.com))
-- [+241 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v3.5.0)
+- [+241 more](https://github.com/assetgraph/assetgraph/compare/v2.17.1...v3.5.0)
 
 ### v2.17.1 (2017-05-24)
 
@@ -970,7 +970,7 @@
 - [writeStatsToStderr: Render the extension of assets that aren't directly supported \(instead of "Asset"\)](https://github.com/assetgraph/assetgraph/commit/c86e5c16e031e61075582871baa2400da7ee810c) ([Andreas Lind](mailto:andreas@one.com))
 - [Asset\#dataUrl: Don't percent-encode the comma character.](https://github.com/assetgraph/assetgraph/commit/1206e4525b648224a5c7774655e053dd70f8e348) ([Andreas Lind](mailto:andreas@one.com))
 - [bundleWebpack: Don't skip every other outgoing relation when reattaching relations.](https://github.com/assetgraph/assetgraph/commit/19c5f9ee5d95c001d39e183187d5fb481378fa80) ([Andreas Lind](mailto:andreas@one.com))
-- [+235 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v3.3.0)
+- [+235 more](https://github.com/assetgraph/assetgraph/compare/v2.17.0...v3.3.0)
 
 ### v2.17.0 (2017-05-22)
 
@@ -1000,7 +1000,7 @@
 - [writeStatsToStderr: Render the extension of assets that aren't directly supported \(instead of "Asset"\)](https://github.com/assetgraph/assetgraph/commit/c86e5c16e031e61075582871baa2400da7ee810c) ([Andreas Lind](mailto:andreas@one.com))
 - [Asset\#dataUrl: Don't percent-encode the comma character.](https://github.com/assetgraph/assetgraph/commit/1206e4525b648224a5c7774655e053dd70f8e348) ([Andreas Lind](mailto:andreas@one.com))
 - [bundleWebpack: Don't skip every other outgoing relation when reattaching relations.](https://github.com/assetgraph/assetgraph/commit/19c5f9ee5d95c001d39e183187d5fb481378fa80) ([Andreas Lind](mailto:andreas@one.com))
-- [+1 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v3.2.0)
+- [+1 more](https://github.com/assetgraph/assetgraph/compare/v3.1.0...v3.2.0)
 
 ### v3.1.0 (2017-04-11)
 
@@ -1124,7 +1124,7 @@
 - [minifySvgAssetsWithSvgo: Specify a floatPrecision of 6 to avoid being too lossy](https://github.com/assetgraph/assetgraph/commit/bf5edf5b15c81a9dd7d65aab84faafe8bc813c4f) ([Andreas Lind](mailto:andreas@one.com))
 - [Switch xmldom to a liberal version range](https://github.com/assetgraph/assetgraph/commit/f1d328dae4e4c01dadd52489642f06565dc9d85c) ([Andreas Lind](mailto:andreas@one.com))
 - [Switch most dependencies over to liberal ranges.](https://github.com/assetgraph/assetgraph/commit/81fac4ef103bf742bfeced5ae9cd7367ca3fe8f2) ([Andreas Lind](mailto:andreas@one.com))
-- [+225 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v3.0.0)
+- [+225 more](https://github.com/assetgraph/assetgraph/compare/v2.15.3...v3.0.0)
 
 ### v2.15.3 (2017-02-23)
 
@@ -1211,7 +1211,7 @@
 - [Update systemjs-builder to 0.15.19, adapt tests slightly.](https://github.com/assetgraph/assetgraph/commit/e94975ad8f33c141769434c231754ae8e102a59e) ([Andreas Lind](mailto:andreas@one.com))
 - [writeAssetsToDisc: Replace seq with async.](https://github.com/assetgraph/assetgraph/commit/0c113e05ee688f62625a20a9f3b62512ee50486f) ([Andreas Lind](mailto:andreas@one.com))
 - [populate: Replace seq with async.](https://github.com/assetgraph/assetgraph/commit/1231cbc028b8d9019898585f0a1b9b9dc32e385d) ([Andreas Lind](mailto:andreas@one.com))
-- [+2 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v2.11.0)
+- [+2 more](https://github.com/assetgraph/assetgraph/compare/v2.10.1...v2.11.0)
 
 ### v2.10.1 (2016-05-25)
 
@@ -1230,7 +1230,7 @@
 - [Adopt the duplicateFavicon transform from assetgraph-builder.](https://github.com/assetgraph/assetgraph/commit/3c15614cbab36d4183138183300fb7133d3488ae) ([Andreas Lind](mailto:andreas@one.com))
 - [Adopt the setAsyncOrDeferOnHtmlScripts transform from assetgraph-builder.](https://github.com/assetgraph/assetgraph/commit/2db9a091539c94879d08ee797fead589819ebf08) ([Andreas Lind](mailto:andreas@one.com))
 - [Adopt the autoprefixer transform from assetgraph-builder.](https://github.com/assetgraph/assetgraph/commit/501272cf15f1ca5c4a94a9c04b66e469c923359b) ([Andreas Lind](mailto:andreas@one.com))
-- [+6 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v2.9.0)
+- [+6 more](https://github.com/assetgraph/assetgraph/compare/v2.8.0...v2.9.0)
 
 ### v2.8.0 (2016-05-18)
 
@@ -1299,7 +1299,7 @@
 - [Try systemjs\/builder\#master](https://github.com/assetgraph/assetgraph/commit/49791ce0f35e7d0ec60c144f26a4f193dcfeb34d) ([Andreas Lind](mailto:andreas@one.com))
 - [compile{Scss,Less}ToCss: Avoid passing undefined to Path.dirname.](https://github.com/assetgraph/assetgraph/commit/0d8142e97129786eb5a8393183e9f65b57645bad) ([Andreas Lind](mailto:andreas@one.com))
 - [chore\(package\): update teepee to version 2.21.4 \(\#508\)](https://github.com/assetgraph/assetgraph/commit/621726302708f3615d45b7d638d840709fd8b587) ([Greenkeeper](mailto:support@greenkeeper.io))
-- [+11 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v2.4.0)
+- [+11 more](https://github.com/assetgraph/assetgraph/compare/v2.3.0...v2.4.0)
 
 ### v2.3.0 (2016-04-05)
 
@@ -1323,7 +1323,7 @@
 - [Travis: Try building with node.js 5.](https://github.com/assetgraph/assetgraph/commit/831312a8d388f2d0727f71a43dec0df2f99c6631) ([Andreas Lind](mailto:andreas@one.com))
 - [Update postcss to 5.0.19.](https://github.com/assetgraph/assetgraph/commit/912bf0b1ec2081e585ff1ce3ca565f873f3469f1) ([Andreas Lind](mailto:andreas@one.com))
 - [Update estraverse to 4.2.0.](https://github.com/assetgraph/assetgraph/commit/80514170712393f9dfd0bbbed30eba36b17e40cf) ([Andreas Lind](mailto:andreas@one.com))
-- [+1 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v2.3.0)
+- [+1 more](https://github.com/assetgraph/assetgraph/compare/v2.2.1...v2.3.0)
 
 ### v2.2.1 (2016-03-16)
 
@@ -1404,7 +1404,7 @@
 - [Fix jshint complaint.](https://github.com/assetgraph/assetgraph/commit/933dd1a70c32714e34d4d65b50bf540a2aeb26e5) ([Andreas Lind](mailto:andreas@one.com))
 - [Update html-minifier to 1.1.1.](https://github.com/assetgraph/assetgraph/commit/2079a094c69dcf704f556ba522f8dce150ac3b87) ([Andreas Lind](mailto:andreas@one.com))
 - [Remove seemingly unused dev deps: mocha-lcov-reporter, onedox.](https://github.com/assetgraph/assetgraph/commit/cc461ebfb31b29bcc8502d9200b8eb6b9457e0a7) ([Andreas Lind](mailto:andreas@one.com))
-- [+13 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v2.1.1)
+- [+13 more](https://github.com/assetgraph/assetgraph/compare/v1.24.0...v2.1.1)
 
 ### v1.24.0 (2016-02-05)
 
@@ -1444,7 +1444,7 @@
 - [Update html-minifier to 1.1.1.](https://github.com/assetgraph/assetgraph/commit/2079a094c69dcf704f556ba522f8dce150ac3b87) ([Andreas Lind](mailto:andreas@one.com))
 - [Remove seemingly unused dev deps: mocha-lcov-reporter, onedox.](https://github.com/assetgraph/assetgraph/commit/cc461ebfb31b29bcc8502d9200b8eb6b9457e0a7) ([Andreas Lind](mailto:andreas@one.com))
 - [Use liberal version ranges for more dev deps.](https://github.com/assetgraph/assetgraph/commit/be25529215de7d365842481ce5a6a4b243548ca6) ([Andreas Lind](mailto:andreas@one.com))
-- [+4 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v2.1.0)
+- [+4 more](https://github.com/assetgraph/assetgraph/compare/v2.0.1...v2.1.0)
 
 ### v2.0.1 (2015-12-04)
 
@@ -1485,7 +1485,7 @@
 - [compressJavaScript: Add sourceMaps option, and only do the work related to loading existing source maps and serializing them afterwards if it's on.](https://github.com/assetgraph/assetgraph/commit/73e1defe766b526b5243175094f0eb309ef55e47) ([Andreas Lind](mailto:andreas@one.com))
 - [Update passerror to 1.1.1.](https://github.com/assetgraph/assetgraph/commit/d9b02f076001ff2ff2bd0bfdaa7a50a8ae97c328) ([Andreas Lind](mailto:andreas@one.com))
 - [Remove commented-out UglifyJS-specific hack.](https://github.com/assetgraph/assetgraph/commit/1c01803cad969d76d5a3e3dbe71daa929aa79303) ([Andreas Lind](mailto:andreas@one.com))
-- [+2 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v2.0.0)
+- [+2 more](https://github.com/assetgraph/assetgraph/compare/v1.23.1...v2.0.0)
 
 ### v1.23.1 (2015-10-18)
 
@@ -1514,7 +1514,7 @@
 - [Updated cssmin to 0.4.3](https://github.com/assetgraph/assetgraph/commit/80a41300bdae8091eda0d77d482ae8dc5e352597) ([Peter Müller](mailto:munter@fumle.dk))
 - [Update createerror to 1.0.1](https://github.com/assetgraph/assetgraph/commit/711521c204054e4bc90a62d99887c34d06c80aac) ([Peter Müller](mailto:munter@fumle.dk))
 - [Updated html-minifier to 0.8.0](https://github.com/assetgraph/assetgraph/commit/72a9d0f98353f86b7eee74c1bc615e250e682c9e) ([Peter Müller](mailto:munter@fumle.dk))
-- [+11 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.23.1)
+- [+11 more](https://github.com/assetgraph/assetgraph/compare/v1.23.0...v1.23.1)
 
 ### v1.23.0 (2015-08-28)
 
@@ -1523,7 +1523,7 @@
 - [Update unexpected to 9.6.0.](https://github.com/assetgraph/assetgraph/commit/221244c59b64f9b19aa1af43100280f0a34cc227) ([Andreas Lind](mailto:andreas@one.com))
 - [package.json: Fix my name.](https://github.com/assetgraph/assetgraph/commit/f76d75ee5e453fd9856f325f41264d84c68abf78) ([Andreas Lind](mailto:andreas@one.com))
 - [package.json: Use a valid SPDX license identifier.](https://github.com/assetgraph/assetgraph/commit/f811e8b540e285733abbf16b2014d38733941559) ([Andreas Lind](mailto:andreas@one.com))
-- [+9 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.23.0)
+- [+9 more](https://github.com/assetgraph/assetgraph/compare/v1.20.1...v1.23.0)
 
 ### v1.20.1 (2015-06-28)
 
@@ -1638,7 +1638,7 @@
 - [Lets try this new docker travis setup with caching](https://github.com/assetgraph/assetgraph/commit/24433b06e7ddde91b9050f36c26d795cc1b04662) ([Peter Müller](mailto:munter@fumle.dk))
 - [Added some test coverage to transforms\/moveAssetsInOrder](https://github.com/assetgraph/assetgraph/commit/27007355837b94d82fddb06e16b4823116fa8e01) ([Peter Müller](mailto:munter@fumle.dk))
 - [Fix accidental wrong coverage badge](https://github.com/assetgraph/assetgraph/commit/486dfac03941dce113e13edafc7503ed63365cae) ([Peter Müller](mailto:munter@fumle.dk))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.14.4)
+- [+3 more](https://github.com/assetgraph/assetgraph/compare/v1.14.3...v1.14.4)
 
 ### v1.14.3 (2014-12-12)
 
@@ -1662,7 +1662,7 @@
 - [Test: Use magicpen-prism to get syntax highlighting.](https://github.com/assetgraph/assetgraph/commit/b5d61c96b403289181fb9f02f80947628dcc13bf) ([Andreas Lind](mailto:andreas@one.com))
 - [Update istanbul to 0.3.5 and use the --include-all-sources switch so we're no longer under the illusion that untested code is fully covered.](https://github.com/assetgraph/assetgraph/commit/00355fc7d702d13c807c9d8119dc9457a69b3d94) ([Andreas Lind](mailto:andreas@one.com))
 - [Improve test coverage of Asset.clone](https://github.com/assetgraph/assetgraph/commit/4df8a7dc0dda46df9e1a9046a71b1b31b5c76090) ([Peter Müller](mailto:munter@fumle.dk))
-- [+23 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.14.0)
+- [+23 more](https://github.com/assetgraph/assetgraph/compare/v1.13.1...v1.14.0)
 
 ### v1.13.1 (2014-11-24)
 
@@ -1814,7 +1814,7 @@
 - [Added getting started blog post link to README](https://github.com/assetgraph/assetgraph/commit/984c2e522e2b4d1f4e0d468362eb01a2a76e15e0) ([Peter Müller](mailto:munter@fumle.dk))
 - [Update glob to 4.0.3.](https://github.com/assetgraph/assetgraph/commit/e7f61db268610601748828dce20e4e372cd33a8c) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [http resolver: Attempt to handle more kinds of pre-response errors emitted by the request object.](https://github.com/assetgraph/assetgraph/commit/61f58dc9915b39b543646de1888927530b68e5b5) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+390 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.43)
+- [+390 more](https://github.com/assetgraph/assetgraph/compare/v1.5.15...v1.6.43)
 
 ### v1.5.15 (2014-06-30)
 
@@ -1823,7 +1823,7 @@
 - [http resolver: Avoid swallowing errors occurring after the response has started.](https://github.com/assetgraph/assetgraph/commit/275d261715d4b2a1d58a0ffad11df64ccde0c5ff) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Don't throw an exception when getting\/setting 'href' for relation types that it doesn't make sense for.](https://github.com/assetgraph/assetgraph/commit/b24cb9ee9cbf870057fe57ee81951293942e7802) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Use setImmediate instead of process.nextTick if available. \(cherry-picked from commit 3a92a64094dfb83250b424528edc88f730015136\)](https://github.com/assetgraph/assetgraph/commit/5891959d95c19d823ba723353a1b8e70e91d7b38) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+5 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.5.15)
+- [+5 more](https://github.com/assetgraph/assetgraph/compare/v1.6.42...v1.5.15)
 
 ### v1.6.42 (2014-06-28)
 
@@ -1867,7 +1867,7 @@
 - [http resolver: Avoid swallowing errors occurring after the response has started.](https://github.com/assetgraph/assetgraph/commit/aa125e4f6f2e6d2e30a574930d4da569b44fd788) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Update cssom-papandreou to 0.2.4-patch6.](https://github.com/assetgraph/assetgraph/commit/f426937dc3bcbe3e0b9ab73fe4262cc0c2b12809) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [http resolver: Test that the retrying logic handles timeouts after the headers have been received.](https://github.com/assetgraph/assetgraph/commit/81c5e731136021e05d6340654dc8a07d06c6871d) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+385 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.42)
+- [+385 more](https://github.com/assetgraph/assetgraph/compare/v1.5.14...v1.6.42)
 
 ### v1.5.14 (2014-06-27)
 
@@ -1876,7 +1876,7 @@
 - [Use setImmediate instead of process.nextTick if available. \(cherry-picked from commit 3a92a64094dfb83250b424528edc88f730015136\)](https://github.com/assetgraph/assetgraph/commit/5891959d95c19d823ba723353a1b8e70e91d7b38) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Release 1.5.11.](https://github.com/assetgraph/assetgraph/commit/fc1b56228c70b718953300799a3e9c449b232ee0) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [JavaScript.isEmpty: Don't break if the asset could not be parsed.](https://github.com/assetgraph/assetgraph/commit/25136b15e0a4ecec0dea4163b43141f61df95951) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.5.14)
+- [+3 more](https://github.com/assetgraph/assetgraph/compare/v1.6.41...v1.5.14)
 
 ### v1.6.41 (2014-06-26)
 
@@ -1885,7 +1885,7 @@
 - [http resolver test: Also allow an ESOCKETTIMEDOUT error when expecting an ETIMEDOUT.](https://github.com/assetgraph/assetgraph/commit/a88e661b8aef6ca91b76b039cfbdc3750160a3b5) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Update mocha to 1.20.1.](https://github.com/assetgraph/assetgraph/commit/bf684c13a3cdcb0503a9f295f2b901079f29b26f) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [http resolver test: Allow ESOCKETTIMEDOUT in addition to ETIMEDOUT. Fixes Travis build.](https://github.com/assetgraph/assetgraph/commit/e8e537b2dae33f2431e593f35972fb6c29716a55) ([Andreas Lind](mailto:andreas@one.com))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.41)
+- [+3 more](https://github.com/assetgraph/assetgraph/compare/v1.6.40...v1.6.41)
 
 ### v1.6.40 (2014-06-24)
 
@@ -1942,7 +1942,7 @@
 - [compileLessToCss: Improve reporting of errors.](https://github.com/assetgraph/assetgraph/commit/24cc3eee55a0c85dabdf5666ba38417345d1745a) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [replaceSymbolsInJavascript: assert that warnings are emitted.](https://github.com/assetgraph/assetgraph/commit/ae8a88f5088cac0c2ad2137c736ed5fcb6a35006) ([Gustav Nikolaj Olsen](mailto:gno@one.com))
 - [transforms\/inlineCssImagesWithLegacyFallback: Don't die if a cssImage hasn't been loaded](https://github.com/assetgraph/assetgraph/commit/3b16d03f567e2940a745fb40365829201db48b36) ([Peter Müller](mailto:munter@fumle.dk))
-- [+11 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.33)
+- [+11 more](https://github.com/assetgraph/assetgraph/compare/v1.6.32...v1.6.33)
 
 ### v1.6.32 (2014-05-28)
 
@@ -1951,7 +1951,7 @@
 - [replaceSymbolsInJavaScript: make it work nicely with objects.](https://github.com/assetgraph/assetgraph/commit/e53a15cb9fed636bf85a32bf6aecb8e00f575379) ([Gustav Nikolaj Olsen](mailto:gno@one.com))
 - [clone the AST before inserting it.](https://github.com/assetgraph/assetgraph/commit/cdf86664df7027593708fa41ba4d18e02ef65fb9) ([Gustav Nikolaj Olsen](mailto:gno@one.com))
 - [Added replaceSymbolsInJavaScript transform \(adopted from assetgraph-builder\).](https://github.com/assetgraph/assetgraph/commit/38d13b4eed8a4a0aa0a7301794208ec235f8b068) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.32)
+- [+3 more](https://github.com/assetgraph/assetgraph/compare/v1.6.31...v1.6.32)
 
 ### v1.6.31 (2014-05-26)
 
@@ -1966,7 +1966,7 @@
 - [HtmlStyle: Preserve all extra attributes when converting back and forth between &lt;link&gt; and &lt;style&gt;.](https://github.com/assetgraph/assetgraph/commit/2ed2aa57b60baa5ce6e5a3256456404e42be69e8) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [bundleRelations: Don't bundle stylesheets found in &lt;head&gt; with ones found in &lt;body&gt;.](https://github.com/assetgraph/assetgraph/commit/b7fe9a5970fb9cf5b8af4d218c84b6f2438f187a) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [bundleRelations: Don't attempt to bundle unloaded scripts and stylesheets.](https://github.com/assetgraph/assetgraph/commit/525425aba8efadb2f6d0e948100a5beafcba221d) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+5 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.30)
+- [+5 more](https://github.com/assetgraph/assetgraph/compare/v1.6.29...v1.6.30)
 
 ### v1.6.29 (2014-05-20)
 
@@ -1987,7 +1987,7 @@
 - [Stop depending on and running vows.](https://github.com/assetgraph/assetgraph/commit/f1eb03c86d8b93234d2456c0c528d4a6d556ed51) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Converted HtmlInlineEventHandler test to mocha.](https://github.com/assetgraph/assetgraph/commit/6dec22c8b3bc66553a931d77f8c4b852c697bcba) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Converted Xml test to mocha.](https://github.com/assetgraph/assetgraph/commit/b2dee924a4f15c951f5d7ecaf2684fe5cb06f4d1) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+105 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.27)
+- [+105 more](https://github.com/assetgraph/assetgraph/compare/v1.6.26...v1.6.27)
 
 ### v1.6.26 (2014-04-25)
 
@@ -2050,7 +2050,7 @@
 - [Model &lt;link rel="logo" href="..."&gt; as a relation.](https://github.com/assetgraph/assetgraph/commit/4c15bf266b1c4a6a3e0f73753b9d1726fe08518d) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [lookupContentType: Match known Content-Types with or without +xml suffix.](https://github.com/assetgraph/assetgraph/commit/3410bc4b80f17791974b6e923367295aa2800868) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Removed empty file: lib\/assets\/index.js](https://github.com/assetgraph/assetgraph/commit/a4a640286a03502d734e4e64c3f4935968b6597b) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.16)
+- [+3 more](https://github.com/assetgraph/assetgraph/compare/v1.6.15...v1.6.16)
 
 ### v1.6.15 (2014-03-11)
 
@@ -2066,7 +2066,7 @@
 - [Release 1.6.13.](https://github.com/assetgraph/assetgraph/commit/081240541e4edbca44377538225b1fa16a396b50) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [bundleRelations: Don't rely on node.matchesSelector, which does not work for documents that don't have an &lt;html&gt; element.](https://github.com/assetgraph/assetgraph/commit/8451327d32a206c67b5326d4eada2e4e4daccbfb) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Modified flattenRequireJs test so the Travis output has a better chance of telling me why it fails.](https://github.com/assetgraph/assetgraph/commit/a660a2a82752f386b1f57a54fd38939888917a46) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+13 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.14)
+- [+13 more](https://github.com/assetgraph/assetgraph/compare/v1.6.11...v1.6.14)
 
 ### v1.6.11 (2014-02-18)
 
@@ -2107,7 +2107,7 @@
 - [Revert "Merge pull request \#159 from One-com\/baseUrlDataMain"](https://github.com/assetgraph/assetgraph/commit/440c4bf1ddd9fce4d6f7ea7c0326a0918c214c42) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Use the just published urltools instead of git:\/\/github.com\/slang800\/url-tools.git](https://github.com/assetgraph/assetgraph/commit/05fbc69607c64303090399f1553e49b90b9fe993) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [flattenRequireJs test added in f3a87c9: Don't assert anything about how the JavaScript comes out.](https://github.com/assetgraph/assetgraph/commit/33bea15db7e598255d45980380ff24f4b49bc11d) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+149 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.9)
+- [+149 more](https://github.com/assetgraph/assetgraph/compare/v1.5.13...v1.6.9)
 
 ### v1.5.13 (2014-02-04)
 
@@ -2116,7 +2116,7 @@
 - [Release 1.5.11.](https://github.com/assetgraph/assetgraph/commit/fc1b56228c70b718953300799a3e9c449b232ee0) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [JavaScript.isEmpty: Don't break if the asset could not be parsed.](https://github.com/assetgraph/assetgraph/commit/25136b15e0a4ecec0dea4163b43141f61df95951) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Release 1.5.10.](https://github.com/assetgraph/assetgraph/commit/0098732bb4fe6134425ffbadbb43063774722cd1) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+2 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.5.13)
+- [+2 more](https://github.com/assetgraph/assetgraph/compare/v1.6.8...v1.5.13)
 
 ### v1.6.8 (2014-01-31)
 
@@ -2164,7 +2164,7 @@
 - [package.json: Hardcode the version numbers of the mkdir and imageinfo dependencies.](https://github.com/assetgraph/assetgraph/commit/7b730df988d81b7528729b5d2fec934828bb8422) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Added transform for setting isFragment to false on assets without incoming relations \(One-com\/assetgraph-builder\#109\).](https://github.com/assetgraph/assetgraph/commit/a03feacf36bf8533ca728701cb1992bda020263f) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Disable the YUICompressor and closure compiler tests](https://github.com/assetgraph/assetgraph/commit/f95cf530a32f0637536e606d864139d0cde80372) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+140 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.6.3)
+- [+140 more](https://github.com/assetgraph/assetgraph/compare/v1.5.12...v1.6.3)
 
 ### v1.5.12 (2014-01-17)
 
@@ -2173,7 +2173,7 @@
 - [JavaScript.isEmpty: Don't break if the asset could not be parsed.](https://github.com/assetgraph/assetgraph/commit/25136b15e0a4ecec0dea4163b43141f61df95951) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Release 1.5.10.](https://github.com/assetgraph/assetgraph/commit/0098732bb4fe6134425ffbadbb43063774722cd1) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [flattenStaticIncludes: Also add &lt;link rel="stylesheet" href=...&gt; tags pointing at .less files to the HTML.](https://github.com/assetgraph/assetgraph/commit/457748b9ba371cb18d5f63d62596cd92186ee775) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+1 more](https://github.com/assetgraph/assetgraph/compare/v5.8.1...v1.5.12)
+- [+1 more](https://github.com/assetgraph/assetgraph/compare/v1.6.2...v1.5.12)
 
 ### v1.6.2 (2014-01-14)
 
