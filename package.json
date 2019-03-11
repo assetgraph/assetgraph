@@ -63,7 +63,7 @@
     "specificity": "^0.4.0",
     "sw-precache": "^5.2.0",
     "teepee": "^2.31.1",
-    "terser": "^3.14.1",
+    "terser": "3.17.0",
     "urltools": "^0.4.1",
     "xmldom": "^0.1.27"
   },
