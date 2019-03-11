@@ -45,7 +45,7 @@
     "glob": "^7.0.5",
     "html-minifier": "^3.5.8",
     "imageinfo": "^1.0.4",
-    "jsdom": "13.2.0",
+    "jsdom": "14.0.0",
     "lines-and-columns": "^1.1.6",
     "lodash": "4.17.11",
     "memoizesync": "1.1.1",
