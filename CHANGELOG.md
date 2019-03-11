@@ -2213,5 +2213,5 @@
 - [JavaScriptCommonJsRequire test: Fixed paths so they're not only valid on my dev machine \(argh\).](https://github.com/assetgraph/assetgraph/commit/4fb98e3b0930433863a7748970236831075f0dcb) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Release 1.6.0beta29.](https://github.com/assetgraph/assetgraph/commit/f1f23cea1f8bbb694e655983146b3fa7df4bd2fe) ([Andreas Lind Petersen](mailto:andreas@one.com))
 - [Update passerror to 1.0.0.](https://github.com/assetgraph/assetgraph/commit/dc27a2a1a3c0c56df20ef5ff0cd936d6f476bca1) ([Andreas Lind Petersen](mailto:andreas@one.com))
-- [+1860 more](https://github.com/assetgraph/assetgraph/compare/undefined%5E...v1.6.0)
+- [+1860 more](https://github.com/assetgraph/assetgraph/compare/d9d4e06c11a13e70761cd809ea9a8517f7922c5f%5E...v1.6.0)
 
