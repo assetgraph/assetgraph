@@ -7,7 +7,7 @@ define(['require', './normalize'], function(req, normalize) {
     if (config.optimizeCss == 'none') {
       return css;
     }
-    
+
     if (typeof process !== "undefined" && process.versions && !!process.versions.node && require.nodeRequire) {
       try {
         var csso = require.nodeRequire('csso');
@@ -18,7 +18,7 @@ define(['require', './normalize'], function(req, normalize) {
       }
       var csslen = css.length;
       try {
-        css =  csso.justDoIt(css);
+        css =  csso.minify(css).css;
       }
       catch(e) {
         console.log('Compression failed due to a CSS syntax error.');
@@ -96,7 +96,7 @@ define(['require', './normalize'], function(req, normalize) {
   // NB add @media query support for media imports
   var importRegEx = /@import\s*(url)?\s*(('([^']*)'|"([^"]*)")|\(('([^']*)'|"([^"]*)"|([^\)]*))\))\s*;?/g;
   var absUrlRegEx = /^([^\:\/]+:\/)?\//;
-  
+
   // Write Css module definition
   var writeCSSDefinition = "define('@writecss', function() {return function writeCss(c) {var d=document,a='appendChild',i='styleSheet',s=d.createElement('style');s.type='text/css';d.getElementsByTagName('head')[0][a](s);s[i]?s[i].cssText=c:s[a](d.createTextNode(c));};});";
 
@@ -157,13 +157,13 @@ define(['require', './normalize'], function(req, normalize) {
 
   cssAPI.write = function(pluginName, moduleName, write, parse) {
     var cssModule;
-    
+
     //external URLS don't get added (just like JS requires)
     if (moduleName.match(absUrlRegEx))
       return;
 
     layerBuffer.push(cssBuffer[moduleName]);
-    
+
     if (!global._requirejsCssData) {
       global._requirejsCssData = {
         usedBy: {css: true},
@@ -210,7 +210,7 @@ define(['require', './normalize'], function(req, normalize) {
             delete global._requirejsCssData;
           }
         }
-        
+
         saveFile(outPath, compress(css));
       });
 
