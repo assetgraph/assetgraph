@@ -54,7 +54,7 @@
     "perfectionist": "^2.4.0",
     "postcss": "7.0.9",
     "postcss-values-parser": "^2.0.0",
-    "read-pkg-up": "^4.0.0",
+    "read-pkg-up": "^5.0.0",
     "repeat-string": "^1.5.4",
     "schemes": "^1.0.1",
     "semver": "^5.3.0",
