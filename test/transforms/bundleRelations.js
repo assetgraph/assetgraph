@@ -1,7 +1,6 @@
 const pathModule = require('path');
 /* global describe, it */
 const expect = require('../unexpected-with-plugins');
-const sinon = require('sinon');
 const AssetGraph = require('../../lib/AssetGraph');
 
 // Helper for extracting all values of a specific property from a postcss rule
