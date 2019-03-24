@@ -22,7 +22,6 @@ define(['require', './normalize'], function(req, normalize) {
       try {
         var csslen = css.length;
         css = csso.minify(css).css;
-        console.log('Compressed CSS output to ' + Math.round(css.length / csslen * 100) + '%.');
         return css;
       }
       catch(e) {
@@ -167,8 +166,6 @@ define(['require', './normalize'], function(req, normalize) {
     var css = layerBuffer.join('');
 
     if (config.separateCSS) {
-      console.log('Writing CSS! file: ' + data.name + '\n');
-
       var outPath = config.dir ? path.resolve(config.dir, config.baseUrl, data.name + '.css') : config.out.replace(/(\.js)?$/, '.css');
       outPath = normalizeWinPath(outPath);
 

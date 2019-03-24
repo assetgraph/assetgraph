@@ -24,7 +24,6 @@ define(['require', './normalize'], function(req, normalize) {
         console.log('Compression failed due to a CSS syntax error.');
         return css;
       }
-      console.log('Compressed CSS output to ' + Math.round(css.length / csslen * 100) + '%.');
       return css;
     }
     console.log('Compression not supported outside of nodejs environments.');
@@ -198,8 +197,6 @@ define(['require', './normalize'], function(req, normalize) {
 
     if (config.separateCSS) {
       var outPath = data.path.replace(/(\.js)?$/, '.css');
-      console.log('Writing CSS! file: ' + outPath + '\n');
-
       var css = layerBuffer.join('');
 
       process.nextTick(function() {
