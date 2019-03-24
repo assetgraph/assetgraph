@@ -1,4 +1,7 @@
 #header {
   color: #6c94be;
 }
-/*# sourceMappingURL=b.css.map*/
+#header .foo {
+  background-color: red;
+}
+/*# sourceMappingURL=b.css.map */

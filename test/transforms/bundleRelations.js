@@ -919,7 +919,6 @@ describe('transforms/bundleRelations', function() {
     });
 
     it('should propagate source map information correctly', async function() {
-      const warnSpy = sinon.spy().named('warn');
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
@@ -927,14 +926,9 @@ describe('transforms/bundleRelations', function() {
         )
       });
       await assetGraph
-        .on('warn', warnSpy)
         .loadAssets('index.html')
         .populate()
         .applySourceMaps();
-
-      expect(warnSpy, 'to have calls satisfying', () =>
-        warnSpy(/^ENOENT.*to\.css/)
-      );
 
       const sourceMaps = assetGraph.findAssets({ type: 'SourceMap' });
       sourceMaps.sort(function(a, b) {
@@ -942,8 +936,8 @@ describe('transforms/bundleRelations', function() {
         b = b.parseTree.sources[0];
         return a < b ? -1 : a > b ? 1 : 0;
       });
-      expect(sourceMaps[0].parseTree.sources, 'to equal', ['/a.less']);
-      expect(sourceMaps[1].parseTree.sources, 'to equal', ['/b.less']);
+      expect(sourceMaps[0].parseTree.sources, 'to equal', ['a.less']);
+      expect(sourceMaps[1].parseTree.sources, 'to equal', ['b.less']);
 
       await assetGraph
         .bundleRelations(
@@ -964,7 +958,12 @@ describe('transforms/bundleRelations', function() {
       expect(
         assetGraph.findAssets({ type: 'SourceMap' })[0].parseTree.sources,
         'to equal',
-        [`${assetGraph.root}a.less`, `${assetGraph.root}b.less`]
+        [
+          `${assetGraph.root}a.less`,
+          'a.css',
+          `${assetGraph.root}b.less`,
+          'b.css'
+        ]
       );
     });
 
