@@ -1,6 +1,7 @@
 const pathModule = require('path');
 /* global describe, it */
 const expect = require('../unexpected-with-plugins');
+const sinon = require('sinon');
 const _ = require('lodash');
 const fs = require('fs');
 const AssetGraph = require('../../lib/AssetGraph');
@@ -205,7 +206,12 @@ describe('transforms/bundleRequireJs', function() {
     await assetGraph.populate();
     expect(assetGraph, 'to contain assets', 'JavaScript', 2);
 
-    await assetGraph.bundleRequireJs({ type: 'Html' });
+    sinon.stub(console, 'log'); // Since annoying output from the require-css plugin
+    try {
+      await assetGraph.bundleRequireJs({ type: 'Html' });
+    } finally {
+      console.log.restore();
+    }
     await assetGraph.populate();
 
     expect(assetGraph, 'to contain relation', 'HtmlStyle');
@@ -432,7 +438,13 @@ describe('transforms/bundleRequireJs', function() {
     });
     await assetGraph.loadAssets('index*.html');
     await assetGraph.populate();
-    await assetGraph.bundleRequireJs({ type: 'Html' });
+
+    sinon.stub(console, 'log'); // Since annoying output from the require-less plugin
+    try {
+      await assetGraph.bundleRequireJs({ type: 'Html' });
+    } finally {
+      console.log.restore();
+    }
 
     expect(
       _.map(
