@@ -90,7 +90,7 @@
     "magicpen-prism": "3.0.1",
     "mocha": "^6.0.0",
     "nyc": "^13.0.1",
-    "open": "^0.0.5",
+    "open": "^6.0.0",
     "prettier": "~1.16.0",
     "proxyquire": "^2.0.1",
     "requirejs": "^2.3.5",
