@@ -9,6 +9,7 @@
       "request": "launch",
       "name": "Test suite",
       "program": "${workspaceFolder}/node_modules/.bin/_mocha",
+      "args": ["--timeout", "9999999999"],
       "skipFiles": [
         "<node_internals>/**" // Prevent stepping through async_hooks.js et al.
       ]
