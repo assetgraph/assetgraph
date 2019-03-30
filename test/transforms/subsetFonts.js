@@ -3589,6 +3589,47 @@ describe('transforms/subsetFonts', function() {
       ]);
     });
 
+    describe('when multiple pages contain the same subsets', function() {
+      // https://github.com/Munter/subfont/issues/50
+      it('should link to and preload the same subset files rather than creating two copies', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/multi-page-same-subset/'
+          )
+        });
+        const [htmlAsset1, htmlAsset2] = await assetGraph.loadAssets(
+          'index*.html'
+        );
+        await assetGraph.populate({
+          followRelations: {
+            crossorigin: false
+          }
+        });
+        await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+        const preloads1 = htmlAsset1.outgoingRelations.filter(
+          relation => relation.type === 'HtmlPreloadLink'
+        );
+        const preloads2 = htmlAsset2.outgoingRelations.filter(
+          relation => relation.type === 'HtmlPreloadLink'
+        );
+        expect(preloads1, 'to have length', 1);
+        expect(preloads2, 'to have length', 1);
+        expect(preloads1[0].to, 'to be', preloads2[0].to);
+
+        const regularSubsetFonts = assetGraph.findAssets({
+          fileName: { $regex: /^IBM_Plex_Sans-400-/ },
+          extension: '.woff2'
+        });
+        // Assert the absence of a -1.woff duplicate:
+        expect(regularSubsetFonts, 'to have length', 1);
+
+        expect(htmlAsset1.text, 'to equal', htmlAsset2.text);
+      });
+    });
+
     it('should handle mixed local fonts and Google fonts', async function() {
       httpception(defaultLocalSubsetMock);
 
