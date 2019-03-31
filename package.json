@@ -90,6 +90,7 @@
     "magicpen-prism": "3.0.1",
     "mocha": "^6.0.0",
     "nyc": "^13.0.1",
+    "offline-github-changelog": "^1.6.0",
     "open": "^6.0.0",
     "prettier": "~1.16.0",
     "proxyquire": "^2.0.1",
@@ -113,7 +114,8 @@
     "test": "mocha",
     "ci": "npm run coverage && npm run lint",
     "docs": "jsdoc -c jsdoc.json",
-    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text --all -- mocha --reporter dot && echo google-chrome coverage/lcov-report/index.html"
+    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text --all -- mocha --reporter dot && echo google-chrome coverage/lcov-report/index.html",
+    "preversion": "offline-github-changelog --next=${npm_package_version} > CHANGELOG.md && git add CHANGELOG.md"
   },
   "nyc": {
     "include": [
