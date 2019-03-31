@@ -3303,9 +3303,7 @@ describe('transforms/subsetFonts', function() {
             '../../testdata/transforms/subsetFonts/unused-variant-on-one-page/'
           )
         });
-        const [htmlAsset1, htmlAsset2] = await assetGraph.loadAssets(
-          'index*.html'
-        );
+        await assetGraph.loadAssets('index*.html');
         await assetGraph.populate();
         await assetGraph.subsetFonts({
           inlineSubsets: false
