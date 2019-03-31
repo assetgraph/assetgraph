@@ -397,7 +397,7 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'Open Sans__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -405,7 +405,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -662,7 +662,7 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'Open Sans__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -670,7 +670,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1307,7 +1307,7 @@ describe('transforms/subsetFonts', function() {
               .and('to contain', 'Space Mono__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1315,7 +1315,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1323,7 +1323,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1331,7 +1331,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1339,7 +1339,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1347,7 +1347,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1827,7 +1827,7 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'Roboto__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1835,7 +1835,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1843,7 +1843,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1851,7 +1851,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1859,7 +1859,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1867,7 +1867,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -2131,7 +2131,7 @@ describe('transforms/subsetFonts', function() {
                 outgoingRelations: [
                   {
                     type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
+                    hrefType: 'rootRelative',
                     to: {
                       fileName: 'Open_Sans-400-8ea2a77d91.woff2',
                       isLoaded: true,
@@ -2140,7 +2140,7 @@ describe('transforms/subsetFonts', function() {
                   },
                   {
                     type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
+                    hrefType: 'rootRelative',
                     to: {
                       fileName: 'Open_Sans-400-ae6be69ecc.woff',
                       isLoaded: true,
@@ -2161,7 +2161,7 @@ describe('transforms/subsetFonts', function() {
                 outgoingRelations: [
                   {
                     type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
+                    hrefType: 'rootRelative',
                     to: {
                       fileName: 'Open_Sans-400-93dbe92b2a.woff2',
                       isLoaded: true,
@@ -2170,7 +2170,7 @@ describe('transforms/subsetFonts', function() {
                   },
                   {
                     type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
+                    hrefType: 'rootRelative',
                     to: {
                       fileName: 'Open_Sans-400-c9253c6736.woff',
                       isLoaded: true,
@@ -3191,9 +3191,9 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'Open Sans__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 href: expect
-                  .it('to begin with', 'Open_Sans-400-')
+                  .it('to begin with', '/subfont/Open_Sans-400-')
                   .and('to match', /-[0-9a-f]{10}\./)
                   .and('to end with', '.woff2'),
                 to: {
@@ -3201,9 +3201,9 @@ describe('transforms/subsetFonts', function() {
                 }
               },
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 href: expect
-                  .it('to begin with', 'Open_Sans-400-')
+                  .it('to begin with', '/subfont/Open_Sans-400-')
                   .and('to match', /-[0-9a-f]{10}\./)
                   .and('to end with', '.woff'),
                 to: {
@@ -3256,7 +3256,7 @@ describe('transforms/subsetFonts', function() {
         'to contain',
         `<script>(function(){var el=document.createElement('link');el.href='/subfont/${
           fallbackCss.fileName
-        }'.toString('url');el.rel='stylesheet';document.body.appendChild(el)}())</script><noscript><link rel="stylesheet" href="subfont/${
+        }'.toString('url');el.rel='stylesheet';document.body.appendChild(el)}())</script><noscript><link rel="stylesheet" href="/subfont/${
           fallbackCss.fileName
         }"></noscript></body></html>`
       );
@@ -3322,7 +3322,7 @@ describe('transforms/subsetFonts', function() {
         expect(
           subfontCss.text,
           'to contain',
-          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(../KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format("woff")'
+          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(/KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format("woff")'
         );
         expect(assetGraph, 'to contain relation', {
           from: subfontCss,
@@ -3582,7 +3582,7 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'Open Sans__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -3590,7 +3590,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -3847,7 +3847,7 @@ describe('transforms/subsetFonts', function() {
             outgoingRelations: [
               {
                 type: 'CssFontFaceSrc',
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   fileName: expect.it('to begin with', 'Local_Sans-400-'),
@@ -3857,7 +3857,7 @@ describe('transforms/subsetFonts', function() {
 
               {
                 type: 'CssFontFaceSrc',
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   fileName: expect.it('to begin with', 'Local_Sans-400-'),
@@ -3867,7 +3867,7 @@ describe('transforms/subsetFonts', function() {
 
               {
                 type: 'CssFontFaceSrc',
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   fileName: expect.it('to begin with', 'Open_Sans-400-'),
@@ -3877,7 +3877,7 @@ describe('transforms/subsetFonts', function() {
 
               {
                 type: 'CssFontFaceSrc',
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   fileName: expect.it('to begin with', 'Open_Sans-400-'),
@@ -4213,9 +4213,9 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'icomoon__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 href: expect
-                  .it('to begin with', 'icomoon-400-')
+                  .it('to begin with', '/subfont/icomoon-400-')
                   .and('to match', /-[0-9a-f]{10}\./)
                   .and('to end with', '.woff2'),
                 to: {
@@ -4223,9 +4223,9 @@ describe('transforms/subsetFonts', function() {
                 }
               },
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 href: expect
-                  .it('to begin with', 'icomoon-400-')
+                  .it('to begin with', '/subfont/icomoon-400-')
                   .and('to match', /-[0-9a-f]{10}\./)
                   .and('to end with', '.woff'),
                 to: {
