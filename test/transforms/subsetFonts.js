@@ -3257,12 +3257,12 @@ describe('transforms/subsetFonts', function() {
         expect(
           subfontCss.text,
           'to contain',
-          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(Roboto-700i-846d1890ae.woff) format("woff")'
+          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(../KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format("woff")'
         );
         expect(assetGraph, 'to contain relation', {
           from: subfontCss,
           to: {
-            url: `${assetGraph.root}subfont/Roboto-700i-846d1890ae.woff`
+            url: `${assetGraph.root}KFOjCnqEu92Fr1Mu51TzBic6CsI.woff`
           }
         });
       });
@@ -3293,6 +3293,28 @@ describe('transforms/subsetFonts', function() {
           to: {
             url: `${assetGraph.root}subfont/Roboto-700i-846d1890ae.woff`
           }
+        });
+      });
+
+      it('should not move any of the original fonts to /subfont/', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/unused-variant-on-one-page/'
+          )
+        });
+        const [htmlAsset1, htmlAsset2] = await assetGraph.loadAssets(
+          'index*.html'
+        );
+        await assetGraph.populate();
+        await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+
+        expect(assetGraph, 'to contain asset', {
+          url: `${assetGraph.root}IBMPlexSans-Regular.woff`
+        }).and('to contain asset', {
+          url: `${assetGraph.root}IBMPlexSans-Italic.woff`
         });
       });
     });
