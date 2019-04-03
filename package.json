@@ -44,7 +44,7 @@
     "fontkit": "^1.7.7",
     "gettemporaryfilepath": "^1.0.0",
     "glob": "^7.0.5",
-    "html-minifier": "^3.5.8",
+    "html-minifier": "^4.0.0",
     "imageinfo": "^1.0.4",
     "jsdom": "14.0.0",
     "lines-and-columns": "^1.1.6",
