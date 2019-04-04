@@ -3311,18 +3311,19 @@ describe('transforms/subsetFonts', function() {
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.subsetFonts({
-          inlineSubsets: false
+          inlineSubsets: false,
+          inlineCss: true
         });
-
         const subfontCss = assetGraph.findAssets({
           type: 'Css',
-          path: '/subfont/'
+          isInline: true,
+          text: { $regex: /KFOjCnqEu92Fr1Mu51TzBic6CsI/ }
         })[0];
 
         expect(
           subfontCss.text,
           'to contain',
-          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(/KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format("woff")'
+          "font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(/KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format('woff')"
         );
         expect(assetGraph, 'to contain relation', {
           from: subfontCss,
