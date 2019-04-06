@@ -54,4 +54,10 @@ describe('parseJavascript', () => {
       ]
     });
   });
+
+  it('should parse dynamic imports', () => {
+    expect(parse('const foo = import("./foo.js")', { sourceType: 'module' }), 'to satisfy', {
+      type: 'Program'
+    });
+  })
 });
