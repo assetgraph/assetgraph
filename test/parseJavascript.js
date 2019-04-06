@@ -7,6 +7,37 @@ describe('parseJavascript', () => {
   it('should parse jsx', () => {
     expect(parse('<main>Hello world</main>'), 'to satisfy', {
       type: 'Program',
+      body: [
+        {
+          type: 'ExpressionStatement',
+          expression: {
+            type: 'JSXElement',
+            openingElement: {
+              type: 'JSXOpeningElement',
+              start: 0,
+              end: 6,
+              attributes: [],
+              name: { type: 'JSXIdentifier', start: 1, end: 5, name: 'main' },
+              selfClosing: false
+            },
+            closingElement: {
+              type: 'JSXClosingElement',
+              start: 17,
+              end: 24,
+              name: { type: 'JSXIdentifier', start: 19, end: 23, name: 'main' }
+            },
+            children: [
+              {
+                type: 'JSXText',
+                start: 6,
+                end: 17,
+                value: 'Hello world',
+                raw: 'Hello world'
+              }
+            ]
+          }
+        }
+      ],
       tokens: [
         {
           type: {
@@ -56,8 +87,34 @@ describe('parseJavascript', () => {
   });
 
   it('should parse dynamic imports', () => {
-    expect(parse('const foo = import("./foo.js")', { sourceType: 'module' }), 'to satisfy', {
-      type: 'Program'
-    });
-  })
+    expect(
+      parse('const foo = import("./foo.js")', { sourceType: 'module' }),
+      'to satisfy',
+      {
+        type: 'Program',
+        body: [
+          {
+            type: 'VariableDeclaration',
+            declarations: [
+              {
+                type: 'VariableDeclarator',
+                init: {
+                  type: 'CallExpression',
+                  callee: {
+                    type: 'Import'
+                  },
+                  arguments: [
+                    {
+                      type: 'Literal',
+                      value: './foo.js'
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    );
+  });
 });

@@ -22,6 +22,7 @@
   ],
   "dependencies": {
     "acorn": "^6.1.0",
+    "acorn-dynamic-import": "^4.0.0",
     "acorn-jsx": "^5.0.1",
     "bluebird": "^3.5.1",
     "chalk": "^2.0.1",
