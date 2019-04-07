@@ -47,7 +47,7 @@ describe('JavaScriptDynamicImport', function() {
     expect(javaScript.text, 'to contain', `import('./main.js');`);
     assetGraph.findAssets({ fileName: 'main.js' })[0].url = `${
       assetGraph.root
-    }/static/foobar.js`;
+    }static/foobar.js`;
     expect(
       javaScript.text,
       'to contain',
