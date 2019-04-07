@@ -3086,6 +3086,38 @@ describe('transforms/subsetFonts', function() {
       });
     });
 
+    it('should check for missing glyphs in any subset format', async function() {
+      httpception();
+
+      const warnSpy = sinon.spy().named('warn');
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/missing-glyphs/'
+        )
+      });
+      assetGraph.on('warn', warnSpy);
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate({
+        followRelations: {
+          crossorigin: false
+        }
+      });
+      await assetGraph.subsetFonts({
+        inlineSubsets: false,
+        formats: [`woff2`]
+      });
+
+      expect(warnSpy, 'to have calls satisfying', function() {
+        warnSpy({
+          message: expect
+            .it('to contain', 'Missing glyph fallback detected')
+            .and('to contain', '\\u{4e2d} (中)')
+            .and('to contain', '\\u{56fd} (国)')
+        });
+      });
+    });
+
     // Some fonts don't contain these, but browsers don't seem to mind, so the warnings would just be noise
     it('should not warn about tab and newline missing from the font being subset', async function() {
       httpception();
