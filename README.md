@@ -36,7 +36,7 @@ assets (HTML, CSS, images, JavaScript...) and the edges are the
 relations between them, e.g. anchor tags, image tags, favorite
 icons, css background-image properties and so on.
 
-<img style="margin: 0 auto;" src="http://gofish.dk/assetgraph/datastructure.png">
+![An example illustration of an asset graph representing a web page](datastructure.png)
 
 An AssetGraph object is a collection of assets (nodes) and the
 relations (edges) between them. It's a basic data model that allows
