@@ -36,7 +36,7 @@ assets (HTML, CSS, images, JavaScript...) and the edges are the
 relations between them, e.g. anchor tags, image tags, favorite
 icons, css background-image properties and so on.
 
-<img style="margin: 0 auto;" src="http://gofish.dk/assetgraph/datastructure.png">
+![An example illustration of an asset graph representing a web page](illustration.png)
 
 An AssetGraph object is a collection of assets (nodes) and the
 relations (edges) between them. It's a basic data model that allows
@@ -60,16 +60,16 @@ modelled as 4 separate assets:
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <!--[if !IE]> -->
-    <style type='text/css'>
+  <head>
+    <!--[if !IE]> -->
+    <style type="text/css">
       body {
         background-image: url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==);
       }
     </style>
-  <!-- <![endif]-->
-</head>
-<body></body>
+    <!-- <![endif]-->
+  </head>
+  <body></body>
 </html>
 ```
 
@@ -108,22 +108,22 @@ Entries in the `CACHE`, `NETWORK` and `FALLBACK` sections
 
 # Features
 
-* Build an AssetGraph programmatically or load it from disk or a
+- Build an AssetGraph programmatically or load it from disk or a
   remote server via http.
-* Find explicit dependencies between JavaScript and CSS and roll them
+- Find explicit dependencies between JavaScript and CSS and roll them
   out as `<script>` and `<link rel='stylesheet'>` tags in your
   HTML.
-* Bundle and inline CSS and JavaScript.
-* Create a cache manifest with references to all the assets your web
+- Bundle and inline CSS and JavaScript.
+- Create a cache manifest with references to all the assets your web
   app needs to be usable offline.
-* Move all CSS, JavaScript, image assets etc. to a static dir and
+- Move all CSS, JavaScript, image assets etc. to a static dir and
   rename them to md5.extension so the web server can be configured to
   set a far-future Cache-Control.
-* Help getting your static assets on a CDN by allowing you to easily
+- Help getting your static assets on a CDN by allowing you to easily
   rewrite all references to them.
-* Use Graphviz to visualize your dependencies at any step.
-* Using the separate <a
-href="https://github.com/assetgraph/assetgraph-sprite">assetgraph-sprite
+- Use Graphviz to visualize your dependencies at any step.
+- Using the separate <a
+  href="https://github.com/assetgraph/assetgraph-sprite">assetgraph-sprite
   transform</a>: Optimize CSS background images by creating sprite
   images. The spriting is guided by a set of custom CSS properties
   with a `-ag-sprite` prefix.
@@ -284,8 +284,8 @@ counts as a separate including asset, so in the below example
 `ie.css` and `all.css` won't be bundled together:
 
 ```html
-<!--[if IE]><link rel='stylesheet' href='ie.css'><![endif]-->
-<link rel='stylesheet' href='all.css'>
+<!--[if IE]><link rel="stylesheet" href="ie.css"/><![endif]-->
+<link rel="stylesheet" href="all.css" />
 ```
 
 The created bundles will be placed at the root of the asset graph with
@@ -332,20 +332,24 @@ Effectively the inverse of `assetGraph.convertHtmlStylesToInlineCssImports`.
 Example:
 
 ```html
-<style type='text/css'>
-    @import url(print.css) print;
-    @import url(foo.css);
-    body {color: red;}
+<style type="text/css">
+  @import url(print.css) print;
+  @import url(foo.css);
+  body {
+    color: red;
+  }
 </style>
 ```
 
 is turned into:
 
 ```html
-<link rel='stylesheet' href='print.css' media='print'>
-<link rel='stylesheet' href='foo.css'>
-<style type='text/css'>
-    body {color: red;}
+<link rel="stylesheet" href="print.css" media="print" />
+<link rel="stylesheet" href="foo.css" />
+<style type="text/css">
+  body {
+    color: red;
+  }
 </style>
 ```
 
@@ -361,16 +365,16 @@ stylesheet.
 Example:
 
 ```html
-<link rel='stylesheet' href='foo.css'>
-<link rel='stylesheet' href='bar.css'>
+<link rel="stylesheet" href="foo.css" />
+<link rel="stylesheet" href="bar.css" />
 ```
 
 is turned into:
 
 ```html
-<style type='text/css'>
-    @import url(foo.css);
-    @import url(bar.css);
+<style type="text/css">
+  @import url(foo.css);
+  @import url(bar.css);
 </style>
 ```
 
@@ -413,15 +417,21 @@ from the unique ids of the assets.
 For example:
 
 ```html
-<script>foo = 'bar';</script>
-<style type='text/css'>body {color: maroon;}</style>
+<script>
+  foo = 'bar';
+</script>
+<style type="text/css">
+  body {
+    color: maroon;
+  }
+</style>
 ```
 
 could be turned into:
 
 ```html
-<script src='4.js'></script>
-<link rel='stylesheet' href='5.css'>
+<script src="4.js"></script>
+<link rel="stylesheet" href="5.css" />
 ```
 
 ## assetGraph.inlineCssImagesWithLegacyFallback([queryObj[, options]])
@@ -460,7 +470,7 @@ await assetGraph.inlineCssImagesWithLegacyFallback(
 where `assetGraph` contains an Html asset with this fragment:
 
 ```html
-<link rel='stylesheet' href='foo.css'>
+<link rel="stylesheet" href="foo.css" />
 ```
 
 and `foo.css` contains:
@@ -474,8 +484,8 @@ body {
 will be turned into:
 
 ```html
-<!--[if IE]><link rel="stylesheet" href="foo.css"><![endif]-->
-<!--[if !IE]>--><link rel="stylesheet" href="1234.css"><!--<![endif]-->
+<!--[if IE]><link rel="stylesheet" href="foo.css"/><![endif]-->
+<!--[if !IE]>--><link rel="stylesheet" href="1234.css" /><!--<![endif]-->
 ```
 
 where `1234.css` is a copy of the original `foo.css` with the
@@ -506,7 +516,7 @@ await assetGraph.inlineRelations({ type: { $in: ['HtmlStyle', 'CssImage'] } });
 where `assetGraph` contains an Html asset with this fragment:
 
 ```html
-<link rel='stylesheet' href='foo.css'>
+<link rel="stylesheet" href="foo.css" />
 ```
 
 and `foo.css` contains:
@@ -520,7 +530,11 @@ body {
 will be turned into:
 
 ```html
-<style type='text/css'>body {background-image: url(data;image/png;base64,iVBORw0KGgoAAAANSUhE...)}</style>
+<style type="text/css">
+  body {
+    background-image: url(data;image/png;base64, iVBORw0KGgoAAAANSUhE...);
+  }
+</style>
 ```
 
 Note that `foo.css` and the `CssImage` will still be modelled as
@@ -534,10 +548,10 @@ that fulfills with an array of the assets that were added. Several
 syntaxes are supported, for example:
 
 ```javascript
-const [ aHtml, bCss ] = await assetGraph.loadAssets('a.html', 'b.css'); // Relative to assetGraph.root
+const [aHtml, bCss] = await assetGraph.loadAssets('a.html', 'b.css'); // Relative to assetGraph.root
 await assetGraph.loadAssets({
-    url: "http://example.com/index.html",
-    text: "var foo = bar;" // The source is specified, won't be loaded
+  url: 'http://example.com/index.html',
+  text: 'var foo = bar;' // The source is specified, won't be loaded
 });
 ```
 
@@ -564,10 +578,14 @@ where `assetGraph` contains an `Html` asset with this fragment:
 
 ```html
 <head>
-    <style type='text/css'>body {background-image: url(foo.png);}</style>
+  <style type="text/css">
+    body {
+      background-image: url(foo.png);
+    }
+  </style>
 </head>
 <body>
-    <img src='bar.png'>
+  <img src="bar.png" />
 </body>
 ```
 
@@ -575,10 +593,14 @@ will be turned into the following if `foo.png` and `bar.png` are identical:
 
 ```html
 <head>
-    <style type='text/css'>body {background-image: url(foo.png);}</style>
+  <style type="text/css">
+    body {
+      background-image: url(foo.png);
+    }
+  </style>
 </head>
 <body>
-    <img src='foo.png'>
+  <img src="foo.png" />
 </body>
 ```
 
@@ -613,11 +635,11 @@ argument is a function, it will be called with each asset as the first
 argument and the assetGraph instance as the second and the url of the
 asset will be changed according to the return value:
 
-* If a falsy value is returned, nothing happens; the asset keeps its
+- If a falsy value is returned, nothing happens; the asset keeps its
   current url.
-* If a non-absolute url is returned, it is resolved from
+- If a non-absolute url is returned, it is resolved from
   `assetGraph.root`.
-* If the url ends in a slash, the file name part of the old url is
+- If the url ends in a slash, the file name part of the old url is
   appended.
 
 Move all `Css` and `Png` assets to a root-relative url:
