@@ -843,6 +843,52 @@ describe('transforms/subsetFonts', function() {
       });
     });
 
+    describe('with `inlineSubsets: true`', function() {
+      it('should inline the font subset', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/inline-subsets/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate({
+          followRelations: {
+            crossorigin: false
+          }
+        });
+
+        await assetGraph.subsetFonts({
+          inlineSubsets: true
+        });
+        const css = assetGraph.findAssets({
+          type: 'Css',
+          fileName: /fonts-/
+        })[0];
+
+        expect(css.outgoingRelations, 'to satisfy', [
+          {
+            type: 'CssFontFaceSrc',
+            hrefType: `inline`,
+            href: /^data:font\/woff2;base64/,
+            to: {
+              isInline: true,
+              contentType: `font/woff2`
+            }
+          },
+          {
+            type: 'CssFontFaceSrc',
+            hrefType: `inline`,
+            href: /^data:font\/woff;base64/,
+            to: {
+              isInline: true,
+              contentType: `font/woff`
+            }
+          }
+        ]);
+      });
+    });
+
     // Regression tests for https://github.com/Munter/subfont/issues/24
     describe('when the same Google Web Font is referenced multiple times', function() {
       it('should not break for two identical CSS @imports from the same asset', async function() {
