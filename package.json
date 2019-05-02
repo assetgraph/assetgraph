@@ -59,7 +59,7 @@
     "repeat-string": "^1.5.4",
     "schemes": "^1.0.1",
     "semver": "^6.0.0",
-    "sift": "^7.0.1",
+    "sift": "^8.3.3",
     "source-map": "~0.6.1",
     "specificity": "^0.4.0",
     "sw-precache": "^5.2.0",
