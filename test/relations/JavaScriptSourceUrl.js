@@ -23,9 +23,9 @@ describe('relations/JavaScriptSourceUrl', function() {
     expect(javaScript.text, 'to match', /@\s*sourceURL=bar\.js/);
     expect(javaScript.text, 'to match', /@\s*sourceURL=foo\.js/);
 
-    assetGraph.findAssets({ fileName: 'bundle.js' })[0].url = `${
-      assetGraph.root
-    }foo/bundle.js`;
+    assetGraph.findAssets({
+      fileName: 'bundle.js'
+    })[0].url = `${assetGraph.root}foo/bundle.js`;
 
     expect(javaScript.text, 'to match', /@\s*sourceURL=..\/bar\.js/);
     expect(javaScript.text, 'to match', /@\s*sourceURL=..\/foo\.js/);
