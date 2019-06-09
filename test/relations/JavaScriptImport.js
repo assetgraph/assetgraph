@@ -45,9 +45,9 @@ describe('JavaScriptImport', function() {
     const [javaScript] = await assetGraph.loadAssets('index.js');
     await assetGraph.populate();
     expect(javaScript.text, 'to contain', `import main from './main.js';`);
-    assetGraph.findAssets({ fileName: 'main.js' })[0].url = `${
-      assetGraph.root
-    }/static/foobar.js`;
+    assetGraph.findAssets({
+      fileName: 'main.js'
+    })[0].url = `${assetGraph.root}/static/foobar.js`;
     expect(
       javaScript.text,
       'to contain',

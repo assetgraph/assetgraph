@@ -186,9 +186,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
       assetGraph.addPrecacheServiceWorker({ isInitial: true }),
       'to be rejected with',
       new Error(
-        `addPrecacheServiceWorker transform: There is already a service worker at ${
-          assetGraph.root
-        }index-precache-service-worker.js -- giving up`
+        `addPrecacheServiceWorker transform: There is already a service worker at ${assetGraph.root}index-precache-service-worker.js -- giving up`
       )
     );
   });
@@ -245,9 +243,9 @@ describe('transforms/addPrecacheServiceWorker', function() {
       });
       await assetGraph.loadAssets('*.html').populate();
 
-      assetGraph.findAssets({ fileName: 'otherpage.html' })[0].url = `${
-        assetGraph.root
-      }somewhereelse/index.html`;
+      assetGraph.findAssets({
+        fileName: 'otherpage.html'
+      })[0].url = `${assetGraph.root}somewhereelse/index.html`;
 
       await assetGraph.addPrecacheServiceWorker(
         { isInitial: true },
@@ -288,9 +286,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
       expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
       expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
       expect(assetGraph, 'to contain asset', {
-        url: `${
-          assetGraph.root
-        }path/to/index-otherpage-precache-service-worker.js`
+        url: `${assetGraph.root}path/to/index-otherpage-precache-service-worker.js`
       });
       expect(
         assetGraph,

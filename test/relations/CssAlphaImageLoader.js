@@ -17,9 +17,9 @@ describe('relations/CssAlphaImageLoader', function() {
 
     expect(assetGraph, 'to contain relations', 'CssAlphaImageLoader', 3);
 
-    assetGraph.findAssets({ fileName: 'foo.png' })[0].url = `${
-      assetGraph.root
-    }images/quux.png`;
+    assetGraph.findAssets({
+      fileName: 'foo.png'
+    })[0].url = `${assetGraph.root}images/quux.png`;
 
     expect(
       _.map(assetGraph.findRelations({ type: 'CssAlphaImageLoader' }), 'href'),

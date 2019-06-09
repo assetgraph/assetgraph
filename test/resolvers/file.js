@@ -13,9 +13,7 @@ describe('resolvers/file', function() {
 
     expect(assetGraph, 'to contain asset', {
       type: 'Html',
-      url: `${
-        assetGraph.root
-      }spaces,%20unsafe%20chars%20&%20%C3%B1%C3%B8%C5%84-%C3%83%C3%9F%C3%87%C2%A1%C2%A1.html`,
+      url: `${assetGraph.root}spaces,%20unsafe%20chars%20&%20%C3%B1%C3%B8%C5%84-%C3%83%C3%9F%C3%87%C2%A1%C2%A1.html`,
 
       isLoaded: true
     });
