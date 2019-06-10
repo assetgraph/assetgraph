@@ -1,5 +1,6 @@
 const pathModule = require('path');
 /* global describe, it */
+const sinon = require('sinon');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
@@ -11,7 +12,7 @@ const testRoot = pathModule.resolve(
 describe('relations/JavaScriptPaintWorklet', function() {
   it('should detect a relative path', async function() {
     const assetGraph = new AssetGraph({
-      root: testRoot
+      root: `${testRoot}/default`
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -22,7 +23,7 @@ describe('relations/JavaScriptPaintWorklet', function() {
 
   it('should read the href correctly', async function() {
     const assetGraph = new AssetGraph({
-      root: testRoot
+      root: `${testRoot}/default`
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -38,6 +39,115 @@ describe('relations/JavaScriptPaintWorklet', function() {
     });
   });
 
-  // TODO: Test that assetgraph population emits WARN when hitting a relative URL in the href
-  // Relative URLs are resolved from the current pages path, not the including javascript parents path
+  it('should write the href correctly', async function() {
+    const assetGraph = new AssetGraph({
+      root: `${testRoot}/default`
+    });
+    await assetGraph.loadAssets('index.html');
+    await assetGraph.populate();
+
+    const relation = assetGraph.findRelations({ type: 'JavaScriptPaintWorklet' })[0];
+
+    expect(relation, 'to satisfy', {
+      href: '/js/paintworklet.js',
+      to: {
+        path: '/js/',
+        fileName: 'paintworklet.js'
+      },
+      from: {
+        text: expect.it('not to contain', 'movedWorklet.js')
+      }
+    });
+
+    relation.to.fileName = 'movedWorklet.js';
+
+    expect(relation, 'to satisfy', {
+      href: '/js/movedWorklet.js',
+      to: {
+        path: '/js/',
+        fileName: 'movedWorklet.js'
+      },
+      from: {
+        text: expect.it('to contain', 'movedWorklet.js')
+      }
+    });
+  });
+
+  it('should warn when parsing a relative href', async function() {
+    const warnSpy = sinon.spy();
+    const assetGraph = new AssetGraph({
+      root: `${testRoot}/relativeRelation`
+    });
+    await assetGraph.on('warn', warnSpy);
+
+    await assetGraph.loadAssets('js/index.js');
+
+    expect(warnSpy, 'to have calls satisfying', function () {
+      warnSpy({
+        message: expect.it('to start with', 'Using a relative URL when adding a worklet can cause problems'),
+        asset: {
+          type: 'JavaScript',
+          fileName: 'index.js'
+        },
+        line: 1,
+        column: 27
+      })
+    });
+  });
+
+  it('should inline as data-uri', async function() {
+    const assetGraph = new AssetGraph({
+      root: `${testRoot}/default`
+    });
+    await assetGraph.loadAssets('index.html');
+    await assetGraph.populate();
+
+    const relation = assetGraph.findRelations({ type: 'JavaScriptPaintWorklet' })[0];
+
+    relation.inline();
+
+    expect(relation.to, 'to satisfy', {
+      isInline: true
+    });
+
+    expect(relation.from, 'to satisfy', {
+      text: `CSS.paintWorklet.addModule("data:application/javascript,console.log('I%20am%20a%20worklet')%0A");`
+    });
+  });
+
+  it('should throw when detaching', async function() {
+    const assetGraph = new AssetGraph({
+      root: `${testRoot}/default`
+    });
+    await assetGraph.loadAssets('index.html');
+    await assetGraph.populate();
+
+    const relation = assetGraph.findRelations({ type: 'JavaScriptPaintWorklet' })[0];
+
+    expect(
+      function() {
+        relation.detach();
+      },
+      'to throw',
+      'JavaScriptPaintWorklet.detach(): Not implemented'
+    );
+  });
+
+  it('should throw when attaching', async function() {
+    const assetGraph = new AssetGraph({
+      root: `${testRoot}/default`
+    });
+    await assetGraph.loadAssets('index.html');
+    await assetGraph.populate();
+
+    const relation = assetGraph.findRelations({ type: 'JavaScriptPaintWorklet' })[0];
+
+    expect(
+      function() {
+        relation.attach('before', relation);
+      },
+      'to throw',
+      'JavaScriptPaintWorklet.attach(): Not implemented'
+    );
+  });
 });
