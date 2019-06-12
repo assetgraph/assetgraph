@@ -10,6 +10,52 @@ const testRoot = pathModule.resolve(
 );
 
 describe('relations/JavaScriptWorklet', function() {
+  describe('worklet types', function () {
+    it('should detect a CSS paintWorklet registration', function () {
+      const assetGraph = new AssetGraph();
+
+      assetGraph.addAsset({
+        type: 'JavaScript',
+        text: `CSS.paintWorklet.addModule('/rootRelativeHref')`
+      });
+
+      expect(assetGraph, 'to contain relation', 'JavaScriptWorklet');
+    });
+
+    it('should detect a CSS layoutWorklet registration', function () {
+      const assetGraph = new AssetGraph();
+
+      assetGraph.addAsset({
+        type: 'JavaScript',
+        text: `CSS.layoutWorklet.addModule('/masonry.js')`
+      });
+
+      expect(assetGraph, 'to contain relation', 'JavaScriptWorklet');
+    });
+
+    it('should detect a CSS animationWorklet registration', function () {
+      const assetGraph = new AssetGraph();
+
+      assetGraph.addAsset({
+        type: 'JavaScript',
+        text: `CSS.animationWorklet.addModule('/spring-sticky-animator.js')`
+      });
+
+      expect(assetGraph, 'to contain relation', 'JavaScriptWorklet');
+    });
+
+    it('should detect an audioWorklet registration', function () {
+      const assetGraph = new AssetGraph();
+
+      assetGraph.addAsset({
+        type: 'JavaScript',
+        text: `let context = new AudioContext(); context.audioWorklet.addModule('/processors.js')`
+      });
+
+      expect(assetGraph, 'to contain relation', 'JavaScriptWorklet');
+    });
+  });
+
   it('should detect a root-relative path', async function() {
     const assetGraph = new AssetGraph({
       root: `${testRoot}/default`
