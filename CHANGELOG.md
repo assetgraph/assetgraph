@@ -2,6 +2,7 @@
 
 #### Pull requests
 
+- [#1021](https://github.com/assetgraph/assetgraph/pull/1021) Add JavaScriptWorklet relation ([Peter Müller](mailto:munter@fumle.dk))
 - [#1020](https://github.com/assetgraph/assetgraph/pull/1020) Upgrade prettier to version 1.18.2 ([Andreas Lind](mailto:andreaslindpetersen@gmail.com), [depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
 - [#1019](https://github.com/assetgraph/assetgraph/pull/1019) Upgrade file-loader to version 4.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
 - [#1017](https://github.com/assetgraph/assetgraph/pull/1017) Upgrade terser to version 4.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
