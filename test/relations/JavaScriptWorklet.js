@@ -6,10 +6,10 @@ const AssetGraph = require('../../lib/AssetGraph');
 
 const testRoot = pathModule.resolve(
   __dirname,
-  '../../testdata/relations/JavaScriptPaintWorklet'
+  '../../testdata/relations/JavaScriptWorklet'
 );
 
-describe('relations/JavaScriptPaintWorklet', function() {
+describe('relations/JavaScriptWorklet', function() {
   it('should detect a root-relative path', async function() {
     const assetGraph = new AssetGraph({
       root: `${testRoot}/default`
@@ -18,7 +18,7 @@ describe('relations/JavaScriptPaintWorklet', function() {
     await assetGraph.populate();
 
     expect(assetGraph, 'to contain assets', 'JavaScript', 2);
-    expect(assetGraph, 'to contain relation', 'JavaScriptPaintWorklet');
+    expect(assetGraph, 'to contain relation', 'JavaScriptWorklet');
   });
 
   it('should read the href correctly', async function() {
@@ -28,7 +28,7 @@ describe('relations/JavaScriptPaintWorklet', function() {
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
-    const relation = assetGraph.findRelations({ type: 'JavaScriptPaintWorklet' })[0];
+    const relation = assetGraph.findRelations({ type: 'JavaScriptWorklet' })[0];
 
     expect(relation, 'to satisfy', {
       href: '/js/paintworklet.js',
@@ -46,7 +46,7 @@ describe('relations/JavaScriptPaintWorklet', function() {
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
-    const relation = assetGraph.findRelations({ type: 'JavaScriptPaintWorklet' })[0];
+    const relation = assetGraph.findRelations({ type: 'JavaScriptWorklet' })[0];
 
     expect(relation, 'to satisfy', {
       href: '/js/paintworklet.js',
@@ -102,7 +102,7 @@ describe('relations/JavaScriptPaintWorklet', function() {
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
-    const relation = assetGraph.findRelations({ type: 'JavaScriptPaintWorklet' })[0];
+    const relation = assetGraph.findRelations({ type: 'JavaScriptWorklet' })[0];
 
     relation.inline();
 
@@ -122,14 +122,14 @@ describe('relations/JavaScriptPaintWorklet', function() {
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
-    const relation = assetGraph.findRelations({ type: 'JavaScriptPaintWorklet' })[0];
+    const relation = assetGraph.findRelations({ type: 'JavaScriptWorklet' })[0];
 
     expect(
       function() {
         relation.detach();
       },
       'to throw',
-      'JavaScriptPaintWorklet.detach(): Not implemented'
+      'JavaScriptWorklet.detach(): Not implemented'
     );
   });
 
@@ -140,14 +140,14 @@ describe('relations/JavaScriptPaintWorklet', function() {
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
-    const relation = assetGraph.findRelations({ type: 'JavaScriptPaintWorklet' })[0];
+    const relation = assetGraph.findRelations({ type: 'JavaScriptWorklet' })[0];
 
     expect(
       function() {
         relation.attach('before', relation);
       },
       'to throw',
-      'JavaScriptPaintWorklet.attach(): Not implemented'
+      'JavaScriptWorklet.attach(): Not implemented'
     );
   });
 });
