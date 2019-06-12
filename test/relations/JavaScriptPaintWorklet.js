@@ -10,7 +10,7 @@ const testRoot = pathModule.resolve(
 );
 
 describe('relations/JavaScriptPaintWorklet', function() {
-  it('should detect a relative path', async function() {
+  it('should detect a root-relative path', async function() {
     const assetGraph = new AssetGraph({
       root: `${testRoot}/default`
     });
