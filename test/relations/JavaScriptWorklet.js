@@ -10,8 +10,8 @@ const testRoot = pathModule.resolve(
 );
 
 describe('relations/JavaScriptWorklet', function() {
-  describe('worklet types', function () {
-    it('should detect a CSS paintWorklet registration', function () {
+  describe('worklet types', function() {
+    it('should detect a CSS paintWorklet registration', function() {
       const assetGraph = new AssetGraph();
 
       assetGraph.addAsset({
@@ -22,7 +22,7 @@ describe('relations/JavaScriptWorklet', function() {
       expect(assetGraph, 'to contain relation', 'JavaScriptWorklet');
     });
 
-    it('should detect a CSS layoutWorklet registration', function () {
+    it('should detect a CSS layoutWorklet registration', function() {
       const assetGraph = new AssetGraph();
 
       assetGraph.addAsset({
@@ -33,7 +33,7 @@ describe('relations/JavaScriptWorklet', function() {
       expect(assetGraph, 'to contain relation', 'JavaScriptWorklet');
     });
 
-    it('should detect a CSS animationWorklet registration', function () {
+    it('should detect a CSS animationWorklet registration', function() {
       const assetGraph = new AssetGraph();
 
       assetGraph.addAsset({
@@ -44,7 +44,7 @@ describe('relations/JavaScriptWorklet', function() {
       expect(assetGraph, 'to contain relation', 'JavaScriptWorklet');
     });
 
-    it('should detect an audioWorklet registration', function () {
+    it('should detect an audioWorklet registration', function() {
       const assetGraph = new AssetGraph();
 
       assetGraph.addAsset({
@@ -128,16 +128,19 @@ describe('relations/JavaScriptWorklet', function() {
 
     await assetGraph.loadAssets('js/index.js');
 
-    expect(warnSpy, 'to have calls satisfying', function () {
+    expect(warnSpy, 'to have calls satisfying', function() {
       warnSpy({
-        message: expect.it('to start with', 'Using a relative URL when adding a worklet can cause problems'),
+        message: expect.it(
+          'to start with',
+          'Using a relative URL when adding a worklet can cause problems'
+        ),
         asset: {
           type: 'JavaScript',
           fileName: 'index.js'
         },
         line: 1,
         column: 27
-      })
+      });
     });
   });
 
