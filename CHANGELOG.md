@@ -1,3 +1,23 @@
+### v5.9.0 (2019-06-12)
+
+#### Pull requests
+
+- [#1020](https://github.com/assetgraph/assetgraph/pull/1020) Upgrade prettier to version 1.18.2 ([Andreas Lind](mailto:andreaslindpetersen@gmail.com), [depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+- [#1019](https://github.com/assetgraph/assetgraph/pull/1019) Upgrade file-loader to version 4.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+- [#1017](https://github.com/assetgraph/assetgraph/pull/1017) Upgrade terser to version 4.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+- [#1016](https://github.com/assetgraph/assetgraph/pull/1016) Upgrade read-pkg-up to version 6.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+- [#1014](https://github.com/assetgraph/assetgraph/pull/1014) Upgrade eslint-plugin-node to version 9.0.1 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+- [#1011](https://github.com/assetgraph/assetgraph/pull/1011) Upgrade jsdom to version 15.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+- [#1009](https://github.com/assetgraph/assetgraph/pull/1009) Upgrade jsdom to version 14.1.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+- [#1008](https://github.com/assetgraph/assetgraph/pull/1008) Upgrade nyc to version 14.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+- [#1007](https://github.com/assetgraph/assetgraph/pull/1007) Upgrade prettier to version 1.17.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+- [#1006](https://github.com/assetgraph/assetgraph/pull/1006) Fix mixed content warning ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+
+#### Commits to master
+
+- [Use a ^ version range for jsdom](https://github.com/assetgraph/assetgraph/commit/596f07e2255397b67edd78760380282d492af302) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Update offline-github-changelog to 1.6.1](https://github.com/assetgraph/assetgraph/commit/13acfe2a7ba91ace5ea06f03c95832ca21f4dd95) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+
 ### v5.8.4 (2019-04-08)
 
 #### Pull requests
@@ -512,18 +532,25 @@
 
 ### v4.2.0 (2018-03-30)
 
+- [Ditch the annoying "enourmous" splitCssIfIeLimitIsReached test case](https://github.com/assetgraph/assetgraph/commit/ee4da295a6fccc113bc46d4b7985e1096c4681da) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Make sure that we preserve the href of relations that maintain it as a direct property](https://github.com/assetgraph/assetgraph/commit/110e907a60fb9798e520e08475e7ff6385731a60) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Asset\#\_warnIncompatibleTypes: Attach err.asset](https://github.com/assetgraph/assetgraph/commit/4f5ec437de7b99ed4f734d31d2ef5d586d3f7f6a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Remove accidentally added bogus package-lock file](https://github.com/assetgraph/assetgraph/commit/f4f06c5ddcb36d4632d8eda5d69e738e9b2588e7) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Reformat comment](https://github.com/assetgraph/assetgraph/commit/0e71e8ac073fcb400874be37a260fa964a61d87e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [+3 more](https://github.com/assetgraph/assetgraph/compare/v4.1.1...v4.2.0)
+
+### v4.1.1 (2018-03-27)
+
 #### Pull requests
 
 - [#836](https://github.com/assetgraph/assetgraph/pull/836) Switch data-url resolving to use data-urls package ([Peter Müller](mailto:munter@fumle.dk))
 
 #### Commits to master
 
-- [Ditch the annoying "enourmous" splitCssIfIeLimitIsReached test case](https://github.com/assetgraph/assetgraph/commit/ee4da295a6fccc113bc46d4b7985e1096c4681da) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Make sure that we preserve the href of relations that maintain it as a direct property](https://github.com/assetgraph/assetgraph/commit/110e907a60fb9798e520e08475e7ff6385731a60) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Asset\#\_warnIncompatibleTypes: Attach err.asset](https://github.com/assetgraph/assetgraph/commit/4f5ec437de7b99ed4f734d31d2ef5d586d3f7f6a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Remove accidentally added bogus package-lock file](https://github.com/assetgraph/assetgraph/commit/f4f06c5ddcb36d4632d8eda5d69e738e9b2588e7) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Reformat comment](https://github.com/assetgraph/assetgraph/commit/0e71e8ac073fcb400874be37a260fa964a61d87e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+7 more](https://github.com/assetgraph/assetgraph/compare/v4.1.0...v4.2.0)
+- [Fix an occurrence of the old query syntax](https://github.com/assetgraph/assetgraph/commit/0090823c7d61fb3af6728332bf31a34fd86d15a6) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Transforms: Use destructuring for most options objects](https://github.com/assetgraph/assetgraph/commit/fbdae42ee59512401acc42a4ebea36bf6766dd53) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [addPrecacheServiceWorker: Don't follow HtmlAlternateLink](https://github.com/assetgraph/assetgraph/commit/022214a09e76a527eac1121f33fcac91f43fd0c4) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Fix tests broken by 70f01cd48](https://github.com/assetgraph/assetgraph/commit/19e6c475aabf2089fdd1852a0e097789f337023c) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v4.1.0 (2018-03-24)
 
