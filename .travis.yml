@@ -17,7 +17,7 @@ addons:
 env: CXX="g++-4.8" CC="gcc-4.8"
 
 before_script:
-  - sudo pip install fonttools brotli zopfli
+  - sudo pip install fonttools==3.43.1 brotli zopfli
 
 script: 'npm install && npm run ci'
 after_success: '<coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js'
