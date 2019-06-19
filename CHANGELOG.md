@@ -1,8 +1,21 @@
+### v5.10.0 (2019-06-19)
+
+#### Pull requests
+
+- [#1024](https://github.com/assetgraph/assetgraph/pull/1024) Upgrade eslint-config-prettier to version 5.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+- [#1022](https://github.com/assetgraph/assetgraph/pull/1022) Upgrade css-loader to version 3.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
+
+#### Commits to master
+
+- [Travis: Stay at fonttools 3.42.0](https://github.com/assetgraph/assetgraph/commit/421e463bf53edb23630426ef423483de80e6bd2f) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Silence warning from autoprefixer 9.6.0+](https://github.com/assetgraph/assetgraph/commit/53d01fb0cad59c72adcd9ca526c400a348dca604) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Add early exit with just the font information in transforms\/subsetfonts](https://github.com/assetgraph/assetgraph/commit/b2330995330a38f8ce5951df86ba6a9e636ab72e) ([Peter Müller](mailto:munter@fumle.dk))
+- [Fix changelog](https://github.com/assetgraph/assetgraph/commit/f0d0b39b3095c74d6592f0e944208224b00b156e) ([Peter Müller](mailto:munter@fumle.dk))
+
 ### v5.9.0 (2019-06-12)
 
 #### Pull requests
 
-- [#1021](https://github.com/assetgraph/assetgraph/pull/1021) Add JavaScriptWorklet relation ([Peter Müller](mailto:munter@fumle.dk))
 - [#1020](https://github.com/assetgraph/assetgraph/pull/1020) Upgrade prettier to version 1.18.2 ([Andreas Lind](mailto:andreaslindpetersen@gmail.com), [depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
 - [#1019](https://github.com/assetgraph/assetgraph/pull/1019) Upgrade file-loader to version 4.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
 - [#1017](https://github.com/assetgraph/assetgraph/pull/1017) Upgrade terser to version 4.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
