@@ -1,5 +1,4 @@
 const pathModule = require('path');
-/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const parseJavaScript = require('../../lib/parseJavaScript');
 const AssetGraph = require('../../lib/AssetGraph');

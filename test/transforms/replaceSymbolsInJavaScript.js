@@ -1,5 +1,4 @@
 const pathModule = require('path');
-/* global describe, it, beforeEach */
 const unexpected = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const sinon = require('sinon');

@@ -1,4 +1,3 @@
-/* global describe, it */
 const replaceDescendantNode = require('../lib/replaceDescendantNode');
 const parseJavaScript = require('../lib/parseJavaScript');
 const escodegen = require('escodegen');
