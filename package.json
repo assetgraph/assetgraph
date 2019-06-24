@@ -104,7 +104,7 @@
     "uglify-js": "^3.4.9",
     "unexpected": "^11.0.0-1",
     "unexpected-dom": "^4.5.0",
-    "unexpected-set": "^1.1.0",
+    "unexpected-set": "^2.0.0",
     "unexpected-sinon": "^10.10.1",
     "webpack": "^4.16.1",
     "yui-compressor": "^0.1.3"
