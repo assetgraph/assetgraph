@@ -88,7 +88,7 @@
     "iconv-lite": "^0.4.23",
     "jsdoc": "^3.5.5",
     "less": "^2.7.3",
-    "magicpen-prism": "3.0.1",
+    "magicpen-prism": "3.0.2",
     "mocha": "^6.0.0",
     "nyc": "^14.0.0",
     "offline-github-changelog": "^1.6.1",
