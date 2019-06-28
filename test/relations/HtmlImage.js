@@ -1,9 +1,9 @@
 var expect = require('../unexpected-with-plugins');
 var AssetGraph = require('../../lib/');
 
-describe('relations/HtmlImage', function() {
-    describe('with an alternative attributeName', function() {
-        it('should update that attribute when the href is changed', function() {
+describe('relations/HtmlImage', function () {
+    describe('with an alternative attributeName', function () {
+        it('should update that attribute when the href is changed', function () {
             var assetGraph = new AssetGraph({ root: __dirname });
             assetGraph.addAsset({
                 type: 'Html',
