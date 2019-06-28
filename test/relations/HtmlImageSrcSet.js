@@ -50,7 +50,7 @@ describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', f
 
   describe('with an alternative attributeName', function() {
       it('should update that attribute when the href is changed', function() {
-          const assetGraph = new AssetGraph({
+          var assetGraph = new AssetGraph({
               root: __dirname
           });
 
@@ -60,8 +60,8 @@ describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', f
                 '<!DOCTYPE html><html><body><img srcset="http://example.com/foo.jpg 2x, banner-phone.jpeg?foo,bar 100w 2x"></body></html>'
           });
 
-          const htmlAsset = assetGraph.findAssets()[0];
-          const htmlImageSrcSet = htmlAsset._outgoingRelations[0];
+          var htmlAsset = assetGraph.findAssets()[0];
+          var htmlImageSrcSet = htmlAsset._outgoingRelations[0];
           htmlImageSrcSet.attributeName = 'data-srcset';
           htmlImageSrcSet.node.removeAttribute('srcset');
           htmlImageSrcSet.to.text = 'http://example.com/bar.jpg 2x';
