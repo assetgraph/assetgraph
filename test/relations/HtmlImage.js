@@ -7,7 +7,7 @@ describe('relations/HtmlImage', function() {
       var assetGraph = new AssetGraph({ root: __dirname });
       assetGraph.addAsset({
         type: 'Html',
-        url: `${assetGraph.root}index.html`,
+        url: assetGraph.root + 'index.html',
         text: '<!DOCTYPE html><html><body><img src="foo.png"></body></html>'
       });
 
