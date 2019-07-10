@@ -971,7 +971,7 @@ describe('relations/HtmlRelation', function() {
 
       htmlAsset.outgoingRelations[0].hrefType = 'inline';
 
-      expect(htmlAsset.text, 'to contain', 'AgICAgIA==#yadda">');
+      expect(htmlAsset.text, 'to contain', 'AgICAgICA=#yadda">');
     });
   });
 });
