@@ -93,17 +93,16 @@ describe('relations/MsApplicationConfigPollingUri', function() {
 
     const msApplicationConfig = assetGraph.addAsset({
       type: 'MsApplicationConfig',
-      text: `
-                <?xml version="1.0" encoding="utf-8"?>
-                <browserconfig>
-                    <msapplication>
-                        <notification>
-                            <frequency>30</frequency>
-                            <cycle>1</cycle>
-                        </notification>
-                    </msapplication>
-                </browserconfig>
-            `
+      text: `<?xml version="1.0" encoding="utf-8"?>
+        <browserconfig>
+            <msapplication>
+                <notification>
+                    <frequency>30</frequency>
+                    <cycle>1</cycle>
+                </notification>
+            </msapplication>
+        </browserconfig>
+      `
     });
 
     expect(
