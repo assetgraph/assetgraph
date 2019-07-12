@@ -50,7 +50,7 @@ describe('assets/Xml', function() {
         expect(
           xmlAsset.text,
           'to equal',
-          '<?xml version="1.0" encoding="UTF-8"?>\n<doc/>\n'
+          '<?xml version="1.0" encoding="UTF-8"?>\n<doc/>'
         );
       });
     });
@@ -64,7 +64,7 @@ describe('assets/Xml', function() {
         });
         xmlAsset.parseTree; // eslint-disable-line no-unused-expressions
         xmlAsset.markDirty();
-        expect(xmlAsset.text, 'to equal', '<doc/>\n');
+        expect(xmlAsset.text, 'to equal', '<doc/>');
       });
     });
   });
