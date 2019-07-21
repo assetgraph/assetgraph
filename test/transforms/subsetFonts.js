@@ -3389,24 +3389,63 @@ describe('transforms/subsetFonts', function() {
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.subsetFonts({
-          inlineSubsets: false
+          inlineSubsets: false,
+          inlineCss: true
         });
-
         const subfontCss = assetGraph.findAssets({
           type: 'Css',
-          path: '/subfont/'
+          isInline: true,
+          text: { $regex: /KFOjCnqEu92Fr1Mu51TzBic6CsI/ }
         })[0];
 
         expect(
           subfontCss.text,
           'to contain',
-          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(/KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format("woff")'
+          "font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(/KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format('woff')"
         );
         expect(assetGraph, 'to contain relation', {
           from: subfontCss,
           to: {
             url: `${assetGraph.root}KFOjCnqEu92Fr1Mu51TzBic6CsI.woff`
           }
+        });
+      });
+
+      describe('with inlineCss:false', function() {
+        it('should put the @font-face declarations for the unused variants in the main subfont CSS rather than a separate one after the JS preload script', async function() {
+          httpception();
+
+          const assetGraph = new AssetGraph({
+            root: pathModule.resolve(
+              __dirname,
+              '../../testdata/transforms/subsetFonts/unused-variant/'
+            )
+          });
+          await assetGraph.loadAssets('index.html');
+          await assetGraph.populate();
+          await assetGraph.subsetFonts({
+            inlineSubsets: false,
+            inlineCss: false
+          });
+          const subfontCss = assetGraph.findAssets({
+            type: 'Css',
+            path: '/subfont/'
+          })[0];
+
+          expect(
+            subfontCss.text,
+            'to contain',
+            'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(/KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format("woff")'
+          );
+          expect(assetGraph, 'to contain relation', {
+            from: subfontCss,
+            to: {
+              url: `${assetGraph.root}KFOjCnqEu92Fr1Mu51TzBic6CsI.woff`
+            }
+          });
+
+          // Make sure that the extra stylesheet doesn't get generated in inlineCss:false mode:
+          expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
         });
       });
 
