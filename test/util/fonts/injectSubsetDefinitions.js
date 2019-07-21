@@ -103,4 +103,34 @@ describe('injectSubsetDefinitions', function() {
       "'times\\'new\\'roman__subset', \"times new roman\""
     );
   });
+
+  describe('when replaceOriginal is true', function() {
+    it('should replace a "bareword" font family name that is the last token', function() {
+      expect(
+        injectSubsetDefinitions('times new roman', webfontNameMap, true),
+        'to equal',
+        "'times new roman__subset'"
+      );
+    });
+
+    it('should replace a "bareword" font family name before a comma', function() {
+      expect(
+        injectSubsetDefinitions('times new roman, serif', webfontNameMap, true),
+        'to equal',
+        "'times new roman__subset', serif"
+      );
+    });
+
+    it('should replace a quoted font family name before a comma', function() {
+      expect(
+        injectSubsetDefinitions(
+          '"times new roman", serif',
+          webfontNameMap,
+          true
+        ),
+        'to equal',
+        "'times new roman__subset', serif"
+      );
+    });
+  });
 });
