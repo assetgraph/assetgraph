@@ -3295,20 +3295,85 @@ describe('transforms/subsetFonts', function() {
           type: 'HtmlStyle',
           to: {
             isLoaded: true,
-            isInline: true,
-            text: expect.it('to contain', 'Open Sans'),
-            outgoingRelations: [
-              {
-                hrefType: 'relative',
-                href: 'OpenSans.ttf',
-                to: {
-                  isLoaded: true
-                }
-              }
-            ]
+            isInline: true
           }
-        }
+        },
+        // Fallback loaders:
+        {
+          type: 'HtmlScript',
+          hrefType: 'inline',
+          to: { outgoingRelations: [{ type: 'JavaScriptStaticUrl' }] }
+        },
+        { type: 'HtmlNoscript', hrefType: 'inline' }
       ]);
+    });
+
+    it('should add a script that async loads a CSS with the original @font-face declarations right before </body>', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/local-single/'
+        )
+      });
+      const [htmlAsset] = await assetGraph.loadAssets('index.html');
+      await assetGraph.populate();
+      await assetGraph.subsetFonts({
+        inlineSubsets: false
+      });
+      const originalInlineStylesheet = assetGraph.findAssets({
+        type: 'Css',
+        isInline: true
+      })[0];
+      // Check that the original @font-face was removed from the inline stylesheet:
+      expect(originalInlineStylesheet.text, 'not to contain', '@font-face');
+      const fallbackCss = assetGraph.findAssets({
+        fileName: { $regex: /^fallback-.*\.css/ }
+      })[0];
+      expect(
+        htmlAsset.text,
+        'to contain',
+        `<script>(function(){var el=document.createElement('link');el.href='/subfont/${
+          fallbackCss.fileName
+        }'.toString('url');el.rel='stylesheet';document.body.appendChild(el)}())</script><noscript><link rel="stylesheet" href="subfont/${
+          fallbackCss.fileName
+        }"></noscript></body></html>`
+      );
+      expect(
+        fallbackCss.text,
+        'to equal',
+        '@font-face{font-family:Open Sans;font-style:normal;font-weight:400;src:local("Open Sans Regular"),local("OpenSans-Regular"),url(/OpenSans.ttf) format("truetype")}'
+      );
+      const originalFontFaceLoadingScript = assetGraph.findAssets({
+        type: 'JavaScript',
+        isInline: true,
+        text: { $regex: /createElement/ }
+      })[0];
+      expect(
+        originalFontFaceLoadingScript.text,
+        'to contain',
+        `el.href='/subfont/${fallbackCss.fileName}'`
+      );
+      expect(assetGraph, 'to contain relation', {
+        from: originalFontFaceLoadingScript,
+        to: { type: 'Css' }
+      });
+    });
+
+    describe('when the stylesheet containing the original @font-face declarations did not contain anything else', function() {
+      it('should be removed', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/local-with-no-css-rules-in-font-face-stylesheet/'
+          )
+        });
+        const [htmlAsset] = await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+        expect(htmlAsset.text, 'not to contain', '<style>');
+      });
     });
 
     describe('with unused variants', function() {
@@ -3919,6 +3984,14 @@ describe('transforms/subsetFonts', function() {
               .and('to contain', 'Local Sans__subset')
           }
         },
+        // Self-hosted fallback loaders:
+        {
+          type: 'HtmlScript',
+          hrefType: 'inline',
+          to: { outgoingRelations: [{ type: 'JavaScriptStaticUrl' }] }
+        },
+        { type: 'HtmlNoscript', hrefType: 'inline' },
+        // Google fallback loaders:
         {
           type: 'HtmlScript',
           to: {
@@ -4158,7 +4231,6 @@ describe('transforms/subsetFonts', function() {
       expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
       const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
-
       expect(index.outgoingRelations, 'to satisfy', [
         {
           type: 'HtmlPreloadLink',
@@ -4242,40 +4314,54 @@ describe('transforms/subsetFonts', function() {
           }
         },
         {
-          type: 'HtmlStyle',
+          type: 'HtmlStyleAttribute',
           to: {
-            isLoaded: true,
-            isInline: true,
-            text: expect.it('to contain', 'icomoon'),
+            text: expect.it('to contain', 'icomoon__subset')
+          }
+        },
+        // Fallback loaders:
+        {
+          type: 'HtmlScript',
+          hrefType: 'inline',
+          to: {
             outgoingRelations: [
               {
-                href: 'icomoon.eot',
-                to: { isLoaded: true }
-              },
-              {
-                href: 'icomoon.eot?#iefix',
-                to: { isLoaded: true }
-              },
-              {
-                href: 'icomoon.woff',
-                to: { isLoaded: true }
-              },
-              {
-                href: 'icomoon.ttf',
-                to: { isLoaded: true }
-              },
-              {
-                href: 'icomoon.svg#icomoon',
-                to: { isLoaded: true }
+                type: 'JavaScriptStaticUrl',
+                to: {
+                  type: 'Css',
+                  isLoaded: true,
+                  isInline: false,
+                  text: expect.it('to contain', 'icomoon'),
+                  outgoingRelations: [
+                    {
+                      href: '/icomoon.eot',
+                      to: { isLoaded: true }
+                    },
+                    {
+                      href: '/icomoon.eot?#iefix',
+                      to: { isLoaded: true }
+                    },
+                    {
+                      href: '/icomoon.woff',
+                      to: { isLoaded: true }
+                    },
+                    {
+                      href: '/icomoon.ttf',
+                      to: { isLoaded: true }
+                    },
+                    {
+                      href: '/icomoon.svg#icomoon',
+                      to: { isLoaded: true }
+                    }
+                  ]
+                }
               }
             ]
           }
         },
         {
-          type: 'HtmlStyleAttribute',
-          to: {
-            text: expect.it('to contain', 'icomoon__subset')
-          }
+          type: 'HtmlNoscript',
+          hrefType: 'inline'
         }
       ]);
     });
