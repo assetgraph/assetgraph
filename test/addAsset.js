@@ -367,4 +367,47 @@ describe('AssetGraph#addAsset', function() {
       });
     });
   });
+
+  describe('with a canonicalRoot on the graph', function() {
+    it('should resolve a canonical URL with no path to the graph root', async function() {
+      const assetGraph = new AssetGraph({
+        root: '/myRoot',
+        canonicalRoot: 'https://my.production.domain'
+      });
+
+      const asset = await assetGraph.addAsset('https://my.production.domain');
+
+      expect(asset, 'to satisfy', {
+        url: 'file:///myRoot/'
+      });
+    });
+
+    it('should resolve a canonical URL with a `/` as path to the graph root', async function() {
+      const assetGraph = new AssetGraph({
+        root: '/myRoot',
+        canonicalRoot: 'https://my.production.domain'
+      });
+
+      const asset = await assetGraph.addAsset('https://my.production.domain/');
+
+      expect(asset, 'to satisfy', {
+        url: 'file:///myRoot/'
+      });
+    });
+
+    it('should resolve a canonical URL with a path to the graph root relative path', async function() {
+      const assetGraph = new AssetGraph({
+        root: '/myRoot',
+        canonicalRoot: 'https://my.production.domain'
+      });
+
+      const asset = await assetGraph.addAsset(
+        'https://my.production.domain/page.html'
+      );
+
+      expect(asset, 'to satisfy', {
+        url: 'file:///myRoot/page.html'
+      });
+    });
+  });
 });
