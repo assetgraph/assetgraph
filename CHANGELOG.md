@@ -1,3 +1,30 @@
+### v5.11.0 (2019-07-24)
+
+#### Pull requests
+
+- [#988](https://github.com/assetgraph/assetgraph/pull/988) subsetFonts: Allow passing in per-page font traces ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [#1002](https://github.com/assetgraph/assetgraph/pull/1002) Avoid preloading the unused variants ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [#998](https://github.com/assetgraph/assetgraph/pull/998) subsetFonts: Implement omitFallbacks:true mode ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [#1000](https://github.com/assetgraph/assetgraph/pull/1000)  subsetFonts: Consistently issue root-relative urls instead of relative ones ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [#999](https://github.com/assetgraph/assetgraph/pull/999) subsetFonts: Async load the original @font-face declarations for self-hosted fonts ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [#1039](https://github.com/assetgraph/assetgraph/pull/1039) Upgrade lodash to version 4.17.15 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1038](https://github.com/assetgraph/assetgraph/pull/1038) Upgrade eslint-plugin-mocha to version 6.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1036](https://github.com/assetgraph/assetgraph/pull/1036) Upgrade lodash to version 4.17.14 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1034](https://github.com/assetgraph/assetgraph/pull/1034) Upgrade iconv-lite to version 0.5.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1032](https://github.com/assetgraph/assetgraph/pull/1032) Upgrade eslint-config-prettier to version 6.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1029](https://github.com/assetgraph/assetgraph/pull/1029) Upgrade httpception to version 3.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1030](https://github.com/assetgraph/assetgraph/pull/1030) Upgrade magicpen-prism to version 3.0.2 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1031](https://github.com/assetgraph/assetgraph/pull/1031) Upgrade unexpected-set to version 2.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+
+#### Commits to master
+
+- [Properly detach the &lt;style&gt; when removing an empty inline stylesheet](https://github.com/assetgraph/assetgraph/commit/2a290b92e6770c70dc74ffffcbcbb0da14291c1d) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [prettier --write test\/transforms\/subsetFonts.js](https://github.com/assetgraph/assetgraph/commit/5b15f5385666cef85a9863c8793bd21f57944433) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Fix lint](https://github.com/assetgraph/assetgraph/commit/9187d398bd79af951e72494345b0f6d570773c71) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Update eslint-config-standard to version 13.0.1](https://github.com/assetgraph/assetgraph/commit/20a604747a52792fda47403433e18f803c719401) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [Revert "Try asking for fonttools 3.43.1 \(Travis picks up 3.43.0 still\)"](https://github.com/assetgraph/assetgraph/commit/0216916fe81f51ef9ac585e71fa16913f4723537) ([Andreas Lind](mailto:andreas.lind@peakon.com))
+- [+8 more](https://github.com/assetgraph/assetgraph/compare/v5.10.0...v5.11.0)
+
 ### v5.10.0 (2019-06-19)
 
 #### Pull requests
@@ -992,7 +1019,16 @@
 - [minifySvgAssetsWithSvgo: Specify a floatPrecision of 6 to avoid being too lossy](https://github.com/assetgraph/assetgraph/commit/bf5edf5b15c81a9dd7d65aab84faafe8bc813c4f) ([Andreas Lind](mailto:andreas@one.com))
 - [Switch xmldom to a liberal version range](https://github.com/assetgraph/assetgraph/commit/f1d328dae4e4c01dadd52489642f06565dc9d85c) ([Andreas Lind](mailto:andreas@one.com))
 - [Switch most dependencies over to liberal ranges.](https://github.com/assetgraph/assetgraph/commit/81fac4ef103bf742bfeced5ae9cd7367ca3fe8f2) ([Andreas Lind](mailto:andreas@one.com))
-- [+225 more](https://github.com/assetgraph/assetgraph/compare/v2.17.4...v3.0.0)
+- [+225 more](https://github.com/assetgraph/assetgraph/compare/v2.17.6...v3.0.0)
+
+### v2.17.6 (2019-06-28)
+
+- [Add missing SrcSet\#text setter](https://github.com/assetgraph/assetgraph/commit/2ef4396fe7f75802250eb545895a0f101574f508) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Allow an alternative attribute name for HtmlImageSrcSet as well](https://github.com/assetgraph/assetgraph/commit/a1fc997470ef867b0de9eb318be752ae12db3d80) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+
+### v2.17.5 (2019-06-28)
+
+- [HtmlImage: Allow an alternative attribute name](https://github.com/assetgraph/assetgraph/commit/9938991242bbb81486d96119fc30bcbdffe5023a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v2.17.4 (2017-08-02)
 
