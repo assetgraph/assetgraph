@@ -284,6 +284,17 @@ describe('assets/JavaScript', function() {
     expect(javaScript.text, 'to equal', text);
   });
 
+  it('should support async iteration syntax', function() {
+    const text = `async function foo() {
+    for await (const bar of quux) {
+    }
+}
+;`;
+    const javaScript = new AssetGraph().addAsset({ type: 'JavaScript', text });
+    javaScript.markDirty();
+    expect(javaScript.text, 'to equal', text);
+  });
+
   it('should tolerate JSX syntax', function() {
     const jsxText = 'function render() { return (<MyComponent />); }';
     const javaScript = new AssetGraph().addAsset({
