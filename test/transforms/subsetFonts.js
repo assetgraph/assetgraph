@@ -397,7 +397,7 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'Open Sans__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -405,7 +405,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -662,7 +662,7 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'Open Sans__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -670,7 +670,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -840,6 +840,52 @@ describe('transforms/subsetFonts', function() {
       await assetGraph.subsetFonts({
         inlineSubsets: false,
         inlineCss: true
+      });
+    });
+
+    describe('with `inlineSubsets: true`', function() {
+      it('should inline the font subset', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/inline-subsets/'
+          )
+        });
+        await assetGraph.loadAssets('index.html');
+        await assetGraph.populate({
+          followRelations: {
+            crossorigin: false
+          }
+        });
+
+        await assetGraph.subsetFonts({
+          inlineSubsets: true
+        });
+        const css = assetGraph.findAssets({
+          type: 'Css',
+          fileName: /fonts-/
+        })[0];
+
+        expect(css.outgoingRelations, 'to satisfy', [
+          {
+            type: 'CssFontFaceSrc',
+            hrefType: `inline`,
+            href: /^data:font\/woff2;base64/,
+            to: {
+              isInline: true,
+              contentType: `font/woff2`
+            }
+          },
+          {
+            type: 'CssFontFaceSrc',
+            hrefType: `inline`,
+            href: /^data:font\/woff;base64/,
+            to: {
+              isInline: true,
+              contentType: `font/woff`
+            }
+          }
+        ]);
       });
     });
 
@@ -1307,7 +1353,7 @@ describe('transforms/subsetFonts', function() {
               .and('to contain', 'Space Mono__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1315,7 +1361,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1323,7 +1369,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1331,7 +1377,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1339,7 +1385,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1347,7 +1393,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1827,7 +1873,7 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'Roboto__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1835,7 +1881,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1843,7 +1889,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1851,7 +1897,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -1859,7 +1905,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -1867,7 +1913,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -2131,7 +2177,7 @@ describe('transforms/subsetFonts', function() {
                 outgoingRelations: [
                   {
                     type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
+                    hrefType: 'rootRelative',
                     to: {
                       fileName: 'Open_Sans-400-8ea2a77d91.woff2',
                       isLoaded: true,
@@ -2140,7 +2186,7 @@ describe('transforms/subsetFonts', function() {
                   },
                   {
                     type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
+                    hrefType: 'rootRelative',
                     to: {
                       fileName: 'Open_Sans-400-ae6be69ecc.woff',
                       isLoaded: true,
@@ -2161,7 +2207,7 @@ describe('transforms/subsetFonts', function() {
                 outgoingRelations: [
                   {
                     type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
+                    hrefType: 'rootRelative',
                     to: {
                       fileName: 'Open_Sans-400-93dbe92b2a.woff2',
                       isLoaded: true,
@@ -2170,7 +2216,7 @@ describe('transforms/subsetFonts', function() {
                   },
                   {
                     type: 'CssFontFaceSrc',
-                    hrefType: 'relative',
+                    hrefType: 'rootRelative',
                     to: {
                       fileName: 'Open_Sans-400-c9253c6736.woff',
                       isLoaded: true,
@@ -3086,6 +3132,38 @@ describe('transforms/subsetFonts', function() {
       });
     });
 
+    it('should check for missing glyphs in any subset format', async function() {
+      httpception();
+
+      const warnSpy = sinon.spy().named('warn');
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/missing-glyphs/'
+        )
+      });
+      assetGraph.on('warn', warnSpy);
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate({
+        followRelations: {
+          crossorigin: false
+        }
+      });
+      await assetGraph.subsetFonts({
+        inlineSubsets: false,
+        formats: [`woff2`]
+      });
+
+      expect(warnSpy, 'to have calls satisfying', function() {
+        warnSpy({
+          message: expect
+            .it('to contain', 'Missing glyph fallback detected')
+            .and('to contain', '\\u{4e2d} (中)')
+            .and('to contain', '\\u{56fd} (国)')
+        });
+      });
+    });
+
     // Some fonts don't contain these, but browsers don't seem to mind, so the warnings would just be noise
     it('should not warn about tab and newline missing from the font being subset', async function() {
       httpception();
@@ -3191,9 +3269,9 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'Open Sans__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 href: expect
-                  .it('to begin with', 'Open_Sans-400-')
+                  .it('to begin with', '/subfont/Open_Sans-400-')
                   .and('to match', /-[0-9a-f]{10}\./)
                   .and('to end with', '.woff2'),
                 to: {
@@ -3201,9 +3279,9 @@ describe('transforms/subsetFonts', function() {
                 }
               },
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 href: expect
-                  .it('to begin with', 'Open_Sans-400-')
+                  .it('to begin with', '/subfont/Open_Sans-400-')
                   .and('to match', /-[0-9a-f]{10}\./)
                   .and('to end with', '.woff'),
                 to: {
@@ -3217,20 +3295,81 @@ describe('transforms/subsetFonts', function() {
           type: 'HtmlStyle',
           to: {
             isLoaded: true,
-            isInline: true,
-            text: expect.it('to contain', 'Open Sans'),
-            outgoingRelations: [
-              {
-                hrefType: 'relative',
-                href: 'OpenSans.ttf',
-                to: {
-                  isLoaded: true
-                }
-              }
-            ]
+            isInline: true
           }
-        }
+        },
+        // Fallback loaders:
+        {
+          type: 'HtmlScript',
+          hrefType: 'inline',
+          to: { outgoingRelations: [{ type: 'JavaScriptStaticUrl' }] }
+        },
+        { type: 'HtmlNoscript', hrefType: 'inline' }
       ]);
+    });
+
+    it('should add a script that async loads a CSS with the original @font-face declarations right before </body>', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/local-single/'
+        )
+      });
+      const [htmlAsset] = await assetGraph.loadAssets('index.html');
+      await assetGraph.populate();
+      await assetGraph.subsetFonts({
+        inlineSubsets: false
+      });
+      const originalInlineStylesheet = assetGraph.findAssets({
+        type: 'Css',
+        isInline: true
+      })[0];
+      // Check that the original @font-face was removed from the inline stylesheet:
+      expect(originalInlineStylesheet.text, 'not to contain', '@font-face');
+      const fallbackCss = assetGraph.findAssets({
+        fileName: { $regex: /^fallback-.*\.css/ }
+      })[0];
+      expect(
+        htmlAsset.text,
+        'to contain',
+        `<script>(function(){var el=document.createElement('link');el.href='/subfont/${fallbackCss.fileName}'.toString('url');el.rel='stylesheet';document.body.appendChild(el)}())</script><noscript><link rel="stylesheet" href="/subfont/${fallbackCss.fileName}"></noscript></body></html>`
+      );
+      expect(
+        fallbackCss.text,
+        'to equal',
+        '@font-face{font-family:Open Sans;font-style:normal;font-weight:400;src:local("Open Sans Regular"),local("OpenSans-Regular"),url(/OpenSans.ttf) format("truetype")}'
+      );
+      const originalFontFaceLoadingScript = assetGraph.findAssets({
+        type: 'JavaScript',
+        isInline: true,
+        text: { $regex: /createElement/ }
+      })[0];
+      expect(
+        originalFontFaceLoadingScript.text,
+        'to contain',
+        `el.href='/subfont/${fallbackCss.fileName}'`
+      );
+      expect(assetGraph, 'to contain relation', {
+        from: originalFontFaceLoadingScript,
+        to: { type: 'Css' }
+      });
+    });
+
+    describe('when the stylesheet containing the original @font-face declarations did not contain anything else', function() {
+      it('should be removed', async function() {
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/local-with-no-css-rules-in-font-face-stylesheet/'
+          )
+        });
+        const [htmlAsset] = await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.subsetFonts({
+          inlineSubsets: false
+        });
+        expect(htmlAsset.text, 'not to contain', '<style>');
+      });
     });
 
     describe('with unused variants', function() {
@@ -3246,24 +3385,63 @@ describe('transforms/subsetFonts', function() {
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.subsetFonts({
-          inlineSubsets: false
+          inlineSubsets: false,
+          inlineCss: true
         });
-
         const subfontCss = assetGraph.findAssets({
           type: 'Css',
-          path: '/subfont/'
+          isInline: true,
+          text: { $regex: /KFOjCnqEu92Fr1Mu51TzBic6CsI/ }
         })[0];
 
         expect(
           subfontCss.text,
           'to contain',
-          'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(../KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format("woff")'
+          "font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(/KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format('woff')"
         );
         expect(assetGraph, 'to contain relation', {
           from: subfontCss,
           to: {
             url: `${assetGraph.root}KFOjCnqEu92Fr1Mu51TzBic6CsI.woff`
           }
+        });
+      });
+
+      describe('with inlineCss:false', function() {
+        it('should put the @font-face declarations for the unused variants in the main subfont CSS rather than a separate one after the JS preload script', async function() {
+          httpception();
+
+          const assetGraph = new AssetGraph({
+            root: pathModule.resolve(
+              __dirname,
+              '../../testdata/transforms/subsetFonts/unused-variant/'
+            )
+          });
+          await assetGraph.loadAssets('index.html');
+          await assetGraph.populate();
+          await assetGraph.subsetFonts({
+            inlineSubsets: false,
+            inlineCss: false
+          });
+          const subfontCss = assetGraph.findAssets({
+            type: 'Css',
+            path: '/subfont/'
+          })[0];
+
+          expect(
+            subfontCss.text,
+            'to contain',
+            'font-family:Roboto__subset;font-stretch:normal;font-style:italic;font-weight:700;src:url(/KFOjCnqEu92Fr1Mu51TzBic6CsI.woff) format("woff")'
+          );
+          expect(assetGraph, 'to contain relation', {
+            from: subfontCss,
+            to: {
+              url: `${assetGraph.root}KFOjCnqEu92Fr1Mu51TzBic6CsI.woff`
+            }
+          });
+
+          // Make sure that the extra stylesheet doesn't get generated in inlineCss:false mode:
+          expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
         });
       });
 
@@ -3517,7 +3695,7 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'Open Sans__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   extension: '.woff2'
@@ -3525,7 +3703,7 @@ describe('transforms/subsetFonts', function() {
               },
 
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   extension: '.woff'
@@ -3782,7 +3960,7 @@ describe('transforms/subsetFonts', function() {
             outgoingRelations: [
               {
                 type: 'CssFontFaceSrc',
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   fileName: expect.it('to begin with', 'Local_Sans-400-'),
@@ -3792,7 +3970,7 @@ describe('transforms/subsetFonts', function() {
 
               {
                 type: 'CssFontFaceSrc',
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   fileName: expect.it('to begin with', 'Local_Sans-400-'),
@@ -3802,7 +3980,7 @@ describe('transforms/subsetFonts', function() {
 
               {
                 type: 'CssFontFaceSrc',
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff2',
                   fileName: expect.it('to begin with', 'Open_Sans-400-'),
@@ -3812,7 +3990,7 @@ describe('transforms/subsetFonts', function() {
 
               {
                 type: 'CssFontFaceSrc',
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 to: {
                   contentType: 'font/woff',
                   fileName: expect.it('to begin with', 'Open_Sans-400-'),
@@ -3841,6 +4019,14 @@ describe('transforms/subsetFonts', function() {
               .and('to contain', 'Local Sans__subset')
           }
         },
+        // Self-hosted fallback loaders:
+        {
+          type: 'HtmlScript',
+          hrefType: 'inline',
+          to: { outgoingRelations: [{ type: 'JavaScriptStaticUrl' }] }
+        },
+        { type: 'HtmlNoscript', hrefType: 'inline' },
+        // Google fallback loaders:
         {
           type: 'HtmlScript',
           to: {
@@ -4017,6 +4203,85 @@ describe('transforms/subsetFonts', function() {
         ]);
       });
     });
+
+    describe('with omitFallbacks:true', function() {
+      it('should remove the original @font-face declarations and references to them, and not make subsets of unused variants', async function() {
+        httpception();
+
+        const assetGraph = new AssetGraph({
+          root: pathModule.resolve(
+            __dirname,
+            '../../testdata/transforms/subsetFonts/no-fallbacks/'
+          )
+        });
+        const [htmlAsset] = await assetGraph.loadAssets('index.html');
+        await assetGraph.populate();
+        await assetGraph.subsetFonts({
+          inlineSubsets: false,
+          omitFallbacks: true
+        });
+
+        expect(htmlAsset.text, 'to contain', 'font-family: Roboto__subset;')
+          .and('to contain', 'font: 14px Roboto__subset, serif;')
+          .and('not to contain', 'font-family: Roboto;')
+          .and('not to contain', "font-family: 'Roboto';")
+          .and('not to contain', "font-family: 'font-style: italic;");
+
+        expect(assetGraph, 'to contain no asset', {
+          fileName: 'KFOmCnqEu92Fr1Mu4mxM.woff'
+        });
+
+        const cssAsset = assetGraph.findAssets({
+          fileName: { $regex: /^fonts-.*\.css$/ }
+        })[0];
+        expect(cssAsset.text, 'not to contain', 'font-style:italic');
+      });
+    });
+
+    it('should accept a Map of existing traces', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/subsetFonts/local-single/'
+        )
+      });
+      const [htmlAsset] = await assetGraph.loadAssets('index.html');
+      const tracesByAsset = new Map();
+      tracesByAsset.set(htmlAsset, [
+        {
+          text: 'Something that it does not actually say on the page',
+          props: {
+            'font-family': "'Open Sans'",
+            'font-style': 'normal',
+            'font-weight': 'bold'
+          }
+        }
+      ]);
+      await assetGraph.populate();
+      const { fontInfo } = await assetGraph.subsetFonts({
+        inlineSubsets: false,
+        tracesByAsset
+      });
+      expect(fontInfo, 'to satisfy', [
+        {
+          fontUsages: [
+            {
+              texts: ['Something that it does not actually say on the page'],
+              pageText: ' Sacdeghilmnopstuy',
+              text: ' Sacdeghilmnopstuy',
+              props: {
+                'font-stretch': 'normal',
+                'font-weight': '400',
+                'font-style': 'normal',
+                'font-family': 'Open Sans',
+                src:
+                  "local('Open Sans Regular'), local('OpenSans-Regular'), url(OpenSans.ttf) format('truetype')"
+              }
+            }
+          ]
+        }
+      ]);
+    });
   });
 
   describe('with non-truetype fonts in the mix', function() {
@@ -4080,7 +4345,6 @@ describe('transforms/subsetFonts', function() {
       expect(assetGraph, 'to contain asset', { fileName: 'index.html' });
 
       const index = assetGraph.findAssets({ fileName: 'index.html' })[0];
-
       expect(index.outgoingRelations, 'to satisfy', [
         {
           type: 'HtmlPreloadLink',
@@ -4141,9 +4405,9 @@ describe('transforms/subsetFonts', function() {
             text: expect.it('to contain', 'icomoon__subset'),
             outgoingRelations: [
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 href: expect
-                  .it('to begin with', 'icomoon-400-')
+                  .it('to begin with', '/subfont/icomoon-400-')
                   .and('to match', /-[0-9a-f]{10}\./)
                   .and('to end with', '.woff2'),
                 to: {
@@ -4151,9 +4415,9 @@ describe('transforms/subsetFonts', function() {
                 }
               },
               {
-                hrefType: 'relative',
+                hrefType: 'rootRelative',
                 href: expect
-                  .it('to begin with', 'icomoon-400-')
+                  .it('to begin with', '/subfont/icomoon-400-')
                   .and('to match', /-[0-9a-f]{10}\./)
                   .and('to end with', '.woff'),
                 to: {
@@ -4164,40 +4428,54 @@ describe('transforms/subsetFonts', function() {
           }
         },
         {
-          type: 'HtmlStyle',
+          type: 'HtmlStyleAttribute',
           to: {
-            isLoaded: true,
-            isInline: true,
-            text: expect.it('to contain', 'icomoon'),
+            text: expect.it('to contain', 'icomoon__subset')
+          }
+        },
+        // Fallback loaders:
+        {
+          type: 'HtmlScript',
+          hrefType: 'inline',
+          to: {
             outgoingRelations: [
               {
-                href: 'icomoon.eot',
-                to: { isLoaded: true }
-              },
-              {
-                href: 'icomoon.eot?#iefix',
-                to: { isLoaded: true }
-              },
-              {
-                href: 'icomoon.woff',
-                to: { isLoaded: true }
-              },
-              {
-                href: 'icomoon.ttf',
-                to: { isLoaded: true }
-              },
-              {
-                href: 'icomoon.svg#icomoon',
-                to: { isLoaded: true }
+                type: 'JavaScriptStaticUrl',
+                to: {
+                  type: 'Css',
+                  isLoaded: true,
+                  isInline: false,
+                  text: expect.it('to contain', 'icomoon'),
+                  outgoingRelations: [
+                    {
+                      href: '/icomoon.eot',
+                      to: { isLoaded: true }
+                    },
+                    {
+                      href: '/icomoon.eot?#iefix',
+                      to: { isLoaded: true }
+                    },
+                    {
+                      href: '/icomoon.woff',
+                      to: { isLoaded: true }
+                    },
+                    {
+                      href: '/icomoon.ttf',
+                      to: { isLoaded: true }
+                    },
+                    {
+                      href: '/icomoon.svg#icomoon',
+                      to: { isLoaded: true }
+                    }
+                  ]
+                }
               }
             ]
           }
         },
         {
-          type: 'HtmlStyleAttribute',
-          to: {
-            text: expect.it('to contain', 'icomoon__subset')
-          }
+          type: 'HtmlNoscript',
+          hrefType: 'inline'
         }
       ]);
     });

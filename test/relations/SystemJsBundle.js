@@ -1,5 +1,4 @@
 const pathModule = require('path');
-/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
@@ -21,9 +20,9 @@ describe('relations/SystemJsBundle', function() {
       asset.minify();
     }
 
-    assetGraph.findAssets({ fileName: 'foo.js' })[0].url = `${
-      assetGraph.root
-    }bar.js`;
+    assetGraph.findAssets({
+      fileName: 'foo.js'
+    })[0].url = `${assetGraph.root}bar.js`;
 
     expect(
       assetGraph.findAssets({ type: 'JavaScript' })[0].text,

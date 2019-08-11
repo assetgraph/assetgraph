@@ -1,4 +1,3 @@
-/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
@@ -89,6 +88,20 @@ describe('relations/HtmlImage', function() {
       htmlImage.attach('first');
       expect(htmlImage._decoding, 'to be undefined');
       expect(htmlImage.decoding, 'to equal', 'async');
+    });
+  });
+
+  describe('with an alternative attributeName', function() {
+    it('should update that attribute when the href is changed', function() {
+      initial('<!DOCTYPE html><html><body><img src="foo.png"></body></html>');
+
+      const htmlImage = htmlAsset.outgoingRelations[0];
+      htmlImage.attributeName = 'data-src';
+      htmlImage.node.removeAttribute('src');
+      htmlImage.href = 'bar.png';
+      htmlAsset.markDirty();
+
+      expect(htmlAsset.text, 'to contain', '<img data-src="bar.png">');
     });
   });
 });

@@ -1,5 +1,4 @@
 const pathModule = require('path');
-/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const sinon = require('sinon');
@@ -281,6 +280,17 @@ describe('assets/JavaScript', function() {
       ],
       sourceType: 'module'
     });
+    javaScript.markDirty();
+    expect(javaScript.text, 'to equal', text);
+  });
+
+  it('should support async iteration syntax', function() {
+    const text = `async function foo() {
+    for await (const bar of quux) {
+    }
+}
+;`;
+    const javaScript = new AssetGraph().addAsset({ type: 'JavaScript', text });
     javaScript.markDirty();
     expect(javaScript.text, 'to equal', text);
   });

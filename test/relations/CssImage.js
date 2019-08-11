@@ -1,5 +1,4 @@
 const pathModule = require('path');
-/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
@@ -16,9 +15,9 @@ describe('relations/CssImage', function() {
     await assetGraph.populate();
 
     expect(assetGraph, 'to contain relations', 'CssImage', 17);
-    assetGraph.findAssets({ fileName: 'foo.png' })[0].url = `${
-      assetGraph.root
-    }dir/foo2.png`;
+    assetGraph.findAssets({
+      fileName: 'foo.png'
+    })[0].url = `${assetGraph.root}dir/foo2.png`;
 
     expect(
       _.map(

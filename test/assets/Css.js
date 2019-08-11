@@ -1,5 +1,4 @@
 const pathModule = require('path');
-/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const sinon = require('sinon');
 const AssetGraph = require('../../lib/AssetGraph');
@@ -310,6 +309,37 @@ describe('assets/Css', function() {
         'to contain',
         'quux.png'
       );
+    });
+
+    it('should leave inline relations in a functional state', async function() {
+      const assetGraph = new AssetGraph();
+      const cssAsset = assetGraph.addAsset({
+        type: 'Css',
+        text:
+          '@font-face {\nfont-family: "OpenSans";\nsrc: url(data:font/woff2;base64,) format("woff2");\n} .foo {\n background-image: url(data:image/png;base64,);\n}'
+      });
+      await cssAsset.minify();
+
+      expect(cssAsset.outgoingRelations, 'to satisfy', [
+        {
+          type: 'CssFontFaceSrc',
+          hrefType: 'inline',
+          href: /data:font\/woff2;base64/,
+          to: {
+            contentType: 'font/woff2',
+            isInline: true
+          }
+        },
+        {
+          type: `CssImage`,
+          hrefType: 'inline',
+          href: /data:image\/png;base64/,
+          to: {
+            contentType: 'image/png',
+            isInline: true
+          }
+        }
+      ]);
     });
 
     it('should emit a warn event into errors from cssnano or postcss.parse', async function() {

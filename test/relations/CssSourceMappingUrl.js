@@ -1,5 +1,4 @@
 const pathModule = require('path');
-/* global describe, it */
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
@@ -20,9 +19,9 @@ describe('relations/CssSourceMappingUrl', function() {
     expect(assetGraph, 'to contain relation', 'CssSourceMappingUrl');
     expect(assetGraph, 'to contain relation', 'SourceMapFile');
     expect(assetGraph, 'to contain relation', 'SourceMapSource');
-    assetGraph.findAssets({ fileName: 'foo.css' })[0].url = `${
-      assetGraph.root
-    }foo/somewhereelse.css`;
+    assetGraph.findAssets({
+      fileName: 'foo.css'
+    })[0].url = `${assetGraph.root}foo/somewhereelse.css`;
 
     expect(
       assetGraph.findAssets({ fileName: 'somewhereelse.css' })[0].text,
