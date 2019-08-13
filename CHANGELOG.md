@@ -1,3 +1,17 @@
+### v5.12.0 (2019-08-13)
+
+#### Pull requests
+
+- [#1003](https://github.com/assetgraph/assetgraph/pull/1003) JavaScriptDynamicImport relation \(BLOCKED\) ([Andreas Lind](mailto:andreas.lind@peakon.com), [Andreas Lind](mailto:andreaslindpetersen@gmail.com), [Peter Müller](mailto:munter@fumle.dk))
+- [#1043](https://github.com/assetgraph/assetgraph/pull/1043) Upgrade style-loader to version 1.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+
+#### Commits to master
+
+- [Update escodegen to ^1.12.0](https://github.com/assetgraph/assetgraph/commit/26e2c855db9501803cc7d2b252a8ac8acd18fdb3) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Add config directives for vscode-mocha-test-explorer](https://github.com/assetgraph/assetgraph/commit/a947d4a413258e36887efdd1275f56fddaff9cb8) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Test that we can roundtrip for await \(... of ...\) {}](https://github.com/assetgraph/assetgraph/commit/0a2675f58357fc3a77656d5b3f88870036e1ce21) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Add missing $regex in query](https://github.com/assetgraph/assetgraph/commit/b89487630c8c353dbd3947ff0289ba3c44595ff4) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+
 ### v5.11.0 (2019-07-24)
 
 #### Pull requests
@@ -573,25 +587,18 @@
 
 ### v4.2.0 (2018-03-30)
 
-- [Ditch the annoying "enourmous" splitCssIfIeLimitIsReached test case](https://github.com/assetgraph/assetgraph/commit/ee4da295a6fccc113bc46d4b7985e1096c4681da) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Make sure that we preserve the href of relations that maintain it as a direct property](https://github.com/assetgraph/assetgraph/commit/110e907a60fb9798e520e08475e7ff6385731a60) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Asset\#\_warnIncompatibleTypes: Attach err.asset](https://github.com/assetgraph/assetgraph/commit/4f5ec437de7b99ed4f734d31d2ef5d586d3f7f6a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Remove accidentally added bogus package-lock file](https://github.com/assetgraph/assetgraph/commit/f4f06c5ddcb36d4632d8eda5d69e738e9b2588e7) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Reformat comment](https://github.com/assetgraph/assetgraph/commit/0e71e8ac073fcb400874be37a260fa964a61d87e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v4.1.1...v4.2.0)
-
-### v4.1.1 (2018-03-27)
-
 #### Pull requests
 
 - [#836](https://github.com/assetgraph/assetgraph/pull/836) Switch data-url resolving to use data-urls package ([Peter Müller](mailto:munter@fumle.dk))
 
 #### Commits to master
 
-- [Fix an occurrence of the old query syntax](https://github.com/assetgraph/assetgraph/commit/0090823c7d61fb3af6728332bf31a34fd86d15a6) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Transforms: Use destructuring for most options objects](https://github.com/assetgraph/assetgraph/commit/fbdae42ee59512401acc42a4ebea36bf6766dd53) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [addPrecacheServiceWorker: Don't follow HtmlAlternateLink](https://github.com/assetgraph/assetgraph/commit/022214a09e76a527eac1121f33fcac91f43fd0c4) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Fix tests broken by 70f01cd48](https://github.com/assetgraph/assetgraph/commit/19e6c475aabf2089fdd1852a0e097789f337023c) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Ditch the annoying "enourmous" splitCssIfIeLimitIsReached test case](https://github.com/assetgraph/assetgraph/commit/ee4da295a6fccc113bc46d4b7985e1096c4681da) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Make sure that we preserve the href of relations that maintain it as a direct property](https://github.com/assetgraph/assetgraph/commit/110e907a60fb9798e520e08475e7ff6385731a60) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Asset\#\_warnIncompatibleTypes: Attach err.asset](https://github.com/assetgraph/assetgraph/commit/4f5ec437de7b99ed4f734d31d2ef5d586d3f7f6a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Remove accidentally added bogus package-lock file](https://github.com/assetgraph/assetgraph/commit/f4f06c5ddcb36d4632d8eda5d69e738e9b2588e7) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Reformat comment](https://github.com/assetgraph/assetgraph/commit/0e71e8ac073fcb400874be37a260fa964a61d87e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [+7 more](https://github.com/assetgraph/assetgraph/compare/v4.1.0...v4.2.0)
 
 ### v4.1.0 (2018-03-24)
 
