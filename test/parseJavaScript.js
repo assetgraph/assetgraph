@@ -1,4 +1,3 @@
-const matchSourceExpression = require('../lib/matchSourceExpression');
 const expect = require('./unexpected-with-plugins');
 
 const parse = require('../lib/parseJavaScript');
