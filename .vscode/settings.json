@@ -1,0 +1,4 @@
+{
+  "mochaExplorer.pruneFiles": true,
+  "mochaExplorer.mochaPath": "node_modules/mocha"
+}
