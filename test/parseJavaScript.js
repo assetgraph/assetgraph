@@ -88,7 +88,10 @@ describe('parseJavascript', () => {
 
   it('should parse dynamic imports', () => {
     expect(
-      parse('const foo = import("./foo.js")', { sourceType: 'module' }),
+      parse('const foo = import("./foo.js")', {
+        sourceType: 'module',
+        ecmaVersion: 11
+      }),
       'to satisfy',
       {
         type: 'Program',
@@ -99,16 +102,11 @@ describe('parseJavascript', () => {
               {
                 type: 'VariableDeclarator',
                 init: {
-                  type: 'CallExpression',
-                  callee: {
-                    type: 'Import'
-                  },
-                  arguments: [
-                    {
-                      type: 'Literal',
-                      value: './foo.js'
-                    }
-                  ]
+                  type: 'ImportExpression',
+                  source: {
+                    type: 'Literal',
+                    value: './foo.js'
+                  }
                 }
               }
             ]
