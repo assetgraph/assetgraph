@@ -957,22 +957,21 @@ describe('relations/HtmlRelation', function() {
       assetGraph.addAsset({
         type: 'Svg',
         url: 'https://example.com/image.svg',
-        text: `
-                    <?xml version="1.0" encoding="UTF-8"?>
-                    <svg width="82px" height="90px" viewBox="0 0 82 90" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                        <g id="heart">
-                            <path d="M32,11.2c0,2.7-1.2,5.1-3,6.8l0,0L19,28c-1,1-2,2-3,2s-2-1-3-2L3,18c-1.9-1.7-3-4.1-3-6.8C0,6.1,4.1,2,9.2,2
-                            c2.7,0,5.1,1.2,6.8,3c1.7-1.9,4.1-3,6.8-3C27.9,1.9,32,6.1,32,11.2z"/>
-                        </g>
-                    </svg>
-                `
+        text: `<?xml version="1.0" encoding="UTF-8"?>
+          <svg width="82px" height="90px" viewBox="0 0 82 90" version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <g id="heart">
+                  <path d="M32,11.2c0,2.7-1.2,5.1-3,6.8l0,0L19,28c-1,1-2,2-3,2s-2-1-3-2L3,18c-1.9-1.7-3-4.1-3-6.8C0,6.1,4.1,2,9.2,2
+                  c2.7,0,5.1,1.2,6.8,3c1.7-1.9,4.1-3,6.8-3C27.9,1.9,32,6.1,32,11.2z"/>
+              </g>
+          </svg>
+        `
       });
 
       htmlAsset.outgoingRelations[0].fragment = '#yadda';
 
       htmlAsset.outgoingRelations[0].hrefType = 'inline';
 
-      expect(htmlAsset.text, 'to contain', 'AgICAgIA==#yadda">');
+      expect(htmlAsset.text, 'to contain', 'AgICAgICA=#yadda">');
     });
   });
 });
