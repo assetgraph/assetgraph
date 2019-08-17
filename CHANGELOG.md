@@ -1,4 +1,9 @@
-### v5.12.0 (2019-08-13)
+### v6.0.0 (2019-08-17)
+
+- [#1035](https://github.com/assetgraph/assetgraph/pull/1035) Use jsdom instead of xmldom for XML assets ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [#1041](https://github.com/assetgraph/assetgraph/pull/1041) Remove subsetFonts ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+
+### v5.12.0 (2019-08-14)
 
 #### Pull requests
 
