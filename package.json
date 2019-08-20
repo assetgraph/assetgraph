@@ -67,7 +67,7 @@
     "docdash": "^1.0.0",
     "eslint": "^6.0.0",
     "eslint-config-prettier": "^6.0.0",
-    "eslint-config-standard": "^13.0.1",
+    "eslint-config-standard": "^14.0.0",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-mocha": "^6.0.0",
     "eslint-plugin-node": "^9.0.1",

@@ -36,8 +36,7 @@ describe('transforms/setSourceMapRoot', function() {
     expect(assetGraph, 'to contain asset', 'SourceMap');
     expect(
       assetGraph.findAssets({ type: 'SourceMap' })[0].parseTree.sourceRoot,
-      'to equal',
-      void 0
+      'to be undefined'
     );
   });
 
