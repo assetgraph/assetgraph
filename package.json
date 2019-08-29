@@ -33,6 +33,7 @@
     "esanimate": "^1.1.0",
     "escodegen": "^1.12.0",
     "espurify": "^2.0.1",
+    "esquery": "^1.0.1",
     "estraverse": "^4.3.0",
     "estraverse-fb": "^1.3.2",
     "gettemporaryfilepath": "^1.0.0",
