@@ -32,6 +32,7 @@
     "domspace": "^1.2.1",
     "esanimate": "^1.1.0",
     "escodegen": "^1.12.0",
+    "esdispatch": "0.0.3",
     "espurify": "^2.0.1",
     "esquery": "^1.0.1",
     "estraverse": "^4.3.0",
