@@ -1,7 +1,6 @@
 const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
-const sinon = require('sinon');
 
 describe('relations/HtmlApplicationManifest', function() {
   it('should handle a test case with an existing <link rel="manifest">', async function() {
@@ -83,27 +82,5 @@ describe('relations/HtmlApplicationManifest', function() {
     );
 
     expect(assetGraph, 'to contain relations', 'HtmlApplicationManifest', 2);
-  });
-
-  it('should warn when there are multiple application manifests linked from the same document', async function() {
-    const warnSpy = sinon.spy().named('warn');
-
-    await new AssetGraph({
-      root: pathModule.resolve(
-        __dirname,
-        '../../../testdata/relations/Html/HtmlApplicationManifest/'
-      )
-    })
-      .on('warn', warnSpy)
-      .loadAssets({
-        type: 'Html',
-        text:
-          '<html><head><link rel="manifest" href="manifest.json"><link rel="manifest" href="manifest.json"></head><body></body></html>'
-      })
-      .populate();
-
-    expect(warnSpy, 'to have calls satisfying', () => {
-      warnSpy({ message: /^Multiple ApplicationManifest relations/ });
-    });
   });
 });
