@@ -53,7 +53,7 @@
     "sift": "^7.0.1",
     "source-map": "~0.6.1",
     "sw-precache": "^5.2.0",
-    "teepee": "^2.31.1",
+    "teepee": "^3.0.0",
     "terser": "^4.0.0",
     "urltools": "^0.4.1"
   },
