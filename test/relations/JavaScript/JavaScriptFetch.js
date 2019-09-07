@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/JavaScriptFetch', function() {
   it('should not populate dynamic endpoints', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptFetch'
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
       )
     });
     await assetGraph.loadAssets('dynamic.js');
@@ -21,7 +21,7 @@ describe('relations/JavaScriptFetch', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptFetch'
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
       )
     });
     await assetGraph.loadAssets('fetch.js');
@@ -35,7 +35,7 @@ describe('relations/JavaScriptFetch', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptFetch'
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
       )
     });
     await assetGraph.loadAssets('windowFetch.js');
@@ -49,7 +49,7 @@ describe('relations/JavaScriptFetch', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptFetch'
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
       )
     });
     await assetGraph.loadAssets('sequenceFetch.js');
@@ -63,7 +63,7 @@ describe('relations/JavaScriptFetch', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptFetch'
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
       )
     });
     await assetGraph.loadAssets('fetch.js');
@@ -81,7 +81,7 @@ describe('relations/JavaScriptFetch', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptFetch'
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
       )
     });
     await assetGraph.loadAssets('fetch.js');
@@ -112,7 +112,7 @@ describe('relations/JavaScriptFetch', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptFetch'
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
       )
     });
     await assetGraph.loadAssets('fetch.js');
@@ -133,7 +133,7 @@ describe('relations/JavaScriptFetch', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptFetch'
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
       )
     });
     await assetGraph.loadAssets('a.js');
@@ -156,7 +156,7 @@ describe('relations/JavaScriptFetch', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptFetch'
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
       )
     });
     await assetGraph.loadAssets('a.js');

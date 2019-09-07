@@ -1,5 +1,5 @@
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 const pathModule = require('path');
 
 describe('JavaScriptDynamicImport', function() {
@@ -39,7 +39,7 @@ describe('JavaScriptDynamicImport', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptDynamicImport/relative/'
+        '../../../testdata/relations/JavaScript/JavaScriptDynamicImport/relative/'
       )
     });
     const [javaScript] = await assetGraph.loadAssets('index.js');

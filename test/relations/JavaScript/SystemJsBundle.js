@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/SystemJsBundle', function() {
   it('should handle a test case with a JavaScript asset that has a #SystemJsBundle directive', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/SystemJsBundle/'
+        '../../../testdata/relations/JavaScript/SystemJsBundle/'
       )
     });
     await assetGraph.loadAssets('index.html').populate();

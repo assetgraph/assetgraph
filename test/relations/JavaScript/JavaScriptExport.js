@@ -1,5 +1,5 @@
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 const pathModule = require('path');
 
 describe('JavaScriptExport', function() {
@@ -85,7 +85,7 @@ describe('JavaScriptExport', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptExport/relative/'
+        '../../../testdata/relations/JavaScript/JavaScriptExport/relative/'
       )
     });
     const [javaScript] = await assetGraph.loadAssets('index.js');

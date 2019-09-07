@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('JavaScriptWebWorker', function() {
   it('should pick up new Worker(...) as a relation', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptWebWorker/simple/'
+        '../../../testdata/relations/JavaScript/JavaScriptWebWorker/simple/'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -20,7 +20,7 @@ describe('JavaScriptWebWorker', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptWebWorker/simple/'
+        '../../../testdata/relations/JavaScript/JavaScriptWebWorker/simple/'
       )
     });
     await assetGraph.loadAssets('index.html');
