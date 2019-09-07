@@ -39,7 +39,6 @@
     "html-minifier": "^4.0.0",
     "imageinfo": "^1.0.4",
     "jsdom": "^15.0.0",
-    "lines-and-columns": "^1.1.6",
     "lodash": "4.17.15",
     "memoizesync": "1.1.1",
     "mkdirp": "^0.5.1",
