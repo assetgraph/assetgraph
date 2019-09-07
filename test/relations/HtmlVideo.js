@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlVideo', function() {
@@ -21,13 +20,13 @@ describe('relations/HtmlVideo', function() {
       relation.hrefType = 'relative';
     });
 
-    expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
-      '../movie1.mp4',
-      '../movie1.jpg',
-      '../movie2.png',
-      '../movie2.mov',
-      '../movie2.wmv',
-      '../movie2.flc'
+    expect(assetGraph.findRelations(), 'to satisfy', [
+      { href: '../movie1.mp4' },
+      { href: '../movie1.jpg' },
+      { href: '../movie2.png' },
+      { href: '../movie2.mov' },
+      { href: '../movie2.wmv' },
+      { href: '../movie2.flc' }
     ]);
   });
 });

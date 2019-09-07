@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlPictureSource test', function() {
@@ -21,9 +20,9 @@ describe('relations/HtmlPictureSource test', function() {
     assetGraph.findRelations().forEach(function(relation) {
       relation.hrefType = 'relative';
     });
-    expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
-      '../image.png',
-      '../otherImage.jpg'
+    expect(assetGraph.findRelations(), 'to satisfy', [
+      { href: '../image.png' },
+      { href: '../otherImage.jpg' }
     ]);
   });
 });
