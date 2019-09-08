@@ -14,6 +14,8 @@ describe('relations/HtmlSvgIsland', function() {
     await assetGraph.populate();
 
     expect(assetGraph, 'to contain relation', 'HtmlSvgIsland');
+    expect(assetGraph, 'to contain relation', 'SvgStyle');
+    expect(assetGraph, 'to contain no relation', 'HtmlStyle');
     expect(assetGraph, 'to contain assets', 'Svg', 2);
     expect(assetGraph, 'to contain asset', { type: 'Svg', isInline: true });
     assetGraph.findAssets({ fileName: 'gaussianBlur.svg' })[0].fileName =
