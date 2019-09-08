@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlAudio', function() {
