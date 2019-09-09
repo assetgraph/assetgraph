@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/CssAlphaImageLoader', function() {
@@ -21,9 +20,13 @@ describe('relations/CssAlphaImageLoader', function() {
     })[0].url = `${assetGraph.root}images/quux.png`;
 
     expect(
-      _.map(assetGraph.findRelations({ type: 'CssAlphaImageLoader' }), 'href'),
-      'to equal',
-      ['/images/quux.png', '/bar.png', '/images/quux.png']
+      assetGraph.findRelations({ type: 'CssAlphaImageLoader' }),
+      'to satisfy',
+      [
+        { href: '/images/quux.png' },
+        { href: '/bar.png' },
+        { href: '/images/quux.png' }
+      ]
     );
     const cssRules = assetGraph.findAssets({ type: 'Css' })[0].parseTree.nodes;
     expect(

@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlAudio', function() {
@@ -22,11 +21,11 @@ describe('relations/HtmlAudio', function() {
       relation.hrefType = 'relative';
     });
 
-    expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
-      '../sound.mp3',
-      '../sound.wav',
-      '../sound.wma',
-      '../sound.flac'
+    expect(assetGraph.findRelations(), 'to satisfy', [
+      { href: '../sound.mp3' },
+      { href: '../sound.wav' },
+      { href: '../sound.wma' },
+      { href: '../sound.flac' }
     ]);
   });
 });

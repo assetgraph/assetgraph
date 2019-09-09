@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/HtmlScript', function() {
@@ -39,11 +38,11 @@ describe('relations/HtmlScript', function() {
     await assetGraph.loadAssets('index.html').populate();
 
     expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
-    expect(_.map(assetGraph.findRelations(), 'href'), 'to equal', [
-      'externalNoType.js',
-      undefined,
-      'externalWithTypeTextJavaScript.js',
-      undefined
+    expect(assetGraph.findRelations(), 'to satisfy', [
+      { href: 'externalNoType.js' },
+      { href: undefined },
+      { href: 'externalWithTypeTextJavaScript.js' },
+      { href: undefined }
     ]);
   });
 

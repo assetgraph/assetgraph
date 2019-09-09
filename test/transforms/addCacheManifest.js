@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const urlTools = require('urltools');
 const AssetGraph = require('../../lib/AssetGraph');
 const sinon = require('sinon');
@@ -102,12 +101,13 @@ describe('transforms/addCacheManifest', function() {
 
     expect(assetGraph, 'to contain asset', 'CacheManifest');
     expect(
-      _.map(
-        assetGraph.findRelations({ from: { type: 'CacheManifest' } }),
-        'href'
-      ),
-      'to equal',
-      ['foo.png', 'style.css', 'modernBrowsers.js']
+      assetGraph.findRelations({ from: { type: 'CacheManifest' } }),
+      'to satisfy',
+      [
+        { href: 'foo.png' },
+        { href: 'style.css' },
+        { href: 'modernBrowsers.js' }
+      ]
     );
   });
 
