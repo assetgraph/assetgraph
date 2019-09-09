@@ -1,11 +1,14 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/SvgStyle', function() {
   it('should handle a test case with inline <style> elements', async function() {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/relations/SvgStyle/')
+      root: pathModule.resolve(
+        __dirname,
+        '../../../testdata/relations/Svg/SvgStyle/'
+      )
     });
     await assetGraph.loadAssets('kiwi.svg');
     await assetGraph.populate();

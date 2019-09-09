@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/SvgScript', async function() {
   it('should handle a test case with an inline <script> element', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/SvgScript/xlinkhref/'
+        '../../../testdata/relations/Svg/SvgScript/xlinkhref/'
       )
     });
     await assetGraph.loadAssets('logo.svg');
@@ -24,7 +24,7 @@ describe('relations/SvgScript', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/SvgScript/href/'
+        '../../../testdata/relations/Svg/SvgScript/href/'
       )
     });
     await assetGraph.loadAssets('logo-external.svg');
@@ -47,7 +47,7 @@ describe('relations/SvgScript', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/SvgScript/xlinkhref/'
+        '../../../testdata/relations/Svg/SvgScript/xlinkhref/'
       )
     });
     await assetGraph.loadAssets('logo-external.svg');
@@ -70,7 +70,7 @@ describe('relations/SvgScript', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/SvgScript/xlinkhref/'
+        '../../../testdata/relations/Svg/SvgScript/xlinkhref/'
       )
     });
     await assetGraph.loadAssets('logo.svg');
@@ -88,7 +88,7 @@ describe('relations/SvgScript', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/SvgScript/xlinkhref/'
+        '../../../testdata/relations/Svg/SvgScript/xlinkhref/'
       )
     });
     await assetGraph.loadAssets('logo-external.svg');
@@ -106,7 +106,7 @@ describe('relations/SvgScript', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/SvgScript/xlinkhref/'
+        '../../../testdata/relations/Svg/SvgScript/xlinkhref/'
       )
     });
     await assetGraph.loadAssets('logo-external.svg');

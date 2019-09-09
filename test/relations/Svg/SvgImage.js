@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/SvgImage', function() {
   it('should handle a test case with <image xlink:href=...> referencing an external file', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/SvgImage/xlinkhref'
+        '../../../testdata/relations/Svg/SvgImage/xlinkhref'
       )
     });
     await assetGraph.loadAssets('image.svg');
@@ -28,7 +28,7 @@ describe('relations/SvgImage', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/SvgImage/href/'
+        '../../../testdata/relations/Svg/SvgImage/href/'
       )
     });
     await assetGraph.loadAssets('image.svg');
