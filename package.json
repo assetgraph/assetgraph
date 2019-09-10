@@ -83,6 +83,7 @@
     "proxyquire": "^2.0.1",
     "sinon": "^7.0.0",
     "svgo": "^1.0.5",
+    "typescript-temporary-fork-for-jsdoc": "^3.6.0-insiders.20190802",
     "uglify-js": "^3.4.9",
     "unexpected": "^11.0.0-1",
     "unexpected-assetgraph": "^1.1.1",
@@ -94,6 +95,7 @@
   "main": "lib/AssetGraph.js",
   "scripts": {
     "lint": "eslint . && prettier --check '**/*.js'",
+    "types": "tsc -b tsconfig.json",
     "test": "mocha",
     "ci": "npm run coverage && npm run lint",
     "docs": "jsdoc -c jsdoc.json",
