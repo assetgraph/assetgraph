@@ -12,12 +12,10 @@
     "includePattern": ".js$"
   },
 
-  "plugins": [
-      "plugins/markdown"
-  ],
+  "plugins": ["plugins/markdown", "jsdoc-plugins/remove-imports"],
 
   "docdash": {
-      "static": true,
-      "sort": true
+    "static": true,
+    "sort": true
   }
 }
