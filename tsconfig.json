@@ -17,6 +17,6 @@
     "types": []
   },
 
-  "include": ["lib"],
+  "include": ["lib/**/*.js"],
   "exclude": ["node_modules", "package.json"]
 }
