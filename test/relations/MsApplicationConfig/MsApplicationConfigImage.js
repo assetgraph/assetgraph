@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/MsApplicationConfigImage', async function() {
   it('should handle a test case with an existing <TileImage/> element', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/MsApplicationConfigImage/'
+        '../../../testdata/relations/MsApplicationConfig/MsApplicationConfigImage/'
       )
     });
     await assetGraph.loadAssets({
@@ -30,7 +30,7 @@ describe('relations/MsApplicationConfigImage', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/MsApplicationConfigImage/'
+        '../../../testdata/relations/MsApplicationConfig/MsApplicationConfigImage/'
       )
     });
     await assetGraph.loadAssets({
@@ -56,7 +56,7 @@ describe('relations/MsApplicationConfigImage', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/MsApplicationConfigImage/'
+        '../../../testdata/relations/MsApplicationConfig/MsApplicationConfigImage/'
       )
     });
     await assetGraph.loadAssets({
@@ -99,12 +99,12 @@ describe('relations/MsApplicationConfigImage', async function() {
     });
   });
 
-  describe('when programmatically detataching a relation', async function() {
+  describe('when programmatically detaching a relation', async function() {
     it('it should remove the relation and clean up', async function() {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
-          '../../testdata/relations/MsApplicationConfigImage/'
+          '../../../testdata/relations/MsApplicationConfig/MsApplicationConfigImage/'
         )
       });
       await assetGraph.loadAssets({

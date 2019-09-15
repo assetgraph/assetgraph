@@ -1,6 +1,6 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 const sinon = require('sinon');
 
 describe('relations/MsApplicationConfigPollingUri', function() {
@@ -9,7 +9,7 @@ describe('relations/MsApplicationConfigPollingUri', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/MsApplicationConfigPollingUri/'
+        '../../../testdata/relations/MsApplicationConfig/MsApplicationConfigPollingUri/'
       )
     });
     await assetGraph
@@ -36,7 +36,7 @@ describe('relations/MsApplicationConfigPollingUri', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/MsApplicationConfigPollingUri/'
+        '../../../testdata/relations/MsApplicationConfig/MsApplicationConfigPollingUri/'
       )
     });
     await assetGraph.on('warn', warnSpy);
@@ -122,7 +122,7 @@ describe('relations/MsApplicationConfigPollingUri', function() {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
-          '../../testdata/relations/MsApplicationConfigPollingUri/'
+          '../../../testdata/relations/MsApplicationConfig/MsApplicationConfigPollingUri/'
         )
       });
       await assetGraph.on('warn', warnSpy);
