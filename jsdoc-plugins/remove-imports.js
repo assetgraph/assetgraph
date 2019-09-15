@@ -4,7 +4,10 @@
  */
 exports.handlers = {
   jsdocCommentFound: function(e) {
-    if (e.comment.includes('@typedef {import(')) {
+    if (
+      e.comment.includes('@typedef {import(') ||
+      e.comment.includes('@type {typeof import(')
+    ) {
       e.comment = '';
     }
   }
