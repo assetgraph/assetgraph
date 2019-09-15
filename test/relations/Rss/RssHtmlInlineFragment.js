@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/XmlHtmlInlineFragment', function() {
+describe('relations/RssHtmlInlineFragment', function() {
   it('should handle a test case with an RSS feed with a <description> tag', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/XmlHtmlInlineFragment/'
+        '../../../testdata/relations/Rss/RssHtmlInlineFragment/'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -17,11 +17,11 @@ describe('relations/XmlHtmlInlineFragment', function() {
     expect(assetGraph, 'to contain assets', 'Html', 2);
     expect(assetGraph, 'to contain assets', 'Rss', 1);
     expect(assetGraph, 'to contain assets', 'Png', 1);
-    expect(assetGraph, 'to contain relation', 'XmlHtmlInlineFragment');
+    expect(assetGraph, 'to contain relation', 'RssHtmlInlineFragment');
 
     const rss = assetGraph.findAssets({ type: 'Rss' })[0];
     const fragmentRelation = assetGraph.findRelations({
-      type: 'XmlHtmlInlineFragment'
+      type: 'RssHtmlInlineFragment'
     })[0];
 
     expect(
