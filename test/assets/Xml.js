@@ -68,4 +68,21 @@ describe('assets/Xml', function() {
       });
     });
   });
+
+  describe('#minify', function() {
+    it('should include the XML declaration when reserializing', function() {
+      const xmlAsset = new AssetGraph().addAsset({
+        type: 'Xml',
+        url: 'https://example.com/',
+        text:
+          '<?xml version="1.0" encoding="UTF-8"?>\n<doc>  <foo>  </foo>  </doc>'
+      });
+      xmlAsset.minify();
+      expect(
+        xmlAsset.text,
+        'to equal',
+        '<?xml version="1.0" encoding="UTF-8"?>\n<doc><foo/></doc>'
+      );
+    });
+  });
 });
