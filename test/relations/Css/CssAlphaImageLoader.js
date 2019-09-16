@@ -1,14 +1,14 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
+const expect = require('../../unexpected-with-plugins');
 const _ = require('lodash');
-const AssetGraph = require('../../lib/AssetGraph');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/CssAlphaImageLoader', function() {
   it('should handle a simple test case', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/CssAlphaImageLoader/'
+        '../../../testdata/relations/Css/CssAlphaImageLoader/'
       )
     });
     await assetGraph.loadAssets('index.html');

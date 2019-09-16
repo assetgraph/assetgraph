@@ -1,6 +1,6 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 const urlTools = require('urltools');
 
 describe('relations/CssBehavior', function() {
@@ -8,7 +8,7 @@ describe('relations/CssBehavior', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/CssBehavior/'
+        '../../../testdata/relations/Css/CssBehavior/'
       )
     });
     await assetGraph.loadAssets('index.html');

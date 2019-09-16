@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/CssSourceMappingUrl', function() {
   it('should handle a test case with a Css asset that has @sourceMappingURL directive', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/CssSourceMappingUrl/existingExternalSourceMap/'
+        '../../../testdata/relations/Css/CssSourceMappingUrl/existingExternalSourceMap/'
       )
     });
     await assetGraph.loadAssets('index.html', 'someMore.css').populate();

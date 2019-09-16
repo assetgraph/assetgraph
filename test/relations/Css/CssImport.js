@@ -1,11 +1,14 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/CssImport', function() {
   it('should handle a simple test case', async function() {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/relations/CssImport/')
+      root: pathModule.resolve(
+        __dirname,
+        '../../../testdata/relations/Css/CssImport/'
+      )
     });
     await assetGraph.loadAssets('index.css');
     await assetGraph.populate();

@@ -1,14 +1,14 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
+const expect = require('../../unexpected-with-plugins');
 const _ = require('lodash');
-const AssetGraph = require('../../lib/AssetGraph');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/CssImage', function() {
   it('should handle a test case with a bunch of different CssImage relations', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/CssImage/combo/'
+        '../../../testdata/relations/Css/CssImage/combo/'
       )
     });
     await assetGraph.loadAssets('index.css');
@@ -59,7 +59,7 @@ describe('relations/CssImage', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/CssImage/mouseCursors/'
+        '../../../testdata/relations/Css/CssImage/mouseCursors/'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -76,7 +76,7 @@ describe('relations/CssImage', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/CssImage/mediaRule/'
+        '../../../testdata/relations/Css/CssImage/mediaRule/'
       )
     });
     await assetGraph.loadAssets('relationInMediaRule.css');
@@ -89,7 +89,7 @@ describe('relations/CssImage', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/CssImage/filter/'
+        '../../../testdata/relations/Css/CssImage/filter/'
       )
     });
     await assetGraph.loadAssets('index.css');
@@ -144,7 +144,7 @@ describe('relations/CssImage', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/CssImage/maskImage/'
+        '../../../testdata/relations/Css/CssImage/maskImage/'
       )
     });
     await assetGraph.loadAssets('index.html');

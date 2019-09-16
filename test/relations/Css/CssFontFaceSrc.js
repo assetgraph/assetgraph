@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/CssFontFaceSrc', function() {
   it('should handle a simple test case', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/CssFontFaceSrc/simple/'
+        '../../../testdata/relations/Css/CssFontFaceSrc/simple/'
       )
     });
     await assetGraph.loadAssets('index.css');
@@ -35,7 +35,7 @@ describe('relations/CssFontFaceSrc', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/CssFontFaceSrc/multipleSrc/'
+        '../../../testdata/relations/Css/CssFontFaceSrc/multipleSrc/'
       )
     });
     await assetGraph.loadAssets('index.css');

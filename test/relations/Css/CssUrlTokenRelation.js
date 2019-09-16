@@ -1,5 +1,5 @@
-const unexpected = require('../unexpected-with-plugins');
-const CssUrlTokenRelation = require('../../lib/relations/CssUrlTokenRelation');
+const unexpected = require('../../unexpected-with-plugins');
+const CssUrlTokenRelation = require('../../../lib/relations/Css/CssUrlTokenRelation');
 
 describe('CssUrlTokenRelation', function() {
   describe('#findUrlsInPropertyValue', function() {
