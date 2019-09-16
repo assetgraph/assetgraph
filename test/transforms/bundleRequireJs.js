@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const fs = require('fs');
 const AssetGraph = require('../../lib/AssetGraph');
 const mozilla = require('source-map');
@@ -434,26 +433,20 @@ describe('transforms/bundleRequireJs', function() {
     await assetGraph.bundleRequireJs({ type: 'Html' });
 
     expect(
-      _.map(
-        assetGraph.findRelations({
-          type: 'HtmlStyle',
-          from: { fileName: 'index.html' }
-        }),
-        'href'
-      ),
-      'to equal',
-      ['main-bundle.css']
+      assetGraph.findRelations({
+        type: 'HtmlStyle',
+        from: { fileName: 'index.html' }
+      }),
+      'to satisfy',
+      [{ href: 'main-bundle.css' }]
     );
     expect(
-      _.map(
-        assetGraph.findRelations({
-          type: 'HtmlStyle',
-          from: { fileName: 'index2.html' }
-        }),
-        'href'
-      ),
-      'to equal',
-      ['main2-bundle.css']
+      assetGraph.findRelations({
+        type: 'HtmlStyle',
+        from: { fileName: 'index2.html' }
+      }),
+      'to satisfy',
+      [{ href: 'main2-bundle.css' }]
     );
   });
 
@@ -510,11 +503,9 @@ describe('transforms/bundleRequireJs', function() {
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
-    expect(
-      _.map(assetGraph.findAssets({ type: 'JavaScript' }), 'url').sort(),
-      'to equal',
-      [`${assetGraph.root}require.js`]
-    );
+    expect(assetGraph.findAssets({ type: 'JavaScript' }), 'to satisfy', [
+      { fileName: 'require.js' }
+    ]);
 
     await assetGraph.bundleRequireJs({ type: 'Html' });
 
@@ -542,11 +533,9 @@ describe('transforms/bundleRequireJs', function() {
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
-    expect(
-      _.map(assetGraph.findAssets({ type: 'JavaScript' }), 'url').sort(),
-      'to equal',
-      [`${assetGraph.root}require.js`]
-    );
+    expect(assetGraph.findAssets({ type: 'JavaScript' }), 'to satisfy', [
+      { fileName: 'require.js' }
+    ]);
 
     await assetGraph.bundleRequireJs({ type: 'Html' });
 
@@ -585,12 +574,9 @@ describe('transforms/bundleRequireJs', function() {
     await assetGraph.populate();
 
     expect(
-      _.map(
-        assetGraph.findAssets({ type: 'JavaScript', isInline: false }),
-        'url'
-      ).sort(),
-      'to equal',
-      [`${assetGraph.root}require.js`]
+      assetGraph.findAssets({ type: 'JavaScript', isInline: false }),
+      'to satisfy',
+      [{ fileName: 'require.js' }]
     );
 
     await assetGraph.bundleRequireJs();

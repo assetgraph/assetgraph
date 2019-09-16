@@ -1,6 +1,5 @@
 const AssetGraph = require('../../lib/AssetGraph');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const pathModule = require('path');
 const httpception = require('httpception');
 
@@ -28,31 +27,23 @@ describe('relations/Relation', function() {
         6
       );
 
-      expect(
-        _.map(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'href'),
-        'to satisfy',
-        [
-          'relative.html',
-          '/rootRelative.html',
-          'http://canonical.com/canonical.html',
-          '//example.com/protocolRelative.html',
-          'http://example.com/absolute.html',
-          /^data:/
-        ]
-      );
+      expect(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'to satisfy', [
+        { href: 'relative.html' },
+        { href: '/rootRelative.html' },
+        { href: 'http://canonical.com/canonical.html' },
+        { href: '//example.com/protocolRelative.html' },
+        { href: 'http://example.com/absolute.html' },
+        { href: /^data:/ }
+      ]);
 
-      expect(
-        _.map(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'hrefType'),
-        'to equal',
-        [
-          'relative',
-          'rootRelative',
-          'absolute',
-          'protocolRelative',
-          'absolute',
-          'inline'
-        ]
-      );
+      expect(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'to satisfy', [
+        { hrefType: 'relative' },
+        { hrefType: 'rootRelative' },
+        { hrefType: 'absolute' },
+        { hrefType: 'protocolRelative' },
+        { hrefType: 'absolute' },
+        { hrefType: 'inline' }
+      ]);
 
       assetGraph
         .findRelations({ type: 'HtmlAnchor' })
@@ -65,18 +56,14 @@ describe('relations/Relation', function() {
           }
         });
 
-      expect(
-        _.map(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'href'),
-        'to equal',
-        [
-          'relative2.html',
-          '/rootRelative2.html',
-          'http://canonical.com/canonical2.html',
-          '//example.com/protocolRelative2.html',
-          'http://example.com/absolute2.html',
-          'https://example.com/noLongerInline.html'
-        ]
-      );
+      expect(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'to satisfy', [
+        { href: 'relative2.html' },
+        { href: '/rootRelative2.html' },
+        { href: 'http://canonical.com/canonical2.html' },
+        { href: '//example.com/protocolRelative2.html' },
+        { href: 'http://example.com/absolute2.html' },
+        { href: 'https://example.com/noLongerInline.html' }
+      ]);
     });
 
     it('should handle a test case with urls with different hrefTypes, where hrefs have leading white space', async function() {
@@ -107,18 +94,14 @@ describe('relations/Relation', function() {
           asset.text = asset.text.replace(/href="/g, 'href=" ');
         });
 
-      expect(
-        _.map(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'hrefType'),
-        'to equal',
-        [
-          'relative',
-          'rootRelative',
-          'absolute',
-          'protocolRelative',
-          'absolute',
-          'inline'
-        ]
-      );
+      expect(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'to satisfy', [
+        { hrefType: 'relative' },
+        { hrefType: 'rootRelative' },
+        { hrefType: 'absolute' },
+        { hrefType: 'protocolRelative' },
+        { hrefType: 'absolute' },
+        { hrefType: 'inline' }
+      ]);
     });
 
     it('should inline a relation when its hrefType is changed to inline', async function() {
@@ -146,18 +129,14 @@ describe('relations/Relation', function() {
         '<a data-theone="true" href="data:'
       );
 
-      expect(
-        _.map(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'hrefType'),
-        'to equal',
-        [
-          'inline',
-          'rootRelative',
-          'absolute',
-          'protocolRelative',
-          'absolute',
-          'inline'
-        ]
-      );
+      expect(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'to satisfy', [
+        { hrefType: 'inline' },
+        { hrefType: 'rootRelative' },
+        { hrefType: 'absolute' },
+        { hrefType: 'protocolRelative' },
+        { hrefType: 'absolute' },
+        { hrefType: 'inline' }
+      ]);
     });
 
     it('should externalize a relation when its hrefType is changed from inline', async function() {
@@ -472,12 +451,6 @@ describe('relations/Relation', function() {
     });
   });
 
-  function getTargetFileNames(relations) {
-    return _.map(_.map(relations, 'to'), 'url').map(function(url) {
-      return url.replace(/^.*\//, '');
-    });
-  }
-
   describe('#updateTarget', function() {
     it('should handle a combo test case', async function() {
       const assetGraph = new AssetGraph({
@@ -490,24 +463,26 @@ describe('relations/Relation', function() {
       await assetGraph.populate();
 
       expect(assetGraph, 'to contain assets', 'JavaScript', 4);
-      expect(getTargetFileNames(assetGraph.findRelations()), 'to equal', [
-        'a.js',
-        'b.js',
-        'c.js'
+      expect(assetGraph.findRelations(), 'to satisfy', [
+        { to: { fileName: 'a.js' } },
+        { to: { fileName: 'b.js' } },
+        { to: { fileName: 'c.js' } }
       ]);
-      expect(
-        getTargetFileNames(assetGraph.findRelations({ type: 'HtmlScript' })),
-        'to equal',
-        ['a.js', 'b.js', 'c.js']
-      );
+      expect(assetGraph.findRelations({ type: 'HtmlScript' }), 'to satisfy', [
+        { to: { fileName: 'a.js' } },
+        { to: { fileName: 'b.js' } },
+        { to: { fileName: 'c.js' } }
+      ]);
 
       const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
       expect(
-        getTargetFileNames(
-          assetGraph.findRelations({ from: htmlAsset, type: 'HtmlScript' })
-        ),
-        'to equal',
-        ['a.js', 'b.js', 'c.js']
+        assetGraph.findRelations({ from: htmlAsset, type: 'HtmlScript' }),
+        'to satisfy',
+        [
+          { to: { fileName: 'a.js' } },
+          { to: { fileName: 'b.js' } },
+          { to: { fileName: 'c.js' } }
+        ]
       );
 
       const relation = assetGraph.findRelations({
@@ -516,24 +491,26 @@ describe('relations/Relation', function() {
       relation.to = assetGraph.findAssets({ fileName: 'd.js' })[0];
       relation.refreshHref();
 
-      expect(getTargetFileNames(assetGraph.findRelations()), 'to equal', [
-        'a.js',
-        'd.js',
-        'c.js'
+      expect(assetGraph.findRelations(), 'to satisfy', [
+        { to: { fileName: 'a.js' } },
+        { to: { fileName: 'd.js' } },
+        { to: { fileName: 'c.js' } }
+      ]);
+
+      expect(assetGraph.findRelations({ type: 'HtmlScript' }), 'to satisfy', [
+        { to: { fileName: 'a.js' } },
+        { to: { fileName: 'd.js' } },
+        { to: { fileName: 'c.js' } }
       ]);
 
       expect(
-        getTargetFileNames(assetGraph.findRelations({ type: 'HtmlScript' })),
-        'to equal',
-        ['a.js', 'd.js', 'c.js']
-      );
-
-      expect(
-        getTargetFileNames(
-          assetGraph.findRelations({ from: htmlAsset, type: 'HtmlScript' })
-        ),
-        'to equal',
-        ['a.js', 'd.js', 'c.js']
+        assetGraph.findRelations({ from: htmlAsset, type: 'HtmlScript' }),
+        'to satisfy',
+        [
+          { to: { fileName: 'a.js' } },
+          { to: { fileName: 'd.js' } },
+          { to: { fileName: 'c.js' } }
+        ]
       );
     });
   });

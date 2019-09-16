@@ -1,5 +1,4 @@
 const pathModule = require('path');
-const _ = require('lodash');
 const expect = require('../unexpected-with-plugins');
 const urlTools = require('urltools');
 const AssetGraph = require('../../lib/AssetGraph');
@@ -17,20 +16,20 @@ describe('relations/HtmlObject', function() {
 
     expect(assetGraph, 'to contain relations', 'HtmlObject', 3);
     expect(assetGraph, 'to contain assets', 'Flash', 3);
-    expect(
-      _.map(assetGraph.findRelations({ type: 'HtmlObject' }), 'href'),
-      'to equal',
-      ['themovie.swf', 'theothermovie.swf', 'yetanothermovie.swf']
-    );
+    expect(assetGraph.findRelations({ type: 'HtmlObject' }), 'to satisfy', [
+      { href: 'themovie.swf' },
+      { href: 'theothermovie.swf' },
+      { href: 'yetanothermovie.swf' }
+    ]);
 
     assetGraph.findAssets({ type: 'Html' })[0].url = urlTools.resolveUrl(
       assetGraph.root,
       'foo/index.html'
     );
-    expect(
-      _.map(assetGraph.findRelations({ type: 'HtmlObject' }), 'href'),
-      'to equal',
-      ['../themovie.swf', '../theothermovie.swf', '../yetanothermovie.swf']
-    );
+    expect(assetGraph.findRelations({ type: 'HtmlObject' }), 'to satisfy', [
+      { href: '../themovie.swf' },
+      { href: '../theothermovie.swf' },
+      { href: '../yetanothermovie.swf' }
+    ]);
   });
 });

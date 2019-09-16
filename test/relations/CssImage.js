@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('relations/CssImage', function() {
@@ -20,31 +19,28 @@ describe('relations/CssImage', function() {
     })[0].url = `${assetGraph.root}dir/foo2.png`;
 
     expect(
-      _.map(
-        assetGraph.findRelations({
-          to: assetGraph.findAssets({ fileName: 'foo2.png' })[0]
-        }),
-        'href'
-      ),
-      'to equal',
+      assetGraph.findRelations({
+        to: assetGraph.findAssets({ fileName: 'foo2.png' })[0]
+      }),
+      'to satisfy',
       [
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png',
-        'dir/foo2.png'
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' },
+        { href: 'dir/foo2.png' }
       ]
     );
 

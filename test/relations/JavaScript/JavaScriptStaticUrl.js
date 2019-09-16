@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
-const _ = require('lodash');
 const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/JavaScriptStaticUrl', function() {
@@ -15,9 +14,9 @@ describe('relations/JavaScriptStaticUrl', function() {
     await assetGraph.populate();
 
     expect(
-      _.map(assetGraph.findRelations({ type: 'JavaScriptStaticUrl' }), 'href'),
-      'to equal',
-      ['/images/foo.png']
+      assetGraph.findRelations({ type: 'JavaScriptStaticUrl' }),
+      'to satisfy',
+      [{ href: '/images/foo.png' }]
     );
   });
 });

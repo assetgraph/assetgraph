@@ -27,7 +27,7 @@ describe('relations/HtmlOpenGraph', function() {
     });
   });
 
-  it('should handle a test case with an existing <link rel="preconnect"> element', async function() {
+  it('should handle a test case with existing <meta property="og:..."> elements', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,

@@ -1,7 +1,6 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
-const _ = require('lodash');
 
 describe('transforms/splitCssIfIeLimitIsReached', function() {
   it('should handle a simple Css test case', async function() {
@@ -200,10 +199,10 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
 
     expect(assetGraph, 'to contain assets', { type: 'Css', isInline: true }, 3);
     expect(assetGraph, 'to contain relations', 'HtmlStyle', 3);
-    expect(_.map(assetGraph.findAssets({ type: 'Css' }), 'text'), 'to equal', [
-      '\n          .a {color: #aaa;}\n          .b {color: #bbb;}',
-      '\n          .c {color: #ccc;}\n          .d {color: #ddd;}',
-      '\n          .e {color: #eee;}'
+    expect(assetGraph.findAssets({ type: 'Css' }), 'to satisfy', [
+      { text: '\n          .a {color: #aaa;}\n          .b {color: #bbb;}' },
+      { text: '\n          .c {color: #ccc;}\n          .d {color: #ddd;}' },
+      { text: '\n          .e {color: #eee;}' }
     ]);
     const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
     expect(htmlAsset.text.match(/<style>/g), 'to have length', 3);
@@ -231,11 +230,19 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
 
     expect(assetGraph, 'to contain assets', { type: 'Css', isInline: true }, 4);
     expect(assetGraph, 'to contain relations', 'HtmlStyle', 4);
-    expect(_.map(assetGraph.findAssets({ type: 'Css' }), 'text'), 'to equal', [
-      '\n          @media screen {\n              .a, .quux, .baz {color: #aaa;}\n          }',
-      '\n          .b {color: #bbb;}\n          .c {color: #ccc;}',
-      '\n          @media print {\n             .d {color: #ddd;}\n             .e {color: #eee;}\n             .f {color: #fff;}\n          }',
-      '\n          .hey {color: #000;}\n          .there {color: #fff;}'
+    expect(assetGraph.findAssets({ type: 'Css' }), 'to satisfy', [
+      {
+        text:
+          '\n          @media screen {\n              .a, .quux, .baz {color: #aaa;}\n          }'
+      },
+      { text: '\n          .b {color: #bbb;}\n          .c {color: #ccc;}' },
+      {
+        text:
+          '\n          @media print {\n             .d {color: #ddd;}\n             .e {color: #eee;}\n             .f {color: #fff;}\n          }'
+      },
+      {
+        text: '\n          .hey {color: #000;}\n          .there {color: #fff;}'
+      }
     ]);
 
     const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];

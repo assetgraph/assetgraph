@@ -1,6 +1,5 @@
 const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
-const _ = require('lodash');
 const urlTools = require('urltools');
 const AssetGraph = require('../../lib/AssetGraph');
 const httpception = require('httpception');
@@ -64,15 +63,15 @@ describe('transforms/populate', function() {
     expect(assetGraph, 'to contain assets', 3);
     expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
 
-    expect(
-      _.map(assetGraph.findRelations({ type: 'HtmlScript' }), 'href'),
-      'to equal',
-      [
-        '//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
-        'http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
-        'https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'
-      ]
-    );
+    expect(assetGraph.findRelations({ type: 'HtmlScript' }), 'to satisfy', [
+      { href: '//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js' },
+      {
+        href: 'http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'
+      },
+      {
+        href: 'https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'
+      }
+    ]);
 
     expect(
       assetGraph.findRelations({ type: 'HtmlScript', href: /^\/\// })[0].to,
@@ -86,11 +85,11 @@ describe('transforms/populate', function() {
       }//cdn.example.com/${javaScript.fileName}`;
     });
 
-    expect(
-      _.map(assetGraph.findRelations({ type: 'HtmlScript' }), 'hrefType'),
-      'to equal',
-      ['protocolRelative', 'absolute', 'absolute']
-    );
+    expect(assetGraph.findRelations({ type: 'HtmlScript' }), 'to satisfy', [
+      { hrefType: 'protocolRelative' },
+      { hrefType: 'absolute' },
+      { hrefType: 'absolute' }
+    ]);
 
     expect(
       assetGraph
