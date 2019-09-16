@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <entry>
+    <title>The title</title>
+    <link href="http://example.com"/>
+    <updated>2019-09-16T23:51:55+02:00</updated>
+    <id>http://yeoman.io/blog/generator-karma-rewrite</id>
+    <content type="html"><![CDATA[This contains an image: <img src="foo.png">]]></content>
+  </entry>
+</feed>
