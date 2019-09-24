@@ -1,5 +1,5 @@
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('SourceMapFile', function() {
   describe('#attach', function() {

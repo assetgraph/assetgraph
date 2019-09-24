@@ -1,5 +1,5 @@
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../');
 const pathModule = require('path');
 
 describe('FileRedirect relation', function() {
@@ -9,8 +9,10 @@ describe('FileRedirect relation', function() {
         __dirname,
         '..',
         '..',
+        '..',
         'testdata',
         'relations',
+        'Asset',
         'FileRedirect',
         'noTrailingSlash'
       )
@@ -35,8 +37,10 @@ describe('FileRedirect relation', function() {
         __dirname,
         '..',
         '..',
+        '..',
         'testdata',
         'relations',
+        'Asset',
         'FileRedirect',
         'trailingSlash'
       )

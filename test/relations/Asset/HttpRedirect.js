@@ -1,5 +1,5 @@
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 const http = require('http');
 
 describe('relations/HttpRedirect', function() {
