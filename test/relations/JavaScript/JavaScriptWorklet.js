@@ -1,11 +1,11 @@
 const pathModule = require('path');
 const sinon = require('sinon');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 const testRoot = pathModule.resolve(
   __dirname,
-  '../../testdata/relations/JavaScriptWorklet'
+  '../../../testdata/relations/JavaScript/JavaScriptWorklet'
 );
 
 describe('relations/JavaScriptWorklet', function() {

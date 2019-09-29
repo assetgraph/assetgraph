@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('JavaScriptImportScripts', function() {
   it('should pick up importScripts() and self.importScripts as relations', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptImportScripts/simple/'
+        '../../../testdata/relations/JavaScript/JavaScriptImportScripts/simple/'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -20,7 +20,7 @@ describe('JavaScriptImportScripts', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptImportScripts/simple/'
+        '../../../testdata/relations/JavaScript/JavaScriptImportScripts/simple/'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -85,7 +85,7 @@ describe('JavaScriptImportScripts', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptImportScripts/seq/'
+        '../../../testdata/relations/JavaScript/JavaScriptImportScripts/seq/'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -150,7 +150,7 @@ describe('JavaScriptImportScripts', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptImportScripts/simple/'
+        '../../../testdata/relations/JavaScript/JavaScriptImportScripts/simple/'
       )
     });
     await assetGraph.loadAssets('index.html');

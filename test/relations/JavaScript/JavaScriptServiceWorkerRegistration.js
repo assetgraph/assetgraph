@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/JavaScriptServiceWorkerRegistration', function() {
   it('should populate the relation', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptServiceWorkerRegistration'
+        '../../../testdata/relations/JavaScript/JavaScriptServiceWorkerRegistration'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -26,7 +26,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptServiceWorkerRegistration'
+        '../../../testdata/relations/JavaScript/JavaScriptServiceWorkerRegistration'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -49,7 +49,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptServiceWorkerRegistration'
+        '../../../testdata/relations/JavaScript/JavaScriptServiceWorkerRegistration'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -87,7 +87,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptServiceWorkerRegistration'
+        '../../../testdata/relations/JavaScript/JavaScriptServiceWorkerRegistration'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -108,7 +108,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptServiceWorkerRegistration'
+        '../../../testdata/relations/JavaScript/JavaScriptServiceWorkerRegistration'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -129,7 +129,7 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptServiceWorkerRegistration'
+        '../../../testdata/relations/JavaScript/JavaScriptServiceWorkerRegistration'
       )
     });
     await assetGraph.loadAssets('index.html');

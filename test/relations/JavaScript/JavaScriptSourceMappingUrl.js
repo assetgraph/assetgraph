@@ -1,6 +1,6 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 const sinon = require('sinon');
 
 describe('relations/JavaScriptSourceMappingUrl', function() {
@@ -8,7 +8,7 @@ describe('relations/JavaScriptSourceMappingUrl', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap/'
+        '../../../testdata/relations/JavaScript/JavaScriptSourceMappingUrl/existingSourceMap/'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -37,7 +37,7 @@ describe('relations/JavaScriptSourceMappingUrl', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptSourceMappingUrl/existingSourceMap2/'
+        '../../../testdata/relations/JavaScript/JavaScriptSourceMappingUrl/existingSourceMap2/'
       )
     });
     await assetGraph.on('warn', warnSpy);

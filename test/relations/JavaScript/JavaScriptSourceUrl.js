@@ -1,13 +1,13 @@
 const pathModule = require('path');
-const expect = require('../unexpected-with-plugins');
-const AssetGraph = require('../../lib/AssetGraph');
+const expect = require('../../unexpected-with-plugins');
+const AssetGraph = require('../../../lib/AssetGraph');
 
 describe('relations/JavaScriptSourceUrl', function() {
   it('should handle a test case with an existing bundle that has @sourceURL directives', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptSourceUrl/existingBundle/'
+        '../../../testdata/relations/JavaScript/JavaScriptSourceUrl/existingBundle/'
       )
     });
     await assetGraph.loadAssets('index.html');
@@ -34,7 +34,7 @@ describe('relations/JavaScriptSourceUrl', function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/relations/JavaScriptSourceUrl/bundleRelations/'
+        '../../../testdata/relations/JavaScript/JavaScriptSourceUrl/bundleRelations/'
       )
     });
     await assetGraph.loadAssets('index.html');
