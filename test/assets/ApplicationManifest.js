@@ -24,7 +24,7 @@ describe('assets/ApplicationManifest', function() {
     });
     await assetGraph.loadAssets('related_applications.webmanifest');
 
-    expect(assetGraph, 'to contain relations', 'JsonUrl', 2);
+    expect(assetGraph, 'to contain relations', 'ApplicationManifestUrl', 2);
   });
 
   it('should detect splash_screens urls', async function() {
@@ -36,11 +36,11 @@ describe('assets/ApplicationManifest', function() {
     });
     await assetGraph.loadAssets('splash_screens.webmanifest');
 
-    expect(assetGraph, 'to contain relations', 'JsonUrl', 2);
+    expect(assetGraph, 'to contain relations', 'ApplicationManifestUrl', 2);
 
     await assetGraph.populate();
 
-    expect(assetGraph, 'to contain relations', 'JsonUrl', 2);
+    expect(assetGraph, 'to contain relations', 'ApplicationManifestUrl', 2);
     expect(assetGraph, 'to contain assets', 'Png', 1);
     expect(assetGraph, 'to contain assets', 'Jpeg', 1);
   });
@@ -54,11 +54,11 @@ describe('assets/ApplicationManifest', function() {
     });
     await assetGraph.loadAssets('icons.webmanifest');
 
-    expect(assetGraph, 'to contain relations', 'JsonUrl', 2);
+    expect(assetGraph, 'to contain relations', 'ApplicationManifestUrl', 2);
 
     await assetGraph.populate();
 
-    expect(assetGraph, 'to contain relations', 'JsonUrl', 2);
+    expect(assetGraph, 'to contain relations', 'ApplicationManifestUrl', 2);
     expect(assetGraph, 'to contain asset', 'Png');
     expect(assetGraph, 'to contain asset', 'Jpeg');
   });
@@ -72,7 +72,7 @@ describe('assets/ApplicationManifest', function() {
     });
     await assetGraph.loadAssets('start_url.webmanifest');
 
-    expect(assetGraph, 'to contain relation', 'JsonUrl');
+    expect(assetGraph, 'to contain relation', 'ApplicationManifestUrl');
     expect(assetGraph, 'to contain asset', 'Html');
   });
 });
