@@ -93,6 +93,7 @@
     "systemjs-builder": "^0.16.13",
     "uglify-js": "^3.4.9",
     "unexpected": "^11.0.0-1",
+    "unexpected-assetgraph": "^1.0.0",
     "unexpected-dom": "^4.5.0",
     "unexpected-set": "^2.0.0",
     "unexpected-sinon": "^10.10.1",
