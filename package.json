@@ -85,7 +85,6 @@
     "open": "^6.0.0",
     "prettier": "~1.18.2",
     "proxyquire": "^2.0.1",
-    "requirejs": "^2.3.5",
     "sinon": "^7.0.0",
     "style-loader": "^1.0.0",
     "svgo": "^1.0.5",
