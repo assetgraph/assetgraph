@@ -55,7 +55,7 @@
     "source-map": "~0.6.1",
     "sw-precache": "^5.2.0",
     "teepee": "^3.0.0",
-    "terser": "^4.0.0",
+    "terser": "4.3.8",
     "urltools": "^0.4.1"
   },
   "devDependencies": {
