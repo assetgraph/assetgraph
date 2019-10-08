@@ -1,3 +1,0 @@
-// Some comment
-
-alert('noExistingSourceMap');
