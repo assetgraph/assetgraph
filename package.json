@@ -53,10 +53,10 @@
     "semver": "^6.0.0",
     "sift": "^7.0.1",
     "source-map": "~0.6.1",
-    "sw-precache": "^5.2.0",
     "teepee": "^3.0.0",
     "terser": "^4.0.0",
-    "urltools": "^0.4.1"
+    "urltools": "^0.4.1",
+    "workbox-build": "^4.3.1"
   },
   "devDependencies": {
     "autoprefixer": "^9.0.0",

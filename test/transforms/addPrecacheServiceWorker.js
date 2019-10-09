@@ -116,9 +116,6 @@ describe('transforms/addPrecacheServiceWorker', function() {
 
     expect([warnSpy, infoSpy], 'to have calls satisfying', () => {
       warnSpy(/^ENOENT.*notFound\.js/);
-      infoSpy(
-        /^index-precache-service-worker\.js: Total precache size is about/
-      );
     });
   });
 
@@ -499,12 +496,12 @@ describe('transforms/addPrecacheServiceWorker', function() {
     );
   });
 
-  it('should throw if the staticFileGlobs option is given', async function() {
+  it('should throw if the globPatterns option is given', async function() {
     const warnSpy = sinon.spy().named('warn');
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
-        '../../testdata/transforms/addPrecacheServiceWorker/customConfigWithStaticFileGlobs/'
+        '../../testdata/transforms/addPrecacheServiceWorker/customConfigWithGlobPatterns/'
       )
     });
     await assetGraph
@@ -519,7 +516,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
         isInitial: true
       }),
       'to be rejected with',
-      'addPrecacheServiceWorker transform: The staticFileGlobs config option is not supported at present, sorry!'
+      'addPrecacheServiceWorker transform: The globPatterns config option is not supported at present, sorry!'
     );
   });
 });
