@@ -24,7 +24,6 @@
     "acorn": "^7.0.0",
     "acorn-jsx": "^5.0.1",
     "chalk": "^2.0.1",
-    "common-path-prefix": "^2.0.0",
     "createerror": "^1.3.0",
     "cssnano": "^4.1.10",
     "data-urls": "^1.0.0",
@@ -55,8 +54,7 @@
     "source-map": "~0.6.1",
     "teepee": "^3.0.0",
     "terser": "^4.0.0",
-    "urltools": "^0.4.1",
-    "workbox-build": "^4.3.1"
+    "urltools": "^0.4.1"
   },
   "devDependencies": {
     "autoprefixer": "^9.0.0",

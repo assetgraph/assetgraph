@@ -1,1 +1,0 @@
-alert("Fix IE6!");
