@@ -2,7 +2,9 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('transforms/inlineHtmlTemplates', function() {
+// These tests require a bunch of different plugins, find the
+// right place for them when the core transforms have been split out
+describe.skip('transforms/inlineHtmlTemplates', function() {
   it('should handle a test case with a single Knockout.js template with a nested template loaded using the systemjs-tpl plugin', async function() {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(

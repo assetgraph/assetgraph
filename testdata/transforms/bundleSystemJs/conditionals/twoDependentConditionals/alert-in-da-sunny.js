@@ -1,1 +1,0 @@
-alert('Jah, solen skinner!');

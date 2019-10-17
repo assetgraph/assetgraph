@@ -83,8 +83,6 @@
     "proxyquire": "^2.0.1",
     "sinon": "^7.0.0",
     "svgo": "^1.0.5",
-    "systemjs-asset-plugin": "^3.0.0",
-    "systemjs-builder": "^0.16.13",
     "uglify-js": "^3.4.9",
     "unexpected": "^11.0.0-1",
     "unexpected-assetgraph": "^1.1.1",

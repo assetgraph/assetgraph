@@ -1,1 +1,0 @@
-alert('Jah, det regner!');

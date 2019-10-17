@@ -1,1 +1,0 @@
-alert("system.src.js")
