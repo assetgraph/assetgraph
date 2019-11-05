@@ -1,4 +1,25 @@
-### v6.0.0 (2019-08-17)
+### v6.0.1 (2019-11-05)
+
+#### Pull requests
+
+- [#1058](https://github.com/assetgraph/assetgraph/pull/1058) Upgrade open to version 7.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1056](https://github.com/assetgraph/assetgraph/pull/1056) Upgrade read-pkg-up to version 7.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1050](https://github.com/assetgraph/assetgraph/pull/1050) Lodash reduction ([Peter Müller](mailto:munter@fumle.dk))
+- [#1049](https://github.com/assetgraph/assetgraph/pull/1049) Remove Bluebird ([Andreas Lind](mailto:andreaslindpetersen@gmail.com), [Peter Müller](mailto:munter@fumle.dk))
+- [#1048](https://github.com/assetgraph/assetgraph/pull/1048) Upgrade eslint-plugin-node to version 10.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1046](https://github.com/assetgraph/assetgraph/pull/1046) JavaScript\#strict =&gt; isStrict, and make it a getter so it doesn't get populated as a side effect of finding outgoing relations ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [#1044](https://github.com/assetgraph/assetgraph/pull/1044) Upgrade eslint-config-standard to version 14.0.0 ([Andreas Lind](mailto:andreaslindpetersen@gmail.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+
+#### Commits to master
+
+- [http: Don't set isRedirect unless the status code is 301...303](https://github.com/assetgraph/assetgraph/commit/74ddabb7eb56134ee349ec5b606e2d62a888553d) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Remove the reviewSubResourceIntegrity transform](https://github.com/assetgraph/assetgraph/commit/d12ae57ea58818bd602fc5664ea0845506887534) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Move the systemjs support to github.com:assetgraph\/assetgraph-systemjs.git](https://github.com/assetgraph/assetgraph/commit/e96678683c545867aa5f9b5b505c553acc8f1145) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Remove the executeJavaScriptInOrder transform](https://github.com/assetgraph/assetgraph/commit/37010fbecabdfedf4c7c4caf4b4f94d1fc97eecb) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Move the workbox support to github.com:assetgraph\/assetgraph-workbox.git](https://github.com/assetgraph/assetgraph/commit/a6abbcd8fae4e6904321c6db99caf650d5c778e0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [+17 more](https://github.com/assetgraph/assetgraph/compare/v6.0.0...v6.0.1)
+
+### v6.0.0 (2019-08-18)
 
 - [#1035](https://github.com/assetgraph/assetgraph/pull/1035) Use jsdom instead of xmldom for XML assets ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [#1041](https://github.com/assetgraph/assetgraph/pull/1041) Remove subsetFonts ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
