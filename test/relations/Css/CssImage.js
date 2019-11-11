@@ -133,7 +133,10 @@ describe('relations/CssImage', function() {
       .it('to contain', "'foo%27bar.png.bogus'")
       .and('to contain', "'bar%27quux.png.bogus'")
       .and('to contain', "'blah%22baz.png.bogus'")
-      .and('to contain', "'blerg%22zyp.png.bogus'")(text);
+      .and(
+        'to contain',
+        "'blerg%22zyp.png.bogus'"
+      )(text);
   });
 
   it('should support detecting mask-image properties as relations', async function() {

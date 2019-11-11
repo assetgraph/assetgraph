@@ -25,10 +25,11 @@ describe('relations/HtmlRelation', function() {
           },
           'firstInHead'
         );
-        expect(htmlAsset.outgoingRelations, 'to have length', 3).and(
-          'to satisfy',
-          { 0: relation }
-        );
+        expect(
+          htmlAsset.outgoingRelations,
+          'to have length',
+          3
+        ).and('to satisfy', { 0: relation });
         expect(
           htmlAsset.text,
           'to contain',
@@ -44,10 +45,11 @@ describe('relations/HtmlRelation', function() {
           },
           'lastInHead'
         );
-        expect(htmlAsset.outgoingRelations, 'to have length', 3).and(
-          'to satisfy',
-          { 1: relation }
-        );
+        expect(
+          htmlAsset.outgoingRelations,
+          'to have length',
+          3
+        ).and('to satisfy', { 1: relation });
         expect(
           htmlAsset.text,
           'to contain',
@@ -63,10 +65,11 @@ describe('relations/HtmlRelation', function() {
           },
           'firstInBody'
         );
-        expect(htmlAsset.outgoingRelations, 'to have length', 3).and(
-          'to satisfy',
-          { 1: relation }
-        );
+        expect(
+          htmlAsset.outgoingRelations,
+          'to have length',
+          3
+        ).and('to satisfy', { 1: relation });
         expect(
           htmlAsset.text,
           'to contain',
@@ -82,10 +85,11 @@ describe('relations/HtmlRelation', function() {
           },
           'lastInBody'
         );
-        expect(htmlAsset.outgoingRelations, 'to have length', 3).and(
-          'to satisfy',
-          { 2: relation }
-        );
+        expect(
+          htmlAsset.outgoingRelations,
+          'to have length',
+          3
+        ).and('to satisfy', { 2: relation });
         expect(
           htmlAsset.text,
           'to contain',
@@ -102,10 +106,11 @@ describe('relations/HtmlRelation', function() {
             },
             'first'
           );
-          expect(htmlAsset.outgoingRelations, 'to have length', 3).and(
-            'to satisfy',
-            { 2: relation }
-          );
+          expect(
+            htmlAsset.outgoingRelations,
+            'to have length',
+            3
+          ).and('to satisfy', { 2: relation });
           expect(
             htmlAsset.text,
             'to contain',
@@ -123,10 +128,11 @@ describe('relations/HtmlRelation', function() {
             },
             'last'
           );
-          expect(htmlAsset.outgoingRelations, 'to have length', 3).and(
-            'to satisfy',
-            { 2: relation }
-          );
+          expect(
+            htmlAsset.outgoingRelations,
+            'to have length',
+            3
+          ).and('to satisfy', { 2: relation });
           expect(
             htmlAsset.text,
             'to contain',
