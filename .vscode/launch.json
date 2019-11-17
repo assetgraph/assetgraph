@@ -13,6 +13,24 @@
       "skipFiles": [
         "<node_internals>/**" // Prevent stepping through async_hooks.js et al.
       ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Mocha current file",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/mocha",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/mocha.cmd"
+      },
+      "runtimeArgs": [
+        "--timeout",
+        "999999",
+        "--colors",
+        "--recursive",
+        "${file}"
+      ],
+      "internalConsoleOptions": "openOnSessionStart"
     }
   ]
 }
