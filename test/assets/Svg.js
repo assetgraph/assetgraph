@@ -104,7 +104,7 @@ describe('assets/Svg', function() {
     expect(
       () => asset.parseTree,
       'to throw',
-      /SyntaxError: undefined:1:24: unbound namespace prefix: "xlink"./
+      /:1:24: unbound namespace prefix: "xlink"./
     );
 
     expect(asset.text, 'to be', '<svg><g xlink:href="" /></svg>');
