@@ -20,7 +20,7 @@ describe('relations/HtmlPrerenderLink', function() {
       });
 
       expect(
-        relation.inline,
+        () => relation.inline(),
         'to throw',
         /Inlining of resource hints is not allowed/
       );
