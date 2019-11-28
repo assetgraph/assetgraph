@@ -1,4 +1,4 @@
-### v6.0.2 (2019-11-25)
+### v6.0.3 (2019-11-28)
 
 #### Pull requests
 
@@ -15,12 +15,16 @@
 
 #### Commits to master
 
+- [Avoid serializing the target asset twice when inlining an HtmlRelation with a custom inline\(\) impl](https://github.com/assetgraph/assetgraph/commit/3f1b3d2602f69e120fa43ddb4d495e53da658e6f) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [http: Don't set isRedirect unless the status code is 301...303](https://github.com/assetgraph/assetgraph/commit/74ddabb7eb56134ee349ec5b606e2d62a888553d) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Remove the reviewSubResourceIntegrity transform](https://github.com/assetgraph/assetgraph/commit/d12ae57ea58818bd602fc5664ea0845506887534) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Move the systemjs support to github.com:assetgraph\/assetgraph-systemjs.git](https://github.com/assetgraph/assetgraph/commit/e96678683c545867aa5f9b5b505c553acc8f1145) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Remove the executeJavaScriptInOrder transform](https://github.com/assetgraph/assetgraph/commit/37010fbecabdfedf4c7c4caf4b4f94d1fc97eecb) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Move the workbox support to github.com:assetgraph\/assetgraph-workbox.git](https://github.com/assetgraph/assetgraph/commit/a6abbcd8fae4e6904321c6db99caf650d5c778e0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+17 more](https://github.com/assetgraph/assetgraph/compare/v6.0.1...v6.0.2)
+- [+18 more](https://github.com/assetgraph/assetgraph/compare/v6.0.2...v6.0.3)
+
+### v6.0.2 (2019-11-25)
+
+- [#1064](https://github.com/assetgraph/assetgraph/pull/1064) Backport\/recover from missing xmlns ([Peter Müller](mailto:munter@fumle.dk))
 
 ### v6.0.1 (2019-11-05)
 
@@ -620,25 +624,18 @@
 
 ### v4.2.0 (2018-03-30)
 
-- [Ditch the annoying "enourmous" splitCssIfIeLimitIsReached test case](https://github.com/assetgraph/assetgraph/commit/ee4da295a6fccc113bc46d4b7985e1096c4681da) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Make sure that we preserve the href of relations that maintain it as a direct property](https://github.com/assetgraph/assetgraph/commit/110e907a60fb9798e520e08475e7ff6385731a60) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Asset\#\_warnIncompatibleTypes: Attach err.asset](https://github.com/assetgraph/assetgraph/commit/4f5ec437de7b99ed4f734d31d2ef5d586d3f7f6a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Remove accidentally added bogus package-lock file](https://github.com/assetgraph/assetgraph/commit/f4f06c5ddcb36d4632d8eda5d69e738e9b2588e7) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Reformat comment](https://github.com/assetgraph/assetgraph/commit/0e71e8ac073fcb400874be37a260fa964a61d87e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+3 more](https://github.com/assetgraph/assetgraph/compare/v4.1.1...v4.2.0)
-
-### v4.1.1 (2018-03-27)
-
 #### Pull requests
 
 - [#836](https://github.com/assetgraph/assetgraph/pull/836) Switch data-url resolving to use data-urls package ([Peter Müller](mailto:munter@fumle.dk))
 
 #### Commits to master
 
-- [Fix an occurrence of the old query syntax](https://github.com/assetgraph/assetgraph/commit/0090823c7d61fb3af6728332bf31a34fd86d15a6) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Transforms: Use destructuring for most options objects](https://github.com/assetgraph/assetgraph/commit/fbdae42ee59512401acc42a4ebea36bf6766dd53) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [addPrecacheServiceWorker: Don't follow HtmlAlternateLink](https://github.com/assetgraph/assetgraph/commit/022214a09e76a527eac1121f33fcac91f43fd0c4) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Fix tests broken by 70f01cd48](https://github.com/assetgraph/assetgraph/commit/19e6c475aabf2089fdd1852a0e097789f337023c) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Ditch the annoying "enourmous" splitCssIfIeLimitIsReached test case](https://github.com/assetgraph/assetgraph/commit/ee4da295a6fccc113bc46d4b7985e1096c4681da) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Make sure that we preserve the href of relations that maintain it as a direct property](https://github.com/assetgraph/assetgraph/commit/110e907a60fb9798e520e08475e7ff6385731a60) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Asset\#\_warnIncompatibleTypes: Attach err.asset](https://github.com/assetgraph/assetgraph/commit/4f5ec437de7b99ed4f734d31d2ef5d586d3f7f6a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Remove accidentally added bogus package-lock file](https://github.com/assetgraph/assetgraph/commit/f4f06c5ddcb36d4632d8eda5d69e738e9b2588e7) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Reformat comment](https://github.com/assetgraph/assetgraph/commit/0e71e8ac073fcb400874be37a260fa964a61d87e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [+7 more](https://github.com/assetgraph/assetgraph/compare/v4.1.0...v4.2.0)
 
 ### v4.1.0 (2018-03-24)
 
