@@ -13,6 +13,7 @@
   "plugins": [
     "plugins/markdown",
     "jsdoc-plugins/remove-imports",
+    "jsdoc-plugins/underscore-private",
     "jsdoc-plugin-intersection",
     "jsdoc-inheritance-diagram"
   ],
