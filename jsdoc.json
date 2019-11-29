@@ -6,18 +6,19 @@
     "recurse": true,
     "readme": "README.md"
   },
-
   "source": {
     "include": "lib",
     "includePattern": ".js$"
   },
-
   "plugins": [
-      "plugins/markdown"
+    "plugins/markdown",
+    "jsdoc-plugins/remove-imports",
+    "jsdoc-plugins/underscore-private",
+    "jsdoc-plugin-intersection",
+    "jsdoc-inheritance-diagram"
   ],
-
   "docdash": {
-      "static": true,
-      "sort": true
+    "static": true,
+    "sort": true
   }
 }

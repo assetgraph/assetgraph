@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "allowJs": true,
+    "checkJs": true,
+
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "strict": false,
+    "resolveJsonModule": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationDir": "types",
+
+    "maxNodeModuleJsDepth": 5,
+    "noImplicitAny": true,
+    "types": []
+  },
+
+  "include": ["lib/**/*.js"],
+  "exclude": ["node_modules", "package.json"]
+}
