@@ -13,7 +13,8 @@
   "plugins": [
     "plugins/markdown",
     "jsdoc-plugins/remove-imports",
-    "jsdoc-plugin-intersection"
+    "jsdoc-plugin-intersection",
+    "jsdoc-inheritance-diagram"
   ],
   "docdash": {
     "static": true,
