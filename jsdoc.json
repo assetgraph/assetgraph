@@ -6,14 +6,15 @@
     "recurse": true,
     "readme": "README.md"
   },
-
   "source": {
     "include": "lib",
     "includePattern": ".js$"
   },
-
-  "plugins": ["plugins/markdown", "jsdoc-plugins/remove-imports"],
-
+  "plugins": [
+    "plugins/markdown",
+    "jsdoc-plugins/remove-imports",
+    "jsdoc-plugin-intersection"
+  ],
   "docdash": {
     "static": true,
     "sort": true

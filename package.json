@@ -98,6 +98,7 @@
     "httpception": "^3.0.0",
     "iconv-lite": "^0.5.0",
     "jsdoc": "^3.6.3",
+    "jsdoc-plugin-intersection": "^1.0.2",
     "less": "^2.7.3",
     "magicpen-prism": "3.0.2",
     "mocha": "^6.0.0",
