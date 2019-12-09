@@ -974,4 +974,59 @@ describe('assets/Html', function() {
       }
     );
   });
+
+  describe('with a base tag', function() {
+    it('should interpret outgoing relations relative to the base href', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/assets/Html/base/external/'
+        )
+      });
+      const [htmlAsset] = await assetGraph.loadAssets('index.html');
+      await assetGraph.populate();
+
+      expect(assetGraph, 'to contain assets', 3);
+      expect(assetGraph, 'to contain asset', 'Css');
+      expect(assetGraph, 'to contain asset', 'Png');
+
+      const cssAsset = assetGraph.findAssets({ type: 'Css' })[0];
+      expect(cssAsset, 'to have property', 'isLoaded', true);
+
+      cssAsset.url = `${assetGraph.root}somewhere/else/styles.css`;
+      expect(
+        htmlAsset.outgoingRelations[0],
+        'to have property',
+        'href',
+        '../somewhere/else/styles.css'
+      );
+    });
+
+    it('should interpret outgoing relations in inline assets relative to the base href', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/assets/Html/base/inline/'
+        )
+      });
+      await assetGraph.loadAssets('index.html');
+      await assetGraph.populate();
+
+      expect(assetGraph, 'to contain assets', 3);
+      expect(assetGraph, 'to contain asset', 'Css');
+      expect(assetGraph, 'to contain asset', { type: 'Png', isLoaded: true });
+
+      const pngAsset = assetGraph.findAssets({ type: 'Png' })[0];
+
+      pngAsset.url = `${assetGraph.root}somewhere/else/foo.png`;
+
+      const cssAsset = assetGraph.findAssets({ type: 'Css' })[0];
+      expect(
+        cssAsset.outgoingRelations[0],
+        'to have property',
+        'href',
+        '../somewhere/else/foo.png'
+      );
+    });
+  });
 });
