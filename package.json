@@ -49,7 +49,7 @@
     "read-pkg-up": "^7.0.0",
     "repeat-string": "^1.5.4",
     "schemes": "^1.0.1",
-    "semver": "^6.0.0",
+    "semver": "^7.0.0",
     "sift": "^7.0.1",
     "source-map": "~0.6.1",
     "teepee": "^3.0.0",
