@@ -76,7 +76,7 @@
     "less": "^2.7.3",
     "magicpen-prism": "3.0.2",
     "mocha": "^6.0.0",
-    "nyc": "^14.0.0",
+    "nyc": "^15.0.0",
     "offline-github-changelog": "^1.6.1",
     "open": "^7.0.0",
     "prettier": "~1.19.1",
