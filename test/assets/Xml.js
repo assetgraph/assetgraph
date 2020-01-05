@@ -85,4 +85,86 @@ describe('assets/Xml', function() {
       );
     });
   });
+
+  describe('with an non-UTF-8 encoding', function() {
+    const rawSrc = Buffer.concat([
+      Buffer.from('<?xml version="1.0" encoding="windows-1252"?>\n<doc>'),
+      Buffer.from([0xf8]),
+      Buffer.from('</doc>')
+    ]);
+
+    it('should parse the document correctly', function() {
+      const xmlAsset = new AssetGraph().addAsset({
+        type: 'Xml',
+        url: 'https://example.com/',
+        rawSrc
+      });
+      expect(
+        xmlAsset.parseTree.firstChild.firstChild.nodeValue,
+        'to equal',
+        'ø'
+      );
+    });
+
+    it('should reserialize the document correctly', function() {
+      const xmlAsset = new AssetGraph().addAsset({
+        type: 'Xml',
+        url: 'https://example.com/',
+        rawSrc
+      });
+      // eslint-disable-next-line no-unused-expressions
+      xmlAsset.parseTree;
+      xmlAsset.markDirty();
+      expect(xmlAsset.text, 'to contain', 'encoding="windows-1252"');
+      expect(xmlAsset.rawSrc.includes(Buffer.from([0xf8])), 'to be true');
+    });
+  });
+
+  describe('when explicitly updating the encoding', function() {
+    describe('from an existing explicit encoding in the xml declaration', function() {
+      it('should reserialize the document correctly', function() {
+        const xmlAsset = new AssetGraph().addAsset({
+          type: 'Xml',
+          url: 'https://example.com/',
+          text: '<?xml version="1.0" encoding="utf-8"?>\n<doc>ø</doc>'
+        });
+        // eslint-disable-next-line no-unused-expressions
+        xmlAsset.parseTree;
+        xmlAsset.markDirty();
+        xmlAsset.encoding = 'windows-1252';
+        expect(
+          xmlAsset.rawSrc.includes(
+            Buffer.from('<?xml version="1.0" encoding="windows-1252"?>')
+          ),
+          'to be true'
+        );
+        expect(xmlAsset.rawSrc.includes(Buffer.from([0xf8])), 'to be true');
+        expect(
+          xmlAsset.text,
+          'to contain',
+          '<?xml version="1.0" encoding="windows-1252"?>'
+        );
+      });
+    });
+
+    describe('from nothing', function() {
+      it('should reserialize the document correctly', function() {
+        const xmlAsset = new AssetGraph().addAsset({
+          type: 'Xml',
+          url: 'https://example.com/',
+          text: '<?xml version="1.0"?>\n<doc>ø</doc>'
+        });
+        // eslint-disable-next-line no-unused-expressions
+        xmlAsset.parseTree;
+        xmlAsset.markDirty();
+        xmlAsset.encoding = 'windows-1252';
+        expect(
+          xmlAsset.rawSrc.includes(Buffer.from('encoding="windows-1252"')),
+          'to be true'
+        );
+        expect(xmlAsset.rawSrc.includes(Buffer.from([0xf8])), 'to be true');
+        expect(xmlAsset.text, 'to contain', 'encoding="windows-1252"');
+      });
+    });
+  });
 });
