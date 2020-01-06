@@ -86,18 +86,16 @@ describe('assets/Xml', function() {
     });
   });
 
-  describe('with an non-UTF-8 encoding', function() {
-    const rawSrc = Buffer.concat([
-      Buffer.from('<?xml version="1.0" encoding="windows-1252"?>\n<doc>'),
-      Buffer.from([0xf8]),
-      Buffer.from('</doc>')
-    ]);
-
+  describe('with a non-UTF-8 encoding', function() {
     it('should parse the document correctly', function() {
       const xmlAsset = new AssetGraph().addAsset({
         type: 'Xml',
         url: 'https://example.com/',
-        rawSrc
+        rawSrc: Buffer.concat([
+          Buffer.from('<?xml version="1.0" encoding="windows-1252"?>\n<doc>'),
+          Buffer.from([0xf8]),
+          Buffer.from('</doc>')
+        ])
       });
       expect(
         xmlAsset.parseTree.firstChild.firstChild.nodeValue,
@@ -110,7 +108,11 @@ describe('assets/Xml', function() {
       const xmlAsset = new AssetGraph().addAsset({
         type: 'Xml',
         url: 'https://example.com/',
-        rawSrc
+        rawSrc: Buffer.concat([
+          Buffer.from('<?xml version="1.0" encoding="windows-1252"?>\n<doc>'),
+          Buffer.from([0xf8]),
+          Buffer.from('</doc>')
+        ])
       });
       // eslint-disable-next-line no-unused-expressions
       xmlAsset.parseTree;
