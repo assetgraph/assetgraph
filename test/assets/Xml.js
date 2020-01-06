@@ -104,6 +104,27 @@ describe('assets/Xml', function() {
       );
     });
 
+    describe('that uses non-space whitespace in the xml declaration', function() {
+      it('should parse the document correctly', function() {
+        const xmlAsset = new AssetGraph().addAsset({
+          type: 'Xml',
+          url: 'https://example.com/',
+          rawSrc: Buffer.concat([
+            Buffer.from(
+              '<?xml\tversion="1.0"\tencoding="windows-1252"?>\n<doc>'
+            ),
+            Buffer.from([0xf8]),
+            Buffer.from('</doc>')
+          ])
+        });
+        expect(
+          xmlAsset.parseTree.firstChild.firstChild.nodeValue,
+          'to equal',
+          'ø'
+        );
+      });
+    });
+
     it('should reserialize the document correctly', function() {
       const xmlAsset = new AssetGraph().addAsset({
         type: 'Xml',
@@ -147,9 +168,35 @@ describe('assets/Xml', function() {
           '<?xml version="1.0" encoding="windows-1252"?>'
         );
       });
+
+      describe('that had a non-space whitespace character', function() {
+        it('should reserialize the document correctly', function() {
+          const xmlAsset = new AssetGraph().addAsset({
+            type: 'Xml',
+            url: 'https://example.com/',
+            text: '<?xml version="1.0"\rencoding="utf-8"?>\n<doc>ø</doc>'
+          });
+          // eslint-disable-next-line no-unused-expressions
+          xmlAsset.parseTree;
+          xmlAsset.markDirty();
+          xmlAsset.encoding = 'windows-1252';
+          expect(
+            xmlAsset.rawSrc.includes(
+              Buffer.from('<?xml version="1.0" encoding="windows-1252"?>')
+            ),
+            'to be true'
+          );
+          expect(xmlAsset.rawSrc.includes(Buffer.from([0xf8])), 'to be true');
+          expect(
+            xmlAsset.text,
+            'to contain',
+            '<?xml version="1.0" encoding="windows-1252"?>'
+          );
+        });
+      });
     });
 
-    describe('from nothing', function() {
+    describe('with no existing encoding attribute', function() {
       it('should reserialize the document correctly', function() {
         const xmlAsset = new AssetGraph().addAsset({
           type: 'Xml',
