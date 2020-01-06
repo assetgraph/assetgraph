@@ -166,5 +166,34 @@ describe('assets/Xml', function() {
         expect(xmlAsset.text, 'to contain', 'encoding="windows-1252"');
       });
     });
+
+    describe('with no existing XML declaration', function() {
+      it('should add an XML declaration and reserialize the document correctly', function() {
+        const xmlAsset = new AssetGraph().addAsset({
+          type: 'Xml',
+          url: 'https://example.com/',
+          text: '<doc>ø</doc>'
+        });
+        // eslint-disable-next-line no-unused-expressions
+        xmlAsset.parseTree;
+        xmlAsset.markDirty();
+        xmlAsset.encoding = 'windows-1252';
+        expect(
+          xmlAsset.xmlDeclaration,
+          'to equal',
+          '<?xml version="1.0" encoding="windows-1252"?>'
+        );
+        expect(
+          xmlAsset.rawSrc.includes(Buffer.from('encoding="windows-1252"')),
+          'to be true'
+        );
+        expect(xmlAsset.rawSrc.includes(Buffer.from([0xf8])), 'to be true');
+        expect(
+          xmlAsset.text,
+          'to contain',
+          '<?xml version="1.0" encoding="windows-1252"?>'
+        );
+      });
+    });
   });
 });
