@@ -40,7 +40,7 @@
     "imageinfo": "^1.0.4",
     "jsdom": "^15.0.0",
     "lodash": "4.17.15",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "^1.0.3",
     "normalizeurl": "^1.0.0",
     "p-limit": "^2.2.1",
     "p-map": "^3.0.0",
