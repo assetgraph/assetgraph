@@ -27,7 +27,7 @@
     "createerror": "^1.3.0",
     "cssnano": "^4.1.10",
     "data-urls": "^2.0.0",
-    "domspace": "^1.2.1",
+    "domspace": "^2.0.0",
     "esanimate": "^1.1.0",
     "escodegen": "^1.12.0",
     "espurify": "^2.0.1",
