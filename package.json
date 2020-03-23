@@ -79,7 +79,7 @@
     "nyc": "^15.0.0",
     "offline-github-changelog": "^1.6.1",
     "open": "^7.0.0",
-    "prettier": "~1.19.1",
+    "prettier": "~2.0.1",
     "proxyquire": "^2.0.1",
     "sinon": "^9.0.1",
     "svgo": "^1.0.5",
