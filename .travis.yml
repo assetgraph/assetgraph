@@ -5,8 +5,9 @@ cache:
   directories:
     - node_modules
 node_js:
-  - '10'
-  - 'node'
+  - 10
+  - 12
+  - node
 
 addons:
   apt:
@@ -18,7 +19,7 @@ env: CXX="g++-4.8" CC="gcc-4.8"
 before_script:
   - sudo pip install fonttools brotli zopfli
 
-script: 'npm install && npm run ci'
+script: npm run test:ci
 after_success: '<coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js'
 
 notifications:

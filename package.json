@@ -79,7 +79,7 @@
     "nyc": "^15.0.0",
     "offline-github-changelog": "^1.6.1",
     "open": "^7.0.0",
-    "prettier": "~1.19.1",
+    "prettier": "~2.0.2",
     "proxyquire": "^2.0.1",
     "sinon": "^9.0.1",
     "svgo": "^1.0.5",
@@ -93,11 +93,11 @@
   },
   "main": "lib/AssetGraph.js",
   "scripts": {
-    "lint": "eslint . && prettier --check '**/*.js'",
+    "lint": "eslint . && prettier --check '**/*.{js,md}'",
     "test": "mocha",
-    "ci": "npm run coverage && npm run lint",
+    "test:ci": "npm run coverage",
     "docs": "jsdoc -c jsdoc.json",
-    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text --all -- mocha --reporter dot && echo google-chrome coverage/lcov-report/index.html",
+    "coverage": "nyc --reporter=lcov --reporter=text --all -- mocha --reporter dot && echo google-chrome coverage/lcov-report/index.html",
     "preversion": "offline-github-changelog --next=${npm_package_version} > CHANGELOG.md && git add CHANGELOG.md"
   },
   "nyc": {
