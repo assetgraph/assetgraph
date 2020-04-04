@@ -93,7 +93,7 @@
   },
   "main": "lib/AssetGraph.js",
   "scripts": {
-    "lint": "eslint . && prettier --check '**/*.js'",
+    "lint": "eslint . && prettier --check '**/*.{js,md}'",
     "test": "mocha",
     "ci": "npm run coverage && npm run lint",
     "docs": "jsdoc -c jsdoc.json",
