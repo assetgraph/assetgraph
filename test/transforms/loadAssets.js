@@ -170,6 +170,31 @@ describe('transforms/loadAssets', function() {
     });
   });
 
+  describe('with a deep wildcard glob pattern', function() {
+    it('should add all the matched assets to the graph and return them', async function() {
+      const assetGraph = new AssetGraph({
+        root: pathModule.resolve(
+          __dirname,
+          '../../testdata/transforms/loadAssets/glob/'
+        )
+      });
+
+      const assets = await assetGraph.loadAssets('**/*.html');
+
+      expect(assetGraph.findAssets(), 'to satisfy', [
+        { fileName: 'error.html' },
+        { fileName: 'index1.html' },
+        { fileName: 'index2.html' }
+      ]);
+
+      expect(assets, 'to satisfy', [
+        { fileName: 'error.html' },
+        { fileName: 'index1.html' },
+        { fileName: 'index2.html' }
+      ]);
+    });
+  });
+
   describe('with a single asset config object', function() {
     it('should create and add the asset and return it in an array', async function() {
       const assetGraph = new AssetGraph();
