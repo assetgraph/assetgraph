@@ -1,7 +1,19 @@
-### v6.0.5 (2020-01-02)
+### v6.0.6 (2020-05-18)
 
 #### Pull requests
 
+- [#1091](https://github.com/assetgraph/assetgraph/pull/1091) Avoid directories in glob results in loadAssets and addAssets. Fixes … ([Peter Müller](mailto:munter@fumle.dk))
+- [#1090](https://github.com/assetgraph/assetgraph/pull/1090) Upgrade eslint-plugin-mocha to version 7.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1089](https://github.com/assetgraph/assetgraph/pull/1089) Upgrade eslint to version 7.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1088](https://github.com/assetgraph/assetgraph/pull/1088) Upgrade chalk to version 4.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1085](https://github.com/assetgraph/assetgraph/pull/1085) Upgrade estraverse to version 5.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1082](https://github.com/assetgraph/assetgraph/pull/1082) Upgrade p-map to version 4.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1083](https://github.com/assetgraph/assetgraph/pull/1083) Upgrade sinon to version 9.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1079](https://github.com/assetgraph/assetgraph/pull/1079) Upgrade domspace to version 2.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1077](https://github.com/assetgraph/assetgraph/pull/1077) Upgrade mkdirp to version 1.0.3 ([Andreas Lind](mailto:andreaslindpetersen@gmail.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1074](https://github.com/assetgraph/assetgraph/pull/1074) Support reading the encoding of XML documents from &lt;?xml ... encoding=...?&gt; ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [#1073](https://github.com/assetgraph/assetgraph/pull/1073) Upgrade mocha to version 7.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1072](https://github.com/assetgraph/assetgraph/pull/1072) Upgrade data-urls to version 2.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1071](https://github.com/assetgraph/assetgraph/pull/1071) Upgrade magicpen-prism to version 4.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1070](https://github.com/assetgraph/assetgraph/pull/1070) Upgrade eslint-plugin-node to version 11.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1068](https://github.com/assetgraph/assetgraph/pull/1068) Upgrade nyc to version 15.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -21,12 +33,16 @@
 
 #### Commits to master
 
-- [reviewCSP: Avoid getAttribute of undefined error on relations that don't have a node](https://github.com/assetgraph/assetgraph/commit/7c9c724c1c18c513009551f4232611184ff906ec) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Avoid serializing the target asset twice when inlining an HtmlRelation with a custom inline\(\) impl](https://github.com/assetgraph/assetgraph/commit/3f1b3d2602f69e120fa43ddb4d495e53da658e6f) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [http: Don't set isRedirect unless the status code is 301...303](https://github.com/assetgraph/assetgraph/commit/74ddabb7eb56134ee349ec5b606e2d62a888553d) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Remove the reviewSubResourceIntegrity transform](https://github.com/assetgraph/assetgraph/commit/d12ae57ea58818bd602fc5664ea0845506887534) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Move the systemjs support to github.com:assetgraph\/assetgraph-systemjs.git](https://github.com/assetgraph/assetgraph/commit/e96678683c545867aa5f9b5b505c553acc8f1145) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+19 more](https://github.com/assetgraph/assetgraph/compare/v6.0.4...v6.0.5)
+- [Don't need to install fonttools etc. on ci anymore](https://github.com/assetgraph/assetgraph/commit/c9ca548a81952e9a43c5f454ebdbbe1ebde61f1a) ([Andreas Lind](mailto:andreas.lind@peakon.com))
+- [Remove Html\#allowsPerCsp \(not used?\)](https://github.com/assetgraph/assetgraph/commit/178a1c59d1f5eaa50d78f6e849762c4f6d4cf1dd) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Move more stuff into assetgraph-csp](https://github.com/assetgraph/assetgraph/commit/38dcc29048ab3f52bd8ef9e3ddadb75039fd04c9) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Remove the reviewContentSecurityPolicy transform](https://github.com/assetgraph/assetgraph/commit/5f312d1f868a5316f01319afbd401336e479f4db) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Drop node.js 8 support in time for the next major version](https://github.com/assetgraph/assetgraph/commit/0af565874edc7dd5f692dfd24ae7100793399314) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [+24 more](https://github.com/assetgraph/assetgraph/compare/v6.0.5...v6.0.6)
+
+### v6.0.5 (2020-01-02)
+
+- [reviewCSP: Avoid getAttribute of undefined error on relations that don't have a node](https://github.com/assetgraph/assetgraph/commit/08c7e366b9d4d9612fe01a459e44f87640d120d7) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v6.0.4 (2019-12-11)
 
