@@ -1,4 +1,4 @@
-### v6.0.6 (2020-05-18)
+### v6.0.7 (2020-05-24)
 
 #### Pull requests
 
@@ -33,12 +33,16 @@
 
 #### Commits to master
 
+- [Guard against throwing while generating error messages for invalid URI's. Relates to Munter\/netlify-plugin-subfont\#40](https://github.com/assetgraph/assetgraph/commit/8f1104dbc60831103613a298aafad14333aa157a) ([Peter Müller](mailto:munter@fumle.dk))
 - [Don't need to install fonttools etc. on ci anymore](https://github.com/assetgraph/assetgraph/commit/c9ca548a81952e9a43c5f454ebdbbe1ebde61f1a) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Remove Html\#allowsPerCsp \(not used?\)](https://github.com/assetgraph/assetgraph/commit/178a1c59d1f5eaa50d78f6e849762c4f6d4cf1dd) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Move more stuff into assetgraph-csp](https://github.com/assetgraph/assetgraph/commit/38dcc29048ab3f52bd8ef9e3ddadb75039fd04c9) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Remove the reviewContentSecurityPolicy transform](https://github.com/assetgraph/assetgraph/commit/5f312d1f868a5316f01319afbd401336e479f4db) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Drop node.js 8 support in time for the next major version](https://github.com/assetgraph/assetgraph/commit/0af565874edc7dd5f692dfd24ae7100793399314) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+24 more](https://github.com/assetgraph/assetgraph/compare/v6.0.5...v6.0.6)
+- [+25 more](https://github.com/assetgraph/assetgraph/compare/v6.0.6...v6.0.7)
+
+### v6.0.6 (2020-05-18)
+
+- [Avoid directories in glob results in loadAssets and addAssets. Fixes \#1081](https://github.com/assetgraph/assetgraph/commit/4b0c40d29411f088c1297d110279880fa6f70054) ([Peter Müller](mailto:munter@fumle.dk))
 
 ### v6.0.5 (2020-01-02)
 
