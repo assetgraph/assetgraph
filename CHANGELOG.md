@@ -1,7 +1,11 @@
-### v6.0.7 (2020-05-24)
+### v6.0.8 (2020-06-22)
 
 #### Pull requests
 
+- [#1096](https://github.com/assetgraph/assetgraph/pull/1096) Add qs dependency ([Jang Whemoon](mailto:palindrom615@gmail.com))
+- [#1095](https://github.com/assetgraph/assetgraph/pull/1095) Upgrade mocha to version 8.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1094](https://github.com/assetgraph/assetgraph/pull/1094) Upgrade iconv-lite to version 0.6.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1093](https://github.com/assetgraph/assetgraph/pull/1093) Upgrade p-limit to version 3.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1091](https://github.com/assetgraph/assetgraph/pull/1091) Avoid directories in glob results in loadAssets and addAssets. Fixes … ([Peter Müller](mailto:munter@fumle.dk))
 - [#1090](https://github.com/assetgraph/assetgraph/pull/1090) Upgrade eslint-plugin-mocha to version 7.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1089](https://github.com/assetgraph/assetgraph/pull/1089) Upgrade eslint to version 7.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -33,12 +37,16 @@
 
 #### Commits to master
 
+- [Relax the qs version range a bit so it can be deduped with the copy pulled in by request and u-messy](https://github.com/assetgraph/assetgraph/commit/738e315a9b998ae8d43b77c21329c9f3cb6d9101) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Guard against throwing while generating error messages for invalid URI's. Relates to Munter\/netlify-plugin-subfont\#40](https://github.com/assetgraph/assetgraph/commit/8f1104dbc60831103613a298aafad14333aa157a) ([Peter Müller](mailto:munter@fumle.dk))
 - [Don't need to install fonttools etc. on ci anymore](https://github.com/assetgraph/assetgraph/commit/c9ca548a81952e9a43c5f454ebdbbe1ebde61f1a) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Remove Html\#allowsPerCsp \(not used?\)](https://github.com/assetgraph/assetgraph/commit/178a1c59d1f5eaa50d78f6e849762c4f6d4cf1dd) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Move more stuff into assetgraph-csp](https://github.com/assetgraph/assetgraph/commit/38dcc29048ab3f52bd8ef9e3ddadb75039fd04c9) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Remove the reviewContentSecurityPolicy transform](https://github.com/assetgraph/assetgraph/commit/5f312d1f868a5316f01319afbd401336e479f4db) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+25 more](https://github.com/assetgraph/assetgraph/compare/v6.0.6...v6.0.7)
+- [+26 more](https://github.com/assetgraph/assetgraph/compare/v6.0.7...v6.0.8)
+
+### v6.0.7 (2020-05-24)
+
+- [#1092](https://github.com/assetgraph/assetgraph/pull/1092) Catch throws from decodeURI ([Peter Müller](mailto:munter@fumle.dk))
 
 ### v6.0.6 (2020-05-18)
 
