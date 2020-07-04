@@ -1639,12 +1639,11 @@ describe('assets/Asset', function() {
       expect(assetGraph, 'to contain asset', { type: 'Html', isInline: true });
       expect(assetGraph, 'to contain asset', { type: 'Html', isInline: false });
 
-      await assetGraph.moveAssets({ type: 'Html', isInline: false }, function(
-        asset,
-        assetGraph
-      ) {
-        return urlTools.resolveUrl(assetGraph.root, 'subdir/index.html');
+      const [nonInlineHtml] = assetGraph.findAssets({
+        type: 'Html',
+        isInline: false
       });
+      nonInlineHtml.url = `${assetGraph.root}subdir/index.html`;
 
       expect(
         assetGraph.findRelations({ type: 'CssImage' })[0].propertyNode.value,
