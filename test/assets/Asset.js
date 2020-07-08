@@ -3018,4 +3018,99 @@ describe('assets/Asset', function() {
       expect(asset1, 'to be', asset2);
     });
   });
+
+  describe('init', function() {
+    describe('when a parse tree is given', async function() {
+      it('should flush an existing cached _text and _rawSrc', function() {
+        const assetGraph = new AssetGraph();
+        const asset = assetGraph.addAsset({
+          type: 'JavaScript',
+          url: 'https://example.com/script.js',
+          text: 'foo;'
+        });
+
+        // eslint-disable-next-line no-unused-expressions
+        asset.rawSrc; // Populate rawSrc
+
+        asset.init({
+          parseTree: {
+            type: 'Program',
+            body: [
+              {
+                type: 'ExpressionStatement',
+                expression: {
+                  type: 'Identifier',
+                  name: 'bar'
+                }
+              }
+            ]
+          }
+        });
+        expect(asset.text, 'to equal', 'bar;');
+        expect(asset.rawSrc.toString(), 'to equal', 'bar;');
+      });
+    });
+
+    describe('when a text is given', async function() {
+      it('should flush an existing cached _parseTree and _rawSrc', function() {
+        const assetGraph = new AssetGraph();
+        const asset = assetGraph.addAsset({
+          type: 'JavaScript',
+          url: 'https://example.com/script.js',
+          rawSrc: Buffer.from('foo;')
+        });
+
+        // eslint-disable-next-line no-unused-expressions
+        asset.parseTree; // Populate parseTree
+
+        asset.init({
+          text: 'bar;'
+        });
+        expect(asset.rawSrc.toString(), 'to equal', 'bar;');
+        expect(asset.parseTree, 'to satisfy', {
+          type: 'Program',
+          body: [
+            {
+              type: 'ExpressionStatement',
+              expression: {
+                type: 'Identifier',
+                name: 'bar'
+              }
+            }
+          ]
+        });
+      });
+    });
+
+    describe('when a rawSrc is given', async function() {
+      it('should flush an existing cached _parseTree and _text', function() {
+        const assetGraph = new AssetGraph();
+        const asset = assetGraph.addAsset({
+          type: 'JavaScript',
+          url: 'https://example.com/script.js',
+          rawSrc: Buffer.from('foo;')
+        });
+
+        // eslint-disable-next-line no-unused-expressions
+        asset.parseTree; // Populate parseTree
+
+        asset.init({
+          rawSrc: Buffer.from('bar;')
+        });
+        expect(asset.text, 'to equal', 'bar;');
+        expect(asset.parseTree, 'to satisfy', {
+          type: 'Program',
+          body: [
+            {
+              type: 'ExpressionStatement',
+              expression: {
+                type: 'Identifier',
+                name: 'bar'
+              }
+            }
+          ]
+        });
+      });
+    });
+  });
 });
