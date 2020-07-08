@@ -1,4 +1,4 @@
-### v6.1.0 (2020-07-08)
+### v6.1.1 (2020-07-08)
 
 #### Pull requests
 
@@ -42,7 +42,14 @@
 - [Relax the qs version range a bit so it can be deduped with the copy pulled in by request and u-messy](https://github.com/assetgraph/assetgraph/commit/738e315a9b998ae8d43b77c21329c9f3cb6d9101) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Guard against throwing while generating error messages for invalid URI's. Relates to Munter\/netlify-plugin-subfont\#40](https://github.com/assetgraph/assetgraph/commit/8f1104dbc60831103613a298aafad14333aa157a) ([Peter Müller](mailto:munter@fumle.dk))
 - [Don't need to install fonttools etc. on ci anymore](https://github.com/assetgraph/assetgraph/commit/c9ca548a81952e9a43c5f454ebdbbe1ebde61f1a) ([Andreas Lind](mailto:andreas.lind@peakon.com))
-- [+28 more](https://github.com/assetgraph/assetgraph/compare/v6.0.7...v6.1.0)
+- [+28 more](https://github.com/assetgraph/assetgraph/compare/v6.1.0...v6.1.1)
+
+### v6.1.0 (2020-07-09)
+
+- [serializeSourceMaps: Take a query object](https://github.com/assetgraph/assetgraph/commit/3e3ceed25a9debf51fee0c10deb27193cfa60921) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Asset\#init: Flush the cached states when text, rawSrc, or parseTree is given without the others](https://github.com/assetgraph/assetgraph/commit/c0aa8f101142a666db6d334acb5556bca44779fb) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Relax the qs version range a bit so it can be deduped with the copy pulled in by request and u-messy](https://github.com/assetgraph/assetgraph/commit/ecd2d4931cbfbf11ffe91e23d9bfc34e817be2a0) ([Andreas Lind](mailto:andreas.lind@peakon.com))
+- [Add qs dependency](https://github.com/assetgraph/assetgraph/commit/fdd03265b5d4ba53e1baf61395a33ea46a40eae5) ([Jang Whemoon](mailto:palindrom615@gmail.com))
 
 ### v6.0.7 (2020-05-24)
 
