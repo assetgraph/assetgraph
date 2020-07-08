@@ -1,4 +1,4 @@
-### v6.0.8 (2020-06-22)
+### v6.1.0 (2020-07-08)
 
 #### Pull requests
 
@@ -37,12 +37,12 @@
 
 #### Commits to master
 
+- [serializeSourceMaps: Take a query object](https://github.com/assetgraph/assetgraph/commit/ce71c298288ed8bbd6fcb61fb146fd86bd888ab4) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Asset\#init: Flush the cached states when text, rawSrc, or parseTree is given without the others](https://github.com/assetgraph/assetgraph/commit/e82b85a5bc50908b3a6ece38f022b91e3870b4f0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Relax the qs version range a bit so it can be deduped with the copy pulled in by request and u-messy](https://github.com/assetgraph/assetgraph/commit/738e315a9b998ae8d43b77c21329c9f3cb6d9101) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Guard against throwing while generating error messages for invalid URI's. Relates to Munter\/netlify-plugin-subfont\#40](https://github.com/assetgraph/assetgraph/commit/8f1104dbc60831103613a298aafad14333aa157a) ([Peter Müller](mailto:munter@fumle.dk))
 - [Don't need to install fonttools etc. on ci anymore](https://github.com/assetgraph/assetgraph/commit/c9ca548a81952e9a43c5f454ebdbbe1ebde61f1a) ([Andreas Lind](mailto:andreas.lind@peakon.com))
-- [Remove Html\#allowsPerCsp \(not used?\)](https://github.com/assetgraph/assetgraph/commit/178a1c59d1f5eaa50d78f6e849762c4f6d4cf1dd) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Move more stuff into assetgraph-csp](https://github.com/assetgraph/assetgraph/commit/38dcc29048ab3f52bd8ef9e3ddadb75039fd04c9) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+26 more](https://github.com/assetgraph/assetgraph/compare/v6.0.7...v6.0.8)
+- [+28 more](https://github.com/assetgraph/assetgraph/compare/v6.0.7...v6.1.0)
 
 ### v6.0.7 (2020-05-24)
 
