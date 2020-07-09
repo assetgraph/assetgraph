@@ -39,7 +39,7 @@
     "html-minifier": "^4.0.0",
     "imageinfo": "^1.0.4",
     "jsdom": "^16.1.0",
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "mkdirp": "^1.0.3",
     "normalizeurl": "^1.0.0",
     "p-limit": "^3.0.1",
