@@ -52,7 +52,7 @@ describe('transforms/moveAssetsInOrder', function() {
       spy({
         message:
           'transforms.moveAssetsInOrder: Cyclic dependencies detected. All files could not be moved',
-        relations: expect.it('to satisfy', [
+        relations: expect.it('with set semantics', 'to satisfy', [
           {
             from: {
               fileName: 'circular-base.css'
