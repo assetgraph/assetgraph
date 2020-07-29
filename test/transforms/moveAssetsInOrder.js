@@ -1,4 +1,5 @@
 const expect = require('../unexpected-with-plugins');
+const sinon = require('sinon');
 const AssetGraph = require('../../lib/AssetGraph');
 
 describe('transforms/moveAssetsInOrder', function() {
@@ -29,18 +30,43 @@ describe('transforms/moveAssetsInOrder', function() {
     });
   });
 
-  it('should throw an error when encountering circular references', async function() {
+  it('should emit an error when encountering circular references', async function() {
+    const order = ['first.css', 'second.css', 'third.css', 'main.css'];
+    let idx = 0;
+
     const assetGraph = new AssetGraph({
       root: 'testdata/transforms/moveAssetsInOrder/'
     });
 
-    await assetGraph.loadAssets('circular.html');
-    await assetGraph.populate();
+    const spy = sinon.spy();
+    assetGraph.on('warn', spy);
 
-    await expect(
-      () => assetGraph.moveAssetsInOrder({ type: 'Css' }, '/css/'),
-      'to error',
-      /Couldn't find a suitable rename order due to cycles in the selection/
-    );
+    await assetGraph.loadAssets('partiallycircular.html');
+    await assetGraph.populate();
+    await assetGraph.moveAssetsInOrder({ type: 'Css' }, function(asset) {
+      expect(asset.fileName, 'to be', order[idx]);
+      idx += 1;
+    });
+
+    expect(spy, 'to have calls satisfying', () => {
+      spy({
+        message:
+          'transforms.moveAssetsInOrder: Cyclic dependencies detected. All files could not be moved',
+        relations: expect.it('with set semantics', 'to satisfy', [
+          {
+            from: {
+              fileName: 'circular-base.css'
+            },
+            href: 'circular-child.css'
+          },
+          {
+            from: {
+              fileName: 'circular-child.css'
+            },
+            href: 'circular-base.css'
+          }
+        ])
+      });
+    });
   });
 });
