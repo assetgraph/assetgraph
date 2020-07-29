@@ -19,6 +19,17 @@ env: CXX="g++-4.8" CC="gcc-4.8"
 script: 'npm install && npm run ci'
 after_success: '<coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js'
 
+matrix:
+  include:
+    - name: Windows
+      os: windows
+      node_js: lts/*
+      script: npm run test
+    - name: OSX
+      os: osx
+      node_js: lts/*
+      script: npm run test
+
 notifications:
   webhooks:
     urls:
