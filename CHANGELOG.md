@@ -1,4 +1,4 @@
-### v6.1.2 (2020-08-02)
+### v6.1.3 (2020-08-02)
 
 #### Pull requests
 
@@ -44,7 +44,11 @@
 - [Asset\#init: Flush the cached states when text, rawSrc, or parseTree is given without the others](https://github.com/assetgraph/assetgraph/commit/e82b85a5bc50908b3a6ece38f022b91e3870b4f0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Relax the qs version range a bit so it can be deduped with the copy pulled in by request and u-messy](https://github.com/assetgraph/assetgraph/commit/738e315a9b998ae8d43b77c21329c9f3cb6d9101) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Guard against throwing while generating error messages for invalid URI's. Relates to Munter\/netlify-plugin-subfont\#40](https://github.com/assetgraph/assetgraph/commit/8f1104dbc60831103613a298aafad14333aa157a) ([Peter Müller](mailto:munter@fumle.dk))
-- [+29 more](https://github.com/assetgraph/assetgraph/compare/v6.1.1...v6.1.2)
+- [+29 more](https://github.com/assetgraph/assetgraph/compare/v6.1.2...v6.1.3)
+
+### v6.1.2 (2020-08-02)
+
+- [#1097](https://github.com/assetgraph/assetgraph/pull/1097) Switch moveAssetsInOrder to emit a warning about cyclic dependencies instead of throwing ([Peter Müller](mailto:munter@fumle.dk))
 
 ### v6.1.1 (2020-07-09)
 
