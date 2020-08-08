@@ -1,7 +1,10 @@
-### v6.1.3 (2020-08-02)
+### v6.2.0 (2020-08-08)
 
 #### Pull requests
 
+- [#1103](https://github.com/assetgraph/assetgraph/pull/1103) Upgrade eslint-plugin-mocha to version 8.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1102](https://github.com/assetgraph/assetgraph/pull/1102) Upgrade escodegen to version 2.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1101](https://github.com/assetgraph/assetgraph/pull/1101) Upgrade terser to version 5.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1098](https://github.com/assetgraph/assetgraph/pull/1098) Remove the moveAssets and moveAssetsInOrder transforms ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [#1099](https://github.com/assetgraph/assetgraph/pull/1099) Upgrade lodash to version 4.17.19 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1096](https://github.com/assetgraph/assetgraph/pull/1096) Add qs dependency ([Jang Whemoon](mailto:palindrom615@gmail.com))
@@ -39,12 +42,16 @@
 
 #### Commits to master
 
+- [logEvents: Support a custom console implementation](https://github.com/assetgraph/assetgraph/commit/e4a34c621da8d38b0d85aef272761bb0d17e1639) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Revert "Update mocha to version 8.0.1"](https://github.com/assetgraph/assetgraph/commit/c0adb1ff623f5811930cb62fd3216125bef41fe8) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Also null out .consumer when initializing in case the asset is a source map](https://github.com/assetgraph/assetgraph/commit/780541c3a7a9e2a433222c7201384f3b2b4cc32c) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [serializeSourceMaps: Take a query object](https://github.com/assetgraph/assetgraph/commit/ce71c298288ed8bbd6fcb61fb146fd86bd888ab4) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Asset\#init: Flush the cached states when text, rawSrc, or parseTree is given without the others](https://github.com/assetgraph/assetgraph/commit/e82b85a5bc50908b3a6ece38f022b91e3870b4f0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Relax the qs version range a bit so it can be deduped with the copy pulled in by request and u-messy](https://github.com/assetgraph/assetgraph/commit/738e315a9b998ae8d43b77c21329c9f3cb6d9101) ([Andreas Lind](mailto:andreas.lind@peakon.com))
-- [Guard against throwing while generating error messages for invalid URI's. Relates to Munter\/netlify-plugin-subfont\#40](https://github.com/assetgraph/assetgraph/commit/8f1104dbc60831103613a298aafad14333aa157a) ([Peter Müller](mailto:munter@fumle.dk))
-- [+29 more](https://github.com/assetgraph/assetgraph/compare/v6.1.2...v6.1.3)
+- [+31 more](https://github.com/assetgraph/assetgraph/compare/v6.1.3...v6.2.0)
+
+### v6.1.3 (2020-08-03)
+
+- [Improve Relation.location output for CSS](https://github.com/assetgraph/assetgraph/commit/6c839be9a3d8d42ad69924eb227696c25c5f8eca) ([Peter Müller](mailto:munter@fumle.dk))
 
 ### v6.1.2 (2020-08-02)
 
@@ -112,7 +119,6 @@
 
 #### Pull requests
 
-- [#1042](https://github.com/assetgraph/assetgraph/pull/1042) Resolve canonical URL's with no trailing slash as the assetgrap… ([Peter Müller](mailto:munter@fumle.dk))
 - [#988](https://github.com/assetgraph/assetgraph/pull/988) subsetFonts: Allow passing in per-page font traces ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [#1002](https://github.com/assetgraph/assetgraph/pull/1002) Avoid preloading the unused variants ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [#998](https://github.com/assetgraph/assetgraph/pull/998) subsetFonts: Implement omitFallbacks:true mode ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
@@ -154,7 +160,6 @@
 
 #### Pull requests
 
-- [#1021](https://github.com/assetgraph/assetgraph/pull/1021) Add JavaScriptWorklet relation ([Peter Müller](mailto:munter@fumle.dk))
 - [#1020](https://github.com/assetgraph/assetgraph/pull/1020) Upgrade prettier to version 1.18.2 ([Andreas Lind](mailto:andreaslindpetersen@gmail.com), [depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
 - [#1019](https://github.com/assetgraph/assetgraph/pull/1019) Upgrade file-loader to version 4.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
 - [#1017](https://github.com/assetgraph/assetgraph/pull/1017) Upgrade terser to version 4.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
