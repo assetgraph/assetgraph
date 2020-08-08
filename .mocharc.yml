@@ -1,0 +1,5 @@
+reporter: spec
+timeout: 60000
+recursive: true
+checkLeaks: true
+globals: requirejsVars
