@@ -957,4 +957,30 @@ describe('relations/Relation', function () {
       '<img src="https://example.com/image.svg#yadda">'
     );
   });
+
+  it('should handle a relative url pointing out of the root', async function () {
+    httpception([
+      {
+        request: 'GET http://example.com/',
+        response: {
+          headers: {
+            'Content-Type': 'text/html',
+          },
+          body: '<link rel="stylesheet" href="../../styles.css">',
+        },
+      },
+    ]);
+
+    const assetGraph = new AssetGraph();
+    const htmlAsset = assetGraph.addAsset({
+      type: 'Html',
+      url: 'https://example.com/',
+    });
+    await htmlAsset.load();
+    const htmlStyle = htmlAsset.outgoingRelations[0];
+    expect(htmlStyle.to.url, 'to equal', 'https://example.com/styles.css');
+    expect(htmlStyle.href, 'to equal', '../../styles.css');
+    htmlStyle.refreshHref();
+    expect(htmlStyle.href, 'to equal', 'styles.css');
+  });
 });
