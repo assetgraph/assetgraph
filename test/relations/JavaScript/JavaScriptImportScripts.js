@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('JavaScriptImportScripts', function() {
-  it('should pick up importScripts() and self.importScripts as relations', async function() {
+describe('JavaScriptImportScripts', function () {
+  it('should pick up importScripts() and self.importScripts as relations', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/JavaScript/JavaScriptImportScripts/simple/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -16,31 +16,31 @@ describe('JavaScriptImportScripts', function() {
     expect(assetGraph, 'to contain assets', 'JavaScript', 5);
   });
 
-  it('should support attaching and detaching importScripts relations', async function() {
+  it('should support attaching and detaching importScripts relations', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/JavaScript/JavaScriptImportScripts/simple/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
     assetGraph.findRelations({ to: { fileName: 'foo.js' } })[0].detach();
     const webWorker = assetGraph.findRelations({
-      type: 'JavaScriptWebWorker'
+      type: 'JavaScriptWebWorker',
     })[0].to;
     expect(webWorker.text, 'not to contain', "'foo.js';");
     expect(webWorker.text, 'to contain', "importScripts('bar.js');");
     webWorker.addRelation(
       {
         type: 'JavaScriptImportScripts',
-        to: { url: 'foo.js' }
+        to: { url: 'foo.js' },
       },
       'before',
       assetGraph.findRelations({
         type: 'JavaScriptImportScripts',
-        to: { fileName: 'bar.js' }
+        to: { fileName: 'bar.js' },
       })[0]
     );
     expect(webWorker.text, 'to contain', "importScripts('foo.js', 'bar.js');");
@@ -48,12 +48,12 @@ describe('JavaScriptImportScripts', function() {
     webWorker.addRelation(
       {
         type: 'JavaScriptImportScripts',
-        href: 'after.js'
+        href: 'after.js',
       },
       'after',
       assetGraph.findRelations({
         type: 'JavaScriptImportScripts',
-        to: { fileName: 'bar.js' }
+        to: { fileName: 'bar.js' },
       })[0]
     );
     expect(
@@ -64,14 +64,14 @@ describe('JavaScriptImportScripts', function() {
     webWorker.addRelation(
       {
         type: 'JavaScriptImportScripts',
-        href: 'last.js'
+        href: 'last.js',
       },
       'last'
     );
     webWorker.addRelation(
       {
         type: 'JavaScriptImportScripts',
-        href: 'first.js'
+        href: 'first.js',
       },
       'first'
     );
@@ -81,31 +81,31 @@ describe('JavaScriptImportScripts', function() {
     );
   });
 
-  it('should support attaching and detaching importScripts separated by comma in the source file', async function() {
+  it('should support attaching and detaching importScripts separated by comma in the source file', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/JavaScript/JavaScriptImportScripts/seq/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
     assetGraph.findRelations({ to: { fileName: 'foo.js' } })[0].detach();
     const webWorker = assetGraph.findRelations({
-      type: 'JavaScriptWebWorker'
+      type: 'JavaScriptWebWorker',
     })[0].to;
     expect(webWorker.text, 'not to contain', "'foo.js';");
     expect(webWorker.text, 'to contain', "importScripts('bar.js')");
     webWorker.addRelation(
       {
         type: 'JavaScriptImportScripts',
-        href: 'foo.js'
+        href: 'foo.js',
       },
       'before',
       assetGraph.findRelations({
         type: 'JavaScriptImportScripts',
-        to: { fileName: 'bar.js' }
+        to: { fileName: 'bar.js' },
       })[0]
     );
     expect(webWorker.text, 'to contain', "importScripts('foo.js', 'bar.js')");
@@ -113,12 +113,12 @@ describe('JavaScriptImportScripts', function() {
     webWorker.addRelation(
       {
         type: 'JavaScriptImportScripts',
-        href: 'after.js'
+        href: 'after.js',
       },
       'after',
       assetGraph.findRelations({
         type: 'JavaScriptImportScripts',
-        to: { fileName: 'bar.js' }
+        to: { fileName: 'bar.js' },
       })[0]
     );
     expect(
@@ -129,14 +129,14 @@ describe('JavaScriptImportScripts', function() {
     webWorker.addRelation(
       {
         type: 'JavaScriptImportScripts',
-        href: 'last.js'
+        href: 'last.js',
       },
       'last'
     );
     webWorker.addRelation(
       {
         type: 'JavaScriptImportScripts',
-        href: 'first.js'
+        href: 'first.js',
       },
       'first'
     );
@@ -146,21 +146,21 @@ describe('JavaScriptImportScripts', function() {
     );
   });
 
-  it('should refuse to inline, attach and detach', async function() {
+  it('should refuse to inline, attach and detach', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/JavaScript/JavaScriptImportScripts/simple/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
     const javaScriptImportScripts = assetGraph.findRelations({
-      type: 'JavaScriptImportScripts'
+      type: 'JavaScriptImportScripts',
     })[0];
     expect(
-      function() {
+      function () {
         javaScriptImportScripts.inline();
       },
       'to throw',
@@ -168,7 +168,7 @@ describe('JavaScriptImportScripts', function() {
     );
 
     expect(
-      function() {
+      function () {
         javaScriptImportScripts.node = {};
         javaScriptImportScripts.detach();
       },
@@ -177,7 +177,7 @@ describe('JavaScriptImportScripts', function() {
     );
 
     expect(
-      function() {
+      function () {
         javaScriptImportScripts.attach('after', { argumentsNode: [] });
       },
       'to throw',
@@ -185,7 +185,7 @@ describe('JavaScriptImportScripts', function() {
     );
 
     expect(
-      function() {
+      function () {
         javaScriptImportScripts.attach('foobar');
       },
       'to throw',

@@ -2,8 +2,8 @@ const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 const http = require('http');
 
-describe('relations/HttpRedirect', function() {
-  it('should handle a basic test case', async function() {
+describe('relations/HttpRedirect', function () {
+  it('should handle a basic test case', async function () {
     let serverAddress;
     let rootUrl;
     let loopCount = 0;
@@ -13,7 +13,7 @@ describe('relations/HttpRedirect', function() {
         if (req.url === '/301') {
           res.writeHead(301, {
             Location: '/relativeRedirectTarget.html',
-            'Content-Type': 'text/html; charset=UTF-8'
+            'Content-Type': 'text/html; charset=UTF-8',
           });
           res.end(
             '<!DOCTYPE html><html><head></head><html>Moved permanently</body></html>'
@@ -21,7 +21,7 @@ describe('relations/HttpRedirect', function() {
         } else if (req.url === '/302') {
           res.writeHead(302, {
             Location: `${rootUrl}absoluteRedirectTarget.html`,
-            'Content-Type': 'text/html; charset=UTF-8'
+            'Content-Type': 'text/html; charset=UTF-8',
           });
           res.end(
             '<!DOCTYPE html><html><head></head><html>Moved temporarily</body></html>'
@@ -30,7 +30,7 @@ describe('relations/HttpRedirect', function() {
           infiniteloopCount += 1;
           res.writeHead(302, {
             Location: `${rootUrl}infiniteloop`,
-            'Content-Type': 'text/html; charset=UTF-8'
+            'Content-Type': 'text/html; charset=UTF-8',
           });
           res.end(
             '<!DOCTYPE html><html><head></head><html>Moved temporarily</body></html>'
@@ -40,7 +40,7 @@ describe('relations/HttpRedirect', function() {
             loopCount += 1;
             res.writeHead(302, {
               Location: `${rootUrl}loop`,
-              'Content-Type': 'text/html; charset=UTF-8'
+              'Content-Type': 'text/html; charset=UTF-8',
             });
             res.end(
               '<!DOCTYPE html><html><head></head><html>Moved temporarily</body></html>'
@@ -48,7 +48,7 @@ describe('relations/HttpRedirect', function() {
           } else {
             res.writeHead(301, {
               Location: '/loopRedirectTarget.html',
-              'Content-Type': 'text/html; charset=UTF-8'
+              'Content-Type': 'text/html; charset=UTF-8',
             });
             res.end(
               '<!DOCTYPE html><html><head></head><html>Moved permanently</body></html>'
@@ -58,7 +58,7 @@ describe('relations/HttpRedirect', function() {
           /\/(?:relative|absolute|loop)RedirectTarget\.html$/.test(req.url)
         ) {
           res.writeHead(200, {
-            'Content-Type': 'text/html; charset=UTF-8'
+            'Content-Type': 'text/html; charset=UTF-8',
           });
           res.end(`This is ${req.url}`);
         } else {
@@ -89,7 +89,7 @@ describe('relations/HttpRedirect', function() {
         { href: '/relativeRedirectTarget.html' },
         { href: `${rootUrl}absoluteRedirectTarget.html` },
         { href: '/loopRedirectTarget.html' },
-        { href: `${rootUrl}infiniteloop` }
+        { href: `${rootUrl}infiniteloop` },
       ]);
       expect(loopCount, 'to be', 1);
       expect(infiniteloopCount, 'to be', 2);

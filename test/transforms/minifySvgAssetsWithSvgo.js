@@ -2,13 +2,13 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const pathModule = require('path');
 
-describe('transforms/minifySvgAssetsWithSvgo', function() {
-  it('should handle a simple test case', async function() {
+describe('transforms/minifySvgAssetsWithSvgo', function () {
+  it('should handle a simple test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/minifySvgAssetsWithSvgo/simple/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -25,12 +25,12 @@ describe('transforms/minifySvgAssetsWithSvgo', function() {
     );
   });
 
-  it('should preserve the top-level attributes of an SVG island in HTML when minifying', async function() {
+  it('should preserve the top-level attributes of an SVG island in HTML when minifying', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/minifySvgAssetsWithSvgo/svgIslandInHtml/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -47,7 +47,7 @@ describe('transforms/minifySvgAssetsWithSvgo', function() {
     );
   });
 
-  it('should not throw away too much precision', async function() {
+  it('should not throw away too much precision', async function () {
     const assetGraph = new AssetGraph();
     await assetGraph.loadAssets({
       type: 'Svg',
@@ -58,7 +58,7 @@ describe('transforms/minifySvgAssetsWithSvgo', function() {
         ' width="69.964px" height="11.535px" viewBox="0 0 69.964 11.535" enable-background="new 0 0 69.964 11.535" xml:space="preserve">\n' +
         '<path fill="#ffffff" d="M32.988,8.093c-0.587,0-1.062,0.478-1.062,1.06c0,0.586,0.475,1.059,1.062,1.059\n' +
         ' c0.584,0,1.058-0.473,1.058-1.059C34.045,8.57,33.572,8.093,32.988,8.093z"/>\n' +
-        '</svg>'
+        '</svg>',
     });
     await assetGraph.minifySvgAssetsWithSvgo({ type: 'Svg' });
 

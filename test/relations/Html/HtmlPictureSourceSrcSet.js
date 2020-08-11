@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlPictureSourceSrcSet', function() {
-  it('should handle a test case with an existing <picture srcset="..."> element', async function() {
+describe('relations/HtmlPictureSourceSrcSet', function () {
+  it('should handle a test case with an existing <picture srcset="..."> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlPictureSourceSrcSet/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -28,14 +28,14 @@ describe('relations/HtmlPictureSourceSrcSet', function() {
     expect(
       assetGraph
         .findRelations({ type: 'HtmlPictureSourceSrcSet' })
-        .map(function(htmlPictureSourceSrcSet) {
+        .map(function (htmlPictureSourceSrcSet) {
           return htmlPictureSourceSrcSet.node.outerHTML;
         }),
       'to equal',
       [
         '<source media="(min-width: 45em)" srcset="large-1.jpg 1x, reallyLarge.jpg 2x">',
         '<source media="(min-width: 18em)" srcset="med-1.jpg 1x, reallyMed.jpg 2x">',
-        '<source srcset="small-1.jpg 1x, reallySmall.jpg 2x">'
+        '<source srcset="small-1.jpg 1x, reallySmall.jpg 2x">',
       ]
     );
   });

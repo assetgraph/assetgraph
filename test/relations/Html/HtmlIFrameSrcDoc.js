@@ -2,18 +2,18 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlIFrameSrcDoc', function() {
-  it('should handle a test case with an existing <iframe srcdoc=...> element', async function() {
+describe('relations/HtmlIFrameSrcDoc', function () {
+  it('should handle a test case with an existing <iframe srcdoc=...> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlIFrameSrcDoc/'
-      )
+      ),
     });
 
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate({
-      followRelations: { to: { protocol: 'file:' } }
+      followRelations: { to: { protocol: 'file:' } },
     });
 
     expect(assetGraph, 'to contain assets', 'Html', 3);

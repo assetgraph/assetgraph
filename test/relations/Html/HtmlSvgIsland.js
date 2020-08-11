@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlSvgIsland', function() {
-  it('should handle a test case with an existing <svg> element', async function() {
+describe('relations/HtmlSvgIsland', function () {
+  it('should handle a test case with an existing <svg> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlSvgIsland/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -30,7 +30,7 @@ describe('relations/HtmlSvgIsland', function() {
     // on the documentElement of the inline asset:
     const inlineSvgAsset = assetGraph.findAssets({
       type: 'Svg',
-      isInline: true
+      isInline: true,
     })[0];
     inlineSvgAsset.parseTree.documentElement.setAttribute('foo', 'bar');
     inlineSvgAsset.parseTree.documentElement.removeAttribute('hey', 'there');
@@ -44,9 +44,9 @@ describe('relations/HtmlSvgIsland', function() {
         {
           attributes: {
             foo: 'bar',
-            hey: undefined
-          }
-        }
+            hey: undefined,
+          },
+        },
       ]
     );
   });

@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlInlineScriptTemplate', function() {
-  it('should handle a test case with an existing <script type="text/html"> element', async function() {
+describe('relations/HtmlInlineScriptTemplate', function () {
+  it('should handle a test case with an existing <script type="text/html"> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlInlineScriptTemplate/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -23,7 +23,7 @@ describe('relations/HtmlInlineScriptTemplate', function() {
     );
     const inlineHtml = assetGraph.findAssets({
       type: 'Html',
-      isInline: true
+      isInline: true,
     })[0];
     const document = inlineHtml.parseTree;
     document.firstChild.appendChild(document.createTextNode('hello!'));
@@ -36,12 +36,12 @@ describe('relations/HtmlInlineScriptTemplate', function() {
     );
   });
 
-  it('should handle a test case with some advanced markup in a <script type="text/html"> element', async function() {
+  it('should handle a test case with some advanced markup in a <script type="text/html"> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlInlineScriptTemplate/'
-      )
+      ),
     });
     await assetGraph.loadAssets('advancedMarkup.html');
     await assetGraph.populate();
@@ -56,7 +56,7 @@ describe('relations/HtmlInlineScriptTemplate', function() {
 
     const inlineHtml = assetGraph.findAssets({
       type: 'Html',
-      isInline: true
+      isInline: true,
     })[0];
     const document = inlineHtml.parseTree;
     document.appendChild(document.createTextNode('hello!'));

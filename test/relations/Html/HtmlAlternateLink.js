@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlAlternateLink', function() {
-  it('should handle a simple test case', async function() {
+describe('relations/HtmlAlternateLink', function () {
+  it('should handle a simple test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlAlternateLink/'
-      )
+      ),
     });
 
     await assetGraph.loadAssets('index.html');

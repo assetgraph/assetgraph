@@ -2,8 +2,8 @@ const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../');
 const pathModule = require('path');
 
-describe('FileRedirect relation', function() {
-  it('should expand dir without trailing slash', async function() {
+describe('FileRedirect relation', function () {
+  it('should expand dir without trailing slash', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
@@ -15,7 +15,7 @@ describe('FileRedirect relation', function() {
         'Asset',
         'FileRedirect',
         'noTrailingSlash'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -26,12 +26,12 @@ describe('FileRedirect relation', function() {
       'to satisfy',
       {
         from: { url: `${assetGraph.root}subdir` },
-        to: { url: `${assetGraph.root}subdir/index.html` }
+        to: { url: `${assetGraph.root}subdir/index.html` },
       }
     );
   });
 
-  it('should expand dir with trailing slash', async function() {
+  it('should expand dir with trailing slash', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
@@ -43,7 +43,7 @@ describe('FileRedirect relation', function() {
         'Asset',
         'FileRedirect',
         'trailingSlash'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -54,7 +54,7 @@ describe('FileRedirect relation', function() {
       'to satisfy',
       {
         from: { url: `${assetGraph.root}subdir/` },
-        to: { url: `${assetGraph.root}subdir/index.html` }
+        to: { url: `${assetGraph.root}subdir/index.html` },
       }
     );
   });

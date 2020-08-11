@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlKnockoutContainerless', function() {
-  it('should handle a test case with existing <!-- ko ... --> comments', async function() {
+describe('relations/HtmlKnockoutContainerless', function () {
+  it('should handle a test case with existing <!-- ko ... --> comments', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlKnockoutContainerless/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -19,12 +19,12 @@ describe('relations/HtmlKnockoutContainerless', function() {
 
     const javaScript = assetGraph.findAssets({
       type: 'JavaScript',
-      isInline: true
+      isInline: true,
     })[0];
     javaScript.parseTree.body[0].expression.properties.push({
       type: 'Property',
       key: { type: 'Identifier', name: 'yup' },
-      value: { type: 'Literal', value: 'yup', raw: "'yup'" }
+      value: { type: 'Literal', value: 'yup', raw: "'yup'" },
     });
     javaScript.markDirty();
 

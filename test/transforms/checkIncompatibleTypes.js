@@ -3,8 +3,8 @@ const httpception = require('httpception');
 const expect = require('../unexpected-with-plugins');
 const sinon = require('sinon');
 
-describe('checkIncompatibleTypes', function() {
-  it('should not complain if an HTTP redirect with a Content-Type conflicts with the expected type', async function() {
+describe('checkIncompatibleTypes', function () {
+  it('should not complain if an HTTP redirect with a Content-Type conflicts with the expected type', async function () {
     const assetGraph = new AssetGraph();
     httpception({
       request: 'GET https://www.example.com/foo.js',
@@ -12,10 +12,10 @@ describe('checkIncompatibleTypes', function() {
         statusCode: 302,
         headers: {
           'Content-Type': 'text/html',
-          Location: 'https://www.example.com/otherScript.js'
+          Location: 'https://www.example.com/otherScript.js',
         },
-        body: 'Sorry, please get the script from over there'
-      }
+        body: 'Sorry, please get the script from over there',
+      },
     });
 
     await assetGraph.loadAssets('https://www.example.com/foo.js');
@@ -26,7 +26,7 @@ describe('checkIncompatibleTypes', function() {
     expect(warnSpy, 'was not called');
   });
 
-  it('should warn if the Content-Type of the asset contradicts the incoming relations', async function() {
+  it('should warn if the Content-Type of the asset contradicts the incoming relations', async function () {
     const assetGraph = new AssetGraph();
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
@@ -39,17 +39,17 @@ describe('checkIncompatibleTypes', function() {
                 <script src="foo.js"></script>
             </body>
         </html>
-      `
+      `,
     });
 
     httpception({
       request: 'GET https://www.example.com/foo.js',
       response: {
         headers: {
-          'Content-Type': 'image/png'
+          'Content-Type': 'image/png',
         },
-        body: 'alert("foo");'
-      }
+        body: 'alert("foo");',
+      },
     });
     await htmlAsset.outgoingRelations[0].to.load();
     const warnSpy = sinon.spy();
@@ -60,7 +60,7 @@ describe('checkIncompatibleTypes', function() {
     });
   });
 
-  it('should not complain about a targetType:Image relation pointing at a specific image type', async function() {
+  it('should not complain about a targetType:Image relation pointing at a specific image type', async function () {
     const assetGraph = new AssetGraph();
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
@@ -73,20 +73,20 @@ describe('checkIncompatibleTypes', function() {
                 <img src="image.png">
             </body>
         </html>
-      `
+      `,
     });
 
     httpception({
       request: 'GET https://www.example.com/image.png',
       response: {
         headers: {
-          'Content-Type': 'image/png'
+          'Content-Type': 'image/png',
         },
         body: Buffer.from(
           'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAADUlEQVQI12P4//+/GgAJIgMksOYDrwAAAABJRU5ErkJggg==',
           'base64'
-        )
-      }
+        ),
+      },
     });
     await htmlAsset.outgoingRelations[0].to.load();
     const warnSpy = sinon.spy();
@@ -95,12 +95,12 @@ describe('checkIncompatibleTypes', function() {
     expect(warnSpy, 'was not called');
   });
 
-  it('should warn if an asset is being used in incompatible contexts', async function() {
+  it('should warn if an asset is being used in incompatible contexts', async function () {
     const assetGraph = new AssetGraph();
 
     const undetectableAsset = assetGraph.addAsset({
       url: 'http://example.com/undetectable',
-      text: '/* foo */'
+      text: '/* foo */',
     });
 
     assetGraph.addAsset({
@@ -116,7 +116,7 @@ describe('checkIncompatibleTypes', function() {
             <script src="undetectable"></script>
         </body>
         </html>
-      `
+      `,
     });
 
     await undetectableAsset.load();
@@ -132,7 +132,7 @@ describe('checkIncompatibleTypes', function() {
     });
   });
 
-  it('should warn if the Content-Type is text/plain when expecting a specific Text subclass', async function() {
+  it('should warn if the Content-Type is text/plain when expecting a specific Text subclass', async function () {
     const assetGraph = new AssetGraph();
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
@@ -145,17 +145,17 @@ describe('checkIncompatibleTypes', function() {
                 <script src="foo.js"></script>
             </body>
         </html>
-      `
+      `,
     });
 
     httpception({
       request: 'GET https://www.example.com/foo.js',
       response: {
         headers: {
-          'Content-Type': 'text/plain'
+          'Content-Type': 'text/plain',
         },
-        body: 'alert("foo");'
-      }
+        body: 'alert("foo");',
+      },
     });
     await htmlAsset.outgoingRelations[0].to.load();
     const warnSpy = sinon.spy();
@@ -168,22 +168,22 @@ describe('checkIncompatibleTypes', function() {
     });
   });
 
-  it('should not complain about a SourceMap being served as application/json', async function() {
+  it('should not complain about a SourceMap being served as application/json', async function () {
     httpception([
       {
         request: 'GET https://example.com/styles.css',
         response: {
           headers: {
-            'Content-Type': 'text/css'
+            'Content-Type': 'text/css',
           },
-          body: 'div { color: maroon; }/*#sourceMappingURL=css.map*/'
-        }
+          body: 'div { color: maroon; }/*#sourceMappingURL=css.map*/',
+        },
       },
       {
         request: 'GET https://example.com/css.map',
         response: {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
           body: {
             version: 3,
@@ -191,15 +191,15 @@ describe('checkIncompatibleTypes', function() {
             names: [],
             mappings:
               'AAAA;EACE,eAAe;EACf,sBAAsB;CACvB;AACD;EACE,+CAA+C;EAC/C,uCAAuC;CACxC',
-            file: 'styles.css'
-          }
-        }
-      }
+            file: 'styles.css',
+          },
+        },
+      },
     ]);
     const assetGraph = new AssetGraph();
     await assetGraph.loadAssets('https://example.com/styles.css');
     await assetGraph.populate({
-      followRelations: { type: 'CssSourceMappingUrl' }
+      followRelations: { type: 'CssSourceMappingUrl' },
     });
     const warnSpy = sinon.spy();
     assetGraph.on('warn', warnSpy);
@@ -207,23 +207,23 @@ describe('checkIncompatibleTypes', function() {
     expect(warnSpy, 'was not called');
   });
 
-  it('should not complain if a source map is served with a Content-Type of application/octet-stream', async function() {
+  it('should not complain if a source map is served with a Content-Type of application/octet-stream', async function () {
     const assetGraph = new AssetGraph();
 
     httpception({
       request: 'GET https://www.example.com/foo.js.map',
       response: {
         headers: {
-          'Content-Type': 'application/octet-stream'
+          'Content-Type': 'application/octet-stream',
         },
         body: {
           version: 3,
           sources: ['foo.js'],
           names: [],
           mappings: 'AAEA;EACI,cAAA',
-          file: 'foo.js'
-        }
-      }
+          file: 'foo.js',
+        },
+      },
     });
 
     await assetGraph.loadAssets('https://www.example.com/foo.js.map');

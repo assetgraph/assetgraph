@@ -3,22 +3,22 @@ const expect = require('../unexpected-with-plugins');
 const pathModule = require('path');
 const httpception = require('httpception');
 
-describe('relations/Relation', function() {
-  describe('#hrefType', function() {
-    it('should handle a test case with urls with different hrefTypes', async function() {
+describe('relations/Relation', function () {
+  describe('#hrefType', function () {
+    it('should handle a test case with urls with different hrefTypes', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/relations/Relation/refreshHref/'
         ),
-        canonicalRoot: 'http://canonical.com/'
+        canonicalRoot: 'http://canonical.com/',
       });
       await assetGraph.loadAssets('index.html');
 
       expect(assetGraph, 'to contain asset', {
         type: 'Html',
         isInline: false,
-        isLoaded: true
+        isLoaded: true,
       });
       expect(
         assetGraph,
@@ -33,7 +33,7 @@ describe('relations/Relation', function() {
         { href: 'http://canonical.com/canonical.html' },
         { href: '//example.com/protocolRelative.html' },
         { href: 'http://example.com/absolute.html' },
-        { href: /^data:/ }
+        { href: /^data:/ },
       ]);
 
       expect(assetGraph.findRelations({ type: 'HtmlAnchor' }), 'to satisfy', [
@@ -42,12 +42,12 @@ describe('relations/Relation', function() {
         { hrefType: 'absolute' },
         { hrefType: 'protocolRelative' },
         { hrefType: 'absolute' },
-        { hrefType: 'inline' }
+        { hrefType: 'inline' },
       ]);
 
       assetGraph
         .findRelations({ type: 'HtmlAnchor' })
-        .forEach(function(htmlAnchor) {
+        .forEach(function (htmlAnchor) {
           if (htmlAnchor.hrefType === 'inline') {
             htmlAnchor.to.url = 'https://example.com/noLongerInline.html';
           } else {
@@ -62,24 +62,24 @@ describe('relations/Relation', function() {
         { href: 'http://canonical.com/canonical2.html' },
         { href: '//example.com/protocolRelative2.html' },
         { href: 'http://example.com/absolute2.html' },
-        { href: 'https://example.com/noLongerInline.html' }
+        { href: 'https://example.com/noLongerInline.html' },
       ]);
     });
 
-    it('should handle a test case with urls with different hrefTypes, where hrefs have leading white space', async function() {
+    it('should handle a test case with urls with different hrefTypes, where hrefs have leading white space', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/relations/Relation/refreshHref/'
         ),
-        canonicalRoot: 'http://canonical.com/'
+        canonicalRoot: 'http://canonical.com/',
       });
       await assetGraph.loadAssets('index.html');
 
       expect(assetGraph, 'to contain asset', {
         type: 'Html',
         isInline: false,
-        isLoaded: true
+        isLoaded: true,
       });
       expect(
         assetGraph,
@@ -90,7 +90,7 @@ describe('relations/Relation', function() {
 
       assetGraph
         .findAssets({ type: 'Html', isLoaded: true })
-        .forEach(function(asset) {
+        .forEach(function (asset) {
           asset.text = asset.text.replace(/href="/g, 'href=" ');
         });
 
@@ -100,24 +100,24 @@ describe('relations/Relation', function() {
         { hrefType: 'absolute' },
         { hrefType: 'protocolRelative' },
         { hrefType: 'absolute' },
-        { hrefType: 'inline' }
+        { hrefType: 'inline' },
       ]);
     });
 
-    it('should inline a relation when its hrefType is changed to inline', async function() {
+    it('should inline a relation when its hrefType is changed to inline', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/relations/Relation/refreshHref/'
         ),
-        canonicalRoot: 'http://canonical.com/'
+        canonicalRoot: 'http://canonical.com/',
       });
       await assetGraph.loadAssets('index.html');
 
       const indexHtml = assetGraph.findAssets({ fileName: 'index.html' })[0];
       const relation = assetGraph.findRelations({
         from: indexHtml,
-        to: { fileName: 'relative.html' }
+        to: { fileName: 'relative.html' },
       })[0];
 
       await relation.to.load();
@@ -135,16 +135,16 @@ describe('relations/Relation', function() {
         { hrefType: 'absolute' },
         { hrefType: 'protocolRelative' },
         { hrefType: 'absolute' },
-        { hrefType: 'inline' }
+        { hrefType: 'inline' },
       ]);
     });
 
-    it('should externalize a relation when its hrefType is changed from inline', async function() {
+    it('should externalize a relation when its hrefType is changed from inline', async function () {
       const assetGraph = new AssetGraph();
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/',
-        text: '<style>body { color: maroon; }</style>'
+        text: '<style>body { color: maroon; }</style>',
       });
 
       htmlAsset.outgoingRelations[0].hrefType = 'rootRelative';
@@ -152,7 +152,7 @@ describe('relations/Relation', function() {
     });
   });
 
-  describe('#canonical', function() {
+  describe('#canonical', function () {
     const testDataDir = pathModule.resolve(
       pathModule.resolve(
         __dirname,
@@ -160,12 +160,12 @@ describe('relations/Relation', function() {
       )
     );
 
-    it('should populate "canonical" from the local root', async function() {
+    it('should populate "canonical" from the local root', async function () {
       httpception();
 
       const assetGraph = new AssetGraph({
         root: testDataDir,
-        canonicalRoot: 'http://canonical.com/'
+        canonicalRoot: 'http://canonical.com/',
       });
       await assetGraph.loadAssets('canonical.html');
       await assetGraph.populate();
@@ -177,18 +177,18 @@ describe('relations/Relation', function() {
           hrefType: 'absolute',
           href: 'http://canonical.com/local.js',
           to: {
-            url: `file://${pathModule.join(testDataDir, 'local.js')}`
-          }
-        }
+            url: `file://${pathModule.join(testDataDir, 'local.js')}`,
+          },
+        },
       ]);
     });
 
-    it('should treat "canonical" as non-crossorigin', async function() {
+    it('should treat "canonical" as non-crossorigin', async function () {
       httpception();
 
       const assetGraph = new AssetGraph({
         root: testDataDir,
-        canonicalRoot: 'http://canonical.com/'
+        canonicalRoot: 'http://canonical.com/',
       });
       await assetGraph.loadAssets('canonical.html');
       await assetGraph.populate();
@@ -197,17 +197,17 @@ describe('relations/Relation', function() {
         {
           hrefType: 'absolute',
           canonical: true,
-          crossorigin: false
-        }
+          crossorigin: false,
+        },
       ]);
     });
 
-    it('should keep "canonical" relative href when moving target asset', async function() {
+    it('should keep "canonical" relative href when moving target asset', async function () {
       httpception();
 
       const assetGraph = new AssetGraph({
         root: testDataDir,
-        canonicalRoot: 'http://canonical.com/'
+        canonicalRoot: 'http://canonical.com/',
       });
       await assetGraph.loadAssets('canonical.html');
       await assetGraph.populate();
@@ -217,20 +217,20 @@ describe('relations/Relation', function() {
       const relation = assetGraph.findRelations()[0];
 
       expect(relation, 'to satisfy', {
-        href: 'http://canonical.com/local.js'
+        href: 'http://canonical.com/local.js',
       });
 
       relation.to.fileName = 'movedLocal.js';
 
       expect(relation, 'to satisfy', {
-        href: 'http://canonical.com/movedLocal.js'
+        href: 'http://canonical.com/movedLocal.js',
       });
     });
 
-    it('should add the canonical root to the href of a local file', async function() {
+    it('should add the canonical root to the href of a local file', async function () {
       const assetGraph = new AssetGraph({
         root: testDataDir,
-        canonicalRoot: 'http://canonical.com/'
+        canonicalRoot: 'http://canonical.com/',
       });
       await assetGraph.loadAssets('local.html');
       await assetGraph.populate();
@@ -243,8 +243,8 @@ describe('relations/Relation', function() {
         hrefType: 'relative',
         href: 'local.js',
         to: {
-          url: `file://${pathModule.join(testDataDir, 'local.js')}`
-        }
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`,
+        },
       });
 
       relation.canonical = true;
@@ -255,14 +255,14 @@ describe('relations/Relation', function() {
         crossorigin: false,
         href: 'http://canonical.com/local.js',
         to: {
-          url: `file://${pathModule.join(testDataDir, 'local.js')}`
-        }
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`,
+        },
       });
     });
 
-    it('should silently ignore a canonical setting when there is no canonicalRoot', async function() {
+    it('should silently ignore a canonical setting when there is no canonicalRoot', async function () {
       const assetGraph = new AssetGraph({
-        root: testDataDir
+        root: testDataDir,
       });
       await assetGraph.loadAssets('local.html');
       await assetGraph.populate();
@@ -275,8 +275,8 @@ describe('relations/Relation', function() {
         hrefType: 'relative',
         href: 'local.js',
         to: {
-          url: `file://${pathModule.join(testDataDir, 'local.js')}`
-        }
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`,
+        },
       });
 
       relation.canonical = true;
@@ -287,15 +287,15 @@ describe('relations/Relation', function() {
         crossorigin: false,
         href: 'local.js',
         to: {
-          url: `file://${pathModule.join(testDataDir, 'local.js')}`
-        }
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`,
+        },
       });
     });
 
-    it('should remove the canonical root from the href of a local file', async function() {
+    it('should remove the canonical root from the href of a local file', async function () {
       const assetGraph = new AssetGraph({
         root: testDataDir,
-        canonicalRoot: 'http://canonical.com/'
+        canonicalRoot: 'http://canonical.com/',
       });
       await assetGraph.loadAssets('canonical.html');
       await assetGraph.populate();
@@ -310,8 +310,8 @@ describe('relations/Relation', function() {
         crossorigin: false,
         href: 'http://canonical.com/local.js',
         to: {
-          url: `file://${pathModule.join(testDataDir, 'local.js')}`
-        }
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`,
+        },
       });
 
       relation.canonical = false;
@@ -320,42 +320,42 @@ describe('relations/Relation', function() {
         hrefType: 'rootRelative',
         href: '/local.js',
         to: {
-          url: `file://${pathModule.join(testDataDir, 'local.js')}`
-        }
+          url: `file://${pathModule.join(testDataDir, 'local.js')}`,
+        },
       });
     });
 
-    it('should handle mailto: protocols where host matches canonicalroot ', async function() {
+    it('should handle mailto: protocols where host matches canonicalroot ', async function () {
       const assetGraph = new AssetGraph({
         root: testDataDir,
-        canonicalRoot: 'http://bar.com/'
+        canonicalRoot: 'http://bar.com/',
       });
       await assetGraph.loadAssets('mailto.html');
       await assetGraph.populate();
 
       expect(assetGraph.findRelations(), 'to satisfy', [
         {
-          canonical: false
-        }
+          canonical: false,
+        },
       ]);
     });
   });
 
-  describe('with a canonicalRoot setting', function() {
-    describe('of a root-relative url', function() {
-      it('should honor it when changing a hrefType to rootRelative', function() {
+  describe('with a canonicalRoot setting', function () {
+    describe('of a root-relative url', function () {
+      it('should honor it when changing a hrefType to rootRelative', function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/relations/Relation/rootRelativeCanonicalRoot/'
           ),
-          canonicalRoot: '/my-app'
+          canonicalRoot: '/my-app',
         });
 
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: `${assetGraph.root}index.html`,
-          text: '<link rel="stylesheet" href="style.css">'
+          text: '<link rel="stylesheet" href="style.css">',
         });
         htmlAsset.outgoingRelations[0].hrefType = 'rootRelative';
         expect(
@@ -370,20 +370,20 @@ describe('relations/Relation', function() {
         );
       });
 
-      describe('when an existing root-relative relation starts with the canonical root path', function() {
-        it('should strip it when converting the relation to relative', function() {
+      describe('when an existing root-relative relation starts with the canonical root path', function () {
+        it('should strip it when converting the relation to relative', function () {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
               '../../testdata/relations/Relation/rootRelativeCanonicalRoot/'
             ),
-            canonicalRoot: '/my-app'
+            canonicalRoot: '/my-app',
           });
 
           const htmlAsset = assetGraph.addAsset({
             type: 'Html',
             url: `${assetGraph.root}index.html`,
-            text: '<link rel="stylesheet" href="/my-app/style.css">'
+            text: '<link rel="stylesheet" href="/my-app/style.css">',
           });
           htmlAsset.outgoingRelations[0].hrefType = 'relative';
           expect(htmlAsset.outgoingRelations[0].href, 'to equal', 'style.css');
@@ -396,20 +396,20 @@ describe('relations/Relation', function() {
       });
     });
 
-    describe('of a protocol relative url', function() {
-      it('should honor it when changing a hrefType to rootRelative', function() {
+    describe('of a protocol relative url', function () {
+      it('should honor it when changing a hrefType to rootRelative', function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/relations/Relation/rootRelativeCanonicalRoot/'
           ),
-          canonicalRoot: '//my.doma.in/my-app'
+          canonicalRoot: '//my.doma.in/my-app',
         });
 
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: `${assetGraph.root}index.html`,
-          text: '<link rel="stylesheet" href="style.css">'
+          text: '<link rel="stylesheet" href="style.css">',
         });
         htmlAsset.outgoingRelations[0].hrefType = 'rootRelative';
         expect(
@@ -424,20 +424,20 @@ describe('relations/Relation', function() {
         );
       });
 
-      describe('when an existing root-relative relation starts with the canonical root path', function() {
-        it('should strip it when converting the relation to relative', function() {
+      describe('when an existing root-relative relation starts with the canonical root path', function () {
+        it('should strip it when converting the relation to relative', function () {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
               '../../testdata/relations/Relation/rootRelativeCanonicalRoot/'
             ),
-            canonicalRoot: '//doma.in/my-app'
+            canonicalRoot: '//doma.in/my-app',
           });
 
           const htmlAsset = assetGraph.addAsset({
             type: 'Html',
             url: `${assetGraph.root}index.html`,
-            text: '<link rel="stylesheet" href="/my-app/style.css">'
+            text: '<link rel="stylesheet" href="/my-app/style.css">',
           });
           htmlAsset.outgoingRelations[0].hrefType = 'relative';
           expect(htmlAsset.outgoingRelations[0].href, 'to equal', 'style.css');
@@ -451,13 +451,13 @@ describe('relations/Relation', function() {
     });
   });
 
-  describe('#updateTarget', function() {
-    it('should handle a combo test case', async function() {
+  describe('#updateTarget', function () {
+    it('should handle a combo test case', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/relations/Relation/updateTarget/'
-        )
+        ),
       });
       await assetGraph.loadAssets('index.html', 'd.js');
       await assetGraph.populate();
@@ -466,12 +466,12 @@ describe('relations/Relation', function() {
       expect(assetGraph.findRelations(), 'to satisfy', [
         { to: { fileName: 'a.js' } },
         { to: { fileName: 'b.js' } },
-        { to: { fileName: 'c.js' } }
+        { to: { fileName: 'c.js' } },
       ]);
       expect(assetGraph.findRelations({ type: 'HtmlScript' }), 'to satisfy', [
         { to: { fileName: 'a.js' } },
         { to: { fileName: 'b.js' } },
-        { to: { fileName: 'c.js' } }
+        { to: { fileName: 'c.js' } },
       ]);
 
       const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
@@ -481,12 +481,12 @@ describe('relations/Relation', function() {
         [
           { to: { fileName: 'a.js' } },
           { to: { fileName: 'b.js' } },
-          { to: { fileName: 'c.js' } }
+          { to: { fileName: 'c.js' } },
         ]
       );
 
       const relation = assetGraph.findRelations({
-        to: { fileName: 'b.js' }
+        to: { fileName: 'b.js' },
       })[0];
       relation.to = assetGraph.findAssets({ fileName: 'd.js' })[0];
       relation.refreshHref();
@@ -494,13 +494,13 @@ describe('relations/Relation', function() {
       expect(assetGraph.findRelations(), 'to satisfy', [
         { to: { fileName: 'a.js' } },
         { to: { fileName: 'd.js' } },
-        { to: { fileName: 'c.js' } }
+        { to: { fileName: 'c.js' } },
       ]);
 
       expect(assetGraph.findRelations({ type: 'HtmlScript' }), 'to satisfy', [
         { to: { fileName: 'a.js' } },
         { to: { fileName: 'd.js' } },
-        { to: { fileName: 'c.js' } }
+        { to: { fileName: 'c.js' } },
       ]);
 
       expect(
@@ -509,18 +509,18 @@ describe('relations/Relation', function() {
         [
           { to: { fileName: 'a.js' } },
           { to: { fileName: 'd.js' } },
-          { to: { fileName: 'c.js' } }
+          { to: { fileName: 'c.js' } },
         ]
       );
     });
   });
 
-  it('should not add index.html to a relation that does not have it', async function() {
+  it('should not add index.html to a relation that does not have it', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/Relation/indexHtmlOnFile/'
-      )
+      ),
     });
     await assetGraph.loadAssets('linker.html');
     await assetGraph.populate();
@@ -531,124 +531,124 @@ describe('relations/Relation', function() {
     expect(htmlAnchor.href, 'to equal', '/hey/');
   });
 
-  describe('#crossorigin', function() {
-    it('should evaluate to false for a relation that points from file: to file:', async function() {
+  describe('#crossorigin', function () {
+    it('should evaluate to false for a relation that points from file: to file:', async function () {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
         url: `file://${pathModule.resolve(__dirname, 'index.html')}`,
         text:
-          '<!DOCTYPE html><html><head></head><body><a href="other.html">Link</a></body></html>'
+          '<!DOCTYPE html><html><head></head><body><a href="other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
     });
 
-    it('should evaluate to true for a relation that points from file: to http:', async function() {
+    it('should evaluate to true for a relation that points from file: to http:', async function () {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
         url: `fil://${pathModule.resolve(__dirname, 'index.html')}`,
         text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://example.com/">Link</a></body></html>'
+          '<!DOCTYPE html><html><head></head><body><a href="http://example.com/">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
     });
 
-    it('should evaluate to true for a relation that points to a different hostname via http', async function() {
+    it('should evaluate to true for a relation that points to a different hostname via http', async function () {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'http://example.com/index.html',
         text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://anotherexample.com/">Link</a></body></html>'
+          '<!DOCTYPE html><html><head></head><body><a href="http://anotherexample.com/">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
     });
 
-    it('should evaluate to false for an absolute relation that points at the same hostname via http', async function() {
+    it('should evaluate to false for an absolute relation that points at the same hostname via http', async function () {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'http://example.com/index.html',
         text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>'
+          '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
     });
 
-    it('should evaluate to true for an absolute relation that points at the same scheme and hostname, but a different port', async function() {
+    it('should evaluate to true for an absolute relation that points at the same scheme and hostname, but a different port', async function () {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'http://example.com:1337/index.html',
         text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://example.com:1338/other.html">Link</a></body></html>'
+          '<!DOCTYPE html><html><head></head><body><a href="http://example.com:1338/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
     });
 
-    it('should take the default http port into account when the source url omits it', async function() {
+    it('should take the default http port into account when the source url omits it', async function () {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'http://example.com/index.html',
         text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://example.com:80/other.html">Link</a></body></html>'
+          '<!DOCTYPE html><html><head></head><body><a href="http://example.com:80/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
     });
 
-    it('should take the default http port into account when the target url omits it', async function() {
+    it('should take the default http port into account when the target url omits it', async function () {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'http://example.com:80/index.html',
         text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>'
+          '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
     });
 
-    it('should take the default https port into account when the source url omits it', async function() {
+    it('should take the default https port into account when the source url omits it', async function () {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'https://example.com/index.html',
         text:
-          '<!DOCTYPE html><html><head></head><body><a href="https://example.com:443/other.html">Link</a></body></html>'
+          '<!DOCTYPE html><html><head></head><body><a href="https://example.com:443/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
     });
 
-    it('should take the default https port into account when the target url omits it', async function() {
+    it('should take the default https port into account when the target url omits it', async function () {
       const assetGraph = new AssetGraph({ root: __dirname });
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'https://example.com:443/index.html',
         text:
-          '<!DOCTYPE html><html><head></head><body><a href="https://example.com/other.html">Link</a></body></html>'
+          '<!DOCTYPE html><html><head></head><body><a href="https://example.com/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
     });
   });
 
-  describe('#inline', function() {
-    describe('on a non-inline relation', function() {
-      it('should update the href of all outgoing relations of the target asset', async function() {
+  describe('#inline', function () {
+    describe('on a non-inline relation', function () {
+      it('should update the href of all outgoing relations of the target asset', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/relations/Relation/inlineExternalRelation/'
-          )
+          ),
         });
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
@@ -663,12 +663,12 @@ describe('relations/Relation', function() {
         );
       });
 
-      it('should set the incomingInlineRelation property of the target asset', async function() {
+      it('should set the incomingInlineRelation property of the target asset', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/relations/Relation/inlineExternalRelation/'
-          )
+          ),
         });
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
@@ -682,9 +682,9 @@ describe('relations/Relation', function() {
     // Regression test
     // Would be nice to tweak the semantics of addAsset or replace it with a more complete
     // set of lifecycle hooks
-    it('should not break when the target asset has not been fully populated yet', function() {
+    it('should not break when the target asset has not been fully populated yet', function () {
       const assetGraph = new AssetGraph();
-      assetGraph.on('addAsset', asset => {
+      assetGraph.on('addAsset', (asset) => {
         if (asset.type === 'Css') {
           // For some historical reason this kicks in before the Html asset has been added to the graph
           asset.incomingRelations[0].inline();
@@ -692,15 +692,15 @@ describe('relations/Relation', function() {
       });
       assetGraph.addAsset({
         type: 'Html',
-        text: '<style>body { color: maroon; }</style>'
+        text: '<style>body { color: maroon; }</style>',
       });
     });
   });
 
-  describe('#to', function() {
-    describe('when used as a setter', function() {
-      describe('when an asset config is passed', function() {
-        it('should add the target asset to the graph', function() {
+  describe('#to', function () {
+    describe('when used as a setter', function () {
+      describe('when an asset config is passed', function () {
+        it('should add the target asset to the graph', function () {
           const assetGraph = new AssetGraph();
           const htmlAsset = assetGraph.addAsset({
             type: 'Html',
@@ -713,7 +713,7 @@ describe('relations/Relation', function() {
                   <a href="https://example.com/other.html">Link</a>
                 </body>
               </html>
-            `
+            `,
           });
 
           htmlAsset.outgoingRelations[0].to = 'https://blah.com/whataboutthis/';
@@ -726,22 +726,22 @@ describe('relations/Relation', function() {
 
           expect(assetGraph, 'to contain asset', {
             type: undefined,
-            url: 'https://blah.com/whataboutthis/'
+            url: 'https://blah.com/whataboutthis/',
           });
 
           htmlAsset.outgoingRelations[0].to = {
-            url: 'https://whatdoyouknow.com/whataboutthis/'
+            url: 'https://whatdoyouknow.com/whataboutthis/',
           };
 
           expect(assetGraph, 'to contain asset', {
             type: undefined,
-            url: 'https://whatdoyouknow.com/whataboutthis/'
+            url: 'https://whatdoyouknow.com/whataboutthis/',
           });
         });
       });
 
-      describe('when an existing asset is passed', function() {
-        it('should automatically refresh the href of the relation', function() {
+      describe('when an existing asset is passed', function () {
+        it('should automatically refresh the href of the relation', function () {
           const assetGraph = new AssetGraph();
           const htmlAsset = assetGraph.addAsset({
             type: 'Html',
@@ -754,12 +754,12 @@ describe('relations/Relation', function() {
                   <a href="https://example.com/other.html">Link</a>
                 </body>
               </html>
-            `
+            `,
           });
 
           const imageAsset = assetGraph.addAsset({
             type: 'Png',
-            url: 'https://example.com/images/foo.png'
+            url: 'https://example.com/images/foo.png',
           });
 
           htmlAsset.outgoingRelations[0].to = imageAsset;
@@ -774,8 +774,8 @@ describe('relations/Relation', function() {
     });
   });
 
-  describe('#refreshHref', function() {
-    it('should preserve (and not double) the fragment identifier when the target asset is unresolved', function() {
+  describe('#refreshHref', function () {
+    it('should preserve (and not double) the fragment identifier when the target asset is unresolved', function () {
       const assetGraph = new AssetGraph();
       const svgAsset = assetGraph.addAsset({
         type: 'Svg',
@@ -800,7 +800,7 @@ describe('relations/Relation', function() {
               </g>
             </g>
           </svg>
-        `
+        `,
       });
 
       svgAsset.url = 'https://example.com/somewhereelse/image.svg';
@@ -809,7 +809,7 @@ describe('relations/Relation', function() {
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/index.html',
-        text: '<img src="somewhereelse/image.svg">'
+        text: '<img src="somewhereelse/image.svg">',
       });
 
       htmlAsset.outgoingRelations[0].inline();
@@ -818,49 +818,49 @@ describe('relations/Relation', function() {
     });
   });
 
-  describe('#fragment', function() {
-    describe('invoked as a getter', function() {
-      it('should be the empty string when the relation href does not contain a fragment identifier', function() {
+  describe('#fragment', function () {
+    describe('invoked as a getter', function () {
+      it('should be the empty string when the relation href does not contain a fragment identifier', function () {
         const assetGraph = new AssetGraph();
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: 'https://example.com/',
-          text: '<a href="https://example.com/other.html">Link</a>'
+          text: '<a href="https://example.com/other.html">Link</a>',
         });
 
         expect(htmlAsset.outgoingRelations[0].fragment, 'to equal', '');
       });
 
-      it('should be undefined for an inline relation', function() {
+      it('should be undefined for an inline relation', function () {
         const assetGraph = new AssetGraph();
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: 'https://example.com/',
-          text: '<style>body { color: maroon; }</style>'
+          text: '<style>body { color: maroon; }</style>',
         });
 
         expect(htmlAsset.outgoingRelations[0].fragment, 'to be undefined');
       });
 
-      it('should be the fragment including the # when the href does contain a fragment identifier', function() {
+      it('should be the fragment including the # when the href does contain a fragment identifier', function () {
         const assetGraph = new AssetGraph();
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: 'https://example.com/',
-          text: '<a href="https://example.com/other.html#blabla">Link</a>'
+          text: '<a href="https://example.com/other.html#blabla">Link</a>',
         });
 
         expect(htmlAsset.outgoingRelations[0].fragment, 'to equal', '#blabla');
       });
     });
 
-    describe('invoked as a setter', function() {
-      it('should throw if the fragment is a non-empty string that does not begin with #', function() {
+    describe('invoked as a setter', function () {
+      it('should throw if the fragment is a non-empty string that does not begin with #', function () {
         const assetGraph = new AssetGraph();
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: 'https://example.com/',
-          text: '<a href="https://example.com/other.html">Link</a>'
+          text: '<a href="https://example.com/other.html">Link</a>',
         });
 
         expect(
@@ -870,12 +870,12 @@ describe('relations/Relation', function() {
         );
       });
 
-      it('should introduce a fragment identifier to the href of a relation that does not already have one', function() {
+      it('should introduce a fragment identifier to the href of a relation that does not already have one', function () {
         const assetGraph = new AssetGraph();
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: 'https://example.com/',
-          text: '<a href="https://example.com/other.html">Link</a>'
+          text: '<a href="https://example.com/other.html">Link</a>',
         });
 
         htmlAsset.outgoingRelations[0].fragment = '#yadda';
@@ -887,12 +887,12 @@ describe('relations/Relation', function() {
         );
       });
 
-      it('should replace the fragment identifier of a relation that already had one', function() {
+      it('should replace the fragment identifier of a relation that already had one', function () {
         const assetGraph = new AssetGraph();
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: 'https://example.com/',
-          text: '<a href="https://example.com/other.html#blabla">Link</a>'
+          text: '<a href="https://example.com/other.html#blabla">Link</a>',
         });
 
         htmlAsset.outgoingRelations[0].fragment = '#yadda';
@@ -904,12 +904,12 @@ describe('relations/Relation', function() {
         );
       });
 
-      it('should remove the fragment if undefined is passed', function() {
+      it('should remove the fragment if undefined is passed', function () {
         const assetGraph = new AssetGraph();
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: 'https://example.com/',
-          text: '<a href="https://example.com/other.html#blabla">Link</a>'
+          text: '<a href="https://example.com/other.html#blabla">Link</a>',
         });
 
         htmlAsset.outgoingRelations[0].fragment = undefined;
@@ -921,12 +921,12 @@ describe('relations/Relation', function() {
         );
       });
 
-      it('should remove the fragment if the empty string is passed', function() {
+      it('should remove the fragment if the empty string is passed', function () {
         const assetGraph = new AssetGraph();
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: 'https://example.com/',
-          text: '<a href="https://example.com/other.html#blabla">Link</a>'
+          text: '<a href="https://example.com/other.html#blabla">Link</a>',
         });
 
         htmlAsset.outgoingRelations[0].fragment = '';
@@ -940,13 +940,13 @@ describe('relations/Relation', function() {
     });
   });
 
-  it('should preserve the fragment when an asset is externalized', function() {
+  it('should preserve the fragment when an asset is externalized', function () {
     const assetGraph = new AssetGraph();
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
       url: 'https://example.com/',
       text:
-        '<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iODJweCIgaGVpZ2h0PSI5MHB4IiB2aWV3Qm94PSIwIDAgODIgOTAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZyBpZD0iaGVhcnQiPgogICAgICA8cGF0aCBkPSJNMzIsMTEuMmMwLDIuNy0xLjIsNS4xLTMsNi44bDAsMEwxOSwyOGMtMSwxLTIsMi0zLDJzLTItMS0zLTJMMywxOGMtMS45LTEuNy0zLTQuMS0zLTYuOEMwLDYuMSw0LjEsMiw5LjIsMgogICAgICBjMi43LDAsNS4xLDEuMiw2LjgsM2MxLjctMS45LDQuMS0zLDYuOC0zQzI3LjksMS45LDMyLDYuMSwzMiwxMS4yeiIvPgogIDwvZz4KPC9zdmc+Cg==#yadda">'
+        '<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iODJweCIgaGVpZ2h0PSI5MHB4IiB2aWV3Qm94PSIwIDAgODIgOTAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZyBpZD0iaGVhcnQiPgogICAgICA8cGF0aCBkPSJNMzIsMTEuMmMwLDIuNy0xLjIsNS4xLTMsNi44bDAsMEwxOSwyOGMtMSwxLTIsMi0zLDJzLTItMS0zLTJMMywxOGMtMS45LTEuNy0zLTQuMS0zLTYuOEMwLDYuMSw0LjEsMiw5LjIsMgogICAgICBjMi43LDAsNS4xLDEuMiw2LjgsM2MxLjctMS45LDQuMS0zLDYuOC0zQzI3LjksMS45LDMyLDYuMSwzMiwxMS4yeiIvPgogIDwvZz4KPC9zdmc+Cg==#yadda">',
     });
 
     htmlAsset.outgoingRelations[0].to.url = 'https://example.com/image.svg';

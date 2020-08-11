@@ -4,12 +4,12 @@ const http = require('http');
 const httpception = require('httpception');
 const sinon = require('sinon');
 
-describe('resolvers/http', function() {
-  it('should resolve an http url and load an asset', async function() {
+describe('resolvers/http', function () {
+  it('should resolve an http url and load an asset', async function () {
     const server = http
       .createServer((req, res) => {
         res.writeHead(200, {
-          'Content-Type': 'text/html; charset=UTF-8'
+          'Content-Type': 'text/html; charset=UTF-8',
         });
         res.end('Foo');
       })
@@ -30,22 +30,22 @@ describe('resolvers/http', function() {
     server.close();
   });
 
-  it('should retry once encountering a self-redirect', async function() {
+  it('should retry once encountering a self-redirect', async function () {
     httpception([
       {
         request: 'GET http://example.com/',
         response: {
           statusCode: 301,
-          headers: { Location: 'http://example.com/' }
-        }
+          headers: { Location: 'http://example.com/' },
+        },
       },
       {
         request: 'GET http://example.com/',
         response: {
           headers: 'Content-Type: text/html; charset=UTF-8',
-          body: '<!DOCTYPE html><html><head></head><body>Hey!</body></html>'
-        }
-      }
+          body: '<!DOCTYPE html><html><head></head><body>Hey!</body></html>',
+        },
+      },
     ]);
 
     const assetGraph = new AssetGraph({ root: 'http://example.com/' });
@@ -58,22 +58,22 @@ describe('resolvers/http', function() {
     expect(assetGraph, 'to contain asset', 'Html');
   });
 
-  it('should disregard the fragment identifier of both the asset being loaded and the Location header when deciding whether it is a self-redirect', async function() {
+  it('should disregard the fragment identifier of both the asset being loaded and the Location header when deciding whether it is a self-redirect', async function () {
     httpception([
       {
         request: 'GET http://example.com/',
         response: {
           statusCode: 301,
-          headers: { Location: 'http://example.com/#bar' }
-        }
+          headers: { Location: 'http://example.com/#bar' },
+        },
       },
       {
         request: 'GET http://example.com/',
         response: {
           headers: 'Content-Type: text/html; charset=UTF-8',
-          body: '<!DOCTYPE html><html><head></head><body>Hey!</body></html>'
-        }
-      }
+          body: '<!DOCTYPE html><html><head></head><body>Hey!</body></html>',
+        },
+      },
     ]);
 
     const assetGraph = new AssetGraph({ root: 'http://example.com/' });
@@ -86,7 +86,7 @@ describe('resolvers/http', function() {
     expect(assetGraph, 'to contain asset', 'Html');
   });
 
-  it('should not provide metadata.contentType when the Content-Type header cannot be parsed, thus falling back to parsing the extension', async function() {
+  it('should not provide metadata.contentType when the Content-Type header cannot be parsed, thus falling back to parsing the extension', async function () {
     const html =
       '<!DOCTYPE html>\n<html><head></head><body><p>Hello, world</p></body></html>';
 
@@ -95,8 +95,8 @@ describe('resolvers/http', function() {
       response: {
         statusCode: 200,
         headers: 'Content-Type: &',
-        body: Buffer.from(html)
-      }
+        body: Buffer.from(html),
+      },
     });
 
     const assetGraph = new AssetGraph({ root: 'http://example.com/' });
@@ -107,7 +107,7 @@ describe('resolvers/http', function() {
 
     expect(assetGraph, 'to contain asset', {
       type: 'Html',
-      url: 'http://example.com/foo.html'
+      url: 'http://example.com/foo.html',
     });
     expect(warnSpy, 'to have calls satisfying', () => {
       warnSpy('Invalid Content-Type response header received: &');

@@ -4,22 +4,22 @@ const AssetGraph = require('../../lib/AssetGraph');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
-describe('transforms.autoprefixer', function() {
-  describe('if autoprefixer is not available', function() {
+describe('transforms.autoprefixer', function () {
+  describe('if autoprefixer is not available', function () {
     const autoprefixerTransform = proxyquire(
       '../../lib/transforms/autoprefixer',
       {
         autoprefixer: null,
-        'autoprefixer/package.json': null
+        'autoprefixer/package.json': null,
       }
     );
 
-    it('should emit an info event', async function() {
+    it('should emit an info event', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/autoprefixer/'
-        )
+        ),
       });
       await assetGraph.loadAssets('index.html');
       await assetGraph.populate();
@@ -36,12 +36,12 @@ describe('transforms.autoprefixer', function() {
     });
   });
 
-  it('should handle an unprefixed test case', async function() {
+  it('should handle an unprefixed test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/autoprefixer/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -55,36 +55,36 @@ describe('transforms.autoprefixer', function() {
     expect(assetGraph, 'to contain relations', 'CssImage', 4);
   });
 
-  it('should handle a simple option case', async function() {
+  it('should handle a simple option case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/autoprefixer/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
     await assetGraph.autoprefixer('last 2 versions');
   });
 
-  it('should handle a complex option case', async function() {
+  it('should handle a complex option case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/autoprefixer/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
     await assetGraph.autoprefixer('last 2 versions, ie > 8,ff > 28');
   });
 
-  it('should preserve source information', async function() {
+  it('should preserve source information', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/autoprefixer/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -93,20 +93,20 @@ describe('transforms.autoprefixer', function() {
       'http://example.com/style.css';
 
     await assetGraph.autoprefixer('last 2 versions, ie > 8,ff > 28', {
-      sourceMaps: true
+      sourceMaps: true,
     });
 
     expect(assetGraph.findAssets({ type: 'Css' })[0].sourceMap, 'to satisfy', {
-      sources: expect.it('to contain', 'http://example.com/style.css')
+      sources: expect.it('to contain', 'http://example.com/style.css'),
     });
   });
 
-  it('should preserve source maps', async function() {
+  it('should preserve source maps', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/autoprefixer/existingExternalSourceMap'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -115,7 +115,7 @@ describe('transforms.autoprefixer', function() {
     expect(assetGraph, 'to contain asset', 'SourceMap');
 
     await assetGraph.autoprefixer('last 2 versions, ie > 8,ff > 28', {
-      sourceMaps: true
+      sourceMaps: true,
     });
 
     expect(assetGraph, 'to contain asset', 'Css');

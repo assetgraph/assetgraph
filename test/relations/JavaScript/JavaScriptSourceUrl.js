@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/JavaScriptSourceUrl', function() {
-  it('should handle a test case with an existing bundle that has @sourceURL directives', async function() {
+describe('relations/JavaScriptSourceUrl', function () {
+  it('should handle a test case with an existing bundle that has @sourceURL directives', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/JavaScript/JavaScriptSourceUrl/existingBundle/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -23,19 +23,19 @@ describe('relations/JavaScriptSourceUrl', function() {
     expect(javaScript.text, 'to match', /@\s*sourceURL=foo\.js/);
 
     assetGraph.findAssets({
-      fileName: 'bundle.js'
+      fileName: 'bundle.js',
     })[0].url = `${assetGraph.root}foo/bundle.js`;
 
     expect(javaScript.text, 'to match', /@\s*sourceURL=..\/bar\.js/);
     expect(javaScript.text, 'to match', /@\s*sourceURL=..\/foo\.js/);
   });
 
-  it('should handle a test case with two JavaScript assets, then running the addJavaScriptSourceUrl transform', async function() {
+  it('should handle a test case with two JavaScript assets, then running the addJavaScriptSourceUrl transform', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/JavaScript/JavaScriptSourceUrl/bundleRelations/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();

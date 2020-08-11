@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/AtomHtmlInlineFragment', function() {
-  it('should handle a test case with an atom feed with a <content> tag', async function() {
+describe('relations/AtomHtmlInlineFragment', function () {
+  it('should handle a test case with an atom feed with a <content> tag', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Atom/AtomHtmlInlineFragment/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -21,7 +21,7 @@ describe('relations/AtomHtmlInlineFragment', function() {
 
     const atom = assetGraph.findAssets({ type: 'Atom' })[0];
     const fragmentRelation = assetGraph.findRelations({
-      type: 'AtomHtmlInlineFragment'
+      type: 'AtomHtmlInlineFragment',
     })[0];
 
     expect(

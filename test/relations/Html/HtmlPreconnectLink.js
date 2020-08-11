@@ -2,14 +2,14 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlPreconnectLink', function() {
+describe('relations/HtmlPreconnectLink', function () {
   function getHtmlAsset(htmlString) {
     const graph = new AssetGraph({ root: __dirname });
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
       text:
         htmlString || '<!doctype html><html><head></head><body></body></html>',
-      url: `file://${__dirname}doesntmatter.html`
+      url: `file://${__dirname}doesntmatter.html`,
     });
 
     graph.addAsset(htmlAsset);
@@ -17,11 +17,11 @@ describe('relations/HtmlPreconnectLink', function() {
     return htmlAsset;
   }
 
-  describe('#inline', function() {
-    it('should throw', function() {
+  describe('#inline', function () {
+    it('should throw', function () {
       const relation = getHtmlAsset().addRelation({
         type: 'HtmlPreconnectLink',
-        to: { url: 'index.html' }
+        to: { url: 'index.html' },
       });
 
       expect(
@@ -32,24 +32,24 @@ describe('relations/HtmlPreconnectLink', function() {
     });
   });
 
-  it('should handle a test case with an existing <link rel="preconnect"> element', async function() {
+  it('should handle a test case with an existing <link rel="preconnect"> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlPreconnectLink/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
 
     expect(assetGraph, 'to contain relation', 'HtmlPreconnectLink');
   });
 
-  it('should update the href', async function() {
+  it('should update the href', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlPreconnectLink/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
 
@@ -63,13 +63,13 @@ describe('relations/HtmlPreconnectLink', function() {
     expect(link, 'to satisfy', { href: 'foo.bar' });
   });
 
-  describe('when programmatically adding a relation', function() {
-    it('should handle crossorigin url', function() {
+  describe('when programmatically adding a relation', function () {
+    it('should handle crossorigin url', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
           type: 'HtmlPreconnectLink',
-          to: { url: 'http://assetgraph.org' }
+          to: { url: 'http://assetgraph.org' },
         },
         'firstInHead'
       );

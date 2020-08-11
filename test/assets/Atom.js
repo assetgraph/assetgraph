@@ -2,10 +2,10 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('assets/Atom', function() {
-  it('should find an Atom asset', async function() {
+describe('assets/Atom', function () {
+  it('should find an Atom asset', async function () {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/assets/Atom/')
+      root: pathModule.resolve(__dirname, '../../testdata/assets/Atom/'),
     });
     await assetGraph.loadAssets('feed.atom').populate();
 
@@ -29,7 +29,7 @@ describe('assets/Atom', function() {
 
     expect(assetGraph, 'to contain asset', {
       type: 'Atom',
-      text: { $regex: /and a &lt;a href="http:\/\/example.com\/bar.html"/ }
+      text: { $regex: /and a &lt;a href="http:\/\/example.com\/bar.html"/ },
     });
   });
 });

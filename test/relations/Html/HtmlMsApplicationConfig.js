@@ -2,22 +2,22 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlMsApplicationConfig', function() {
+describe('relations/HtmlMsApplicationConfig', function () {
   function getHtmlAsset(htmlString) {
     return new AssetGraph({ root: __dirname }).addAsset({
       type: 'Html',
       text:
         htmlString || '<!doctype html><html><head></head><body></body></html>',
-      url: `file://${__dirname}doesntmatter.html`
+      url: `file://${__dirname}doesntmatter.html`,
     });
   }
 
-  it('should handle a test case with an existing <meta name="msapplication-config" content="..."> element', async function() {
+  it('should handle a test case with an existing <meta name="msapplication-config" content="..."> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlMsApplicationConfig/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -25,19 +25,19 @@ describe('relations/HtmlMsApplicationConfig', function() {
     expect(assetGraph, 'to contain asset', { fileName: 'IEconfig.xml' });
   });
 
-  it('should update the href', async function() {
+  it('should update the href', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlMsApplicationConfig/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
     expect(assetGraph, 'to contain relation', 'HtmlMsApplicationConfig');
 
     const relation = assetGraph.findRelations({
-      type: 'HtmlMsApplicationConfig'
+      type: 'HtmlMsApplicationConfig',
     })[0];
 
     relation.to.url = 'foo.bar';
@@ -45,18 +45,18 @@ describe('relations/HtmlMsApplicationConfig', function() {
     expect(relation, 'to satisfy', { href: 'foo.bar' });
   });
 
-  describe('when programmatically adding a relation', function() {
-    it('should register a relation when using attach', async function() {
+  describe('when programmatically adding a relation', function () {
+    it('should register a relation when using attach', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../../testdata/relations/Html/HtmlMsApplicationConfig/'
-        )
+        ),
       });
       await assetGraph.loadAssets('index.html').populate();
 
       const previousRelation = assetGraph.findRelations({
-        type: 'HtmlMsApplicationConfig'
+        type: 'HtmlMsApplicationConfig',
       })[0];
 
       previousRelation.from.addRelation(
@@ -65,8 +65,8 @@ describe('relations/HtmlMsApplicationConfig', function() {
           to: {
             type: 'Xml',
             url: 'foo.xml',
-            text: '<?xml version="1.0" encoding="utf-8"?><browserconfig />'
-          }
+            text: '<?xml version="1.0" encoding="utf-8"?><browserconfig />',
+          },
         },
         'before',
         previousRelation
@@ -75,16 +75,16 @@ describe('relations/HtmlMsApplicationConfig', function() {
       expect(assetGraph.findRelations(), 'to satisfy', [
         {
           type: 'HtmlMsApplicationConfig',
-          href: 'foo.xml'
+          href: 'foo.xml',
         },
         {
           type: 'HtmlMsApplicationConfig',
-          href: 'IEconfig.xml'
-        }
+          href: 'IEconfig.xml',
+        },
       ]);
     });
 
-    it('should attach a link node in <head>', function() {
+    it('should attach a link node in <head>', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
@@ -92,8 +92,8 @@ describe('relations/HtmlMsApplicationConfig', function() {
           to: {
             type: 'Xml',
             text: '<?xml version="1.0" encoding="utf-8"?><browserconfig />',
-            url: 'foo.xml'
-          }
+            url: 'foo.xml',
+          },
         },
         'firstInHead'
       );

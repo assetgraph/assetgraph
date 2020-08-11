@@ -1,44 +1,44 @@
 const expect = require('./unexpected-with-plugins');
 const AssetGraph = require('../lib/AssetGraph');
 
-describe('AssetGraph.findRelations', function() {
-  it('should handle a simple test case', async function() {
+describe('AssetGraph.findRelations', function () {
+  it('should handle a simple test case', async function () {
     const assetGraph = new AssetGraph();
     await assetGraph.loadAssets(
       new AssetGraph().addAsset({
         type: 'Html',
         url: 'a',
         text: 'a',
-        foo: 'bar'
+        foo: 'bar',
       }),
       new AssetGraph().addAsset({
         type: 'Html',
         url: 'b',
         text: 'b',
-        foo: 'bar'
+        foo: 'bar',
       }),
       new AssetGraph().addAsset({
         type: 'Html',
         url: 'c',
         text: 'c',
-        foo: 'quux'
+        foo: 'quux',
       }),
       new AssetGraph().addAsset({
         type: 'Css',
         url: 'd',
         text: 'body { color: #ddd; }',
-        foo: 'baz'
+        foo: 'baz',
       }),
       new AssetGraph().addAsset({
         type: 'Css',
         url: 'e',
-        text: 'body { color: #eee; }'
+        text: 'body { color: #eee; }',
       }),
       new AssetGraph().addAsset({
         type: 'Png',
         url: 'f',
         rawSrc: Buffer.from('f'),
-        foo: 'baz'
+        foo: 'baz',
       })
     );
 
@@ -47,7 +47,7 @@ describe('AssetGraph.findRelations', function() {
     aHtml.addRelation(
       {
         type: 'HtmlStyle',
-        to: assetGraph.findAssets({ text: 'body { color: #ddd; }' })[0]
+        to: assetGraph.findAssets({ text: 'body { color: #ddd; }' })[0],
       },
       'last'
     );
@@ -55,7 +55,7 @@ describe('AssetGraph.findRelations', function() {
       {
         type: 'HtmlAnchor',
         to: bHtml,
-        node: aHtml.parseTree.createElement('a')
+        node: aHtml.parseTree.createElement('a'),
       },
       'last'
     );
@@ -63,7 +63,7 @@ describe('AssetGraph.findRelations', function() {
       {
         type: 'HtmlAnchor',
         to: assetGraph.findAssets({ text: 'c' })[0],
-        node: aHtml.parseTree.createElement('a')
+        node: aHtml.parseTree.createElement('a'),
       },
       'last'
     );
@@ -71,14 +71,14 @@ describe('AssetGraph.findRelations', function() {
       {
         type: 'HtmlAnchor',
         to: assetGraph.findAssets({ text: 'c' })[0],
-        node: aHtml.parseTree.createElement('a')
+        node: aHtml.parseTree.createElement('a'),
       },
       'last'
     );
     bHtml.addRelation(
       {
         type: 'HtmlStyle',
-        to: assetGraph.findAssets({ text: 'body { color: #eee; }' })[0]
+        to: assetGraph.findAssets({ text: 'body { color: #eee; }' })[0],
       },
       'last'
     );
@@ -95,7 +95,7 @@ describe('AssetGraph.findRelations', function() {
         to: assetGraph.findAssets({ type: 'Png' })[0],
         parentNode: dCss.parseTree,
         propertyNode: dCssPropertyNode,
-        node: dCssNode
+        node: dCssNode,
       },
       'last'
     );
@@ -112,7 +112,7 @@ describe('AssetGraph.findRelations', function() {
         to: assetGraph.findAssets({ type: 'Png' })[0],
         parentNode: eCss.parseTree,
         propertyNode: eCssPropertyNode,
-        node: eCssNode
+        node: eCssNode,
       },
       'last'
     );
@@ -123,7 +123,7 @@ describe('AssetGraph.findRelations', function() {
       'to contain relations',
       {
         type: 'HtmlAnchor',
-        from: aHtml
+        from: aHtml,
       },
       2
     );
@@ -134,8 +134,8 @@ describe('AssetGraph.findRelations', function() {
         type: 'HtmlAnchor',
         to: {
           text: 'c',
-          foo: 'quux'
-        }
+          foo: 'quux',
+        },
       },
       2
     );
@@ -145,11 +145,11 @@ describe('AssetGraph.findRelations', function() {
       {
         type: { $in: ['HtmlAnchor', 'HtmlStyle'] },
         from: {
-          text: { $in: [aHtml.text, bHtml.text] }
+          text: { $in: [aHtml.text, bHtml.text] },
         },
         to: {
-          type: { $in: ['Html', 'Css'] }
-        }
+          type: { $in: ['Html', 'Css'] },
+        },
       },
       5
     );
@@ -159,16 +159,16 @@ describe('AssetGraph.findRelations', function() {
       {
         type: { $regex: /CssIm|HtmlAn/ },
         from: {
-          text: { $regex: /^a|#ddd/ }
-        }
+          text: { $regex: /^a|#ddd/ },
+        },
       },
       3
     );
     expect(assetGraph, 'to contain relation', {
       type: /Style/,
       from: {
-        text: { $regex: /^a<link rel=/ }
-      }
+        text: { $regex: /^a<link rel=/ },
+      },
     });
     expect(
       assetGraph,
@@ -176,8 +176,8 @@ describe('AssetGraph.findRelations', function() {
       {
         type: { $not: 'CssImage' },
         from: {
-          text: { $not: /^a<link rel=/ }
-        }
+          text: { $not: /^a<link rel=/ },
+        },
       },
       2
     );
@@ -188,8 +188,8 @@ describe('AssetGraph.findRelations', function() {
         from: {
           foo(val) {
             return typeof val !== 'undefined';
-          }
-        }
+          },
+        },
       },
       6
     );
@@ -197,8 +197,8 @@ describe('AssetGraph.findRelations', function() {
       from: {
         foo(val) {
           return typeof val === 'undefined';
-        }
-      }
+        },
+      },
     });
   });
 });

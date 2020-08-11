@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/SvgAnchor', function() {
-  it('should handle a test case with <a xlink:href=...> referencing an external file', async function() {
+describe('relations/SvgAnchor', function () {
+  it('should handle a test case with <a xlink:href=...> referencing an external file', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Svg/SvgAnchor/xlinkhref'
-      )
+      ),
     });
     await assetGraph.loadAssets('image.svg');
     await assetGraph.populate();
@@ -24,12 +24,12 @@ describe('relations/SvgAnchor', function() {
     );
   });
 
-  it('should handle a test case with <a href=...> referencing an external file', async function() {
+  it('should handle a test case with <a href=...> referencing an external file', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Svg/SvgAnchor/href/'
-      )
+      ),
     });
     await assetGraph.loadAssets('image.svg');
     await assetGraph.populate();

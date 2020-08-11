@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('transforms/inlineCssImagesWithLegacyFallback', function() {
-  it('should handle a test case with a single Html asset', async function() {
+describe('transforms/inlineCssImagesWithLegacyFallback', function () {
+  it('should handle a test case with a single Html asset', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCssImagesWithLegacyFallback/combo/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -32,7 +32,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
     );
     expect(
       assetGraph.findAssets({
-        fileName: 'imageGreaterThan32KBWithInlineParameter.css'
+        fileName: 'imageGreaterThan32KBWithInlineParameter.css',
       })[0].text,
       'not to match',
       /inline/
@@ -100,12 +100,12 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
     );
   });
 
-  it('should not create the fallback stylesheet if a minimumIeVersion of 9 is specified', async function() {
+  it('should not create the fallback stylesheet if a minimumIeVersion of 9 is specified', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCssImagesWithLegacyFallback/combo/'
-      )
+      ),
     });
 
     await assetGraph.loadAssets('index.html');
@@ -118,7 +118,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
       { isInitial: true },
       {
         minimumIeVersion: 9,
-        sizeThreshold: (32768 * 3) / 4
+        sizeThreshold: (32768 * 3) / 4,
       }
     );
 
@@ -131,12 +131,12 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
     );
   });
 
-  it('should handle a test case with multiple Html asset that point at the same Css', async function() {
+  it('should handle a test case with multiple Html asset that point at the same Css', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCssImagesWithLegacyFallback/multipleHtmls/'
-      )
+      ),
     });
     await assetGraph.loadAssets('*.html');
     await assetGraph.populate();
@@ -177,7 +177,7 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
 
     assetGraph
       .findAssets({ type: 'Html', isInline: false })
-      .forEach(function(htmlAsset) {
+      .forEach(function (htmlAsset) {
         expect(
           htmlAsset.text.match(/<!--\[if gte IE 8\]><!-->/g),
           'to have length',
@@ -186,12 +186,12 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
       });
   });
 
-  it('should handle a test case with a root-relative HtmlStyle relation', async function() {
+  it('should handle a test case with a root-relative HtmlStyle relation', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCssImagesWithLegacyFallback/rootRelative/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -209,12 +209,12 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
     );
   });
 
-  it('should handle a test case with a small background-image inside a @media query', async function() {
+  it('should handle a test case with a small background-image inside a @media query', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCssImagesWithLegacyFallback/mediaQuery/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -225,11 +225,11 @@ describe('transforms/inlineCssImagesWithLegacyFallback', function() {
 
     expect(assetGraph, 'to contain relation', {
       type: 'CssImage',
-      to: { isInline: false }
+      to: { isInline: false },
     });
     expect(assetGraph, 'to contain no relations', {
       type: 'CssImage',
-      to: { isInline: true }
+      to: { isInline: true },
     });
   });
 });

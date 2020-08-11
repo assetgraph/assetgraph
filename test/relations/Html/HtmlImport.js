@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlImport', function() {
-  it('should handle a test case with an existing <link rel="import"> element', async function() {
+describe('relations/HtmlImport', function () {
+  it('should handle a test case with an existing <link rel="import"> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlImport/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -19,7 +19,7 @@ describe('relations/HtmlImport', function() {
       'to contain assets',
       {
         type: 'Html',
-        isPopulated: true
+        isPopulated: true,
       },
       4
     );
@@ -28,7 +28,7 @@ describe('relations/HtmlImport', function() {
       'to contain assets',
       {
         type: 'Css',
-        isPopulated: true
+        isPopulated: true,
       },
       1
     );

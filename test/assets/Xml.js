@@ -2,10 +2,10 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('assets/Xml', function() {
-  it('should handle a test case with an existing Xml asset', async function() {
+describe('assets/Xml', function () {
+  it('should handle a test case with an existing Xml asset', async function () {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/assets/Xml/')
+      root: pathModule.resolve(__dirname, '../../testdata/assets/Xml/'),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -27,23 +27,23 @@ describe('assets/Xml', function() {
     expect(xml.text, 'to match', /foobarquux/);
   });
 
-  it('should parse a document without an XML declaration', function() {
+  it('should parse a document without an XML declaration', function () {
     // eg. svgo omits this
     const xmlAsset = new AssetGraph().addAsset({
       type: 'Xml',
       url: 'https://example.com/',
-      text: '<doc />\n'
+      text: '<doc />\n',
     });
     expect(() => xmlAsset.parseTree, 'not to throw');
   });
 
-  describe('#text', function() {
-    describe('when the original document included an XML declaration', function() {
-      it('should include the XML declaration when reserializing', function() {
+  describe('#text', function () {
+    describe('when the original document included an XML declaration', function () {
+      it('should include the XML declaration when reserializing', function () {
         const xmlAsset = new AssetGraph().addAsset({
           type: 'Xml',
           url: 'https://example.com/',
-          text: '<?xml version="1.0" encoding="UTF-8"?>\n<doc />'
+          text: '<?xml version="1.0" encoding="UTF-8"?>\n<doc />',
         });
         xmlAsset.parseTree; // eslint-disable-line no-unused-expressions
         xmlAsset.markDirty();
@@ -55,12 +55,12 @@ describe('assets/Xml', function() {
       });
     });
 
-    describe('when the original document did not include an XML declaration', function() {
-      it('should not include an XML declaration when reserializing', function() {
+    describe('when the original document did not include an XML declaration', function () {
+      it('should not include an XML declaration when reserializing', function () {
         const xmlAsset = new AssetGraph().addAsset({
           type: 'Xml',
           url: 'https://example.com/',
-          text: '<doc />'
+          text: '<doc />',
         });
         xmlAsset.parseTree; // eslint-disable-line no-unused-expressions
         xmlAsset.markDirty();
@@ -69,13 +69,13 @@ describe('assets/Xml', function() {
     });
   });
 
-  describe('#minify', function() {
-    it('should include the XML declaration when reserializing', function() {
+  describe('#minify', function () {
+    it('should include the XML declaration when reserializing', function () {
       const xmlAsset = new AssetGraph().addAsset({
         type: 'Xml',
         url: 'https://example.com/',
         text:
-          '<?xml version="1.0" encoding="UTF-8"?>\n<doc>  <foo>  </foo>  </doc>'
+          '<?xml version="1.0" encoding="UTF-8"?>\n<doc>  <foo>  </foo>  </doc>',
       });
       xmlAsset.minify();
       expect(
@@ -86,16 +86,16 @@ describe('assets/Xml', function() {
     });
   });
 
-  describe('with a non-UTF-8 encoding', function() {
-    it('should parse the document correctly', function() {
+  describe('with a non-UTF-8 encoding', function () {
+    it('should parse the document correctly', function () {
       const xmlAsset = new AssetGraph().addAsset({
         type: 'Xml',
         url: 'https://example.com/',
         rawSrc: Buffer.concat([
           Buffer.from('<?xml version="1.0" encoding="windows-1252"?>\n<doc>'),
           Buffer.from([0xf8]),
-          Buffer.from('</doc>')
-        ])
+          Buffer.from('</doc>'),
+        ]),
       });
       expect(
         xmlAsset.parseTree.firstChild.firstChild.nodeValue,
@@ -104,8 +104,8 @@ describe('assets/Xml', function() {
       );
     });
 
-    describe('that uses non-space whitespace in the xml declaration', function() {
-      it('should parse the document correctly', function() {
+    describe('that uses non-space whitespace in the xml declaration', function () {
+      it('should parse the document correctly', function () {
         const xmlAsset = new AssetGraph().addAsset({
           type: 'Xml',
           url: 'https://example.com/',
@@ -114,8 +114,8 @@ describe('assets/Xml', function() {
               '<?xml\tversion="1.0"\tencoding="windows-1252"?>\n<doc>'
             ),
             Buffer.from([0xf8]),
-            Buffer.from('</doc>')
-          ])
+            Buffer.from('</doc>'),
+          ]),
         });
         expect(
           xmlAsset.parseTree.firstChild.firstChild.nodeValue,
@@ -125,15 +125,15 @@ describe('assets/Xml', function() {
       });
     });
 
-    it('should reserialize the document correctly', function() {
+    it('should reserialize the document correctly', function () {
       const xmlAsset = new AssetGraph().addAsset({
         type: 'Xml',
         url: 'https://example.com/',
         rawSrc: Buffer.concat([
           Buffer.from('<?xml version="1.0" encoding="windows-1252"?>\n<doc>'),
           Buffer.from([0xf8]),
-          Buffer.from('</doc>')
-        ])
+          Buffer.from('</doc>'),
+        ]),
       });
       // eslint-disable-next-line no-unused-expressions
       xmlAsset.parseTree;
@@ -143,13 +143,13 @@ describe('assets/Xml', function() {
     });
   });
 
-  describe('when explicitly updating the encoding', function() {
-    describe('from an existing explicit encoding in the xml declaration', function() {
-      it('should reserialize the document correctly', function() {
+  describe('when explicitly updating the encoding', function () {
+    describe('from an existing explicit encoding in the xml declaration', function () {
+      it('should reserialize the document correctly', function () {
         const xmlAsset = new AssetGraph().addAsset({
           type: 'Xml',
           url: 'https://example.com/',
-          text: '<?xml version="1.0" encoding="utf-8"?>\n<doc>ø</doc>'
+          text: '<?xml version="1.0" encoding="utf-8"?>\n<doc>ø</doc>',
         });
         // eslint-disable-next-line no-unused-expressions
         xmlAsset.parseTree;
@@ -169,12 +169,12 @@ describe('assets/Xml', function() {
         );
       });
 
-      describe('that had a non-space whitespace character', function() {
-        it('should reserialize the document correctly', function() {
+      describe('that had a non-space whitespace character', function () {
+        it('should reserialize the document correctly', function () {
           const xmlAsset = new AssetGraph().addAsset({
             type: 'Xml',
             url: 'https://example.com/',
-            text: '<?xml version="1.0"\rencoding="utf-8"?>\n<doc>ø</doc>'
+            text: '<?xml version="1.0"\rencoding="utf-8"?>\n<doc>ø</doc>',
           });
           // eslint-disable-next-line no-unused-expressions
           xmlAsset.parseTree;
@@ -196,12 +196,12 @@ describe('assets/Xml', function() {
       });
     });
 
-    describe('with no existing encoding attribute', function() {
-      it('should reserialize the document correctly', function() {
+    describe('with no existing encoding attribute', function () {
+      it('should reserialize the document correctly', function () {
         const xmlAsset = new AssetGraph().addAsset({
           type: 'Xml',
           url: 'https://example.com/',
-          text: '<?xml version="1.0"?>\n<doc>ø</doc>'
+          text: '<?xml version="1.0"?>\n<doc>ø</doc>',
         });
         // eslint-disable-next-line no-unused-expressions
         xmlAsset.parseTree;
@@ -216,12 +216,12 @@ describe('assets/Xml', function() {
       });
     });
 
-    describe('with no existing XML declaration', function() {
-      it('should add an XML declaration and reserialize the document correctly', function() {
+    describe('with no existing XML declaration', function () {
+      it('should add an XML declaration and reserialize the document correctly', function () {
         const xmlAsset = new AssetGraph().addAsset({
           type: 'Xml',
           url: 'https://example.com/',
-          text: '<doc>ø</doc>'
+          text: '<doc>ø</doc>',
         });
         // eslint-disable-next-line no-unused-expressions
         xmlAsset.parseTree;

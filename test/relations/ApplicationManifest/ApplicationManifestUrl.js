@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/ApplicationManifestUrl', function() {
-  it('should get the href correctly', async function() {
+describe('relations/ApplicationManifestUrl', function () {
+  it('should get the href correctly', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/ApplicationManifest/ApplicationManifestUrl/'
-      )
+      ),
     });
     await assetGraph.loadAssets('app.webmanifest');
     await assetGraph.populate();
@@ -22,18 +22,18 @@ describe('relations/ApplicationManifestUrl', function() {
       [
         {
           href: 'index.html',
-          hrefType: 'relative'
-        }
+          hrefType: 'relative',
+        },
       ]
     );
   });
 
-  it('should set the href correctly', async function() {
+  it('should set the href correctly', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/ApplicationManifest/ApplicationManifestUrl/'
-      )
+      ),
     });
     await assetGraph.loadAssets('app.webmanifest');
     await assetGraph.populate();
@@ -46,8 +46,8 @@ describe('relations/ApplicationManifestUrl', function() {
       [
         {
           href: 'foo.html',
-          hrefType: 'relative'
-        }
+          hrefType: 'relative',
+        },
       ]
     );
   });

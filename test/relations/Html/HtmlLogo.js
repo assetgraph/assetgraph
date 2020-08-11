@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlLogo', function() {
-  it('should handle a test case with an existing <link rel="logo" href="..."> element', async function() {
+describe('relations/HtmlLogo', function () {
+  it('should handle a test case with an existing <link rel="logo" href="..."> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlLogo/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();

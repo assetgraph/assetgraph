@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlTemplate', function() {
-  it('should handle a test case with an existing <template> element', async function() {
+describe('relations/HtmlTemplate', function () {
+  it('should handle a test case with an existing <template> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlTemplate/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -19,8 +19,8 @@ describe('relations/HtmlTemplate', function() {
       type: 'HtmlImage',
       from: {
         type: 'Html',
-        isFragment: false
-      }
+        isFragment: false,
+      },
     });
 
     expect(
@@ -30,8 +30,8 @@ describe('relations/HtmlTemplate', function() {
         type: 'HtmlImage',
         from: {
           type: 'Html',
-          isFragment: true
-        }
+          isFragment: true,
+        },
       },
       2
     );

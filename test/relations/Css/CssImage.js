@@ -2,25 +2,25 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/CssImage', function() {
-  it('should handle a test case with a bunch of different CssImage relations', async function() {
+describe('relations/CssImage', function () {
+  it('should handle a test case with a bunch of different CssImage relations', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Css/CssImage/combo/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.css');
     await assetGraph.populate();
 
     expect(assetGraph, 'to contain relations', 'CssImage', 17);
     assetGraph.findAssets({
-      fileName: 'foo.png'
+      fileName: 'foo.png',
     })[0].url = `${assetGraph.root}dir/foo2.png`;
 
     expect(
       assetGraph.findRelations({
-        to: assetGraph.findAssets({ fileName: 'foo2.png' })[0]
+        to: assetGraph.findAssets({ fileName: 'foo2.png' })[0],
       }),
       'to satisfy',
       [
@@ -40,7 +40,7 @@ describe('relations/CssImage', function() {
         { href: 'dir/foo2.png' },
         { href: 'dir/foo2.png' },
         { href: 'dir/foo2.png' },
-        { href: 'dir/foo2.png' }
+        { href: 'dir/foo2.png' },
       ]
     );
 
@@ -51,12 +51,12 @@ describe('relations/CssImage', function() {
     );
   });
 
-  it('should handle a test case with three CssImage relations pointing at mouse cursors', async function() {
+  it('should handle a test case with three CssImage relations pointing at mouse cursors', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Css/CssImage/mouseCursors/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -68,12 +68,12 @@ describe('relations/CssImage', function() {
     expect(assetGraph, 'to contain relations', 'CssImage', 3);
   });
 
-  it('should handle a test case with a CssImage relation inside a @media rule', async function() {
+  it('should handle a test case with a CssImage relation inside a @media rule', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Css/CssImage/mediaRule/'
-      )
+      ),
     });
     await assetGraph.loadAssets('relationInMediaRule.css');
     await assetGraph.populate();
@@ -81,12 +81,12 @@ describe('relations/CssImage', function() {
     expect(assetGraph, 'to contain relations', 'CssImage', 2);
   });
 
-  it('should handle a test case with multiple CSS filter urls', async function() {
+  it('should handle a test case with multiple CSS filter urls', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Css/CssImage/filter/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.css');
     await assetGraph.populate();
@@ -96,7 +96,7 @@ describe('relations/CssImage', function() {
     expect(assetGraph, 'to contain asset', { type: 'Svg', isInline: true });
   });
 
-  it('should handle a test case with a singlequote in a background-image url(...)', async function() {
+  it('should handle a test case with a singlequote in a background-image url(...)', async function () {
     const assetGraph = new AssetGraph();
     assetGraph.addAsset({
       type: 'Html',
@@ -121,7 +121,7 @@ describe('relations/CssImage', function() {
                 </head>
                 <body></body>
                 </html>
-            `
+            `,
     });
 
     expect(assetGraph, 'to contain assets', { type: 'Png' }, 4);
@@ -139,12 +139,12 @@ describe('relations/CssImage', function() {
       )(text);
   });
 
-  it('should support detecting mask-image properties as relations', async function() {
+  it('should support detecting mask-image properties as relations', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Css/CssImage/maskImage/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();

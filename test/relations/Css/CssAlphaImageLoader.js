@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/CssAlphaImageLoader', function() {
-  it('should handle a simple test case', async function() {
+describe('relations/CssAlphaImageLoader', function () {
+  it('should handle a simple test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Css/CssAlphaImageLoader/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -16,7 +16,7 @@ describe('relations/CssAlphaImageLoader', function() {
     expect(assetGraph, 'to contain relations', 'CssAlphaImageLoader', 3);
 
     assetGraph.findAssets({
-      fileName: 'foo.png'
+      fileName: 'foo.png',
     })[0].url = `${assetGraph.root}images/quux.png`;
 
     expect(
@@ -25,7 +25,7 @@ describe('relations/CssAlphaImageLoader', function() {
       [
         { href: '/images/quux.png' },
         { href: '/bar.png' },
-        { href: '/images/quux.png' }
+        { href: '/images/quux.png' },
       ]
     );
     const cssRules = assetGraph.findAssets({ type: 'Css' })[0].parseTree.nodes;

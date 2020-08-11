@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlScript', function() {
-  it('should inline a script', async function() {
+describe('relations/HtmlScript', function () {
+  it('should inline a script', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlScript/combo'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -28,12 +28,12 @@ describe('relations/HtmlScript', function() {
     );
   });
 
-  it('should handle a test case with existing <script> elements', async function() {
+  it('should handle a test case with existing <script> elements', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlScript/combo'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -42,16 +42,16 @@ describe('relations/HtmlScript', function() {
       { href: 'externalNoType.js' },
       { href: undefined },
       { href: 'externalWithTypeTextJavaScript.js' },
-      { href: undefined }
+      { href: undefined },
     ]);
   });
 
-  it('should attach script node before the first existing script node when using the `first` position', async function() {
+  it('should attach script node before the first existing script node when using the `first` position', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlScript/combo'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -65,8 +65,8 @@ describe('relations/HtmlScript', function() {
         type: 'HtmlScript',
         to: {
           url: 'firstRelationAsset.js',
-          text: '"use strict"'
-        }
+          text: '"use strict"',
+        },
       },
       'first'
     );
@@ -85,18 +85,18 @@ describe('relations/HtmlScript', function() {
     expect(relation.node, 'to be', firstScript.node.previousSibling);
   });
 
-  it('should attach script node as the last node in document.body if no other scripts exist when using the `first` position', function() {
+  it('should attach script node as the last node in document.body if no other scripts exist when using the `first` position', function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlScript/combo'
-      )
+      ),
     });
 
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
       url: 'https://example.com/index.html',
-      text: '<html><head><title>first test</title></head></html>'
+      text: '<html><head><title>first test</title></head></html>',
     });
 
     const document = htmlAsset.parseTree;
@@ -105,8 +105,8 @@ describe('relations/HtmlScript', function() {
         type: 'HtmlScript',
         to: {
           url: 'firstRelationAsset.js',
-          text: '"use strict";'
-        }
+          text: '"use strict";',
+        },
       },
       'first'
     );
@@ -116,19 +116,19 @@ describe('relations/HtmlScript', function() {
     expect(relation.node, 'to be', document.body.lastChild);
   });
 
-  it('should attach script node before another when using the `before` position', async function() {
+  it('should attach script node before another when using the `before` position', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlScript/combo'
-      )
+      ),
     });
 
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
       url: 'https://example.com/index.html',
       text:
-        '<html><head><title>first test</title><script>"use strict";</script><style>body { background: red; }</style></head></html>'
+        '<html><head><title>first test</title><script>"use strict";</script><style>body { background: red; }</style></head></html>',
     });
 
     const firstScript = assetGraph.findRelations({ type: 'HtmlScript' })[0];
@@ -138,8 +138,8 @@ describe('relations/HtmlScript', function() {
         type: 'HtmlScript',
         to: {
           url: 'firstRelationAsset.js',
-          text: '"use strict";'
-        }
+          text: '"use strict";',
+        },
       },
       'before',
       firstScript
@@ -150,19 +150,19 @@ describe('relations/HtmlScript', function() {
     expect(relation.node, 'to be', firstScript.node.previousSibling);
   });
 
-  it('should attach a script node after another when using the `after` position', function() {
+  it('should attach a script node after another when using the `after` position', function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlScript/combo'
-      )
+      ),
     });
 
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
       url: 'https://example.com/index.html',
       text:
-        '<html><head><title>first test</title><script>"use strict";</script><style>body { background: red; }</style></head></html>'
+        '<html><head><title>first test</title><script>"use strict";</script><style>body { background: red; }</style></head></html>',
     });
 
     const firstScript = assetGraph.findRelations({ type: 'HtmlScript' })[0];
@@ -172,8 +172,8 @@ describe('relations/HtmlScript', function() {
         type: 'HtmlScript',
         to: {
           url: 'firstRelationAsset.js',
-          text: '"use strict";'
-        }
+          text: '"use strict";',
+        },
       },
       'after',
       firstScript
@@ -184,26 +184,26 @@ describe('relations/HtmlScript', function() {
     expect(relation.node, 'to be', firstScript.node.nextSibling);
   });
 
-  describe('#async', function() {
-    it('should support the async attribute when creating a relation', async function() {
+  describe('#async', function () {
+    it('should support the async attribute when creating a relation', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../../testdata/relations/Html/HtmlScript/combo'
-        )
+        ),
       });
 
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/index.html',
-        text: '<!DOCTYPE html><html><head></head><body></body></html>'
+        text: '<!DOCTYPE html><html><head></head><body></body></html>',
       });
 
       htmlAsset.addRelation(
         {
           type: 'HtmlScript',
           async: true,
-          href: 'https://example.com/script.js'
+          href: 'https://example.com/script.js',
         },
         'first'
       );
@@ -215,45 +215,45 @@ describe('relations/HtmlScript', function() {
       );
     });
 
-    it('should support retrieving the async attribute from an attached relation', async function() {
+    it('should support retrieving the async attribute from an attached relation', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../../testdata/relations/Html/HtmlScript/combo'
-        )
+        ),
       });
 
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/index.html',
         text:
-          '<!DOCTYPE html><html><head></head><body><script async src="script.js"></script></body></html>'
+          '<!DOCTYPE html><html><head></head><body><script async src="script.js"></script></body></html>',
       });
 
       expect(htmlAsset.outgoingRelations, 'to satisfy', [{ async: true }]);
     });
   });
 
-  describe('#defer', function() {
-    it('should support the defer attribute when creating a relation', function() {
+  describe('#defer', function () {
+    it('should support the defer attribute when creating a relation', function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../../testdata/relations/Html/HtmlScript/combo'
-        )
+        ),
       });
 
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/index.html',
-        text: '<!DOCTYPE html><html><head></head><body></body></html>'
+        text: '<!DOCTYPE html><html><head></head><body></body></html>',
       });
 
       htmlAsset.addRelation(
         {
           type: 'HtmlScript',
           defer: true,
-          href: 'https://example.com/script.js'
+          href: 'https://example.com/script.js',
         },
         'first'
       );
@@ -265,31 +265,31 @@ describe('relations/HtmlScript', function() {
       );
     });
 
-    it('should support retrieving the defer attribute from an attached relation', function() {
+    it('should support retrieving the defer attribute from an attached relation', function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../../testdata/relations/Html/HtmlScript/combo'
-        )
+        ),
       });
 
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/index.html',
         text:
-          '<!DOCTYPE html><html><head></head><body><script defer src="script.js"></script></body></html>'
+          '<!DOCTYPE html><html><head></head><body><script defer src="script.js"></script></body></html>',
       });
 
       expect(htmlAsset.outgoingRelations, 'to satisfy', [{ defer: true }]);
     });
   });
 
-  it('should populate an inline <script type=module>', async function() {
+  it('should populate an inline <script type=module>', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlScript/moduleInline/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -297,12 +297,12 @@ describe('relations/HtmlScript', function() {
     expect(assetGraph, 'to contain assets', 'JavaScript', 2);
   });
 
-  it('should follow an external <script type=module>', async function() {
+  it('should follow an external <script type=module>', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlScript/moduleExternal/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 

@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlAppleTouchStartupImage', function() {
-  it('should handle a simple test case', async function() {
+describe('relations/HtmlAppleTouchStartupImage', function () {
+  it('should handle a simple test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlAppleTouchStartupImage/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -19,13 +19,13 @@ describe('relations/HtmlAppleTouchStartupImage', function() {
     const pngAsset = assetGraph.findAssets({ type: 'Png' })[0];
     const existingHtmlAppleTouchStartupImageRelation = assetGraph.findRelations(
       {
-        type: 'HtmlAppleTouchStartupImage'
+        type: 'HtmlAppleTouchStartupImage',
       }
     )[0];
     htmlAsset.addRelation(
       {
         type: 'HtmlAppleTouchStartupImage',
-        to: pngAsset
+        to: pngAsset,
       },
       'after',
       existingHtmlAppleTouchStartupImageRelation
@@ -33,7 +33,7 @@ describe('relations/HtmlAppleTouchStartupImage', function() {
     htmlAsset.addRelation(
       {
         type: 'HtmlAppleTouchStartupImage',
-        to: pngAsset
+        to: pngAsset,
       },
       'before',
       existingHtmlAppleTouchStartupImageRelation

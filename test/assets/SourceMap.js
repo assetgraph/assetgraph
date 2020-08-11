@@ -2,11 +2,11 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const pathModule = require('path');
 
-describe('SourceMap', function() {
-  describe('with an old jquery build', function() {
+describe('SourceMap', function () {
+  describe('with an old jquery build', function () {
     let sourceMap;
     let assetGraph;
-    beforeEach(async function() {
+    beforeEach(async function () {
       assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
@@ -16,29 +16,29 @@ describe('SourceMap', function() {
           'assets',
           'SourceMap',
           'jquery'
-        )
+        ),
       });
       sourceMap = assetGraph.addAsset('jquery-1.10.1.min.map');
       await sourceMap.load();
     });
 
-    it('should support #generatedPositionFor', function() {
+    it('should support #generatedPositionFor', function () {
       expect(
         sourceMap.generatedPositionFor({
           source: 'jquery-1.10.1.js',
           line: 23,
-          column: 1
+          column: 1,
         }),
         'to equal',
         {
           line: 4,
           column: 18,
-          lastColumn: null
+          lastColumn: null,
         }
       );
     });
 
-    it('should support #originalPositionFor', function() {
+    it('should support #originalPositionFor', function () {
       expect(
         sourceMap.originalPositionFor({ line: 4, column: 19 }),
         'to equal',
@@ -46,12 +46,12 @@ describe('SourceMap', function() {
           source: 'jquery-1.10.1.js',
           line: 23,
           column: 1,
-          name: 'readyList'
+          name: 'readyList',
         }
       );
     });
 
-    it('should not rely on a cached SourceMapConsumer when the asset is marked dirty', function() {
+    it('should not rely on a cached SourceMapConsumer when the asset is marked dirty', function () {
       sourceMap.originalPositionFor({ line: 4, column: 19 });
       sourceMap.text = '{}';
       expect(

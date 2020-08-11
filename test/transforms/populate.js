@@ -4,16 +4,16 @@ const urlTools = require('urltools');
 const AssetGraph = require('../../lib/AssetGraph');
 const httpception = require('httpception');
 
-describe('transforms/populate', function() {
-  it('should handle a test case with an Html asset and some stylesheets when told not to follow relations to Css', async function() {
+describe('transforms/populate', function () {
+  it('should handle a test case with an Html asset and some stylesheets when told not to follow relations to Css', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/populate/notToCss/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate({
-      followRelations: { type: { $not: 'HtmlStyle' } }
+      followRelations: { type: { $not: 'HtmlStyle' } },
     });
 
     expect(assetGraph, 'to contain asset', { type: 'Css', isLoaded: false });
@@ -28,12 +28,12 @@ describe('transforms/populate', function() {
     );
   });
 
-  it('should handle a test case with custom protocols', async function() {
+  it('should handle a test case with custom protocols', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/populate/customProtocols/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -49,12 +49,12 @@ describe('transforms/populate', function() {
     expect(matches, 'to have length', 4);
   });
 
-  it('should populate a test case with protocol-relative urls from file:', async function() {
+  it('should populate a test case with protocol-relative urls from file:', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/populate/protocolRelativeUrls/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -66,11 +66,12 @@ describe('transforms/populate', function() {
     expect(assetGraph.findRelations({ type: 'HtmlScript' }), 'to satisfy', [
       { href: '//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js' },
       {
-        href: 'http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'
+        href: 'http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
       },
       {
-        href: 'https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'
-      }
+        href:
+          'https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
+      },
     ]);
 
     expect(
@@ -79,16 +80,18 @@ describe('transforms/populate', function() {
       assetGraph.findRelations({ type: 'HtmlScript', href: /^http:\/\// })[0].to
     );
 
-    assetGraph.findAssets({ type: 'JavaScript' }).forEach(function(javaScript) {
-      javaScript.url = `${
-        javaScript.url.match(/^(https?:)/)[1]
-      }//cdn.example.com/${javaScript.fileName}`;
-    });
+    assetGraph
+      .findAssets({ type: 'JavaScript' })
+      .forEach(function (javaScript) {
+        javaScript.url = `${
+          javaScript.url.match(/^(https?:)/)[1]
+        }//cdn.example.com/${javaScript.fileName}`;
+      });
 
     expect(assetGraph.findRelations({ type: 'HtmlScript' }), 'to satisfy', [
       { hrefType: 'protocolRelative' },
       { hrefType: 'absolute' },
-      { hrefType: 'absolute' }
+      { hrefType: 'absolute' },
     ]);
 
     expect(
@@ -99,82 +102,82 @@ describe('transforms/populate', function() {
       [
         'src="//cdn.example.com/jquery.min.js"',
         'src="http://cdn.example.com/jquery.min.js"',
-        'src="https://cdn.example.com/jquery.min.js"'
+        'src="https://cdn.example.com/jquery.min.js"',
       ]
     );
   });
 
-  describe('when followRelations is specified as an array of relation instances', function() {
-    it('should support an empty array', function() {
+  describe('when followRelations is specified as an array of relation instances', function () {
+    it('should support an empty array', function () {
       httpception();
 
       const assetGraph = new AssetGraph();
       assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/',
-        text: '<script src="foo.js"></script><script src="bar.js"></script>'
+        text: '<script src="foo.js"></script><script src="bar.js"></script>',
       });
       return assetGraph
         .populate({
-          followRelations: { $in: [] }
+          followRelations: { $in: [] },
         })
-        .then(function() {
+        .then(function () {
           expect(assetGraph, 'to contain no asset', {
             url: 'https://example.com/foo.js',
-            isLoaded: true
+            isLoaded: true,
           }).and('to contain asset', {
             url: 'https://example.com/bar.js',
-            isLoaded: false
+            isLoaded: false,
           });
         });
     });
 
-    it('should support a single instance', async function() {
+    it('should support a single instance', async function () {
       httpception({
         request: 'GET https://example.com/foo.js',
         response: {
           headers: {
-            'Content-Type': 'application/javascript'
+            'Content-Type': 'application/javascript',
           },
-          body: 'alert("foo");'
-        }
+          body: 'alert("foo");',
+        },
       });
 
       const assetGraph = new AssetGraph();
       const htmlAsset = assetGraph.addAsset({
         url: 'https://example.com/',
-        text: '<script src="foo.js"></script>'
+        text: '<script src="foo.js"></script>',
       });
       await assetGraph.populate({
-        followRelations: htmlAsset.outgoingRelations[0]
+        followRelations: htmlAsset.outgoingRelations[0],
       });
 
       expect(assetGraph, 'to contain asset', {
         url: 'https://example.com/foo.js',
-        isLoaded: true
+        isLoaded: true,
       });
     });
 
-    it('should support an array with multiple items', async function() {
+    it('should support an array with multiple items', async function () {
       httpception([
         {
           request: 'GET https://example.com/foo.js',
           response: {
             headers: {
-              'Content-Type': 'application/javascript'
+              'Content-Type': 'application/javascript',
             },
-            body: 'alert("foo");'
-          }
+            body: 'alert("foo");',
+          },
         },
         {
           request: 'GET https://example.com/bar.js',
           response: {
             headers: {
-              'Content-Type': 'application/javascript'
+              'Content-Type': 'application/javascript',
             },
-            body: 'alert("bar");'
-          }
-        }
+            body: 'alert("bar");',
+          },
+        },
       ]);
 
       const assetGraph = new AssetGraph();
@@ -182,23 +185,23 @@ describe('transforms/populate', function() {
         type: 'Html',
         url: 'https://example.com/',
         text:
-          '<script src="foo.js"></script><script src="bar.js"></script><script src="quux.js"></script>'
+          '<script src="foo.js"></script><script src="bar.js"></script><script src="quux.js"></script>',
       });
       await assetGraph.populate({
-        followRelations: { $in: htmlAsset.outgoingRelations.slice(0, 2) }
+        followRelations: { $in: htmlAsset.outgoingRelations.slice(0, 2) },
       });
 
       expect(assetGraph, 'to contain asset', {
         url: 'https://example.com/foo.js',
-        isLoaded: true
+        isLoaded: true,
       })
         .and('to contain asset', {
           url: 'https://example.com/bar.js',
-          isLoaded: true
+          isLoaded: true,
         })
         .and('to contain asset', {
           url: 'https://example.com/quux.js',
-          isLoaded: false
+          isLoaded: false,
         });
     });
   });

@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/CssSourceMappingUrl', function() {
-  it('should handle a test case with a Css asset that has @sourceMappingURL directive', async function() {
+describe('relations/CssSourceMappingUrl', function () {
+  it('should handle a test case with a Css asset that has @sourceMappingURL directive', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Css/CssSourceMappingUrl/existingExternalSourceMap/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html', 'someMore.css').populate();
 
@@ -20,7 +20,7 @@ describe('relations/CssSourceMappingUrl', function() {
     expect(assetGraph, 'to contain relation', 'SourceMapFile');
     expect(assetGraph, 'to contain relation', 'SourceMapSource');
     assetGraph.findAssets({
-      fileName: 'foo.css'
+      fileName: 'foo.css',
     })[0].url = `${assetGraph.root}foo/somewhereelse.css`;
 
     expect(
@@ -34,11 +34,11 @@ describe('relations/CssSourceMappingUrl', function() {
     expect(
       assetGraph.findRelations({
         type: 'CssSourceMappingUrl',
-        from: { fileName: 'somewhereelse.css' }
+        from: { fileName: 'somewhereelse.css' },
       })[0].from.sourceMap,
       'to satisfy',
       {
-        sources: [`${assetGraph.root}foo.less`]
+        sources: [`${assetGraph.root}foo.less`],
       }
     );
     const css = assetGraph.findAssets({ fileName: 'somewhereelse.css' })[0];
@@ -52,19 +52,19 @@ describe('relations/CssSourceMappingUrl', function() {
     expect(
       assetGraph.findRelations({
         type: 'CssSourceMappingUrl',
-        from: { fileName: 'somewhereelse.css' }
+        from: { fileName: 'somewhereelse.css' },
       })[0].to.parseTree,
       'to satisfy',
       {
         sources: [
           `${assetGraph.root}foo.less`,
-          `${assetGraph.root}someMore.css`
-        ]
+          `${assetGraph.root}someMore.css`,
+        ],
       }
     );
 
     for (const relation of assetGraph.findRelations({
-      type: 'SourceMapSource'
+      type: 'SourceMapSource',
     })) {
       relation.hrefType = 'rootRelative';
     }

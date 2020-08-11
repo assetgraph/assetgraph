@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/RssHtmlInlineFragment', function() {
-  it('should handle a test case with an RSS feed with a <description> tag', async function() {
+describe('relations/RssHtmlInlineFragment', function () {
+  it('should handle a test case with an RSS feed with a <description> tag', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Rss/RssHtmlInlineFragment/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -21,7 +21,7 @@ describe('relations/RssHtmlInlineFragment', function() {
 
     const rss = assetGraph.findAssets({ type: 'Rss' })[0];
     const fragmentRelation = assetGraph.findRelations({
-      type: 'RssHtmlInlineFragment'
+      type: 'RssHtmlInlineFragment',
     })[0];
 
     expect(

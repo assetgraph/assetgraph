@@ -2,22 +2,22 @@ const pathModule = require('path');
 const expect = require('../../unexpected-with-plugins');
 const AssetGraph = require('../../../lib/AssetGraph');
 
-describe('relations/HtmlPreloadLink', function() {
+describe('relations/HtmlPreloadLink', function () {
   function getHtmlAsset(htmlString) {
     return new AssetGraph({ root: __dirname }).addAsset({
       type: 'Html',
       text:
         htmlString || '<!doctype html><html><head></head><body></body></html>',
-      url: `file://${__dirname}doesntmatter.html`
+      url: `file://${__dirname}doesntmatter.html`,
     });
   }
 
-  it('should handle a test case with an existing <link rel="preload"> element', async function() {
+  it('should handle a test case with an existing <link rel="preload"> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlPreloadLink/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -26,12 +26,12 @@ describe('relations/HtmlPreloadLink', function() {
     expect(assetGraph, 'to contain asset', 'Woff');
   });
 
-  it('should update the href', async function() {
+  it('should update the href', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../../testdata/relations/Html/HtmlPreloadLink/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -39,18 +39,18 @@ describe('relations/HtmlPreloadLink', function() {
     expect(assetGraph, 'to contain relation', 'HtmlPreloadLink');
 
     const preloadLink = assetGraph.findRelations({
-      type: 'HtmlPreloadLink'
+      type: 'HtmlPreloadLink',
     })[0];
 
     preloadLink.to.url = 'foo.bar';
 
     expect(preloadLink, 'to satisfy', {
-      href: 'foo.bar'
+      href: 'foo.bar',
     });
   });
 
-  describe('when programmatically adding a relation', function() {
-    it('should attach a link node in <head>', function() {
+  describe('when programmatically adding a relation', function () {
+    it('should attach a link node in <head>', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
@@ -58,8 +58,8 @@ describe('relations/HtmlPreloadLink', function() {
           to: {
             type: 'JavaScript',
             text: '"use strict"',
-            url: 'foo.js'
-          }
+            url: 'foo.js',
+          },
         },
         'firstInHead'
       );
@@ -71,7 +71,7 @@ describe('relations/HtmlPreloadLink', function() {
       );
     });
 
-    it('should set the `as` property passed in the constructor', function() {
+    it('should set the `as` property passed in the constructor', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
@@ -79,9 +79,9 @@ describe('relations/HtmlPreloadLink', function() {
           to: {
             type: 'JavaScript',
             text: '"use strict"',
-            url: 'foo.js'
+            url: 'foo.js',
           },
-          as: 'object'
+          as: 'object',
         },
         'firstInHead'
       );
@@ -93,7 +93,7 @@ describe('relations/HtmlPreloadLink', function() {
       );
     });
 
-    it('should add the `crossorigin` attribute when the relation is loaded as a font', function() {
+    it('should add the `crossorigin` attribute when the relation is loaded as a font', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
@@ -101,9 +101,9 @@ describe('relations/HtmlPreloadLink', function() {
           to: {
             type: 'JavaScript',
             text: '"use strict"',
-            url: 'foo.js'
+            url: 'foo.js',
           },
-          as: 'font'
+          as: 'font',
         },
         'firstInHead'
       );
@@ -115,7 +115,7 @@ describe('relations/HtmlPreloadLink', function() {
       );
     });
 
-    it('should not add the `crossorigin` attribute when the relation is not as a font and the target is not cross origin', function() {
+    it('should not add the `crossorigin` attribute when the relation is not as a font and the target is not cross origin', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
@@ -123,9 +123,9 @@ describe('relations/HtmlPreloadLink', function() {
           to: {
             type: 'JavaScript',
             text: '"use strict"',
-            url: 'foo.js'
+            url: 'foo.js',
           },
-          as: 'script'
+          as: 'script',
         },
         'firstInHead'
       );
@@ -137,7 +137,7 @@ describe('relations/HtmlPreloadLink', function() {
       );
     });
 
-    it('should add the `crossorigin` attribute when the relation is crossorigin', function() {
+    it('should add the `crossorigin` attribute when the relation is crossorigin', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
@@ -145,9 +145,9 @@ describe('relations/HtmlPreloadLink', function() {
           to: {
             type: 'JavaScript',
             text: '"use strict"',
-            url: 'http://fisk.dk/foo.js'
+            url: 'http://fisk.dk/foo.js',
           },
-          as: 'script'
+          as: 'script',
         },
         'firstInHead'
       );
@@ -160,14 +160,14 @@ describe('relations/HtmlPreloadLink', function() {
     });
   });
 
-  describe('#contentType', function() {
-    describe('with unresolved font targets', function() {
-      it('should handle woff', function() {
+  describe('#contentType', function () {
+    describe('with unresolved font targets', function () {
+      it('should handle woff', function () {
         const htmlAsset = getHtmlAsset();
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { url: 'foo.woff' }
+            to: { url: 'foo.woff' },
           },
           'firstInHead'
         );
@@ -175,12 +175,12 @@ describe('relations/HtmlPreloadLink', function() {
         expect(relation.contentType, 'to be', 'font/woff');
       });
 
-      it('should handle woff2', function() {
+      it('should handle woff2', function () {
         const htmlAsset = getHtmlAsset();
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { url: 'foo.woff2' }
+            to: { url: 'foo.woff2' },
           },
           'firstInHead'
         );
@@ -188,12 +188,12 @@ describe('relations/HtmlPreloadLink', function() {
         expect(relation.contentType, 'to be', 'font/woff2');
       });
 
-      it('should handle otf', function() {
+      it('should handle otf', function () {
         const htmlAsset = getHtmlAsset();
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { url: 'foo.otf' }
+            to: { url: 'foo.otf' },
           },
           'firstInHead'
         );
@@ -201,12 +201,12 @@ describe('relations/HtmlPreloadLink', function() {
         expect(relation.contentType, 'to be', 'font/otf');
       });
 
-      it('should handle ttf', function() {
+      it('should handle ttf', function () {
         const htmlAsset = getHtmlAsset();
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { url: 'foo.ttf' }
+            to: { url: 'foo.ttf' },
           },
           'firstInHead'
         );
@@ -214,12 +214,12 @@ describe('relations/HtmlPreloadLink', function() {
         expect(relation.contentType, 'to be', 'font/ttf');
       });
 
-      it('should handle eot', function() {
+      it('should handle eot', function () {
         const htmlAsset = getHtmlAsset();
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { url: 'foo.eot' }
+            to: { url: 'foo.eot' },
           },
           'firstInHead'
         );
@@ -228,13 +228,13 @@ describe('relations/HtmlPreloadLink', function() {
       });
     });
 
-    describe('with unresolved unknown target', function() {
-      it('should return undefined', function() {
+    describe('with unresolved unknown target', function () {
+      it('should return undefined', function () {
         const htmlAsset = getHtmlAsset();
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { url: 'foo.bar' }
+            to: { url: 'foo.bar' },
           },
           'firstInHead'
         );
@@ -243,16 +243,16 @@ describe('relations/HtmlPreloadLink', function() {
       });
     });
 
-    describe('with resolved known targets', function() {
-      it('should handle JavaScript', function() {
+    describe('with resolved known targets', function () {
+      it('should handle JavaScript', function () {
         const htmlAsset = getHtmlAsset();
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
             to: {
               type: 'JavaScript',
-              url: 'foo.js'
-            }
+              url: 'foo.js',
+            },
           },
           'firstInHead'
         );
@@ -260,15 +260,15 @@ describe('relations/HtmlPreloadLink', function() {
         expect(relation.contentType, 'to be', 'application/javascript');
       });
 
-      it('should handle Css', function() {
+      it('should handle Css', function () {
         const htmlAsset = getHtmlAsset();
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
             to: {
               type: 'Css',
-              url: 'foo.css'
-            }
+              url: 'foo.css',
+            },
           },
           'firstInHead'
         );
