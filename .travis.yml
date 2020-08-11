@@ -9,6 +9,12 @@ node_js:
   - 12
   - node
 
+matrix:
+  include:
+    - name: Lint
+      node_js: 14
+      script: npm run lint
+
 addons:
   apt:
     packages:
