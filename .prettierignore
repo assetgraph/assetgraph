@@ -7,3 +7,6 @@
 
 # Don't fight npm install --save
 /package.json
+
+# Generated
+/CHANGELOG.md
