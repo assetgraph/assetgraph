@@ -1,1 +1,3 @@
-alert("Fix IE6!");
+(function () {
+  alert("Fix IE6!");
+}());

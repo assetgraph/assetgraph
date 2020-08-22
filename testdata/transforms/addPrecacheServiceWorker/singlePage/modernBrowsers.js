@@ -1,1 +1,3 @@
-alert("Modern browsers!");
+(function () {
+  alert("Modern browsers!");
+}());

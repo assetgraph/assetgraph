@@ -144,7 +144,7 @@ describe('transforms/bundleRelations', function() {
         {
           type: 'Html',
           text:
-            "\n<h1>Hello World</h1>\n<script>var foo = 'foo';\nvar bar = 'bar';</script>\n"
+            "\n<h1>Hello World</h1>\n<script>var foo='foo';var bar='bar'</script>\n"
         }
       ]);
     });
@@ -986,7 +986,7 @@ describe('transforms/bundleRelations', function() {
         assetGraph.findRelations({ type: 'JavaScriptImportScripts' })[0].to
           .text,
         'to equal',
-        "console.log('foo');\nconsole.log('bar');\nconsole.log('quux');"
+        "console.log('foo');console.log('bar');console.log('quux');"
       );
       expect(
         assetGraph.findAssets({ fileName: 'worker.js' })[0].text,

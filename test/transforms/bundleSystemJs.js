@@ -571,17 +571,17 @@ describe('transforms/bundleSystemJs', function() {
     expect(
       assetGraph.findAssets({ fileName: 'page1.html' })[0].text,
       'to contain',
-      'System.config({ bundles:'
+      'System.config({bundles:'
     );
     expect(
       assetGraph.findAssets({ fileName: 'page1.html' })[0].text,
       'to contain',
-      "<script src=\"/bundle-page1.js\"></script><script>System.config({ bundles: { 'bundle-lazyrequired.js': ['lazyRequired.js'] } });</script><script>"
+      "<script src=\"/bundle-page1.js\"></script><script>System.config({bundles:{'bundle-lazyrequired.js':['lazyRequired.js']}})</script><script>"
     );
     expect(
       assetGraph.findAssets({ fileName: 'page2.html' })[0].text,
       'to contain',
-      "<script src=\"/bundle-page2.js\"></script><script>System.config({ bundles: { 'bundle-lazyrequired.js': ['lazyRequired.js'] } });</script><script>"
+      "<script src=\"/bundle-page2.js\"></script><script>System.config({bundles:{'bundle-lazyrequired.js':['lazyRequired.js']}})</script><script>"
     );
     expect(assetGraph, 'to contain relation', 'SystemJsLazyBundle', 2);
 
@@ -600,12 +600,12 @@ describe('transforms/bundleSystemJs', function() {
     expect(
       assetGraph.findAssets({ fileName: 'page1.html' })[0].text,
       'to contain',
-      "System.config({ bundles: { 'static/"
+      "System.config({bundles:{'static/"
     );
     expect(
       assetGraph.findAssets({ fileName: 'page2.html' })[0].text,
       'to contain',
-      "System.config({ bundles: { 'static/"
+      "System.config({bundles:{'static/"
     );
   });
 
