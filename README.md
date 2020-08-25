@@ -478,7 +478,7 @@ and `foo.css` contains:
 
 ```css
 body {
-  background-image: url(small.png);
+  background-image: url(small.gif);
 }
 ```
 
@@ -494,7 +494,7 @@ images inlined as `data:` urls:
 
 ```css
 body {
-  background-image: url(data;image/png;base64, iVBORw0KGgoAAAANSUhE...);
+  background-image: url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==);
 }
 ```
 
@@ -524,7 +524,7 @@ and `foo.css` contains:
 
 ```css
 body {
-  background-image: url(small.png);
+  background-image: url(small.gif);
 }
 ```
 
@@ -533,7 +533,7 @@ will be turned into:
 ```html
 <style type="text/css">
   body {
-    background-image: url(data;image/png;base64, iVBORw0KGgoAAAANSUhE...);
+    background-image: url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==);
   }
 </style>
 ```
