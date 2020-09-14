@@ -7,7 +7,7 @@
 
 AssetGraph is an extensible, <a href="http://nodejs.org/">node.js</a>-based
 framework for manipulating and optimizing web pages and web
-applications. The main core is a dependency graph model of your entire website, where all assets are treated as first class citizens. It can automatically dicsover assets based on your declarative code, reducing the configuration needs to a minimum.
+applications. The main core is a dependency graph model of your entire website, where all assets are treated as first class citizens. It can automatically discover assets based on your declarative code, reducing the configuration needs to a minimum.
 
 If you just want to get started with the basics, read [Peter Müller - Getting started with Assetgraph](http://mntr.dk/2014/getting-started-with-assetgraph/).
 
