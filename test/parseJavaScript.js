@@ -89,7 +89,7 @@ describe('parseJavascript', () => {
     expect(
       parse('const foo = import("./foo.js")', {
         sourceType: 'module',
-        ecmaVersion: 11,
+        ecmaVersion: 2021,
       }),
       'to satisfy',
       {
