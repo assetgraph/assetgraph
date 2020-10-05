@@ -1,7 +1,16 @@
-### v6.2.0 (2020-08-08)
+### v6.2.1 (2020-10-05)
 
 #### Pull requests
 
+- [#1114](https://github.com/assetgraph/assetgraph/pull/1114) Upgrade autoprefixer to version 10.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1115](https://github.com/assetgraph/assetgraph/pull/1115) Upgrade postcss to version 8.0.3 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1113](https://github.com/assetgraph/assetgraph/pull/1113) Fix typo ([Rusty Conover](mailto:rusty@luckydinosaur.com))
+- [#1109](https://github.com/assetgraph/assetgraph/pull/1109) Upgrade unexpected-set to version 3.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1108](https://github.com/assetgraph/assetgraph/pull/1108) Upgrade lodash to version 4.17.20 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1107](https://github.com/assetgraph/assetgraph/pull/1107) Upgrade acorn to version 8.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1106](https://github.com/assetgraph/assetgraph/pull/1106) Upgrade magicpen-prism to version 4.1.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1105](https://github.com/assetgraph/assetgraph/pull/1105) Upgrade magicpen-prism to version 4.1.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1104](https://github.com/assetgraph/assetgraph/pull/1104) Upgrade terser to ^5.0.0 ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [#1103](https://github.com/assetgraph/assetgraph/pull/1103) Upgrade eslint-plugin-mocha to version 8.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1102](https://github.com/assetgraph/assetgraph/pull/1102) Upgrade escodegen to version 2.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1101](https://github.com/assetgraph/assetgraph/pull/1101) Upgrade terser to version 5.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -42,12 +51,16 @@
 
 #### Commits to master
 
-- [logEvents: Support a custom console implementation](https://github.com/assetgraph/assetgraph/commit/e4a34c621da8d38b0d85aef272761bb0d17e1639) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Revert "Update mocha to version 8.0.1"](https://github.com/assetgraph/assetgraph/commit/c0adb1ff623f5811930cb62fd3216125bef41fe8) ([Andreas Lind](mailto:andreas.lind@peakon.com))
-- [Also null out .consumer when initializing in case the asset is a source map](https://github.com/assetgraph/assetgraph/commit/780541c3a7a9e2a433222c7201384f3b2b4cc32c) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [serializeSourceMaps: Take a query object](https://github.com/assetgraph/assetgraph/commit/ce71c298288ed8bbd6fcb61fb146fd86bd888ab4) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Asset\#init: Flush the cached states when text, rawSrc, or parseTree is given without the others](https://github.com/assetgraph/assetgraph/commit/e82b85a5bc50908b3a6ece38f022b91e3870b4f0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+31 more](https://github.com/assetgraph/assetgraph/compare/v6.1.3...v6.2.0)
+- [Pass ecmaVersion:2021 to acorn](https://github.com/assetgraph/assetgraph/commit/3eae6466bc6c62687153117eb6793124cb88d61e) ([Andreas Lind](mailto:andreas.lind@peakon.com))
+- [Use valid data: urls in README.md to avoid tripping up prettier](https://github.com/assetgraph/assetgraph/commit/ef0ed595798c6b0b334ef8f75dafc76bef0df009) ([Andreas Lind](mailto:andreas.lind@peakon.com))
+- [Update prettier to version 2.1.0](https://github.com/assetgraph/assetgraph/commit/4eb58f583786c2fc7f7e56ed1c696cf6a431533f) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [Use a ^ version range for lodash](https://github.com/assetgraph/assetgraph/commit/1a2626b0d58c6f449b7c0d28292feae64498ea16) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Add test for a href pointing out of a https: root](https://github.com/assetgraph/assetgraph/commit/e9699ee4e408a541c134fded6fc418e8635d12d1) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [+42 more](https://github.com/assetgraph/assetgraph/compare/v6.2.0...v6.2.1)
+
+### v6.2.0 (2020-08-08)
+
+- [logEvents: Support a custom console implementation](https://github.com/assetgraph/assetgraph/commit/24c65f85013d992f60ce41e886fad0ea648dae6f) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v6.1.3 (2020-08-03)
 
@@ -65,6 +78,9 @@
 
 - [serializeSourceMaps: Take a query object](https://github.com/assetgraph/assetgraph/commit/3e3ceed25a9debf51fee0c10deb27193cfa60921) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Asset\#init: Flush the cached states when text, rawSrc, or parseTree is given without the others](https://github.com/assetgraph/assetgraph/commit/c0aa8f101142a666db6d334acb5556bca44779fb) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+
+### v6.0.8 (2020-06-22)
+
 - [Relax the qs version range a bit so it can be deduped with the copy pulled in by request and u-messy](https://github.com/assetgraph/assetgraph/commit/ecd2d4931cbfbf11ffe91e23d9bfc34e817be2a0) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Add qs dependency](https://github.com/assetgraph/assetgraph/commit/fdd03265b5d4ba53e1baf61395a33ea46a40eae5) ([Jang Whemoon](mailto:palindrom615@gmail.com))
 
