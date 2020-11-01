@@ -45,6 +45,20 @@ describe('relations/JavaScriptFetch', function () {
     expect(assetGraph, 'to contain assets', 'JavaScript', 2);
   });
 
+  it('should not populate this.addEventListener("fetch")', async function () {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
+      ),
+    });
+    await assetGraph.loadAssets('serviceWorker.js');
+    await assetGraph.populate();
+
+    expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 0);
+    expect(assetGraph, 'to contain assets', 'JavaScript', 1);
+  });
+
   it('should populate a sequence fetch', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
