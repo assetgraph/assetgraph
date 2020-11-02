@@ -188,10 +188,10 @@ describe('relations/JavaScriptFetch', function () {
     expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
 
     const relation = assetGraph.findRelations({ type: 'JavaScriptFetch' })[0];
-    relation.from.url = "https://cdn.example/fetch.js";
+    relation.from.url = 'https://cdn.example/fetch.js';
 
     expect(relation.from, 'to satisfy', {
-      text: `fetch('b.js');`,
+      text: `fetch('/b.js');`,
     });
   });
 });
