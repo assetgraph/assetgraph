@@ -188,4 +188,24 @@ describe('relations/JavaScriptFetch', function () {
       'JavaScriptFetch.attach(): Not implemented'
     );
   });
+
+  it('should not change when script moves.', async function () {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../../testdata/relations/JavaScript/JavaScriptFetch'
+      ),
+    });
+    await assetGraph.loadAssets('index.html');
+    await assetGraph.populate();
+
+    expect(assetGraph, 'to contain relations', 'JavaScriptFetch', 1);
+
+    const relation = assetGraph.findRelations({ type: 'JavaScriptFetch' })[0];
+    relation.from.url = 'https://cdn.example/fetch.js';
+
+    expect(relation.from, 'to satisfy', {
+      text: `fetch('/b.js');`,
+    });
+  });
 });
