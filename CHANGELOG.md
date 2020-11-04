@@ -1,7 +1,9 @@
-### v6.2.1 (2020-10-05)
+### v6.2.2 (2020-11-04)
 
 #### Pull requests
 
+- [#1122](https://github.com/assetgraph/assetgraph/pull/1122) Update fetch expression to only match direct descendants. ([Kevin Cox](mailto:kevincox@kevincox.ca))
+- [#1119](https://github.com/assetgraph/assetgraph/pull/1119) Upgrade eslint-config-standard to version 15.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1114](https://github.com/assetgraph/assetgraph/pull/1114) Upgrade autoprefixer to version 10.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1115](https://github.com/assetgraph/assetgraph/pull/1115) Upgrade postcss to version 8.0.3 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1113](https://github.com/assetgraph/assetgraph/pull/1113) Fix typo ([Rusty Conover](mailto:rusty@luckydinosaur.com))
@@ -56,7 +58,11 @@
 - [Update prettier to version 2.1.0](https://github.com/assetgraph/assetgraph/commit/4eb58f583786c2fc7f7e56ed1c696cf6a431533f) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [Use a ^ version range for lodash](https://github.com/assetgraph/assetgraph/commit/1a2626b0d58c6f449b7c0d28292feae64498ea16) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Add test for a href pointing out of a https: root](https://github.com/assetgraph/assetgraph/commit/e9699ee4e408a541c134fded6fc418e8635d12d1) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+42 more](https://github.com/assetgraph/assetgraph/compare/v6.2.0...v6.2.1)
+- [+42 more](https://github.com/assetgraph/assetgraph/compare/v6.2.1...v6.2.2)
+
+### v6.2.1 (2020-10-05)
+
+- [Update lodash to ^4.17.20](https://github.com/assetgraph/assetgraph/commit/6a2fcfe0175d05f26f8810a4756b473a36461411) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 
 ### v6.2.0 (2020-08-08)
 
@@ -78,9 +84,6 @@
 
 - [serializeSourceMaps: Take a query object](https://github.com/assetgraph/assetgraph/commit/3e3ceed25a9debf51fee0c10deb27193cfa60921) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Asset\#init: Flush the cached states when text, rawSrc, or parseTree is given without the others](https://github.com/assetgraph/assetgraph/commit/c0aa8f101142a666db6d334acb5556bca44779fb) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-
-### v6.0.8 (2020-06-22)
-
 - [Relax the qs version range a bit so it can be deduped with the copy pulled in by request and u-messy](https://github.com/assetgraph/assetgraph/commit/ecd2d4931cbfbf11ffe91e23d9bfc34e817be2a0) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Add qs dependency](https://github.com/assetgraph/assetgraph/commit/fdd03265b5d4ba53e1baf61395a33ea46a40eae5) ([Jang Whemoon](mailto:palindrom615@gmail.com))
 
