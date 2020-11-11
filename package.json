@@ -21,7 +21,7 @@
     "test/unexpectedAssetGraph.js"
   ],
   "dependencies": {
-    "acorn": "^7.0.0",
+    "acorn": "^8.0.4",
     "acorn-jsx": "^5.0.1",
     "bluebird": "^3.5.1",
     "chalk": "^2.0.1",
