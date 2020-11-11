@@ -44,6 +44,21 @@ describe('assets/JavaScript', function () {
     );
   });
 
+  // https://github.com/Munter/netlify-plugin-checklinks/issues/286#issuecomment-725530864
+  it('should report a syntax error in a JavaScript asset that uses module features', async function () {
+    let firstWarning;
+    await new AssetGraph({
+      root: pathModule.resolve(__dirname, '../../testdata/assets/JavaScript/'),
+    })
+      .on('warn', (err) => (firstWarning = firstWarning || err))
+      .loadAssets('parseErrorAndModuleFeatures.js')
+      .populate();
+
+    expect(firstWarning, 'to be an', Error);
+    expect(firstWarning.message, 'to match', /Unexpected token/);
+    expect(firstWarning.message, 'to contain', '(2:18)');
+  });
+
   it('should handle setting a new parseTree', function () {
     const one = new AssetGraph().addAsset({
       type: 'JavaScript',
