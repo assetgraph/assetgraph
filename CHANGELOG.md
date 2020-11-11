@@ -1,7 +1,8 @@
-### v6.2.2 (2020-11-04)
+### v6.3.0 (2020-11-11)
 
 #### Pull requests
 
+- [#1126](https://github.com/assetgraph/assetgraph/pull/1126) Upgrade offline-github-changelog to version 2.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1122](https://github.com/assetgraph/assetgraph/pull/1122) Update fetch expression to only match direct descendants. ([Kevin Cox](mailto:kevincox@kevincox.ca))
 - [#1119](https://github.com/assetgraph/assetgraph/pull/1119) Upgrade eslint-config-standard to version 15.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1114](https://github.com/assetgraph/assetgraph/pull/1114) Upgrade autoprefixer to version 10.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -53,12 +54,16 @@
 
 #### Commits to master
 
+- [Add test for optional chaining syntax](https://github.com/assetgraph/assetgraph/commit/9f0e22ad3a50890bf118f45d134e0f758af87a6e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Fix reporting of errors in JavaScript assets that use module-exclusive features](https://github.com/assetgraph/assetgraph/commit/5174cd088f95526e572b9461e08ba29b80ae6869) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Pass ecmaVersion:2021 to acorn](https://github.com/assetgraph/assetgraph/commit/3eae6466bc6c62687153117eb6793124cb88d61e) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Use valid data: urls in README.md to avoid tripping up prettier](https://github.com/assetgraph/assetgraph/commit/ef0ed595798c6b0b334ef8f75dafc76bef0df009) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Update prettier to version 2.1.0](https://github.com/assetgraph/assetgraph/commit/4eb58f583786c2fc7f7e56ed1c696cf6a431533f) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
-- [Use a ^ version range for lodash](https://github.com/assetgraph/assetgraph/commit/1a2626b0d58c6f449b7c0d28292feae64498ea16) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Add test for a href pointing out of a https: root](https://github.com/assetgraph/assetgraph/commit/e9699ee4e408a541c134fded6fc418e8635d12d1) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+42 more](https://github.com/assetgraph/assetgraph/compare/v6.2.1...v6.2.2)
+- [+44 more](https://github.com/assetgraph/assetgraph/compare/v6.2.2...v6.3.0)
+
+### v6.2.2 (2020-11-05)
+
+- [Guard against a bug in source-map](https://github.com/assetgraph/assetgraph/commit/503a695760d7195a87dd9f3f5de40770781cd430) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v6.2.1 (2020-10-05)
 
@@ -138,6 +143,7 @@
 
 #### Pull requests
 
+- [#1042](https://github.com/assetgraph/assetgraph/pull/1042) Resolve canonical URL's with no trailing slash as the assetgrap… ([Peter Müller](mailto:munter@fumle.dk))
 - [#988](https://github.com/assetgraph/assetgraph/pull/988) subsetFonts: Allow passing in per-page font traces ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [#1002](https://github.com/assetgraph/assetgraph/pull/1002) Avoid preloading the unused variants ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [#998](https://github.com/assetgraph/assetgraph/pull/998) subsetFonts: Implement omitFallbacks:true mode ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
@@ -179,6 +185,7 @@
 
 #### Pull requests
 
+- [#1021](https://github.com/assetgraph/assetgraph/pull/1021) Add JavaScriptWorklet relation ([Peter Müller](mailto:munter@fumle.dk))
 - [#1020](https://github.com/assetgraph/assetgraph/pull/1020) Upgrade prettier to version 1.18.2 ([Andreas Lind](mailto:andreaslindpetersen@gmail.com), [depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
 - [#1019](https://github.com/assetgraph/assetgraph/pull/1019) Upgrade file-loader to version 4.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
 - [#1017](https://github.com/assetgraph/assetgraph/pull/1017) Upgrade terser to version 4.0.0 ([depfu[bot]](mailto:depfu[bot]@users.noreply.github.com))
