@@ -250,7 +250,7 @@ describe('assets/JavaScript', function() {
     );
   });
 
-  it('should tolerate ES6 syntax', function() {
+  it('should tolerate ES6 import syntax', function() {
     const es6Text = "import gql from 'graphql-tag';\nlet a = 123;";
     const javaScript = new AssetGraph().addAsset({
       type: 'JavaScript',
@@ -308,6 +308,29 @@ describe('assets/JavaScript', function() {
     const javaScript = new AssetGraph().addAsset({ type: 'JavaScript', text });
     javaScript.markDirty();
     expect(javaScript.text, 'to equal', text);
+  });
+
+  it('should support optional chaining syntax', function() {
+    const es6Text = 'foo = bar?.baz;';
+    const javaScript = new AssetGraph().addAsset({
+      type: 'JavaScript',
+      text: es6Text
+    });
+    expect(javaScript.parseTree, 'to satisfy', {
+      type: 'Program',
+      body: [
+        {
+          type: 'ExpressionStatement',
+          expression: {
+            type: 'AssignmentExpression',
+            right: { type: 'ChainExpression' }
+          }
+        }
+      ],
+      sourceType: 'module'
+    });
+    javaScript.markDirty();
+    expect(javaScript.text, 'to equal', es6Text);
   });
 
   it('should tolerate JSX syntax', function() {
