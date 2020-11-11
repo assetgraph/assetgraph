@@ -33,7 +33,7 @@
     "esanimate": "^1.1.0",
     "escodegen": "^1.12.0",
     "espurify": "^2.0.1",
-    "estraverse": "^4.3.0",
+    "estraverse": "^5.2.0",
     "estraverse-fb": "^1.3.2",
     "gettemporaryfilepath": "^1.0.0",
     "glob": "^7.0.5",
