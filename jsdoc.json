@@ -18,6 +18,24 @@
 
   "docdash": {
       "static": true,
-      "sort": true
+      "sort": true,
+      "search": true,
+      "collapse": true,
+      "typedefs": true,
+    
+      "menu": {
+          "Github Repository": {
+              "href": "https://github.com/assetgraph/assetgraph",
+              "target":"_blank",
+              "class": "menu-item",
+              "id": "github_link"
+          },
+          "Gitter Chat": {
+              "href": "https://gitter.im/assetgraph/assetgraph",
+              "target": "_blank",
+              "class": "menu-item",
+              "id": "gitter_chat_link"
+          }
+      }
   }
 }
