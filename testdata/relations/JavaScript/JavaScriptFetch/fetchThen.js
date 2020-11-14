@@ -1,1 +1,0 @@
-window.fetch('b.js');
