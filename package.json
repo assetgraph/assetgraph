@@ -89,7 +89,7 @@
     "unexpected-assetgraph": "^1.1.1",
     "unexpected-dom": "^4.5.0",
     "unexpected-set": "^3.0.0",
-    "unexpected-sinon": "^10.10.1",
+    "unexpected-sinon": "^11.0.0",
     "yui-compressor": "^0.1.3"
   },
   "main": "lib/AssetGraph.js",
