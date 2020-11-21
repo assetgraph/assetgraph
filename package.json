@@ -87,7 +87,7 @@
     "uglify-js": "^3.4.9",
     "unexpected": "^11.0.0-1",
     "unexpected-assetgraph": "^1.1.1",
-    "unexpected-dom": "^4.5.0",
+    "unexpected-dom": "^5.0.0",
     "unexpected-set": "^3.0.0",
     "unexpected-sinon": "^10.10.1",
     "yui-compressor": "^0.1.3"
