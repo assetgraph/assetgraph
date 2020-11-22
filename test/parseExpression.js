@@ -2,13 +2,12 @@ const expect = require('./unexpected-with-plugins').clone();
 const parseExpression = require('../lib/parseExpression');
 
 describe('parseExpression', function () {
-  expect.addAssertion('<any> to parse as <object>', function (
-    expect,
-    subject,
-    value
-  ) {
-    expect(parseExpression(subject), 'to exhaustively satisfy', value);
-  });
+  expect.addAssertion(
+    '<any> to parse as <object>',
+    function (expect, subject, value) {
+      expect(parseExpression(subject), 'to exhaustively satisfy', value);
+    }
+  );
 
   it('should parse a number', function () {
     expect(2, 'to parse as', {

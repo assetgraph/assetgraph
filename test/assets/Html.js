@@ -13,23 +13,21 @@ function createAsset(inputHtml) {
 describe('assets/Html', function () {
   const expect = unexpected
     .clone()
-    .addAssertion('<string> to minify to <string> <function?>', function (
-      expect,
-      subject,
-      value,
-      manipulator
-    ) {
-      const htmlAsset = new AssetGraph().addAsset({
-        type: 'Html',
-        text: subject,
-      });
-      if (manipulator) {
-        manipulator(htmlAsset);
-        htmlAsset.markDirty();
+    .addAssertion(
+      '<string> to minify to <string> <function?>',
+      function (expect, subject, value, manipulator) {
+        const htmlAsset = new AssetGraph().addAsset({
+          type: 'Html',
+          text: subject,
+        });
+        if (manipulator) {
+          manipulator(htmlAsset);
+          htmlAsset.markDirty();
+        }
+        htmlAsset.minify();
+        expect(htmlAsset.text, 'to equal', value);
       }
-      htmlAsset.minify();
-      expect(htmlAsset.text, 'to equal', value);
-    });
+    );
 
   it('should handle a test case with a javascript: url', async function () {
     const assetGraph = new AssetGraph({
