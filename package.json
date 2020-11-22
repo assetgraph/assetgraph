@@ -71,7 +71,7 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "httpception": "^3.0.0",
+    "httpception": "^4.0.1",
     "iconv-lite": "^0.6.0",
     "jsdoc": "^3.5.5",
     "less": "^2.7.3",
