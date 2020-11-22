@@ -3,6 +3,7 @@
 /examples/
 /node_modules/
 /coverage/
+/.nyc_output/
 /jsdoc/
 
 # Don't fight npm install --save
