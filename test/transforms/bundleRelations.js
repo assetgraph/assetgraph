@@ -1434,7 +1434,7 @@ describe('transforms/bundleRelations', function () {
       .serializeSourceMaps({ sourcesContent: true })
       .queue(function (assetGraph) {
         expect(assetGraph, 'to contain asset', 'SourceMap');
-        var sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
+        const sourceMap = assetGraph.findAssets({ type: 'SourceMap' })[0];
         expect(sourceMap.parseTree.sourcesContent, 'to equal', ['foo', 'bar']);
       });
   });

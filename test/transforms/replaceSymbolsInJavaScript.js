@@ -336,7 +336,7 @@ describe('transforms/replaceSymbolsInJavaScript', function () {
         /* eslint-enable */
       }
     ).then(function (parseTree) {
-      var binOp = parseTree.body[0].expression;
+      const binOp = parseTree.body[0].expression;
       expect(binOp.type, 'to equal', 'BinaryExpression');
       expect(binOp.left, 'not to be', binOp.right);
     });
