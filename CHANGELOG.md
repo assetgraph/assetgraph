@@ -1,7 +1,12 @@
-### v6.3.0 (2020-11-11)
+### v6.4.0 (2020-12-22)
 
 #### Pull requests
 
+- [#1128](https://github.com/assetgraph/assetgraph/pull/1128) Upgrade eslint-config-standard to version 16.0.2 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1135](https://github.com/assetgraph/assetgraph/pull/1135) Upgrade eslint-config-prettier to version 7.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1127](https://github.com/assetgraph/assetgraph/pull/1127) Stop modelling fetch\(...\) as a relation ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [#1134](https://github.com/assetgraph/assetgraph/pull/1134) Upgrade eslint-plugin-standard to version 5.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1133](https://github.com/assetgraph/assetgraph/pull/1133) Upgrade esanimate to version 2.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1126](https://github.com/assetgraph/assetgraph/pull/1126) Upgrade offline-github-changelog to version 2.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1122](https://github.com/assetgraph/assetgraph/pull/1122) Update fetch expression to only match direct descendants. ([Kevin Cox](mailto:kevincox@kevincox.ca))
 - [#1119](https://github.com/assetgraph/assetgraph/pull/1119) Upgrade eslint-config-standard to version 15.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -54,12 +59,21 @@
 
 #### Commits to master
 
-- [Add test for optional chaining syntax](https://github.com/assetgraph/assetgraph/commit/9f0e22ad3a50890bf118f45d134e0f758af87a6e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Fix reporting of errors in JavaScript assets that use module-exclusive features](https://github.com/assetgraph/assetgraph/commit/5174cd088f95526e572b9461e08ba29b80ae6869) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Pass ecmaVersion:2021 to acorn](https://github.com/assetgraph/assetgraph/commit/3eae6466bc6c62687153117eb6793124cb88d61e) ([Andreas Lind](mailto:andreas.lind@peakon.com))
-- [Use valid data: urls in README.md to avoid tripping up prettier](https://github.com/assetgraph/assetgraph/commit/ef0ed595798c6b0b334ef8f75dafc76bef0df009) ([Andreas Lind](mailto:andreas.lind@peakon.com))
-- [Update prettier to version 2.1.0](https://github.com/assetgraph/assetgraph/commit/4eb58f583786c2fc7f7e56ed1c696cf6a431533f) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
-- [+44 more](https://github.com/assetgraph/assetgraph/compare/v6.2.2...v6.3.0)
+- [populate: Support startAssets being passed as an asset instance or an array of asset instances](https://github.com/assetgraph/assetgraph/commit/0810c1d26b6d0f959f718103b5c6f080c65a97d6) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Fix array-callback-return lint violation](https://github.com/assetgraph/assetgraph/commit/7ea007009d570eb9ea68ea04762b21725257f5e5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [eslint --fix .](https://github.com/assetgraph/assetgraph/commit/15de6ae66c2cdf8562f68148f84e8ed399c41abf) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Update httpception to ^4.0.1](https://github.com/assetgraph/assetgraph/commit/7735863d93761970e14903f2126f25ec96e44e2a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [prettier --write '\*\*\/\*.{js,json,md}'](https://github.com/assetgraph/assetgraph/commit/decb43e2a394db2a820d0694105d22fe495e0bdc) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [+54 more](https://github.com/assetgraph/assetgraph/compare/v6.3.0...v6.4.0)
+
+### v6.3.0 (2020-11-12)
+
+- [Update test now that uglify-js supports template strings](https://github.com/assetgraph/assetgraph/commit/61e28482192d0c3d2750ee67e2569e3c9e9e9ad5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Update escodegen to ^2.0.0](https://github.com/assetgraph/assetgraph/commit/c4517c40cfde56dd277b1a309d4a46b8dabb7345) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Update estraverse to ^5.2.0](https://github.com/assetgraph/assetgraph/commit/1445952993287f67bcddeb16dbb0db21121fec3e) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Add test for optional chaining syntax](https://github.com/assetgraph/assetgraph/commit/196d814016ea8cb26864a14532c1ff1528f37c87) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Update acorn to ^8.0.4](https://github.com/assetgraph/assetgraph/commit/10f6eaf02bd2161bc86120bdaf3e281f3147c4d5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [+1 more](https://github.com/assetgraph/assetgraph/compare/v6.2.2...v6.3.0)
 
 ### v6.2.2 (2020-11-05)
 
