@@ -205,4 +205,82 @@ describe('transforms/populate', function () {
         });
     });
   });
+
+  it('should support startAsset being passed as an asset instance', async function () {
+      httpception([
+        {
+          request: 'GET https://example.com/first.html',
+          response: {
+            headers: {
+              'Content-Type': 'text/html',
+            },
+            body: '<script src="foo.js"></script>',
+          },
+        },
+        {
+          request: 'GET https://example.com/foo.js',
+          response: {
+            headers: {
+              'Content-Type': 'application/javascript',
+            },
+            body: 'alert("foo");',
+          },
+        },
+      ]);
+
+      const assetGraph = new AssetGraph();
+      const firstHtmlAsset = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/first.html',
+      });
+
+      const secondHtmlAsset = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/second.html',
+      });
+
+      await assetGraph.populate({startAssets: firstHtmlAsset});
+
+      expect(firstHtmlAsset.isLoaded, 'to be true');
+      expect(secondHtmlAsset.isLoaded, 'to be false');
+  });
+
+  it('should support startAsset being passed as an array of asset instances', async function () {
+      httpception([
+        {
+          request: 'GET https://example.com/first.html',
+          response: {
+            headers: {
+              'Content-Type': 'text/html',
+            },
+            body: '<script src="foo.js"></script>',
+          },
+        },
+        {
+          request: 'GET https://example.com/foo.js',
+          response: {
+            headers: {
+              'Content-Type': 'application/javascript',
+            },
+            body: 'alert("foo");',
+          },
+        },
+      ]);
+
+      const assetGraph = new AssetGraph();
+      const firstHtmlAsset = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/first.html',
+      });
+
+      const secondHtmlAsset = assetGraph.addAsset({
+        type: 'Html',
+        url: 'https://example.com/second.html',
+      });
+
+      await assetGraph.populate({startAssets: [firstHtmlAsset]});
+
+      expect(firstHtmlAsset.isLoaded, 'to be true');
+      expect(secondHtmlAsset.isLoaded, 'to be false');
+  });
 });
