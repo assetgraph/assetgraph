@@ -58,6 +58,32 @@ describe('assets/Html', function () {
     expect(assetGraph.findAssets({ type: 'Html' })[0].text, 'to match', /bar/);
   });
 
+  it('should handle a test case with a javascript: url that contains spaces', async function () {
+    const assetGraph = new AssetGraph({
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/assets/Html/javascriptUrl/'
+      ),
+    });
+    await assetGraph.loadAssets('withspaces.html');
+    await assetGraph.populate();
+
+    expect(assetGraph, 'to contain assets', 2);
+    expect(assetGraph, 'to contain asset', 'Html');
+    expect(assetGraph, 'to contain relation', 'HtmlAnchor');
+    expect(assetGraph, 'to contain asset', 'JavaScript');
+
+    const javaScript = assetGraph.findAssets({
+      type: 'JavaScript',
+      isInline: true,
+    })[0];
+    expect(javaScript.parseTree.body, 'to satisfy', [
+      {
+        type: 'FunctionDeclaration',
+      },
+    ]);
+  });
+
   describe('#text', function () {
     it('should get text of asset instantiated with rawSrc property', function () {
       expect(
