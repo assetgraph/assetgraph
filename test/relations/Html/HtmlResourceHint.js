@@ -30,6 +30,21 @@ describe('relations/HtmlResourceHint', function () {
   });
 
   describe('#as', function () {
+    describe('with an invalid value', function () {
+      it('should not break', function () {
+        const assetGraph = new AssetGraph();
+
+        const htmlAsset = assetGraph.addAsset({
+          type: 'Html',
+          text:
+            '<link rel="prefetch" as="stylesheet" href="/static/bundles/es6/FeedPageContainer.css/263e0ec404b3.css" type="text/css" crossorigin="anonymous"></link>',
+        });
+
+        // eslint-disable-next-line no-unused-expressions
+        htmlAsset.outgoingRelations;
+      });
+    });
+
     describe('when target asset is not resolved', function () {
       it('should detect css as style', function () {
         const htmlAsset = getHtmlAsset();
