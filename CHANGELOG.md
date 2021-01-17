@@ -1,4 +1,4 @@
-### v6.4.1 (2021-01-17)
+### v6.4.2 (2021-01-17)
 
 #### Pull requests
 
@@ -59,12 +59,16 @@
 
 #### Commits to master
 
+- [Tolerate unspecified "as" attribute values for resource hints](https://github.com/assetgraph/assetgraph/commit/c9da1c70b39366567e738b4eb7317b39271ca7db) ([Andreas Lind](mailto:andreas.lind@peakon.com))
+- [package.json: Set version to 7.0.0-pre to make the current state less confusing](https://github.com/assetgraph/assetgraph/commit/de63d5e1d58595e31f434de4dc8ac2e2b9165822) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Call decodeURIComponent on javascript: urls before parsing them](https://github.com/assetgraph/assetgraph/commit/72e0293a314f3ecdf9c9f3c58693f2d60d07b9c1) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Run prettier](https://github.com/assetgraph/assetgraph/commit/c6dfdea560f85d54bcb9fd3f058d59c927f59837) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [populate: Support startAssets being passed as an asset instance or an array of asset instances](https://github.com/assetgraph/assetgraph/commit/0810c1d26b6d0f959f718103b5c6f080c65a97d6) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Fix array-callback-return lint violation](https://github.com/assetgraph/assetgraph/commit/7ea007009d570eb9ea68ea04762b21725257f5e5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [eslint --fix .](https://github.com/assetgraph/assetgraph/commit/15de6ae66c2cdf8562f68148f84e8ed399c41abf) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+56 more](https://github.com/assetgraph/assetgraph/compare/v6.4.0...v6.4.1)
+- [+58 more](https://github.com/assetgraph/assetgraph/compare/v6.4.1...v6.4.2)
+
+### v6.4.1 (2021-01-17)
+
+- [Call decodeURIComponent on javascript: urls before parsing them](https://github.com/assetgraph/assetgraph/commit/0febc9f1649e38279bdfc4e890c717ef66ebf5cd) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 
 ### v6.4.0 (2020-12-22)
 
