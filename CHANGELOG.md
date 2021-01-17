@@ -1,4 +1,4 @@
-### v6.4.0 (2020-12-22)
+### v6.4.1 (2021-01-17)
 
 #### Pull requests
 
@@ -59,12 +59,17 @@
 
 #### Commits to master
 
+- [Call decodeURIComponent on javascript: urls before parsing them](https://github.com/assetgraph/assetgraph/commit/72e0293a314f3ecdf9c9f3c58693f2d60d07b9c1) ([Andreas Lind](mailto:andreas.lind@peakon.com))
+- [Run prettier](https://github.com/assetgraph/assetgraph/commit/c6dfdea560f85d54bcb9fd3f058d59c927f59837) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [populate: Support startAssets being passed as an asset instance or an array of asset instances](https://github.com/assetgraph/assetgraph/commit/0810c1d26b6d0f959f718103b5c6f080c65a97d6) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Fix array-callback-return lint violation](https://github.com/assetgraph/assetgraph/commit/7ea007009d570eb9ea68ea04762b21725257f5e5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [eslint --fix .](https://github.com/assetgraph/assetgraph/commit/15de6ae66c2cdf8562f68148f84e8ed399c41abf) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Update httpception to ^4.0.1](https://github.com/assetgraph/assetgraph/commit/7735863d93761970e14903f2126f25ec96e44e2a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [prettier --write '\*\*\/\*.{js,json,md}'](https://github.com/assetgraph/assetgraph/commit/decb43e2a394db2a820d0694105d22fe495e0bdc) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+54 more](https://github.com/assetgraph/assetgraph/compare/v6.3.0...v6.4.0)
+- [+56 more](https://github.com/assetgraph/assetgraph/compare/v6.4.0...v6.4.1)
+
+### v6.4.0 (2020-12-22)
+
+- [populate: Support startAssets being passed as an asset instance or an array of asset instances](https://github.com/assetgraph/assetgraph/commit/3e49eebf215c280b88220c1ab6424c4a46d85712) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [prettier --write lib\/assets\/JavaScript.js](https://github.com/assetgraph/assetgraph/commit/01aca3e8437c42c706173ff6d8655956af0b3b4c) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v6.3.0 (2020-11-12)
 
