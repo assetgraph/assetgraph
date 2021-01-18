@@ -10,22 +10,25 @@ describe('relations/HttpRedirect', function() {
     let infiniteloopCount = 0;
     const server = http
       .createServer((req, res) => {
-        if (req.url === '/301') {
-          res.writeHead(301, {
-            Location: '/relativeRedirectTarget.html',
-            'Content-Type': 'text/html; charset=UTF-8'
-          });
-          res.end(
-            '<!DOCTYPE html><html><head></head><html>Moved permanently</body></html>'
-          );
-        } else if (req.url === '/302') {
-          res.writeHead(302, {
-            Location: `${rootUrl}absoluteRedirectTarget.html`,
-            'Content-Type': 'text/html; charset=UTF-8'
-          });
-          res.end(
-            '<!DOCTYPE html><html><head></head><html>Moved temporarily</body></html>'
-          );
+        const number = parseInt(req.url.substr(1));
+        if (!isNaN(number)) {
+          if (req.url.endsWith('Target.html')) {
+            res.writeHead(200, {
+              'Content-Type': 'text/html; charset=UTF-8'
+            });
+            res.end(`This is ${req.url}`);
+          } else {
+            res.writeHead(number, {
+              Location:
+                number === 301 || number === 308
+                  ? `/${number}Target.html`
+                  : `${rootUrl}${number}Target.html`,
+              'Content-Type': 'text/html; charset=UTF-8'
+            });
+            res.end(
+              `<!DOCTYPE html><html><head></head><html>${number} redirect</body></html>`
+            );
+          }
         } else if (req.url === '/infiniteloop') {
           infiniteloopCount += 1;
           res.writeHead(302, {
@@ -54,9 +57,7 @@ describe('relations/HttpRedirect', function() {
               '<!DOCTYPE html><html><head></head><html>Moved permanently</body></html>'
             );
           }
-        } else if (
-          /\/(?:relative|absolute|loop)RedirectTarget\.html$/.test(req.url)
-        ) {
+        } else if (req.url === '/loopRedirectTarget.html') {
           res.writeHead(200, {
             'Content-Type': 'text/html; charset=UTF-8'
           });
@@ -77,17 +78,31 @@ describe('relations/HttpRedirect', function() {
       const assetGraph = new AssetGraph({ root: rootUrl });
       assetGraph.requestOptions = { numRetries: 1 };
 
-      await assetGraph.loadAssets('/301', '/302', '/loop', '/infiniteloop');
+      await assetGraph.loadAssets(
+        '/301',
+        '/302',
+        '/303',
+        '/307',
+        '/308',
+        '/loop',
+        '/infiniteloop'
+      );
       await assetGraph.populate();
 
-      expect(assetGraph, 'to contain assets', 'Html', 7);
+      expect(assetGraph, 'to contain assets', 'Html', 13);
       expect(assetGraph, 'to contain assets', { statusCode: 301 }, 2);
       expect(assetGraph, 'to contain assets', { statusCode: 302 }, 2);
-      expect(assetGraph, 'to contain relations', 'HttpRedirect', 4);
+      expect(assetGraph, 'to contain assets', { statusCode: 303 }, 1);
+      expect(assetGraph, 'to contain assets', { statusCode: 307 }, 1);
+      expect(assetGraph, 'to contain assets', { statusCode: 308 }, 1);
+      expect(assetGraph, 'to contain relations', 'HttpRedirect', 7);
       const httpRedirects = assetGraph.findRelations({ type: 'HttpRedirect' });
       expect(httpRedirects, 'to satisfy', [
-        { href: '/relativeRedirectTarget.html' },
-        { href: `${rootUrl}absoluteRedirectTarget.html` },
+        { href: '/301Target.html' },
+        { href: `${rootUrl}302Target.html` },
+        { href: `${rootUrl}303Target.html` },
+        { href: `${rootUrl}307Target.html` },
+        { href: `/308Target.html` },
         { href: '/loopRedirectTarget.html' },
         { href: `${rootUrl}infiniteloop` }
       ]);
