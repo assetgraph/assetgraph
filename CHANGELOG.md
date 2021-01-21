@@ -1,4 +1,4 @@
-### v6.4.4 (2021-01-18)
+### v6.4.5 (2021-01-21)
 
 #### Pull requests
 
@@ -59,12 +59,16 @@
 
 #### Commits to master
 
+- [Sidestep teepee's buggy expansion of {...} in urls](https://github.com/assetgraph/assetgraph/commit/26e89cd90d4e7ef1b972c08d8df6b296463118fe) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Also handle HTTP status codes of 307 and 308 as redirects](https://github.com/assetgraph/assetgraph/commit/7e020a266d59d606aee34dece8f1e21c4e85fb4b) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Tolerate unspecified "as" attribute values for resource hints](https://github.com/assetgraph/assetgraph/commit/c9da1c70b39366567e738b4eb7317b39271ca7db) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [package.json: Set version to 7.0.0-pre to make the current state less confusing](https://github.com/assetgraph/assetgraph/commit/de63d5e1d58595e31f434de4dc8ac2e2b9165822) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [Call decodeURIComponent on javascript: urls before parsing them](https://github.com/assetgraph/assetgraph/commit/72e0293a314f3ecdf9c9f3c58693f2d60d07b9c1) ([Andreas Lind](mailto:andreas.lind@peakon.com))
-- [Run prettier](https://github.com/assetgraph/assetgraph/commit/c6dfdea560f85d54bcb9fd3f058d59c927f59837) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+59 more](https://github.com/assetgraph/assetgraph/compare/v6.4.3...v6.4.4)
+- [+60 more](https://github.com/assetgraph/assetgraph/compare/v6.4.4...v6.4.5)
+
+### v6.4.4 (2021-01-18)
+
+- [Pass ecmaVersion:2021 to acorn](https://github.com/assetgraph/assetgraph/commit/c75b57b15da1079273cd98b415f3b51438e02a21) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 
 ### v6.4.3 (2021-01-18)
 
