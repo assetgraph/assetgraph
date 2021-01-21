@@ -115,14 +115,14 @@ describe('resolvers/http', function() {
   });
 
   // Regression test for https://github.com/assetgraph/assetgraph/issues/1144
-  it('should not break when a url contains curly braces', async function () {
+  it('should not break when a url contains curly braces', async function() {
     httpception({
       request:
         'GET https://api.amplitude.com/httpapi?api_key=e102edba5e9caea6b89e3c04fac87a4d&event={%22event_type%22:%22Overall%20Active%20User%22,%22event_properties%22:{%22Email%20Send%20Time%22:%222019-05-10T10:43:42%22,%22Current%20Date%22:%2210/05/2019%22,%22UserId%22:5698327,%22campaign%22:%22Daily%20Digest%22,%22Platform%22:%22E-Mail%22},%22user_id%22:%225698327%22}',
       response: {
         statusCode: 200,
-        body: '<html><body>Hello, world!</body></html>',
-      },
+        body: '<html><body>Hello, world!</body></html>'
+      }
     });
 
     const assetGraph = new AssetGraph();
@@ -136,7 +136,7 @@ describe('resolvers/http', function() {
     expect(assetGraph, 'to contain asset', {
       type: 'Html',
       url:
-        'https://api.amplitude.com/httpapi?api_key=e102edba5e9caea6b89e3c04fac87a4d&event={%22event_type%22:%22Overall%20Active%20User%22,%22event_properties%22:{%22Email%20Send%20Time%22:%222019-05-10T10:43:42%22,%22Current%20Date%22:%2210/05/2019%22,%22UserId%22:5698327,%22campaign%22:%22Daily%20Digest%22,%22Platform%22:%22E-Mail%22},%22user_id%22:%225698327%22}',
+        'https://api.amplitude.com/httpapi?api_key=e102edba5e9caea6b89e3c04fac87a4d&event={%22event_type%22:%22Overall%20Active%20User%22,%22event_properties%22:{%22Email%20Send%20Time%22:%222019-05-10T10:43:42%22,%22Current%20Date%22:%2210/05/2019%22,%22UserId%22:5698327,%22campaign%22:%22Daily%20Digest%22,%22Platform%22:%22E-Mail%22},%22user_id%22:%225698327%22}'
     });
   });
 });
