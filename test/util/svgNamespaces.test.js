@@ -56,7 +56,7 @@ describe('svgNamespaces', () => {
   });
 
   describe('removeAddedNamespaces', () => {
-    it('should remove faked anmespaces', () => {
+    it('should remove faked namespaces', () => {
       expect(
         removeAddedNamespaces(
           '<svg xmlns:element="http://fake" xmlns:xlink="http://fake"><element:g xlink:href=""></g></svg>'
