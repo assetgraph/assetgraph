@@ -80,11 +80,11 @@ describe('assets/JavaScript', function() {
     const assetGraph = new AssetGraph();
     const one = assetGraph.addAsset({
       type: 'JavaScript',
-      text: 'function test (argumentName) { return argumentName; }'
+      text: 'function test (argumentName) {\n  return argumentName;\n}'
     });
     const two = assetGraph.addAsset({
       type: 'JavaScript',
-      text: 'function test (argumentName) { return argumentName; }'
+      text: 'function test (argumentName) {\n  return argumentName;\n}'
     });
 
     expect(one, 'to have the same AST as', two);
@@ -476,6 +476,93 @@ describe('assets/JavaScript', function() {
         javaScript.parseTree; // eslint-disable-line no-unused-expressions
         javaScript.markDirty();
         expect(javaScript.text, 'to equal', `var foo = 'b"\\'ar';`);
+      });
+    });
+  });
+
+  describe('pretty detection', function () {
+    it('should leave unmodified source unchanged', async function () {
+      const sourceCode = 'function test () {\n\t// This logs hello world\n\tconsole.log("Hello world");\n}';
+      const assetGraph = new AssetGraph();
+      const asset = assetGraph.addAsset({
+        type: 'JavaScript',
+        text: sourceCode
+      });
+
+      expect(asset, 'to satisfy', {
+        text: sourceCode,
+        isPretty: true
+      });
+    });
+
+    it('should retain pretty printing', async function () {
+      const sourceCode = 'function test () {\n\t// This logs hello world\n\tconsole.log("Hello world");\n}';
+      const assetGraph = new AssetGraph();
+      const asset = assetGraph.addAsset({
+        type: 'JavaScript',
+        text: sourceCode
+      });
+
+      const parseTree = asset.parseTree
+      asset.parseTree = parseTree;
+
+      expect(asset, 'to satisfy', {
+        text: `function test() {\n    // This logs hello world\n    console.log('Hello world');\n};`,
+        isPretty: true
+      });
+    });
+
+    it('should retain minification', async function () {
+      const sourceCode = 'function test(){console.log("Hello world")}';
+      const assetGraph = new AssetGraph();
+      const asset = assetGraph.addAsset({
+        type: 'JavaScript',
+        text: sourceCode
+      });
+
+      expect(asset, 'to satisfy', {
+        text: sourceCode,
+        isPretty: false
+      });
+
+      const parseTree = asset.parseTree
+      asset.parseTree = parseTree;
+
+      expect(asset, 'to satisfy', {
+        text: `function test(){console.log('Hello world')};`,
+        isPretty: false
+      });
+    });
+
+    it('should minify pretty printed code', async function () {
+      const sourceCode = 'function test () {\n\t// This logs hello world\n\tconsole.log("Hello world");\n}';
+      const assetGraph = new AssetGraph();
+      const asset = assetGraph.addAsset({
+        type: 'JavaScript',
+        text: sourceCode
+      });
+
+      asset.minify();
+
+      expect(asset, 'to satisfy', {
+        text: `function test(){console.log('Hello world')};`,
+        isPretty: false
+      });
+    });
+
+    it('should pretty print minified code', async function () {
+      const sourceCode = `function test(){console.log('Hello world')};`;
+      const assetGraph = new AssetGraph();
+      const asset = assetGraph.addAsset({
+        type: 'JavaScript',
+        text: sourceCode
+      });
+
+      asset.prettyPrint();
+
+      expect(asset, 'to satisfy', {
+        text: `function test() {\n    console.log('Hello world');\n}\n;`,
+        isPretty: true
       });
     });
   });

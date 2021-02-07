@@ -86,13 +86,13 @@ describe('transforms/addPrecacheServiceWorker', function() {
         { isInitial: true },
         { minify: true }
       );
-
       expect(
         assetGraph,
         'to contain assets',
         {
           type: 'JavaScript',
-          _toBeMinified: true
+          isLoaded: true,
+          isPretty: false
         },
         2
       );

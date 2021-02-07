@@ -22,11 +22,7 @@ describe('relations/HtmlScript', function() {
 
     expect(firstScript.node.hasAttribute('src'), 'to be', false);
 
-    expect(
-      firstScript.node.textContent,
-      'to equal',
-      "var external = 'noType';"
-    );
+    expect(firstScript.node.textContent, 'to equal', "var external='noType'");
   });
 
   it('should handle a test case with existing <script> elements', async function() {

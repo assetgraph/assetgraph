@@ -108,7 +108,7 @@ describe('JavaScriptImportScripts', function() {
         to: { fileName: 'bar.js' }
       })[0]
     );
-    expect(webWorker.text, 'to contain', "importScripts('foo.js', 'bar.js')");
+    expect(webWorker.text, 'to contain', "importScripts('foo.js','bar.js')");
 
     webWorker.addRelation(
       {
@@ -124,7 +124,7 @@ describe('JavaScriptImportScripts', function() {
     expect(
       webWorker.text,
       'to contain',
-      "importScripts('foo.js', 'bar.js', 'after.js')"
+      "importScripts('foo.js','bar.js','after.js')"
     );
     webWorker.addRelation(
       {
