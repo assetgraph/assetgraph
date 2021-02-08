@@ -34,22 +34,22 @@ describe('transforms/compressJavaScript', function() {
     assetGraph.addAsset({
       url: 'https://example.com/script.js',
       type: 'JavaScript',
-      text: 'foo = bar?.quux;'
+      text: 'foo(',
     });
     await assetGraph.compressJavaScript({ type: 'JavaScript' }, 'uglifyJs');
-
-    expect(warnSpy, 'to have calls satisfying', function() {
+    expect(warnSpy, 'to have calls satisfying', function () {
       warnSpy(
         new errors.ParseError(
-          'Parse error in https://example.com/script.js\nUnexpected token: punc «.» (line 1, column 11)'
+          'Parse error in https://example.com/script.js\nUnexpected token (1:4)'
         )
       );
+        warnSpy(new errors.ParseError('Parse error in https://example.com/script.js\nUnexpected token: eof (line 1, column 5)'));
     });
     expect(assetGraph, 'to contain asset', 'JavaScript');
     expect(
       assetGraph.findAssets({ type: 'JavaScript' })[0].text,
       'to equal',
-      'foo = bar?.quux;'
+      'foo('
     );
   });
 
