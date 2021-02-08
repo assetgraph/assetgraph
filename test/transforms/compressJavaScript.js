@@ -34,14 +34,13 @@ describe('transforms/compressJavaScript', function () {
     assetGraph.addAsset({
       url: 'https://example.com/script.js',
       type: 'JavaScript',
-      text: 'var foo = `123`;',
+      text: 'foo?.bar',
     });
     await assetGraph.compressJavaScript({ type: 'JavaScript' }, 'uglifyJs');
-
     expect(warnSpy, 'to have calls satisfying', function () {
       warnSpy(
         new errors.ParseError(
-          "Parse error in https://example.com/script.js\nUnexpected character '`' (line 1, column 11)"
+          'Parse error in https://example.com/script.js\nUnexpected token: punc «.» (line 1, column 5)'
         )
       );
     });
@@ -49,7 +48,7 @@ describe('transforms/compressJavaScript', function () {
     expect(
       assetGraph.findAssets({ type: 'JavaScript' })[0].text,
       'to equal',
-      'var foo = `123`;'
+      'foo?.bar'
     );
   });
 
