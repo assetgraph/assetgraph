@@ -1,6 +1,6 @@
 const unexpected = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
-const mozilla = require('source-map');
+const mozilla = require('source-map-js');
 const pathModule = require('path');
 
 function createAsset(inputHtml) {
