@@ -79,7 +79,7 @@
     "mocha": "^8.0.1",
     "nyc": "^15.0.0",
     "offline-github-changelog": "^2.0.0",
-    "open": "^7.0.0",
+    "open": "^8.0.2",
     "prettier": "~2.2.0",
     "proxyquire": "^2.0.1",
     "sinon": "^9.0.1",
