@@ -82,7 +82,7 @@
     "open": "^8.0.2",
     "prettier": "~2.2.0",
     "proxyquire": "^2.0.1",
-    "sinon": "^9.0.1",
+    "sinon": "^10.0.0",
     "svgo": "^1.0.5",
     "uglify-js": "^3.4.9",
     "unexpected": "^12.0.0",
