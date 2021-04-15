@@ -63,7 +63,7 @@
     "coveralls": "^3.0.2",
     "docdash": "^1.0.0",
     "eslint": "^7.0.0",
-    "eslint-config-prettier": "^7.0.0",
+    "eslint-config-prettier": "^8.2.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-mocha": "^8.0.0",
