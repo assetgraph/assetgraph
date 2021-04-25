@@ -1,5 +1,5 @@
 {
-  "extends": ["standard", "prettier", "prettier/standard"],
+  "extends": ["standard", "prettier"],
   "plugins": ["import", "mocha"],
   "env": {
     "mocha": true
