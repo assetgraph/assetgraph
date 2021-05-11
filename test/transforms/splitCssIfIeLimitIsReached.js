@@ -161,8 +161,10 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
       .findAssets({ type: 'Css' })
       .map((cssAsset) => cssAsset.text)
       .join('\n');
-    const parseTreeAfter = new AssetGraph().addAsset({ type: 'Css', text })
-      .parseTree;
+    const parseTreeAfter = new AssetGraph().addAsset({
+      type: 'Css',
+      text,
+    }).parseTree;
 
     expect(
       assetGraph._parseTreeBefore.toString().replace(/\n+/g, '\n'),
@@ -232,17 +234,14 @@ describe('transforms/splitCssIfIeLimitIsReached', function () {
     expect(assetGraph, 'to contain relations', 'HtmlStyle', 4);
     expect(assetGraph.findAssets({ type: 'Css' }), 'to satisfy', [
       {
-        text:
-          '\n          @media screen {\n              .a, .quux, .baz {color: #aaa;}\n          }',
+        text: '\n          @media screen {\n              .a, .quux, .baz {color: #aaa;}\n          }',
       },
       { text: '\n          .b {color: #bbb;}\n          .c {color: #ccc;}' },
       {
-        text:
-          '\n          @media print {\n             .d {color: #ddd;}\n             .e {color: #eee;}\n             .f {color: #fff;}\n          }',
+        text: '\n          @media print {\n             .d {color: #ddd;}\n             .e {color: #eee;}\n             .f {color: #fff;}\n          }',
       },
       {
-        text:
-          '\n          .hey {color: #000;}\n          .there {color: #fff;}',
+        text: '\n          .hey {color: #000;}\n          .there {color: #fff;}',
       },
     ]);
 

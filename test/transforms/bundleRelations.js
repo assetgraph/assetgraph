@@ -103,8 +103,7 @@ describe('transforms/bundleRelations', function () {
       expect(assetGraph.findAssets({ type: 'Html' }), 'to satisfy', [
         {
           type: 'Html',
-          text:
-            '<style>h1 { color: red; }</style>\n<h1>Hello World</h1>\n<style>p { color: blue; }</style>\n',
+          text: '<style>h1 { color: red; }</style>\n<h1>Hello World</h1>\n<style>p { color: blue; }</style>\n',
         },
       ]);
 
@@ -113,8 +112,7 @@ describe('transforms/bundleRelations', function () {
       expect(assetGraph.findAssets({ type: 'Html' }), 'to satisfy', [
         {
           type: 'Html',
-          text:
-            '<style>h1 { color: red; }p { color: blue; }</style>\n<h1>Hello World</h1>\n\n',
+          text: '<style>h1 { color: red; }p { color: blue; }</style>\n<h1>Hello World</h1>\n\n',
         },
       ]);
     });
@@ -131,8 +129,7 @@ describe('transforms/bundleRelations', function () {
       expect(assetGraph.findAssets({ type: 'Html' }), 'to satisfy', [
         {
           type: 'Html',
-          text:
-            "<script>var foo = 'foo'</script>\n<h1>Hello World</h1>\n<script>var bar = 'bar'</script>\n",
+          text: "<script>var foo = 'foo'</script>\n<h1>Hello World</h1>\n<script>var bar = 'bar'</script>\n",
         },
       ]);
 
@@ -143,8 +140,7 @@ describe('transforms/bundleRelations', function () {
       expect(assetGraph.findAssets({ type: 'Html' }), 'to satisfy', [
         {
           type: 'Html',
-          text:
-            "\n<h1>Hello World</h1>\n<script>var foo = 'foo';\nvar bar = 'bar';</script>\n",
+          text: "\n<h1>Hello World</h1>\n<script>var foo = 'foo';\nvar bar = 'bar';</script>\n",
         },
       ]);
     });

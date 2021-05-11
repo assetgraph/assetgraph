@@ -69,8 +69,7 @@ describe('transforms/populate', function () {
         href: 'http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
       },
       {
-        href:
-          'https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
+        href: 'https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',
       },
     ]);
 
@@ -184,8 +183,7 @@ describe('transforms/populate', function () {
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/',
-        text:
-          '<script src="foo.js"></script><script src="bar.js"></script><script src="quux.js"></script>',
+        text: '<script src="foo.js"></script><script src="bar.js"></script><script src="quux.js"></script>',
       });
       await assetGraph.populate({
         followRelations: { $in: htmlAsset.outgoingRelations.slice(0, 2) },

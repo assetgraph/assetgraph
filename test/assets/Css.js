@@ -298,8 +298,7 @@ describe('assets/Css', function () {
       const assetGraph = new AssetGraph();
       const cssAsset = assetGraph.addAsset({
         type: 'Css',
-        text:
-          '.foo {\n  background-image: url(foo.png);\n}.bar {\n  background-image: url(bar.png);\n}',
+        text: '.foo {\n  background-image: url(foo.png);\n}.bar {\n  background-image: url(bar.png);\n}',
       });
       await cssAsset.minify();
       cssAsset.outgoingRelations[0].href = 'blah.png';
@@ -315,8 +314,7 @@ describe('assets/Css', function () {
       const assetGraph = new AssetGraph();
       const cssAsset = assetGraph.addAsset({
         type: 'Css',
-        text:
-          '@font-face {\nfont-family: "OpenSans";\nsrc: url(data:font/woff2;base64,) format("woff2");\n} .foo {\n background-image: url(data:image/png;base64,);\n}',
+        text: '@font-face {\nfont-family: "OpenSans";\nsrc: url(data:font/woff2;base64,) format("woff2");\n} .foo {\n background-image: url(data:image/png;base64,);\n}',
       });
       await cssAsset.minify();
 

@@ -21,8 +21,7 @@ describe('assets/Asset', function () {
             headers: {
               'Content-Type': 'text/html',
             },
-            body:
-              '<link rel="stylesheet" href="https://www.example.com/style.css">',
+            body: '<link rel="stylesheet" href="https://www.example.com/style.css">',
           },
         },
 
@@ -72,8 +71,7 @@ describe('assets/Asset', function () {
 
       await assetGraph.loadAssets({
         type: 'Html',
-        text:
-          '<link rel="stylesheet" href="https://www.example.com/style.css">',
+        text: '<link rel="stylesheet" href="https://www.example.com/style.css">',
       });
       await assetGraph.populate();
     });
@@ -206,8 +204,7 @@ describe('assets/Asset', function () {
       assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/',
-        text:
-          '<img src="https://travis-ci.org/peerigon/extract-loader.svg?branch=master" alt="Build Status">',
+        text: '<img src="https://travis-ci.org/peerigon/extract-loader.svg?branch=master" alt="Build Status">',
       });
       await assetGraph.populate();
     });
@@ -269,8 +266,7 @@ describe('assets/Asset', function () {
       assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/',
-        text:
-          '<img src="https://travis-ci.org/peerigon/extract-loader.svg?branch=master" alt="Build Status">',
+        text: '<img src="https://travis-ci.org/peerigon/extract-loader.svg?branch=master" alt="Build Status">',
       });
       await assetGraph.populate();
     });
@@ -415,8 +411,7 @@ describe('assets/Asset', function () {
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: 'https://example.com/',
-          text:
-            '<img src="foo.png"><style>body { background: url(bar.png); }</style>',
+          text: '<img src="foo.png"><style>body { background: url(bar.png); }</style>',
         });
         expect(assetGraph, 'to contain relation', 'HtmlImage');
         expect(assetGraph, 'to contain relation', 'HtmlStyle');
@@ -861,8 +856,7 @@ describe('assets/Asset', function () {
     assetGraph.addAsset({
       type: 'Html',
       url: 'http://example.com/foo.html',
-      text:
-        '<!DOCTYPE html><html><head></head><body><a href="http://example.com/bar.html">link text</a></body></html>',
+      text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/bar.html">link text</a></body></html>',
     });
     const barHtml = assetGraph.addAsset({
       // Not yet loaded
@@ -1174,16 +1168,14 @@ describe('assets/Asset', function () {
             const htmlAsset = new AssetGraph().addAsset({
               type: 'Html',
               url: 'https://www.example.com/',
-              text:
-                '<!DOCTYPE html><html><body><script>alert("foo");</script></body></html>',
+              text: '<!DOCTYPE html><html><body><script>alert("foo");</script></body></html>',
             });
 
-            const replacementJavaScript = htmlAsset.outgoingRelations[0].to.replaceWith(
-              {
+            const replacementJavaScript =
+              htmlAsset.outgoingRelations[0].to.replaceWith({
                 type: 'JavaScript',
                 text: 'alert("bar");',
-              }
-            );
+              });
 
             expect(replacementJavaScript.url, 'to be null');
 
@@ -1203,12 +1195,11 @@ describe('assets/Asset', function () {
             });
 
             // Used to break with TypeError: Cannot read property 'length' of null
-            const replacementJavaScript = htmlAsset.outgoingRelations[0].to.replaceWith(
-              {
+            const replacementJavaScript =
+              htmlAsset.outgoingRelations[0].to.replaceWith({
                 type: 'JavaScript',
                 text: "alert('/foo.png'.toString('url'));",
-              }
-            );
+              });
 
             expect(replacementJavaScript.url, 'to be null');
           });
@@ -1311,8 +1302,7 @@ describe('assets/Asset', function () {
         const replacementHtmlAsset = assetGraph.addAsset({
           type: 'Html',
           url: 'https://www.example.com/somewhere/else/page.html',
-          text:
-            '<!DOCTYPE html><html><head></head><body><a href="look/here.html">indeed</a></body></html>',
+          text: '<!DOCTYPE html><html><head></head><body><a href="look/here.html">indeed</a></body></html>',
         });
 
         htmlAsset.replaceWith(replacementHtmlAsset);
@@ -1320,8 +1310,7 @@ describe('assets/Asset', function () {
         expect(replacementHtmlAsset, 'to satisfy', {
           type: 'Html',
           url: 'https://www.example.com/',
-          text:
-            '<!DOCTYPE html><html><head></head><body><a href="somewhere/else/look/here.html">indeed</a></body></html>',
+          text: '<!DOCTYPE html><html><head></head><body><a href="somewhere/else/look/here.html">indeed</a></body></html>',
         });
       });
     });
@@ -1367,14 +1356,12 @@ describe('assets/Asset', function () {
       assetGraph.addAsset({
         type: 'Html',
         url: 'http://example.com/quux.html',
-        text:
-          '<!DOCTYPE html>\n<html><head><title>Boring document</title></head></html>',
+        text: '<!DOCTYPE html>\n<html><head><title>Boring document</title></head></html>',
       });
       assetGraph.addAsset({
         type: 'Html',
         url: 'http://example.com/baz.html',
-        text:
-          '<!DOCTYPE html>\n<html><head><title>Another boring document</title></head></html>',
+        text: '<!DOCTYPE html>\n<html><head><title>Another boring document</title></head></html>',
       });
 
       expect(assetGraph, 'to contain relation', {
@@ -1739,8 +1726,7 @@ describe('assets/Asset', function () {
     await assetGraph.loadAssets({
       type: 'Html',
       url: 'file:///foo/bar/quux/baz/index.html',
-      text:
-        '<!DOCTYPE html><html><head><script>const foo = "".toString("url")</script></head><body></body></html>',
+      text: '<!DOCTYPE html><html><head><script>const foo = "".toString("url")</script></head><body></body></html>',
     });
 
     expect(assetGraph, 'to contain relation', {
@@ -1806,8 +1792,7 @@ describe('assets/Asset', function () {
 
       it('should not break when the root of the AssetGraph instance is a windows-style file: url', async function () {
         const assetGraph = new AssetGraph({
-          root:
-            'file:///C%3A/projects/assetgraph/testdata/addAsset/relativeUrl/',
+          root: 'file:///C%3A/projects/assetgraph/testdata/addAsset/relativeUrl/',
         });
 
         assetGraph.addAsset('foo.png');

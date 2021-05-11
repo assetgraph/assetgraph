@@ -127,8 +127,7 @@ describe('relations/HtmlScript', function () {
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
       url: 'https://example.com/index.html',
-      text:
-        '<html><head><title>first test</title><script>"use strict";</script><style>body { background: red; }</style></head></html>',
+      text: '<html><head><title>first test</title><script>"use strict";</script><style>body { background: red; }</style></head></html>',
     });
 
     const firstScript = assetGraph.findRelations({ type: 'HtmlScript' })[0];
@@ -161,8 +160,7 @@ describe('relations/HtmlScript', function () {
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
       url: 'https://example.com/index.html',
-      text:
-        '<html><head><title>first test</title><script>"use strict";</script><style>body { background: red; }</style></head></html>',
+      text: '<html><head><title>first test</title><script>"use strict";</script><style>body { background: red; }</style></head></html>',
     });
 
     const firstScript = assetGraph.findRelations({ type: 'HtmlScript' })[0];
@@ -226,8 +224,7 @@ describe('relations/HtmlScript', function () {
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/index.html',
-        text:
-          '<!DOCTYPE html><html><head></head><body><script async src="script.js"></script></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><script async src="script.js"></script></body></html>',
       });
 
       expect(htmlAsset.outgoingRelations, 'to satisfy', [{ async: true }]);
@@ -276,8 +273,7 @@ describe('relations/HtmlScript', function () {
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/index.html',
-        text:
-          '<!DOCTYPE html><html><head></head><body><script defer src="script.js"></script></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><script defer src="script.js"></script></body></html>',
       });
 
       expect(htmlAsset.outgoingRelations, 'to satisfy', [{ defer: true }]);

@@ -537,8 +537,7 @@ describe('relations/Relation', function () {
       await assetGraph.loadAssets({
         type: 'Html',
         url: `file://${pathModule.resolve(__dirname, 'index.html')}`,
-        text:
-          '<!DOCTYPE html><html><head></head><body><a href="other.html">Link</a></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><a href="other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
@@ -549,8 +548,7 @@ describe('relations/Relation', function () {
       await assetGraph.loadAssets({
         type: 'Html',
         url: `fil://${pathModule.resolve(__dirname, 'index.html')}`,
-        text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://example.com/">Link</a></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
@@ -561,8 +559,7 @@ describe('relations/Relation', function () {
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'http://example.com/index.html',
-        text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://anotherexample.com/">Link</a></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><a href="http://anotherexample.com/">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
@@ -573,8 +570,7 @@ describe('relations/Relation', function () {
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'http://example.com/index.html',
-        text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
@@ -585,8 +581,7 @@ describe('relations/Relation', function () {
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'http://example.com:1337/index.html',
-        text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://example.com:1338/other.html">Link</a></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com:1338/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be true');
@@ -597,8 +592,7 @@ describe('relations/Relation', function () {
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'http://example.com/index.html',
-        text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://example.com:80/other.html">Link</a></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com:80/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
@@ -609,8 +603,7 @@ describe('relations/Relation', function () {
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'http://example.com:80/index.html',
-        text:
-          '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><a href="http://example.com/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
@@ -621,8 +614,7 @@ describe('relations/Relation', function () {
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'https://example.com/index.html',
-        text:
-          '<!DOCTYPE html><html><head></head><body><a href="https://example.com:443/other.html">Link</a></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><a href="https://example.com:443/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
@@ -633,8 +625,7 @@ describe('relations/Relation', function () {
       await assetGraph.loadAssets({
         type: 'Html',
         url: 'https://example.com:443/index.html',
-        text:
-          '<!DOCTYPE html><html><head></head><body><a href="https://example.com/other.html">Link</a></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><a href="https://example.com/other.html">Link</a></body></html>',
       });
 
       expect(assetGraph.findRelations()[0].crossorigin, 'to be false');
@@ -945,8 +936,7 @@ describe('relations/Relation', function () {
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
       url: 'https://example.com/',
-      text:
-        '<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iODJweCIgaGVpZ2h0PSI5MHB4IiB2aWV3Qm94PSIwIDAgODIgOTAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZyBpZD0iaGVhcnQiPgogICAgICA8cGF0aCBkPSJNMzIsMTEuMmMwLDIuNy0xLjIsNS4xLTMsNi44bDAsMEwxOSwyOGMtMSwxLTIsMi0zLDJzLTItMS0zLTJMMywxOGMtMS45LTEuNy0zLTQuMS0zLTYuOEMwLDYuMSw0LjEsMiw5LjIsMgogICAgICBjMi43LDAsNS4xLDEuMiw2LjgsM2MxLjctMS45LDQuMS0zLDYuOC0zQzI3LjksMS45LDMyLDYuMSwzMiwxMS4yeiIvPgogIDwvZz4KPC9zdmc+Cg==#yadda">',
+      text: '<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iODJweCIgaGVpZ2h0PSI5MHB4IiB2aWV3Qm94PSIwIDAgODIgOTAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZyBpZD0iaGVhcnQiPgogICAgICA8cGF0aCBkPSJNMzIsMTEuMmMwLDIuNy0xLjIsNS4xLTMsNi44bDAsMEwxOSwyOGMtMSwxLTIsMi0zLDJzLTItMS0zLTJMMywxOGMtMS45LTEuNy0zLTQuMS0zLTYuOEMwLDYuMSw0LjEsMiw5LjIsMgogICAgICBjMi43LDAsNS4xLDEuMiw2LjgsM2MxLjctMS45LDQuMS0zLDYuOC0zQzI3LjksMS45LDMyLDYuMSwzMiwxMS4yeiIvPgogIDwvZz4KPC9zdmc+Cg==#yadda">',
     });
 
     htmlAsset.outgoingRelations[0].to.url = 'https://example.com/image.svg';

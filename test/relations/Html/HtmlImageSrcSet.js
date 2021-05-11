@@ -66,8 +66,7 @@ describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', a
 
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
-        text:
-          '<!DOCTYPE html><html><body><img srcset="http://example.com/foo.jpg 2x, banner-phone.jpeg?foo,bar 100w 2x"></body></html>',
+        text: '<!DOCTYPE html><html><body><img srcset="http://example.com/foo.jpg 2x, banner-phone.jpeg?foo,bar 100w 2x"></body></html>',
       });
 
       const htmlImageSrcSet = htmlAsset.outgoingRelations[0];

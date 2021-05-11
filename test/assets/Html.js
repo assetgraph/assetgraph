@@ -161,8 +161,7 @@ describe('assets/Html', function () {
       expect(
         new AssetGraph().addAsset({
           type: 'Html',
-          text:
-            '<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>',
+          text: '<!DOCTYPE html><html><head></head><body>Hello, world!\u263a</body></html>',
         }).rawSrc,
         'to equal',
         Buffer.from(
@@ -699,8 +698,7 @@ describe('assets/Html', function () {
     it('should format the document nicely', function () {
       const htmlAsset = new AssetGraph().addAsset({
         type: 'Html',
-        text:
-          '<!DOCTYPE html><html><head></head><body><span>foo</span></body></html>',
+        text: '<!DOCTYPE html><html><head></head><body><span>foo</span></body></html>',
       });
       htmlAsset.prettyPrint();
       expect(
@@ -714,8 +712,7 @@ describe('assets/Html', function () {
   it('should not evaluate inline scripts', function () {
     const htmlAsset = new AssetGraph().addAsset({
       type: 'Html',
-      text:
-        '<!DOCTYPE html><html><head></head><body><script>document.write("<foo>" + "</foo>");</script></body></html>',
+      text: '<!DOCTYPE html><html><head></head><body><script>document.write("<foo>" + "</foo>");</script></body></html>',
     });
     // eslint-disable-next-line no-unused-expressions
     htmlAsset.parseTree;

@@ -36,8 +36,7 @@ describe('relations/HtmlResourceHint', function () {
 
         const htmlAsset = assetGraph.addAsset({
           type: 'Html',
-          text:
-            '<link rel="prefetch" as="stylesheet" href="/static/bundles/es6/FeedPageContainer.css/263e0ec404b3.css" type="text/css" crossorigin="anonymous"></link>',
+          text: '<link rel="prefetch" as="stylesheet" href="/static/bundles/es6/FeedPageContainer.css/263e0ec404b3.css" type="text/css" crossorigin="anonymous"></link>',
         });
 
         // eslint-disable-next-line no-unused-expressions

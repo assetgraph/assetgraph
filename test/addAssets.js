@@ -51,8 +51,7 @@ describe('#addAssets', function () {
     assetGraph.addAssets({
       type: 'Html',
       url: 'http://example.com/index.html',
-      text:
-        '<!DOCTYPE html><html><head></head><body><script>alert("Hello!");</script></body></html>',
+      text: '<!DOCTYPE html><html><head></head><body><script>alert("Hello!");</script></body></html>',
     });
 
     expect(assetGraph, 'to contain asset', 'Html');

@@ -74,8 +74,7 @@ describe('assets/Xml', function () {
       const xmlAsset = new AssetGraph().addAsset({
         type: 'Xml',
         url: 'https://example.com/',
-        text:
-          '<?xml version="1.0" encoding="UTF-8"?>\n<doc>  <foo>  </foo>  </doc>',
+        text: '<?xml version="1.0" encoding="UTF-8"?>\n<doc>  <foo>  </foo>  </doc>',
       });
       xmlAsset.minify();
       expect(
