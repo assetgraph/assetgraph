@@ -1,7 +1,12 @@
-### v6.6.0 (2021-02-06)
+### v6.6.0 (2021-05-12)
 
 #### Pull requests
 
+- [#1159](https://github.com/assetgraph/assetgraph/pull/1159) Upgrade read-pkg-up to version 8.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1158](https://github.com/assetgraph/assetgraph/pull/1158) Upgrade sinon to version 10.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1155](https://github.com/assetgraph/assetgraph/pull/1155) Upgrade open to version 8.0.2 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1148](https://github.com/assetgraph/assetgraph/pull/1148) Upgrade magicpen-prism to version 5.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1147](https://github.com/assetgraph/assetgraph/pull/1147) Switch from source-map to source-map-js ([Andreas Lind](mailto:andreas.lind@peakon.com))
 - [#1128](https://github.com/assetgraph/assetgraph/pull/1128) Upgrade eslint-config-standard to version 16.0.2 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1135](https://github.com/assetgraph/assetgraph/pull/1135) Upgrade eslint-config-prettier to version 7.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1127](https://github.com/assetgraph/assetgraph/pull/1127) Stop modelling fetch\(...\) as a relation ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
@@ -59,12 +64,16 @@
 
 #### Commits to master
 
-- [Run prettier on the two cherry-picked commits](https://github.com/assetgraph/assetgraph/commit/73afa2f66326e66d7f24141bf577df0a1b8e6162) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Add AssetGraph\#buildHref that supports any hrefType](https://github.com/assetgraph/assetgraph/commit/957a66dc5476e80df61744f90a4512947a0d091f) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Fix typo in test description](https://github.com/assetgraph/assetgraph/commit/5d86afa240868d94d5c1188aaf7c60cf79627ccd) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Fix test](https://github.com/assetgraph/assetgraph/commit/52c89cdd8ce73335f896b9492798784336dd76b5) ([Andreas Lind](mailto:andreas.lind@peakon.com))
-- [Sidestep teepee's buggy expansion of {...} in urls](https://github.com/assetgraph/assetgraph/commit/26e89cd90d4e7ef1b972c08d8df6b296463118fe) ([Andreas Lind](mailto:andreas.lind@peakon.com))
-- [+64 more](https://github.com/assetgraph/assetgraph/compare/v6.5.0...v6.6.0)
+- [prettier --write '\*\*\/\*.{js,json,md}'](https://github.com/assetgraph/assetgraph/commit/434c075cdfe5f57c44b123b6e34d2affe75d9ece) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [Update prettier to version 2.3.0](https://github.com/assetgraph/assetgraph/commit/3e4c157bfb3f890ee1ce79f0158b8cae58cf679a) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [Fix eslint-plugin-prettier usage](https://github.com/assetgraph/assetgraph/commit/c3435d90bbb8a02cbcc47878cc27c3096292f795) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [Update eslint-config-prettier to version 8.3.0](https://github.com/assetgraph/assetgraph/commit/10b934e46596f7fa0b8706d6276fdae882cc0df8) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [Fix error handling test that broke because uglify-js started supporting template strings](https://github.com/assetgraph/assetgraph/commit/1547f90975ace5a50a61af484fed103a7b4c82c4) ([Andreas Lind](mailto:andreas.lind@peakon.com))
+- [+69 more](https://github.com/assetgraph/assetgraph/compare/v6.6.0...v6.6.0)
+
+### v6.6.0 (2021-02-06)
+
+- [Backport fix for \#1123 from master \(cd99a60..00dae9f\)](https://github.com/assetgraph/assetgraph/commit/220f93da4210b62686dae261a1362e3bcd1431ca) ([Andreas Lind](mailto:andreas.lind@peakon.com))
 
 ### v6.5.0 (2021-01-24)
 
