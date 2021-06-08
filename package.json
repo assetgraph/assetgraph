@@ -76,7 +76,7 @@
     "jsdoc": "^3.5.5",
     "less": "^2.7.3",
     "magicpen-prism": "5.0.0",
-    "mocha": "^8.0.1",
+    "mocha": "^9.0.0",
     "nyc": "^15.0.0",
     "offline-github-changelog": "^2.0.0",
     "open": "^8.0.2",
