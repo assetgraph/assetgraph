@@ -3,13 +3,16 @@ const expect = require('../unexpected-with-plugins');
 const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlVideo', function() {
-  it('should handle a test case with existing <video> tags', async function() {
+describe('relations/HtmlVideo', function () {
+  it('should handle a test case with existing <video> tags', async function () {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/relations/HtmlVideo/')
+      root: pathModule.resolve(
+        __dirname,
+        '../../testdata/relations/HtmlVideo/'
+      ),
     });
     await assetGraph.loadAssets('index.html').populate({
-      followRelations: () => false
+      followRelations: () => false,
     });
 
     expect(assetGraph, 'to contain relations', 'HtmlVideo', 4);
@@ -17,7 +20,7 @@ describe('relations/HtmlVideo', function() {
 
     assetGraph.findAssets({ type: 'Html' })[0].url =
       'http://example.com/foo/bar.html';
-    assetGraph.findRelations().forEach(function(relation) {
+    assetGraph.findRelations().forEach(function (relation) {
       relation.hrefType = 'relative';
     });
 
@@ -27,7 +30,7 @@ describe('relations/HtmlVideo', function() {
       '../movie2.png',
       '../movie2.mov',
       '../movie2.wmv',
-      '../movie2.flc'
+      '../movie2.flc',
     ]);
   });
 });

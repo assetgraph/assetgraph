@@ -2,22 +2,22 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('transforms/inlineHtmlTemplates', function() {
-  it('should handle a test case with a single Knockout.js template with a nested template loaded using the systemjs-tpl plugin', async function() {
+describe('transforms/inlineHtmlTemplates', function () {
+  it('should handle a test case with a single Knockout.js template with a nested template loaded using the systemjs-tpl plugin', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineHtmlTemplates/withNested/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
       .populate({
-        followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
+        followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } },
       })
       .bundleSystemJs()
       .populate({
-        followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
+        followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } },
       })
       .inlineHtmlTemplates();
 
@@ -36,21 +36,21 @@ describe('transforms/inlineHtmlTemplates', function() {
     );
   });
 
-  it('should handle a test case with several Knockout.js templates loaded using the systemjs-tpl plugin', async function() {
+  it('should handle a test case with several Knockout.js templates loaded using the systemjs-tpl plugin', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineHtmlTemplates/multiple/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
       .populate({
-        followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
+        followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } },
       })
       .bundleSystemJs()
       .populate({
-        followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
+        followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } },
       })
       .inlineHtmlTemplates();
 
@@ -74,7 +74,7 @@ describe('transforms/inlineHtmlTemplates', function() {
       type: 'HtmlInlineScriptTemplate',
       node(node) {
         return node.getAttribute('id') === 'foo';
-      }
+      },
     })[0];
     expect(relation, 'to be ok');
     expect(
@@ -87,7 +87,7 @@ describe('transforms/inlineHtmlTemplates', function() {
       type: 'HtmlInlineScriptTemplate',
       node(node) {
         return node.getAttribute('id') === 'bar';
-      }
+      },
     })[0];
     expect(relation, 'to be ok');
     expect(
@@ -97,20 +97,20 @@ describe('transforms/inlineHtmlTemplates', function() {
     );
   });
 
-  it('should handle a test case with the same Knockout.js being loaded using the systemjs-tpl plugin in multiple .html pages', async function() {
+  it('should handle a test case with the same Knockout.js being loaded using the systemjs-tpl plugin in multiple .html pages', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineHtmlTemplates/multipleInMultipleHtmlPages/'
-      )
+      ),
     });
     await assetGraph.loadAssets(['index1.html', 'index2.html']);
     await assetGraph.populate({
-      followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
+      followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } },
     });
     await assetGraph.bundleSystemJs();
     await assetGraph.populate({
-      followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
+      followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } },
     });
     await assetGraph.inlineHtmlTemplates();
 
@@ -134,7 +134,7 @@ describe('transforms/inlineHtmlTemplates', function() {
       type: 'HtmlInlineScriptTemplate',
       node(node) {
         return node.getAttribute('id') === 'foo';
-      }
+      },
     })[0];
     expect(relation, 'to be ok');
     expect(
@@ -147,7 +147,7 @@ describe('transforms/inlineHtmlTemplates', function() {
       type: 'HtmlInlineScriptTemplate',
       node(node) {
         return node.getAttribute('id') === 'bar';
-      }
+      },
     })[0];
     expect(relation, 'to be ok');
     expect(
@@ -175,7 +175,7 @@ describe('transforms/inlineHtmlTemplates', function() {
       type: 'HtmlInlineScriptTemplate',
       node(node) {
         return node.getAttribute('id') === 'foo';
-      }
+      },
     })[0];
     expect(relation, 'to be ok');
     expect(
@@ -188,7 +188,7 @@ describe('transforms/inlineHtmlTemplates', function() {
       type: 'HtmlInlineScriptTemplate',
       node(node) {
         return node.getAttribute('id') === 'bar';
-      }
+      },
     })[0];
     expect(relation, 'to be ok');
     expect(

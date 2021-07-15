@@ -3,13 +3,13 @@ const expect = require('../unexpected-with-plugins');
 const estraverse = require('estraverse-fb');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('transforms/bundleSystemJs', function() {
-  it('should handle a simple test case', async function() {
+describe('transforms/bundleSystemJs', function () {
+  it('should handle a simple test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/simple/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -32,7 +32,7 @@ describe('transforms/bundleSystemJs', function() {
     );
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
-      fileName: { $regex: /bundle/ }
+      fileName: { $regex: /bundle/ },
     });
     expect(
       assetGraph.findRelations({ from: { fileName: 'index.html' } })[2].to.text,
@@ -42,7 +42,7 @@ describe('transforms/bundleSystemJs', function() {
     expect(
       assetGraph.findRelations({
         from: { fileName: 'index.html' },
-        to: { fileName: { $regex: /bundle/ } }
+        to: { fileName: { $regex: /bundle/ } },
       })[0].to.text,
       'to contain',
       "alert('main!');"
@@ -53,41 +53,38 @@ describe('transforms/bundleSystemJs', function() {
     expect(assetGraph, 'to contain assets', 'JavaScript', 1);
   });
 
-  it('should pick up the source map information', async function() {
+  it('should pick up the source map information', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/simple/'
-      )
+      ),
     });
-    await assetGraph
-      .loadAssets('index.html')
-      .populate()
-      .bundleSystemJs();
+    await assetGraph.loadAssets('index.html').populate().bundleSystemJs();
 
     let numNodesWithCorrectLoc = 0;
     estraverse.traverse(
       assetGraph.findAssets({
         type: 'JavaScript',
-        fileName: { $regex: /bundle/ }
+        fileName: { $regex: /bundle/ },
       })[0].parseTree,
       {
         enter(node) {
           if (node.loc && node.loc.source === `${assetGraph.root}main.js`) {
             numNodesWithCorrectLoc += 1;
           }
-        }
+        },
       }
     );
     expect(numNodesWithCorrectLoc, 'to be greater than or equal to', 1);
   });
 
-  it('should handle a simple test case with an extra System.config call', async function() {
+  it('should handle a simple test case with an extra System.config call', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/simpleWithExtraConfigCall/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -111,7 +108,7 @@ describe('transforms/bundleSystemJs', function() {
     );
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
-      fileName: { $regex: /bundle/ }
+      fileName: { $regex: /bundle/ },
     });
 
     await assetGraph.bundleRelations();
@@ -119,15 +116,15 @@ describe('transforms/bundleSystemJs', function() {
     expect(assetGraph, 'to contain assets', 'JavaScript', 1);
   });
 
-  it('should handle a complex test case', async function() {
+  it('should handle a complex test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/test-tree/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate({
-      followRelations: { type: { $not: 'JavaScriptSystemImport' } }
+      followRelations: { type: { $not: 'JavaScriptSystemImport' } },
     });
 
     expect(assetGraph, 'to contain assets', 'JavaScript', 4);
@@ -149,7 +146,7 @@ describe('transforms/bundleSystemJs', function() {
     );
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
-      fileName: { $regex: /bundle/ }
+      fileName: { $regex: /bundle/ },
     });
 
     await assetGraph.bundleRelations();
@@ -157,12 +154,12 @@ describe('transforms/bundleSystemJs', function() {
     expect(assetGraph, 'to contain assets', 'JavaScript', 1);
   });
 
-  it('should handle a multi-page test case with one System.import call per page importing the same thing', async function() {
+  it('should handle a multi-page test case with one System.import call per page importing the same thing', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/multiPageOneSystemImportEach/'
-      )
+      ),
     });
     await assetGraph.loadAssets('*.html').populate();
 
@@ -198,12 +195,12 @@ describe('transforms/bundleSystemJs', function() {
     );
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
-      fileName: { $regex: /bundle/ }
+      fileName: { $regex: /bundle/ },
     });
     expect(
       assetGraph.findRelations({
         from: { fileName: 'page1.html' },
-        to: { fileName: { $regex: /bundle/ } }
+        to: { fileName: { $regex: /bundle/ } },
       })[0].to.text,
       'to contain',
       "alert('main!');"
@@ -211,7 +208,7 @@ describe('transforms/bundleSystemJs', function() {
     expect(
       assetGraph.findRelations({
         from: { fileName: 'page2.html' },
-        to: { fileName: { $regex: /bundle/ } }
+        to: { fileName: { $regex: /bundle/ } },
       })[0].to.text,
       'to contain',
       "alert('main!');"
@@ -222,24 +219,24 @@ describe('transforms/bundleSystemJs', function() {
     expect(assetGraph, 'to contain assets', 'JavaScript', 2);
   });
 
-  it('should handle a multi-page test case with one System.import call per page importing different modules with nothing in common, one of them using a condition', async function() {
+  it('should handle a multi-page test case with one System.import call per page importing different modules with nothing in common, one of them using a condition', async function () {
     await new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/multiPageNothingInCommon/'
-      )
+      ),
     })
       .loadAssets('*.html')
       .populate()
       .bundleSystemJs();
   });
 
-  it('should handle a multi-page test case with one System.import call per page importing different things', async function() {
+  it('should handle a multi-page test case with one System.import call per page importing different things', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/multiPageDifferentSystemImports/'
-      )
+      ),
     });
     await assetGraph.loadAssets('*.html').populate();
 
@@ -278,14 +275,14 @@ describe('transforms/bundleSystemJs', function() {
       'to contain assets',
       {
         type: 'JavaScript',
-        fileName: { $regex: /bundle/ }
+        fileName: { $regex: /bundle/ },
       },
       2
     );
     expect(
       assetGraph.findRelations({
         from: { fileName: 'page1.html' },
-        to: { fileName: { $regex: /bundle/ } }
+        to: { fileName: { $regex: /bundle/ } },
       })[0].to.text,
       'to contain',
       "alert('main!');"
@@ -293,7 +290,7 @@ describe('transforms/bundleSystemJs', function() {
     expect(
       assetGraph.findRelations({
         from: { fileName: 'page2.html' },
-        to: { fileName: { $regex: /bundle/ } }
+        to: { fileName: { $regex: /bundle/ } },
       })[0].to.text,
       'to contain',
       "alert('otherMain!');"
@@ -304,39 +301,33 @@ describe('transforms/bundleSystemJs', function() {
     expect(assetGraph, 'to contain assets', 'JavaScript', 2);
   });
 
-  it('should only deduplicate asset list entries (as determined by the url)', async function() {
+  it('should only deduplicate asset list entries (as determined by the url)', async function () {
     // The tpl.js in this test has been tweaked to list each template twice
     // in the asset list
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/assetList/sameAssetListEntryTwice/'
-      )
+      ),
     });
-    await assetGraph
-      .loadAssets('index.html')
-      .populate()
-      .bundleSystemJs();
+    await assetGraph.loadAssets('index.html').populate().bundleSystemJs();
 
     expect(assetGraph, 'to contain asset', { isFragment: true });
   });
 
-  it('should add a SystemJsBundle relation to a non-Css entry in the asset list', async function() {
+  it('should add a SystemJsBundle relation to a non-Css entry in the asset list', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/assetList/template/'
-      )
+      ),
     });
-    await assetGraph
-      .loadAssets('index.html')
-      .populate()
-      .bundleSystemJs();
+    await assetGraph.loadAssets('index.html').populate().bundleSystemJs();
 
     expect(assetGraph, 'to contain asset', {
       fileName: 'foo.html',
       type: 'Html',
-      isFragment: true
+      isFragment: true,
     });
     expect(assetGraph, 'to contain relations', { type: 'SystemJsBundle' }, 1);
     expect(
@@ -346,17 +337,14 @@ describe('transforms/bundleSystemJs', function() {
     );
   });
 
-  it('should add a SystemJsBundle relation to a conditional non-Css entry in the asset list', async function() {
+  it('should add a SystemJsBundle relation to a conditional non-Css entry in the asset list', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/assetList/conditionalTemplate/'
-      )
+      ),
     });
-    await assetGraph
-      .loadAssets('index.html')
-      .populate()
-      .bundleSystemJs();
+    await assetGraph.loadAssets('index.html').populate().bundleSystemJs();
 
     expect(
       assetGraph,
@@ -377,20 +365,20 @@ describe('transforms/bundleSystemJs', function() {
     ).and('not to contain', 'sunny');
   });
 
-  it('should add a SystemJsBundle relation to a conditional non-Css entry in the asset list in a multi-page setting', async function() {
+  it('should add a SystemJsBundle relation to a conditional non-Css entry in the asset list in a multi-page setting', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/assetList/multiPageConditionalTemplate/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets(['index1.html', 'index2.html'])
       .populate()
       .bundleSystemJs({
         conditions: {
-          weather: ['rainy', 'sunny']
-        }
+          weather: ['rainy', 'sunny'],
+        },
       })
       .populate();
 
@@ -413,12 +401,12 @@ describe('transforms/bundleSystemJs', function() {
     expect(assetGraph, 'to contain relations', { type: 'SystemJsBundle' }, 0);
   });
 
-  it('should handle a test case with a css plugin', async function() {
+  it('should handle a test case with a css plugin', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/cssPlugin/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -434,12 +422,12 @@ describe('transforms/bundleSystemJs', function() {
     expect(assetGraph, 'to contain relation', 'HtmlStyle');
   });
 
-  it('should handle a test case with a less plugin', async function() {
+  it('should handle a test case with a less plugin', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/lessPlugin/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -458,24 +446,24 @@ describe('transforms/bundleSystemJs', function() {
     );
   });
 
-  describe('with systemjs-plugin-less', function() {
-    describe('and all JavaScript assets marked for removal via data-systemjs-remove', function() {
-      it('should remove system.js and the configuration and not inject the bundle', async function() {
+  describe('with systemjs-plugin-less', function () {
+    describe('and all JavaScript assets marked for removal via data-systemjs-remove', function () {
+      it('should remove system.js and the configuration and not inject the bundle', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/onlyLess/'
-          )
+          ),
         });
         await assetGraph.loadAssets('index.html').populate({
-          followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
+          followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } },
         });
 
         expect(assetGraph, 'to contain assets', 'Html', 1);
         expect(assetGraph, 'to contain no assets', 'Css');
 
         await assetGraph.bundleSystemJs().populate({
-          followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } }
+          followRelations: { type: { $not: 'JavaScriptSourceMappingUrl' } },
         });
 
         expect(
@@ -489,13 +477,13 @@ describe('transforms/bundleSystemJs', function() {
     });
   });
 
-  it('should error out if two pages include the same System.config assets in different orders', async function() {
+  it('should error out if two pages include the same System.config assets in different orders', async function () {
     await expect(
       new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs/'
-        )
+        ),
       })
         .loadAssets('page*.html')
         .populate()
@@ -507,13 +495,13 @@ describe('transforms/bundleSystemJs', function() {
     );
   });
 
-  it('should error out if two pages include the same System.config assets in different orders, second scenario', async function() {
+  it('should error out if two pages include the same System.config assets in different orders, second scenario', async function () {
     await expect(
       new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs2/'
-        )
+        ),
       })
         .loadAssets('page*.html')
         .populate()
@@ -525,13 +513,13 @@ describe('transforms/bundleSystemJs', function() {
     );
   });
 
-  it('should error out if two pages include conflicting System.js configs', async function() {
+  it('should error out if two pages include conflicting System.js configs', async function () {
     await expect(
       new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/conflictingSystemConfigs3/'
-        )
+        ),
       })
         .loadAssets('page*.html')
         .populate()
@@ -541,12 +529,12 @@ describe('transforms/bundleSystemJs', function() {
     );
   });
 
-  it('should handle a lazy import System.import case', async function() {
+  it('should handle a lazy import System.import case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/lazySystemImport/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -556,12 +544,12 @@ describe('transforms/bundleSystemJs', function() {
     expect(assetGraph, 'to contain relation', 'SystemJsLazyBundle');
   });
 
-  it('should handle a multi-page lazy import System.import case', async function() {
+  it('should handle a multi-page lazy import System.import case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/multiPageLazySystemImport/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('*.html')
@@ -585,17 +573,17 @@ describe('transforms/bundleSystemJs', function() {
     );
     expect(assetGraph, 'to contain relation', 'SystemJsLazyBundle', 2);
 
-    await assetGraph.moveAssetsInOrder({ type: 'JavaScript' }, function(
-      asset,
-      assetGraph
-    ) {
-      if (
-        assetGraph.findRelations({ type: 'SystemJsLazyBundle', to: asset })
-          .length > 0
-      ) {
-        return `${assetGraph.root}static/foobar-${asset.fileName}`;
+    await assetGraph.moveAssetsInOrder(
+      { type: 'JavaScript' },
+      function (asset, assetGraph) {
+        if (
+          assetGraph.findRelations({ type: 'SystemJsLazyBundle', to: asset })
+            .length > 0
+        ) {
+          return `${assetGraph.root}static/foobar-${asset.fileName}`;
+        }
       }
-    });
+    );
 
     expect(
       assetGraph.findAssets({ fileName: 'page1.html' })[0].text,
@@ -609,12 +597,12 @@ describe('transforms/bundleSystemJs', function() {
     );
   });
 
-  it('should handle the use of system.js in a web worker', async function() {
+  it('should handle the use of system.js in a web worker', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/webWorker/'
-      )
+      ),
     });
     await assetGraph.loadAssets('*.html').populate();
 
@@ -630,12 +618,12 @@ describe('transforms/bundleSystemJs', function() {
     );
   });
 
-  it('should handle the use of system.js in a service worker registered via <link rel="serviceworker" href=...>', async function() {
+  it('should handle the use of system.js in a service worker registered via <link rel="serviceworker" href=...>', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/HtmlServiceWorkerRegistration/'
-      )
+      ),
     });
     await assetGraph.loadAssets('*.html').populate();
 
@@ -651,12 +639,12 @@ describe('transforms/bundleSystemJs', function() {
     );
   });
 
-  it('should handle the use of system.js in a service worker registered via navigator.serviceWorker.register(...)', async function() {
+  it('should handle the use of system.js in a service worker registered via navigator.serviceWorker.register(...)', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/JavaScriptServiceWorkerRegistration/'
-      )
+      ),
     });
     await assetGraph.loadAssets('*.html').populate();
 
@@ -672,12 +660,12 @@ describe('transforms/bundleSystemJs', function() {
     );
   });
 
-  it('should handle a System.import test case with a manual bundle', async function() {
+  it('should handle a System.import test case with a manual bundle', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/manualBundle/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -698,12 +686,12 @@ describe('transforms/bundleSystemJs', function() {
     ).and('not to contain', 'b.js');
   });
 
-  it('should allow multiple identical definitions of the same manual bundle', async function() {
+  it('should allow multiple identical definitions of the same manual bundle', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/duplicateManualBundle/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -718,13 +706,13 @@ describe('transforms/bundleSystemJs', function() {
     ).and('to contain', 'b.js');
   });
 
-  it('should error out if the same manual bundle is defined multiple times', async function() {
+  it('should error out if the same manual bundle is defined multiple times', async function () {
     return expect(
       new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/conflictingManualBundles/'
-        )
+        ),
       })
         .loadAssets('index.html')
         .populate()
@@ -736,13 +724,13 @@ describe('transforms/bundleSystemJs', function() {
     );
   });
 
-  describe('with a data-systemjs-polyfill attribute', function() {
-    it('should remove the data-systemjs-polyfill attribute', async function() {
+  describe('with a data-systemjs-polyfill attribute', function () {
+    it('should remove the data-systemjs-polyfill attribute', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/polyfill/simple/'
-        )
+        ),
       });
       await assetGraph.loadAssets('index.html').populate();
 
@@ -767,12 +755,12 @@ describe('transforms/bundleSystemJs', function() {
       );
     });
 
-    it('should polyfill system.js when instructed to', async function() {
+    it('should polyfill system.js when instructed to', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/polyfill/simple/'
-        )
+        ),
       });
       await assetGraph.loadAssets('index.html').populate();
 
@@ -792,13 +780,13 @@ describe('transforms/bundleSystemJs', function() {
       expect(assetGraph, 'to contain relations', 'HtmlScript', 4);
     });
 
-    describe('that has no value', function() {
-      it('should polyfill system.js', async function() {
+    describe('that has no value', function () {
+      it('should polyfill system.js', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/polyfill/noValue/'
-          )
+          ),
         });
         await assetGraph.loadAssets('index.html').populate();
 
@@ -820,13 +808,13 @@ describe('transforms/bundleSystemJs', function() {
     });
   });
 
-  describe('with a data-systemjs-csp-production attribute', function() {
-    it('should remove the data-systemjs-csp-production attribute', async function() {
+  describe('with a data-systemjs-csp-production attribute', function () {
+    it('should remove the data-systemjs-csp-production attribute', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/replacement/simple/'
-        )
+        ),
       });
       await assetGraph.loadAssets('index.html').populate();
 
@@ -852,12 +840,12 @@ describe('transforms/bundleSystemJs', function() {
       expect(assetGraph, 'to contain no assets', { fileName: 'system.js' });
     });
 
-    it('should replace system.js with the referenced asset', async function() {
+    it('should replace system.js with the referenced asset', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/replacement/simple/'
-        )
+        ),
       });
       await assetGraph.loadAssets('index.html').populate();
 
@@ -876,17 +864,17 @@ describe('transforms/bundleSystemJs', function() {
       );
       expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
       expect(assetGraph, 'to contain asset', {
-        fileName: 'system-csp-production.js'
+        fileName: 'system-csp-production.js',
       });
     });
 
-    describe('that has no value', function() {
-      it('should replace system.js with the default system-csp-production.js', async function() {
+    describe('that has no value', function () {
+      it('should replace system.js with the default system-csp-production.js', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/replacement/noValue/'
-          )
+          ),
         });
         await assetGraph.loadAssets('index.html').populate();
 
@@ -905,18 +893,18 @@ describe('transforms/bundleSystemJs', function() {
         );
         expect(assetGraph, 'to contain relations', 'HtmlScript', 3);
         expect(assetGraph, 'to contain asset', {
-          fileName: 'system-csp-production.js'
+          fileName: 'system-csp-production.js',
         });
       });
     });
   });
 
-  it('should pick up assets referenced via an asset plugin', async function() {
+  it('should pick up assets referenced via an asset plugin', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/assetPlugin/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -935,12 +923,12 @@ describe('transforms/bundleSystemJs', function() {
     ).and('not to contain', "'/test-foo.txt'.toString('url')");
   });
 
-  it('should pick up assets referenced via an asset plugin using a wildcard', async function() {
+  it('should pick up assets referenced via an asset plugin using a wildcard', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleSystemJs/assetPluginWithWildcard/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -964,13 +952,13 @@ describe('transforms/bundleSystemJs', function() {
       );
   });
 
-  describe('with a buildConfig property in a System.config({...})', function() {
-    it('should apply the build config during the build', async function() {
+  describe('with a buildConfig property in a System.config({...})', function () {
+    it('should apply the build config during the build', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/buildConfig/'
-        )
+        ),
       });
       await assetGraph
         .loadAssets('index.html')
@@ -981,12 +969,12 @@ describe('transforms/bundleSystemJs', function() {
       expect(assetGraph, 'to contain asset', { fileName: 'styles.css' });
     });
 
-    it('should remove the buildConfig and testConfig properties after building', async function() {
+    it('should remove the buildConfig and testConfig properties after building', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/buildConfig/'
-        )
+        ),
       });
       await assetGraph
         .loadAssets('index.html')
@@ -1001,12 +989,12 @@ describe('transforms/bundleSystemJs', function() {
       ).and('not to contain', 'testConfig');
     });
 
-    it('should remove the System.config call if there is no other properties after removing the buildConfig property', async function() {
+    it('should remove the System.config call if there is no other properties after removing the buildConfig property', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/buildConfigWithNothingElse/'
-        )
+        ),
       });
       await assetGraph
         .loadAssets('index.html')
@@ -1021,12 +1009,12 @@ describe('transforms/bundleSystemJs', function() {
       );
     });
 
-    it('should remove the System.config call in a SequenceExpression if there is no other properties after removing the buildConfig property', async function() {
+    it('should remove the System.config call in a SequenceExpression if there is no other properties after removing the buildConfig property', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/buildConfigWithNothingElseInASequenceExpression/'
-        )
+        ),
       });
       await assetGraph
         .loadAssets('index.html')
@@ -1042,27 +1030,27 @@ describe('transforms/bundleSystemJs', function() {
     });
   });
 
-  describe('with conditionals', async function() {
-    describe('when specifying a single value of the a conditional up front', async function() {
-      it('should exclude the unneeded branches from the created bundle', async function() {
+  describe('with conditionals', async function () {
+    describe('when specifying a single value of the a conditional up front', async function () {
+      it('should exclude the unneeded branches from the created bundle', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/conditionals/exclude/'
-          )
+          ),
         });
         await assetGraph
           .loadAssets('index.html')
           .populate()
           .bundleSystemJs({
             conditions: {
-              lang: 'en_us'
-            }
+              lang: 'en_us',
+            },
           })
           .populate();
 
         const bundleAsset = assetGraph.findAssets({
-          fileName: 'common-bundle.js'
+          fileName: 'common-bundle.js',
         })[0];
         expect(bundleAsset.text, 'to contain', 'American English')
           .and('not to contain', 'Danish')
@@ -1073,40 +1061,40 @@ describe('transforms/bundleSystemJs', function() {
       });
     });
 
-    describe('when specifying multiple values of a conditional up front', async function() {
-      it('should trace the provided values of the conditional (and only those)', async function() {
+    describe('when specifying multiple values of a conditional up front', async function () {
+      it('should trace the provided values of the conditional (and only those)', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/conditionals/multipleValuesGiven/'
-          )
+          ),
         });
         await assetGraph
           .loadAssets('index.html')
           .populate()
           .bundleSystemJs({
             conditions: {
-              'whichTest.js': ['foo', 'quux']
-            }
+              'whichTest.js': ['foo', 'quux'],
+            },
           })
           .populate();
 
         const commonBundleAsset = assetGraph.findAssets({
-          fileName: 'common-bundle.js'
+          fileName: 'common-bundle.js',
         })[0];
         expect(commonBundleAsset.text, 'to contain', 'foo')
           .and('not to contain', 'quux')
           .and('not to contain', 'bar');
 
         const fooBundleAsset = assetGraph.findAssets({
-          fileName: 'bundle-main-foo.js'
+          fileName: 'bundle-main-foo.js',
         })[0];
         expect(fooBundleAsset.text, 'to contain', "alert('foo')")
           .and('not to contain', "alert('bar');")
           .and('not to contain', "alert('quux');");
 
         const quuxBundleAsset = assetGraph.findAssets({
-          fileName: 'bundle-main-quux.js'
+          fileName: 'bundle-main-quux.js',
         })[0];
         expect(quuxBundleAsset.text, 'to contain', "alert('quux')")
           .and('not to contain', "alert('bar');")
@@ -1122,26 +1110,26 @@ describe('transforms/bundleSystemJs', function() {
             '<script src="config.js">',
             '<script src="/common-bundle.js">',
             '<script src="/bundle-main-foo.js" data-assetgraph-conditions="\'whichTest.js|default\': \'foo\'">',
-            '<script src="/bundle-main-quux.js" data-assetgraph-conditions="\'whichTest.js|default\': \'quux\'">'
+            '<script src="/bundle-main-quux.js" data-assetgraph-conditions="\'whichTest.js|default\': \'quux\'">',
           ]
         );
       });
 
-      describe('with a plugin providing a value based on the conditional', async function() {
-        it('should trace the provided values of the conditional', async function() {
+      describe('with a plugin providing a value based on the conditional', async function () {
+        it('should trace the provided values of the conditional', async function () {
           const assetGraph = new AssetGraph({
             root: pathModule.resolve(
               __dirname,
               '../../testdata/transforms/bundleSystemJs/conditionals/pluginAndMultipleValuesGiven/'
-            )
+            ),
           });
           await assetGraph
             .loadAssets('index.html')
             .populate()
             .bundleSystemJs({
               conditions: {
-                'locale.js': ['en_us', 'da']
-              }
+                'locale.js': ['en_us', 'da'],
+              },
             })
             .populate();
 
@@ -1155,11 +1143,11 @@ describe('transforms/bundleSystemJs', function() {
               '<script src="config.js">',
               '<script src="/common-bundle.js">',
               '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'locale.js|default\': \'en_us\'">',
-              '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'locale.js|default\': \'da\'">'
+              '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'locale.js|default\': \'da\'">',
             ]
           );
           const commonBundleAsset = assetGraph.findAssets({
-            fileName: 'common-bundle.js'
+            fileName: 'common-bundle.js',
           })[0];
           expect(
             commonBundleAsset.text,
@@ -1168,7 +1156,7 @@ describe('transforms/bundleSystemJs', function() {
           ).and('not to contain', "alert('da');");
 
           const americanEnglishBundleAsset = assetGraph.findAssets({
-            fileName: 'bundle-main-en_us.js'
+            fileName: 'bundle-main-en_us.js',
           })[0];
           expect(
             americanEnglishBundleAsset.text,
@@ -1177,7 +1165,7 @@ describe('transforms/bundleSystemJs', function() {
           ).and('not to contain', "alert('da');");
 
           const danishBundleAsset = assetGraph.findAssets({
-            fileName: 'bundle-main-da.js'
+            fileName: 'bundle-main-da.js',
           })[0];
           expect(danishBundleAsset.text, 'to contain', "alert('da')").and(
             'not to contain',
@@ -1187,13 +1175,13 @@ describe('transforms/bundleSystemJs', function() {
       });
     });
 
-    describe('with unspecified conditionals', async function() {
-      it('should create separate bundles per variant', async function() {
+    describe('with unspecified conditionals', async function () {
+      it('should create separate bundles per variant', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/conditionals/oneBundlePerVariant/'
-          )
+          ),
         });
         await assetGraph
           .loadAssets('index.html')
@@ -1211,7 +1199,7 @@ describe('transforms/bundleSystemJs', function() {
             '<script src="config.js">',
             '<script src="/common-bundle.js">',
             '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
-            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
+            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">',
           ]
         );
         expect(
@@ -1221,12 +1209,12 @@ describe('transforms/bundleSystemJs', function() {
         );
       });
 
-      it('should support independent conditionals', async function() {
+      it('should support independent conditionals', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/conditionals/twoIndependentConditionals/'
-          )
+          ),
         });
         await assetGraph
           .loadAssets('index.html')
@@ -1246,29 +1234,29 @@ describe('transforms/bundleSystemJs', function() {
             '<script src="/bundle-main-rainy.js" data-assetgraph-conditions="\'weather.js|default\': \'rainy\'">',
             '<script src="/bundle-main-sunny.js" data-assetgraph-conditions="\'weather.js|default\': \'sunny\'">',
             '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
-            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
+            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">',
           ]
         );
         const commonBundle = assetGraph.findAssets({
-          fileName: 'common-bundle.js'
+          fileName: 'common-bundle.js',
         })[0];
         expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
           .and('not to contain', 'neededInAmericanEnglish')
           .and('not to contain', 'neededInDanish');
       });
 
-      it('should support independent conditionals with one of the conditions provided up front', async function() {
+      it('should support independent conditionals with one of the conditions provided up front', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/conditionals/twoIndependentConditionals/'
-          )
+          ),
         });
         await assetGraph
           .loadAssets('index.html')
           .populate()
           .bundleSystemJs({
-            conditions: { 'weather.js': 'sunny' }
+            conditions: { 'weather.js': 'sunny' },
           })
           .populate();
 
@@ -1282,11 +1270,11 @@ describe('transforms/bundleSystemJs', function() {
             '<script src="config.js">',
             '<script src="/common-bundle.js">',
             '<script src="/bundle-main-da.js" data-assetgraph-conditions="\'lang.js|default\': \'da\'">',
-            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">'
+            '<script src="/bundle-main-en_us.js" data-assetgraph-conditions="\'lang.js|default\': \'en_us\'">',
           ]
         );
         const commonBundle = assetGraph.findAssets({
-          fileName: 'common-bundle.js'
+          fileName: 'common-bundle.js',
         })[0];
         expect(commonBundle.text, 'not to contain', 'rainy').and(
           'not to contain',
@@ -1294,12 +1282,12 @@ describe('transforms/bundleSystemJs', function() {
         );
       });
 
-      it('should support dependent conditionals', async function() {
+      it('should support dependent conditionals', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/conditionals/twoDependentConditionals/'
-          )
+          ),
         });
         await assetGraph
           .loadAssets('index.html')
@@ -1321,23 +1309,23 @@ describe('transforms/bundleSystemJs', function() {
             "<script src=\"/bundle-main-rainy-da.js\" data-assetgraph-conditions=\"'weather.js|default': 'rainy', 'lang.js|default': 'da'\">",
             "<script src=\"/bundle-main-rainy-en_us.js\" data-assetgraph-conditions=\"'weather.js|default': 'rainy', 'lang.js|default': 'en_us'\">",
             "<script src=\"/bundle-main-sunny-da.js\" data-assetgraph-conditions=\"'weather.js|default': 'sunny', 'lang.js|default': 'da'\">",
-            "<script src=\"/bundle-main-sunny-en_us.js\" data-assetgraph-conditions=\"'weather.js|default': 'sunny', 'lang.js|default': 'en_us'\">"
+            "<script src=\"/bundle-main-sunny-en_us.js\" data-assetgraph-conditions=\"'weather.js|default': 'sunny', 'lang.js|default': 'en_us'\">",
           ]
         );
         const commonBundle = assetGraph.findAssets({
-          fileName: 'common-bundle.js'
+          fileName: 'common-bundle.js',
         })[0];
         expect(commonBundle.text, 'to contain', 'neededInAllLanguages')
           .and('not to contain', 'neededInAmericanEnglish')
           .and('not to contain', 'neededInDanish');
       });
 
-      it('should create separate stylesheets per variant', async function() {
+      it('should create separate stylesheets per variant', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/conditionals/stylesheet/'
-          )
+          ),
         });
         await assetGraph
           .loadAssets('index.html')
@@ -1356,12 +1344,12 @@ describe('transforms/bundleSystemJs', function() {
         );
       });
 
-      it('should work when combined with the asset list plugin', async function() {
+      it('should work when combined with the asset list plugin', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/bundleSystemJs/conditionals/combinedWithAssetPlugin/'
-          )
+          ),
         });
         await assetGraph
           .loadAssets('index.html')
@@ -1377,12 +1365,12 @@ describe('transforms/bundleSystemJs', function() {
       });
     });
 
-    it('should support a combination of paths aliases and conditions', async function() {
+    it('should support a combination of paths aliases and conditions', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/bundleSystemJs/conditionals/specfiedAndUnspecified/'
-        )
+        ),
       });
       await assetGraph
         .loadAssets('index.html')
@@ -1390,8 +1378,8 @@ describe('transforms/bundleSystemJs', function() {
         .bundleSystemJs({
           conditions: {
             locale: ['en_us', 'da'],
-            environment: ['development', 'production']
-          }
+            environment: ['development', 'production'],
+          },
         })
         .populate();
 

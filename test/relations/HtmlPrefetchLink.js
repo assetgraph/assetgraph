@@ -2,22 +2,22 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlPrefetchLink', function() {
+describe('relations/HtmlPrefetchLink', function () {
   function getHtmlAsset(htmlString) {
     return new AssetGraph({ root: __dirname }).addAsset({
       type: 'Html',
       text:
         htmlString || '<!doctype html><html><head></head><body></body></html>',
-      url: `file://${__dirname}doesntmatter.html`
+      url: `file://${__dirname}doesntmatter.html`,
     });
   }
 
-  it('should handle a test case with an existing <link rel="prefetch"> element', async function() {
+  it('should handle a test case with an existing <link rel="prefetch"> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlPrefetchLink/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -26,12 +26,12 @@ describe('relations/HtmlPrefetchLink', function() {
     expect(assetGraph, 'to contain asset', 'Woff');
   });
 
-  it('should update the href', async function() {
+  it('should update the href', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlPrefetchLink/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -39,23 +39,23 @@ describe('relations/HtmlPrefetchLink', function() {
     expect(assetGraph, 'to contain relation', 'HtmlPrefetchLink');
 
     const prefetchLink = assetGraph.findRelations({
-      type: 'HtmlPrefetchLink'
+      type: 'HtmlPrefetchLink',
     })[0];
 
     prefetchLink.to.url = 'foo.bar';
 
     expect(prefetchLink, 'to satisfy', {
-      href: 'foo.bar'
+      href: 'foo.bar',
     });
   });
 
-  describe('when programmatically adding a relation', function() {
-    it('should attach a link node in <head>', function() {
+  describe('when programmatically adding a relation', function () {
+    it('should attach a link node in <head>', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
           type: 'HtmlPrefetchLink',
-          to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+          to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
         },
         'firstInHead'
       );
@@ -67,13 +67,13 @@ describe('relations/HtmlPrefetchLink', function() {
       );
     });
 
-    it('should set the `as` property passed in the constructor', function() {
+    it('should set the `as` property passed in the constructor', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
           type: 'HtmlPrefetchLink',
           href: 'foo.js',
-          as: 'object'
+          as: 'object',
         },
         'firstInHead'
       );
@@ -85,16 +85,16 @@ describe('relations/HtmlPrefetchLink', function() {
       );
     });
 
-    it('should add the `crossorigin` attribute when the relation is loaded as a font', function() {
+    it('should add the `crossorigin` attribute when the relation is loaded as a font', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
           type: 'HtmlPrefetchLink',
           to: {
             type: 'Woff',
-            url: 'foo.woff'
+            url: 'foo.woff',
           },
-          as: 'font'
+          as: 'font',
         },
         'firstInHead'
       );
@@ -106,7 +106,7 @@ describe('relations/HtmlPrefetchLink', function() {
       );
     });
 
-    it('should add the `crossorigin` attribute when the relation is crossorigin', function() {
+    it('should add the `crossorigin` attribute when the relation is crossorigin', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
@@ -114,9 +114,9 @@ describe('relations/HtmlPrefetchLink', function() {
           to: new AssetGraph().addAsset({
             type: 'JavaScript',
             text: '"use strict"',
-            url: 'http://fisk.dk/foo.js'
+            url: 'http://fisk.dk/foo.js',
           }),
-          as: 'script'
+          as: 'script',
         },
         'firstInHead'
       );

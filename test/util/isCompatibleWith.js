@@ -2,8 +2,8 @@ const AssetGraph = require('../../lib/AssetGraph');
 const expect = require('../unexpected-with-plugins');
 const isCompatibleWith = require('../../lib/util/isCompatibleWith');
 
-describe('isCompatibleWith', function() {
-  it('should consider Css compatible with Asset', function() {
+describe('isCompatibleWith', function () {
+  it('should consider Css compatible with Asset', function () {
     expect(
       isCompatibleWith(
         new AssetGraph().addAsset({ type: 'Css', text: '' }),
@@ -13,12 +13,12 @@ describe('isCompatibleWith', function() {
     );
   });
 
-  it('should consider Atom compatible with Xml', function() {
+  it('should consider Atom compatible with Xml', function () {
     expect(
       isCompatibleWith(
         new AssetGraph().addAsset({
           type: 'Atom',
-          text: '<?xml version="1.0" encoding="utf-8"?><foo></foo>'
+          text: '<?xml version="1.0" encoding="utf-8"?><foo></foo>',
         }),
         'Xml'
       ),
@@ -26,12 +26,12 @@ describe('isCompatibleWith', function() {
     );
   });
 
-  it('should consider Xml compatible with Atom', function() {
+  it('should consider Xml compatible with Atom', function () {
     expect(
       isCompatibleWith(
         new AssetGraph().addAsset({
           type: 'Xml',
-          text: '<?xml version="1.0" encoding="utf-8"?><foo></foo>'
+          text: '<?xml version="1.0" encoding="utf-8"?><foo></foo>',
         }),
         'Atom'
       ),
@@ -39,7 +39,7 @@ describe('isCompatibleWith', function() {
     );
   });
 
-  it('should consider Css incompatible with JavaScript', function() {
+  it('should consider Css incompatible with JavaScript', function () {
     expect(
       isCompatibleWith(
         new AssetGraph().addAsset({ type: 'Css', text: '' }),

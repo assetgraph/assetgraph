@@ -2,10 +2,10 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/JsonUrl', function() {
-  it('should get the href correctly', async function() {
+describe('relations/JsonUrl', function () {
+  it('should get the href correctly', async function () {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/relations/JsonUrl/')
+      root: pathModule.resolve(__dirname, '../../testdata/relations/JsonUrl/'),
     });
     await assetGraph.loadAssets('app.webmanifest');
     await assetGraph.populate();
@@ -16,14 +16,14 @@ describe('relations/JsonUrl', function() {
     expect(assetGraph.findRelations({ type: 'JsonUrl' }), 'to satisfy', [
       {
         href: 'index.html',
-        hrefType: 'relative'
-      }
+        hrefType: 'relative',
+      },
     ]);
   });
 
-  it('should set the href correctly', async function() {
+  it('should set the href correctly', async function () {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/relations/JsonUrl/')
+      root: pathModule.resolve(__dirname, '../../testdata/relations/JsonUrl/'),
     });
     await assetGraph.loadAssets('app.webmanifest');
     await assetGraph.populate();
@@ -33,8 +33,8 @@ describe('relations/JsonUrl', function() {
     expect(assetGraph.findRelations({ type: 'JsonUrl' }), 'to satisfy', [
       {
         href: 'foo.html',
-        hrefType: 'relative'
-      }
+        hrefType: 'relative',
+      },
     ]);
   });
 });

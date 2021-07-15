@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/CssFontFaceSrc', function() {
-  it('should handle a simple test case', async function() {
+describe('relations/CssFontFaceSrc', function () {
+  it('should handle a simple test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/CssFontFaceSrc/simple/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.css');
     await assetGraph.populate();
@@ -31,12 +31,12 @@ describe('relations/CssFontFaceSrc', function() {
     );
   });
 
-  it('should handle a test case with multiple src properties in one rule and multiple urls in one value', async function() {
+  it('should handle a test case with multiple src properties in one rule and multiple urls in one value', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/CssFontFaceSrc/multipleSrc/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.css');
     await assetGraph.populate();
@@ -63,7 +63,7 @@ describe('relations/CssFontFaceSrc', function() {
         "url('fontawesome-webfont.woff')",
         "url('http://example.com/foo.ttf')",
         "url('fontawesome-webfont.svgz#FontAwesomeRegular')",
-        "url('fontawesome-webfont.svg#FontAwesomeRegular')"
+        "url('fontawesome-webfont.svg#FontAwesomeRegular')",
       ]
     );
   });

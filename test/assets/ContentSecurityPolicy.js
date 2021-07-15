@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('assets/ContentSecurityPolicy', function() {
-  it('should handle a test case with existing Content-Security-Policy meta tags', async function() {
+describe('assets/ContentSecurityPolicy', function () {
+  it('should handle a test case with existing Content-Security-Policy meta tags', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/assets/ContentSecurityPolicy/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -20,22 +20,22 @@ describe('assets/ContentSecurityPolicy', function() {
     expect(assetGraph, 'to contain relations', 'HtmlContentSecurityPolicy', 2);
 
     const contentSecurityPolicies = assetGraph.findAssets({
-      type: 'ContentSecurityPolicy'
+      type: 'ContentSecurityPolicy',
     });
     expect(contentSecurityPolicies[0].parseTree, 'to equal', {
       defaultSrc: ["'self'"],
       styleSrc: ["'unsafe-inline'"],
       reportUri: ['http://example.com/tellyouwhat'],
-      foobarquux: []
+      foobarquux: [],
     });
 
     expect(contentSecurityPolicies[1].parseTree, 'to equal', {
       defaultSrc: ["'self'"],
-      reportUri: ['http://example.com/gossip']
+      reportUri: ['http://example.com/gossip'],
     });
 
     contentSecurityPolicies[0].parseTree.reportUri = [
-      'http://somewhereelse.com/tellyouwhat'
+      'http://somewhereelse.com/tellyouwhat',
     ];
     contentSecurityPolicies[0].markDirty();
 
@@ -46,12 +46,11 @@ describe('assets/ContentSecurityPolicy', function() {
     );
   });
 
-  it('should normalize the casing of directives, hash names and single quoted directives', function() {
+  it('should normalize the casing of directives, hash names and single quoted directives', function () {
     expect(
       new AssetGraph().addAsset({
         type: 'ContentSecurityPolicy',
-        text:
-          "DEFAULT-sRc 'seLF' 'sHa256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs=' HttP://foo.com dAta: sVn+SSH: 'UNsafe-InLiNe' 'unSAFE-eVal' 'nONCe-ABC123'"
+        text: "DEFAULT-sRc 'seLF' 'sHa256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs=' HttP://foo.com dAta: sVn+SSH: 'UNsafe-InLiNe' 'unSAFE-eVal' 'nONCe-ABC123'",
       }).parseTree,
       'to exhaustively satisfy',
       {
@@ -63,34 +62,34 @@ describe('assets/ContentSecurityPolicy', function() {
           'svn+ssh:',
           "'unsafe-inline'",
           "'unsafe-eval'",
-          "'nonce-ABC123'"
-        ]
+          "'nonce-ABC123'",
+        ],
       }
     );
   });
 
   // Doesn't seem to permitted by the grammar, but is used by eg. https://report-uri.io/home/generate
-  it('should allow a trailing semicolon', function() {
+  it('should allow a trailing semicolon', function () {
     expect(
       new AssetGraph().addAsset({
         type: 'ContentSecurityPolicy',
-        text: "default-src 'self';"
+        text: "default-src 'self';",
       }).parseTree,
       'to exhaustively satisfy',
       {
-        defaultSrc: ["'self'"]
+        defaultSrc: ["'self'"],
       }
     );
   });
 
-  it('should support "boolean" directives', function() {
+  it('should support "boolean" directives', function () {
     const contentSecurityPolicy = new AssetGraph().addAsset({
       type: 'ContentSecurityPolicy',
-      text: 'upgrade-insecure-requests; block-all-mixed-content'
+      text: 'upgrade-insecure-requests; block-all-mixed-content',
     });
     expect(contentSecurityPolicy.parseTree, 'to exhaustively satisfy', {
       upgradeInsecureRequests: [],
-      blockAllMixedContent: []
+      blockAllMixedContent: [],
     });
     contentSecurityPolicy.markDirty();
     expect(
@@ -100,32 +99,32 @@ describe('assets/ContentSecurityPolicy', function() {
     );
   });
 
-  it('should tolerate leading newlines', function() {
+  it('should tolerate leading newlines', function () {
     const csp = new AssetGraph().addAsset({
       type: 'ContentSecurityPolicy',
-      text: "\n     default-src 'self'; img-src 'self'"
+      text: "\n     default-src 'self'; img-src 'self'",
     });
     expect(csp.parseTree, 'to satisfy', {
       defaultSrc: ["'self'"],
-      imgSrc: ["'self'"]
+      imgSrc: ["'self'"],
     });
     csp.markDirty();
     expect(csp.text, 'to equal', "default-src 'self'; img-src 'self'");
   });
 
-  it('should automatically derive the type when attached via an HtmlContentSecurityPolicy relation', function() {
+  it('should automatically derive the type when attached via an HtmlContentSecurityPolicy relation', function () {
     const assetGraph = new AssetGraph();
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
       url: 'https://example.com/',
-      text: '<!DOCTYPE html><html><head></head><body></body></html>'
+      text: '<!DOCTYPE html><html><head></head><body></body></html>',
     });
 
     htmlAsset.addRelation({
       type: 'HtmlContentSecurityPolicy',
       to: {
-        text: "default-src 'none'"
-      }
+        text: "default-src 'none'",
+      },
     });
     expect(assetGraph, 'to contain asset', 'ContentSecurityPolicy');
   });

@@ -17,13 +17,13 @@ describe('parseJavascript', () => {
               end: 6,
               attributes: [],
               name: { type: 'JSXIdentifier', start: 1, end: 5, name: 'main' },
-              selfClosing: false
+              selfClosing: false,
             },
             closingElement: {
               type: 'JSXClosingElement',
               start: 17,
               end: 24,
-              name: { type: 'JSXIdentifier', start: 19, end: 23, name: 'main' }
+              name: { type: 'JSXIdentifier', start: 19, end: 23, name: 'main' },
             },
             children: [
               {
@@ -31,57 +31,57 @@ describe('parseJavascript', () => {
                 start: 6,
                 end: 17,
                 value: 'Hello world',
-                raw: 'Hello world'
-              }
-            ]
-          }
-        }
+                raw: 'Hello world',
+              },
+            ],
+          },
+        },
       ],
       tokens: [
         {
           type: {
-            label: 'jsxTagStart'
-          }
-        },
-        {
-          type: {
-            label: 'jsxName'
+            label: 'jsxTagStart',
           },
-          value: 'main'
         },
         {
           type: {
-            label: 'jsxTagEnd'
-          }
-        },
-        {
-          type: {
-            label: 'jsxText'
+            label: 'jsxName',
           },
-          value: 'Hello world'
+          value: 'main',
         },
         {
           type: {
-            label: 'jsxTagStart'
-          }
-        },
-        {
-          type: {
-            label: '/'
-          }
-        },
-        {
-          type: {
-            label: 'jsxName'
+            label: 'jsxTagEnd',
           },
-          value: 'main'
         },
         {
           type: {
-            label: 'jsxTagEnd'
-          }
-        }
-      ]
+            label: 'jsxText',
+          },
+          value: 'Hello world',
+        },
+        {
+          type: {
+            label: 'jsxTagStart',
+          },
+        },
+        {
+          type: {
+            label: '/',
+          },
+        },
+        {
+          type: {
+            label: 'jsxName',
+          },
+          value: 'main',
+        },
+        {
+          type: {
+            label: 'jsxTagEnd',
+          },
+        },
+      ],
     });
   });
 
@@ -89,7 +89,7 @@ describe('parseJavascript', () => {
     expect(
       parse('const foo = import("./foo.js")', {
         sourceType: 'module',
-        ecmaVersion: 2021
+        ecmaVersion: 2021,
       }),
       'to satisfy',
       {
@@ -104,13 +104,13 @@ describe('parseJavascript', () => {
                   type: 'ImportExpression',
                   source: {
                     type: 'Literal',
-                    value: './foo.js'
-                  }
-                }
-              }
-            ]
-          }
-        ]
+                    value: './foo.js',
+                  },
+                },
+              },
+            ],
+          },
+        ],
       }
     );
   });

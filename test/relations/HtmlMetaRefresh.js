@@ -2,20 +2,20 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const http = require('http');
 
-describe('relations/HtmlMetaRefresh', function() {
-  it('should handle a basic test case', async function() {
+describe('relations/HtmlMetaRefresh', function () {
+  it('should handle a basic test case', async function () {
     const server = http
       .createServer((req, res) => {
         if (req.url === '/metaRefresh') {
           res.writeHead(302, {
-            'Content-Type': 'text/html; charset=UTF-8'
+            'Content-Type': 'text/html; charset=UTF-8',
           });
           res.end(
             '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="5; url=/metaRefreshTarget.html"></head><html>Moved temporarily</body></html>'
           );
         } else if (/\/.*Target\.html$/.test(req.url)) {
           res.writeHead(200, {
-            'Content-Type': 'text/html; charset=UTF-8'
+            'Content-Type': 'text/html; charset=UTF-8',
           });
           res.end(`This is ${req.url}`);
         } else {

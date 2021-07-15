@@ -1,13 +1,13 @@
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('transforms/moveAssets', function() {
-  it('should throw if mandatory second argument is missing', async function() {
+describe('transforms/moveAssets', function () {
+  it('should throw if mandatory second argument is missing', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/blah/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'http://www.example.com/blah/quux.html'
+      url: 'http://www.example.com/blah/quux.html',
     });
 
     expect(
@@ -17,14 +17,14 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with a non-inline asset that is moved to another absolute url', async function() {
+  it('should handle a test case with a non-inline asset that is moved to another absolute url', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/blah/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'http://www.example.com/blah/quux.html'
+      url: 'http://www.example.com/blah/quux.html',
     });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return 'http://www.example.com/blah/someotherplace.html';
     });
 
@@ -35,14 +35,14 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with a non-inline asset that is moved to an absolute url without a file name', async function() {
+  it('should handle a test case with a non-inline asset that is moved to an absolute url without a file name', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/blah/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'http://www.example.com/blah/quux.html'
+      url: 'http://www.example.com/blah/quux.html',
     });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return 'http://www.example.com/w00p/';
     });
 
@@ -53,14 +53,14 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with a non-inline asset that is moved to a relative url', async function() {
+  it('should handle a test case with a non-inline asset that is moved to a relative url', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'http://www.example.com/blah/hey/quux.html'
+      url: 'http://www.example.com/blah/hey/quux.html',
     });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return 'otherdir/someotherplace.html';
     });
 
@@ -71,14 +71,14 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with a non-inline asset that is moved to a relative url without a file name', async function() {
+  it('should handle a test case with a non-inline asset that is moved to a relative url without a file name', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'http://www.example.com/blah/yay/quux.html'
+      url: 'http://www.example.com/blah/yay/quux.html',
     });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return 'otherdir/';
     });
 
@@ -89,14 +89,14 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with a non-inline asset that is moved to a relative url with ../', async function() {
+  it('should handle a test case with a non-inline asset that is moved to a relative url with ../', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'http://www.example.com/blah/hey/quux.html'
+      url: 'http://www.example.com/blah/hey/quux.html',
     });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return '../someotherplace.html';
     });
 
@@ -107,14 +107,14 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with a non-inline asset that is moved to a relative url with ../ but without a file name', async function() {
+  it('should handle a test case with a non-inline asset that is moved to a relative url with ../ but without a file name', async function () {
     const assetGraph = new AssetGraph({ root: 'file:///foo/bar/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'file:///foo/bar/hey/blah/quux.html'
+      url: 'file:///foo/bar/hey/blah/quux.html',
     });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return '../';
     });
 
@@ -125,14 +125,14 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with a non-inline asset that is moved to a root-relative url', async function() {
+  it('should handle a test case with a non-inline asset that is moved to a root-relative url', async function () {
     const assetGraph = new AssetGraph({ root: 'file:///foo/bar/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'file:///foo/bar/hello.html'
+      url: 'file:///foo/bar/hello.html',
     });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return '/yay.html';
     });
 
@@ -143,14 +143,14 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with a non-inline asset that is moved to a root-relative url without a file name', async function() {
+  it('should handle a test case with a non-inline asset that is moved to a root-relative url without a file name', async function () {
     const assetGraph = new AssetGraph({ root: 'file:///foo/bar/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'file:///foo/bar/blah/foo/quux.html'
+      url: 'file:///foo/bar/blah/foo/quux.html',
     });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return '/';
     });
 
@@ -161,14 +161,14 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with a non-inline asset that is moved to a root-relative url without file name', async function() {
+  it('should handle a test case with a non-inline asset that is moved to a root-relative url without file name', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'http://www.example.com/blah/hey/quux.html'
+      url: 'http://www.example.com/blah/hey/quux.html',
     });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return '/';
     });
 
@@ -179,14 +179,14 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with a non-inline asset that is moved to a root-relative url without file name, file: urls', async function() {
+  it('should handle a test case with a non-inline asset that is moved to a root-relative url without file name, file: urls', async function () {
     const assetGraph = new AssetGraph({ root: 'file:///foo/bar/' });
     assetGraph.addAsset({
       type: 'Html',
       text: 'foo',
-      url: 'file:///foo/bar/baz/quux.html'
+      url: 'file:///foo/bar/baz/quux.html',
     });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return '/';
     });
 
@@ -197,10 +197,10 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with an inline asset that is moved to an absolute url', async function() {
+  it('should handle a test case with an inline asset that is moved to an absolute url', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/blah/' });
     assetGraph.addAsset({ type: 'Html', text: 'foo' });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return 'http://www.example.com/foo/someotherplace.html';
     });
 
@@ -211,15 +211,15 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with an inline asset that is moved to an absolute url without a file name', async function() {
+  it('should handle a test case with an inline asset that is moved to an absolute url without a file name', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/blah/' });
     assetGraph.addAsset({
       type: 'Html',
-      text: '<style>body { color: maroon; }</style>'
+      text: '<style>body { color: maroon; }</style>',
     });
     await assetGraph.moveAssets(
       { type: 'Css' },
-      asset => 'http://www.example.com/foo/'
+      (asset) => 'http://www.example.com/foo/'
     );
 
     expect(
@@ -229,10 +229,10 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with an inline asset that is moved to a relative url', async function() {
+  it('should handle a test case with an inline asset that is moved to a relative url', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/blah/' });
     assetGraph.addAsset({ type: 'Html', text: 'foo' });
-    await assetGraph.moveAssets({ type: 'Html' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Html' }, function (asset) {
       return 'here/there.html';
     });
 
@@ -243,13 +243,13 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with an inline asset that is moved to a relative url without a file name', async function() {
+  it('should handle a test case with an inline asset that is moved to a relative url without a file name', async function () {
     const assetGraph = new AssetGraph({ root: 'http://www.example.com/blah/' });
     assetGraph.addAsset({
       type: 'Html',
-      text: '<style>body { color: maroon; }</style>'
+      text: '<style>body { color: maroon; }</style>',
     });
-    await assetGraph.moveAssets({ type: 'Css' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Css' }, function (asset) {
       return 'here/';
     });
 
@@ -260,13 +260,13 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with an inline asset that is moved to a root-relative url', async function() {
+  it('should handle a test case with an inline asset that is moved to a root-relative url', async function () {
     const assetGraph = new AssetGraph({ root: 'file:///foo/bar/' });
     assetGraph.addAsset({
       type: 'Html',
-      text: '<style>body { color: maroon; }</style>'
+      text: '<style>body { color: maroon; }</style>',
     });
-    await assetGraph.moveAssets({ type: 'Css' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Css' }, function (asset) {
       return '/there.css';
     });
 
@@ -277,13 +277,13 @@ describe('transforms/moveAssets', function() {
     );
   });
 
-  it('should handle a test case with an inline asset that is moved to a root-relative url without a file name', async function() {
+  it('should handle a test case with an inline asset that is moved to a root-relative url without a file name', async function () {
     const assetGraph = new AssetGraph({ root: 'file:///foo/bar/' });
     assetGraph.addAsset({
       type: 'Html',
-      text: '<style>body { color: maroon; }</style>'
+      text: '<style>body { color: maroon; }</style>',
     });
-    await assetGraph.moveAssets({ type: 'Css' }, function(asset) {
+    await assetGraph.moveAssets({ type: 'Css' }, function (asset) {
       return '/';
     });
 

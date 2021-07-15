@@ -4,9 +4,9 @@ const httpception = require('httpception');
 const sinon = require('sinon');
 const pathModule = require('path');
 
-describe('AssetGraph#addAsset', function() {
-  describe('with an array', function() {
-    it('should throw', function() {
+describe('AssetGraph#addAsset', function () {
+  describe('with an array', function () {
+    it('should throw', function () {
       expect(
         () => new AssetGraph().addAsset([]),
         'to throw',
@@ -17,8 +17,8 @@ describe('AssetGraph#addAsset', function() {
     });
   });
 
-  describe('with a glob pattern', function() {
-    it('should throw', function() {
+  describe('with a glob pattern', function () {
+    it('should throw', function () {
       expect(
         () => new AssetGraph().addAsset('*.html'),
         'to throw',
@@ -29,7 +29,7 @@ describe('AssetGraph#addAsset', function() {
     });
   });
 
-  it('should handle a relative path', async function() {
+  it('should handle a relative path', async function () {
     const assetGraph = new AssetGraph({
       root: `${pathModule.resolve(
         __dirname,
@@ -37,7 +37,7 @@ describe('AssetGraph#addAsset', function() {
         'testdata',
         'addAsset',
         'relativeUrl'
-      )}/`
+      )}/`,
     });
     const asset = assetGraph.addAsset('foo.png');
     assetGraph.addAsset(asset);
@@ -45,16 +45,16 @@ describe('AssetGraph#addAsset', function() {
     expect(asset.type, 'to equal', 'Png');
   });
 
-  it('should handle an http: url', async function() {
+  it('should handle an http: url', async function () {
     httpception({
       request: 'GET http://www.example.com/foo.gif',
       response: {
         statusCode: 200,
         headers: {
-          'Content-Type': 'image/gif'
+          'Content-Type': 'image/gif',
         },
-        body: Buffer.from('GIF')
-      }
+        body: Buffer.from('GIF'),
+      },
     });
 
     const assetGraph = new AssetGraph();
@@ -66,7 +66,7 @@ describe('AssetGraph#addAsset', function() {
     expect(asset.type, 'to equal', 'Gif');
   });
 
-  it('should handle a data: url', async function() {
+  it('should handle a data: url', async function () {
     const assetGraph = new AssetGraph();
     const asset = assetGraph.addAsset(
       'data:text/html;base64,SGVsbG8sIHdvcmxkIQo='
@@ -77,7 +77,7 @@ describe('AssetGraph#addAsset', function() {
     expect(asset.rawSrc, 'to equal', Buffer.from('Hello, world!\n', 'utf-8'));
   });
 
-  it('should not loop infinitely when encountering non-resolvable urls', async function() {
+  it('should not loop infinitely when encountering non-resolvable urls', async function () {
     const assetGraph = new AssetGraph();
     const warnSpy = sinon.spy().named('warn');
     assetGraph.on('warn', warnSpy);
@@ -91,7 +91,7 @@ describe('AssetGraph#addAsset', function() {
     );
   });
 
-  it('should accept `-` as part of the protocol', async function() {
+  it('should accept `-` as part of the protocol', async function () {
     const assetGraph = new AssetGraph();
     const warnSpy = sinon.spy().named('warn');
 
@@ -103,11 +103,11 @@ describe('AssetGraph#addAsset', function() {
     expect(warnSpy, 'was not called');
   });
 
-  it('should only warn about unknown unsupported protocols', async function() {
+  it('should only warn about unknown unsupported protocols', async function () {
     const warnSpy = sinon.spy().named('warn');
 
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../testdata/unsupportedProtocols/')
+      root: pathModule.resolve(__dirname, '../testdata/unsupportedProtocols/'),
     });
     assetGraph.on('warn', warnSpy);
 
@@ -118,7 +118,7 @@ describe('AssetGraph#addAsset', function() {
       { to: { url: 'tel:9876543' } },
       { to: { url: 'sms:9876543' } },
       { to: { url: 'fax:9876543' } },
-      { to: { url: 'httpz://foo.com/' } }
+      { to: { url: 'httpz://foo.com/' } },
     ]);
 
     expect(warnSpy, 'to have calls satisfying', () =>
@@ -130,39 +130,39 @@ describe('AssetGraph#addAsset', function() {
     );
   });
 
-  describe('with an asset config that includes the body', function() {
-    it('should add the targets of all external outgoing relations as unloaded Asset instances', function() {
+  describe('with an asset config that includes the body', function () {
+    it('should add the targets of all external outgoing relations as unloaded Asset instances', function () {
       const assetGraph = new AssetGraph();
       const asset = assetGraph.addAsset({
         type: 'Css',
         url: 'https://example.com/styles.css',
-        text: 'body { background-image: url(https://example.com/foo.png); }'
+        text: 'body { background-image: url(https://example.com/foo.png); }',
       });
       expect(asset, 'to be an', AssetGraph.Css);
       expect(assetGraph, 'to contain asset', {
         type: 'Png',
         url: 'https://example.com/foo.png',
-        isLoaded: false
+        isLoaded: false,
       });
     });
   });
 
-  describe('with an asset config that does not include the body', function() {
-    it('should add the targets of all external outgoing relations as unloaded Asset instances once the asset is loaded', async function() {
+  describe('with an asset config that does not include the body', function () {
+    it('should add the targets of all external outgoing relations as unloaded Asset instances once the asset is loaded', async function () {
       const assetGraph = new AssetGraph();
       const cssAsset = assetGraph.addAsset({
         type: 'Css',
-        url: 'https://example.com/styles.css'
+        url: 'https://example.com/styles.css',
       });
 
       httpception({
         request: 'GET https://example.com/styles.css',
         response: {
           headers: {
-            'Content-Type': 'text/css'
+            'Content-Type': 'text/css',
           },
-          body: 'body { background-image: url(https://example.com/foo.png); }'
-        }
+          body: 'body { background-image: url(https://example.com/foo.png); }',
+        },
       });
 
       await cssAsset.load();
@@ -170,35 +170,35 @@ describe('AssetGraph#addAsset', function() {
       expect(assetGraph, 'to contain asset', {
         type: 'Png',
         url: 'https://example.com/foo.png',
-        isLoaded: false
+        isLoaded: false,
       });
     });
   });
 
-  describe('when the url already exists in the graph', function() {
-    it('should return the existing instance', function() {
+  describe('when the url already exists in the graph', function () {
+    it('should return the existing instance', function () {
       const assetGraph = new AssetGraph();
       const cssAsset = assetGraph.addAsset({
         type: 'Css',
         url: 'https://example.com/styles.css',
-        text: 'body { color: teal; }'
+        text: 'body { color: teal; }',
       });
       expect(cssAsset, 'to be a', AssetGraph.Css).and('to satisfy', {
-        text: 'body { color: teal; }'
+        text: 'body { color: teal; }',
       });
 
       const cssAsset2 = assetGraph.addAsset({
         type: 'Css',
         url: 'https://example.com/styles.css',
-        text: 'body { color: teal; }'
+        text: 'body { color: teal; }',
       });
 
       expect(cssAsset2, 'to be', cssAsset);
     });
   });
 
-  describe('when more information arrives about an existing asset', function() {
-    it('should upgrade from Xml to Atom (more specific)', async function() {
+  describe('when more information arrives about an existing asset', function () {
+    it('should upgrade from Xml to Atom (more specific)', async function () {
       const assetGraph = new AssetGraph();
       const xmlAsset = assetGraph.addAsset({
         url: 'http://example.com/feed.xml',
@@ -215,7 +215,7 @@ describe('AssetGraph#addAsset', function() {
               <content type="html">This contains an image: &lt;img src=&quot;foo.png&quot;&gt; and a &lt;a href=&quot;bar.html&quot;&gt;relative link&lt;/a&gt;</content>
             </entry>
           </feed>
-        `
+        `,
       });
 
       await xmlAsset.load();
@@ -227,7 +227,7 @@ describe('AssetGraph#addAsset', function() {
 
       const atomAsset = assetGraph.addAsset({
         url: 'http://example.com/feed.xml',
-        contentType: 'application/atom+xml'
+        contentType: 'application/atom+xml',
       });
 
       expect(atomAsset, 'to be', xmlAsset);
@@ -239,7 +239,7 @@ describe('AssetGraph#addAsset', function() {
       expect(assetGraph, 'to contain no assets', 'Xml');
     });
 
-    it('should not downgrade from Atom to Xml (less specific)', async function() {
+    it('should not downgrade from Atom to Xml (less specific)', async function () {
       const assetGraph = new AssetGraph();
       const atomAsset = assetGraph.addAsset({
         type: 'Atom',
@@ -257,7 +257,7 @@ describe('AssetGraph#addAsset', function() {
               <content type="html">This contains an image: &lt;img src=&quot;foo.png&quot;&gt; and a &lt;a href=&quot;bar.html&quot;&gt;relative link&lt;/a&gt;</content>
             </entry>
           </feed>
-        `
+        `,
       });
 
       await atomAsset.load();
@@ -267,7 +267,7 @@ describe('AssetGraph#addAsset', function() {
 
       assetGraph.addAsset({
         url: 'http://example.com/feed.xml',
-        contentType: 'application/xml'
+        contentType: 'application/xml',
       });
 
       expect(assetGraph, 'to contain asset', 'Atom');
@@ -275,12 +275,12 @@ describe('AssetGraph#addAsset', function() {
       expect(assetGraph, 'to contain no assets', 'Xml');
     });
 
-    it('should upgrade based on the type of an incoming relation being added later', async function() {
+    it('should upgrade based on the type of an incoming relation being added later', async function () {
       const assetGraph = new AssetGraph();
 
       const undetectableAsset = await assetGraph.addAsset({
         url: 'http://example.com/undetectable',
-        text: '/* foo */'
+        text: '/* foo */',
       });
       await undetectableAsset.load();
 
@@ -295,7 +295,7 @@ describe('AssetGraph#addAsset', function() {
                 <link rel="stylesheet" href="undetectable">
             </head>
             </html>
-          `
+          `,
         })
         .load();
       await undetectableAsset.load();
@@ -303,7 +303,7 @@ describe('AssetGraph#addAsset', function() {
       expect(assetGraph, 'to contain asset', 'Css');
     });
 
-    it('should upgrade based on the type of an existing incoming relation', async function() {
+    it('should upgrade based on the type of an existing incoming relation', async function () {
       const assetGraph = new AssetGraph();
 
       await assetGraph
@@ -317,86 +317,86 @@ describe('AssetGraph#addAsset', function() {
                 <link rel="stylesheet" href="undetectable">
             </head>
             </html>
-          `
+          `,
         })
         .load();
 
       await assetGraph
         .addAsset({
           url: 'http://example.com/undetectable',
-          text: '/* foo */'
+          text: '/* foo */',
         })
         .load();
 
       expect(assetGraph, 'to contain asset', 'Css');
     });
 
-    it('should upgrade an unloaded asset with text', async function() {
+    it('should upgrade an unloaded asset with text', async function () {
       const assetGraph = new AssetGraph();
       assetGraph.addAsset({
         type: 'Css',
         url: 'http://example.com/styles.css',
-        text: '@import "more.css";'
+        text: '@import "more.css";',
       });
       expect(assetGraph, 'to contain asset', {
-        url: 'http://example.com/more.css'
+        url: 'http://example.com/more.css',
       });
       await assetGraph
         .addAsset({
           type: 'Css',
           url: 'http://example.com/more.css',
-          text: 'body { color: teal; }'
+          text: 'body { color: teal; }',
         })
         .load();
 
       expect(assetGraph, 'to contain asset', {
         url: 'http://example.com/more.css',
-        text: 'body { color: teal; }'
+        text: 'body { color: teal; }',
       });
       expect(assetGraph, 'to contain assets', 2);
       expect(assetGraph, 'to contain relation', {
         type: 'CssImport',
         from: {
-          url: 'http://example.com/styles.css'
+          url: 'http://example.com/styles.css',
         },
         to: {
-          url: 'http://example.com/more.css'
-        }
+          url: 'http://example.com/more.css',
+        },
       });
     });
   });
 
-  describe('with a canonicalRoot on the graph', function() {
-    it('should resolve a canonical URL with no path to the graph root', async function() {
+  describe('with a canonicalRoot on the graph', function () {
+    it('should resolve a canonical URL with no path to the graph root', async function () {
       const assetGraph = new AssetGraph({
         root: '/myRoot',
-        canonicalRoot: 'https://my.production.domain'
+        canonicalRoot: 'https://my.production.domain',
       });
 
       const asset = await assetGraph.addAsset('https://my.production.domain');
 
       expect(asset, 'to satisfy', {
-        url: 'file:///myRoot/'
+        url: 'file:///myRoot/',
       });
     });
 
-    it('should resolve a canonical URL with a `/` as path to the graph root', async function() {
+    it('should resolve a canonical URL with a `/` as path to the graph root', async function () {
       const assetGraph = new AssetGraph({
         root: '/myRoot',
-        canonicalRoot: 'https://my.production.domain'
+        canonicalRoot: 'https://my.production.domain',
       });
 
       const asset = await assetGraph.addAsset('https://my.production.domain/');
 
       expect(asset, 'to satisfy', {
-        url: 'file:///myRoot/'
+        url: 'file:///myRoot/',
       });
     });
 
-    it('should resolve a canonical URL with a path to the graph root relative path', async function() {
+    it('should resolve a canonical URL with a path to the graph root relative path', async function () {
       const assetGraph = new AssetGraph({
         root: '/myRoot',
-        canonicalRoot: 'https://my.production.domain'
+        canonicalRoot: 'https://my.production.domain',
       });
 
       const asset = await assetGraph.addAsset(
@@ -404,7 +404,7 @@ describe('AssetGraph#addAsset', function() {
       );
 
       expect(asset, 'to satisfy', {
-        url: 'file:///myRoot/page.html'
+        url: 'file:///myRoot/page.html',
       });
     });
   });

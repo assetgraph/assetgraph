@@ -4,13 +4,13 @@ const expect = require('../unexpected-with-plugins');
 const urlTools = require('urltools');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlObject', function() {
-  it('should handle a test case with an existing <object><param name="src" value="..."></object> construct', async function() {
+describe('relations/HtmlObject', function () {
+  it('should handle a test case with an existing <object><param name="src" value="..."></object> construct', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlObject/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();

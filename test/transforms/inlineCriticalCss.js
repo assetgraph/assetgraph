@@ -3,13 +3,13 @@ const expect = require('../unexpected-with-plugins');
 const sinon = require('sinon');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('tranforms/inlineCriticalCss', function() {
-  it('should not do anything on an empty page', async function() {
+describe('tranforms/inlineCriticalCss', function () {
+  it('should not do anything on an empty page', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCriticalCss/'
-      )
+      ),
     });
     await assetGraph.loadAssets('empty.html');
     await assetGraph.populate();
@@ -23,14 +23,14 @@ describe('tranforms/inlineCriticalCss', function() {
     expect(assetGraph.findAssets(), 'to satisfy', assets);
   });
 
-  it('should emit a warning when encountering broken html', async function() {
+  it('should emit a warning when encountering broken html', async function () {
     const warnSpy = sinon.spy();
 
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCriticalCss/'
-      )
+      ),
     });
     await assetGraph.on('warn', warnSpy);
     await assetGraph.loadAssets('missing-structure.html');
@@ -49,12 +49,12 @@ describe('tranforms/inlineCriticalCss', function() {
     });
   });
 
-  it('should inline the heading style of a simple test case', async function() {
+  it('should inline the heading style of a simple test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCriticalCss/'
-      )
+      ),
     });
     await assetGraph.loadAssets('simple.html');
     await assetGraph.populate();
@@ -63,8 +63,8 @@ describe('tranforms/inlineCriticalCss', function() {
     expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
     expect(assetGraph, 'to contain relation', {
       to: {
-        fileName: 'simple.css'
-      }
+        fileName: 'simple.css',
+      },
     });
 
     expect(assetGraph, 'to contain relation', {
@@ -72,19 +72,19 @@ describe('tranforms/inlineCriticalCss', function() {
         isInline: true,
         text: ['h1 { color: red; }', '', 'a { color: rebeccapurple; }'].join(
           '\n'
-        )
+        ),
       },
-      node: node =>
-        node && node.parentNode && node.parentNode.tagName === 'HEAD'
+      node: (node) =>
+        node && node.parentNode && node.parentNode.tagName === 'HEAD',
     });
   });
 
-  it('should include the <html> node in critical nodes', async function() {
+  it('should include the <html> node in critical nodes', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCriticalCss/'
-      )
+      ),
     });
     await assetGraph.loadAssets('htmlnode.html');
     await assetGraph.populate();
@@ -94,25 +94,25 @@ describe('tranforms/inlineCriticalCss', function() {
     expect(assetGraph, 'to contain relation', {
       type: 'HtmlStyle',
       to: {
-        fileName: 'htmlnode.css'
-      }
+        fileName: 'htmlnode.css',
+      },
     });
     expect(assetGraph, 'to contain relation', {
       to: {
         isInline: true,
-        text: 'html {\n    color:red;\n}'
+        text: 'html {\n    color:red;\n}',
       },
-      node: node =>
-        node && node.parentNode && node.parentNode.tagName === 'HEAD'
+      node: (node) =>
+        node && node.parentNode && node.parentNode.tagName === 'HEAD',
     });
   });
 
-  it('should handle at-rule block nested CSS rules', async function() {
+  it('should handle at-rule block nested CSS rules', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCriticalCss/'
-      )
+      ),
     });
     await assetGraph.loadAssets('media.html');
     await assetGraph.populate();
@@ -138,26 +138,26 @@ describe('tranforms/inlineCriticalCss', function() {
           '    h1 {',
           '        background: black;',
           '    }',
-          '}'
-        ].join('\n')
+          '}',
+        ].join('\n'),
       },
-      node: node =>
-        node && node.parentNode && node.parentNode.tagName === 'HEAD'
+      node: (node) =>
+        node && node.parentNode && node.parentNode.tagName === 'HEAD',
     });
     expect(assetGraph, 'to contain relation', {
       type: 'HtmlStyle',
       to: {
-        fileName: 'media.css'
-      }
+        fileName: 'media.css',
+      },
     });
   });
 
-  it('should handle pseudo-selectors', async function() {
+  it('should handle pseudo-selectors', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCriticalCss/'
-      )
+      ),
     });
     await assetGraph.loadAssets('pseudo.html');
     await assetGraph.populate();
@@ -179,26 +179,26 @@ describe('tranforms/inlineCriticalCss', function() {
           '',
           'p:nth-child(2) {',
           '    background: hotpink;',
-          '}'
-        ].join('\n')
+          '}',
+        ].join('\n'),
       },
-      node: node =>
-        node && node.parentNode && node.parentNode.tagName === 'HEAD'
+      node: (node) =>
+        node && node.parentNode && node.parentNode.tagName === 'HEAD',
     });
     expect(assetGraph, 'to contain relation', {
       type: 'HtmlStyle',
       to: {
-        fileName: 'pseudo.css'
-      }
+        fileName: 'pseudo.css',
+      },
     });
   });
 
-  it('should combine with other CSS transforms without throwing', async function() {
+  it('should combine with other CSS transforms without throwing', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/inlineCriticalCss/'
-      )
+      ),
     });
     await assetGraph.loadAssets('simple.html');
     await assetGraph.populate();
@@ -206,7 +206,7 @@ describe('tranforms/inlineCriticalCss', function() {
     for (const asset of assetGraph.findAssets({
       type: { $in: ['Html', 'Css'] },
       isLoaded: true,
-      isInline: false
+      isInline: false,
     })) {
       asset.minify();
     }
@@ -217,18 +217,18 @@ describe('tranforms/inlineCriticalCss', function() {
       to: { type: 'Css', isLoaded: true },
       node(node) {
         return !node.hasAttribute('nobundle');
-      }
+      },
     });
     await assetGraph.inlineCriticalCss();
     await assetGraph.mergeIdenticalAssets({
       isLoaded: true,
       isInline: false,
-      type: { $in: ['JavaScript', 'Css'] }
+      type: { $in: ['JavaScript', 'Css'] },
     }); // The bundling might produce several identical files, especially the 'oneBundlePerIncludingAsset' strategy.
 
     for (const asset of assetGraph.findAssets({
       type: { $in: ['Html', 'Css'] },
-      isLoaded: true
+      isLoaded: true,
     })) {
       asset.minify();
     }
@@ -237,17 +237,17 @@ describe('tranforms/inlineCriticalCss', function() {
       {
         to: {
           isInline: true,
-          text: 'h1{color:red}a{color:#639}'
+          text: 'h1{color:red}a{color:#639}',
         },
-        node: expect.it(node => {
+        node: expect.it((node) => {
           return node && node.parentNode && node.parentNode.tagName === 'HEAD';
-        })
+        }),
       },
       {
         to: {
-          fileName: 'simple.css'
-        }
-      }
+          fileName: 'simple.css',
+        },
+      },
     ]);
   });
 });

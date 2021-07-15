@@ -3,13 +3,13 @@ const expect = require('../unexpected-with-plugins');
 const urlTools = require('urltools');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlConditionalComment', function() {
-  it('should handle a test case with some existing conditional comments', async function() {
+describe('relations/HtmlConditionalComment', function () {
+  it('should handle a test case with some existing conditional comments', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlConditionalComment/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -36,7 +36,7 @@ describe('relations/HtmlConditionalComment', function() {
     );
 
     await assetGraph.externalizeRelations({
-      type: { $in: ['HtmlStyle', 'HtmlScript'] }
+      type: { $in: ['HtmlStyle', 'HtmlScript'] },
     });
 
     for (const asset of assetGraph.findAssets({ type: 'Html' })) {
@@ -62,12 +62,12 @@ describe('relations/HtmlConditionalComment', function() {
     );
   });
 
-  it('should handle a test case with the HTML5 boilerplate conditional comments', async function() {
+  it('should handle a test case with the HTML5 boilerplate conditional comments', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlConditionalComment/'
-      )
+      ),
     });
     await assetGraph.loadAssets('html5Boilerplate.html');
     await assetGraph.populate();
@@ -82,14 +82,14 @@ describe('relations/HtmlConditionalComment', function() {
 
     for (const htmlAsset of assetGraph.findAssets({
       type: 'Html',
-      isInline: true
+      isInline: true,
     })) {
       htmlAsset.markDirty();
     }
 
     const { text } = assetGraph.findAssets({
       type: 'Html',
-      isInline: false
+      isInline: false,
     })[0];
     expect(
       text,

@@ -1,7 +1,7 @@
 const expect = require('../unexpected-with-plugins');
 const {
   addMissingNamespaces,
-  removeAddedNamespaces
+  removeAddedNamespaces,
 } = require('../../lib/util/svgNamespaces');
 
 describe('svgNamespaces', () => {

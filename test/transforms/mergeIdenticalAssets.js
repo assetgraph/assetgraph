@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('transforms/mergeIdenticalAssets', function() {
-  it('should handle a combo test case', async function() {
+describe('transforms/mergeIdenticalAssets', function () {
+  it('should handle a combo test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/mergeIdenticalAssets/combo/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -28,7 +28,7 @@ describe('transforms/mergeIdenticalAssets', function() {
 
     expect(assetGraph, 'to contain asset', 'Png');
     expect(assetGraph, 'to contain relation', {
-      from: { type: 'CacheManifest' }
+      from: { type: 'CacheManifest' },
     });
 
     const htmlImages = assetGraph.findRelations({ type: 'HtmlImage' });
@@ -36,12 +36,12 @@ describe('transforms/mergeIdenticalAssets', function() {
     expect(htmlImages[0].to, 'to equal', htmlImages[1].to);
   });
 
-  it('should handle a test case with a JavaScript asset and a Css asset with identical contents', async function() {
+  it('should handle a test case with a JavaScript asset and a Css asset with identical contents', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/mergeIdenticalAssets/identicalAssetsOfDifferentTypes/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();

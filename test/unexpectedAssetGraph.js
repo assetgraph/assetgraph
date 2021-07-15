@@ -28,7 +28,7 @@ module.exports = {
       },
       getKeys(value) {
         return ['type', 'url', 'isLoaded', 'isInline', 'isRedirect'];
-      }
+      },
     });
 
     expect.addType({
@@ -40,7 +40,7 @@ module.exports = {
       inspect(assetGraph, depth, output) {
         output.text('AssetGraph(').nl();
 
-        assetGraph.findAssets({ isInline: false }).forEach(function(asset) {
+        assetGraph.findAssets({ isInline: false }).forEach(function (asset) {
           output
             .text(
               `${asset.isLoaded ? ' ' : '!'} ${urlTools.buildRelativeUrl(
@@ -52,7 +52,7 @@ module.exports = {
         });
 
         return output.text(')');
-      }
+      },
     });
 
     expect.addType({
@@ -72,13 +72,13 @@ module.exports = {
       },
       getKeys(value) {
         return ['type', 'hrefType', 'href', 'crossorigin', 'canonical'];
-      }
+      },
     });
 
     expect.addAssertion(
       [
         '<AssetGraph> to contain [no] (asset|assets) <string|object|number?>',
-        '<AssetGraph> to contain [no] (asset|assets) <string|object|number> <number?>'
+        '<AssetGraph> to contain [no] (asset|assets) <string|object|number> <number?>',
       ],
       (expect, subject, value, number) => {
         expect.errorMode = 'nested';
@@ -105,13 +105,15 @@ module.exports = {
 
     expect.addAssertion(
       '<AssetGraph> to contain (url|urls) <string|array?>',
-      function(expect, subject, urls) {
+      function (expect, subject, urls) {
         if (!Array.isArray(urls)) {
           urls = [urls];
         }
-        urls = urls.map(url => new urlModule.URL(url, subject.root).toString());
+        urls = urls.map((url) =>
+          new urlModule.URL(url, subject.root).toString()
+        );
         expect.errorMode = 'nested';
-        urls.forEach(function(url) {
+        urls.forEach(function (url) {
           expect(subject.findAssets({ url }), 'to have length', 1);
         });
       }
@@ -119,7 +121,7 @@ module.exports = {
 
     expect.addAssertion(
       '<AssetGraph> to contain [no] (relation|relations) <string|object|number?>',
-      function(expect, subject, queryObj) {
+      function (expect, subject, queryObj) {
         let number;
         if (typeof queryObj === 'string') {
           queryObj = { type: queryObj };
@@ -145,7 +147,7 @@ module.exports = {
 
     expect.addAssertion(
       '<AssetGraph> to contain [no] (relation|relations) [including unresolved] <string|object|number> <number?>',
-      function(expect, subject, queryObj, number) {
+      function (expect, subject, queryObj, number) {
         if (typeof queryObj === 'string') {
           queryObj = { type: queryObj };
         } else if (typeof queryObj === 'number') {
@@ -175,7 +177,7 @@ module.exports = {
         return {
           type: 'Program',
           body: parseJavaScript(`!${stringOrAssetOrFunctionOrAst.toString()}`)
-            .body[0].expression.argument.body.body
+            .body[0].expression.argument.body.body,
         };
       } else {
         return stringOrAssetOrFunctionOrAst;
@@ -188,7 +190,7 @@ module.exports = {
 
     expect.addAssertion(
       '<object|string|function|AssetGraph.asset> [not] to have the same AST as <object|string|function|AssetGraph.asset>',
-      function(expect, subject, value) {
+      function (expect, subject, value) {
         expect(
           prettyPrintAst(toAst(subject)),
           '[not] to equal',
@@ -196,5 +198,5 @@ module.exports = {
         );
       }
     );
-  }
+  },
 };

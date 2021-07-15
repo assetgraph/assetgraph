@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlNoscript', function() {
-  it('should handle a test case with an existing <noscript>', async function() {
+describe('relations/HtmlNoscript', function () {
+  it('should handle a test case with an existing <noscript>', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlNoscript/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -24,19 +24,19 @@ describe('relations/HtmlNoscript', function() {
     expect(noscriptDoc.innerHTML, 'to match', /^\s+<style[\s\S]+<\/style>\s+$/);
   });
 
-  it('should support attaching itself to an existing document', function() {
+  it('should support attaching itself to an existing document', function () {
     const assetGraph = new AssetGraph();
     const htmlAsset = assetGraph.addAsset({
       type: 'Html',
-      text: '<html><body></body></html>'
+      text: '<html><body></body></html>',
     });
     htmlAsset.addRelation(
       {
         type: 'HtmlNoscript',
         to: {
           type: 'Html',
-          text: '<marquee>hey</marquee>'
-        }
+          text: '<marquee>hey</marquee>',
+        },
       },
       'lastInBody'
     );

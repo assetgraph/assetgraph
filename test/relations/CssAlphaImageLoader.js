@@ -3,13 +3,13 @@ const expect = require('../unexpected-with-plugins');
 const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/CssAlphaImageLoader', function() {
-  it('should handle a simple test case', async function() {
+describe('relations/CssAlphaImageLoader', function () {
+  it('should handle a simple test case', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/CssAlphaImageLoader/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -17,7 +17,7 @@ describe('relations/CssAlphaImageLoader', function() {
     expect(assetGraph, 'to contain relations', 'CssAlphaImageLoader', 3);
 
     assetGraph.findAssets({
-      fileName: 'foo.png'
+      fileName: 'foo.png',
     })[0].url = `${assetGraph.root}images/quux.png`;
 
     expect(

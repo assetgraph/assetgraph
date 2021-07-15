@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/JavaScriptServiceWorkerRegistration', function() {
-  it('should populate the relation', async function() {
+describe('relations/JavaScriptServiceWorkerRegistration', function () {
+  it('should populate the relation', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/JavaScriptServiceWorkerRegistration'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -22,12 +22,12 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     expect(assetGraph, 'to contain assets', 'JavaScript', 2);
   });
 
-  it('should read the href correctly', async function() {
+  it('should read the href correctly', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/JavaScriptServiceWorkerRegistration'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
 
@@ -45,12 +45,12 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     );
   });
 
-  it('should write the href correctly', async function() {
+  it('should write the href correctly', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/JavaScriptServiceWorkerRegistration'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -63,14 +63,14 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     );
 
     const relation = assetGraph.findRelations({
-      type: 'JavaScriptServiceWorkerRegistration'
+      type: 'JavaScriptServiceWorkerRegistration',
     })[0];
 
     expect(relation, 'to satisfy', {
       href: 'sw.js',
       from: {
-        text: expect.it('not to contain', 'static/serviceworker.js')
-      }
+        text: expect.it('not to contain', 'static/serviceworker.js'),
+      },
     });
 
     relation.to.url = 'static/serviceworker.js';
@@ -78,23 +78,23 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     expect(relation, 'to satisfy', {
       href: 'static/serviceworker.js',
       from: {
-        text: expect.it('to contain', 'static/serviceworker.js')
-      }
+        text: expect.it('to contain', 'static/serviceworker.js'),
+      },
     });
   });
 
-  it('should throw when inlining', async function() {
+  it('should throw when inlining', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/JavaScriptServiceWorkerRegistration'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
     const relation = assetGraph.findRelations({
-      type: 'JavaScriptServiceWorkerRegistration'
+      type: 'JavaScriptServiceWorkerRegistration',
     })[0];
 
     expect(
@@ -104,18 +104,18 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     );
   });
 
-  it('should throw when detaching', async function() {
+  it('should throw when detaching', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/JavaScriptServiceWorkerRegistration'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
     const relation = assetGraph.findRelations({
-      type: 'JavaScriptServiceWorkerRegistration'
+      type: 'JavaScriptServiceWorkerRegistration',
     })[0];
 
     expect(
@@ -125,18 +125,18 @@ describe('relations/JavaScriptServiceWorkerRegistration', function() {
     );
   });
 
-  it('should throw when attaching', async function() {
+  it('should throw when attaching', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/JavaScriptServiceWorkerRegistration'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
 
     const relation = assetGraph.findRelations({
-      type: 'JavaScriptServiceWorkerRegistration'
+      type: 'JavaScriptServiceWorkerRegistration',
     })[0];
 
     expect(

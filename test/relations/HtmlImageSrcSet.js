@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', async function() {
-  it('should handle a test case with an existing <img srcset=...> element', async function() {
+describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', async function () {
+  it('should handle a test case with an existing <img srcset=...> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlImageSrcSet/existing'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -29,12 +29,12 @@ describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', a
     );
   });
 
-  it('should allow non-URL encoded commas in the srcset urls as long as they are not the first or the last character', async function() {
+  it('should allow non-URL encoded commas in the srcset urls as long as they are not the first or the last character', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlImageSrcSet/commas'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -58,16 +58,15 @@ describe('relations/HtmlImageSrcSet, relations/SrcSet, relations/SrcSetEntry', a
     );
   });
 
-  describe('with an alternative attributeName', function() {
-    it('should update that attribute when the href is changed', function() {
+  describe('with an alternative attributeName', function () {
+    it('should update that attribute when the href is changed', function () {
       const assetGraph = new AssetGraph({
-        root: __dirname
+        root: __dirname,
       });
 
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
-        text:
-          '<!DOCTYPE html><html><body><img srcset="http://example.com/foo.jpg 2x, banner-phone.jpeg?foo,bar 100w 2x"></body></html>'
+        text: '<!DOCTYPE html><html><body><img srcset="http://example.com/foo.jpg 2x, banner-phone.jpeg?foo,bar 100w 2x"></body></html>',
       });
 
       const htmlImageSrcSet = htmlAsset.outgoingRelations[0];

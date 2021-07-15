@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/SystemJsBundle', function() {
-  it('should handle a test case with a JavaScript asset that has a #SystemJsBundle directive', async function() {
+describe('relations/SystemJsBundle', function () {
+  it('should handle a test case with a JavaScript asset that has a #SystemJsBundle directive', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/SystemJsBundle/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -21,7 +21,7 @@ describe('relations/SystemJsBundle', function() {
     }
 
     assetGraph.findAssets({
-      fileName: 'foo.js'
+      fileName: 'foo.js',
     })[0].url = `${assetGraph.root}bar.js`;
 
     expect(
@@ -41,7 +41,7 @@ describe('relations/SystemJsBundle', function() {
     assetGraph.findAssets({ type: 'JavaScript' })[0].addRelation(
       {
         type: 'SystemJsBundle',
-        to: assetGraph.findAssets({ fileName: 'bar.js' })[0]
+        to: assetGraph.findAssets({ fileName: 'bar.js' })[0],
       },
       'last'
     );

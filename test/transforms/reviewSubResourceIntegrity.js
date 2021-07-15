@@ -3,14 +3,14 @@ const expect = require('../unexpected-with-plugins');
 const sinon = require('sinon');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('transforms/reviewSubResourceIntegrity', function() {
-  describe('in update mode', function() {
-    it('should add integrity attributes', async function() {
+describe('transforms/reviewSubResourceIntegrity', function () {
+  describe('in update mode', function () {
+    it('should add integrity attributes', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/reviewSubResourceIntegrity/noExistingIntegrityAttributes/'
-        )
+        ),
       });
       await assetGraph.loadAssets('index.html');
       await assetGraph.populate();
@@ -27,19 +27,19 @@ describe('transforms/reviewSubResourceIntegrity', function() {
       );
     });
 
-    describe('with the algorithm option', function() {
-      it('should add integrity attributes with that algorithm', async function() {
+    describe('with the algorithm option', function () {
+      it('should add integrity attributes with that algorithm', async function () {
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/reviewSubResourceIntegrity/noExistingIntegrityAttributes/'
-          )
+          ),
         });
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.reviewSubResourceIntegrity(undefined, {
           update: true,
-          algorithm: 'sha384'
+          algorithm: 'sha384',
         });
 
         const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
@@ -54,12 +54,12 @@ describe('transforms/reviewSubResourceIntegrity', function() {
       });
     });
 
-    it('should leave existing integrity tokens alone', async function() {
+    it('should leave existing integrity tokens alone', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/reviewSubResourceIntegrity/existingIntegrityAttributes/'
-        )
+        ),
       });
       await assetGraph.loadAssets('index.html');
       await assetGraph.populate();
@@ -76,21 +76,21 @@ describe('transforms/reviewSubResourceIntegrity', function() {
       );
     });
 
-    describe('with single:true', function() {
-      it('should warn and overwrite existing access tokens if they do not match', async function() {
+    describe('with single:true', function () {
+      it('should warn and overwrite existing access tokens if they do not match', async function () {
         const warnSpy = sinon.spy().named('warn');
         const assetGraph = new AssetGraph({
           root: pathModule.resolve(
             __dirname,
             '../../testdata/transforms/reviewSubResourceIntegrity/wrongExistingIntegrityAttributes/'
-          )
+          ),
         });
         assetGraph.on('warn', warnSpy);
         await assetGraph.loadAssets('index.html');
         await assetGraph.populate();
         await assetGraph.reviewSubResourceIntegrity(undefined, {
           update: true,
-          single: true
+          single: true,
         });
 
         const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
@@ -118,14 +118,14 @@ describe('transforms/reviewSubResourceIntegrity', function() {
     });
   });
 
-  describe('in validate mode', function() {
-    it('should complain about invalid hashes', async function() {
+  describe('in validate mode', function () {
+    it('should complain about invalid hashes', async function () {
       const warnSpy = sinon.spy().named('warn');
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/reviewSubResourceIntegrity/wrongExistingIntegrityAttributes/'
-        )
+        ),
       });
       assetGraph.on('warn', warnSpy);
       await assetGraph.loadAssets('index.html');
@@ -146,13 +146,13 @@ describe('transforms/reviewSubResourceIntegrity', function() {
       });
     });
 
-    it('should not complain when at least one hash is correct', async function() {
+    it('should not complain when at least one hash is correct', async function () {
       const warnSpy = sinon.spy().named('warn');
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/reviewSubResourceIntegrity/multipleHashes/'
-        )
+        ),
       });
       assetGraph.on('warn', warnSpy);
       await assetGraph.loadAssets('index.html');

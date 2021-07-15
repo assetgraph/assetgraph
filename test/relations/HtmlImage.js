@@ -1,10 +1,10 @@
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlImage', function() {
+describe('relations/HtmlImage', function () {
   let assetGraph;
   let htmlAsset;
-  beforeEach(function() {
+  beforeEach(function () {
     assetGraph = new AssetGraph({ root: __dirname });
   });
 
@@ -12,13 +12,13 @@ describe('relations/HtmlImage', function() {
     htmlAsset = assetGraph.addAsset({
       type: 'Html',
       url: `${assetGraph.root}index.html`,
-      text: html
+      text: html,
     });
   }
 
-  describe('#decoding', function() {
-    describe('invoked as a getter', function() {
-      it('should retrieve the trimmed, lower cased decoding attribute', function() {
+  describe('#decoding', function () {
+    describe('invoked as a getter', function () {
+      it('should retrieve the trimmed, lower cased decoding attribute', function () {
         initial(
           '<!DOCTYPE html><html><body><img src="foo.png" decoding=" ASYNC "></body></html>'
         );
@@ -30,8 +30,8 @@ describe('relations/HtmlImage', function() {
       });
     });
 
-    describe('invoked as a setter', function() {
-      it('should trim, lower case and update the decoding attribute', function() {
+    describe('invoked as a setter', function () {
+      it('should trim, lower case and update the decoding attribute', function () {
         initial('<!DOCTYPE html><html><body><img src="foo.png"></body></html>');
         assetGraph.findRelations({ type: 'HtmlImage' })[0].decoding = ' ASYNC ';
         expect(
@@ -41,7 +41,7 @@ describe('relations/HtmlImage', function() {
         );
       });
 
-      it('should remove decoding attribute when set to a falsy value', function() {
+      it('should remove decoding attribute when set to a falsy value', function () {
         initial(
           '<!DOCTYPE html><html><body><img src="foo.png" decoding="async"></body></html>'
         );
@@ -55,14 +55,14 @@ describe('relations/HtmlImage', function() {
     });
   });
 
-  describe('#attach', function() {
-    it('should support the decoding property when adding an HtmlImage relation', function() {
+  describe('#attach', function () {
+    it('should support the decoding property when adding an HtmlImage relation', function () {
       initial('<!DOCTYPE html><html><head></head><body></body></html>');
       htmlAsset.addRelation(
         {
           type: 'HtmlImage',
           decoding: ' ASYNC ',
-          to: 'https://example.com/foo.png'
+          to: 'https://example.com/foo.png',
         },
         'first'
       );
@@ -75,8 +75,8 @@ describe('relations/HtmlImage', function() {
     });
   });
 
-  describe('#detach', function() {
-    it('should store the decoding attribute and use it when reattaching', function() {
+  describe('#detach', function () {
+    it('should store the decoding attribute and use it when reattaching', function () {
       initial(
         '<!DOCTYPE html><html><body><img src="foo.png" decoding="async"></body></html>'
       );
@@ -91,8 +91,8 @@ describe('relations/HtmlImage', function() {
     });
   });
 
-  describe('with an alternative attributeName', function() {
-    it('should update that attribute when the href is changed', function() {
+  describe('with an alternative attributeName', function () {
+    it('should update that attribute when the href is changed', function () {
       initial('<!DOCTYPE html><html><body><img src="foo.png"></body></html>');
 
       const htmlImage = htmlAsset.outgoingRelations[0];

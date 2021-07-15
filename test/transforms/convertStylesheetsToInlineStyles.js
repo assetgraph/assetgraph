@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('transforms/convertStylesheetsToInlineStyles', function() {
-  it('should convert all stylesheets to inline styles', async function() {
+describe('transforms/convertStylesheetsToInlineStyles', function () {
+  it('should convert all stylesheets to inline styles', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/convertStylesheetsToInlineStyles/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -25,7 +25,7 @@ describe('transforms/convertStylesheetsToInlineStyles', function() {
 
     expect(assetGraph, 'to contain assets', 7);
     expect(assetGraph, 'to contain no relations', {
-      type: { $in: ['HtmlStyle', 'CssImport'] }
+      type: { $in: ['HtmlStyle', 'CssImport'] },
     });
     expect(assetGraph, 'to contain relations', 'HtmlStyleAttribute', 5);
 

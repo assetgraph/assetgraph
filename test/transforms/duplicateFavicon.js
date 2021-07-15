@@ -3,13 +3,13 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const urlTools = require('urltools');
 
-describe('transforms.duplicateFavicon', function() {
-  it('should handle a referenced favicon.ico', async function() {
+describe('transforms.duplicateFavicon', function () {
+  it('should handle a referenced favicon.ico', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/duplicateFavicon/referencedFavicon'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -20,14 +20,14 @@ describe('transforms.duplicateFavicon', function() {
     expect(assetGraph, 'to contain relation', 'HtmlShortcutIcon');
     expect(assetGraph, 'to contain relation', {
       type: 'HtmlShortcutIcon',
-      href: 'favicon.copy.ico'
+      href: 'favicon.copy.ico',
     });
     expect(assetGraph, 'to contain assets', 'Ico', 2);
     expect(assetGraph, 'to contain asset', {
-      url: urlTools.resolveUrl(assetGraph.root, 'favicon.ico')
+      url: urlTools.resolveUrl(assetGraph.root, 'favicon.ico'),
     });
     expect(assetGraph, 'to contain asset', {
-      url: urlTools.resolveUrl(assetGraph.root, 'favicon.copy.ico')
+      url: urlTools.resolveUrl(assetGraph.root, 'favicon.copy.ico'),
     });
     expect(
       assetGraph.findAssets({ type: 'Html' })[0].text,
@@ -42,12 +42,12 @@ describe('transforms.duplicateFavicon', function() {
     );
   });
 
-  it('should handle an unreferenced favicon.ico', async function() {
+  it('should handle an unreferenced favicon.ico', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/duplicateFavicon/unreferencedFavicon'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html', 'noHead.html', 'favicon.ico')
@@ -61,13 +61,13 @@ describe('transforms.duplicateFavicon', function() {
     expect(assetGraph, 'to contain assets', 'Ico', 2);
     expect(assetGraph, 'to contain asset', {
       url: urlTools.resolveUrl(assetGraph.root, 'favicon.ico'),
-      isInitial: true
+      isInitial: true,
     });
     expect(assetGraph, 'to contain asset', {
       url: urlTools.resolveUrl(assetGraph.root, 'favicon.copy.ico'),
       isInitial(isInitial) {
         return !isInitial;
-      }
+      },
     });
     expect(
       assetGraph.findAssets({ type: 'Html', fileName: 'index.html' })[0].text,

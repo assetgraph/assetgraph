@@ -9,17 +9,17 @@ function getFunctionBodySource(fn) {
   );
 }
 
-describe('transforms/pullGlobalsIntoVariables', function() {
-  it('should handle a test case with a single JavaScript asset', async function() {
+describe('transforms/pullGlobalsIntoVariables', function () {
+  it('should handle a test case with a single JavaScript asset', async function () {
     const assetGraph = new AssetGraph();
     await assetGraph
       .loadAssets({
         type: 'JavaScript',
         url: 'file:///foo.js',
-        text: getFunctionBodySource(function() {
+        text: getFunctionBodySource(function () {
           /* eslint-disable */
           var MATHMIN = 2;
-          var parseInt = function() {
+          var parseInt = function () {
             return 99;
           };
           function parseFloat() {
@@ -45,7 +45,7 @@ describe('transforms/pullGlobalsIntoVariables', function() {
             setTimeout(foo, 100);
           }, 100);
           /* eslint-enable */
-        })
+        }),
       })
       .pullGlobalsIntoVariables(
         { type: 'JavaScript' },
@@ -59,8 +59,8 @@ describe('transforms/pullGlobalsIntoVariables', function() {
             'Math.min',
             'isFinite',
             'parseFloat',
-            'parseInt'
-          ]
+            'parseInt',
+          ],
         }
       );
 
@@ -71,14 +71,14 @@ describe('transforms/pullGlobalsIntoVariables', function() {
     expect(
       assetGraph.findAssets({ type: 'JavaScript' })[0].text,
       'to equal',
-      getFunctionBodySource(function() {
+      getFunctionBodySource(function () {
         /* eslint-disable */
         var SETTIMEOUT = setTimeout,
           MATH = Math,
           MATHMIN_ = MATH.min,
           FOOBARQUUX = foo.bar.quux;
         var MATHMIN = 2;
-        var parseInt = function() {
+        var parseInt = function () {
           return 99;
         };
         function parseFloat() {
@@ -105,16 +105,16 @@ describe('transforms/pullGlobalsIntoVariables', function() {
     );
   });
 
-  it('should handle a case with a single JavaScript when run with wrapInFunction:true', async function() {
+  it('should handle a case with a single JavaScript when run with wrapInFunction:true', async function () {
     const assetGraph = new AssetGraph();
     await assetGraph
       .loadAssets({
         type: 'JavaScript',
         url: 'file:///foo.js',
         /* eslint-disable */
-        text: getFunctionBodySource(function() {
+        text: getFunctionBodySource(function () {
           alert(Math.floor(10.8) + Math.floor(20.4) + Math.min(3, 5));
-        })
+        }),
         /* eslint-enable */
       })
       .pullGlobalsIntoVariables(
@@ -130,8 +130,8 @@ describe('transforms/pullGlobalsIntoVariables', function() {
       assetGraph.findAssets({ type: 'JavaScript' })[0].text,
       'to equal',
       /* eslint-disable */
-      getFunctionBodySource(function() {
-        (function(MATH, MATHFLOOR) {
+      getFunctionBodySource(function () {
+        (function (MATH, MATHFLOOR) {
           alert(MATHFLOOR(10.8) + MATHFLOOR(20.4) + MATH.min(3, 5));
         })(Math, Math.floor);
       })
@@ -139,19 +139,19 @@ describe('transforms/pullGlobalsIntoVariables', function() {
     );
   });
 
-  it('should handle a test case with a single JavaScript asset when run with stringLiterals:true', async function() {
+  it('should handle a test case with a single JavaScript asset when run with stringLiterals:true', async function () {
     const assetGraph = new AssetGraph();
     await assetGraph
       .loadAssets({
         type: 'JavaScript',
         url: 'file:///foo.js',
-        text: getFunctionBodySource(function() {
+        text: getFunctionBodySource(function () {
           /* eslint-disable */
           var a = 'foobarquux',
             b = 'foobarquux';
           f.foobarquux();
           /* eslint-enable */
-        })
+        }),
       })
       .pullGlobalsIntoVariables(
         { type: 'JavaScript' },
@@ -165,7 +165,7 @@ describe('transforms/pullGlobalsIntoVariables', function() {
     expect(
       assetGraph.findAssets({ type: 'JavaScript' })[0].text,
       'to equal',
-      getFunctionBodySource(function() {
+      getFunctionBodySource(function () {
         /* eslint-disable */
         var FOOBARQUUX = 'foobarquux';
         var a = FOOBARQUUX,

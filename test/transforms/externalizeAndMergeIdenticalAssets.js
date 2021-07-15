@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('transforms/externalizeRelations and transforms/mergeIdenticalAssets', function() {
-  it('should handle a test case with multiple inline scripts then externalizing them', async function() {
+describe('transforms/externalizeRelations and transforms/mergeIdenticalAssets', function () {
+  it('should handle a test case with multiple inline scripts then externalizing them', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/externalizeAndMergeIdenticalAssets/'
-      )
+      ),
     });
     await assetGraph.loadAssets('first.html', 'second.html');
     await assetGraph.populate();
@@ -27,30 +27,30 @@ describe('transforms/externalizeRelations and transforms/mergeIdenticalAssets', 
 
     const typeTwos = assetGraph.findAssets({
       type: 'JavaScript',
-      text: { $regex: /TypeTwo/ }
+      text: { $regex: /TypeTwo/ },
     });
     expect(typeTwos, 'to have length', 1);
     expect(assetGraph, 'to contain relation', {
       from: { fileName: 'first.html' },
-      to: typeTwos[0]
+      to: typeTwos[0],
     });
     expect(assetGraph, 'to contain relation', {
       from: { fileName: 'second.html' },
-      to: typeTwos[0]
+      to: typeTwos[0],
     });
 
     const typeThrees = assetGraph.findAssets({
       type: 'JavaScript',
-      text: { $regex: /TypeThree/ }
+      text: { $regex: /TypeThree/ },
     });
     expect(typeThrees, 'to have length', 1);
     expect(assetGraph, 'to contain relation', {
       from: { fileName: 'first.html' },
-      to: typeThrees[0]
+      to: typeThrees[0],
     });
     expect(assetGraph, 'to contain relation', {
       from: { fileName: 'second.html' },
-      to: typeThrees[0]
+      to: typeThrees[0],
     });
 
     expect(
@@ -59,8 +59,8 @@ describe('transforms/externalizeRelations and transforms/mergeIdenticalAssets', 
       {
         from: assetGraph.findAssets({ fileName: 'first.html' })[0],
         to: {
-          text: { $regex: /TypeOne/ }
-        }
+          text: { $regex: /TypeOne/ },
+        },
       },
       2
     );

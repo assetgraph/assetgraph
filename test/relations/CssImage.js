@@ -3,26 +3,26 @@ const expect = require('../unexpected-with-plugins');
 const _ = require('lodash');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/CssImage', function() {
-  it('should handle a test case with a bunch of different CssImage relations', async function() {
+describe('relations/CssImage', function () {
+  it('should handle a test case with a bunch of different CssImage relations', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/CssImage/combo/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.css');
     await assetGraph.populate();
 
     expect(assetGraph, 'to contain relations', 'CssImage', 17);
     assetGraph.findAssets({
-      fileName: 'foo.png'
+      fileName: 'foo.png',
     })[0].url = `${assetGraph.root}dir/foo2.png`;
 
     expect(
       _.map(
         assetGraph.findRelations({
-          to: assetGraph.findAssets({ fileName: 'foo2.png' })[0]
+          to: assetGraph.findAssets({ fileName: 'foo2.png' })[0],
         }),
         'href'
       ),
@@ -44,7 +44,7 @@ describe('relations/CssImage', function() {
         'dir/foo2.png',
         'dir/foo2.png',
         'dir/foo2.png',
-        'dir/foo2.png'
+        'dir/foo2.png',
       ]
     );
 
@@ -55,12 +55,12 @@ describe('relations/CssImage', function() {
     );
   });
 
-  it('should handle a test case with three CssImage relations pointing at mouse cursors', async function() {
+  it('should handle a test case with three CssImage relations pointing at mouse cursors', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/CssImage/mouseCursors/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -72,12 +72,12 @@ describe('relations/CssImage', function() {
     expect(assetGraph, 'to contain relations', 'CssImage', 3);
   });
 
-  it('should handle a test case with a CssImage relation inside a @media rule', async function() {
+  it('should handle a test case with a CssImage relation inside a @media rule', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/CssImage/mediaRule/'
-      )
+      ),
     });
     await assetGraph.loadAssets('relationInMediaRule.css');
     await assetGraph.populate();
@@ -85,12 +85,12 @@ describe('relations/CssImage', function() {
     expect(assetGraph, 'to contain relations', 'CssImage', 2);
   });
 
-  it('should handle a test case with multiple CSS filter urls', async function() {
+  it('should handle a test case with multiple CSS filter urls', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/CssImage/filter/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.css');
     await assetGraph.populate();
@@ -100,7 +100,7 @@ describe('relations/CssImage', function() {
     expect(assetGraph, 'to contain asset', { type: 'Svg', isInline: true });
   });
 
-  it('should handle a test case with a singlequote in a background-image url(...)', async function() {
+  it('should handle a test case with a singlequote in a background-image url(...)', async function () {
     const assetGraph = new AssetGraph();
     assetGraph.addAsset({
       type: 'Html',
@@ -125,7 +125,7 @@ describe('relations/CssImage', function() {
                 </head>
                 <body></body>
                 </html>
-            `
+            `,
     });
 
     expect(assetGraph, 'to contain assets', { type: 'Png' }, 4);
@@ -137,15 +137,18 @@ describe('relations/CssImage', function() {
       .it('to contain', "'foo%27bar.png.bogus'")
       .and('to contain', "'bar%27quux.png.bogus'")
       .and('to contain', "'blah%22baz.png.bogus'")
-      .and('to contain', "'blerg%22zyp.png.bogus'")(text);
+      .and(
+        'to contain',
+        "'blerg%22zyp.png.bogus'"
+      )(text);
   });
 
-  it('should support detecting mask-image properties as relations', async function() {
+  it('should support detecting mask-image properties as relations', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/CssImage/maskImage/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();

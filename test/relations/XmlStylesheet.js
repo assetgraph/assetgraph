@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/XmlStylesheet', function() {
-  it('should handle a test case with inline elements', async function() {
+describe('relations/XmlStylesheet', function () {
+  it('should handle a test case with inline elements', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/XmlStylesheet/'
-      )
+      ),
     });
     await assetGraph.loadAssets('logo.svg');
     await assetGraph.populate();
@@ -25,7 +25,7 @@ describe('relations/XmlStylesheet', function() {
     );
 
     assetGraph.findAssets({
-      type: 'Css'
+      type: 'Css',
     })[0].url = 'external.css';
 
     const relation = assetGraph.findRelations()[0];

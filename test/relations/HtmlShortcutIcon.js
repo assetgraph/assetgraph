@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlShortcutIcon', function() {
-  it('should handle a test case with an existing <link rel="shortcut icon" href="..."> elements in different variants', async function() {
+describe('relations/HtmlShortcutIcon', function () {
+  it('should handle a test case with an existing <link rel="shortcut icon" href="..."> elements in different variants', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlShortcutIcon/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -18,13 +18,13 @@ describe('relations/HtmlShortcutIcon', function() {
     const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
     const pngAsset = assetGraph.findAssets({ type: 'Png' })[0];
     const firstExistingHtmlShortcutIconRelation = assetGraph.findRelations({
-      type: 'HtmlShortcutIcon'
+      type: 'HtmlShortcutIcon',
     })[0];
 
     htmlAsset.addRelation(
       {
         type: 'HtmlShortcutIcon',
-        to: pngAsset
+        to: pngAsset,
       },
       'after',
       firstExistingHtmlShortcutIconRelation
@@ -32,7 +32,7 @@ describe('relations/HtmlShortcutIcon', function() {
     htmlAsset.addRelation(
       {
         type: 'HtmlShortcutIcon',
-        to: pngAsset
+        to: pngAsset,
       },
       'before',
       firstExistingHtmlShortcutIconRelation

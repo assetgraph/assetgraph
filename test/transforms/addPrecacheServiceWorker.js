@@ -3,20 +3,20 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const sinon = require('sinon');
 
-describe('transforms/addPrecacheServiceWorker', function() {
-  it('should add a precache service worker to a single HTML page', async function() {
+describe('transforms/addPrecacheServiceWorker', function () {
+  it('should add a precache service worker to a single HTML page', async function () {
     const warnSpy = sinon.spy().named('warn');
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/addPrecacheServiceWorker/singlePage/'
-      )
+      ),
     });
     await assetGraph
       .on('warn', warnSpy)
       .loadAssets('index.html')
       .populate({
-        followRelations: { to: { protocol: 'file:' } }
+        followRelations: { to: { protocol: 'file:' } },
       });
 
     expect(warnSpy, 'to have calls satisfying', () =>
@@ -38,7 +38,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
       isLoaded: false,
-      fileName: 'notFound.js'
+      fileName: 'notFound.js',
     });
 
     await assetGraph.addPrecacheServiceWorker({ isInitial: true });
@@ -52,7 +52,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
       1
     );
     expect(assetGraph, 'to contain asset', {
-      url: `${assetGraph.root}index-precache-service-worker.js`
+      url: `${assetGraph.root}index-precache-service-worker.js`,
     });
     expect(
       assetGraph.findAssets({ type: 'Html' })[0].text,
@@ -60,7 +60,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
       "<script>if ('serviceWorker' in navigator)"
     );
     const serviceWorker = assetGraph.findAssets({
-      fileName: 'index-precache-service-worker.js'
+      fileName: 'index-precache-service-worker.js',
     })[0];
     expect(serviceWorker.text, 'to contain', 'foo.png')
       .and('to contain', '"/modernBrowsers.js".toString(\'url\')')
@@ -68,19 +68,19 @@ describe('transforms/addPrecacheServiceWorker', function() {
       .and('not to contain', 'fixIE6.js');
   });
 
-  describe('with minify:true', function() {
-    it('should minify the service worker and the registration script', async function() {
+  describe('with minify:true', function () {
+    it('should minify the service worker and the registration script', async function () {
       const warnSpy = sinon.spy().named('warn');
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/addPrecacheServiceWorker/singlePage/'
-        )
+        ),
       });
       assetGraph.on('warn', warnSpy);
       await assetGraph.loadAssets('index.html');
       await assetGraph.populate({
-        followRelations: { to: { protocol: 'file:' } }
+        followRelations: { to: { protocol: 'file:' } },
       });
       await assetGraph.addPrecacheServiceWorker(
         { isInitial: true },
@@ -92,21 +92,21 @@ describe('transforms/addPrecacheServiceWorker', function() {
         'to contain assets',
         {
           type: 'JavaScript',
-          _toBeMinified: true
+          _toBeMinified: true,
         },
         2
       );
     });
   });
 
-  it('should relay informational messages from sw-precache', async function() {
+  it('should relay informational messages from sw-precache', async function () {
     const infoSpy = sinon.spy().named('info');
     const warnSpy = sinon.spy().named('warn');
     await new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/addPrecacheServiceWorker/singlePage/'
-      )
+      ),
     })
       .on('info', infoSpy)
       .on('warn', warnSpy)
@@ -122,12 +122,12 @@ describe('transforms/addPrecacheServiceWorker', function() {
     });
   });
 
-  it('should add precache service workers to multiple pages', async function() {
+  it('should add precache service workers to multiple pages', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/addPrecacheServiceWorker/multiPage/'
-      )
+      ),
     });
     await assetGraph.loadAssets('*.html').populate();
 
@@ -149,30 +149,30 @@ describe('transforms/addPrecacheServiceWorker', function() {
     expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 5);
     expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
     expect(assetGraph, 'to contain asset', {
-      url: `${assetGraph.root}index-precache-service-worker.js`
+      url: `${assetGraph.root}index-precache-service-worker.js`,
     }).and('to contain asset', {
-      url: `${assetGraph.root}otherpage-precache-service-worker.js`
+      url: `${assetGraph.root}otherpage-precache-service-worker.js`,
     });
   });
 
-  it('should give up when the target location of the service worker is clobbered', async function() {
+  it('should give up when the target location of the service worker is clobbered', async function () {
     const warnSpy = sinon.spy().named('warn');
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/addPrecacheServiceWorker/singlePage/'
-      )
+      ),
     });
     await assetGraph
       .on('warn', warnSpy)
       .loadAssets('index.html')
       .populate({ followRelations: { to: { protocol: 'file:' } } })
-      .queue(assetGraph => {
+      .queue((assetGraph) => {
         assetGraph.addAsset(
           new AssetGraph().addAsset({
             type: 'JavaScript',
             url: `${assetGraph.root}index-precache-service-worker.js`,
-            text: 'alert("hello");'
+            text: 'alert("hello");',
           })
         );
       });
@@ -190,13 +190,13 @@ describe('transforms/addPrecacheServiceWorker', function() {
     );
   });
 
-  describe('in single:true mode', function() {
-    it('should add the same shared precache service worker to multiple pages', async function() {
+  describe('in single:true mode', function () {
+    it('should add the same shared precache service worker to multiple pages', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/addPrecacheServiceWorker/multiPage/'
-        )
+        ),
       });
       await assetGraph.loadAssets('*.html').populate();
 
@@ -221,29 +221,29 @@ describe('transforms/addPrecacheServiceWorker', function() {
       expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
       expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
       expect(assetGraph, 'to contain asset', {
-        url: `${assetGraph.root}index-otherpage-precache-service-worker.js`
+        url: `${assetGraph.root}index-otherpage-precache-service-worker.js`,
       });
       expect(
         assetGraph,
         'to contain relations',
         {
-          to: { fileName: 'index-otherpage-precache-service-worker.js' }
+          to: { fileName: 'index-otherpage-precache-service-worker.js' },
         },
         2
       );
     });
 
-    it('should only add one fragment to the service worker file name per unique basename', async function() {
+    it('should only add one fragment to the service worker file name per unique basename', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/addPrecacheServiceWorker/multiPage/'
-        )
+        ),
       });
       await assetGraph.loadAssets('*.html').populate();
 
       assetGraph.findAssets({
-        fileName: 'otherpage.html'
+        fileName: 'otherpage.html',
       })[0].url = `${assetGraph.root}somewhereelse/index.html`;
 
       await assetGraph.addPrecacheServiceWorker(
@@ -252,16 +252,16 @@ describe('transforms/addPrecacheServiceWorker', function() {
       );
 
       expect(assetGraph, 'to contain asset', {
-        url: `${assetGraph.root}index-precache-service-worker.js`
+        url: `${assetGraph.root}index-precache-service-worker.js`,
       });
     });
 
-    it('should put the service worker at a common path prefix', async function() {
+    it('should put the service worker at a common path prefix', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/addPrecacheServiceWorker/multiPageInDifferentDirectories/'
-        )
+        ),
       });
       await assetGraph.loadAssets('**/*.html').populate();
 
@@ -285,30 +285,27 @@ describe('transforms/addPrecacheServiceWorker', function() {
       expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 3);
       expect(assetGraph, 'to contain relations', 'HtmlScript', 2);
       expect(assetGraph, 'to contain asset', {
-        url: `${assetGraph.root}path/to/index-otherpage-precache-service-worker.js`
+        url: `${assetGraph.root}path/to/index-otherpage-precache-service-worker.js`,
       });
       expect(
         assetGraph,
         'to contain relations',
         {
-          to: { fileName: 'index-otherpage-precache-service-worker.js' }
+          to: { fileName: 'index-otherpage-precache-service-worker.js' },
         },
         2
       );
     });
 
-    it('should create multiple service workers when when the participating HTML assets reside on different schemes', async function() {
+    it('should create multiple service workers when when the participating HTML assets reside on different schemes', async function () {
       const infoSpy = sinon.spy().named('info');
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/addPrecacheServiceWorker/multiPage/'
-        )
+        ),
       });
-      await assetGraph
-        .on('info', infoSpy)
-        .loadAssets('*.html')
-        .populate();
+      await assetGraph.on('info', infoSpy).loadAssets('*.html').populate();
 
       assetGraph.findAssets({ fileName: 'index.html' })[0].url =
         'https://example.com/blah.html';
@@ -319,10 +316,10 @@ describe('transforms/addPrecacheServiceWorker', function() {
       );
 
       expect(assetGraph, 'to contain asset', {
-        url: 'https://example.com/blah-precache-service-worker.js'
+        url: 'https://example.com/blah-precache-service-worker.js',
       });
       expect(assetGraph, 'to contain asset', {
-        url: `${assetGraph.root}otherpage-precache-service-worker.js`
+        url: `${assetGraph.root}otherpage-precache-service-worker.js`,
       });
 
       expect(infoSpy, 'to have a call satisfying', () =>
@@ -334,18 +331,15 @@ describe('transforms/addPrecacheServiceWorker', function() {
       );
     });
 
-    it('should create multiple service workers when when the participating HTML assets reside on different hosts', async function() {
+    it('should create multiple service workers when when the participating HTML assets reside on different hosts', async function () {
       const infoSpy = sinon.spy().named('info');
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/addPrecacheServiceWorker/multiPage/'
-        )
+        ),
       });
-      await assetGraph
-        .on('info', infoSpy)
-        .loadAssets('*.html')
-        .populate();
+      await assetGraph.on('info', infoSpy).loadAssets('*.html').populate();
 
       assetGraph.findAssets({ fileName: 'index.html' })[0].url =
         'https://example.com/blah.html';
@@ -358,10 +352,10 @@ describe('transforms/addPrecacheServiceWorker', function() {
       );
 
       expect(assetGraph, 'to contain asset', {
-        url: 'https://example.com/blah-precache-service-worker.js'
+        url: 'https://example.com/blah-precache-service-worker.js',
       });
       expect(assetGraph, 'to contain asset', {
-        url: 'https://yadda.com/foo-precache-service-worker.js'
+        url: 'https://yadda.com/foo-precache-service-worker.js',
       });
 
       expect(infoSpy, 'to have a call satisfying', () =>
@@ -373,13 +367,13 @@ describe('transforms/addPrecacheServiceWorker', function() {
       );
     });
 
-    it('should respect a root-relative canonicalRoot', async function() {
+    it('should respect a root-relative canonicalRoot', async function () {
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/transforms/addPrecacheServiceWorker/multiPage/'
         ),
-        canonicalRoot: '/my-app'
+        canonicalRoot: '/my-app',
       });
       const htmlAssets = await assetGraph.loadAssets('*.html');
 
@@ -396,7 +390,7 @@ describe('transforms/addPrecacheServiceWorker', function() {
         `navigator.serviceWorker.register('/my-app/index-otherpage-precache-service-worker.js');`
       );
       const serviceWorker = assetGraph.findAssets({
-        fileName: 'index-otherpage-precache-service-worker.js'
+        fileName: 'index-otherpage-precache-service-worker.js',
       })[0];
       expect(
         serviceWorker.text,
@@ -406,15 +400,15 @@ describe('transforms/addPrecacheServiceWorker', function() {
     });
   });
 
-  it('use a config at the canonical path if present', async function() {
+  it('use a config at the canonical path if present', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/addPrecacheServiceWorker/customConfig/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').populate({
-      followRelations: { to: { protocol: 'file:' } }
+      followRelations: { to: { protocol: 'file:' } },
     });
 
     await assetGraph.addPrecacheServiceWorker({ isInitial: true });
@@ -426,29 +420,29 @@ describe('transforms/addPrecacheServiceWorker', function() {
       1
     );
     const serviceWorker = assetGraph.findAssets({
-      fileName: 'index-precache-service-worker.js'
+      fileName: 'index-precache-service-worker.js',
     })[0];
     expect(serviceWorker.text, 'to contain', 'ag-test-url');
   });
 
-  it('use a config at custom path if present', async function() {
+  it('use a config at custom path if present', async function () {
     const root = pathModule.resolve(
       __dirname,
       '../../testdata/transforms/addPrecacheServiceWorker/customConfig/'
     );
     const assetGraph = new AssetGraph({
-      root
+      root,
     });
     await assetGraph.loadAssets('index.html').populate({
-      followRelations: { to: { protocol: 'file:' } }
+      followRelations: { to: { protocol: 'file:' } },
     });
 
     await assetGraph.addPrecacheServiceWorker(
       {
-        isInitial: true
+        isInitial: true,
       },
       {
-        configPath: pathModule.resolve(root, 'custom-sw-precache-config.js')
+        configPath: pathModule.resolve(root, 'custom-sw-precache-config.js'),
       }
     );
 
@@ -459,32 +453,32 @@ describe('transforms/addPrecacheServiceWorker', function() {
       1
     );
     const serviceWorker = assetGraph.findAssets({
-      fileName: 'index-precache-service-worker.js'
+      fileName: 'index-precache-service-worker.js',
     })[0];
     expect(serviceWorker.text, 'to contain', 'ag-test-url-at-custom-path');
   });
 
-  it('warn if config at custom path is not present', async function() {
+  it('warn if config at custom path is not present', async function () {
     const warnSpy = sinon.spy().named('warn');
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/addPrecacheServiceWorker/customConfig/'
-      )
+      ),
     });
     await assetGraph
       .on('warn', warnSpy)
       .loadAssets('index.html')
       .populate({
-        followRelations: { to: { protocol: 'file:' } }
+        followRelations: { to: { protocol: 'file:' } },
       });
 
     await assetGraph.addPrecacheServiceWorker(
       {
-        isInitial: true
+        isInitial: true,
       },
       {
-        configPath: 'not-found-sw-precache-config.js'
+        configPath: 'not-found-sw-precache-config.js',
       }
     );
 
@@ -499,24 +493,24 @@ describe('transforms/addPrecacheServiceWorker', function() {
     );
   });
 
-  it('should throw if the staticFileGlobs option is given', async function() {
+  it('should throw if the staticFileGlobs option is given', async function () {
     const warnSpy = sinon.spy().named('warn');
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/addPrecacheServiceWorker/customConfigWithStaticFileGlobs/'
-      )
+      ),
     });
     await assetGraph
       .on('warn', warnSpy)
       .loadAssets('index.html')
       .populate({
-        followRelations: { to: { protocol: 'file:' } }
+        followRelations: { to: { protocol: 'file:' } },
       });
 
     await expect(
       assetGraph.addPrecacheServiceWorker({
-        isInitial: true
+        isInitial: true,
       }),
       'to be rejected with',
       'addPrecacheServiceWorker transform: The staticFileGlobs config option is not supported at present, sorry!'

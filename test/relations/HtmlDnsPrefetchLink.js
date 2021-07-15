@@ -2,21 +2,21 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlDnsPrefetchLink', function() {
+describe('relations/HtmlDnsPrefetchLink', function () {
   function getHtmlAsset(htmlString) {
     return new AssetGraph({ root: __dirname }).addAsset({
       type: 'Html',
       text:
         htmlString || '<!doctype html><html><head></head><body></body></html>',
-      url: `file://${__dirname}doesntmatter.html`
+      url: `file://${__dirname}doesntmatter.html`,
     });
   }
 
-  describe('#inline', function() {
-    it('should throw', function() {
+  describe('#inline', function () {
+    it('should throw', function () {
       const relation = getHtmlAsset().addRelation({
         type: 'HtmlDnsPrefetchLink',
-        to: { url: 'index.html' }
+        to: { url: 'index.html' },
       });
 
       expect(
@@ -27,24 +27,24 @@ describe('relations/HtmlDnsPrefetchLink', function() {
     });
   });
 
-  it('should handle a test case with an existing <link rel="dns-prefetch"> element', async function() {
+  it('should handle a test case with an existing <link rel="dns-prefetch"> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlDnsPrefetchLink/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
 
     expect(assetGraph, 'to contain relation', 'HtmlDnsPrefetchLink');
   });
 
-  it('should update the href', async function() {
+  it('should update the href', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlDnsPrefetchLink/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
 
@@ -57,13 +57,13 @@ describe('relations/HtmlDnsPrefetchLink', function() {
     expect(link, 'to satisfy', { href: 'foo.bar' });
   });
 
-  describe('when programmatically adding a relation', function() {
-    it('should handle crossorigin url', function() {
+  describe('when programmatically adding a relation', function () {
+    it('should handle crossorigin url', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
           type: 'HtmlDnsPrefetchLink',
-          href: 'http://assetgraph.org'
+          href: 'http://assetgraph.org',
         },
         'firstInHead'
       );

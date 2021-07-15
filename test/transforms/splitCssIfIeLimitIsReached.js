@@ -3,17 +3,17 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const _ = require('lodash');
 
-describe('transforms/splitCssIfIeLimitIsReached', function() {
-  it('should handle a simple Css test case', async function() {
+describe('transforms/splitCssIfIeLimitIsReached', function () {
+  it('should handle a simple Css test case', async function () {
     const infos = [];
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/splitCssIfIeLimitIsReached/'
-      )
+      ),
     });
 
-    assetGraph.on('info', function(err) {
+    assetGraph.on('info', function (err) {
       infos.push(err);
     });
 
@@ -45,7 +45,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
     expect(
       assetGraph
         .findAssets({ type: 'Css' })
-        .map(cssAsset => cssAsset.parseTree.nodes.length)
+        .map((cssAsset) => cssAsset.parseTree.nodes.length)
         .reduce((prev, current) => prev + current, 0),
       'to equal',
       4096
@@ -65,38 +65,38 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
         type: 'Css',
         text: assetGraph
           .findAssets({ type: 'Css' })
-          .map(function(cssAsset) {
+          .map(function (cssAsset) {
             return cssAsset.text;
           })
-          .join('')
+          .join(''),
       })
       .parseTree.toString();
 
     expect(assetGraph._parseTreeBefore.toString(), 'to equal', `${cssAfter}\n`);
 
     cssAssets = assetGraph.findAssets({
-      type: 'Css'
+      type: 'Css',
     });
     const pngRelations = assetGraph.findRelations({
       to: {
-        type: 'Png'
-      }
+        type: 'Png',
+      },
     });
 
     expect(pngRelations, 'to have length', 1);
     expect(pngRelations[0].from, 'to be', cssAssets[1]);
   });
 
-  it('should handle a real life huge Css test case', async function() {
+  it('should handle a real life huge Css test case', async function () {
     const infos = [];
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/splitCssIfIeLimitIsReached/'
-      )
+      ),
     });
 
-    assetGraph.on('info', function(err) {
+    assetGraph.on('info', function (err) {
       infos.push(err);
     });
 
@@ -118,7 +118,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
         assetGraph,
         'to contain asset',
         {
-          url: new RegExp(`\\.${extension}(?:$|#)`)
+          url: new RegExp(`\\.${extension}(?:$|#)`),
         },
         1
       );
@@ -134,7 +134,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
     expect(
       assetGraph
         .findAssets({ type: 'Css' })
-        .map(cssAsset => cssAsset.parseTree.nodes.length)
+        .map((cssAsset) => cssAsset.parseTree.nodes.length)
         .reduce((prev, current) => prev + current, 0),
       'to equal',
       6039
@@ -160,10 +160,12 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
 
     const text = assetGraph
       .findAssets({ type: 'Css' })
-      .map(cssAsset => cssAsset.text)
+      .map((cssAsset) => cssAsset.text)
       .join('\n');
-    const parseTreeAfter = new AssetGraph().addAsset({ type: 'Css', text })
-      .parseTree;
+    const parseTreeAfter = new AssetGraph().addAsset({
+      type: 'Css',
+      text,
+    }).parseTree;
 
     expect(
       assetGraph._parseTreeBefore.toString().replace(/\n+/g, '\n'),
@@ -173,17 +175,17 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
 
     for (const extension of ['png', 'gif', 'svg', 'ttf', 'eot', 'woff']) {
       expect(assetGraph, 'to contain asset', {
-        url: new RegExp(`\\.${extension}(?:$|#)`)
+        url: new RegExp(`\\.${extension}(?:$|#)`),
       });
     }
   });
 
-  it('should handle a test case with an inline stylesheet', async function() {
+  it('should handle a test case with an inline stylesheet', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/splitCssIfIeLimitIsReached/'
-      )
+      ),
     });
 
     await assetGraph.loadAssets('inline.html');
@@ -203,18 +205,18 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
     expect(_.map(assetGraph.findAssets({ type: 'Css' }), 'text'), 'to equal', [
       '\n          .a {color: #aaa;}\n          .b {color: #bbb;}',
       '\n          .c {color: #ccc;}\n          .d {color: #ddd;}',
-      '\n          .e {color: #eee;}'
+      '\n          .e {color: #eee;}',
     ]);
     const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
     expect(htmlAsset.text.match(/<style>/g), 'to have length', 3);
   });
 
-  it('should handle a test case with an inline stylesheet that has rules in media queries', async function() {
+  it('should handle a test case with an inline stylesheet that has rules in media queries', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/splitCssIfIeLimitIsReached/'
-      )
+      ),
     });
 
     await assetGraph.loadAssets('inlineWithMedia.html');
@@ -235,19 +237,19 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
       '\n          @media screen {\n              .a, .quux, .baz {color: #aaa;}\n          }',
       '\n          .b {color: #bbb;}\n          .c {color: #ccc;}',
       '\n          @media print {\n             .d {color: #ddd;}\n             .e {color: #eee;}\n             .f {color: #fff;}\n          }',
-      '\n          .hey {color: #000;}\n          .there {color: #fff;}'
+      '\n          .hey {color: #000;}\n          .there {color: #fff;}',
     ]);
 
     const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
     expect(htmlAsset.text.match(/<style>/g), 'to have length', 4);
   });
 
-  it('should leave a big stylesheet alone if minimumIeVersion is 10', async function() {
+  it('should leave a big stylesheet alone if minimumIeVersion is 10', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/splitCssIfIeLimitIsReached/'
-      )
+      ),
     });
 
     await assetGraph.loadAssets({
@@ -255,7 +257,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
       url: 'http://example.com/foo.html',
       text: `<!DOCTYPE html><html><body><style>${new Array(5000).join(
         'body {color: red;}'
-      )}</style></body></html>`
+      )}</style></body></html>`,
     });
     await assetGraph.populate();
 
@@ -268,12 +270,12 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
     expect(assetGraph, 'to contain asset', 'Css');
   });
 
-  it('should split a big stylesheet alone if minimumIeVersion is 9', async function() {
+  it('should split a big stylesheet alone if minimumIeVersion is 9', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/splitCssIfIeLimitIsReached/'
-      )
+      ),
     });
 
     await assetGraph.loadAssets({
@@ -281,7 +283,7 @@ describe('transforms/splitCssIfIeLimitIsReached', function() {
       url: 'http://example.com/foo.html',
       text: `<!DOCTYPE html><html><body><style>${new Array(5000).join(
         'body {color: red;}'
-      )}</style></body></html>`
+      )}</style></body></html>`,
     });
     await assetGraph.populate();
 

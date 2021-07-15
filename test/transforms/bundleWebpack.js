@@ -2,13 +2,13 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('bundleWebpack', function() {
-  it('should create a bundle consisting of a single file', async function() {
+describe('bundleWebpack', function () {
+  it('should create a bundle consisting of a single file', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/simple/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -17,47 +17,44 @@ describe('bundleWebpack', function() {
 
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
-      isLoaded: true
+      isLoaded: true,
     });
     expect(assetGraph, 'to contain relation', {
       type: 'HtmlScript',
-      from: { fileName: 'index.html' }
+      from: { fileName: 'index.html' },
     });
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
-      fileName: { $regex: /bundle/ }
+      fileName: { $regex: /bundle/ },
     });
     expect(
       assetGraph.findRelations({
         from: { fileName: 'index.html' },
-        to: { fileName: { $regex: /bundle/ } }
+        to: { fileName: { $regex: /bundle/ } },
       })[0].to.text,
       'to contain',
       "alert('main!');"
     );
   });
 
-  it('should create a bundle when no webpack bundle is referenced', async function() {
+  it('should create a bundle when no webpack bundle is referenced', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/unusedwebpack/'
-      )
+      ),
     });
-    await assetGraph
-      .loadAssets('index.html')
-      .bundleWebpack()
-      .populate();
+    await assetGraph.loadAssets('index.html').bundleWebpack().populate();
 
     expect(assetGraph, 'to contain no relation', 'HtmlScript');
   });
 
-  it('should create a bundle consisting of a single file with a different publicPath', async function() {
+  it('should create a bundle consisting of a single file with a different publicPath', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/publicPath/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -66,32 +63,32 @@ describe('bundleWebpack', function() {
 
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
-      isLoaded: true
+      isLoaded: true,
     });
     expect(assetGraph, 'to contain relation', {
       type: 'HtmlScript',
-      from: { fileName: 'index.html' }
+      from: { fileName: 'index.html' },
     });
     expect(assetGraph, 'to contain asset', {
       type: 'JavaScript',
-      fileName: { $regex: /bundle/ }
+      fileName: { $regex: /bundle/ },
     });
     expect(
       assetGraph.findRelations({
         from: { fileName: 'index.html' },
-        to: { fileName: { $regex: /bundle/ } }
+        to: { fileName: { $regex: /bundle/ } },
       })[0].to.text,
       'to contain',
       "alert('main!');"
     );
   });
 
-  it('should discover relations in the bundle', async function() {
+  it('should discover relations in the bundle', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/relationInBundle/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -100,16 +97,16 @@ describe('bundleWebpack', function() {
     expect(assetGraph, 'to contain asset', { type: 'Png', isLoaded: true });
     expect(assetGraph, 'to contain relation', {
       type: 'JavaScriptStaticUrl',
-      to: { fileName: { $regex: /^[a-f0-9]{32}\.png$/ } }
+      to: { fileName: { $regex: /^[a-f0-9]{32}\.png$/ } },
     });
   });
 
-  it('should pick up source maps from webpack', async function() {
+  it('should pick up source maps from webpack', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/sourceMaps/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -139,33 +136,33 @@ describe('bundleWebpack', function() {
             firstGetBoundingClientRectNode =
               firstGetBoundingClientRectNode || node;
           }
-        }
+        },
       }
     );
     expect(alertInScriptWithoutExistingSourceMap, 'to satisfy', {
       loc: {
         source: `${assetGraph.root}noExistingSourceMap.js`,
         start: {
-          line: 3
-        }
-      }
+          line: 3,
+        },
+      },
     });
     expect(firstGetBoundingClientRectNode, 'to satisfy', {
       loc: {
         source: `${assetGraph.root}jquery-1.10.1.js`,
         start: {
-          line: 9591
-        }
-      }
+          line: 9591,
+        },
+      },
     });
   });
 
-  it('should make sources: [...] references relative when they point out of the web root', async function() {
+  it('should make sources: [...] references relative when they point out of the web root', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/sourceMapsAndNodeModules/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.bundleWebpack();
@@ -177,29 +174,26 @@ describe('bundleWebpack', function() {
       [
         'webpack://webpack/bootstrap',
         '/main.js',
-        '../../../../../node_modules/createerror/lib/createError.js'
+        '../../../../../node_modules/createerror/lib/createError.js',
       ]
     );
   });
 
-  it('should pick up CSS assets in the output bundles', async function() {
+  it('should pick up CSS assets in the output bundles', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/css/'
-      )
+      ),
     });
-    await assetGraph
-      .loadAssets('index.html')
-      .bundleWebpack()
-      .applySourceMaps();
+    await assetGraph.loadAssets('index.html').bundleWebpack().applySourceMaps();
 
     expect(assetGraph, 'to contain asset', { type: 'Css', isLoaded: true });
     expect(assetGraph, 'to contain relation', {
       type: 'HtmlStyle',
       href: '/dist/main.css',
       from: { type: 'Html' },
-      to: { type: 'Css' }
+      to: { type: 'Css' },
     });
     expect(
       assetGraph.findAssets({ type: 'Html' })[0].text,
@@ -208,28 +202,28 @@ describe('bundleWebpack', function() {
     );
   });
 
-  it('should not build unused bundles', async function() {
+  it('should not build unused bundles', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/namedUnusedBundles/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html').bundleWebpack();
 
     expect(assetGraph, 'to contain asset', {
       fileName: 'bundle.main.js',
-      isLoaded: true
+      isLoaded: true,
     }).and('to contain no asset', { fileName: 'bundle.unused.js' });
   });
 
   // Started breaking some time in late January 2019 due to some internal webpack problem
-  it.skip('should support code splitting via require.ensure', async function() {
+  it.skip('should support code splitting via require.ensure', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/codeSplit/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
@@ -244,26 +238,26 @@ describe('bundleWebpack', function() {
     );
     expect(assetGraph, 'to contain relation', {
       from: { fileName: 'index.html' },
-      to: { fileName: 'bundle.js' }
+      to: { fileName: 'bundle.js' },
     }).and('to contain relation', {
       from: { fileName: 'bundle.js' },
-      to: { fileName: { $regex: /^[01]\.bundle\.js$/ } }
+      to: { fileName: { $regex: /^[01]\.bundle\.js$/ } },
     });
   });
 
   // Started breaking some time in late January 2019 due to some internal webpack problem
-  it.skip('should support code splitting via require.ensure and wildcards', async function() {
+  it.skip('should support code splitting via require.ensure and wildcards', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/wildcardCodeSplit/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
       .bundleWebpack()
       .populate({
-        followRelations: { type: { $not: 'SourceMapSource' } }
+        followRelations: { type: { $not: 'SourceMapSource' } },
       });
 
     expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 4);
@@ -277,7 +271,7 @@ describe('bundleWebpack', function() {
   });
 
   // Started breaking some time in late January 2019 due to some internal webpack problem
-  it.skip('should support code splitting via require.ensure and wildcards when chunkFilename is used', async function() {
+  it.skip('should support code splitting via require.ensure and wildcards when chunkFilename is used', async function () {
     // The presence of
     //   { output: { ... chunkFilename: 'js/bundle.[name].[chunkhash:8].js' } }
     // in the webpack config makes the dynamic loader come out as:
@@ -289,13 +283,13 @@ describe('bundleWebpack', function() {
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/bundleWebpack/wildcardCodeSplitWithChunkfilename/'
-      )
+      ),
     });
     await assetGraph
       .loadAssets('index.html')
       .bundleWebpack()
       .populate({
-        followRelations: { type: { $not: 'SourceMapSource' } }
+        followRelations: { type: { $not: 'SourceMapSource' } },
       });
 
     expect(assetGraph, 'to contain relations', 'JavaScriptStaticUrl', 4);

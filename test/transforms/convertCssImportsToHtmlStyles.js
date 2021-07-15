@@ -6,21 +6,21 @@ const AssetGraph = require('../../lib/AssetGraph');
 // Helper for extracting all values of a specific property from a postcss rule
 function getPropertyValues(container, propertyName) {
   return container.nodes
-    .filter(function(node) {
+    .filter(function (node) {
       return node.prop === propertyName;
     })
-    .map(function(node) {
+    .map(function (node) {
       return node.value;
     });
 }
 
-describe('transforms/convertCssImportsToHtmlStyles', function() {
-  it('should converting Css @import rules to <link rel="stylesheet">', async function() {
+describe('transforms/convertCssImportsToHtmlStyles', function () {
+  it('should converting Css @import rules to <link rel="stylesheet">', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/transforms/convertCssImportsToHtmlStyles/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -31,7 +31,7 @@ describe('transforms/convertCssImportsToHtmlStyles', function() {
     expect(assetGraph, 'to contain relations', 'CssImport', 3);
     expect(assetGraph, 'to contain relation', {
       type: 'CssImport',
-      hrefType: 'rootRelative'
+      hrefType: 'rootRelative',
     });
 
     await assetGraph.convertCssImportsToHtmlStyles({ type: 'Html' });
@@ -40,7 +40,7 @@ describe('transforms/convertCssImportsToHtmlStyles', function() {
     expect(assetGraph, 'to contain relations', 'HtmlStyle', 4);
     expect(assetGraph, 'to contain relation', {
       type: 'HtmlStyle',
-      hrefType: 'rootRelative'
+      hrefType: 'rootRelative',
     });
     expect(assetGraph, 'to contain no relations', { type: 'CssImport' });
     expect(

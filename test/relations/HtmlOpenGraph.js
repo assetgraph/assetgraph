@@ -2,21 +2,21 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlOpenGraph', function() {
+describe('relations/HtmlOpenGraph', function () {
   function getHtmlAsset(htmlString) {
     return new AssetGraph({ root: __dirname }).addAsset({
       type: 'Html',
       text:
         htmlString || '<!doctype html><html><head></head><body></body></html>',
-      url: `file://${__dirname}doesntmatter.html`
+      url: `file://${__dirname}doesntmatter.html`,
     });
   }
 
-  describe('#inline', function() {
-    it('should throw', function() {
+  describe('#inline', function () {
+    it('should throw', function () {
       const relation = getHtmlAsset().addRelation({
         type: 'HtmlOpenGraph',
-        to: { url: 'index.html' }
+        to: { url: 'index.html' },
       });
 
       expect(
@@ -27,24 +27,24 @@ describe('relations/HtmlOpenGraph', function() {
     });
   });
 
-  it('should handle a test case with an existing <link rel="preconnect"> element', async function() {
+  it('should handle a test case with an existing <link rel="preconnect"> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlOpenGraph/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
 
     expect(assetGraph, 'to contain relation', 'HtmlOpenGraph', 10);
   });
 
-  it('should update the href', async function() {
+  it('should update the href', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlOpenGraph/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
 
@@ -58,14 +58,14 @@ describe('relations/HtmlOpenGraph', function() {
     expect(link, 'to satisfy', { href: 'foo.bar' });
   });
 
-  describe('when programmatically adding a relation', function() {
-    it('should handle crossorigin url', function() {
+  describe('when programmatically adding a relation', function () {
+    it('should handle crossorigin url', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
           type: 'HtmlOpenGraph',
           href: 'http://assetgraph.org',
-          ogProperty: 'og:image'
+          ogProperty: 'og:image',
         },
         'firstInHead'
       );

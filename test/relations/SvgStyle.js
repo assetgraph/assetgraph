@@ -2,10 +2,10 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/SvgStyle', function() {
-  it('should handle a test case with inline <style> elements', async function() {
+describe('relations/SvgStyle', function () {
+  it('should handle a test case with inline <style> elements', async function () {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/relations/SvgStyle/')
+      root: pathModule.resolve(__dirname, '../../testdata/relations/SvgStyle/'),
     });
     await assetGraph.loadAssets('kiwi.svg');
     await assetGraph.populate();
@@ -28,7 +28,7 @@ describe('relations/SvgStyle', function() {
     const cloneSvgStyle = svg.addRelation(
       {
         type: 'SvgStyle',
-        to: clone
+        to: clone,
       },
       'first'
     );
@@ -49,7 +49,7 @@ describe('relations/SvgStyle', function() {
     const svgStyle = svg.addRelation(
       {
         type: 'SvgStyle',
-        to: clone.clone()
+        to: clone.clone(),
       },
       'first'
     );

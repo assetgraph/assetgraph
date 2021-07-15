@@ -1,11 +1,11 @@
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlRelation', function() {
-  describe('#attach', function() {
-    describe('when there is an existing relation in both <head> and <body>', function() {
+describe('relations/HtmlRelation', function () {
+  describe('#attach', function () {
+    describe('when there is an existing relation in both <head> and <body>', function () {
       let htmlAsset;
-      beforeEach(function() {
+      beforeEach(function () {
         htmlAsset = new AssetGraph().addAsset({
           type: 'Html',
           text:
@@ -13,15 +13,15 @@ describe('relations/HtmlRelation', function() {
             '<html>' +
             '<head><link rel="stylesheet" href="existingheadstyles.css"></head>' +
             '<body><div><link rel="stylesheet" href="existingbodystyles.css"></div></body>' +
-            '</html>'
+            '</html>',
         });
       });
 
-      it('should support a position of firstInHead', function() {
+      it('should support a position of firstInHead', function () {
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlStyle',
-            to: { url: 'newstyles.css' }
+            to: { url: 'newstyles.css' },
           },
           'firstInHead'
         );
@@ -36,11 +36,11 @@ describe('relations/HtmlRelation', function() {
         );
       });
 
-      it('should support a position of lastInHead', function() {
+      it('should support a position of lastInHead', function () {
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlStyle',
-            to: { url: 'newstyles.css' }
+            to: { url: 'newstyles.css' },
           },
           'lastInHead'
         );
@@ -55,11 +55,11 @@ describe('relations/HtmlRelation', function() {
         );
       });
 
-      it('should support a position of firstInBody', function() {
+      it('should support a position of firstInBody', function () {
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlStyle',
-            to: { url: 'newstyles.css' }
+            to: { url: 'newstyles.css' },
           },
           'firstInBody'
         );
@@ -74,11 +74,11 @@ describe('relations/HtmlRelation', function() {
         );
       });
 
-      it('should support a position of lastInBody', function() {
+      it('should support a position of lastInBody', function () {
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlStyle',
-            to: { url: 'newstyles.css' }
+            to: { url: 'newstyles.css' },
           },
           'lastInBody'
         );
@@ -93,12 +93,12 @@ describe('relations/HtmlRelation', function() {
         );
       });
 
-      describe('with position=first', function() {
-        it('should honor the preferredPosition of the relation type when adding the first relation of its kind, even when other relation types are present', function() {
+      describe('with position=first', function () {
+        it('should honor the preferredPosition of the relation type when adding the first relation of its kind, even when other relation types are present', function () {
           const relation = htmlAsset.addRelation(
             {
               type: 'HtmlScript',
-              to: { url: 'script.js', type: 'JavaScript' }
+              to: { url: 'script.js', type: 'JavaScript' },
             },
             'first'
           );
@@ -114,12 +114,12 @@ describe('relations/HtmlRelation', function() {
         });
       });
 
-      describe('with position=last', function() {
-        it('should honor the preferredPosition of the relation type when adding the first relation of its kind, even when other relation types are present', function() {
+      describe('with position=last', function () {
+        it('should honor the preferredPosition of the relation type when adding the first relation of its kind, even when other relation types are present', function () {
           const relation = htmlAsset.addRelation(
             {
               type: 'HtmlScript',
-              to: { url: 'script.js', type: 'JavaScript' }
+              to: { url: 'script.js', type: 'JavaScript' },
             },
             'last'
           );
@@ -137,14 +137,14 @@ describe('relations/HtmlRelation', function() {
     });
   });
 
-  describe('attaching to <head>', function() {
+  describe('attaching to <head>', function () {
     function getHtmlAsset(htmlString) {
       return new AssetGraph({ root: __dirname }).addAsset({
         type: 'Html',
         text:
           htmlString ||
           '<!doctype html><html><head></head><body></body></html>',
-        url: 'doesntmatter.html'
+        url: 'doesntmatter.html',
       });
     }
 
@@ -152,8 +152,8 @@ describe('relations/HtmlRelation', function() {
       return asset.assetGraph.findRelations(query)[0];
     }
 
-    describe('with no <head> tag', function() {
-      it('should create a <head> tag', function() {
+    describe('with no <head> tag', function () {
+      it('should create a <head> tag', function () {
         const htmlAsset = getHtmlAsset('<html></html>');
 
         expect(htmlAsset.outgoingRelations, 'to satisfy', []);
@@ -161,23 +161,23 @@ describe('relations/HtmlRelation', function() {
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
           },
           'firstInHead'
         );
 
         expect(htmlAsset.parseTree.head, 'not to be null');
         expect(htmlAsset.outgoingRelations, 'to satisfy', [
-          expect.it('to be', relation)
+          expect.it('to be', relation),
         ]);
       });
     });
 
-    describe('with no relations in <head> tag', function() {
-      describe('with no relations in <body> tag', function() {
+    describe('with no relations in <head> tag', function () {
+      describe('with no relations in <body> tag', function () {
         const html = '<!doctype html><html><head></head><body></body></html>';
 
-        it('should append relation node to <head> when using "first"-position', function() {
+        it('should append relation node to <head> when using "first"-position', function () {
           const htmlAsset = getHtmlAsset(html);
           expect(htmlAsset.outgoingRelations, 'to satisfy', []);
 
@@ -186,20 +186,20 @@ describe('relations/HtmlRelation', function() {
           const relation = htmlAsset.addRelation(
             {
               type: 'HtmlPreloadLink',
-              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
             },
             'firstInHead'
           );
 
           expect(htmlAsset.outgoingRelations, 'to satisfy', [
-            expect.it('to be', relation)
+            expect.it('to be', relation),
           ]);
           expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
-            expect.it('to be', relation.node)
+            expect.it('to be', relation.node),
           ]);
         });
 
-        it('should append relation node to <head> when using "last"-position', function() {
+        it('should append relation node to <head> when using "last"-position', function () {
           const htmlAsset = getHtmlAsset(html);
 
           expect(htmlAsset.outgoingRelations, 'to satisfy', []);
@@ -208,25 +208,25 @@ describe('relations/HtmlRelation', function() {
           const relation = htmlAsset.addRelation(
             {
               type: 'HtmlPreloadLink',
-              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
             },
             'lastInHead'
           );
 
           expect(htmlAsset.outgoingRelations, 'to satisfy', [
-            expect.it('to be', relation)
+            expect.it('to be', relation),
           ]);
           expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
-            expect.it('to be', relation.node)
+            expect.it('to be', relation.node),
           ]);
         });
       });
 
-      describe('with relations in <body> tag', function() {
+      describe('with relations in <body> tag', function () {
         const html =
           '<!DOCTYPE html><html><head></head><body><script src="bundle.js"></script></body></html>';
 
-        it('should append relation node to <head> when using "first"-position', function() {
+        it('should append relation node to <head> when using "first"-position', function () {
           const htmlAsset = getHtmlAsset(html);
 
           expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -234,9 +234,9 @@ describe('relations/HtmlRelation', function() {
               'to be',
               findRelation(htmlAsset, {
                 type: 'HtmlScript',
-                href: 'bundle.js'
+                href: 'bundle.js',
               })
-            )
+            ),
           ]);
 
           expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', []);
@@ -244,7 +244,7 @@ describe('relations/HtmlRelation', function() {
           const relation = htmlAsset.addRelation(
             {
               type: 'HtmlPreloadLink',
-              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
             },
             'firstInHead'
           );
@@ -255,31 +255,31 @@ describe('relations/HtmlRelation', function() {
               'to be',
               findRelation(htmlAsset, {
                 type: 'HtmlScript',
-                href: 'bundle.js'
+                href: 'bundle.js',
               })
-            )
+            ),
           ]);
 
           expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
-            expect.it('to be', relation.node)
+            expect.it('to be', relation.node),
           ]);
         });
 
-        it('should append relation node to <head> when using "last"-position', function() {
+        it('should append relation node to <head> when using "last"-position', function () {
           const htmlAsset = getHtmlAsset(html);
 
           expect(htmlAsset.outgoingRelations, 'to satisfy', [
             {
               type: 'HtmlScript',
-              href: 'bundle.js'
-            }
+              href: 'bundle.js',
+            },
           ]);
           expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', []);
 
           const relation = htmlAsset.addRelation(
             {
               type: 'HtmlPreloadLink',
-              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+              to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
             },
             'lastInHead'
           );
@@ -290,19 +290,19 @@ describe('relations/HtmlRelation', function() {
               'to be',
               findRelation(htmlAsset, {
                 type: 'HtmlScript',
-                href: 'bundle.js'
+                href: 'bundle.js',
               })
-            )
+            ),
           ]);
 
           expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
-            expect.it('to be', relation.node)
+            expect.it('to be', relation.node),
           ]);
         });
       });
     });
 
-    describe('with relations in <head> tag', function() {
+    describe('with relations in <head> tag', function () {
       const html = [
         '<!DOCTYPE html><html><head>',
         '<meta id="tag1" charset="utf-8">',
@@ -310,10 +310,10 @@ describe('relations/HtmlRelation', function() {
         '<meta id="tag3" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">',
         '<link id="tag4" rel="shortcut icon" href="/favicon.svg">',
         '<meta id="tag5" name="description" content="content description">',
-        '</head><body><script src="bundle.js"></script></body></html>'
+        '</head><body><script src="bundle.js"></script></body></html>',
       ].join('');
 
-      it('should append relation node first in <head> when using "first"-position', function() {
+      it('should append relation node first in <head> when using "first"-position', function () {
         const htmlAsset = getHtmlAsset(html);
 
         expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -321,23 +321,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -345,13 +345,13 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
 
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
           },
           'firstInHead'
         );
@@ -362,23 +362,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -387,11 +387,11 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
       });
 
-      it('should append relation node last in <head> when using "last"-position', function() {
+      it('should append relation node last in <head> when using "last"-position', function () {
         const htmlAsset = getHtmlAsset(html);
 
         expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -399,23 +399,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -423,13 +423,13 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
 
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
           },
           'lastInHead'
         );
@@ -439,14 +439,14 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it('to be', relation),
@@ -454,9 +454,9 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -465,11 +465,11 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
-          expect.it('to be', relation.node)
+          expect.it('to be', relation.node),
         ]);
       });
 
-      it('should append relation node before <link id="tag2" rel="shortcut icon" href="/favicon.ico">', function() {
+      it('should append relation node before <link id="tag2" rel="shortcut icon" href="/favicon.ico">', function () {
         const htmlAsset = getHtmlAsset(html);
 
         expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -477,23 +477,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -501,13 +501,13 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
 
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
           },
           'before',
           htmlAsset.parseTree.querySelector('#tag2')
@@ -519,23 +519,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -544,11 +544,11 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
       });
 
-      it('should append relation node after <meta id="tag1" charset="utf-8">', function() {
+      it('should append relation node after <meta id="tag1" charset="utf-8">', function () {
         const htmlAsset = getHtmlAsset(html);
 
         expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -556,23 +556,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -580,13 +580,13 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
 
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
           },
           'after',
           htmlAsset.parseTree.querySelector('#tag1')
@@ -598,23 +598,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -623,11 +623,11 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
       });
 
-      it('should append relation node before <meta id="tag3" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">', function() {
+      it('should append relation node before <meta id="tag3" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">', function () {
         const htmlAsset = getHtmlAsset(html);
 
         expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -635,23 +635,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -659,13 +659,13 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
 
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
           },
           'before',
           htmlAsset.parseTree.querySelector('#tag3')
@@ -676,7 +676,7 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it('to be', relation),
@@ -684,16 +684,16 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -702,11 +702,11 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', relation.node),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
       });
 
-      it('should append relation node after <meta id="tag3" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">', function() {
+      it('should append relation node after <meta id="tag3" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">', function () {
         const htmlAsset = getHtmlAsset(html);
 
         expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -714,23 +714,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -738,13 +738,13 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
 
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
           },
           'after',
           htmlAsset.parseTree.querySelector('#tag3')
@@ -755,7 +755,7 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it('to be', relation),
@@ -763,16 +763,16 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -781,11 +781,11 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', relation.node),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
       });
 
-      it('should append relation node before <meta id="tag5" name="description" content="content description">', function() {
+      it('should append relation node before <meta id="tag5" name="description" content="content description">', function () {
         const htmlAsset = getHtmlAsset(html);
 
         expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -793,23 +793,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -817,13 +817,13 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
 
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
           },
           'before',
           htmlAsset.parseTree.querySelector('#tag5')
@@ -834,14 +834,14 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it('to be', relation),
@@ -849,9 +849,9 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -860,11 +860,11 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
           expect.it('to be', relation.node),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
       });
 
-      it('should append relation node after <link id="tag4" rel="shortcut icon" href="/favicon.svg">', function() {
+      it('should append relation node after <link id="tag4" rel="shortcut icon" href="/favicon.svg">', function () {
         const htmlAsset = getHtmlAsset(html);
 
         expect(htmlAsset.outgoingRelations, 'to satisfy', [
@@ -872,23 +872,23 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -896,13 +896,13 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag2')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
 
         const relation = htmlAsset.addRelation(
           {
             type: 'HtmlPreloadLink',
-            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' }
+            to: { type: 'JavaScript', text: '"use strict"', url: 'foo.js' },
           },
           'after',
           htmlAsset.parseTree.querySelector('#tag4')
@@ -913,14 +913,14 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.ico'
+              href: '/favicon.ico',
             })
           ),
           expect.it(
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlShortcutIcon',
-              href: '/favicon.svg'
+              href: '/favicon.svg',
             })
           ),
           expect.it('to be', relation),
@@ -928,9 +928,9 @@ describe('relations/HtmlRelation', function() {
             'to be',
             findRelation(htmlAsset, {
               type: 'HtmlScript',
-              href: 'bundle.js'
+              href: 'bundle.js',
             })
-          )
+          ),
         ]);
 
         expect(htmlAsset.parseTree.head.childNodes, 'to satisfy', [
@@ -939,19 +939,19 @@ describe('relations/HtmlRelation', function() {
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag3')),
           expect.it('to be', htmlAsset.parseTree.querySelector('#tag4')),
           expect.it('to be', relation.node),
-          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5'))
+          expect.it('to be', htmlAsset.parseTree.querySelector('#tag5')),
         ]);
       });
     });
   });
 
-  describe('#inline', function() {
-    it('should preserve the fragment identifier', function() {
+  describe('#inline', function () {
+    it('should preserve the fragment identifier', function () {
       const assetGraph = new AssetGraph();
       const htmlAsset = assetGraph.addAsset({
         type: 'Html',
         url: 'https://example.com/',
-        text: '<img src="image.svg#foo">'
+        text: '<img src="image.svg#foo">',
       });
 
       assetGraph.addAsset({
@@ -964,7 +964,7 @@ describe('relations/HtmlRelation', function() {
                   c2.7,0,5.1,1.2,6.8,3c1.7-1.9,4.1-3,6.8-3C27.9,1.9,32,6.1,32,11.2z"/>
               </g>
           </svg>
-        `
+        `,
       });
 
       htmlAsset.outgoingRelations[0].fragment = '#yadda';

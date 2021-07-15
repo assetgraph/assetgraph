@@ -2,10 +2,10 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('assets/Rss', function() {
-  it('should find an Rss asset', async function() {
+describe('assets/Rss', function () {
+  it('should find an Rss asset', async function () {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/assets/Rss/')
+      root: pathModule.resolve(__dirname, '../../testdata/assets/Rss/'),
     });
     await assetGraph.loadAssets('feed.rss').populate();
 
@@ -32,7 +32,7 @@ describe('assets/Rss', function() {
 
     expect(assetGraph, 'to contain asset', {
       type: 'Rss',
-      text: { $regex: /<link>http:\/\/example.com\/bar.html<\/link>/ }
+      text: { $regex: /<link>http:\/\/example.com\/bar.html<\/link>/ },
     });
   });
 });

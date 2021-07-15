@@ -3,14 +3,14 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const sinon = require('sinon');
 
-describe('relations/MsApplicationConfigPollingUri', function() {
-  it('should handle a test case with an existing <TileImage/> element', async function() {
+describe('relations/MsApplicationConfigPollingUri', function () {
+  it('should handle a test case with an existing <TileImage/> element', async function () {
     const warnSpy = sinon.spy().named('warn');
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/MsApplicationConfigPollingUri/'
-      )
+      ),
     });
     await assetGraph
       .on('warn', warnSpy)
@@ -22,27 +22,27 @@ describe('relations/MsApplicationConfigPollingUri', function() {
     );
 
     expect(assetGraph.findRelations(), 'to satisfy', [
-      { type: 'MsApplicationConfigPollingUri' }
+      { type: 'MsApplicationConfigPollingUri' },
     ]);
 
     expect(assetGraph.findAssets(), 'to satisfy', [
       { type: 'MsApplicationConfig' },
-      { type: 'Xml', fileName: 'polling-target' }
+      { type: 'Xml', fileName: 'polling-target' },
     ]);
   });
 
-  it('should update the href', async function() {
+  it('should update the href', async function () {
     const warnSpy = sinon.spy().named('warn');
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/MsApplicationConfigPollingUri/'
-      )
+      ),
     });
     await assetGraph.on('warn', warnSpy);
     await assetGraph.loadAssets({
       type: 'MsApplicationConfig',
-      url: 'IEconfig.xml'
+      url: 'IEconfig.xml',
     });
     await assetGraph.populate();
 
@@ -53,17 +53,17 @@ describe('relations/MsApplicationConfigPollingUri', function() {
     expect(assetGraph, 'to contain relation', 'MsApplicationConfigPollingUri');
 
     const relation = assetGraph.findRelations({
-      type: 'MsApplicationConfigPollingUri'
+      type: 'MsApplicationConfigPollingUri',
     })[0];
 
     relation.to.url = 'foo.bar';
 
     expect(relation, 'to satisfy', {
-      href: '/foo.bar'
+      href: '/foo.bar',
     });
   });
 
-  it('should throw when trying to inline', function() {
+  it('should throw when trying to inline', function () {
     const assetGraph = new AssetGraph();
 
     const msApplicationConfig = assetGraph.addAsset({
@@ -78,7 +78,7 @@ describe('relations/MsApplicationConfigPollingUri', function() {
                 </notification>
             </msapplication>
         </browserconfig>
-      `
+      `,
     });
 
     expect(
@@ -88,7 +88,7 @@ describe('relations/MsApplicationConfigPollingUri', function() {
     );
   });
 
-  it('should throw when trying to attach', function() {
+  it('should throw when trying to attach', function () {
     const assetGraph = new AssetGraph();
 
     const msApplicationConfig = assetGraph.addAsset({
@@ -102,33 +102,33 @@ describe('relations/MsApplicationConfigPollingUri', function() {
                 </notification>
             </msapplication>
         </browserconfig>
-      `
+      `,
     });
 
     expect(
       () =>
         msApplicationConfig.addRelation({
           type: 'MsApplicationConfigPollingUri',
-          to: { type: 'Xml', url: '/polling-target' }
+          to: { type: 'Xml', url: '/polling-target' },
         }),
       'to throw',
       'MsApplicationConfigPollingUri.attach: Not supported'
     );
   });
 
-  describe('when programmatically detaching a relation', function() {
-    it('should remove the relation and clean up', async function() {
+  describe('when programmatically detaching a relation', function () {
+    it('should remove the relation and clean up', async function () {
       const warnSpy = sinon.spy().named('warn');
       const assetGraph = new AssetGraph({
         root: pathModule.resolve(
           __dirname,
           '../../testdata/relations/MsApplicationConfigPollingUri/'
-        )
+        ),
       });
       await assetGraph.on('warn', warnSpy);
       await assetGraph.loadAssets({
         type: 'MsApplicationConfig',
-        url: 'IEconfig.xml'
+        url: 'IEconfig.xml',
       });
       await assetGraph.populate();
 
@@ -144,7 +144,7 @@ describe('relations/MsApplicationConfigPollingUri', function() {
       );
 
       const relation = assetGraph.findRelations({
-        type: 'MsApplicationConfigPollingUri'
+        type: 'MsApplicationConfigPollingUri',
       })[0];
 
       relation.detach();

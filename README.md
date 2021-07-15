@@ -168,14 +168,14 @@ Find assets by matching a regular expression against the url:
 
 ```javascript
 var localImageAssets = assetGraph.findAssets({
-  url: { $regex: /^file:.*\.(?:png|gif|jpg)$/ }
+  url: { $regex: /^file:.*\.(?:png|gif|jpg)$/ },
 });
 ```
 
 Find assets by predicate function:
 
 ```javascript
-var orphanedJavaScriptAssets = assetGraph.findAssets(function(asset) {
+var orphanedJavaScriptAssets = assetGraph.findAssets(function (asset) {
   return (
     asset.type === 'JavaScript' &&
     assetGraph.findRelations({ to: asset }).length === 0
@@ -195,7 +195,7 @@ a multi-criteria query to match:
 ```javascript
 var textBasedAssetsOnGoogleCom = assetGraph.findAssets({
   isText: true,
-  url: { $regex: /^https?:\/\/(?:www\.)google\.com\// }
+  url: { $regex: /^https?:\/\/(?:www\.)google\.com\// },
 });
 ```
 
@@ -204,7 +204,7 @@ Find assets by existence of incoming relations:
 ```javascript
 var importedCssAssets = assetGraph.findAssets({
   type: 'Css',
-  incomingRelations: { $elemMatch: { type: 'CssImport' } }
+  incomingRelations: { $elemMatch: { type: 'CssImport' } },
 });
 ```
 
@@ -216,7 +216,7 @@ Find all HtmlAnchor (`<a href=...>`) relations pointing at local images:
 ```javascript
 assetGraph.findRelations({
   type: 'HtmlAnchor',
-  to: { isImage: true, url: { $regex: /^file:/ } }
+  to: { isImage: true, url: { $regex: /^file:/ } },
 });
 ```
 
@@ -284,7 +284,7 @@ counts as a separate including asset, so in the below example
 `ie.css` and `all.css` won't be bundled together:
 
 ```html
-<!--[if IE]><link rel="stylesheet" href="ie.css"/><![endif]-->
+<!--[if IE]><link rel="stylesheet" href="ie.css" /><![endif]-->
 <link rel="stylesheet" href="all.css" />
 ```
 
@@ -484,7 +484,7 @@ body {
 will be turned into:
 
 ```html
-<!--[if IE]><link rel="stylesheet" href="foo.css"/><![endif]-->
+<!--[if IE]><link rel="stylesheet" href="foo.css" /><![endif]-->
 <!--[if !IE]>--><link rel="stylesheet" href="1234.css" /><!--<![endif]-->
 ```
 
@@ -493,7 +493,7 @@ images inlined as `data:` urls:
 
 ```css
 body {
-  background-image: url(data;image/png;base64, iVBORw0KGgoAAAANSUhE...);
+  background-image: url(data;image/png;base64 iVBORw0KGgoAAAANSUhE...);
 }
 ```
 
@@ -532,7 +532,7 @@ will be turned into:
 ```html
 <style type="text/css">
   body {
-    background-image: url(data;image/png;base64, iVBORw0KGgoAAAANSUhE...);
+    background-image: url(data;image/png;base64 iVBORw0KGgoAAAANSUhE...);
   }
 </style>
 ```
@@ -551,7 +551,7 @@ syntaxes are supported, for example:
 const [aHtml, bCss] = await assetGraph.loadAssets('a.html', 'b.css'); // Relative to assetGraph.root
 await assetGraph.loadAssets({
   url: 'http://example.com/index.html',
-  text: 'var foo = bar;' // The source is specified, won't be loaded
+  text: 'var foo = bar;', // The source is specified, won't be loaded
 });
 ```
 
@@ -684,7 +684,7 @@ Here's a simplified example taken from `buildProduction` in
 ```javascript
 await assetGraph.moveAssetsInOrder(
   { type: { $in: ['JavaScript', 'Css', 'Jpeg', 'Gif', 'Png'] } },
-  asset => `/static/${asset.md5Hex.substr(0, 10)}${asset.extension}`
+  (asset) => `/static/${asset.md5Hex.substr(0, 10)}${asset.extension}`
 );
 ```
 
@@ -739,8 +739,8 @@ await assetGraph.loadAssets('a.html');
 await assetGraph.populate({
   followRelations: {
     type: 'HtmlAnchor',
-    to: { url: { $regex: /\/[bc]\.html$/ } }
-  }
+    to: { url: { $regex: /\/[bc]\.html$/ } },
+  },
 });
 ```
 

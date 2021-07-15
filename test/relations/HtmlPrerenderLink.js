@@ -2,21 +2,21 @@ const pathModule = require('path');
 const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 
-describe('relations/HtmlPrerenderLink', function() {
+describe('relations/HtmlPrerenderLink', function () {
   function getHtmlAsset(htmlString) {
     return new AssetGraph({ root: __dirname }).addAsset({
       type: 'Html',
       text:
         htmlString || '<!doctype html><html><head></head><body></body></html>',
-      url: `file://${__dirname}doesntmatter.html`
+      url: `file://${__dirname}doesntmatter.html`,
     });
   }
 
-  describe('#inline', function() {
-    it('should throw', function() {
+  describe('#inline', function () {
+    it('should throw', function () {
       const relation = getHtmlAsset().addRelation({
         type: 'HtmlPrerenderLink',
-        to: { url: 'index.html' }
+        to: { url: 'index.html' },
       });
 
       expect(
@@ -27,12 +27,12 @@ describe('relations/HtmlPrerenderLink', function() {
     });
   });
 
-  it('should handle a test case with an existing <link rel="prerender"> element', async function() {
+  it('should handle a test case with an existing <link rel="prerender"> element', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlPrerenderLink/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -41,12 +41,12 @@ describe('relations/HtmlPrerenderLink', function() {
     expect(assetGraph, 'to contain assets', 'Html', 2);
   });
 
-  it('should update the href', async function() {
+  it('should update the href', async function () {
     const assetGraph = new AssetGraph({
       root: pathModule.resolve(
         __dirname,
         '../../testdata/relations/HtmlPrerenderLink/'
-      )
+      ),
     });
     await assetGraph.loadAssets('index.html');
     await assetGraph.populate();
@@ -54,23 +54,23 @@ describe('relations/HtmlPrerenderLink', function() {
     expect(assetGraph, 'to contain relation', 'HtmlPrerenderLink');
 
     const prerenderLink = assetGraph.findRelations({
-      type: 'HtmlPrerenderLink'
+      type: 'HtmlPrerenderLink',
     })[0];
 
     prerenderLink.to.url = 'foo.bar';
 
     expect(prerenderLink, 'to satisfy', {
-      href: 'foo.bar'
+      href: 'foo.bar',
     });
   });
 
-  describe('when programmatically adding a relation', function() {
-    it('should attach a link node in <head>', function() {
+  describe('when programmatically adding a relation', function () {
+    it('should attach a link node in <head>', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
           type: 'HtmlPrerenderLink',
-          href: 'https://example.com/'
+          href: 'https://example.com/',
         },
         'firstInHead'
       );
@@ -81,7 +81,7 @@ describe('relations/HtmlPrerenderLink', function() {
       );
     });
 
-    it('should handle crossorigin url the same', function() {
+    it('should handle crossorigin url the same', function () {
       const htmlAsset = getHtmlAsset();
       htmlAsset.addRelation(
         {
@@ -89,9 +89,9 @@ describe('relations/HtmlPrerenderLink', function() {
           to: new AssetGraph().addAsset({
             type: 'Html',
             text: '<!doctype html><html><head></head><body></body></html>',
-            url: 'http://fisk.dk/index.html'
+            url: 'http://fisk.dk/index.html',
           }),
-          as: 'script'
+          as: 'script',
         },
         'firstInHead'
       );

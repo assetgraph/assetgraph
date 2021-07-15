@@ -3,10 +3,10 @@ const expect = require('../unexpected-with-plugins');
 const AssetGraph = require('../../lib/AssetGraph');
 const Svg = require('../../lib/assets/Svg');
 
-describe('assets/Svg', function() {
-  it('should handle a combo test case with an Svg asset', async function() {
+describe('assets/Svg', function () {
+  it('should handle a combo test case with an Svg asset', async function () {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/assets/Svg/combo/')
+      root: pathModule.resolve(__dirname, '../../testdata/assets/Svg/combo/'),
     });
     await assetGraph.loadAssets('index.html').populate();
 
@@ -44,7 +44,7 @@ describe('assets/Svg', function() {
     expect(svg.text, 'to match', /<a[^>]* xlink:href="hello\.html"/);
 
     const svgFontFaceUri = assetGraph.findRelations({
-      type: 'SvgFontFaceUri'
+      type: 'SvgFontFaceUri',
     })[0];
     expect(svgFontFaceUri.href, 'to equal', 'fontawesome-webfont.ttf');
     svgFontFaceUri.to.url = assetGraph.resolveUrl(
@@ -58,9 +58,9 @@ describe('assets/Svg', function() {
     );
   });
 
-  it('should inline an Svg asset as a non-base64 data: url', async function() {
+  it('should inline an Svg asset as a non-base64 data: url', async function () {
     const assetGraph = new AssetGraph({
-      root: pathModule.resolve(__dirname, '../../testdata/assets/Svg/inline/')
+      root: pathModule.resolve(__dirname, '../../testdata/assets/Svg/inline/'),
     });
     await assetGraph
       .loadAssets('index.css')
@@ -77,7 +77,7 @@ describe('assets/Svg', function() {
   it('should fake namespace declarations for inline svg assets', () => {
     const asset = new Svg(
       {
-        text: '<svg><g xlink:href="" /></svg>'
+        text: '<svg><g xlink:href="" /></svg>',
       },
       new AssetGraph({ root: 'http://assetgraph.org/' })
     );
@@ -96,7 +96,7 @@ describe('assets/Svg', function() {
     const asset = new Svg(
       {
         url: 'http://assetgraph.org/test.svg',
-        text: '<svg><g xlink:href="" /></svg>'
+        text: '<svg><g xlink:href="" /></svg>',
       },
       graph
     );
