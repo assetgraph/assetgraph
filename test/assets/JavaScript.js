@@ -4,6 +4,29 @@ const AssetGraph = require('../../lib/AssetGraph');
 const sinon = require('sinon');
 
 describe('assets/JavaScript', function () {
+  it('should populate the _text property with the rawSrc on creation', async function () {
+    let firstWarning;
+    const assets = await new AssetGraph({
+      root: pathModule.resolve(__dirname, '../../testdata/assets/JavaScript/'),
+    })
+      .on('warn', (err) => (firstWarning = firstWarning || err))
+      .loadAssets('parseError.js');
+
+    expect(assets, 'to have length', 1);
+    const jsAsset = assets[0];
+    expect(
+      jsAsset._text,
+      'to equal',
+      `function blah () {
+    function quux () {
+    }
+}
+whatever();
+this.is(very wrong);
+`
+    );
+  });
+
   it('should handle a test case that has a parse error in an inline JavaScript asset', async function () {
     let firstWarning;
     await new AssetGraph({
