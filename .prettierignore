@@ -3,12 +3,11 @@
 /examples/
 /node_modules/
 /coverage/
-/.nyc_output/
 /jsdoc/
 /.nyc_output/
 
 # Don't fight npm install --save
 /package.json
 
-# Generated
+# Generated:
 /CHANGELOG.md
