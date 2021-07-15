@@ -4,6 +4,7 @@
 /node_modules/
 /coverage/
 /jsdoc/
+/.nyc_output/
 
 # Don't fight npm install --save
 /package.json
