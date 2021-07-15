@@ -37,6 +37,15 @@ describe('assets/Text', function () {
         expect(textAsset.text, 'to equal', 'foo');
       });
 
+      it('should set the cached _text', function () {
+        const textAsset = new AssetGraph().addAsset({
+          type: 'Text',
+          rawSrc: Buffer.from('Hello, world!\u263a'),
+        });
+        textAsset.text = 'foo';
+        expect(textAsset._text, 'to equal', 'foo');
+      });
+
       it('should remove _lastKnownByteLength', function () {
         const textAsset = new AssetGraph().addAsset({
           type: 'Text',
@@ -45,6 +54,17 @@ describe('assets/Text', function () {
         expect(textAsset._lastKnownByteLength, 'to equal', 16);
         textAsset.text = 'foo';
         expect(textAsset._lastKnownByteLength, 'to be undefined');
+      });
+
+      describe('with a subclass that has a parseTree', function () {
+        it('should set the cached _text', function () {
+          const textAsset = new AssetGraph().addAsset({
+            type: 'JavaScript',
+            rawSrc: Buffer.from('foo;'),
+          });
+          textAsset.text = 'bar;';
+          expect(textAsset._text, 'to equal', 'bar;');
+        });
       });
     });
   });
