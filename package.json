@@ -43,7 +43,7 @@
     "mkdirp": "^1.0.3",
     "normalizeurl": "^1.0.0",
     "p-limit": "^3.0.1",
-    "p-map": "^4.0.0",
+    "p-map": "^5.1.0",
     "perfectionist": "^2.4.0",
     "postcss": "^8.0.3",
     "qs": "^6.5.2",
