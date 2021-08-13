@@ -114,11 +114,8 @@ describe('transforms/addPrecacheServiceWorker', function () {
       .populate({ followRelations: { to: { protocol: 'file:' } } })
       .addPrecacheServiceWorker({ isInitial: true });
 
-    expect([warnSpy, infoSpy], 'to have calls satisfying', () => {
+    expect(warnSpy, 'to have calls satisfying', () => {
       warnSpy(/^ENOENT.*notFound\.js/);
-      infoSpy(
-        /^index-precache-service-worker\.js: Total precache size is about/
-      );
     });
   });
 
