@@ -1,7 +1,8 @@
-### v7.1.0 (2021-07-15)
+### v7.2.0 (2021-08-13)
 
 #### Pull requests
 
+- [#1184](https://github.com/assetgraph/assetgraph/pull/1184) Upgrade p-map to version 5.1.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1173](https://github.com/assetgraph/assetgraph/pull/1173) Upgrade eslint-plugin-mocha to version 9.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1172](https://github.com/assetgraph/assetgraph/pull/1172) Upgrade sinon to version 11.1.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1159](https://github.com/assetgraph/assetgraph/pull/1159) Upgrade read-pkg-up to version 8.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -66,12 +67,20 @@
 
 #### Commits to master
 
+- [Update dependencies readme badge](https://github.com/assetgraph/assetgraph/commit/2fea40ce86ade4132a134f16374c8f67fead2bf9) ([Peter Müller](mailto:pingvin+github@gmail.com))
+- [Add CHANGELOG.md to .prettierignore](https://github.com/assetgraph/assetgraph/commit/d4ca0a204692c8735f50c2f965d447d8a3896b5a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Add \/.nyc\_output to .prettierignore](https://github.com/assetgraph/assetgraph/commit/dd5445b7108a41969524efe06d11ed44894d0abb) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Make sure that Text\#\_text is populated when text is reassigned, even for asset types with a parse tree](https://github.com/assetgraph/assetgraph/commit/d94a930103eb4070e7c2e9094fcaeca056c4dd48) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Manually cherry-pick 221305242](https://github.com/assetgraph/assetgraph/commit/6b9932a8fed64c05fdcf90b51031bf868261cda2) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [prettier --write '\*\*\/\*.{js,json,md}'](https://github.com/assetgraph/assetgraph/commit/434c075cdfe5f57c44b123b6e34d2affe75d9ece) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [Update prettier to version 2.3.0](https://github.com/assetgraph/assetgraph/commit/3e4c157bfb3f890ee1ce79f0158b8cae58cf679a) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
-- [Fix eslint-plugin-prettier usage](https://github.com/assetgraph/assetgraph/commit/c3435d90bbb8a02cbcc47878cc27c3096292f795) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [+71 more](https://github.com/assetgraph/assetgraph/compare/v7.0.1...v7.1.0)
+- [+74 more](https://github.com/assetgraph/assetgraph/compare/v7.1.0...v7.2.0)
+
+### v7.1.0 (2021-07-15)
+
+- [prettier --write '\*\*\/\*.{js,json,md,css}'](https://github.com/assetgraph/assetgraph/commit/f48ac9c7e77541acf4b394e34342e5ff99c8af90) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Add CHANGELOG.md to .prettierignore](https://github.com/assetgraph/assetgraph/commit/efd540445638a381ead3b77f3d27dc7758120a8a) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Add \/.nyc\_output to .prettierignore](https://github.com/assetgraph/assetgraph/commit/19faeafe4c839c74a497af3c2ddf327b015a30e7) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Update prettier to ~2.3.2](https://github.com/assetgraph/assetgraph/commit/12e85d2a4d1cbb04e0c2adcd66d0855a47534af1) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Make sure that Text\#\_text is populated when text is reassigned, even for asset types with a parse tree](https://github.com/assetgraph/assetgraph/commit/85b65c15fcc46cad55b4c63e379e1adc896a6a86) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v7.0.1 (2021-05-12)
 
