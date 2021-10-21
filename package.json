@@ -46,7 +46,7 @@
     "mkdirp": "^0.5.1",
     "normalizeurl": "^1.0.0",
     "perfectionist": "^2.4.0",
-    "postcss": "^7.0.14",
+    "postcss": "^8.3.10",
     "qs": "^6.5.2",
     "read-pkg-up": "^6.0.0",
     "repeat-string": "^1.5.4",
