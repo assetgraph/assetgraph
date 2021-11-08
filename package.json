@@ -52,7 +52,7 @@
     "schemes": "^1.0.1",
     "semver": "^7.0.0",
     "sift": "^7.0.1",
-    "source-map-js": "^1.0.0",
+    "source-map-js": "^1.0.1",
     "teepee": "^3.0.0",
     "terser": "^5.0.0",
     "urltools": "^0.4.1"
