@@ -145,6 +145,7 @@ describe('transforms/populate', function () {
       const assetGraph = new AssetGraph();
       const htmlAsset = assetGraph.addAsset({
         url: 'https://example.com/',
+        type: 'Html',
         text: '<script src="foo.js"></script>',
       });
       await assetGraph.populate({

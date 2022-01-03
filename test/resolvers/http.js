@@ -122,6 +122,9 @@ describe('resolvers/http', function () {
       response: {
         statusCode: 200,
         body: '<html><body>Hello, world!</body></html>',
+        headers: {
+          'Content-Type': 'text/html',
+        },
       },
     });
 

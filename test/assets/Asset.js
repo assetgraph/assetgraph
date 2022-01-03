@@ -82,20 +82,6 @@ describe('assets/Asset', function () {
       return expect(asset.load(), 'to be rejected');
     });
 
-    it('should autodetect the type of an asset with an unrecognizable file extension', async function () {
-      const assetGraph = new AssetGraph({
-        root: pathModule.resolve(
-          __dirname,
-          '../../testdata/assets/Asset/autodetectTypeWhenExtensionIsUnknown/'
-        ),
-      });
-
-      await assetGraph.loadAssets('index.html');
-      await assetGraph.populate();
-
-      expect(assetGraph, 'to contain asset', 'Svg');
-    });
-
     it('should complain if an unparsable Content-Type response header is received', async function () {
       const assetGraph = new AssetGraph();
       const warnSpy = sinon.spy();
