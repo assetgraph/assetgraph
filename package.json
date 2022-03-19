@@ -44,7 +44,7 @@
     "normalizeurl": "^1.0.0",
     "p-limit": "^3.0.1",
     "p-map": "^4.0.0",
-    "perfectionist": "^2.4.0",
+    "perfectionist-papandreou": "^2.4.0-patch1",
     "postcss": "^8.3.10",
     "qs": "^6.5.2",
     "read-pkg-up": "^9.0.0",
