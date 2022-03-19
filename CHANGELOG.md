@@ -1,7 +1,18 @@
-### v7.3.1 (2021-10-21)
+### v7.4.0 (2022-03-19)
 
 #### Pull requests
 
+- [#1220](https://github.com/assetgraph/assetgraph/pull/1220) Stop detecting asset types based on the `file` command ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [#1216](https://github.com/assetgraph/assetgraph/pull/1216) Upgrade eslint-plugin-mocha to version 10.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1213](https://github.com/assetgraph/assetgraph/pull/1213) Upgrade jsdom to version 19.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1211](https://github.com/assetgraph/assetgraph/pull/1211) Upgrade prettier to version 2.5.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1208](https://github.com/assetgraph/assetgraph/pull/1208) Upgrade source-map-js to version 1.0.0 ([Andreas Lind](mailto:andreaslindpetersen@gmail.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1207](https://github.com/assetgraph/assetgraph/pull/1207) Upgrade sinon to version 12.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1198](https://github.com/assetgraph/assetgraph/pull/1198) Upgrade jsdom to version 18.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1199](https://github.com/assetgraph/assetgraph/pull/1199) Upgrade read-pkg-up to version 9.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1201](https://github.com/assetgraph/assetgraph/pull/1201) Upgrade eslint to version 8.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1200](https://github.com/assetgraph/assetgraph/pull/1200) Upgrade eslint-plugin-promise to version 5.1.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1197](https://github.com/assetgraph/assetgraph/pull/1197) Upgrade prettier to version 2.4.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1190](https://github.com/assetgraph/assetgraph/pull/1190) Upgrade mocha to version 9.1.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1184](https://github.com/assetgraph/assetgraph/pull/1184) Upgrade p-map to version 5.1.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1173](https://github.com/assetgraph/assetgraph/pull/1173) Upgrade eslint-plugin-mocha to version 9.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -68,12 +79,17 @@
 
 #### Commits to master
 
+- [Revert "Update eslint to version 8.0.1"](https://github.com/assetgraph/assetgraph/commit/9ecf9f88b1bb9ab73861554200ea99494524b474) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Replace Travis with Github Actions](https://github.com/assetgraph/assetgraph/commit/5a19598c14613cb8c2de6a1d6e4aa7d86c9eba9f) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Update postcss to ^8.3.10](https://github.com/assetgraph/assetgraph/commit/3439dc2d939fb5fdd5a70e8f9bebb75a2a1a2aa0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Adapt to the new cssnano api](https://github.com/assetgraph/assetgraph/commit/d7282522349610ebd66773e09929f595b35493fc) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Update cssnano to version 5.0.8](https://github.com/assetgraph/assetgraph/commit/00111b89734e43e729d7dcee66a98f3054d2ce15) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
-- [Revert "Update p-map to version 5.1.0"](https://github.com/assetgraph/assetgraph/commit/2c8346613a9060d8931804dbe188fc5b226b9671) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+79 more](https://github.com/assetgraph/assetgraph/compare/v7.3.0...v7.3.1)
+- [+80 more](https://github.com/assetgraph/assetgraph/compare/v7.3.1...v7.4.0)
+
+### v7.3.1 (2021-10-21)
+
+- [Update postcss to ^8.3.10](https://github.com/assetgraph/assetgraph/commit/2aabe8ca196630f843e8b1db7ae352c29ed71c44) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Replace Travis with Github Actions](https://github.com/assetgraph/assetgraph/commit/80a76650f3423a7f3929abaf54d7881e798a86bb) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v7.3.0 (2021-10-21)
 
