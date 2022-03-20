@@ -1,4 +1,4 @@
-### v7.4.0 (2022-03-19)
+### v7.5.0 (2022-03-20)
 
 #### Pull requests
 
@@ -79,12 +79,22 @@
 
 #### Commits to master
 
+- [Replace perfectionist with perfectionist-papandreou \(postcss 8 compatible\)](https://github.com/assetgraph/assetgraph/commit/4cffe642ab1d05d78ac63970ccbe6652749bce48) ([Andreas Lind](mailto:andreas.lind@workday.com))
 - [Revert "Update eslint to version 8.0.1"](https://github.com/assetgraph/assetgraph/commit/9ecf9f88b1bb9ab73861554200ea99494524b474) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Replace Travis with Github Actions](https://github.com/assetgraph/assetgraph/commit/5a19598c14613cb8c2de6a1d6e4aa7d86c9eba9f) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Update postcss to ^8.3.10](https://github.com/assetgraph/assetgraph/commit/3439dc2d939fb5fdd5a70e8f9bebb75a2a1a2aa0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Adapt to the new cssnano api](https://github.com/assetgraph/assetgraph/commit/d7282522349610ebd66773e09929f595b35493fc) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Update cssnano to version 5.0.8](https://github.com/assetgraph/assetgraph/commit/00111b89734e43e729d7dcee66a98f3054d2ce15) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
-- [+80 more](https://github.com/assetgraph/assetgraph/compare/v7.3.1...v7.4.0)
+- [+81 more](https://github.com/assetgraph/assetgraph/compare/v7.4.0...v7.5.0)
+
+### v7.4.0 (2022-03-19)
+
+#### Pull requests
+
+- [#1227](https://github.com/assetgraph/assetgraph/pull/1227) Replace perfectionist with perfectionist-papandreou \(postcss 8 compatible\) ([Andreas Lind](mailto:andreas.lind@workday.com))
+
+#### Commits to master
+
+- [Empty commit to trigger CI build](https://github.com/assetgraph/assetgraph/commit/e1b16113e7d829d563cb667f60296990f38ea559) ([Andreas Lind](mailto:andreas.lind@workday.com))
 
 ### v7.3.1 (2021-10-21)
 
