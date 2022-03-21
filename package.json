@@ -78,7 +78,7 @@
     "magicpen-prism": "5.0.0",
     "mocha": "^9.1.0",
     "nyc": "^15.0.0",
-    "offline-github-changelog": "^2.0.0",
+    "offline-github-changelog": "^2.4.0",
     "open": "^8.0.2",
     "prettier": "~2.6.0",
     "proxyquire": "^2.0.1",
