@@ -1,7 +1,11 @@
-### v7.5.0 (2022-03-20)
+### v7.6.0 (2022-04-03)
 
 #### Pull requests
 
+- [#1231](https://github.com/assetgraph/assetgraph/pull/1231) Refresh CHANGELOG.md with preversion command ([Aarni Koskela](mailto:akx@iki.fi))
+- [#1205](https://github.com/assetgraph/assetgraph/pull/1205) Upgrade svgo to version 2.8.0 ([Andreas Lind](mailto:andreas.lind@workday.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1230](https://github.com/assetgraph/assetgraph/pull/1230) Upgrade prettier to version 2.6.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1229](https://github.com/assetgraph/assetgraph/pull/1229) Upgrade sinon to version 13.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1220](https://github.com/assetgraph/assetgraph/pull/1220) Stop detecting asset types based on the `file` command ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [#1216](https://github.com/assetgraph/assetgraph/pull/1216) Upgrade eslint-plugin-mocha to version 10.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1213](https://github.com/assetgraph/assetgraph/pull/1213) Upgrade jsdom to version 19.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -79,12 +83,16 @@
 
 #### Commits to master
 
+- [Apply Buffer.from on the body of the return value of data-urls https:\/\/github.com\/jsdom\/data-urls\/releases\/tag\/v3.0.0](https://github.com/assetgraph/assetgraph/commit/1ddb0c69ddc80154297e29a7f113edc735ff694e) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [Update data-urls to version 3.0.1](https://github.com/assetgraph/assetgraph/commit/85dae0c04f4d5c8f48255b2120956e042dce0fdb) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [npm i postcss@^8.4.12 perfectionist-papandreou@^2.4.0-patch2 cssnano@^5.1.4 Manual cherry-pick of \#1228](https://github.com/assetgraph/assetgraph/commit/53a6de9c60502f12ae4157469630cb1ba91290b9) ([Andreas Lind](mailto:andreas.lind@workday.com))
 - [Replace perfectionist with perfectionist-papandreou \(postcss 8 compatible\)](https://github.com/assetgraph/assetgraph/commit/4cffe642ab1d05d78ac63970ccbe6652749bce48) ([Andreas Lind](mailto:andreas.lind@workday.com))
 - [Revert "Update eslint to version 8.0.1"](https://github.com/assetgraph/assetgraph/commit/9ecf9f88b1bb9ab73861554200ea99494524b474) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Replace Travis with Github Actions](https://github.com/assetgraph/assetgraph/commit/5a19598c14613cb8c2de6a1d6e4aa7d86c9eba9f) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Update postcss to ^8.3.10](https://github.com/assetgraph/assetgraph/commit/3439dc2d939fb5fdd5a70e8f9bebb75a2a1a2aa0) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Adapt to the new cssnano api](https://github.com/assetgraph/assetgraph/commit/d7282522349610ebd66773e09929f595b35493fc) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+81 more](https://github.com/assetgraph/assetgraph/compare/v7.4.0...v7.5.0)
+- [+84 more](https://github.com/assetgraph/assetgraph/compare/v7.5.0...v7.6.0)
+
+### v7.5.0 (2022-03-20)
+
+- [#1228](https://github.com/assetgraph/assetgraph/pull/1228) Update more postcss-related packages ([Andreas Lind](mailto:andreas.lind@workday.com))
 
 ### v7.4.0 (2022-03-19)
 
