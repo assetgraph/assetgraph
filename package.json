@@ -45,7 +45,7 @@
     "memoizesync": "1.1.1",
     "mkdirp": "^0.5.1",
     "normalizeurl": "^1.0.0",
-    "perfectionist-papandreou": "^2.4.0-patch2",
+    "perfectionist-dfd": "^3.0.0-alpha.2",
     "postcss": "^8.4.12",
     "qs": "^6.5.2",
     "read-pkg-up": "^6.0.0",
