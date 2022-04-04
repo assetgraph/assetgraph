@@ -1,10 +1,7 @@
-### v7.6.0 (2022-04-03)
+### v7.6.1 (2022-04-04)
 
 #### Pull requests
 
-- [#1231](https://github.com/assetgraph/assetgraph/pull/1231) Refresh CHANGELOG.md with preversion command ([Aarni Koskela](mailto:akx@iki.fi))
-- [#1205](https://github.com/assetgraph/assetgraph/pull/1205) Upgrade svgo to version 2.8.0 ([Andreas Lind](mailto:andreas.lind@workday.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
-- [#1230](https://github.com/assetgraph/assetgraph/pull/1230) Upgrade prettier to version 2.6.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1229](https://github.com/assetgraph/assetgraph/pull/1229) Upgrade sinon to version 13.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1220](https://github.com/assetgraph/assetgraph/pull/1220) Stop detecting asset types based on the `file` command ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [#1216](https://github.com/assetgraph/assetgraph/pull/1216) Upgrade eslint-plugin-mocha to version 10.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -88,7 +85,11 @@
 - [npm i postcss@^8.4.12 perfectionist-papandreou@^2.4.0-patch2 cssnano@^5.1.4 Manual cherry-pick of \#1228](https://github.com/assetgraph/assetgraph/commit/53a6de9c60502f12ae4157469630cb1ba91290b9) ([Andreas Lind](mailto:andreas.lind@workday.com))
 - [Replace perfectionist with perfectionist-papandreou \(postcss 8 compatible\)](https://github.com/assetgraph/assetgraph/commit/4cffe642ab1d05d78ac63970ccbe6652749bce48) ([Andreas Lind](mailto:andreas.lind@workday.com))
 - [Revert "Update eslint to version 8.0.1"](https://github.com/assetgraph/assetgraph/commit/9ecf9f88b1bb9ab73861554200ea99494524b474) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+84 more](https://github.com/assetgraph/assetgraph/compare/v7.5.0...v7.6.0)
+- [+84 more](https://github.com/assetgraph/assetgraph/compare/v7.6.0...v7.6.1)
+
+### v7.6.0 (2022-04-03)
+
+- [#1233](https://github.com/assetgraph/assetgraph/pull/1233) Replace perfectionist-papandreou with perfectionist-dfd ([Andreas Lind](mailto:andreas.lind@workday.com), [Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v7.5.0 (2022-03-20)
 
