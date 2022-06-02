@@ -12,8 +12,8 @@ describe('relations/HtmlShortcutIcon', function () {
     });
     await assetGraph.loadAssets('index.html').populate();
 
-    expect(assetGraph, 'to contain assets', 2);
-    expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 7);
+    expect(assetGraph, 'to contain assets', 3);
+    expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 8);
 
     const htmlAsset = assetGraph.findAssets({ type: 'Html' })[0];
     const pngAsset = assetGraph.findAssets({ type: 'Png' })[0];
@@ -38,7 +38,7 @@ describe('relations/HtmlShortcutIcon', function () {
       firstExistingHtmlShortcutIconRelation
     );
 
-    expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 9);
+    expect(assetGraph, 'to contain relations', 'HtmlShortcutIcon', 10);
 
     const matches = assetGraph
       .findAssets({ type: 'Html' })[0]
