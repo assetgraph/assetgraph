@@ -1,7 +1,14 @@
-### v7.6.1 (2022-04-04)
+### v7.7.0 (2022-06-02)
 
 #### Pull requests
 
+- [#1241](https://github.com/assetgraph/assetgraph/pull/1241) \[review\] Add support for Safari mask-icon. ([Bram Stein](mailto:b.l.stein@gmail.com))
+- [#1239](https://github.com/assetgraph/assetgraph/pull/1239) Upgrade sinon to version 14.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1238](https://github.com/assetgraph/assetgraph/pull/1238) Upgrade mocha to version 10.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1235](https://github.com/assetgraph/assetgraph/pull/1235) Upgrade glob to version 8.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1231](https://github.com/assetgraph/assetgraph/pull/1231) Refresh CHANGELOG.md with preversion command ([Aarni Koskela](mailto:akx@iki.fi))
+- [#1205](https://github.com/assetgraph/assetgraph/pull/1205) Upgrade svgo to version 2.8.0 ([Andreas Lind](mailto:andreas.lind@workday.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1230](https://github.com/assetgraph/assetgraph/pull/1230) Upgrade prettier to version 2.6.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1229](https://github.com/assetgraph/assetgraph/pull/1229) Upgrade sinon to version 13.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1220](https://github.com/assetgraph/assetgraph/pull/1220) Stop detecting asset types based on the `file` command ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [#1216](https://github.com/assetgraph/assetgraph/pull/1216) Upgrade eslint-plugin-mocha to version 10.0.1 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -80,12 +87,16 @@
 
 #### Commits to master
 
-- [Apply Buffer.from on the body of the return value of data-urls https:\/\/github.com\/jsdom\/data-urls\/releases\/tag\/v3.0.0](https://github.com/assetgraph/assetgraph/commit/1ddb0c69ddc80154297e29a7f113edc735ff694e) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [Update data-urls to version 3.0.1](https://github.com/assetgraph/assetgraph/commit/85dae0c04f4d5c8f48255b2120956e042dce0fdb) ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
-- [npm i postcss@^8.4.12 perfectionist-papandreou@^2.4.0-patch2 cssnano@^5.1.4 Manual cherry-pick of \#1228](https://github.com/assetgraph/assetgraph/commit/53a6de9c60502f12ae4157469630cb1ba91290b9) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [Replace perfectionist with perfectionist-papandreou \(postcss 8 compatible\)](https://github.com/assetgraph/assetgraph/commit/4cffe642ab1d05d78ac63970ccbe6652749bce48) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [Revert "Update eslint to version 8.0.1"](https://github.com/assetgraph/assetgraph/commit/9ecf9f88b1bb9ab73861554200ea99494524b474) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+84 more](https://github.com/assetgraph/assetgraph/compare/v7.6.0...v7.6.1)
+- [Fix lint](https://github.com/assetgraph/assetgraph/commit/def82d5a71a89941049c685b015ddb1de72859a8) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Lint with node.js 16](https://github.com/assetgraph/assetgraph/commit/a41abedd952891703da4e080aae7d7f68f5f6777) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [npm i --save-dev eslint-plugin-n](https://github.com/assetgraph/assetgraph/commit/670c33fc7666e39e8cb71828418db9b45fc3ce7b) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [Port CHANGELOG.md over from v7](https://github.com/assetgraph/assetgraph/commit/88ccb9b1fa4bdb51b786dc3fdd248554538125a1) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [git diff v7.5.0...tech\/perfectionist-dfd | patch -p1](https://github.com/assetgraph/assetgraph/commit/0156aa5dffb3d8029abc8928770c9b2e0ce21c93) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [+89 more](https://github.com/assetgraph/assetgraph/compare/v7.6.1...v7.7.0)
+
+### v7.6.1 (2022-04-04)
+
+- [Update to perfectionist-dfd@^3.0.0 https:\/\/github.com\/danielfdickinson\/perfectionist-dfd\/discussions\/29\#discussioncomment-2496914](https://github.com/assetgraph/assetgraph/commit/924e49a1a78edc9ff6b0fee35f1c9fe430191257) ([Andreas Lind](mailto:andreas.lind@workday.com))
 
 ### v7.6.0 (2022-04-03)
 
