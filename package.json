@@ -90,7 +90,7 @@
     "requirejs": "^2.3.5",
     "sinon": "^7.0.0",
     "style-loader": "^1.0.0",
-    "svgo": "^1.0.5",
+    "svgo": "^2.8.0",
     "systemjs-asset-plugin": "^3.0.0",
     "systemjs-builder": "^0.16.13",
     "uglify-js": "^3.4.9",
