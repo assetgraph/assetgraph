@@ -46,7 +46,7 @@
     "p-map": "^4.0.0",
     "perfectionist-dfd": "^3.0.0-alpha.2",
     "postcss": "^8.4.12",
-    "qs": "^6.5.2",
+    "qs": "6.11.0",
     "read-pkg-up": "^9.0.0",
     "repeat-string": "^1.5.4",
     "schemes": "^1.0.1",
