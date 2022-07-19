@@ -30,7 +30,7 @@
     "domspace": "^2.0.0",
     "esanimate": "^2.0.0",
     "escodegen": "^2.0.0",
-    "espurify": "^2.0.1",
+    "espurify": "^3.0.0",
     "esquery": "github:jupenur/esquery",
     "estraverse": "^5.0.0",
     "estraverse-fb": "^1.3.2",
