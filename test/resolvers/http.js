@@ -118,7 +118,7 @@ describe('resolvers/http', function () {
   it('should not break when a url contains curly braces', async function () {
     httpception({
       request:
-        'GET https://api.amplitude.com/httpapi?api_key=e102edba5e9caea6b89e3c04fac87a4d&event=%7B%22event_type%22:%22Overall%20Active%20User%22,%22event_properties%22:%7B%22Email%20Send%20Time%22:%222019-05-10T10:43:42%22,%22Current%20Date%22:%2210/05/2019%22,%22UserId%22:5698327,%22campaign%22:%22Daily%20Digest%22,%22Platform%22:%22E-Mail%22%7D,%22user_id%22:%225698327%22%7D',
+        'GET https://api.amplitude.com/httpapi?api_key=e102edba5e9caea6b89e3c04fac87a4d&event=%7B%22event_type%22%3A%22Overall%20Active%20User%22,%22event_properties%22%3A%7B%22Email%20Send%20Time%22%3A%222019-05-10T10%3A43%3A42%22,%22Current%20Date%22%3A%2210/05/2019%22,%22UserId%22%3A5698327,%22campaign%22%3A%22Daily%20Digest%22,%22Platform%22%3A%22E-Mail%22%7D,%22user_id%22%3A%225698327%22%7D',
       response: {
         statusCode: 200,
         body: '<html><body>Hello, world!</body></html>',
@@ -135,10 +135,9 @@ describe('resolvers/http', function () {
       'https://api.amplitude.com/httpapi?api_key=e102edba5e9caea6b89e3c04fac87a4d&event={%22event_type%22:%22Overall%20Active%20User%22,%22event_properties%22:{%22Email%20Send%20Time%22:%222019-05-10T10:43:42%22,%22Current%20Date%22:%2210/05/2019%22,%22UserId%22:5698327,%22campaign%22:%22Daily%20Digest%22,%22Platform%22:%22E-Mail%22},%22user_id%22:%225698327%22}'
     );
     await assetGraph.populate();
-
     expect(assetGraph, 'to contain asset', {
       type: 'Html',
-      url: 'https://api.amplitude.com/httpapi?api_key=e102edba5e9caea6b89e3c04fac87a4d&event={%22event_type%22:%22Overall%20Active%20User%22,%22event_properties%22:{%22Email%20Send%20Time%22:%222019-05-10T10:43:42%22,%22Current%20Date%22:%2210/05/2019%22,%22UserId%22:5698327,%22campaign%22:%22Daily%20Digest%22,%22Platform%22:%22E-Mail%22},%22user_id%22:%225698327%22}',
+      url: 'https://api.amplitude.com/httpapi?api_key=e102edba5e9caea6b89e3c04fac87a4d&event=%7B%22event_type%22%3A%22Overall%20Active%20User%22,%22event_properties%22%3A%7B%22Email%20Send%20Time%22%3A%222019-05-10T10%3A43%3A42%22,%22Current%20Date%22%3A%2210/05/2019%22,%22UserId%22%3A5698327,%22campaign%22%3A%22Daily%20Digest%22,%22Platform%22%3A%22E-Mail%22%7D,%22user_id%22%3A%225698327%22%7D',
     });
   });
 });

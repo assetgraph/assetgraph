@@ -77,6 +77,35 @@ describe('AssetGraph#addAsset', function () {
     expect(asset.rawSrc, 'to equal', Buffer.from('Hello, world!\n', 'utf-8'));
   });
 
+  describe('when called with an absolute url', function () {
+    it('should normalize the url', function () {
+      const assetGraph = new AssetGraph();
+      const asset = assetGraph.addAsset(
+        'file:///C:/dev/assetgraph/docs/index.html'
+      );
+      assetGraph.addAsset(asset);
+      expect(
+        asset.url,
+        'to equal',
+        'file:///C%3A/dev/assetgraph/docs/index.html'
+      );
+    });
+  });
+
+  describe('when called with a relative url', function () {
+    it('should normalize the url', function () {
+      const assetGraph = new AssetGraph({ root: 'file:///C:/dev/assetgraph/' });
+      expect(assetGraph.root, 'to equal', 'file:///C%3A/dev/assetgraph/');
+      const asset = assetGraph.addAsset('docs/i:n:d:e:x.html');
+      assetGraph.addAsset(asset);
+      expect(
+        asset.url,
+        'to equal',
+        'file:///C%3A/dev/assetgraph/docs/i%3An%3Ad%3Ae%3Ax.html'
+      );
+    });
+  });
+
   it('should not loop infinitely when encountering non-resolvable urls', async function () {
     const assetGraph = new AssetGraph();
     const warnSpy = sinon.spy().named('warn');
