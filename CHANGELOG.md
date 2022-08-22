@@ -1,7 +1,10 @@
-### v7.7.0 (2022-06-02)
+### v7.8.1 (2022-08-22)
 
 #### Pull requests
 
+- [#1246](https://github.com/assetgraph/assetgraph/pull/1246) Upgrade espurify to version 3.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1244](https://github.com/assetgraph/assetgraph/pull/1244) Upgrade jsdom to version 20.0.0 ([Andreas Lind](mailto:andreas.lind@workday.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1243](https://github.com/assetgraph/assetgraph/pull/1243) Upgrade prettier to version 2.7.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1241](https://github.com/assetgraph/assetgraph/pull/1241) \[review\] Add support for Safari mask-icon. ([Bram Stein](mailto:b.l.stein@gmail.com))
 - [#1239](https://github.com/assetgraph/assetgraph/pull/1239) Upgrade sinon to version 14.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1238](https://github.com/assetgraph/assetgraph/pull/1238) Upgrade mocha to version 10.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -87,12 +90,24 @@
 
 #### Commits to master
 
-- [Fix lint](https://github.com/assetgraph/assetgraph/commit/def82d5a71a89941049c685b015ddb1de72859a8) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Lint with node.js 16](https://github.com/assetgraph/assetgraph/commit/a41abedd952891703da4e080aae7d7f68f5f6777) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [npm i --save-dev eslint-plugin-n](https://github.com/assetgraph/assetgraph/commit/670c33fc7666e39e8cb71828418db9b45fc3ce7b) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [Port CHANGELOG.md over from v7](https://github.com/assetgraph/assetgraph/commit/88ccb9b1fa4bdb51b786dc3fdd248554538125a1) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [git diff v7.5.0...tech\/perfectionist-dfd | patch -p1](https://github.com/assetgraph/assetgraph/commit/0156aa5dffb3d8029abc8928770c9b2e0ce21c93) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+89 more](https://github.com/assetgraph/assetgraph/compare/v7.6.1...v7.7.0)
+- [Normalize urls in addAsset https:\/\/github.com\/Munter\/subfont\/issues\/160\#issuecomment-1197929357](https://github.com/assetgraph/assetgraph/commit/f225bf4ffac6e815c861089836ceef5eaf9366dd) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Remove dead code](https://github.com/assetgraph/assetgraph/commit/43082278fec5762d14160b5575311d981c2ff9c9) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Add temporary workaround for https:\/\/github.com\/dperini\/nwsapi\/issues\/57](https://github.com/assetgraph/assetgraph/commit/493292ceb754712dede4191d10085e82400d9616) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Fix CHANGELOG generation in preversion script now that an npm env var changed](https://github.com/assetgraph/assetgraph/commit/30e5a4dbd3c487c51a5e537854d3ba1bd11468b5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Copy the latest releases over from the v7 CHANGELOG.md](https://github.com/assetgraph/assetgraph/commit/6fb89528287a3fd85553de790c96dc2d37876934) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [+94 more](https://github.com/assetgraph/assetgraph/compare/v7.8.1...v7.8.1)
+
+### v7.8.1 (2022-07-28)
+
+- [Normalize urls in addAsset https:\/\/github.com\/Munter\/subfont\/issues\/160\#issuecomment-1197929357](https://github.com/assetgraph/assetgraph/commit/9ae1b022ee4c7ffb05894bce0a938c3fe4544606) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+
+### v7.8.0 (2022-06-06)
+
+- [Upgrade svgo to 2.x by backporting \#1205](https://github.com/assetgraph/assetgraph/commit/c98110b539159edd64ddc4845c3f0effc327e31c) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+
+### v7.7.0 (2022-06-02)
+
+- [Add support for Safari mask-icon.](https://github.com/assetgraph/assetgraph/commit/63590f94cca05460c1f3d342de1b856ad7c83571) ([Bram Stein](mailto:b.l.stein@gmail.com))
 
 ### v7.6.1 (2022-04-04)
 
