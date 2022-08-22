@@ -1,4 +1,4 @@
-### v7.8.0 (2022-07-28)
+### v7.8.1 (2022-08-22)
 
 #### Pull requests
 
@@ -95,7 +95,11 @@
 - [Add temporary workaround for https:\/\/github.com\/dperini\/nwsapi\/issues\/57](https://github.com/assetgraph/assetgraph/commit/493292ceb754712dede4191d10085e82400d9616) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Fix CHANGELOG generation in preversion script now that an npm env var changed](https://github.com/assetgraph/assetgraph/commit/30e5a4dbd3c487c51a5e537854d3ba1bd11468b5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Copy the latest releases over from the v7 CHANGELOG.md](https://github.com/assetgraph/assetgraph/commit/6fb89528287a3fd85553de790c96dc2d37876934) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+94 more](https://github.com/assetgraph/assetgraph/compare/v7.8.0...v7.8.0)
+- [+94 more](https://github.com/assetgraph/assetgraph/compare/v7.8.1...v7.8.1)
+
+### v7.8.1 (2022-07-28)
+
+- [Normalize urls in addAsset https:\/\/github.com\/Munter\/subfont\/issues\/160\#issuecomment-1197929357](https://github.com/assetgraph/assetgraph/commit/9ae1b022ee4c7ffb05894bce0a938c3fe4544606) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v7.8.0 (2022-06-06)
 
