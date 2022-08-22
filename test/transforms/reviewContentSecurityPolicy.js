@@ -1096,6 +1096,28 @@ describe('transforms/reviewContentSecurityPolicy', function () {
           });
         });
       });
+
+      describe('with strict-dynamic', function () {
+        it('should warn about missing hashes', async function () {
+          const assetGraph = new AssetGraph({
+            root: pathModule.resolve(
+              __dirname,
+              '../../testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/strictDynamic/'
+            ),
+          });
+          const warnSpy = sinon.spy().named('warn');
+          assetGraph.on('warn', warnSpy);
+          await assetGraph.loadAssets('index.html');
+          await assetGraph.reviewContentSecurityPolicy();
+
+          expect(warnSpy, 'to have calls satisfying', () => {
+            warnSpy(
+              "testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/strictDynamic/index.html: An asset violates the script-src 'unsafe-inline' 'strict-dynamic' Content-Security-Policy directive:\n" +
+                '  inline JavaScript in testdata/transforms/reviewContentSecurityPolicy/existingContentSecurityPolicy/strictDynamic/index.html'
+            );
+          });
+        });
+      });
     });
   });
 
