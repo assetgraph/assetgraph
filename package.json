@@ -89,7 +89,6 @@
     "unexpected": "^13.0.1",
     "unexpected-assetgraph": "^1.1.2",
     "unexpected-dom": "^5.1.0",
-    "unexpected-set": "^3.3.0",
     "unexpected-sinon": "^11.1.0",
     "yui-compressor": "^0.1.3"
   },
