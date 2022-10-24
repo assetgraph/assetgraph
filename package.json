@@ -84,7 +84,7 @@
     "prettier": "~2.7.0",
     "proxyquire": "^2.0.1",
     "sinon": "^14.0.0",
-    "svgo": "^2.8.0",
+    "svgo": "^3.0.0",
     "uglify-js": "^3.4.9",
     "unexpected": "^12.0.0",
     "unexpected-assetgraph": "^1.1.1",
