@@ -1,7 +1,10 @@
-### v7.8.1 (2022-08-22)
+### v7.10.0 (2022-10-27)
 
 #### Pull requests
 
+- [#1247](https://github.com/assetgraph/assetgraph/pull/1247) Upgrade unexpected to version 13.0.1 ([Andreas Lind](mailto:andreas.lind@workday.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1249](https://github.com/assetgraph/assetgraph/pull/1249) Upgrade svgo to version 3.0.0 ([Andreas Lind](mailto:andreas.lind@workday.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1248](https://github.com/assetgraph/assetgraph/pull/1248) Upgrade offline-github-changelog to version 3.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1246](https://github.com/assetgraph/assetgraph/pull/1246) Upgrade espurify to version 3.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1244](https://github.com/assetgraph/assetgraph/pull/1244) Upgrade jsdom to version 20.0.0 ([Andreas Lind](mailto:andreas.lind@workday.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1243](https://github.com/assetgraph/assetgraph/pull/1243) Upgrade prettier to version 2.7.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -90,12 +93,16 @@
 
 #### Commits to master
 
+- [Copy over CHANGELOG.md from v7](https://github.com/assetgraph/assetgraph/commit/29d2ad54a6c8db2b0fff84ec4ee0c3cd3df452c9) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Normalize urls in addAsset https:\/\/github.com\/Munter\/subfont\/issues\/160\#issuecomment-1197929357](https://github.com/assetgraph/assetgraph/commit/f225bf4ffac6e815c861089836ceef5eaf9366dd) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Remove dead code](https://github.com/assetgraph/assetgraph/commit/43082278fec5762d14160b5575311d981c2ff9c9) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Add temporary workaround for https:\/\/github.com\/dperini\/nwsapi\/issues\/57](https://github.com/assetgraph/assetgraph/commit/493292ceb754712dede4191d10085e82400d9616) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Fix CHANGELOG generation in preversion script now that an npm env var changed](https://github.com/assetgraph/assetgraph/commit/30e5a4dbd3c487c51a5e537854d3ba1bd11468b5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Copy the latest releases over from the v7 CHANGELOG.md](https://github.com/assetgraph/assetgraph/commit/6fb89528287a3fd85553de790c96dc2d37876934) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+94 more](https://github.com/assetgraph/assetgraph/compare/v7.8.1...v7.8.1)
+- [+95 more](https://github.com/assetgraph/assetgraph/compare/v7.9.0...v7.10.0)
+
+### v7.9.0 (2022-08-22)
+
+- [reviewCSP: Require inline assets to be hashed when 'strict-dynamic' is present Addresses papandreou\/seespee\#96](https://github.com/assetgraph/assetgraph/commit/6f9ffd3b6d75a2a40354a4f1932cd4f7129ce936) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v7.8.1 (2022-07-28)
 
