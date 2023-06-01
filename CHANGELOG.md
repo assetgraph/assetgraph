@@ -1,7 +1,12 @@
-### v7.10.0 (2022-10-27)
+### v7.11.0 (2023-06-01)
 
 #### Pull requests
 
+- [#1259](https://github.com/assetgraph/assetgraph/pull/1259) Upgrade mkdirp to version 2.1.3 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1257](https://github.com/assetgraph/assetgraph/pull/1257) Upgrade jsdom to version 21.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1256](https://github.com/assetgraph/assetgraph/pull/1256) Upgrade data-urls to version 4.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1255](https://github.com/assetgraph/assetgraph/pull/1255) Upgrade sinon to version 15.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
+- [#1254](https://github.com/assetgraph/assetgraph/pull/1254) Upgrade prettier to version 2.8.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1247](https://github.com/assetgraph/assetgraph/pull/1247) Upgrade unexpected to version 13.0.1 ([Andreas Lind](mailto:andreas.lind@workday.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1249](https://github.com/assetgraph/assetgraph/pull/1249) Upgrade svgo to version 3.0.0 ([Andreas Lind](mailto:andreas.lind@workday.com), [depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
 - [#1248](https://github.com/assetgraph/assetgraph/pull/1248) Upgrade offline-github-changelog to version 3.0.0 ([depfu[bot]](mailto:23717796+depfu[bot]@users.noreply.github.com))
@@ -93,12 +98,16 @@
 
 #### Commits to master
 
+- [git show v7:CHANGELOG.md &gt; CHANGELOG.md](https://github.com/assetgraph/assetgraph/commit/dc152b662d357284960c72aec49bcbbcfd3b34f8) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [prettier --write test\/assets\/JavaScript.js](https://github.com/assetgraph/assetgraph/commit/e1189e3ba6ae561ff086eeb84ea22e26fa3f9f84) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [Specify ecmaVersion:latest to acorn, fixes \#1250](https://github.com/assetgraph/assetgraph/commit/7faf11b9e527874114c435ecb80ec836b91f140b) ([Andreas Lind](mailto:andreas.lind@workday.com))
 - [Copy over CHANGELOG.md from v7](https://github.com/assetgraph/assetgraph/commit/29d2ad54a6c8db2b0fff84ec4ee0c3cd3df452c9) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Normalize urls in addAsset https:\/\/github.com\/Munter\/subfont\/issues\/160\#issuecomment-1197929357](https://github.com/assetgraph/assetgraph/commit/f225bf4ffac6e815c861089836ceef5eaf9366dd) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Remove dead code](https://github.com/assetgraph/assetgraph/commit/43082278fec5762d14160b5575311d981c2ff9c9) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Add temporary workaround for https:\/\/github.com\/dperini\/nwsapi\/issues\/57](https://github.com/assetgraph/assetgraph/commit/493292ceb754712dede4191d10085e82400d9616) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Fix CHANGELOG generation in preversion script now that an npm env var changed](https://github.com/assetgraph/assetgraph/commit/30e5a4dbd3c487c51a5e537854d3ba1bd11468b5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+95 more](https://github.com/assetgraph/assetgraph/compare/v7.9.0...v7.10.0)
+- [+98 more](https://github.com/assetgraph/assetgraph/compare/v7.10.0...v7.11.0)
+
+### v7.10.0 (2022-10-27)
+
+- [Specify ecmaVersion:latest to acorn, fixes \#1250](https://github.com/assetgraph/assetgraph/commit/71664577adc62a4767cded236c7d3b22ac7eb56f) ([Andreas Lind](mailto:andreas.lind@workday.com))
 
 ### v7.9.0 (2022-08-22)
 
