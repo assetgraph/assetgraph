@@ -52,7 +52,7 @@ describe('transforms.autoprefixer', function () {
     await assetGraph.autoprefixer('last 100 versions');
 
     expect(assetGraph, 'to contain relations', 'HtmlStyle', 2);
-    expect(assetGraph, 'to contain relations', 'CssImage', 4);
+    expect(assetGraph, 'to contain relations', 'CssImage', 3);
   });
 
   it('should handle a simple option case', async function () {
