@@ -1,4 +1,4 @@
-### v7.11.1 (2023-06-01)
+### v7.12.0 (2024-04-04)
 
 #### Pull requests
 
@@ -98,12 +98,16 @@
 
 #### Commits to master
 
+- [Fix lint error](https://github.com/assetgraph/assetgraph/commit/40f98a051c4e5ba4ff0b892af0641688a884c03f) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Use ubuntu-latest](https://github.com/assetgraph/assetgraph/commit/521651fc9ec0c2c47b3454544ead9d932a673a31) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Fix silly copy\/paste error](https://github.com/assetgraph/assetgraph/commit/905a4d808c523acb9e35e7f496e5e380173905d5) ([Andreas Lind](mailto:andreas.lind@workday.com))
 - [Expose checkIncompatibleTypesForAsset on the AssetGraph instance](https://github.com/assetgraph/assetgraph/commit/9ad7c41ce2ef40cb10e49b2c31c31c89973924cf) ([Andreas Lind](mailto:andreas.lind@workday.com))
 - [git show v7:CHANGELOG.md &gt; CHANGELOG.md](https://github.com/assetgraph/assetgraph/commit/dc152b662d357284960c72aec49bcbbcfd3b34f8) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [prettier --write test\/assets\/JavaScript.js](https://github.com/assetgraph/assetgraph/commit/e1189e3ba6ae561ff086eeb84ea22e26fa3f9f84) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [Specify ecmaVersion:latest to acorn, fixes \#1250](https://github.com/assetgraph/assetgraph/commit/7faf11b9e527874114c435ecb80ec836b91f140b) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [Copy over CHANGELOG.md from v7](https://github.com/assetgraph/assetgraph/commit/29d2ad54a6c8db2b0fff84ec4ee0c3cd3df452c9) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [+99 more](https://github.com/assetgraph/assetgraph/compare/v7.11.0...v7.11.1)
+- [+102 more](https://github.com/assetgraph/assetgraph/compare/v7.11.1...v7.12.0)
+
+### v7.11.1 (2023-06-01)
+
+- [Fix silly copy\/paste error](https://github.com/assetgraph/assetgraph/commit/0c1ab239b00a5f6874733c07814d4e0d053c3221) ([Andreas Lind](mailto:andreas.lind@workday.com))
 
 ### v7.11.0 (2023-06-01)
 
