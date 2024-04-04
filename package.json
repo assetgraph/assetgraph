@@ -56,7 +56,7 @@
     "source-map": "~0.6.1",
     "specificity": "^0.4.0",
     "teepee": "^2.31.1",
-    "terser": "^4.0.0",
+    "terser": "^5.30.3",
     "urltools": "^0.4.1",
     "workbox-build": "^4.3.1"
   },
