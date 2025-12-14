@@ -1,4 +1,4 @@
-### v7.12.0 (2024-04-04)
+### v7.13.0 (2025-12-14)
 
 #### Pull requests
 
@@ -98,12 +98,20 @@
 
 #### Commits to master
 
+- [Adjust expected svgo output](https://github.com/assetgraph/assetgraph/commit/ea285ac0ccf6abf61ec4df99d7a87d3215c8e9d3) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Update the autoprefixer dev dep to ^10.4.19](https://github.com/assetgraph/assetgraph/commit/c0e3a7aeb893d7a18893ba5f78e3f7fdd312e591) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [Fix autoprefixer test after the behavior changed](https://github.com/assetgraph/assetgraph/commit/f6af5cc89470a90cd94b7de1ceff76297244a214) ([Andreas Lind](mailto:andreas.lind@workday.com))
 - [Fix lint error](https://github.com/assetgraph/assetgraph/commit/40f98a051c4e5ba4ff0b892af0641688a884c03f) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 - [Use ubuntu-latest](https://github.com/assetgraph/assetgraph/commit/521651fc9ec0c2c47b3454544ead9d932a673a31) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
-- [Fix silly copy\/paste error](https://github.com/assetgraph/assetgraph/commit/905a4d808c523acb9e35e7f496e5e380173905d5) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [Expose checkIncompatibleTypesForAsset on the AssetGraph instance](https://github.com/assetgraph/assetgraph/commit/9ad7c41ce2ef40cb10e49b2c31c31c89973924cf) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [git show v7:CHANGELOG.md &gt; CHANGELOG.md](https://github.com/assetgraph/assetgraph/commit/dc152b662d357284960c72aec49bcbbcfd3b34f8) ([Andreas Lind](mailto:andreas.lind@workday.com))
-- [+102 more](https://github.com/assetgraph/assetgraph/compare/v7.11.1...v7.12.0)
+- [+105 more](https://github.com/assetgraph/assetgraph/compare/v7.12.0...v7.13.0)
+
+### v7.12.0 (2024-04-04)
+
+- [Update the autoprefixer dev dep to ^9.8.8](https://github.com/assetgraph/assetgraph/commit/b31366c9ebcbd5059fd6e5f77190900fe473e29c) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [Fix autoprefixer test after the behavior changed](https://github.com/assetgraph/assetgraph/commit/4423769233c0c3152ff9fab6244a06ec5c2c5468) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [Cherry-pick \#1104, fixes \#1302](https://github.com/assetgraph/assetgraph/commit/ac3f5e343618414027ccacb46e323363b78de568) ([Andreas Lind](mailto:andreas.lind@workday.com))
+- [Fix lint error](https://github.com/assetgraph/assetgraph/commit/d8b6d5518e6a8570fc9d332171d136f71e5b59f5) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
+- [Use ubuntu-latest](https://github.com/assetgraph/assetgraph/commit/31a6f929fceb7b3aa928ed04d89182fb43b9cb71) ([Andreas Lind](mailto:andreaslindpetersen@gmail.com))
 
 ### v7.11.1 (2023-06-01)
 
