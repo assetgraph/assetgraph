@@ -412,7 +412,7 @@ describe('assets/JavaScript', function () {
 
     expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', () => {
       infoSpy(
-        'Could not parse http://example.com/script.js as a module, fall back to script mode\nUnexpected token (1:6)'
+        'Could not parse http://example.com/script.js as a module, fall back to script mode\nUnexpected token (1:6) in http://example.com/script.js'
       );
     });
   });
@@ -434,7 +434,7 @@ describe('assets/JavaScript', function () {
 
     expect([errorSpy, warnSpy, infoSpy], 'to have calls satisfying', () => {
       warnSpy(
-        'Parse error in http://example.com/script.js\nUnexpected token (1:5)'
+        'Parse error in http://example.com/script.js\nUnexpected token (1:5) in http://example.com/script.js'
       );
     });
   });

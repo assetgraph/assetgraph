@@ -40,7 +40,7 @@ describe('transforms/compressJavaScript', function () {
     expect(warnSpy, 'to have calls satisfying', function () {
       warnSpy(
         new errors.ParseError(
-          'Parse error in https://example.com/script.js\nUnexpected token (1:4)'
+          'Parse error in https://example.com/script.js\nUnexpected token (1:4) in https://example.com/script.js'
         )
       );
       warnSpy(
