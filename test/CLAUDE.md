@@ -21,6 +21,8 @@ One test file per source subject, named identically to the source file. Two harn
 
 The suite is large (146 files). Run the single mirrored file while iterating (`npx mocha test/<subject>.js`); reserve the full `npm test` for a final check. To iterate on one failing case, isolate it with `--grep`: `npx mocha test/<subject>.js --grep "<test title>"`. Do not use `it.only`/`describe.only` to isolate: `mocha/no-exclusive-tests` makes it a lint error, so it fails `npm run lint`/CI and the Stop hook's eslint gate will block the turn if a committed test still contains it.
 
+To check coverage for just the file you changed while iterating, run `.claude/scripts/cover.sh <subject>` (e.g. `.claude/scripts/cover.sh relations/HtmlImage`). It runs the mirrored test under nyc scoped to `lib/<subject>.js` and prints that file's uncovered lines, so you don't need the full, slow `npm run coverage`. Use it directly rather than hand-rolling an `nyc` command: a naive scoped run trips mocha's `--check-leaks` on nyc's `__coverage__` global and reports a passing test as failing; the script handles that. For a top-level method test whose code lives elsewhere (e.g. `findAssets`), pass the lib path: `.claude/scripts/cover.sh findAssets lib/AssetGraph.js`.
+
 ## Assertion library: Unexpected, not chai/jest
 
 Every file starts with the assertion import, path adjusted for depth:
