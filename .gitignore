@@ -3,3 +3,6 @@
 .DS_Store
 /.nyc_output/
 /jsdoc/
+
+# Claude Code personal settings
+.claude/settings.local.json
